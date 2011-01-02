@@ -1,12 +1,6 @@
 #pragma once
 
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glut.h>
-
-#pragma comment(lib, "OpenGL32.lib")
-#pragma comment(lib, "glu32.lib")
-#pragma comment(lib, "glut32.lib")
+#include "common.h"
 
 #define drawOneLine(x1,y1,x2,y2) glBegin(GL_LINES); \
     glVertex2f((x1),(y1)); glVertex2f((x2),(y2)); glEnd();
