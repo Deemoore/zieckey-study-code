@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="lines"
+	Name="all"
 	ProjectGUID="{BCDCC5CB-ADDC-48C8-AD0A-18AEAB4E8DEA}"
 	RootNamespace="Light"
 	Keyword="Win32Proj"
@@ -166,7 +166,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="源文件"
+			Name="src"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
@@ -176,12 +176,20 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="头文件"
+			Name="inc"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\common.h"
+				>
+			</File>
+			<File
 				RelativePath=".\lines.h"
+				>
+			</File>
+			<File
+				RelativePath=".\polys.h"
 				>
 			</File>
 		</Filter>
