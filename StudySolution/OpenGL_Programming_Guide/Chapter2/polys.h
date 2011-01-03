@@ -3,6 +3,8 @@
 #include "common.h"
 
 
+static GLubyte Mask[128];//自己编辑一个图片作为mask的值
+
 void display( void )
 {
 	GLubyte fly[] =
@@ -53,13 +55,25 @@ void display( void )
 	glRectf( 125.0, 25.0, 425.0, 325.0 );
 	glPolygonStipple( halftone );
 	glRectf( 425.0, 25.0, 625.0, 425.0 );
-	glDisable( GL_POLYGON_STIPPLE );
+    glPolygonStipple( Mask );
+    glRectf( 625.0, 25.0, 753.0, 425.0 );
+    glDisable( GL_POLYGON_STIPPLE );
 	glFlush();
 }
 void init( void )
 {
 	glClearColor( 0.0, 0.0, 0.0, 0.0 );
 	glShadeModel( GL_FLAT );
+    
+    FILE *fp;
+    fp = fopen("opengl.redbook.chapter.polys.stipple.bmp", "rb");
+    if( !fp )
+        exit(0);
+    if( fseek(fp, -(int)sizeof(Mask), SEEK_END) )
+        exit(0);
+    if( !fread(Mask, sizeof(Mask), 1, fp) )
+        exit(0);
+    fclose(fp);
 }
 void reshape( int w, int h )
 {

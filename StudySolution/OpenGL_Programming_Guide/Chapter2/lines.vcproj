@@ -192,6 +192,10 @@
 				RelativePath=".\polys.h"
 				>
 			</File>
+			<File
+				RelativePath=".\primrestart.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"

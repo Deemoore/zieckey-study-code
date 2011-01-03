@@ -1,6 +1,6 @@
 //#include "lines.h"
 #include "polys.h"
-
+//#include "primrestart.h"
 int main( int argc, char* argv[] )
 { 
     glutInit( &argc, argv );
