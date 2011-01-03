@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ch2"
-	ProjectGUID="{BCDCC5CB-ADDC-48C8-AD0A-18AEAB4E8DEA}"
+	Name="ch3"
+	ProjectGUID="{22C64A7B-BDC5-48B6-A21F-531BD31AD122}"
 	RootNamespace="Light"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -185,15 +185,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\lines.h"
-				>
-			</File>
-			<File
-				RelativePath=".\polys.h"
-				>
-			</File>
-			<File
-				RelativePath=".\primrestart.h"
+				RelativePath=".\translate.rotate.h"
 				>
 			</File>
 		</Filter>
