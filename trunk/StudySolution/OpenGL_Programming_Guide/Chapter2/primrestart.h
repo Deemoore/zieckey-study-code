@@ -24,14 +24,14 @@ init()
 	glGenBuffers( 1, &vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, vbo );
 	glBufferData( GL_ARRAY_BUFFER, 2 * NumPoints * sizeof( GLfloat ),
-	              NULL, GL_STATIC_DRAW );
+	              0, GL_STATIC_DRAW );
 
-	vertices = glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+	vertices = (GLfloat*)glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
-	if ( vertices == NULL )
+	if ( vertices == 0 )
 	{
 		fprintf( stderr, "Unable to map vertex buffer\n" );
-		exit( EXIT_FAILURE );
+		//exit( EXIT_FAILURE );
 	}
 	else
 	{
@@ -65,14 +65,14 @@ init()
 	** the element-array loop logic */
 	glBufferData( GL_ELEMENT_ARRAY_BUFFER,
 	              NumStrips*( NumPointsPerStrip + 1 )*sizeof( GLushort ),
-	              NULL, GL_STATIC_DRAW );
+	              0, GL_STATIC_DRAW );
 	indices = glMapBuffer( GL_ELEMENT_ARRAY_BUFFER,
 	                       GL_WRITE_ONLY );
 
-	if ( indices == NULL )
+	if ( indices == 0 )
 	{
 		fprintf( stderr, "Unable to map index buffer\n" );
-		exit( EXIT_FAILURE );
+		//exit( EXIT_FAILURE );
 	}
 	else
 	{
@@ -114,10 +114,25 @@ display()
 }
 
 
-void reshape( int w, int h )
+
+void reshape( int width, int height )
 {
-	glViewport( 0, 0, ( GLsizei ) w, ( GLsizei ) h );
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	gluOrtho2D( 0.0, ( GLdouble ) w, 0.0, ( GLdouble ) h );
+    if ( height == 0 ) // Prevent A Divide By Zero By
+    {
+        height = 1; // Making Height Equal One
+    }
+
+    glViewport( 0, 0, width, height ); // Reset The Current Viewport
+
+    //投影矩阵负责为我们的场景增加透视功能，意味着越远的东西看起来越小。
+    glMatrixMode( GL_PROJECTION );				// 选择投影矩阵
+    glLoadIdentity();							// 重置投影矩阵
+
+    // 设置视口的大小
+    gluPerspective( 45.0f, ( GLfloat )width / ( GLfloat )height, 0.1f, 100.0f );
+
+    //模型观察矩阵负责存放了我们的物体信息
+    glMatrixMode( GL_MODELVIEW );						// 选择模型观察矩阵
+    glLoadIdentity();
 };
+
