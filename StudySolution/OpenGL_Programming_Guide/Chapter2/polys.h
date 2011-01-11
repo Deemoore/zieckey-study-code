@@ -66,7 +66,7 @@ void init( void )
 	glShadeModel( GL_FLAT );
     
     FILE *fp;
-    fp = fopen("opengl.redbook.chapter.polys.stipple.bmp", "rb");
+    fp = fopen("../Resource/opengl.redbook.chapter.polys.stipple.bmp", "rb");
     if( !fp )
         exit(0);
     if( fseek(fp, -(int)sizeof(Mask), SEEK_END) )
