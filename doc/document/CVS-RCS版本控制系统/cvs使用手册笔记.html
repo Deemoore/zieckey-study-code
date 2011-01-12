@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" id="sixapart-standard">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="generator" content="Movable Type 3.36" />
+
+   <link rel="stylesheet" href="http://www.chedong.com/tech/styles-site.css" type="text/css" />
+   <link rel="alternate" type="application/atom+xml" title="Atom" href="http://www.chedong.com/tech/atom.xml" />
+   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.chedong.com/tech/index.xml" />
+
+   <title>CVS使用手册 (笔记 by 车东)</title>
+
+   <link rel="start" href="http://www.chedong.com/tech/" title="Home" />
+   
+   <link rel="next" href="http://www.chedong.com/tech/webalizer.html" title="WebAlizer的配置说明（含Windows下的for IIS版）" />
+
+   <!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://www.chedong.com/tech/cvs_card.html"
+    trackback:ping="http://www.chedong.com/cgi-bin/mt/trackback.cgi/1003.your ping is to be moderated, so please dont't send repeatedly"
+    dc:title="CVS使用手册"
+    dc:identifier="http://www.chedong.com/tech/cvs_card.html"
+    dc:subject=""
+    dc:description="CVS是一个C/S系统，多个开发人员通过一个中心版本控制系统来记录文件版本，从而达到保证文件同步的目的。工作模式如下： CVS服务器（文件版本库） / | \ （版 本 同 步） / | \开发者1 开发者2 开发者3 作为一般开发人员挑选2,6看就可以了，CVS的管理员则更需要懂的更多一些，最后还简单介绍了一些Windows下的cvs客户端使用，CVS远 程用户认证的选择及与BUG跟踪系统等开发环境的集成问题。 CVS环境初始化：CVS环境的搭建 管理员 CVS的日常使用：日常开发中最常用的CVS命令， 开发人员 管理员 CVS的分支开发：项目按照不同进度和目标并发进行 管理员 CVS的用户认证：通过SSH的远程用户认证，安全，简单 管理员 CVSWEB：CVS的WEB访问界面大大提高代码版本比较的效率 管理员 CVS TAG：将$Id$ 加入代码注释中，方便开发过程的跟踪开发人员 CVS vs VSS: CVS和Virsual SourceSafe的比较 开发人员 管理员 WinCVS: 通过SSH认证的WinCVS认证设置 基于CVSTrac的小组开发环境搭建：通过CVSTrac实现web界面的CVS用户管理,集成的BUG跟踪和WIKI交流..."
+    dc:creator="车东"
+    dc:date="2002-02-06T18:36:37+08:00" />
+</rdf:RDF>
+-->
+
+
+      <!--
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="http://www.chedong.com/tech/cvs_card.html">
+<dc:title>CVS使用手册</dc:title>
+<dc:description>CVS是一个C/S系统，多个开发人员通过一个中心版本控制系统来记录文件版本，从而达到保证文件同步的目的。工作模式如下： CVS服务器（文件版本库） / | \ （版 本 同 步） / | \开发者1 开发者2 开发者3 作为一般开发人员挑选2,6看就可以了，CVS的管理员则更需要懂的更多一些，最后还简单介绍了一些Windows下的cvs客户端使用，CVS远 程用户认证的选择及与BUG跟踪系统等开发环境的集成问题。 CVS环境初始化：CVS环境的搭建 管理员 CVS的日常使用：日常开发中最常用的CVS命令， 开发人员 管理员 CVS的分支开发：项目按照不同进度和目标并发进行 管理员 CVS的用户认证：通过SSH的远程用户认证，安全，简单 管理员 CVSWEB：CVS的WEB访问界面大大提高代码版本比较的效率 管理员 CVS TAG：将$Id$ 加入代码注释中，方便开发过程的跟踪开发人员 CVS vs VSS: CVS和Virsual SourceSafe的比较 开发人员 管理员 WinCVS: 通过SSH认证的WinCVS认证设置 基于CVSTrac的小组开发环境搭建：通过CVSTrac实现web界面的CVS用户管理,集成的BUG跟踪和WIKI交流...</dc:description>
+<dc:creator>chedong</dc:creator>
+<dc:date>2002-02-06T18:36:37+08:00</dc:date>
+<license rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/cn/" />
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by-sa/2.5/cn/">
+</License>
+</rdf:RDF>
+-->
+
+   
+   <script type="text/javascript" src="http://www.chedong.com/tech/mt-site.js"></script>
+</head>
+<body class="layout-two-column-right individual-entry-archive" onload="individualArchivesOnLoad(commenter_name)">
+   <div id="container">
+      <div id="container-inner" class="pkg">
+
+         <div id="banner">
+            <div id="banner-inner" class="pkg">
+               <h1 id="banner-header"><a href="http://www.chedong.com/tech/" accesskey="1">笔记 by 车东</a></h1>
+               <h2 id="banner-description">为而不有……</h2>
+            </div>
+         </div>
+
+         <div id="pagebody">
+            <div id="pagebody-inner" class="pkg">
+               <div id="alpha">
+                  <div id="alpha-inner" class="pkg">
+
+                     <p class="content-nav">
+                        
+                        <a href="http://www.chedong.com/tech/">(回到Blog入口)</a>|<a href="/">(回到首页)</a>
+                        | <a href="http://www.chedong.com/tech/webalizer.html">WebAlizer的配置说明（含Windows下的for IIS版） &raquo;</a>
+                     </p>
+
+                     <h2 id="archive-title">CVS使用手册</h2>
+                           <span class="post-footers">
+                                   作者：<a href="http://www.chedong.com">车东</a> 发表于：2002-02-06 18:02 最后更新于：2008-02-15 22:02<br />
+                                   <a href="http://creativecommons.org/licenses/by/3.0/deed.zh">版权声明</a>：可以任意转载，转载时请务必以超链接形式标明文章<a class="permalink" href="http://www.chedong.com/tech/cvs_card.html">原始出处</a>和作者信息及<a href="http://www.chedong.com/blog/archives/001249.html">本声明</a>。<br />
+<a class="permalink" href="http://www.chedong.com/tech/cvs_card.html">http://www.chedong.com/tech/cvs_card.html</a>
+                           </span>
+<hr />
+                     <div class="entry" id="entry-1331">
+                        <div class="entry-content">
+                                                      <div class="entry-body">
+                              <p>CVS是一个C/S系统，多个开发人员通过一个中心版本控制系统来记录文件版本，从而达到保证文件同步的目的。工作模式如下： </p> <pre>       CVS服务器（文件版本库）<br />     /     |       \<br />     （版 本 同 步）<br />   /       |         \<br />开发者1  开发者2   开发者3<br /></pre> <p>作为一般开发人员挑选2,6看就可以了，CVS的管理员则更需要懂的更多一些，最后还简单介绍了一些Windows下的cvs客户端使用，CVS远 程用户认证的选择及与BUG跟踪系统等开发环境的集成问题。</p> <ol>   <li><a href="http://www.chedong.com/tech/cvs_card.html#init">CVS环境初始化</a>：CVS环境的搭建 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#daily">CVS的日常使用</a>：日常开发中最常用的CVS命令， 开发人员 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#branch">CVS的分支开发</a>：项目按照不同进度和目标并发进行 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#ssh">CVS的用户认证</a>：通过SSH的远程用户认证，安全，简单 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#cvsweb">CVSWEB</a>：CVS的WEB访问界面大大提高代码版本比较的效率 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#tag">CVS TAG</a>：将$<span style="font-weight: bold">Id</span>$ 加入代码注释中，方便开发过程的跟踪开发人员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#vss">CVS vs VSS</a>: CVS和Virsual SourceSafe的比较 开发人员 管理员</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#wincvs">WinCVS:</a> 通过SSH认证的WinCVS认证设置</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#cvstrac">基于CVSTrac的小组开发环境搭建</a>：通过CVSTrac实现web界面的CVS用户管理,集成的BUG跟踪和WIKI交流</li>   <li><a href="http://www.chedong.com/tech/cvs_card.html#auth">CVS中的用户权限管理</a>：基于系统用户的CVS权限管理和基于CVSROOT/passwd的虚拟用户管理</li> </ol> <p>一个系统20%的功能往往能够满足80%的需求，CVS也不例外，以下是CVS最常用的功能，可能还不到它全部命令选项的20%，作为一般开发人员平时会用cvs update和cvs commit就够了，更多的需求在实际应用过程中自然会出现，不时回头看看相关文档经常有意外的收获。</p>
+                           </div>
+                           
+                                                      <div id="more" class="entry-more">
+                              <h2><a name="init"></a>CVS环境初始化</h2> 环境设置：指定CVS库的路径CVSROOT <p> tcsh<br /> setenv CVSROOT /path/to/cvsroot<br /> bash<br />  CVSROOT=/path/to/cvsroot ; export CVSROOT</p> <p>后面还提到远程CVS服务器的设置：<br /> CVSROOT=:ext:$USER@test.server.address#port:/path/to/cvsroot CVS_RSH=ssh; export CVSROOT CVS_RSH<br /> <br /> 初始化：CVS版本库的初始化。<br /> cvs init</p> <p>一个项目的首次导入<br /> cvs import -m &quot;write some comments here&quot; project_name vendor_tag release_tag<br /> 执行后：会将所有源文件及目录导入到/path/to/cvsroot/project_name目录下<br />  <em>vender_tag: 开发商标记<br /> release_tag: 版本发布标记</em></p> <p> 项目导出：将代码从CVS库里导出<br /> cvs checkout project_name<br /> <em>cvs 将创建project_name目录，并将最新版本的源代码导出到相应目录中。这个checkout和Virvual SourceSafe中的check out不是一个概念，相对于Virvual SourceSafe的check out是cvs update， check in是cvs commit。</em><br /> <br /> </p> <h2><a name="daily"></a>CVS的日常使用<strong> </strong></h2> <p>&nbsp;</p>  <p><strong>注意：第一次导出以后，就不是通过cvs checkout来同步文件了，而是要进入刚才cvs checkout project_name导出的project_name目录下进行具体文件的版本同步（添加，修改，删除）操作。</strong></p> <p><u>将文件同步到最新的版本<br /> </u> cvs update<br /> <em>不制定文件名，cvs将同步所有子目录下的文件，也可以制定某个文件名/目录进行同步<br /> </em>cvs update file_name<br /> <em>最好每天开始工作前或将自己的工作导入到CVS库里前都要做一次，并养成&ldquo;先同步 后修改&rdquo;的习惯，和Virvual SourceSafe不同，CVS里没有文件锁定的概念，所有的冲突是在commit之前解决，如果你修改过程中，有其他人修改并commit到了CVS 库中，CVS会通知你文件冲突，并自动将冲突部分用<br /> &gt;&gt;&gt;&gt;&gt;&gt;<br /> content on cvs server<br /> &lt;&lt;&lt;&lt;&lt;&lt;<br />  content in your file<br /> &gt;&gt;&gt;&gt;&gt;&gt;<br /> 标记出来，由你确认冲突内容的取舍。<br /> 版本冲突一般是在多个人修改一个文件造成的，但这种项目管理上的问题不应该指望由CVS来解决。</em></p> <p><u>确认修改写入到CVS库里</u><br /> cvs commit -m &quot;write some comments here&quot; file_name</p> <p><em>注意：CVS的很多动作都是通过cvs commit进行最后确认并修改的，最好每次只修改一个文件。在确认的前，还需要用户填写修改注释，以帮助其他开发人员了解修改的原因。如果不用写-m &quot;comments&quot;而直接确认`cvs commit file_name` 的话，cvs会自动调用系统缺省的文字编辑器(一般是vi)要求你写入注释。<br /> 注释的质量很重要：所以不仅必须要写，而且必须写一些比较有意义的内容：以方便其他开发人员能够很好的理解<br /> 不好的注释，很难让其他的开发人员快速的理解：比如： -m &quot;bug fixed&quot; 甚至 -m &quot;&quot;<br />  好的注释，甚至可以用中文: -m &quot;在用户注册过程中加入了Email地址校验&quot;</em> <br /> <br /> 修改某个版本注释：每次只确认一个文件到CVS库里是一个很好的习惯，但难免有时候忘了指定文件名，把多个文件以同样注释commit到CVS库里了，以 下命令可以允许你修改某个文件某个版本的注释：<br /> cvs admin -m 1.3:&quot;write some comments here&quot; file_name<br /> <br /> <u> 添加文件</u><br /> 创建好新文件后，比如：touch new_file<br /> cvs add new_file<br /> <em>注意：对于图片，Word文档等非纯文本的项目，需要使用cvs add -kb选项按2进制文件方式导入(k表示扩展选项，b表示binary)，否则有可能出现文件被破坏的情况<br />  比如：<br /> cvs add -kb new_file.gif<br /> cvs add -kb readme.doc</em></p> <p><em>如果关键词替换属性在首次导入时设置错了怎么办？<br /> </em>cvs admin -kkv new_file.css <br /> <em><br /> </em><span style="text-decoration: underline">然后确认修改并注释</span><br /> cvs ci -m &quot;write some comments here&quot;</p> <p> <u>删除文件</u><br />  将某个源文件物理删除后，比如：rm file_name<br /> cvs rm file_name<br /> 然后确认修改并注释<br /> cvs ci -m &quot;write some comments here&quot;<br /> 以上面前2步合并的方法为：<br /> cvs rm -f file_name<br /> cvs ci -m &quot;why delete file&quot;<br /> <em>注意：很多cvs命令都有缩写形式：commit=&gt;ci; update=&gt;up; checkout=&gt;co/get; remove=&gt;rm;</em> </p>  <p><u>添加目录</u><br /> cvs add dir_name<br /> <br /> <u>查看修改历史</u><br /> cvs log file_name<br /> cvs history file_name<br /> <br /> <u> 查看当前文件不同版本的区别</u><br /> cvs diff -r1.3 -r1.5 file_name<br />  查看当前文件（可能已经修改了）和库中相应文件的区别<br /> cvs diff file_name<br /> cvs的web界面提供了更方便的定位文件修改和比较版本区别的方法，具体安装设置请看后面的cvsweb使用</p> <p><u>正确的通过CVS恢复旧版本的方法</u>：<br /> 如果用cvs update -r1.2 file.name<br /> 这个命令是给file.name加一个STICK TAG： &quot;1.2&quot; ，虽然你的本意只是想将它恢复到1.2版本<br /> 正确的恢复版本的方法是：cvs update -p -r1.2 file_name &gt;file_name<br /> 如果不小心已经加成STICK TAG的话：用cvs update -A 解决</p>  <p><u>移动文件/文件重命名</u><br /> cvs里没有cvs move或cvs rename，因为这两个操作是可以由先cvs remove old_file_name，然后cvs add new_file_name实现的。</p> <p> <u>删除/移动目录</u><br /> 最方便的方法是让管理员直接移动，删除CVSROOT里相应目录（因为CVS一个项目下的子目录都是独立的，移动到$CVSROOT目录下都可以作为新的 独立项目：好比一颗树，其实砍下任意一枝都能独立存活），对目录进行了修改后，要求其开发人员重新导出项目cvs checkout project_name 或者用cvs update -dP同步。</p> <p><u>项目发布导出不带CVS目录的源文件</u><br /> 做开发的时候你可能注意到了，每个开发目录下，CVS都创建了一个CVS/目录。里面有文件用于记录当前目录和CVS库之间的对应信息。但项目发布的时候 你一般不希望把文件目录还带着含有CVS信息的CVS目录吧，这个一次性的导出过程使用cvs export命令，不过export只能针对一个TAG或者日期导出，比如：<br /> cvs export -r release1 project_name <br /> cvs export -D 20021023 project_name<br />  cvs export -D now project_name</p> <h2><a name="branch"></a>CVS Branch：项目多分支同步开发</h2> 确认版本里程碑：多个文件各自版本号不一样，项目到一定阶段，可以给所有文件统一指定一个阶段里程碑版本号，方便以后按照这个阶段里程碑版本号导出项目， 同时也是项目的多个分支开发的基础。<br /> <p> cvs tag release_1_0</p> <p><u>开始一个新的里程碑</u>：<br /> cvs commit -r 2 标记所有文件开始进入2.x的开发</p> <p><em>注意：CVS里的revsion和软件包的发布版本可以没有直接的关系。但所有文件使用和发布版本一致的版本号比较有助于维护。</em></p> <p><u>版本分支的建立</u><br />  在开发项目的2.x版本的时候发现1.x有问题，但2.x又不敢用，则从先前标记的里程碑：release_1_0导出一个分支 release_1_0_patch<br /> cvs rtag -b -r release_1_0 release_1_0_patch proj_dir</p> <p>一些人先在另外一个目录下导出release_1_0_patch这个分支：解决1.0中的紧急问题，<br /> cvs checkout -r release_1_0_patch<br /> 而其他人员仍旧在项目的主干分支2.x上开发</p> <p>在release_1_0_patch上修正错误后，标记一个1.0的错误修正版本号<br /> cvs tag release_1_0_patch_1</p> <p>如果2.0认为这些错误修改在2.0里也需要，也可以在2.0的开发目录下合并release_1_0_patch_1中的修改到当前代码中：<br /> cvs update -j release_1_0_patch_1</p>  <h2><a name="ssh"></a>CVS的远程认证通过SSH远程访问CVS</h2> 使用cvs本身基于pserver的远程认证很麻烦,需要定义服务器和用户组，用户名，设置密码等，<br /> <p> 常见的登陆格式如下：<br /> cvs -d :pserver:cvs_user_name@cvs.server.address:/path/to/cvsroot login<br /> 例子：<br /> cvs -d :pserver:cvs@samba.org:/cvsroot login</p> <p>不是很安全，因此一般是作为匿名只读CVS访问的方式。从安全考虑，通过系统本地帐号认证并通过SSH传输是比较好的办法，通过在客户机的 /etc/profile里设置一下内容：<br /> CVSROOT=:ext:$USER@cvs.server.address#port:/path/to/cvsroot CVS_RSH=ssh; export CVSROOT CVS_RSH<br />  所有客户机所有本地用户都可以映射到CVS服务器相应同名帐号了。</p> <p>比如:</p> <p>CVS服务器是192.168.0.3，上面CVSROOT路径是/home/cvsroot，另外一台开发客户机是192.168.0.4，如果 tom在2台机器上都有同名的帐号，那么从192.168.0.4上设置了：<br /> export CVSROOT=:ext:tom@192.168.0.3:/home/cvsroot<br /> export CVS_RSH=ssh<br /> tom就可以直接在192.168.0.4上对192.168.0.3的cvsroot进行访问了（如果有权限的话）<br /> cvs checkout project_name<br /> cd project_name<br /> cvs update<br />  ...<br /> cvs commit <br /> </p> <p> 如果CVS所在服务器的SSH端口不在缺省的22，或者和客户端与CVS服务器端SSH缺省端口不一致，有时候设置了：<br /> :ext:$USER@test.server.address#port:/path/to/cvsroot <br /> <br /> 仍然不行，比如有以下错误信息：<br /> ssh: test.server.address#port: Name or service not known<br /> cvs [checkout aborted]: end of file from server (consult above messages if any)<br />  <br /> 解决的方法是做一个脚本指定端口转向（不能使用alias，会出找不到文件错误）：<br /> 创建一个/usr/bin/ssh_cvs文件，假设远程服务器的SSH端口是非缺省端口：34567<br /> #!/bin/sh<br /> /usr/bin/ssh -p 34567 &quot;$@&quot;<br /> 然后：chmod +x /usr/bin/ssh_cvs<br /> 并CVS_RSH=ssh_cvs; export CVS_RSH</p> <p>注意：port是指相应服务器SSH的端口，不是指cvs专用的pserver的端口<br /> <br /> </p>  <h2><a name="cvsweb"></a>CVSWEB：提高文件浏览效率</h2> CVSWEB就是CVS的WEB界面，可以大大提高程序员定位修改的效率:<br /> <p> 使用的样例可以看：<a href="http://www.freebsd.org/cgi/cvsweb.cgi">http://www.freebsd.org/cgi/cvsweb.cgi</a></p> <p>CVSWEB的下载：CVSWEB从最初的版本已经演化出很多功能界面更丰富的版本，这个是我个人感觉安装设置比较方便的：<br /> 原先在：http://www.spaghetti-code.de/software/linux/cvsweb/，但目前已经删除，<a href="http://www.chedong.com/cgi-bin/mt/cvsweb.tgz">目前仍可以在本站下载CVSWEB</a>， 其实最近2年<a href="http://www.freebsd.org/projects/cvsweb.html">FreeBSD的CVSWeb项目</a>已经有了更好的发展吧，而当初没有用FreeBSD那个版本 主要就是因为没有彩色的文件Diff功能。  <br /> 下载解包：<br /> tar zxf cvsweb.tgz<br /> 把配置文件cvsweb.conf放到安全的地方（比如和apache的配置放在同一个目录下），<br /> 修改：cvsweb.cgi让CGI找到配置文件：<br /> $config = $ENV{'CVSWEB_CONFIG'} || '/path/to/apache/conf/cvsweb.conf';<br /> <br /> 转到/path/to/apache/conf下并修改cvsweb.conf：</p> <ol>   <li> 修改CVSROOT路径设置：<br />  %CVSROOT = (<br /> 'Development' =&gt; '/path/to/cvsroot', #&lt;==修改指向本地的CVSROOT<br /> );</li>   <li> 缺省不显示已经删除的文档：<br /> &quot;hideattic&quot; =&gt; &quot;1&quot;,#&lt;==缺省不显示已经删除的文档</li>    <li>在配置文件cvsweb.conf中还可以定制页头的描述信息，你可以修改$long_intro成你需要的文字</li> </ol> <p> CVSWEB可不能随便开放给所有用户，因此需要使用WEB用户认证：<br /> 先生成 passwd:<br /> /path/to/apache/bin/htpasswd -c cvsweb.passwd user<br /> <br /> 修改httpd.conf: 增加<br /> &lt;Directory &quot;/path/to/apache/cgi-bin/cvsweb/&quot;&gt;<br /> AuthName &quot;CVS Authorization&quot;<br />  AuthType Basic<br /> AuthUserFile /path/to/cvsweb.passwd<br /> require valid-user<br /> &lt;/Directory&gt;<br /> <br /> </p> <h2><a name="tag"></a>CVS TAGS: $Id$</h2> 将$Id$ 加在程序文件开头的注释里是一个很好的习惯，cvs能够自动解释更新其中的内容成：file_name version time user_name 的格式，比如：cvs_card.txt,v 1.1 2002/04/05 04:24:12 chedong Exp，可以这些信息了解文件的最后修改人和修改时间。<br /><pre>几个常用的缺省文件：<br />default.php<br />&lt;?php<br />/*<br /> * Copyright (c) 2002 Company Name.<br /> * $Header$<br /> */<br /><br />?&gt;<br />====================================<br />Default.java: 注意文件头一般注释用 /* 开始 JAVADOC注释用 /** 开始的区别<br />/*<br /> * Copyright (c) 2002 MyCompany Name.<br /> * $Header$<br /> */<br /><br />package com.mycompany;<br /><br />import java.;<br /><br />/**<br /> * comments here<br /> */<br />public class Default {<br />    /**<br />     * Comments here<br />     * @param<br />     * @return<br />     */<br />    public toString() {<br /><br />    }<br />}<br />====================================<br />default.pl:<br />#!/usr/bin/perl -w<br /># Copyright (c) 2002 Company Name.<br /># $Header$<br /><br /># file comments here<br /><br />use strict;<br /><br /></pre>  <h2><a name="vss"></a>CVS vs VSS</h2> <p>CVS没有文件锁定模式，VSS在check out同时，同时记录了文件被导出者锁定。 </p> <p>CVS的update和commit， VSS是get_lastest_version和check in </p> <p>对应VSS的check out/undo check out的CVS里是edit和unedit </p> <p>在CVS中，标记自动更新功能缺省是打开的，这样也带来一个潜在的问题，就是不用-kb方式添加binary文件的话在cvs自动更新时可能会导致 文件失效。</p> <p>$Header$ $Date$这样的标记在Virsual SourceSafe中称之为Keyword Explaination，缺省是关闭的，需要通过OPITION打开，并指定需要进行源文件关键词扫描的文件类型：*.txt,*.java, *.html...</p> <p>对于Virsual SourceSafe和CVS都通用的TAG有：<br /> $Header$<br /> $Author$<br />  $Date$ <br /> $Revision$ </p> <p>我建议尽量使用通用的关键词保证代码在CVS和VSS都能方便的跟踪。 </p> <h2><a name="wincvs"></a>WinCVS</h2> 下载：<br /> <p> cvs Windows客户端：目前稳定版本为1.2<br /> <a href="http://cvsgui.sourceforge.net">http://cvsgui.sourceforge.net</a><br /> ssh Windows客户端<br />  <a href="http://www.networksimplicity.com/openssh/">http://www.networksimplicity.com/openssh/</a><br /> <br /> 安装好以上2个软件以后：<br /> WinCVS客户端的admin==&gt;preference设置<br /> 1 在general选单里<br /> 设置CVSROOT： username@192.168.0.123:/home/cvsroot<br /> 设置Authorization: 选择SSH server<br /> <br /> 2 Port选单里<br />  钩上：check for alternate rsh name<br /> 并设置ssh.exe的路径，缺省是装在 C:\Program Files\NetworkSimplicity\ssh\ssh.exe </p> <p>然后就可以使用WinCVS进行cvs操作了，所有操作都会跳出命令行窗口要求你输入服务器端的认证密码。 </p> <p>当然，如果你觉得这样很烦的话，还有一个办法就是生成一个没有密码的公钥/私钥对，并设置CVS使用基于公钥/私钥的SSH认证（在general 选单里）。</p> <p>可以选择的diff工具：examdiff<br /> 下载：<br /> <a href="http://www.prestosoft.com/examdiff/examdiff.htm">http://www.prestosoft.com/examdiff/examdiff.htm</a><br /> 还是在WinCVS菜单admin==&gt;preference的WinCVS选单里<br />  选上：Externel diff program<br /> 并设置diff工具的路径，比如：C:\Program Files\ed16i\ExamDiff.exe<br /> 在对文件进行版本diff时，第一次需要将窗口右下角的use externel diff选上。 </p> <h2><a name="cvstrac"></a>基于CVSTrac的小组开发环境搭建</h2> 作为一个小组级的开发环境，版本控制系统和BUG跟踪系统等都涉及到用户认证部分。如何方便的将这些系统集成起来是一个非常困难的事情，毕竟我们不能指望 Linux下有像Source Offsite那样集成度很高的版本控制/BUG跟踪集成系统。<br /> <br /> 我个人是很反对使用pserver模式的远程用户认证的，但如果大部分组员使用WINDOWS客户端进行开发的话，总体来说使用 CVSROOT/passwd认证还是很难避免的，但CVS本身用户的管理比较麻烦。本来我打算自己用perl写一个管理界面的，直到我发现了 CVSTrac： 一个基于WEB界面的BUG跟踪系统，它外挂在CVS系统上的BUG跟踪系统，其中就包括了WEB界面的CVSROOT/passwd文件的管理，甚至还 集成了WIKIWIKI讨论组功能。 <p>这里首先说一下CVS的pserver模式下的用户认证，CVS的用户认证服务是基于inetd中的：<br /> cvspserver stream tcp nowait apache /usr/bin/cvs cvs --allow-root=/home/cvsroot pserver<br /> 一般在2401端口（这个端口号很好记：49的平方）<br />  <br /> CVS用户数据库是基于CVSROOT/passwd文件，文件格式：<br /> [username]:[crypt_password]:[mapping_system_user]<br /> 由于密码都用的是UNIX标准的CRYPT加密，这个passwd文件的格式基本上是apache的htpasswd格式的扩展（比APACHE的 PASSWD文件多一个系统用户映射字段），所以这个文件最简单的方法可以用<br /> apache/bin/htpasswd -b myname mypassword <br /> 创建。注意：通过htpasswd创建出来的文件会没有映射系统用户的字段<br /> 例如：<br /> new:geBvosup/zKl2<br /> setup:aISQuNAAoY3qw<br />  test:hwEpz/BX.rEDU </p> <p>映射系统用户的目的在于：你可以创建一个专门的CVS服务帐号，比如用apache的运行用户apache，并将/home/cvsroot目录下 的所有权限赋予这个用户，然后在passwd文件里创建不同的开发用户帐号，但开发用户帐号最后的文件读写权限都映射为apache用户，在SSH模式下 多个系统开发用户需要在同一个组中才可以相互读写CVS库中的文件。</p> <p>进一步的，你可以将用户分别映射到apache这个系统用户上。<br /> new:geBvosup/zKl2:apache<br /> setup:aISQuNAAoY3qw:apache<br /> test:hwEpz/BX.rEDU:apache </p> <p>CVSTrac很好的解决了CVSROOT/passwd的管理问题，而且包含了BUG跟踪报告系统和集成WIKIWIKI交流功能等，使用的 CGI方式的安装，并且基于<a href="http://www.gnu.org/copyleft/gpl.html">GNU Public License</a>：<br /> </p>  <p align="left">在inetd里加入cvspserver服务：<br /> cvspserver stream tcp nowait apache /usr/bin/cvs cvs --allow-root=/home/cvsroot pserver</p> <p align="left">xietd的配置文件：%cat cvspserver <br /> service cvspserver<br /> {<br /> disable = no<br /> socket_type = stream<br /> wait = no<br /> user = apache<br />  server = /usr/bin/cvs<br /> server_args = -f --allow-root=/home/cvsroot pserver<br /> log_on_failure += USERID<br /> }</p> <p> 注意：这里的用户设置成apache目的是和/home/cvsroot的所有用户一致，并且必须让这个这个用户对/home/cvsroot/下的 CVSROOT/passwd和cvstrac初始化生成的myproj.db有读取权限。</p> <p>&nbsp;</p> <p>安装过程 </p> <ol>   <li>下载：可以从<a href="http://www.cvstrac.org">http://www.cvstrac.org</a>  下载<br /> 我用的是已经在Linux上编译好的应用程序包：cvstrac-1.1.2.bin.gz，<br /> %gzip -d cvstrac-1.1.2.bin.gz<br /> %chmod +x cvstrac-1.1.2.bin<br /> #mv cvstarc-1.1.1.bin /usr/bin/cvstrac</li>   <br /> 如果是从源代码编译：<br /> 从 http://www.sqlite.org/download.html 下载SQLITE的rpm包：<br /> rpm -i sqlite-devel-2.8.6-1.i386.rpm<br />  从 ftp://ftp.cvstrac.org/cvstrac/ 下载软件包<br /> 解包，假设解包到/home/chedong/cvstrac-1.1.2下，并规划将cvstrac安装到/usr/local/bin目录下， cd /home/chedong/cvstrac-1.1.2 编辑linux-gcc.mk:<br /> 修改：<br /> SRCDIR = /home/chedong/cvstrac-1.1.2<br /> INSTALLDIR = /usr/local/bin<br /> 然后<br /> mv linux-gcc.mk Makefile<br /> make<br /> #make install<br />    <br />   <li> 初始化cvstrac数据库：假设数据库名是 myproj<br /> 在已经装好的CVS服务器上（CVS库这时候应该已经是初始化好了，比如：cvs init初始化在/home/cvsroot里），运行一下<br /> %cvstrac init /home/cvsroot myproj<br /> 运行后，/home/cvsroot里会有一个的myproj.db库，使用CVSTRAC服务，/home/cvsroot/myproj.db /home/cvsroot/CVSROOT/readers /home/cvsroot/CVSROOT/writers /home/cvsroot/CVSROOT/passwd这几个文件对于web服务的运行用户应该是可写的，在RedHat8上，缺省就有一个叫 apache用户和一个apache组，所以在httpd.conf文件中设置了用apache用户运行web服务：<br /> User apache<br /> Group apache，<br /> 然后设置属于apache用户和apache组<br />  #chown -R apache:apache /home/cvsroot<br /> -rw-r--r-- 1 apache apache 55296 Jan 5 19:40 myproj.db<br /> drwxrwxr-x 3 apache apache 4096 Oct 24 13:04 CVSROOT/<br /> drwxrwxr-x 2 apache apache 4096 Aug 30 19:47 some_proj/<br /> 此外还在/home/cvsroot/CVSROOT中设置了：<br /> chmod 664 readers writers passwd<br />   </li>   <li>在apche/cgi-bin目录中创建脚本cvstrac:<br />  #!/bin/sh<br /> /usr/bin/cvstrac cgi /home/cvsroot<br /> 设置脚本可执行：<br /> chmod +x /home/apache/cgi-bin/cvstrac<br />   </li>   <li>从 http://cvs.server.address/cgi-bin/cvstrac/myproj 进入管理界面<br /> 缺省登录名：setup 密码 setup<br /> 对于一般用户可以从：<br />  http://cvs.server.address/cgi-bin/cvstrac/myproj</li>   <li>在setup中重新设置了CVSROOT的路径后，/home/cvsroot<br /> 如果是初次使用需要在/home/cvsroot/CVSROOT下创建passwd, readers, writers文件<br /> touch passwd readers writers<br /> 然后设置属于apache用户，<br /> chown apache.apache passwd readers writers<br /> 这样使用setup用户创建新用户后会同步更新CVSROOT/passwd下的帐号<br />   </li>  </ol> <p align="left">修改登录密码，进行BUG报告等，<br /> 更多使用细节可以在使用中慢慢了解。<br /> </p> <p align="left">对于前面提到的WinCVS在perference里设置：<br /> CVSROOT栏输入：username@ip.address.of.cvs:/home/cvsroot<br /> Authenitication选择：use passwd file on server side <br /> 就可以了从服务器上进行CVS操作了。<br /> </p> <h2><a name="auth"></a>CVS的用户权限管理</h2>  <p align="left">CVS的权限管理分2种策略：<br /> </p> <ul>   <li>基于系统文件权限的系统用户管理：适合多个在Linux上使用系统帐号的开发人员进行开发。</li>   <li>基于CVSROOT/passwd的虚拟用户管理：适合多个在Windows平台上的开发人员将帐号映射成系统帐号使用。</li> </ul> 为什么使用apache/apache用户？首先RedHat8中缺省就有了，而且使用这个用户可以方便通过cvstrac进行WEB管理。<br /> chown -R apache.apache /home/cvsroot<br /> chmod 775 /home/cvsroot<br />  <p align="left">Linux上通过ssh连接CVS服务器的多个开发人员：通过都属于apache组实现文件的共享读写<br /> 开发人员有开发服务器上的系统帐号：sysuser1 sysuser2，设置让他们都属于apache组，因为通过cvs新导入的项目都是对组开放的：664权限的，这样无论那个系统用户导入的项目文件，只 要文件的组宿主是apache，所有其他同组系统开发用户就都可以读写；基于ssh远程认证的也是一样。<br /> </p> <p align="left">&nbsp; &nbsp;apache(system group)<br /> / &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; \<br /> sysuser1 &nbsp; sysuser2 &nbsp; &nbsp; sysuser3<br /> </p> <p align="left">Windows上通过cvspserver连接CVS服务器的多个开发人员：通过在passwd文件种映射成 apache用户实现文件的共享读写<br /> 他们的帐号通过CVSROOT/passwd和readers writers这几个文件管理；通过cvstrac设置所有虚拟用户都映射到apache用户上即可。<br /> </p>  <p align="left">&nbsp; &nbsp;apache(system user)<br /> / &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\<br />  windev1 &nbsp; &nbsp; windev2 &nbsp; &nbsp; &nbsp;windev3&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p> <p align="left">&nbsp;</p> <p>&nbsp;</p> <p>利用CVS WinCVS/CVSWeb/CVSTrac 构成了一个相对完善的跨平台工作组开发版本控制环境。</p>  <p>相关资源： </p> <p>CVS HOME：<br /> <a href="http://www.cvshome.org">http://www.cvshome.org</a></p> <p>CVS FAQ：<br /> <a href="http://www.loria.fr/%7Emolli/cvs-index.html">http://www.loria.fr/~molli/cvs-index.html</a><br /> <br /> 相关网站:<br /> <a href="http://directory.google.com/Top/Computers/Software/Configuration_Management/Tools/Concurrent_Versions_System/">http://directory.google.com/Top/Computers/Software/Configuration_Management/Tools/Concurrent_Versions_System/</a><br /> </p> <p>CVS--并行版本系统<br />  <a href="http://www.soforge.com/cvsdoc/zh_CN/book1.html">http://www.soforge.com/cvsdoc/zh_CN/book1.html</a></p> <p>CVS 免费书:<br /> <a href="http://cvsbook.red-bean.com/">http://cvsbook.red-bean.com/</a></p> <p><a href="http://refcards.com/refcards/cvs/index.html">CVS命令的速查卡片 refcards.com/refcards/cvs/</a></p> <p>WinCVS:<br /> <a href="http://cvsgui.sourceforge.net/">http://cvsgui.sourceforge.net/</a></p> <p>CVSTrac: A Web-Based Bug And Patch-Set Tracking System For CVS<br /> <a href="http://www.cvstrac.org">http://www.cvstrac.org</a> </p>  <p>StatCVS：基于CVS的代码统计工具：按代码量，按开发者的统计表等<br /> <a href="http://sourceforge.net/projects/statcvs">http://sourceforge.net/projects/statcvs<br /> </a></p> 如何在WEB开发中规划CVS上：在Google上查 &quot;cvs web development&quot;<br /> <a href="http://ccm.redhat.com/bboard-archive/cvs_for_web_development/index.html">http://ccm.redhat.com/bboard-archive/cvs_for_web_development/index.html</a><br /> <br /> 一些集成了CVS的IDE环境： <br /> <a href="http://www.eclipse.org/">Eclipse</a><br />
+                           </div>
+                                        
+                           
+                        </div>
+                        <p class="entry-footer">
+                           <span class="post-footers">
+                               <a href="http://www.chedong.com/cgi-bin/mt/mt.cgi?__mode=view&_type=entry&id=1331&blog_id=10" class="permalink">再编辑</a>
+                           </span> 
+                        </p>
+                     </div>
+
+                                          <div class="trackbacks">
+                        <h3 id="trackback" class="trackbacks-header">引用通告</h3>
+                        <div id="trackbacks-info">
+                           <p>TrackBack URL for this entry:<br />如果您想引用这篇文章到您的Blog，<br />请复制下面的链接，并放置到您发表文章的相应界面中。<br />http://www.chedong.com/cgi-bin/mt/trackback.cgi/1003.<script type="text/javascript">obfuscator('TYTwTTj1Qj', 'AHtZapOml2GBxURWsz8jCJeXLvPi19qFM6DK07Trd45okNbycn3YQShVIfguwE', '__MTTBLINK__', 'http://www.chedong.com/cgi-bin/mt/trackback.cgi/1003.', '');</script></p>
+                        </div>
+                                                                                 <div class="trackbacks-content">
+                              <p>以下是前来引用的链接:  <a href="http://www.chedong.com/tech/cvs_card.html" rel="nofollow">CVS使用手册</a>:</p>
+                           
+                           <a id="p214602"></a>
+                           <div class="trackback" id="ping-214602">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a href="http://www.chedong.com/blog/archives/000790.html" rel="nofollow nofollow">[GTD]: Getting Things Done! 搞定</a> 来自 车东[Blog^2]<br />
+                                    无论是工作还是生活中很多人都遇到过时间/事务管理的问题，有的朋友会问：有没有能将... <a href="http://www.chedong.com/blog/archives/000790.html" rel="nofollow nofollow">[阅读更多细节]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 引用时间:  <a href="#ping-214602" rel="nofollow">November  9, 2007 09:58 AM</a>
+                              </p>
+                           </div>
+                           
+                                                   
+                           <a id="p214704"></a>
+                           <div class="trackback" id="ping-214704">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a href="http://www.cnblogs.com/csdnexpert/archive/2007/12/17/999756.html" rel="nofollow nofollow"> WinCVS中文版及中文使用手册</a> 来自 csdnexpert<br />
+                                    WinCVS是CVS的一个客户端程序，它以CVS作为基础，在其上构造了功能强大的GUI，使得Windows平台上的CVS用户可以轻而易举的进行协同工作！W... <a href="http://www.cnblogs.com/csdnexpert/archive/2007/12/17/999756.html" rel="nofollow nofollow">[阅读更多细节]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 引用时间:  <a href="#ping-214704" rel="nofollow">December 17, 2007 10:38 AM</a>
+                              </p>
+                           </div>
+                           
+                                                   
+                           <a id="p215758"></a>
+                           <div class="trackback" id="ping-215758">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a href="http://blog.csdn.net/techcrunch/archive/2008/01/03/2018975.aspx" rel="nofollow nofollow"> WinCVS中文版及中文使用手册</a> 来自 techcrunch<br />
+                                    WinCVS是CVS的一个客户端程序，它以CVS作为基础，在其上构造了功能强大的GUI，使得Windows平台上的CVS用户可以轻而易举的进行协同工作！ ... <a href="http://blog.csdn.net/techcrunch/archive/2008/01/03/2018975.aspx" rel="nofollow nofollow">[阅读更多细节]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 引用时间:  <a href="#ping-215758" rel="nofollow">January  3, 2008 12:46 PM</a>
+                              </p>
+                           </div>
+                           
+                                                   
+                           <a id="p215759"></a>
+                           <div class="trackback" id="ping-215759">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a href="http://blog.csdn.net/hejishan/archive/2008/01/03/2020567.aspx" rel="nofollow nofollow"> WinCVS中文版及中文使用手册</a> 来自 itkbase<br />
+                                    WinCVS是CVS的一个客户端程序，它以CVS作为基础，在其上构造了功能强大的GUI，使得Windows平台上的CVS用户可以轻而易举的进行协同工作！ ... <a href="http://blog.csdn.net/hejishan/archive/2008/01/03/2020567.aspx" rel="nofollow nofollow">[阅读更多细节]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 引用时间:  <a href="#ping-215759" rel="nofollow">January  3, 2008 02:45 PM</a>
+                              </p>
+                           </div>
+                           
+                                                   
+                           <a id="p215802"></a>
+                           <div class="trackback" id="ping-215802">
+                              <div class="trackback-content">
+                                 <p>
+                                    &raquo; <a href="http://www.chedong.com/blog/archives/001412.html" rel="nofollow nofollow">svn diff版本如何忽略空格</a> 来自 车东[Blog^2]<br />
+                                    最近才了解并开始使用svn ，其实和cvs的操作还是略有一些差别的。cvs其实很... <a href="http://www.chedong.com/blog/archives/001412.html" rel="nofollow nofollow">[阅读更多细节]</a>
+                                 </p>
+                              </div>
+                              <p class="trackback-footer">
+                                 引用时间:  <a href="#ping-215802" rel="nofollow">January  9, 2008 01:04 AM</a>
+                              </p>
+                           </div>
+                                                         </div>
+                           
+                        
+                     </div>
+                     
+
+                     <script type="text/JavaScript">
+var yahoo_pid="un_10105_769_19";
+var yahoo_bgcolor="FFFFFF";
+var yahoo_bordercolor="FFFFFF";
+var yahoo_titlecolor="0082FF";
+var yahoo_titlebgcolor="ffffff";
+var yahoo_descolor="000000";
+var yahoo_linkcolor="0082FF";
+var yahoo_width=728;
+var yahoo_height=145;
+var yahoo_type = 7;
+</script>
+<script type="text/javascript" src="http://cm.p4p.cn.yahoo.com/inf.js"></script>                     <div id="comments" class="comments">
+                                                      <h3 class="comments-header">Comments</h3>
+                           <a id="c056966"></a>
+                           <div class="comment" id="comment-56966">
+                              <div class="comment-content">
+                                 <p>挺好的文章，最近在做个项目要用到CVS，觉得很有用！<br />
+thanks!<br />
+</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 cocobear  发表于
+                                 <a href="#comment-56966">May 10, 2007 09:52 PM</a>
+                              </p>
+                           </div>
+                                                      
+                           <a id="c057241"></a>
+                           <div class="comment" id="comment-57241">
+                              <div class="comment-content">
+                                 <p>很好的文章。最近想学习这方面的知识，使用的是wincvs，现在有一个问题想请教：在文件副本中对源文件如何做修改？因为可能要用到一些编译环境，如何编译？编译后如何保存？谢谢！</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 wind  发表于
+                                 <a href="#comment-57241">June 28, 2007 10:22 AM</a>
+                              </p>
+                           </div>
+                                                      
+                           <a id="c057589"></a>
+                           <div class="comment" id="comment-57589">
+                              <div class="comment-content">
+                                 <p>　　谢谢．．．我现在要在windows下搭建一个ＣＶＳ版本控制，但是没有好的安装软件，有人可以给我推荐一个吗？？？好象现在这些软件很少</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 菜鸟  发表于
+                                 <a href="#comment-57589">September 18, 2007 03:22 PM</a>
+                              </p>
+                           </div>
+                                                      
+                           <a id="c057737"></a>
+                           <div class="comment" id="comment-57737">
+                              <div class="comment-content">
+                                 <p>windows下,客户端和服务器版本不以至就不能登录,是什么问题?有没有一种好的解决办法?</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 xianwang   发表于
+                                 <a href="#comment-57737">October 29, 2007 07:33 PM</a>
+                              </p>
+                           </div>
+                                                      
+                           <a id="c057813"></a>
+                           <div class="comment" id="comment-57813">
+                              <div class="comment-content">
+                                 <p>答菜鸟：windows下可以用cvsnt来搭建服务器。<br />
+答xianwang：你的问题描述不清楚呵，windows下用的什么客户端？</p>
+
+<p>可以到：www.scmbbs.com中的“cvs门派论坛”提问，有人解答。</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 xuejiang  发表于
+                                 <a href="#comment-57813">November 15, 2007 07:24 PM</a>
+                              </p>
+                           </div>
+                                                      
+                           <a id="c057970"></a>
+                           <div class="comment" id="comment-57970">
+                              <div class="comment-content">
+                                 <p>相比cvs，还是建议使用svn</p>
+                              </div>
+                              <p class="comment-footer">
+                                 由:
+                                 jason  发表于
+                                 <a href="#comment-57970">December 20, 2007 05:41 PM</a>
+                              </p>
+                           </div>
+                           
+
+                         
+                        <form method="post" action="http://www.chedong.com/cgi-bin/mt/cm.cgi" name="comments_form" onsubmit="if (this.bakecookie.checked) rememberMe(this)">
+                           <input type="hidden" name="static" value="1" />
+                           <input type="hidden" name="entry_id" value="1331" />
+                           
+                           <div class="comments-open" id="comments-open">
+                              <h2 class="comments-open-header">发表一个评论</h2>
+                              
+                              <div class="comments-open-content">
+                                 <script type="text/javascript">
+                                 <!--
+                                 writeTypeKeyGreeting(commenter_name, 1331);
+                                 //-->
+                                 </script>
+                              
+                                                                  <p class="comments-open-moderated">
+                                    (如果你此前从未在此 Blog 上发表过评论，则你的评论必须在 Blog 主人验证后才能显示，请你耐心等候。)
+                                 </p>
+                                 
+
+                                 <div id="comments-open-data">
+                                    <div id="name-email">
+                                       <p>
+                                          <label for="comment-author">名字:</label>
+                                          <input id="comment-author" name="author" size="30" />
+                                       </p>
+                                       <p>
+                                          <label for="comment-email">Email 地址:</label>
+                                          <input id="comment-email" name="email" size="30" />
+                                       </p>
+                                    </div>
+                                    <!--
+                                    <p>
+                                       <label for="comment-url">URL:</label>
+                                       <input id="comment-url" name="url" size="30" />
+                                    </p>
+                                    -->
+                                    <p>
+                                       <label for="comment-bake-cookie"><input type="checkbox"
+                                          id="comment-bake-cookie" name="bakecookie" onclick="if (!this.checked) forgetMe(document.comments_form)" value="1" />
+                                          记住个人信息？</label>
+                                    </p>
+                                 </div>
+
+                                 <p id="comments-open-text">
+                                    <label for="comment-text">评论: (你可以使用 HTML 标签设置风格)</label>
+                                    <textarea id="comment-text" name="text" rows="15" cols="50"></textarea>
+                                 </p>
+                                 <div id="comments-open-footer" class="comments-open-footer">
+<script type="text/javascript">obfuscator('qukWyyuyWy', 'm5sNVq9YaSgUrF3bkcBTe10QWhf7tMCyKDXvRwHiO4pjZlxGLnouA6d8z2JIPE', 'hidden_input', '', '');</script>
+                                    <input type="submit" accesskey="s" name="post" id="comment-post" value="发表" />
+                                 </div>
+                              </div>
+                           </div>
+                        </form>
+                        
+                     </div>
+                     
+                  </div>
+               </div>
+               <div id="beta">
+                  <div id="beta-inner" class="pkg">
+
+                      <div class="module-search module">
+                         <h2 class="module-header">搜索</h2>
+                         <div class="module-content">
+<!-- SiteSearch Google -->
+<form method="get" action="http://www.google.cn/custom" target="google_window">
+<p>
+<input type="hidden" name="domains" value="chedong.com"></input>
+<input type="text" name="q" size="20" maxlength="55" value=""></input><br />
+<input type="radio" name="sitesearch" value=""></input><a>Web</a>
+<input type="radio" name="sitesearch" value="chedong.com" checked="checked"></input><a>chedong.com</a><br />
+<input type="submit" name="sa"></input><br />
+<input type="hidden" name="client" value="pub-1309797784693300"></input>
+<input type="hidden" name="forid" value="1"></input>
+<input type="hidden" name="ie" value="UTF-8"></input>
+<input type="hidden" name="oe" value="UTF-8"></input>
+<input type="hidden" name="cof" value="GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1;"></input>
+<input type="hidden" name="hl" value="zh-CN"></input>
+</p>
+</form>
+<!-- SiteSearch Google -->
+
+                            <form method="get" action="http://www.chedong.com/cgi-bin/mt/mt-search.cgi">
+                               <input type="hidden" name="IncludeBlogs" value="10" />
+                               <label for="search" accesskey="4">搜索此 Blog: </label><br />
+                               <input id="search" name="search" size="20" />
+                               <input type="submit" value="搜索" />
+                            </form>
+                         </div>
+                      </div>
+
+                      <div class="module-welcome module">
+                        <h2 class="module-header">相关文章</h2>
+                        <div class="module-content">
+                        
+                        </div>
+
+                         <h2 class="module-header">关于</h2>
+                         <div class="module-content">
+                             <p class="first">此页面包含了发表于<strong>February 06, 2002 06:36 PM</strong>的 Blog 上的单篇日记。</p>
+                             
+
+                             <p>此 Blog 的后一篇日记是 <a href="http://www.chedong.com/tech/webalizer.html">WebAlizer的配置说明（含Windows下的for IIS版）</a>。</p>
+
+                             <p>更多信息可在 <a href="http://www.chedong.com/tech/">主索引</a> 页和 <a href="http://www.chedong.com/tech/archives.html">归档</a> 页看到。</p>
+                             
+                         </div>
+                      </div>
+
+                      <div class="module-syndicate module">
+                         <div class="module-content">
+                            <a href="http://www.chedong.com/tech/atom.xml">订阅 RSS feed</a><br />
+                            [<a href="http://www.sixapart.com/about/feeds">这是什么？</a>]<br />
+<a href="http://www.google.com/reader/preview/*/feed/http://feed.feedsky.com/chedong">订阅到 Google Reader</a><br />
+<a href="http://www.zhuaxia.com/add_channel.php?url=http://feed.feedsky.com/chedong">订阅到 抓虾</a><br />
+<a href="http://www.bloglines.com/sub/http://feed.feedsky.com/chedong">订阅到 Bloglines</a><br />
+<a href="http://add.my.yahoo.com/rss?url=http://feed.feedsky.com/chedong">订阅到 My Yahoo!</a><br />
+<a href="http://www.potu.com/sub/http://feed.feedsky.com/chedong" title="PUTO 用户点击添加到自己的订阅列表">订阅到 PUTO</a><br />
+<a href="https://www.live.com/?add=http://feed.feedsky.com/chedong" >订阅到 Windows Live!</a><br />
+                         </div>
+                      </div>
+
+                                            <div class="module-creative-commons module">
+                         <div class="module-content">
+                            <a href="http://creativecommons.org/licenses/by-sa/2.5/cn/"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-sa/2.5/cn/88x31.png" /></a><br />
+                            此 Blog 中的日记遵循以下授权 <a href="http://creativecommons.org/licenses/by-sa/2.5/cn/">Creative Commons(创作共用)授权</a>.
+                         </div>
+                      </div>
+                      
+
+                      <div class="module-powered module">
+                         <div class="module-content">
+                            Powered by<br /><a href="http://www.sixapart.com/movabletype/">Movable Type 3.36</a>
+                         </div>
+                      </div>
+
+                  </div>
+               </div>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+数据库MySQL的使用
+
+
+By zieckey (  zieckey@yahoo.com.cn  )
+   All Rights Reserved!
+ 
+
+一、基本使用方法 
+
+启动MySQL数据库：
+
+[root@zieckey root]# safe_mysqld -u mysql&
+[1] 5288
+[root@zieckey root]# Starting mysqld daemon with databases from /var/lib/mysql
+
+使用MySQL数据库：
+[root@zieckey root]# mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3 to server version: 3.23.54
+ 
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+ 
+mysql> 
+
+创建一个数据库：
+mysql> create database testdb;
+Query OK, 1 row affected (0.00 sec)
+
+1、显示数据库
+    mysql> show databases;
+　　+----------+
+　　| Database |
+　　+----------+
+　　| mysql　　|
+　　| test　　 |
+　　+----------+
+　　2 rows in set (0.04 sec)
+
+Mysql刚安装完有两个数据库：mysql和test。mysql库非常重要，它里面有MySQL的系统信息，我们改密码
+
+和新增用户，实际上就是用这个库中的相关表进行操作。
+
+　　2、显示数据库中的表
+　　mysql> use mysql; （打开库，对每个库进行操作就要打开此库，类似于foxpro ）
+　　Database changed
+
+　　mysql> show tables;
+　　+-----------------+
+　　| Tables_in_mysql |
+　　+-----------------+
+　　| columns_priv　　|
+　　| db　　　　　　　|
+　　| func　　　　　　|
+　　| host　　　　　　|
+　　| tables_priv　　 |
+　　| user　　　　　　|
+　　+-----------------+
+　　6 rows in set (0.01 sec)
+
+　　3、显示数据表的结构：
+　　describe 表名;
+
+mysql> describe db;
++-----------------------+-----------------+------+-----+---------+-------+
+| Field                 | Type            | Null | Key | Default | Extra |
++-----------------------+-----------------+------+-----+---------+-------+
+| Host                  | char(60) binary |      | PRI |         |       |
+| Db                    | char(64) binary |      | PRI |         |       |
+| User                  | char(16) binary |      | PRI |         |       |
+| Select_priv           | enum('N','Y')   |      |     | N       |       |
+| Insert_priv           | enum('N','Y')   |      |     | N       |       |
+| Update_priv           | enum('N','Y')   |      |     | N       |       |
+| Delete_priv           | enum('N','Y')   |      |     | N       |       |
+| Create_priv           | enum('N','Y')   |      |     | N       |       |
+| Drop_priv             | enum('N','Y')   |      |     | N       |       |
+| Grant_priv            | enum('N','Y')   |      |     | N       |       |
+| References_priv       | enum('N','Y')   |      |     | N       |       |
+| Index_priv            | enum('N','Y')   |      |     | N       |       |
+| Alter_priv            | enum('N','Y')   |      |     | N       |       |
+| Create_tmp_table_priv | enum('N','Y')   |      |     | N       |       |
+| Lock_tables_priv      | enum('N','Y')   |      |     | N       |       |
++-----------------------+-----------------+------+-----+---------+-------+
+15 rows in set (0.00 sec)
+
+　　4、显示表中的记录：
+　　select * from 表名;
+　　例如：显示mysql库中user表中的纪录。所有能对MySQL用户操作的用户都在此表中。
+　　Select * from user;
+
+　　5、建库：
+　　create database 库名;
+　　例如：创建一个名字位aaa的库
+　　mysql> create databases aaa;
+　　6、建表：
+　　use 库名；
+　　create table 表名 (字段设定列表)；
+　　例如：在刚创建的aaa库中建立表name,表中有id(序号，自动增长)，xm（姓名）,xb（性别）,csny（出身
+
+年月）四个字段
+　　use aaa;
+　　mysql> create table name (id int(3) auto_increment not null primary key, xm char(8),xb char
+(2),csny date);
+　　可以用describe命令察看刚建立的表结构。
+　　mysql> describe name;
+
+　　+-------+---------+------+-----+---------+----------------+
+　　| Field | Type　　| Null | Key | Default | Extra　　　　　|
+　　+-------+---------+------+-----+---------+----------------+
+　　| id　　| int(3)　|　　　| PRI | NULL　　| auto_increment |
+　　| xm　　| char(8) | YES　|　　 | NULL　　|　　　　　　　　|
+　　| xb　　| char(2) | YES　|　　 | NULL　　|　　　　　　　　|
+　　| csny　| date　　| YES　|　　 | NULL　　|　　　　　　　　|
+　　+-------+---------+------+-----+---------+----------------+
+
+　　7、增加记录
+　　例如：增加几条相关纪录。
+　　mysql> insert into name values('','张三','男','1971-10-01');
+　　mysql> insert into name values('','白云','女','1972-05-20');
+　　可用select命令来验证结果。
+　　mysql> select * from name;
+　　+----+------+------+------------+
+　　| id | xm　 | xb　 | csny　　　 |
+　　+----+------+------+------------+
+　　|　1 | 张三 | 男　 | 1971-10-01 |
+　　|　2 | 白云 | 女　 | 1972-05-20 |
+　　+----+------+------+------------+
+
+　　8、修改纪录
+　　例如：将张三的出生年月改为1971-01-10
+　　mysql> update name set csny='1971-01-10' where xm='张三';
+
+　　9、删除纪录
+　　例如：删除张三的纪录。
+　　mysql> delete from name where xm='张三';
+
+　　10、删库和删表
+　　drop database 库名;
+　　drop table 表名； 
+
+
+二、C语言中操作MySQL数据库的方法详解
+
+注:下面的所有例子在Red Hat 9 linux下测试通过
+
+1，使用c语言操作mysql之前，先在mysql里头创建一个数据库，一个表，在表里头添加数据如下：
+
+启动MySQL数据库服务器：
+[root@zieckey root]# safe_mysqld -u mysql&
+[1] 5288
+[root@zieckey root]# Starting mysqld daemon with databases from /var/lib/mysql
+
+创建数据库，库名为cusemysql:
+mysql>create database cusemysql;
+创建表,表名为:
+mysql>use cusemysql;
+mysql>create table children(childno int not null unique,fname varchar(20),age int);
+添加一点数据哦:
+mysql> insert into children values(5,"花儿",10);
+对拉，为了方便起见，把表的大致样子给大家看看
+
+mysql>  select * from children;
++---------+-------+------+
+| childno | fname | age  |
++---------+-------+------+
+|       5 | 花儿  |   10 |
++---------+-------+------+
+1 row in set (0.02 sec)
+ 
+mysql>
+
+2 ,下面进行具体的操作
+
+插入：insert    
+
+好的，我们现编辑一段c代码，取名为insert.c
+
+///////////////////////////////////
+/*  insert.c */
+#include <stdio.h>
+#include <stdlib.h>
+#include "mysql.h" 
+/*注意哦，上面也可以是mysql.h的绝对地址，一般在mysql下的include目录下，仔细看看你的在哪里？*/
+
+int main(int argc, char *argv[])
+{
+    MYSQL my_connection;
+
+    int res;
+
+    mysql_init(&my_connection);
+
+    /*mysql_real_connect(&mysql,host,user,passwd,dbname,0,NULL,0) == NULL)*/
+    if (mysql_real_connect(&my_connection, "localhost", "root", "","cusemysql",0,NULL,CLIENT_FOUND_ROWS))
+    {
+            printf("Connection success\n");
+        res = mysql_query(&my_connection, "insert into children values(11,'Anny',5)");
+
+        if (!res)
+        {    
+            printf("Inserted %lu rows\n",(unsigned long)mysql_affected_rows(&my_connection));
+        /*里头的函数返回受表中影响的行数*/
+        }
+        else
+        {
+        //分别打印出错误代码及详细信息
+        fprintf(stderr, "Insert error %d: %s\n",mysql_errno(&my_connection),mysql_error(&my_connection));
+        }
+        mysql_close(&my_connection);
+    }
+
+    else
+    {
+        fprintf(stderr, "Connection failed\n");
+
+        if (mysql_errno(&my_connection))
+        {
+                fprintf(stderr, "Connection error %d: %s\n",mysql_errno(&my_connection),mysql_error(&my_connection));
+        }
+    }
+    return EXIT_SUCCESS;
+}
+/////////////////////////////////////////////
+代码写完了，要编译哦
+[root@zieckey mysql]# gcc -o insert insert.c
+/tmp/ccyHfsX2.o(.text+0x1e): In function `main':
+: undefined reference to `mysql_init'
+/tmp/ccyHfsX2.o(.text+0x47): In function `main':
+: undefined reference to `mysql_real_connect'
+/tmp/ccyHfsX2.o(.text+0x76): In function `main':
+: undefined reference to `mysql_query'
+/tmp/ccyHfsX2.o(.text+0x9a): In function `main':
+: undefined reference to `mysql_affected_rows'
+/tmp/ccyHfsX2.o(.text+0xbc): In function `main':
+: undefined reference to `mysql_error'
+/tmp/ccyHfsX2.o(.text+0xcf): In function `main':
+: undefined reference to `mysql_errno'
+/tmp/ccyHfsX2.o(.text+0xf5): In function `main':
+: undefined reference to `mysql_close'
+/tmp/ccyHfsX2.o(.text+0x11f): In function `main':
+: undefined reference to `mysql_errno'
+/tmp/ccyHfsX2.o(.text+0x135): In function `main':
+: undefined reference to `mysql_error'
+/tmp/ccyHfsX2.o(.text+0x148): In function `main':
+: undefined reference to `mysql_errno'
+collect2: ld returned 1 exit status
+[root@zieckey mysql]#
+头文件和库文件位置没有指定
+[root@zieckey mysql]# gcc -o insert insert.c -I/usr/include/mysql/ -L/usr/lib/mysql/
+/tmp/cc4gdmlp.o(.text+0x1e): In function `main':
+: undefined reference to `mysql_init'
+/tmp/cc4gdmlp.o(.text+0x47): In function `main':
+: undefined reference to `mysql_real_connect'
+/tmp/cc4gdmlp.o(.text+0x76): In function `main':
+: undefined reference to `mysql_query'
+/tmp/cc4gdmlp.o(.text+0x9a): In function `main':
+: undefined reference to `mysql_affected_rows'
+/tmp/cc4gdmlp.o(.text+0xbc): In function `main':
+: undefined reference to `mysql_error'
+/tmp/cc4gdmlp.o(.text+0xcf): In function `main':
+: undefined reference to `mysql_errno'
+/tmp/cc4gdmlp.o(.text+0xf5): In function `main':
+: undefined reference to `mysql_close'
+/tmp/cc4gdmlp.o(.text+0x11f): In function `main':
+: undefined reference to `mysql_errno'
+/tmp/cc4gdmlp.o(.text+0x135): In function `main':
+: undefined reference to `mysql_error'
+/tmp/cc4gdmlp.o(.text+0x148): In function `main':
+: undefined reference to `mysql_errno'
+collect2: ld returned 1 exit status
+[root@zieckey mysql]#
+
+gcc还是找不到头文件，下面我们可以这样：
+
+[root@zieckey mysql]# gcc -o insert insert.c -I/usr/include/mysql/ -L/usr/lib/mysql/ `mysql_config --cflags --libs`
+
+ok,现在我们执行看看
+[root@zieckey mysql]# ./insert
+Connection Success
+Inserted 1 rows
+
+year,果然可以，呵呵
+不信到mysql下看看表children中是否多了刚才插入的那一行数据
+
+mysql>  select * from children;
++---------+---------+------+
+| childno | fname   | age  |
++---------+---------+------+
+|       5 | 花儿    |   10 |
+|      10 | Ann     |    5 |
+|       7 | zieckey |   22 |
++---------+---------+------+
+3 rows in set (0.00 sec)
+ 
+
+
+技巧：这里使用mysql_config是一个好习惯，它可以帮助gcc得到许多有关MySQL的信息。
+

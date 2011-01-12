@@ -1,0 +1,110 @@
+创建一个新进程的方法只有由某个已存在的进程调用fork()或vfork()，当然某些进程如init等是作为系统启动的一部风而被内核创建的。
+
+1.fork函数介绍
+#include <sys/types.h>
+#include <unistd.h>
+pid_t fork (void );
+正确返回：父进程中返回子进程的进程号；子进程中返回0；（单调用双返回函数）
+错误返回：-1；
+
+子进程是父进程的一个拷贝。具体说，子进程从父进程那得到了数据段和堆栈段，但不是与父进程共享而是单独分配内存。fork函数返回后，子进程和父进程都是从fork函数的下一条语句开始执行。
+
+由于子进程与父进程的运行是无关的，父进程可先于子进程运行，子进程也可先于父进程运行，所以下段程序可以有两种运行结果。
+
+[root@happy src]# cat simplefork.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int globa = 4;
+
+int main (void )
+{
+    pid_t pid;
+    int vari = 5;
+
+    printf ("before fork\n" );
+    printf("globa = %d vari = %d\n",globa,vari);
+
+    if ((pid = fork()) < 0){
+            printf ("fork error\n");
+            _exit (0);
+    }
+    else if (pid == 0){
+            globa++ ;
+            vari--;
+            printf("Child changed the variable, child pid = %d\n", getpid() );
+    }
+    else
+    {
+            printf("Parent pid = %d \n", getpid() );
+    }
+
+    printf("globa = %d vari = %d, pit = %d\n", globa, vari, getpid() );
+
+    _exit (0);
+}
+运行结果：（可能出现的一种结果）
+[root@happy src]# ./a.out
+before fork
+globa = 4 vari = 5
+Child changed the variable, child pid = 28604
+globa = 5 vari = 4, pit = 28604
+Parent pid = 28603 
+globa = 4 vari = 5, pit = 28603
+
+
+2.vfork函数介绍
+vfork创建新进程的主要目的在于用exec函数执行另外的程序，实际上，在没调用exec或exit之前子进程的运行中是与父进程共享数据段的。在 vfork调用中，子进程先运行，父进程挂起，直到子进程调用exec或exit，在这以后，父子进程的执行顺序不再有限制。
+
+[root@happy src]# cat simplevfork.c
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int globa = 4;
+
+int main (void )
+{
+    pid_t pid;
+    int vari = 5;
+
+    printf ("before fork\n" );
+    printf("globa = %d vari = %d\n",globa,vari);
+
+    if ((pid = vfork()) < 0){
+            printf ("fork error\n");
+            _exit(0);
+    }
+    else if (pid == 0){
+            globa++ ;
+            vari--;
+            printf("Child changed the variable, child pid = %d\n", getpid() );
+            _exit( 0 );
+    }
+    else
+    {
+            printf("Parent pid = %d \n", getpid() );
+    }
+
+    printf("globa = %d vari = %d, pit = %d\n", globa, vari, getpid() );
+
+    _exit(0);
+}
+
+运行结果（固定的）：
+[root@happy src]# gcc simplevfork.c
+[root@happy src]# ./a.out
+before fork
+globa = 4 vari = 5
+Child changed the variable, child pid = 28606
+Parent pid = 28605 
+globa = 5 vari = 4, pit = 28605
+
+总结
+区别：
+1、fork()用于创建一个新进程。由fork()创建的子进程是父进程的副本。即子进程获取父进程数据空间，堆和   栈的副本。父子进程之间不共享这些存储空间的部分。而vfork()创建的进程并不将父进程的地址空间完全复制到子进程中，因为子进程会立即调用exec (或exit)于是也就不会存放该地址空间。相反，在子进程调用exec或exit之前，它在父进程的空间进行。
+2、vfork()与fork()另一个区别就是：vfork保证子进程先运行，在它调用exec或exit之后父进程才可能被调度运行。
+
+相同：
+1、两者被调用一次，但是返回两次。两次返回的唯一区别是子进程的返回值是0，而父进程的返回值则是新子进程的进程ID。

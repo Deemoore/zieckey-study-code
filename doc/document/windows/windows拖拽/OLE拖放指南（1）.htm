@@ -1,0 +1,1108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head id="Head">
+
+<title>
+	第一部分：介绍(OLE Drag和Drop随笔) - 学海苦作舟，书山勤为径 - C++博客
+</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta id="metaKeywords" name="keywords" content="第一部分：介绍(OLE Drag和Drop随笔)"><link type="text/css" rel="stylesheet" href="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/common.css"><link id="MainCss" type="text/css" rel="stylesheet" href="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/style.css"><link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cppblog.com/windcsn/rss.aspx"></head><body>
+    <form name="Form1" method="post" action="3598.html" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+<input name="__EVENTTARGET" id="__EVENTTARGET" value="" type="hidden">
+<input name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" type="hidden">
+<input name="__VIEWSTATE" id="__VIEWSTATE" value="" type="hidden">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/WebResource.js" type="text/javascript"></script>
+
+<script language="JavaScript">
+									function ctlent(evt,id)
+											{
+												if(evt.ctrlKey && evt.keyCode == 13)
+												{	
+													try
+													{
+														TempSave(id);
+													}
+													catch(ex)
+													{
+													}
+													finally
+													{
+													    __doPostBack('AjaxHolder$PostComment$btnSubmit','')
+													}
+												}
+		
+												}</script>
+												<script language="JavaScript">function SetReplyAuhor(author){document.getElementById('AjaxHolder_PostComment_tbComment').value+="@"+author+"\n";document.getElementById('AjaxHolder_PostComment_tbComment').focus();return false}</script>
+<script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ScriptResource.js" type="text/javascript"></script>
+<script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ScriptResource_003.js" type="text/javascript"></script>
+<script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ScriptResource_002.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+        
+<span id="dict_daily">[11.08]<a href="http://dict.cn/foot/help2.htm" target="_blank">每日一句</a>: <a href="http://dict.cn/ketang/kouyu/" target="_blank"><i>Deliver not your words by number but by weight.</i> 言不在多，而在有份量。</a> <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" align="absmiddle" height="13" width="13"><param name="allowScriptAccess" value="always"><param name="movie" value="http://dict.cn/audio/dict.swf"><param name="loop" value="false"><param name="menu" value="false"><param name="quality" value="high"><param name="bgcolor" value="#ffffff"><param name="wmode" value="Opaque"><param name="FlashVars" value="audio=20101108"><embed src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/dict.swf" wmode="Opaque" loop="false" menu="false" quality="high" bgcolor="#ffffff" allowscriptaccess="always" flashvars="audio=20101108" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" align="absmiddle" height="13" width="13"></object></span> 
+<script language="JavaScript" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/daily.htm" defer="defer">
+</script> 
+<!--done-->
+<div id="header">
+	
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cppblog.com/windcsn/">学海苦作舟，书山勤为径</a><br>
+		天才出于勤奋-欢迎访问BenBen的BLOG
+	</div>
+</div>
+
+</div>
+
+<div id="mytopmenu">
+	
+		<div id="mylinks">
+<!--done-->
+<a id="MyLinks1_HomeLink" class="menu" href="http://www.cppblog.com/">C++博客</a>&nbsp;&nbsp;
+<a id="MyLinks1_MyHomeLink" class="menu" href="http://www.cppblog.com/windcsn/">首页</a>&nbsp;&nbsp;
+<a id="MyLinks1_NewPostLink" class="menu" href="http://www.cppblog.com/windcsn/admin/EditPosts.aspx?opt=1">新随笔</a>
+<a id="MyLinks1_ContactLink" class="menu" href="http://www.cppblog.com/windcsn/contact.aspx?id=1">联系</a>&nbsp;&nbsp;
+<a id="MyLinks1_Syndication" class="menu" href="http://www.cppblog.com/windcsn/Rss.aspx">聚合</a><a id="MyLinks1_XMLLink" href="http://www.cppblog.com/windcsn/Rss.aspx"><img src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml.gif" style="border-width: 0px;"></a>&nbsp;&nbsp;
+<a id="MyLinks1_Admin" class="menu" href="http://www.cppblog.com/windcsn/admin/EditPosts.aspx">管理</a>
+</div>
+		<div id="mystats">
+<!--done-->
+随笔-104&nbsp;
+评论-369&nbsp;
+文章-0&nbsp;
+trackbacks-0
+</div>
+	
+</div>
+<div id="centercontent">
+	
+					
+<!--done-->
+<div class="post">
+	<div class="postTitle">
+		<a id="viewpost1_TitleUrl" class="postTitle2" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html">第一部分：介绍(OLE Drag和Drop随笔)</a>
+	</div>
+	<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">该指南的目的在于读者能够在他们自己的程序实现完整的拖拽功能。自</span><font face="宋体"><span lang="EN-US">Window95</span><span style="font-family: 宋体;">以来，</span><span lang="EN-US">Drag</span><span style="font-family: 宋体;">和</span><span lang="EN-US">Drop</span><span style="font-family: 宋体;">已经成为</span><span lang="EN-US">Window</span><span style="font-family: 宋体;">程序的一个标准功能，随着</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">和</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">成为主流技术，程序能和</span><span lang="EN-US">Window Shell</span><span style="font-family: 宋体;">甚至其他</span><span lang="EN-US">Window</span><span style="font-family: 宋体;">程序无缝交互。这个弹性是以高昂的代价为基础的，说的婉转点，写一个</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">或</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">支持的程序完全是一个噩梦。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">本指南目的在于帮助你轻松克服写一个</span><font face="宋体"><span lang="EN-US">OLE</span><span style="font-family: 宋体;">接口支持的拖拽程序的困难。通常，我们使用纯</span><span lang="EN-US">WIN32 API</span><span style="font-family: 宋体;">基础。然而，我会使用</span><span lang="EN-US">C++</span><span style="font-family: 宋体;">而不是</span><span lang="EN-US">C</span><span style="font-family: 宋体;">，因为</span><span lang="EN-US">C++</span><span style="font-family: 宋体;">是写</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">接口程序的首选语言；我也会解释怎么样以简单的方式转换成</span><span lang="EN-US">C</span><span style="font-family: 宋体;">语言。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">我有意以几个部分来写这个指南，主要的原因是太多的信息。另外，</span><font face="宋体"><span lang="EN-US">Drag-and-drop</span><span style="font-family: 宋体;">组件也使他们有各自不同的主题，因此我采用了这种方法。指南的第一部分（实际上就是该部分）简单介绍</span><span lang="EN-US">OLE </span><span style="font-family: 宋体;">拖拽，后面的指南着重于拖拽；第</span><span lang="EN-US">2</span><span style="font-family: 宋体;">和</span><span lang="EN-US">3</span><span style="font-family: 宋体;">部分介绍</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">数据传输</span><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">接口。第</span><span lang="EN-US">4</span><span style="font-family: 宋体;">部分看一下</span><span lang="EN-US">IEnumFORMATETC</span><span style="font-family: 宋体;">接口，第</span><span lang="EN-US">5</span><span style="font-family: 宋体;">和</span><span lang="EN-US">6</span><span style="font-family: 宋体;">部分介绍</span><span lang="EN-US">drag</span><span style="font-family: 宋体;">源和</span><span lang="EN-US">drop</span><span style="font-family: 宋体;">目标。</span></font></p>
+<h1 style="margin: 17pt 0cm 16.5pt;"><span style="font-family: 宋体;">推荐阅读</span></h1>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">我强烈推荐你研究一下下面的信息，因为我是从那里学习</span><font face="宋体"><span lang="EN-US">COM</span><span style="font-family: 宋体;">、</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">拖拽的。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">1.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-US"><font face="宋体">msdn.microsoft.com</font></span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 21pt; text-indent: 0cm;"><span style="font-family: 宋体;">每个</span><font face="宋体"><span lang="EN-US">win32</span><span style="font-family: 宋体;">相关的起始之处。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">2.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-US"><font face="宋体">Inside OLE 2<sup>nd</sup> edition</font></span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 21pt; text-indent: 0cm;"><span style="font-family: 宋体;">该书中有许多有用的信息，被作为</span><font face="宋体"><span lang="EN-US">OLD</span><span style="font-family: 宋体;">的圣经。它有点老了，但包含每个你需要知道的东西。</span><span lang="EN-US">MSDN</span><span style="font-family: 宋体;">中包含了该书的一个软</span><span lang="EN-US">COPY</span><span style="font-family: 宋体;">，也许一直再那里；因特耐特上也有许多</span><span lang="EN-US">PDF</span><span style="font-family: 宋体;">和</span><span lang="EN-US">CHM</span><span style="font-family: 宋体;">的版本。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">3.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-US"><a href="ftp://ftp.microsoft.com/softlib/msfiles"><font face="宋体">ftp://ftp.microsoft.com/softlib/msfiles</font></a></span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 21pt; text-indent: 0cm;"><span style="font-family: 宋体;">微软的</span><font face="宋体"><span lang="EN-US">FTP</span><span style="font-family: 宋体;">服务器包含几百个以前的资源，到目前为止我发现的最有用的东西是两个小文件：</span><span lang="EN-US">drgdrps.exe</span><span style="font-family: 宋体;">和</span><span lang="EN-US">drgdrpt.exe</span><span style="font-family: 宋体;">。他们是自解压的</span><span lang="EN-US">ZIP</span><span style="font-family: 宋体;">文件，包含了简单的</span><span lang="EN-US">drop</span><span style="font-family: 宋体;">源和</span><span lang="EN-US">drop</span><span style="font-family: 宋体;">目标程序的完整代码，为了可以简单的访问这些文件，你仅仅需要输入下面的命令：</span></font></p>
+<div style="border: 1pt solid rgb(181, 207, 247); padding: 4pt; background: none repeat scroll 0% 0% rgb(237, 245, 255); margin-left: 3.75pt; margin-right: 27.15pt;"><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">ftp ftp.microsoft.com</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">username "ftp"</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">password "ftp"</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255); margin-left: 18pt; text-indent: -18pt;"><span style="" lang="EN-US"><span style=""><font size="2" face="宋体">1.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-US"><font size="2" face="宋体">cd softlib/mslfiles</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">bin</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">get drgdrps.exe</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">get drgdrpt.exe</font></span></pre><pre style="background: none repeat scroll 0% 0% rgb(237, 245, 255);"><span lang="EN-US"><font size="2" face="宋体">bye</font></span></pre></div>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">4.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span style="font-family: 宋体;">微软技术论文</span><font face="宋体"><span lang="EN-US">-OLE for Idiots</span><span style="font-family: 宋体;">系列，</span><span lang="EN-US">What OLE is Really about</span><span style="font-family: 宋体;">等，这些论文虽然很老了，但他们在今天依然有用。在</span><span lang="EN-US">GOOGLE</span><span style="font-family: 宋体;">中可以轻松查询到。</span></font></p>
+<h1 style="margin: 17pt 0cm 16.5pt;"><font face="宋体"><span lang="EN-US">OLE Drag</span><span style="font-family: 宋体;">和</span><span lang="EN-US">Drop</span></font></h1>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 10.5pt; text-indent: 0cm;"><span style="font-family: 宋体;">拖放是用来描述使用鼠标将数据从一个地方传输到另一个地方的短语。</span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 10.5pt; text-indent: 0cm;"><span style="font-family: 宋体;">每个拖放操作包含三个元素，当然这些元素是</span><font face="宋体"><span lang="EN-US">COM</span><span style="font-family: 宋体;">对象，需要支持拖放功能的程序都必须实现这三个元素。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">1.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="宋体"><span lang="EN-US">IDropSource</span><span style="font-family: 宋体;">接口表示拖放操作的源。</span><span lang="EN-US">IDropSource</span><span style="font-family: 宋体;">包含产生可视化的方法，取消或完成拖放操作的方法。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">2.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="宋体"><span lang="EN-US">IDropTarget</span><span style="font-family: 宋体;">接口用来表示拖放操作的目标对象。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 31.5pt; text-indent: -21pt;"><span style="" lang="EN-US"><span style=""><font face="宋体">3.</font><span style="font: 7pt 'Times New Roman';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><font face="宋体"><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">接口用来表示拖放操作过程中传输的数据。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt 10.5pt; text-indent: 0cm;"><span style="font-family: 宋体;">注意，一个程序不需要支持所有的</span><font face="宋体"><span lang="EN-US">COM</span><span style="font-family: 宋体;">接口；如果你想定义一个</span><span lang="EN-US">drop</span><span style="font-family: 宋体;">目标，那么仅仅实现</span><span lang="EN-US">IDropTarget</span><span style="font-family: 宋体;">接口，同样，如果一个需要支持作为数据源的程序应该支持</span><span lang="EN-US">IDropSource</span><span style="font-family: 宋体;">和</span><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">接口。当然，程序也可以实现三个接口，从而在同一个程序中支持拖放操作。<br></span></font></p>
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><v:shapetype id="_x0000_t75" stroked="f" filled="f" path="m@4@5l@4@11@9@11@9@5xe" o:preferrelative="t" o:spt="75" coordsize="21600,21600"><v:stroke joinstyle="miter"></v:stroke><v:formulas><v:f eqn="if lineDrawn pixelLineWidth 0"></v:f><v:f eqn="sum @0 1 0"></v:f><v:f eqn="sum 0 0 @1"></v:f><v:f eqn="prod @2 1 2"></v:f><v:f eqn="prod @3 21600 pixelWidth"></v:f><v:f eqn="prod @3 21600 pixelHeight"></v:f><v:f eqn="sum @0 0 1"></v:f><v:f eqn="prod @6 1 2"></v:f><v:f eqn="prod @7 21600 pixelWidth"></v:f><v:f eqn="sum @8 21600 0"></v:f><v:f eqn="prod @7 21600 pixelHeight"></v:f><v:f eqn="sum @10 21600 0"></v:f></v:formulas><v:path o:connecttype="rect" gradientshapeok="t" o:extrusionok="f"></v:path><o:lock aspectratio="t" v:ext="edit"></o:lock></v:shapetype></span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;" align="center"><span style="font-family: 宋体;"><img alt="dragdrop04.gif" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/dragdrop04.gif" border="0" height="329" width="610"></span></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><br>上面的图描述了拖放操作中需要支持的关键组件；花点时间来理解一下图的内容。左边的方块是拖放操作的出发点，它已经创建了两个<font face="宋体"><span lang="EN-US">COM</span><span style="font-family: 宋体;">对象，每个暴露一个接口（</span><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">和</span><span lang="EN-US">IDropSource</span><span style="font-family: 宋体;">），</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">通过他们来执行拖放操作。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">右边的方块表示拖放操作的目标，其创建一个</span><font face="宋体"><span lang="EN-US">COM</span><span style="font-family: 宋体;">对象（</span><span lang="EN-US">IDropTarget</span><span style="font-family: 宋体;">接口）。当鼠标被拖动过目标窗口时，</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">传递一个</span><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">接口到目标对象，这是源暴露给目标的数据对象。对象不能以任何方式得到一个副本，仅仅</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">接口变为可用。当目标从数据对象提取数据时，</span><span lang="EN-US">OLE/COM</span><span style="font-family: 宋体;">运行时负责函数调用已经通过进程边界的数据传输。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">上面的例子中，源和目标可以是同一个进程，也可以是不同的进程。在那里实现并不重要，因为</span><font face="宋体"><span lang="EN-US">OLE</span><span style="font-family: 宋体;">运行时（实际上是</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">）负责数据对象在目标进程中激活。</span></font></p>
+<h1 style="margin: 17pt 0cm 16.5pt;"><span style="font-family: 宋体;">开始拖放</span></h1>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">任何程序想要使用</span><font face="宋体"><span lang="EN-US">OLE</span><span style="font-family: 宋体;">函数时首先需要做的是在启动的时候调用</span><span lang="EN-US">OleInitialize</span><span style="font-family: 宋体;">并且在结束的时候调用</span><span lang="EN-US">OleUninitialize</span><span style="font-family: 宋体;">。这么说不是很准确，最好说想要使用</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">的线程必须调用这些函数，因为</span><span lang="EN-US">COM</span><span style="font-family: 宋体;">和</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">必须在每个线程中被初始化和释放。</span></font></p>
+<div style="border: 1pt solid rgb(181, 207, 247); padding: 4pt; background: none repeat scroll 0% 0% rgb(237, 245, 255);"><pre><span lang="EN-US"><font size="2" face="宋体">WINOLEAPI OleInitialize (LPVOID pvReserved);</font></span></pre><pre><span lang="EN-US"><font size="2" face="宋体">WINOLEAPI OleUninitialize ();</font></span></pre></div>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">非常核心的</span><font face="宋体"><span lang="EN-US">OLE</span><span style="font-family: 宋体;">拖放是一个</span><span lang="EN-US">API</span><span style="font-family: 宋体;">调用</span><span lang="EN-US">DoDragDrop</span><span style="font-family: 宋体;">，函数原型如下：</span></font></p>
+<div style="border: 1pt solid rgb(181, 207, 247); padding: 4pt; background: none repeat scroll 0% 0% rgb(237, 245, 255);"><pre><span lang="EN-US"><font size="2" face="宋体">WINOLEAPI DoDragDrop(</font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>IDataObject<span style="">&nbsp; </span>* pDataObject,<span style="">&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Pointer to the data object</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>IDropSource<span style="">&nbsp; </span>* pDropSource,<span style="">&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Pointer to the source</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>DWORD<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>dwOKEffect,<span style="">&nbsp;&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Effects allowed by the source</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>DWORD<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>* pdwEffect<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Pointer to effects on the source</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>);</font></font></span></pre></div>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">一个程序想初始化拖放操作，他必须首先调用这个函数，但在调用</span><font face="宋体"><span lang="EN-US">DoDragDrop</span><span style="font-family: 宋体;">之前，两个重要的步骤必须完成。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">在调用</span><font face="宋体"><span lang="EN-US">DoDragDrop </span><span style="font-family: 宋体;">，</span><span lang="EN-US">IDataObject</span><span style="font-family: 宋体;">和</span><span lang="EN-US">IDropSource</span><span style="font-family: 宋体;">对象被拖放操作的发起者创建。创建这两个对象并不是琐碎的事情，因此我们在下一部分介绍。另外我们这里一直没有提到创建任何</span><span lang="EN-US">GUI</span><span style="font-family: 宋体;">相关的对象（例如窗口），实际上一个</span><span lang="EN-US">drop</span><span style="font-family: 宋体;">源是独立于任何窗口的单独实体，即使拖放操作在窗口程序处理</span><span lang="EN-US">WM_MOUSEMOVE</span><span style="font-family: 宋体;">消息的时候初始化的。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">当</span><font face="宋体"><span lang="EN-US">DoDragDrop</span><span style="font-family: 宋体;">被调用时，进入一个摸态的消息循环，用来监视鼠标和简单的消息。</span></font></p>
+<h1 style="margin: 17pt 0cm 16.5pt;"><span style="font-family: 宋体;">接收</span><font face="宋体"><span lang="EN-US">Drag</span><span style="font-family: 宋体;">和</span><span lang="EN-US">Drop</span><span style="font-family: 宋体;">数据</span></font></h1>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">一个程序想作为拖放操作的接收方，它必须调用</span><font face="宋体"><span lang="EN-US">RegisterDragDrop</span><span style="font-family: 宋体;">函数，当然，这个程序也必须调用与源程序一样调用</span><span lang="EN-US">OleInitialize/OleUninitialize</span><span style="font-family: 宋体;">函数。</span></font></p>
+<div style="border: 1pt solid rgb(181, 207, 247); padding: 4pt; background: none repeat scroll 0% 0% rgb(237, 245, 255);"><pre><span lang="EN-US"><font size="2" face="宋体">WINOLEAPI RegisterDragDrop(</font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>HWND<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>hwnd,<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Handle to a window that can accept drops</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>IDropTarget<span style="">&nbsp; </span>* pDropTarget <span class="comment1"><font color="#5e86aa">// Pointer to object that is to be target of drop</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>);</font></font></span></pre></div>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">看一下上面函数原型显示了最后一个拖放操作组件</span><font face="宋体"><span lang="EN-US">-IDropTarget COM</span><span style="font-family: 宋体;">接口。</span><span lang="EN-US">RegisterDragDrop</span><span style="font-family: 宋体;">同时要求一个窗口的句柄。该窗口被</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">运行时注册，因此，当鼠标拖过该窗口时，</span><span lang="EN-US">OLE</span><span style="font-family: 宋体;">能调用</span><span lang="EN-US">IDropTarget</span><span style="font-family: 宋体;">接口的方法来通知拥有该窗口的程序正在进行一个拖放操作。</span></font></p>
+<p class="MsoBodyTextFirstIndent" style="margin: 0cm 0cm 6pt; text-indent: 10.5pt;"><span style="font-family: 宋体;">当这个窗口被销毁时，应该调用</span><font face="宋体"><span lang="EN-US">RevokeDragDrop API</span><span style="font-family: 宋体;">：</span></font></p>
+<div style="border: 1pt solid rgb(181, 207, 247); padding: 4pt; background: none repeat scroll 0% 0% rgb(237, 245, 255);"><pre><span lang="EN-US"><font size="2" face="宋体">WINOLEAPI RevokeDragDrop(</font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>HWND<span style="">&nbsp;&nbsp;&nbsp; </span>hwnd<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="comment1"><font color="#5e86aa">// Handle to a window that can accept drops</font></span></font></font></span></pre><pre><span lang="EN-US"><font size="2"><font face="宋体"><span style="">&nbsp;&nbsp; </span>);</font></font></span></pre></div><span style="font-size: 10.5pt; font-family: 宋体;">这个</span><span style="font-size: 10.5pt; font-family: 'Times New Roman';" lang="EN-US">API</span><span style="font-size: 10.5pt; font-family: 宋体;">用</span><span style="font-size: 10.5pt; font-family: 'Times New Roman';" lang="EN-US">OLE</span><span style="font-size: 10.5pt; font-family: 宋体;">来反初始化指定的窗口，并且释放注册时使用的</span><span style="font-size: 10.5pt; font-family: 'Times New Roman';" lang="EN-US">IDropTarget</span><span style="font-size: 10.5pt; font-family: 宋体;">接口和进程中的</span><span style="font-size: 10.5pt; font-family: 'Times New Roman';" lang="EN-US">DropTarget</span><span style="font-size: 10.5pt; font-family: 宋体;">对象。</span>
+	<div class="postDesc">posted on 2006-03-01 11:00 <a href="http://www.cppblog.com/windcsn/">笨笨</a> 阅读(2814) <a href="#Post">评论(7)</a> &nbsp;<a href="http://www.cppblog.com/windcsn/admin/EditPosts.aspx?postid=3598">编辑</a>&nbsp;<a href="http://www.cppblog.com/windcsn/AddToFavorite.aspx?id=3598">收藏</a> <a href="http://www.cppblog.com/windcsn/services/trackbacks/3598.aspx">引用</a>  所属分类: <a href="http://www.cppblog.com/windcsn/category/995.html">OLE Drag&amp;Drop</a> </div>
+</div>
+<img src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/3598.jpg" height="1" width="1">
+
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html"
+dc:identifier="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html"
+dc:title="第一部分：介绍(OLE Drag和Drop随笔)"
+trackback:ping="http://www.cppblog.com/windcsn/services/trackbacks/3598.aspx" />
+</rdf:RDF>
+-->
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('AjaxHolder$scriptmanager1', document.getElementById('Form1'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls(['tAjaxHolder$UpdatePanel1'], [], [], 90);
+//]]>
+</script>
+
+<div id="AjaxHolder_UpdatePanel1">
+	    
+    <a name="pagedcomment"></a>
+<!--done-->
+<br>
+<b>评论:</b>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#12722">#</a>&nbsp;<a name="12722"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2006-09-19 20:58 | <a id="AjaxHolder_Comments_CommentList_ctl00_NameLink" target="_blank">Sunlight</a><br>
+				<div align="left">如果有VB的例子就好了。我看很多人用封装好的olelib.tlb。&nbsp;&nbsp;<a onclick='return SetReplyAuhor("Sunlight")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=Sunlight" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl00_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl00$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl00_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#14424">#</a>&nbsp;<a name="14424"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2006-10-31 14:57 | <a id="AjaxHolder_Comments_CommentList_ctl01_NameLink" target="_blank">vc好难学</a><br>
+				<div align="left">@Sunlight
+<br>滚，好不容易看到一个好例子，你别瞎嚷嚷
+<br>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("vc好难学")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=vc%e5%a5%bd%e9%9a%be%e5%ad%a6" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl01_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl01$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl01_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#18797">#</a>&nbsp;<a name="18797"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2007-02-15 13:55 | <a id="AjaxHolder_Comments_CommentList_ctl02_NameLink" target="_blank">wjt</a><br>
+				<div align="left">非常感谢！
+<br>楼主真是天才，德才兼备。&nbsp;&nbsp;<a onclick='return SetReplyAuhor("wjt")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=wjt" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl02_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl02$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl02_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#67388">#</a>&nbsp;<a name="67388"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2008-11-20 16:49 | <a id="AjaxHolder_Comments_CommentList_ctl03_NameLink" href="http://hi.baidu.com/zhaquanmin" target="_blank">查全民</a><br>
+				<div align="left">非常感谢 楼主 对我很有帮助 千言万语就不说了 希望楼主继续保持！&nbsp;&nbsp;<a onclick='return SetReplyAuhor("查全民")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e6%9f%a5%e5%85%a8%e6%b0%91" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl03_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl03$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl03_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#67778">#</a>&nbsp;<a name="67778"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2008-11-25 09:53 | <a id="AjaxHolder_Comments_CommentList_ctl04_NameLink" target="_blank">路人</a><br>
+				<div align="left">若是早几日看到楼主的这系列文章，吾岂能会遭这几日的困顿。
+<br>感谢博主&nbsp;&nbsp;<a onclick='return SetReplyAuhor("路人")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e8%b7%af%e4%ba%ba" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl04_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl04$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl04_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#95563">#</a>&nbsp;<a name="95563"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)
+				2009-09-08 14:03 | <a id="AjaxHolder_Comments_CommentList_ctl05_NameLink" target="_blank">xiaoyulovly</a><br>
+				<div align="left">找了好久了啊，总算让我给找到你了。感谢楼主！！！&nbsp;&nbsp;<a onclick='return SetReplyAuhor("xiaoyulovly")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=xiaoyulovly" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl05_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl05$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl05_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: 第一部分：介绍(OLE Drag和Drop随笔)" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#100103">#</a>&nbsp;<a name="100103"></a>re: 第一部分：介绍(OLE Drag和Drop随笔)<a name="Post"></a>
+				2009-11-04 11:25 | <a id="AjaxHolder_Comments_CommentList_ctl06_NameLink" target="_blank">LaDao</a><br>
+				<div align="left">笨笨应该告知我们原贴是哪里,哪里可以找到源码啊,不然就不厚道了.
+<br><a target="_new" href="http://www.catch22.net/tuts/dragdrop">http://www.catch22.net/tuts/dragdrop</a>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("LaDao")' href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=LaDao" target="_blank">更多评论</a><br><a id="AjaxHolder_Comments_CommentList_ctl06_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl06$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl06_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+
+
+
+<div id="AjaxHolder_Comments_divRefreshComments" style="text-align: right; margin-right: 10px; margin-bottom: 5px; font-size: 12px;"><a id="AjaxHolder_Comments_refreshList" href="javascript:__doPostBack('AjaxHolder$Comments$refreshList','')">刷新评论列表</a></div>
+<style>
+td { font-size: 12px }
+.commentTextBox 
+{ 
+    font-family : Verdana; 
+    font-size: 13px;
+ }
+</style>
+<!--Beging Temp Save-->
+<style>.userData { BEHAVIOR: url(#default#userdata) }
+	</style>
+<div class="userData" id="CommentsPersistDiv"></div>
+<script type="text/javascript">
+function pageLoad()
+{
+    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(handleInitializeRequest);
+    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(handleEndRequest);
+}
+
+function handleInitializeRequest(sender, args)
+{
+    var prm = Sys.WebForms.PageRequestManager.getInstance();
+    var eid = args.get_postBackElement().id;
+    if (eid.indexOf("DeleteLink")>0) 
+    {
+       args.get_postBackElement().innerHTML = "<font color='red'>正在删除...</font>";         
+    }    
+    if (eid.indexOf("btnSubmit")>0) 
+    {
+       document.getElementById("AjaxHolder_PostComment_ltSubmitMsg").innerHTML="正在提交...";
+       document.getElementById("AjaxHolder_PostComment_btnSubmit").disabled = true;
+       
+    }    
+   
+}	
+
+function TempSave(ElementID)
+{
+	try
+	{
+	CommentsPersistDiv.setAttribute("CommentContent",document.getElementById(ElementID).value);
+	CommentsPersistDiv.save("CommentXMLStore");
+	}
+	catch(ex)
+	{
+	}
+	
+}
+function Restore(ElementID)
+{
+	CommentsPersistDiv.load("CommentXMLStore");
+	document.getElementById(ElementID).value=CommentsPersistDiv.getAttribute("CommentContent");
+}	
+			
+			
+</script>
+<!--Ene TempSave-->
+<div class="commentform">
+<script type="text/javascript" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/google_service.js">
+</script>
+<script type="text/javascript">
+var c_enable_dfp = true;
+if (navigator.userAgent.indexOf("Chrome/6.0.401.1") > 0) {
+c_enable_dfp = false;
+}
+if (c_enable_dfp) {
+try{
+  GS_googleAddAdSenseService("ca-pub-4210569241504288");
+  GS_googleEnableAllServices();
+  } catch (e) { }
+}
+</script><script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/google_ads.js"></script>
+<script type="text/javascript">
+if (c_enable_dfp) {
+try{
+  GA_googleAddSlot("ca-pub-4210569241504288", "cppblog_blogpost_bottom");
+  GA_googleAddSlot("ca-pub-4210569241504288", "cppblog_commentbox_up");
+  } catch (e) { }
+}
+</script>
+<script type="text/javascript">
+if (c_enable_dfp) {
+try{
+  GA_googleFetchAds();
+  } catch (e) { }
+}
+</script>
+<span id="AjaxHolder_PostComment_ltSubmitMsg" style="color: Red;"></span>
+<br>
+<a name="Feedback"></a>
+	<table border="0" cellpadding="1" cellspacing="1">
+		<tbody><tr>			
+		<td colspan="3">
+		<div id="itnews_block" style="line-height: 150%;" class="other_info_list">IT新闻：<br>· <a href="http://news.cnblogs.com/n/80125/" target="_blank">Nokia 和 Symbian 的纠葛</a><br>· <a href="http://news.cnblogs.com/n/80124/" target="_blank">Google今日涂鸦：发现X射线115周年</a><br>· <a href="http://news.cnblogs.com/n/80122/" target="_blank">Chrome OS RC 非官方版本已发布</a><br>· <a href="http://news.cnblogs.com/n/80121/" target="_blank">软件就是个管家</a><br>· <a href="http://news.cnblogs.com/n/80120/" target="_blank">政府机关将全面使用正版软件</a><br></div>
+		<div>
+		技术专题：<br>
+		<a href="http://kb.cnblogs.com/zt/jquery/" title="jQuery" target="_blank">jQuery</a>&nbsp; &nbsp;<a href="http://kb.cnblogs.com/zt/android/" title="Android" target="_blank">Android</a>&nbsp; &nbsp;<a href="http://kb.cnblogs.com/zt/ipad/" title="iPad" target="_blank">iPad</a>
+		</div>
+		</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+<script type="Text/Javascript">
+try{
+  GA_googleFillSlot("cppblog_commentbox_up");
+  } catch (e) { }
+</script><script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ads"></script><div id="google_ads_div_cppblog_commentbox_up">
+<ins style="width: 468px; height: 60px; border: 0pt none; display: inline-table; position: relative;"><ins style="width: 468px; height: 60px; border: 0pt none; display: block; position: relative;"><iframe style="border: 0pt none; position: absolute; top: 0pt; left: 0pt;" marginheight="0" marginwidth="0" name="google_ads_iframe_cppblog_commentbox_up" id="google_ads_iframe_cppblog_commentbox_up" scrolling="no" frameborder="0" height="60" width="468"></iframe></ins></ins></div>
+<script>GA_googleCreateDomIframe('google_ads_div_cppblog_commentbox_up' ,'cppblog_commentbox_up');</script>
+<br> </td>
+		</tr>
+		<tr>
+			<td width="75"></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="2">
+			<a href="http://www.cnblogs.com/" target="_blank">博客园</a>&nbsp;  <a href="http://space.cnblogs.com/q/" target="_blank">博问</a>&nbsp; <a href="http://news.cnblogs.com/" target="_blank">IT新闻</a>&nbsp; <!--<a href="http://home.cnblogs.com/ing/" target="_blank">闪存</a>&nbsp;  --><a href="http://a4.yeshj.com/rd/36006/" target="_blank">学英语</a>&nbsp;  <a href="http://job.cnblogs.com/cate-cpp_programmer/" target="_blank">C++程序员招聘</a>
+			</td>
+		</tr>
+		<tr>
+			<td width="55">标题</td>
+			<td><input name="AjaxHolder$PostComment$tbTitle" value="re: 第一部分：介绍(OLE Drag和Drop随笔)" id="AjaxHolder_PostComment_tbTitle" class="commenttb" style="width: 320px;" type="text"></td>
+			<td><span id="AjaxHolder_PostComment_RequiredFieldValidator1" style="color: Red; visibility: hidden;">请输入标题</span></td>
+		</tr>
+		<tr>
+			<td>姓名</td>
+			<td><input name="AjaxHolder$PostComment$tbName" id="AjaxHolder_PostComment_tbName" class="commenttb" style="width: 320px;" type="text"></td>
+			<td><span id="AjaxHolder_PostComment_RequiredFieldValidator2" style="color: Red; visibility: hidden;">请输入你的姓名</span></td>
+		</tr>
+		<tr>
+			<td>主页</td>
+			<td><input name="AjaxHolder$PostComment$tbUrl" id="AjaxHolder_PostComment_tbUrl" class="commenttb" style="width: 320px;" type="text"></td>
+			<td><font face="宋体"></font></td>
+		</tr>
+		<tr>
+			<td colspan="3" align="left">
+				<table id="AjaxHolder_PostComment_tbCaptchaImage" class="CommentForm" border="0" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td colspan="3">
+							<span id="AjaxHolder_PostComment_Requiredfieldvalidator4" style="color: Red; display: none;">请输入验证码</span>
+							<span id="AjaxHolder_PostComment_lblImage" style="color: Red; font-weight: bold;"></span>
+						</td>
+		</tr>
+		<tr>
+			<td width="78">验证码</td>
+			<td><input name="AjaxHolder$PostComment$CodeNumberTextBox" id="AjaxHolder_PostComment_CodeNumberTextBox" type="text">*</td>
+			<td align="left">
+							<img src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/JpegImage.jpg" id="AjaxHolder_PostComment_Img1">
+						</td>
+		</tr>
+	</tbody></table>
+	
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">内容(提交失败后,可以通过“恢复上次提交”恢复刚刚提交的内容)
+				<span id="AjaxHolder_PostComment_RequiredFieldValidator3" style="color: Red; visibility: hidden;">请输入评论内容</span><br>
+				<textarea name="AjaxHolder$PostComment$tbComment" rows="10" cols="50" id="AjaxHolder_PostComment_tbComment" class="commentTextBox" onkeydown="ctlent(event,'AjaxHolder_PostComment_tbComment')" style="width: 480px; height: 220px;"></textarea></td>
+		</tr>
+		<tr>
+			<td colspan="3">
+		<span id="AjaxHolder_PostComment_Message" style="color: Red;"></span>
+		</td>
+		</tr><tr>
+			<td colspan="3"><input id="AjaxHolder_PostComment_chkRemember" name="AjaxHolder$PostComment$chkRemember" checked="checked" tabindex="-1" type="checkbox"><label for="AjaxHolder_PostComment_chkRemember">Remember Me?</label></td>
+		</tr>
+		<tr>
+			<td height="23"><input name="AjaxHolder$PostComment$btnSubmit" value="提交" onclick="TempSave('AjaxHolder_PostComment_tbComment');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;AjaxHolder$PostComment$btnSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="AjaxHolder_PostComment_btnSubmit" type="submit">
+				</td>
+			<td colspan="2" height="23">&nbsp;
+				<a id="AjaxHolder_PostComment_lnkLogin" href="http://www.cppblog.com/login.aspx?ReturnURL=http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html&amp;SourceURL=/windcsn/archive/2006/03/01/3598.html">登录</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_linkLoginComment" onclick="if(document.getElementById('AjaxHolder_PostComment_tbComment').value != '') return confirm('未提交的评论内容将会丢失, 你真的要进入高级评论吗?');" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html?login=1#Post">使用高级评论</a>&nbsp;&nbsp;<a href="http://www.cppblog.com/RequireRegister.aspx">新用户注册</a>&nbsp;&nbsp;<a href="#Top">返回页首</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_lbRestore" onclick="Restore('AjaxHolder_PostComment_tbComment'); return false;" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html#Post">恢复上次提交</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+		</tr>
+		<tr>
+			<td colspan="3">[使用Ctrl+Enter键可以直接提交]</td>
+		</tr>
+		<tr>
+		<td colspan="3">
+		<a href="http://a4.yeshj.com/rd/34138/" target="_blank">每天10分钟，轻松学英语</a>
+		</td>
+		</tr>
+		<tr>
+		<td colspan="3">
+		<script type="text/javascript">
+		if (c_enable_dfp) {
+		try{
+		  GA_googleFillSlot("cppblog_blogpost_bottom");
+		  } catch (e) { }
+		}
+		</script><script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ads_002"></script><div id="google_ads_div_cppblog_blogpost_bottom">
+<ins style="width: 300px; height: 250px; border: 0pt none; display: inline-table; position: relative;"><ins style="width: 300px; height: 250px; border: 0pt none; display: block; position: relative;"><iframe style="border: 0pt none; position: absolute; top: 0pt; left: 0pt;" marginheight="0" marginwidth="0" name="google_ads_iframe_cppblog_blogpost_bottom" id="google_ads_iframe_cppblog_blogpost_bottom" scrolling="no" frameborder="0" height="250" width="300"></iframe></ins></ins></div>
+<script>GA_googleCreateDomIframe('google_ads_div_cppblog_blogpost_bottom' ,'cppblog_blogpost_bottom');</script>
+		</td>
+		</tr>
+		<tr>			
+		<td colspan="3">
+		<div id="job_block" style="line-height: 180%;">推荐职位：<br>· <a href="http://job.cnblogs.com/offer/9051/" target="_blank">.NET高级软件开发工程师（高薪诚聘）(新蛋信息科技)</a><br>· <a href="http://job.cnblogs.com/offer/9827/" target="_blank">高级网站开发工程师 (9588旅行网)</a><br>· <a href="http://job.cnblogs.com/offer/9902/" target="_blank">北京高级.NET工程师（月薪12k）(北京盛安德)</a><br>· <a href="http://job.cnblogs.com/offer/5914/" target="_blank">.NET 开发工程师(北京捷报)</a><br>· <a href="http://job.cnblogs.com/offer/9952/" target="_blank">信息化开发项目经理（.NET）(盛大游戏)</a><br>· <a href="http://job.cnblogs.com/offer/9729/" target="_blank">.NET网站工程师 (北京世纪英博)</a><br>· <a href="http://job.cnblogs.com/offer/9954/" target="_blank">高级软件工程师（.NET）(盛大游戏)</a><br>· <a href="http://job.cnblogs.com/offer/8252/" target="_blank">C++开发工程师(沪江网)</a><br></div><div id="cnblogs_posts" style="line-height: 180%;">博客园首页随笔：<br>· <a href="http://www.cnblogs.com/eastjade/archive/2010/11/08/1870869.html" target="_blank">一步一步教你使用AgileEAS.NET基础类库进行应用开发-WinForm应用篇-库存查询模块</a><br>· <a href="http://www.cnblogs.com/kyo-yo/archive/2010/11/08/Learning-EntLib-Tenth-Decoupling-Your-System-Using-The-Unity-PART2-Learn-To-Use-Unity-One.html" target="_blank">[EntLib]微软企业库5.0 学习之路——第十步、使用Unity解耦你的系统—PART2——了解Unity的使用方法（1）</a><br>· <a href="http://www.cnblogs.com/sunjibin/archive/2010/11/08/1871468.html" target="_blank">【老孙随笔】搞技术永远没有出头之日吗？</a><br>· <a href="http://www.cnblogs.com/peaceli/archive/2010/11/08/flv_videoplayer.html" target="_blank">FLEX4.0开发流媒体视频播放器(总结篇)</a><br>· <a href="http://www.cnblogs.com/rubylouvre/archive/2010/11/08/1871458.html" target="_blank">javascript 测试工具 abut v2</a><br></div><div id="job_block" style="line-height: 180%;">知识库：<br>· <a href="http://kb.cnblogs.com/page/79810/" target="_blank">SQL SERVER 2005  使用订阅发布同步数据库</a><br>· <a href="http://kb.cnblogs.com/page/80024/" target="_blank">在iPhone应用中如何避免内存泄露</a><br>· <a href="http://kb.cnblogs.com/page/79847/" target="_blank">项目经理的思维批判</a><br>· <a href="http://kb.cnblogs.com/page/79811/" target="_blank">Silverlight3动态访问wcf</a><br>· <a href="http://kb.cnblogs.com/page/79812/" target="_blank">linq2sql：直接执行sql语句</a><br></div>
+		</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="5">
+<div id="divRelativePosts">
+相关文章:
+	
+			<ul style="margin-top: 0px;">
+		
+			<li style="list-style: none outside none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl01_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/06/3789.html">第六部分：实现Drop目标对象(OLE drag&amp;drop 之旅)</a>
+			</li>
+		
+			<li style="list-style: none outside none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl02_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/06/3788.html">第五部分：Drop源(OLE drag&amp;drop之旅) </a>
+			</li>
+		
+			<li style="list-style: none outside none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl03_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/03/3669.html">第四部分：枚举FORMATETC(OLE drag&amp;drop之旅) </a>
+			</li>
+		
+			<li style="list-style: none outside none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl04_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/03/3668.html">第三部分：实现IDataObject(OLE drag&amp;drop之旅)</a>
+			</li>
+		
+			<li style="list-style: none outside none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl05_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3603.html">第二部分：OLE数据传输(OLE Drag和Drop随笔) </a>
+			</li>
+		
+			<li style="list-style: none outside none; display: none;">
+				<a id="AjaxHolder_PostComment_ctl08_RelativePostsList_ctl06_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html">第一部分：介绍(OLE Drag和Drop随笔)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+</td>
+		</tr>
+		<tr>
+			<td colspan="3"></td>
+		</tr>
+		<tr>
+			<td colspan="3" height="1">网站导航:<div id="blogsite">
+			<a href="http://www.cnblogs.com/">博客园</a>&nbsp;&nbsp;
+			<a href="http://news.cnblogs.com/">IT新闻</a>&nbsp;&nbsp;
+			<a href="http://home.cnblogs.com/">博客园个人主页</a>&nbsp;&nbsp;
+			<a href="http://www.blogjava.net/">BlogJava</a>&nbsp;&nbsp;
+			<a href="http://www.cnweblog.com/">博客生活</a>&nbsp;&nbsp;
+			<a href="http://www.cnitblog.com/">IT博客网</a>&nbsp;&nbsp;
+			<a href="http://www.phpweblog.net/">PHP博客</a>&nbsp;&nbsp;
+			<a href="http://space.cnblogs.com/">博客园社区</a>&nbsp;&nbsp;
+			<a href="http://www.cppblog.com/windcsn/archive/2006/03/01/3598.html?opt=admin">管理</a>
+			</div></td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				
+<br>
+最简洁阅读版式：<br><a href="http://archive.cnblogs.com/c/3598/">第一部分：介绍(OLE Drag和Drop随笔)</a>
+<br>
+
+</td>
+		</tr>
+	</tbody></table>	
+</div>
+<div id="AjaxHolder_PostComment_ValidationSummary1" style="color: Red; display: none;">
+
+	</div>
+
+</div>
+
+				
+</div>
+<div id="leftcontent" style="display: inline;">
+	
+		<div id="leftcontentcontainer">
+			
+<!--done-->
+<div class="newsItem">
+	<a href="http://www.rapidcounter.com/signup.php" target="_top"><img alt="Web Counter" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/imgo.png" ;="" align="middle" border="0" hspace="4" vspace="2"></a><script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/1144033157.htm"></script><br><a style="font-size: 12px;" href="http://www.rapidcounter.com/" target="_top"><font style="font-size: 12px;" color="#666666">Web Counter</font>
+
+
+</a>
+</div>
+
+			<table id="Calendar1_entryCal" class="Cal" title="Calendar" style="border-width: 1px; border-style: solid; border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr><td colspan="7" style="background-color: Silver;"><table class="CalTitle" style="width: 100%; border-collapse: collapse;" border="0" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev" style="width: 15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V2223')" style="color: Black;" title="Go to the previous month">&lt;</a></td><td style="width: 70%;" align="center">2006年3月</td><td class="CalNextPrev" style="width: 15%;" align="right"><a href="javascript:__doPostBack('Calendar1$entryCal','V2282')" style="color: Black;" title="Go to the next month">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" abbr="日" scope="col" align="center">日</th><th class="CalDayHeader" abbr="一" scope="col" align="center">一</th><th class="CalDayHeader" abbr="二" scope="col" align="center">二</th><th class="CalDayHeader" abbr="三" scope="col" align="center">三</th><th class="CalDayHeader" abbr="四" scope="col" align="center">四</th><th class="CalDayHeader" abbr="五" scope="col" align="center">五</th><th class="CalDayHeader" abbr="六" scope="col" align="center">六</th></tr><tr><td class="CalOtherMonthDay" style="width: 14%;" align="center">26</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">27</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">28</td><td style="width: 14%;" align="center"><a href="http://www.cppblog.com/windcsn/archive/2006/03/01.html"><u>1</u></a></td><td style="width: 14%;" align="center">2</td><td style="width: 14%;" align="center"><a href="http://www.cppblog.com/windcsn/archive/2006/03/03.html"><u>3</u></a></td><td class="CalWeekendDay" style="width: 14%;" align="center">4</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">5</td><td style="width: 14%;" align="center"><a href="http://www.cppblog.com/windcsn/archive/2006/03/06.html"><u>6</u></a></td><td style="width: 14%;" align="center">7</td><td style="width: 14%;" align="center">8</td><td style="width: 14%;" align="center">9</td><td style="width: 14%;" align="center">10</td><td class="CalWeekendDay" style="width: 14%;" align="center">11</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">12</td><td style="width: 14%;" align="center">13</td><td style="width: 14%;" align="center">14</td><td style="width: 14%;" align="center">15</td><td style="width: 14%;" align="center">16</td><td style="width: 14%;" align="center">17</td><td class="CalWeekendDay" style="width: 14%;" align="center">18</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">19</td><td style="width: 14%;" align="center">20</td><td style="width: 14%;" align="center">21</td><td style="width: 14%;" align="center">22</td><td style="width: 14%;" align="center">23</td><td style="width: 14%;" align="center">24</td><td class="CalWeekendDay" style="width: 14%;" align="center">25</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">26</td><td style="width: 14%;" align="center">27</td><td style="width: 14%;" align="center"><a href="http://www.cppblog.com/windcsn/archive/2006/03/28.html"><u>28</u></a></td><td style="width: 14%;" align="center">29</td><td style="width: 14%;" align="center">30</td><td style="width: 14%;" align="center">31</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">1</td></tr><tr><td class="CalOtherMonthDay" style="width: 14%;" align="center">2</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">3</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">4</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">5</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">6</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">7</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">8</td></tr>
+</tbody></table>
+<br>
+			
+<h3>常用链接</h3>
+<ul>
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl01_lnkLinkItem" href="http://www.cppblog.com/windcsn/MyPosts.html">我的随笔</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl02_lnkLinkItem" href="http://www.cppblog.com/windcsn/MyComments.html">我的评论</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl03_lnkLinkItem" href="http://www.cppblog.com/windcsn/OtherPosts.html">我参与的随笔</a></li>
+	</ul>
+<h3>留言簿<span style="font-size: 11px; font-weight: normal;">(37)</span></h3>
+<ul>
+	<li>
+		<a id="SingleColumn1__1ef5ac9_lnkMessages" href="http://www.cppblog.com/windcsn/Contact.aspx?id=1">给我留言</a>
+	</li><li>
+		<a id="SingleColumn1__1ef5ac9_lnkPublicMsgView" href="http://www.cppblog.com/windcsn/default.aspx?opt=msg">查看公开留言</a>
+	</li><li>
+		<a id="SingleColumn1__1ef5ac9_lnkPrivateMsgView" href="http://www.cppblog.com/windcsn/admin/MyMessages.aspx">查看私人留言</a>
+	</li>
+</ul>
+
+<!--done-->
+
+		<h1 class="catListTitle">随笔分类<span style="font-size: 11px; font-weight: normal;">(71)</span></h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/960.html">DirectX3D(6)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_RssLink" title="Subscribe to DirectX3D(6)" class="listitem" href="http://www.cppblog.com/windcsn/category/960.html/rss"><img title="Subscribe to DirectX3D(6)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/995.html">OLE Drag&amp;Drop(6)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_RssLink" title="Subscribe to OLE Drag&amp;Drop(6)" class="listitem" href="http://www.cppblog.com/windcsn/category/995.html/rss"><img title="Subscribe to OLE Drag&amp;Drop(6)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/2257.html">P2P技术(10)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_RssLink" title="Subscribe to P2P技术(10)" class="listitem" href="http://www.cppblog.com/windcsn/category/2257.html/rss"><img title="Subscribe to P2P技术(10)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/2763.html">Security(2)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_RssLink" title="Subscribe to Security(2)" class="listitem" href="http://www.cppblog.com/windcsn/category/2763.html/rss"><img title="Subscribe to Security(2)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl05_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/7558.html">Vista相关的技术(3)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl05_RssLink" title="Subscribe to Vista相关的技术(3)" class="listitem" href="http://www.cppblog.com/windcsn/category/7558.html/rss"><img title="Subscribe to Vista相关的技术(3)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl06_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/4269.html">Windows编程(4)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl06_RssLink" title="Subscribe to Windows编程(4)" class="listitem" href="http://www.cppblog.com/windcsn/category/4269.html/rss"><img title="Subscribe to Windows编程(4)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl07_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/3101.html">编码(8)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl07_RssLink" title="Subscribe to 编码(8)" class="listitem" href="http://www.cppblog.com/windcsn/category/3101.html/rss"><img title="Subscribe to 编码(8)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl08_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/8379.html">代码优化(1)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl08_RssLink" title="Subscribe to 代码优化(1)" class="listitem" href="http://www.cppblog.com/windcsn/category/8379.html/rss"><img title="Subscribe to 代码优化(1)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl09_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/323.html">代码重构(3)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl09_RssLink" title="Subscribe to 代码重构(3)" class="listitem" href="http://www.cppblog.com/windcsn/category/323.html/rss"><img title="Subscribe to 代码重构(3)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl10_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/2556.html">调试(4)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl10_RssLink" title="Subscribe to 调试(4)" class="listitem" href="http://www.cppblog.com/windcsn/category/2556.html/rss"><img title="Subscribe to 调试(4)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl11_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/2429.html">压缩算法(24)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl11_RssLink" title="Subscribe to 压缩算法(24)" class="listitem" href="http://www.cppblog.com/windcsn/category/2429.html/rss"><img title="Subscribe to 压缩算法(24)" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">随笔档案<span style="font-size: 11px; font-weight: normal;">(104)</span></h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl01_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2010/02.html">2010年2月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl02_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2009/06.html">2009年6月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl03_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2009/01.html">2009年1月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl04_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/10.html">2008年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl05_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/09.html">2008年9月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl06_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/08.html">2008年8月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl07_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/07.html">2008年7月 (7)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl08_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/05.html">2008年5月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl09_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2008/03.html">2008年3月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl10_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/12.html">2007年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl11_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/11.html">2007年11月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl12_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/07.html">2007年7月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl13_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/06.html">2007年6月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl14_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/05.html">2007年5月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl15_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/04.html">2007年4月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl16_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/03.html">2007年3月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl17_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/02.html">2007年2月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl18_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2007/01.html">2007年1月 (6)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl19_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/12.html">2006年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl20_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/11.html">2006年11月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl21_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/10.html">2006年10月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl22_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/09.html">2006年9月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl23_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/08.html">2006年8月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl24_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/07.html">2006年7月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl25_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/06.html">2006年6月 (5)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl26_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/04.html">2006年4月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl27_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/03.html">2006年3月 (9)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl28_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/02.html">2006年2月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl29_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2006/01.html">2006年1月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl30_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2005/12.html">2005年12月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl31_Link" class="listitem" href="http://www.cppblog.com/windcsn/archive/2005/11.html">2005年11月 (7)</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">文章分类</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/321.html">图形</a><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_RssLink" title="Subscribe to 图形" class="listitem" href="http://www.cppblog.com/windcsn/category/321.html/rss"><img title="Subscribe to 图形" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_Link" class="listitem" href="http://www.cppblog.com/windcsn/category/322.html">压缩算法</a><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_RssLink" title="Subscribe to 压缩算法" class="listitem" href="http://www.cppblog.com/windcsn/category/322.html/rss"><img title="Subscribe to 压缩算法" src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">相册</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl03_LinkList_ctl01_Link" class="listitem" href="http://www.cppblog.com/windcsn/gallery/361.html">技术</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">Denoise</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl04_LinkList_ctl01_Link" class="listitem" href="http://www.codesoso.com/Tag/%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA" target="_blank">denoise codes</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">English study</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl01_Link" class="listitem" href="http://www.yesky.com/kpzhuanti/213/8651213.shtml" target="_blank">CUDA</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl02_Link" class="listitem" href="http://cuda.csdn.net/" target="_blank">cuda.csdn.net</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl03_Link" class="listitem" href="http://epizza.open.edu.cn/sbpage/rscs.htm" target="_blank">http://epizza.open.edu.cn/sbpage/rscs.htm</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl04_Link" class="listitem" href="http://www.caopeng.org/html/nce3.htm">http://www.caopeng.org/html/nce3.htm</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl05_Link" class="listitem" href="http://www.fli.com.cn/cetonlinelistening.htm" target="_blank">http://www.fli.com.cn/cetonlinelistening.htm</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl06_Link" class="listitem" href="http://www.listeningexpress.com/" target="_blank">http://www.listeningexpress.com/</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl07_Link" class="listitem" href="http://www.studioclassroom.net/bbs/viewthread.php?tid=5683&amp;extra=page%3D1" target="_blank">http://www.studioclassroom.net/bbs/viewthread.php?tid=5683&amp;extra=page%3D1</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl08_Link" class="listitem" href="http://www.tingroom.com/" target="_blank">http://www.tingroom.com/</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl09_Link" class="listitem" href="http://smallvoid.com/articles/windows-vista/network/">smallvoid（Vista Network tune)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl10_Link" class="listitem" href="http://www.listeningexpress.com/download/#VOASEMP3" target="_blank">VOA 英语</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl11_Link" class="listitem" href="http://weblog.pigfoot.org/pigfoot/category/it/msdn/">weblog.pigfoot.org（一些关于windows技术的blog）</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl12_Link" class="listitem" href="http://www.speedguide.net/read_articles.php?id=158">www.speedguide.net</a></li>
+			<li style="margin-top: 2px;">一个讨论如何优化使用网络的网站</li>
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl13_Link" class="listitem" href="http://www.cnblogs.com/Athrun/archive/2007/04/26/727837.html" target="_blank">搜索引擎</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl14_Link" class="listitem" href="http://cn.cyberlink.com/products/powerdirector/other_zh_CN.html" target="_blank">威力导演-CUDA</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl05_LinkList_ctl15_Link" class="listitem" href="http://study.dict.cn/" target="_blank">在线背单词</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">Web技术</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl06_LinkList_ctl01_Link" class="listitem" href="http://zh.wikipedia.org/wiki/Apache_Axis" target="_blank">Axis</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl06_LinkList_ctl02_Link" class="listitem" href="http://www.infoq.com/cn/articles/rest-introduction" target="_blank">REST</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">数据压缩</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl01_Link" class="listitem" href="http://www.bilsen.com/aic/details.htm" target="_blank">AIC(Advanced Image Coding)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl02_Link" class="listitem" href="http://jmvc.blog.sohu.com/" target="_blank">http://jmvc.blog.sohu.com/</a></li>
+			<li style="margin-top: 2px;">JMVC</li>
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl03_Link" class="listitem" href="http://tech.groups.yahoo.com/group/kakadu_jpeg2000/" target="_blank">kakadu group</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl04_Link" class="listitem" href="http://x264dev.multimedia.cx/" target="_blank">Link for X264</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl05_Link" class="listitem" href="http://www.research.ibm.com/journal/rd/426/mitchell.html" target="_blank">QX coder</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl06_Link" class="listitem" href="http://www.c10n.info/archives/454" target="_blank">The Data Compression News Blog</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl07_LinkList_ctl07_Link" class="listitem" href="http://www.compression.ru/video/codec_comparison/wmp_codecs_comparison_en.html" target="_blank">www.compression.ru</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">一些连接</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl01_Link" class="listitem" href="http://www.agner.org/optimize/" target="_blank">Agner Blog</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl02_Link" class="listitem" href="http://www.babytree.com/user/showuser.php?uid=353094256" target="_blank">babytree</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl03_Link" class="listitem" href="http://blog.csdn.net/cunruizhai" target="_blank">cunruizhai</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl04_Link" class="listitem" href="http://www.intel.com/products/processor/manuals/index.htm" target="_blank">Intel CPU Architecture</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl05_Link" class="listitem" href="http://blog.sina.com.cn/girllemon" target="_blank">Life blog</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl06_Link" class="listitem" href="http://blog.csdn.net/Tomorrow_zhf/">Morgan的blog</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl07_Link" class="listitem" href="http://www.famioo.cn/?M=blog&amp;P=Blog&amp;nFamilyID=5301" target="_blank">My Famii</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl08_Link" class="listitem" href="http://sybaby.ah.vnet.cn/Sybaby/View.asp?Pid=157#Show">Mybaby</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl09_Link" class="listitem" href="http://www.52en.com/tl/html/20031120_002.html" target="_blank">Onlie English</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl10_Link" class="listitem" href="http://www.chinahrd.net/knowledge/" target="_blank">管理网</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl11_Link" class="listitem" href="http://blog.csdn.net/housisong/category/232185.aspx" target="_blank">某兄弟的优化专栏</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl08_LinkList_ctl12_Link" class="listitem" href="http://blog.csdn.net/windcsn/" target="_blank">我CSDN的BLOG</a></li>
+			
+				</ul>
+			
+	
+
+
+<script language="JavaScript">
+function SearchGoogle(key,evt,site)
+		{
+			if(evt.keyCode==13 || evt.keyCode==0 || evt.type =='click')
+			{
+				key.focus();
+				var keystr = encodeURIComponent(key.value);
+				url = "http://www.google.com/search?q=";
+				url = url+keystr;
+				url += "&ie=UTF-8&oe=GB2312&hl=zh-CN&domains="+site+"&sitesearch="+site;
+				window.location=url;
+				return false;
+			}
+		}
+</script>
+<h3>搜索</h3>
+<ul>
+	<li>
+		</li><li><input style="width: 130px;" name="q" id="q" onkeydown="return SearchGoogle(document.getElementById('q'),event,'www.cppblog.com/windcsn')" type="text">&nbsp;<input onclick="SearchGoogle(document.getElementById('q'),event,'www.cppblog.com/windcsn')" value="搜索" name="sa" type="button">
+	</li>
+</ul>
+
+<h3>积分与排名</h3>
+<ul>
+	<li>
+		积分 -
+		153200
+	</li><li>
+		排名 -
+		33
+	</li>
+</ul>
+
+<h3>最新评论
+	<a id="SingleColumn1__2cf8b11_RSSHyperlink1" href="http://www.cppblog.com/windcsn/CommentsRSS.aspx"><img src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/xml.gif" style="border-width: 0px;"></a></h3>
+<div class="RecentComment">
+	
+			<ul>
+		
+			<li style="">
+				<a id="SingleColumn1__2cf8b11_CommentList_ctl01_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2010/11/02/87879.html#132109">1.&nbsp;re: 一些相似表达式的不同结果[未登录]</a>
+			</li>
+			<li style="">
+				评论内容较长,点击标题查看
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--chenchen</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2cf8b11_CommentList_ctl02_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2010/09/26/87148.html#127750">2.&nbsp;re: 关于《新一代视频压缩编码标准－H264/AVC》的几处错误</a>
+			</li>
+			<li style="">
+				评论内容较长,点击标题查看
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--vdsg</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2cf8b11_CommentList_ctl03_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2010/09/26/87148.html#127747">3.&nbsp;re: 关于《新一代视频压缩编码标准－H264/AVC》的几处错误</a>
+			</li>
+			<li style="">
+				评论内容较长,点击标题查看
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--vdsg</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2cf8b11_CommentList_ctl04_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2010/08/15/5981.html#123523">4.&nbsp;re: 进程间通讯-WriteProcessMemory和ReadProcessMemory</a>
+			</li>
+			<li style="">
+				WM_COPYDATA 也可实现双向的，需要变通一下！
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--fifi</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2cf8b11_CommentList_ctl05_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2010/08/13/10221.html#123356">5.&nbsp;re: P2P技术资料收集</a>
+			</li>
+			<li style="">
+				看过，谢过了!
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--惠歌子</li>
+		
+			</ul>
+		
+</div>
+
+<h3>阅读排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="">
+		
+			<li>
+				<a id="SingleColumn1__10e22d7_TopList_ctl01_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/01/06/2476.aspx">1.&nbsp;几种压缩算法原理介绍 (6705)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__10e22d7_TopList_ctl02_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/02/19/3327.aspx">2.&nbsp;怎么样在VC中使用Static控件来显示图像？(6560)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__10e22d7_TopList_ctl03_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2005/11/16/1158.aspx">3.&nbsp;TIFF图像文件格式分析(5776)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__10e22d7_TopList_ctl04_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/02/16/3284.aspx">4.&nbsp;GetBitmapBits和GetDIBits的区别(Windows GDI)(4308)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__10e22d7_TopList_ctl05_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/04/20/5981.aspx">5.&nbsp;进程间通讯-WriteProcessMemory和ReadProcessMemory(4163)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+<h3>评论排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="">
+		
+			<li>
+				<a id="SingleColumn1__3c0f498_TopList_ctl01_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/09/08/12167.aspx">1.&nbsp;关于C结构体bit field的跨平台的教训。(24)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3c0f498_TopList_ctl02_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2007/04/02/21127.aspx">2.&nbsp;为什么有些程序员会觉得自己已经很厉害了呢?(22)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3c0f498_TopList_ctl03_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2007/06/14/26307.aspx">3.&nbsp;一个简单的问题：关于loadlibary(21)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3c0f498_TopList_ctl04_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2007/12/07/37940.aspx">4.&nbsp;一段代码优化的讨论(19)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3c0f498_TopList_ctl05_Hyperlink1" href="http://www.cppblog.com/windcsn/archive/2006/03/28/4698.aspx">5.&nbsp;一段关于memcpy的代码(17)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+</div>
+	
+</div>
+
+<!--done-->
+<div class="footer">
+	Powered by: <a href="http://www.cnblogs.com/">博客园</a>	模板提供：<a href="http://blog.hjenglish.com/">沪江博客</a>
+	Copyright ©2010 笨笨
+</div>
+
+
+    
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("AjaxHolder_PostComment_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2"), document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var AjaxHolder_PostComment_RequiredFieldValidator1 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator1"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1");
+AjaxHolder_PostComment_RequiredFieldValidator1.controltovalidate = "AjaxHolder_PostComment_tbTitle";
+AjaxHolder_PostComment_RequiredFieldValidator1.errormessage = "请输入标题";
+AjaxHolder_PostComment_RequiredFieldValidator1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator1.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator2 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator2"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2");
+AjaxHolder_PostComment_RequiredFieldValidator2.controltovalidate = "AjaxHolder_PostComment_tbName";
+AjaxHolder_PostComment_RequiredFieldValidator2.errormessage = "请输入你的姓名";
+AjaxHolder_PostComment_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator2.initialvalue = "";
+var AjaxHolder_PostComment_Requiredfieldvalidator4 = document.all ? document.all["AjaxHolder_PostComment_Requiredfieldvalidator4"] : document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4");
+AjaxHolder_PostComment_Requiredfieldvalidator4.controltovalidate = "AjaxHolder_PostComment_CodeNumberTextBox";
+AjaxHolder_PostComment_Requiredfieldvalidator4.errormessage = "请输入验证码";
+AjaxHolder_PostComment_Requiredfieldvalidator4.display = "Dynamic";
+AjaxHolder_PostComment_Requiredfieldvalidator4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_Requiredfieldvalidator4.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator3 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator3"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3");
+AjaxHolder_PostComment_RequiredFieldValidator3.controltovalidate = "AjaxHolder_PostComment_tbComment";
+AjaxHolder_PostComment_RequiredFieldValidator3.errormessage = "请输入评论内容";
+AjaxHolder_PostComment_RequiredFieldValidator3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator3.initialvalue = "";
+var AjaxHolder_PostComment_ValidationSummary1 = document.all ? document.all["AjaxHolder_PostComment_ValidationSummary1"] : document.getElementById("AjaxHolder_PostComment_ValidationSummary1");
+AjaxHolder_PostComment_ValidationSummary1.showmessagebox = "True";
+AjaxHolder_PostComment_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        
+document.getElementById('AjaxHolder_PostComment_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('AjaxHolder_PostComment_ValidationSummary1'));
+}
+Sys.Application.initialize();
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2'));
+}
+
+document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3'));
+}
+//]]>
+</script>
+</form>
+    <script type="text/javascript">
+        if (document.getElementById('cnblogsgooglead') != null) {
+            document.getElementById('cnblogsgooglead').innerHTML = document.getElementById('cnblogsgoogleadcode').innerHTML;
+            document.getElementById('cnblogsgoogleadcode').innerHTML = '';
+        }
+
+        if (document.getElementById('leftcontent') != null) {
+            if (document.getElementById('leftcontent').style.display == 'none') {
+                document.getElementById('leftcontent').style.display = 'inline';
+            }
+        }
+        if (document.getElementById('Blogleftcontent') != null) {
+            if (document.getElementById('cnblogsleftcontent').style.display == 'none') {
+                document.getElementById('cnblogsleftcontent').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsleftcontent') != null) {
+            if (document.getElementById('cnblogsleftcontent').style.display == 'none') {
+                document.getElementById('cnblogsleftcontent').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('rightmenu') != null) {
+            if (document.getElementById('rightmenu').style.display == 'none') {
+                document.getElementById('rightmenu').style.display = 'inline';
+            }
+        }
+        if (document.getElementById('leftmenu') != null) {
+            if (document.getElementById('leftmenu').style.display == 'none') {
+                document.getElementById('leftmenu').style.display = 'inline';
+            }
+            if (document.getElementById('lefttemp') != null) {
+                document.getElementById('leftmenu').innerHTML = document.getElementById('lefttemp').innerHTML;
+                document.getElementById('lefttemp').innerHTML = '';
+            }
+        }
+
+        if (document.getElementById('left') != null) {
+            if (document.getElementById('left').style.display == 'none') {
+                document.getElementById('left').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsleftmenu') != null) {
+            if (document.getElementById('cnblogsleftmenu').style.display == 'none') {
+                document.getElementById('cnblogsleftmenu').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('menu') != null) {
+            if (document.getElementById('menu').style.display == 'none') {
+                document.getElementById('menu').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsmenu') != null) {
+            if (document.getElementById('cnblogsmenu').style.display == 'none') {
+                document.getElementById('cnblogsmenu').style.display = 'inline';
+            }
+        }
+    </script>    
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script><script src="OLE%E6%8B%96%E6%94%BE%E6%8C%87%E5%8D%97%EF%BC%881%EF%BC%89_files/ga.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-476124-5");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body></html>

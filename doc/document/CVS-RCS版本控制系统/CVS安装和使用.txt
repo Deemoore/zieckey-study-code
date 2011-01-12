@@ -1,0 +1,343 @@
+安装和使用CVS
+简介
+CVS 是 Concurrent Version System（并行版本系统）的缩写，用于版本管理．如果大家曾经参与过多人协作开发的项目，大家肯定有这样的痛苦经历：由于多个人同时修改同一个文件，自己辛辛苦苦修改的程序被别人彻底删除了．另外，如果你的软件/程序已经发布了三个版本，而这时候用户需要你修改第二个版本的东西，也许你会因为只保留了最新版本而痛哭流涕。还有就是你对程序做了一些修改，但是修改很少，你只想给远方的同事发一个两个版本之间的差别文件，这样可以免于邮箱不够大，网速太慢之类的问题．为了解决类似这样的问题，以及诸如生成补丁文件，历史版本修改等，一帮黑客（褒义）在原先 Unix 体系里很成熟的 SCCS 和 RCS 的基础上，开发了 CVS。(SCCS：Source Code Control System，RCS：Revision Control System）。
+CVS 的基本工作思路是这样的：在一台服务器上建立一个仓库，仓库里可以存放许多不同项目的源程序。由仓库管理员统一管理这些源程序．这样，就好象只有一个人在修改文件一样．避免了冲突．每个用户在使用仓库之前，首先要把仓库里的项目文件下载到本地。用户做的任何修改首先都是在本地进行，然后用 cvs 命令进行提交，由 cvs 仓库管理员统一 修改．这样就可以做到跟踪文件变化，冲突控制等等．
+由于 CVS 是典型的 C/S 结构的软件，因此它也分成服务器端和客户端两部分。不过大多数CVS 软件都把它们合二为一了。我们这里就分别从服务器和客户端的角度讨论cvs的使用。
+
+Cvs服务器安装
+
+首先确保系统安装有cvs：
+[root@mail xinetd.d]# rpm -qa|grep cvs
+cvs-1.11.1p1-3
+如果命令输出类似于上面的输出则说明系统已经安装有cvs，否则就需要从安装光盘中安装cvs的rpm包。
+
+一 创建CVS属主用户：
+# useradd -d /cvsroot cvs
+# chmod 771 /cvsroot
+
+二、建立CVS仓库(初始化cvs)
+
+# su cvs
+$ cvs -d /cvsroot init
+$exit
+#
+
+四、启动cvs服务器
+
+在/etc/xinetd.d/目录下创建文件cvspserver，内容如下：
+# default: on
+# description: The cvs server sessions;
+
+service cvspserver
+{
+socket_type = stream
+wait = no
+user = root
+server = /usr/bin/cvs
+server_args = -f --allow-root=/cvsroot pserver
+log_on_failure += USERID
+only_from = 192.168.0.0/24
+}
+其中only_from是用来限制访问的，可以根据实际情况不要或者修改。
+修改该文件权限：
+# chmod 644 cvspserver
+然后重新启动xinetd：
+# /etc/rc.d/init.d/xined restart
+然后察看cvs服务器是否已经运行：
+[root@mail xinetd.d]# netstat -lnp|grep 2401
+tcp 0 0 0.0.0.0:2401 0.0.0.0:* LISTEN 7866/xinetd
+则说明cvs服务器已经运行。
+
+五、创建用来访问cvs的用户
+
+前面创建的cvs用户是cvs仓库管理用户，而为了让用户访问则还需要一个访问用户：
+# useradd cvspub
+# usemod -G cvs cvspub
+这里添加了一个用户cvspub，并且将该用户添加到cvs组中。
+
+六、管理cvs服务器
+
+管理 cvs 服务器．服务器可以用了，现在大家最关心的就是如何管理服务器，比如，我想让一些人有读和/或写 CVS 仓库的权限，但是不想给它系统权限怎么办呢？不难，cvs初始化结束以后，在管理员用户(这里是cvs用户)的主目录里有一个 CVSROOT 目录，这个目录里有三个配置文件：passwd, readers, writers。我们可以通过设置这三个文件来配置 CVS 服务器，下面分别介绍这几个文件的作用：
+passwd：cvs 用户的用户列表文件，它的格式很象 shadow 文件：
+{cvs 用户名}:[加密的口令]:[等效系统用户名]
+如果你希望一个用户只是 cvs 用户，而不是系统用户，那么你就要设置这个文件，刚刚安装完之后这个文件可能不存在，你需要以cvs管理员身份(su cvs)用户手工创建，当然要按照上面格式；
+第二个字段是该用户的加密口令，就是用 crypt (3) 加密的，你可以自己写一个程序来做加密，也可以用两个偷懒的方法：先创建一个系统用户，名字和 cvs 用户一样，口令就是准备给它的 cvs 用户口令，创建完之后从 /etc/shadow 把该用户第二个字段拷贝过来，然后再把这个用户删除．这个方法对付数量少的用户比较方便，人一多就不合适了，而且还有冲突条件(race condition)的安全隐患，还要 root 权限，实在不怎么样，不过权益之计而已；另外一个方法就是利用apche的htpasswd命令创建passwd用户，添加用户只需要htpasswd passwd username即可添加用户到passwd文件中，不过需要在文件中对应行的最后添加一个":"冒号和对应的等效系统用户名；最好的就是自己编写一个程序了来生成这个passwd文件了。
+第三个字段就是等效系统用户名，实际上就是赋与一个 cvs 用户一个等效的系统用户的权限，看下面的例子你就明白它的功能了。
+readers：有 cvs 读权限的用户列表文件，就是一个一维列表。在这个文件中的用户对 cvs
+只有读权限。
+writers：有 cvs 写权限的用户的列表文件，和 readers 一样，是一个一维列表。在这个文件中的用户对 cvs 有写权限。
+上面三个文件在缺省安装的时候可能都不存在，需要我们自己创建，好吧，现在还是让我们用一个例子来教学吧．假设我们有下面几个用户需要使用 cvs：
+cvsuser1, cvsuser2, henry, betty, anonymous
+其中 laser 和 gumpwu 是系统用户，而henry, betty, anonymous 我们都不想给系统用户权限，并且 betty 和 anonymous 都是只读用户，而且 anonymous 更是连口令都没有。
+然后编辑 cvs 管理员家目录里 CVSROOT/passwd 文件，加入下面几行：
+
+laser:$xxefajfka;faffa33:cvspub
+gumpwu:$ajfaal;323r0ofeeanv:cvspub
+henry:$fajkdpaieje:cvspub
+betty:fjkal;ffjieinfn/:cvspub
+anonymous::cvspub
+注意：上面的第二个字段（分隔符为 :）是密文口令，你要用程序或者用我的土办法生成。
+编辑 readers 文件，加入下面几行：
+anonymous
+betty
+编辑 writer 文件，加入下面几行：
+laser
+gumpwu
+henry
+这样就 ok 了，你再用几个用户分别登陆测试，就会发现一切都 ok 了。这里面的原理和说明我想就不多说了，其实很简单，和系统管理用户的概念是一样的。
+
+七、建立新的CVS项目
+
+一般我们都已经有一个或多个项目了，这样我们可以用下面步骤生成一个新的CVS项目。
+将一个工程文件置于CVs中进行版本控制，在CVS 术语中称作导入(import)。从名字上就可以看出，在导入前需要为此作些准备工作。
+输入操作的基本要求是有个"干净"的目录结构。"干净"的意思是不需要版本控制的文件都被移走了（如编译生成的文件，备份文件等等）。如果工程已经开始一段时间了，这就显得很重要。在目录中也许有些是不打算将其置于版本控制下的文件，但是又想将他们放在这里，这种情况下，你要在输入之前将它们移走，然后再移回来。
+注意的是CVS 认为空目录是不存在的。如果想增加一个既不包含文件又不包含子目录的目录，需要在其下创建一个哑文件。建议你创建一个名为 README.txt 的文件，其内容为对目录的简要说明。
+进入到已有项目的目录，比如叫 cvstest：
+$cd cvstest
+运行命令将项目文件导入到cvs仓库中：
+$cvs import -m "this is a cvstest project" cvstest v_0_0_1 start
+说明：import 是cvs的命令之一，表示向cvs仓库输入项目文件．
+-m 参数后面的字串是描述文本，对项目进行描述，如果不加 -m 参数，那么cvs会自动运行一个编辑器（一般是vi，但是可以通过修改环境变量EDITOR来改成你喜欢用的编辑器）让你输入信息，cvstest 是项目名称（实际上是仓库名，在CVS服务器上会存储在以这个名字命名的仓库里）
+v_0_0_1是这个分支的总标记．没啥用（或曰不常用）
+start 是每次 import 标识文件的输入层次的标记，没啥用。
+这样我们就建立了一个CVS仓库了，然后，我们可以把这个测试项目的文件删除，试验如何从仓库获取文件这会在后面的客户端文章进行说明。
+
+在Win2k上安装和使用CVS
+1.准备有关软件：
+从 www.cvsnt.org 下载服务器 cvs-1.10.8NT.exe.zip
+从 www.wincvs.org 下载客户端 WinCvs11b16.zip
+用winzip把cvs-1.10.8NT.exe.zip解压到d:cvs。
+解压并安装wincvs.
+2.把路径 d:cvs 加到path环境变量中。
+具体方法：点选"我的电脑",单击右键，选属性，点环境变量按钮。
+3.建立CVS存储目录。
+打开一个dos窗口，键入"cvs -d :local:d:cvsroot init",然后你会发现d:cvs下面多了一个root子目录。
+4.注册CVS服务
+在dos窗口中，键入"ntservice -i d:cvsroot",屏幕显示"CVS NT Service Installed successfully",打开控制面板中的服务，你会发现多了一个"CVS NT Service"服务
+用"net start cvs"启动cvs服务。 用"net stop cvs"关闭cvs服务。
+5.设置密码
+新建一个空白的passwd文件，放到d:cvsrootcvsroot目录下。用pwgen.exe生成密码。把用户名和密码写到passwd文件，例如：test:OuIgxgsUZH48g
+6.使用wincvs
+选Admin->Perferences,设CVSROOT为":pserver:test@server:d:cvsroot"，server为作为服务器的计算机的名称。test为用户名。
+7.登陆
+选Admin->login,输入密码登陆。
+8.导入模块
+假设要管理的代码已经存在于c:source目录，选弹出菜单上的import module,选择目录c:source,输入模块名"test"，wincvs就会把该目录导入到模块test中。
+9.导出模块
+选Create->checkout module,输入模块名和相应的目录就可以了。
+10。修改文件
+选中要修改的文件，点修改钮（笔图标）。然后修改文件，最后选弹出菜单上的commit selection,修改就被提交了。
+
+CVS NT服务器安装指南
+下载地址：http://www.cvsnt.org
+运行 cvsnt_1.11.1.2.exe
+点两次“Next”跳过“Welcome”界面开始安装
+点“Yes”接受License
+点“Next”用默认的Typical安装
+选“Yes”并点“Finish”，重新启动
+
+到桌面，在“我的电脑”按右键，点“属性”
+点“高级”，点“环境变量”
+选择“系统变量”中的Path，点“编辑”
+在变量值后加“;C:Program FilesCVS for NT”（引号不要加入）
+点“确定”
+再“确定”
+
+进入控制面板，双击“CVS for NT”
+点“Install”安装CVSNT服务
+Install按钮会变无效，Uninstall变有效
+点“Add”，输入“d:cvsroot”，点“OK”
+会提问是否创建目录，回答“是”
+点“Start”启动CVSNT服务
+
+在d:cvsrootCVSROOT目录下创建一个文件名为passwd的文件（没有扩展名）
+（怎么创建没有扩展名的文件：
+点资源管理器菜单“工具”->“文件夹选项”
+点“文件类型”
+找到并选中“TXT 文本文档”，点“高级”
+选中“始终显示扩展名”，点“确定”，然后“关闭”）
+
+在d:cvsrootCVSRTOO下新建文本文件
+编辑该文件，把下面三行
+user1:user1encryptedpassword （加密密码是用CVSNT带的工具“Generate Passwords”生成的，安装后菜单里有）
+user2:user2encryptedpassword
+user3:user3encryptedpassword
+加入，保存退出，然后把该文件改名为passwd（把扩展名去掉）
+
+加3个windows用户
+user1密码同上面设的
+user2密码同上面设的
+user3密码同上面设的
+
+
+安装wincvs（下载地址：http://www.cvsgui.org）后运行wincvs
+
+点“Admin”->Preferences
+CVSROOT 改为 user1@myservername:d:cvsroot
+Authentication 选择 "passwd" file on the cvs server
+Use vesion 选择 cvs 1.10 (Standard)
+
+然后“Admin”->“Login”，成功的返回码为0
+然后可以Import一个module
+
+然后可以checkout这个module，如果checkout到同一个目录，要把原来的目录改名或删除
+点Create->Checkout module
+module name 填 mymodulename
+Local folder如 d:user1
+在Globals页里面把 Checkout read-only 不选中
+其它的不管，点“确定”即可
+
+checkout之前如果没有login，必须先login一次，除非工作目录，否则不需要重新login 
+
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+
+
+
+CVS配置
+一 CVS服务器的安装：
+1。查看你的操作系统上是否安装了CVS：
+#> rpm -qa|grep cvs
+
+如果没有安装你可以在Redhat 第2张光盘上找到，另外你也可以在网上下载到最新的rpm包。很容易找，其实不存在什么linux版本。
+
+2。建立cvs用户组：
+
+#> groupadd cvs
+
+3。建立cvs组的cvsroot用户和所属的目录：
+
+#> useradd -g cvs -G cvs –d /cvsroot cvsroot
+
+4。为cvsroot用户添加密码：
+
+#> passwd cvsroot
+
+5。改变 /cvsroot/ 的目录属性：
+
+#> chmod –R 770 /cvsroot
+
+6。改变用户登陆身份：
+
+#> su cvsroot
+
+7。开始创建单个项目：
+
+#> cd /cvsroot
+#> mkdir project1
+#>mkdir project2
+8。开始建立仓库：
+
+#> cvs –d /cvsroot/project1 init
+#> cvs –d /cvsroot/project2 init
+#> chmod –R 770 ./project1/ ./project2/
+
+9。建立CVS服务启动文件，我们使用xinetd方式：
+
+#> [Crtl]+[d] 切换到root用户身份
+#> cd /etc/xinetd.d
+#> vi cvspserver
+
+service cvspserver
+{
+disable = no
+flags = REUSE
+socket_type = stream
+wait = no
+user = root
+server= /usr/bin/cvs
+server_args= -f --allow-root=/home2/cvsroot/project1 --allow-root=/home2/cvsroot/project2 pserver log_on_failure += USERID
+}
+
+注：由于xinetd的server_args长度限制,当你想运行很多的单个仓库的时候,可以这么做：
+
+#> vi cvspserver
+
+service cvspserver
+{
+disable = no
+flags = REUSE
+socket_type = stream
+wait = no
+user = root
+server = /cvsroot/cvs.run
+log_on_failure += USERID
+}
+
+编写cvs.run脚本
+
+#> vi /cvsroot/cvs.run
+
+#!/bin/bash
+/usr/bin/cvs -f
+--allow-root=/cvsroot/project1
+--allow-root=/cvsroot/project2
+pserver
+
+#>chmod +x /cvsroot/cvs.run
+
+10。加入cvs服务：
+
+#>vi /etc/services
+
+cvspserver 2401/tcp #pserver cvs service
+cvspserver 2401/udp #pserver cvs service
+11。启动cvs服务：
+
+#> /etc/init.d/xinetd restart
+
+12。检查cvspserver服务是否已经启动：
+
+#> netstat -l |grep cvspserver
+应该有如下结果：
+
+tcp 0 0 *:cvspserver *:* LISTEN
+
+二。CVS服务的用户管理：
+
+上面我们已经建立了project1和project2两个CVS仓库，下面我们分别给两个仓库建立cvs用户。
+
+13。创建可以登陆cvs服务器的用户名和密码：
+
+#> su cvsroot
+#> vi /cvsroot/project1/CVSROOT/passwd
+
+trotter:*****:cvsroot
+mimi:*****:cvsroot
+
+#>vi /cvsroot/project2/CVSROOT/passwd
+
+trotter:*****:cvsroot
+gary:*****:cvsroot
+
+这两个文件的意思是有trotter，mimi，gary三个cvs用户，mimi拥有project1的使用权限，gary拥有project2的使用权限，trotter拥有project1和project2的使用权限。登陆后的权限是cvsroot权限。
+注意：这里的cvs用户和系统用户是不同的。
+
+14。*****为密码，由以下文件生成：
+
+#> vi /cvsroot/passwd.pl
+
+#!/usr/bin/perl
+srand (time());
+my $randletter = "(int (rand (26)) + (int (rand (1) + .5) % 2 ? 65 : 97))";
+my $salt = sprintf ("%c%c", eval $randletter, eval $randletter);
+my $plaintext = shift;
+my $crypttext = crypt ($plaintext, $salt);
+print "${crypttext}
+";
+
+#>chmod a+x /cvsroot/passwd.pl
+
+15。如果你想生成一个密码是“123456”，则：
+
+#> /cvsroot/passwd.pl “123456”
+
+回车即可得到加密密码,用其替换passwd文件中的*****
+
+16。 Ok，cvs现在已经全部安装完成了，如果你想让一个用户拥有project1的权限，你就在 /cvsroot/project1/CVSROOT/passwd中给他加入一个用户；如果你想让一个用户同时具有project1和project2 的权限，你就给/cvsroot/project1/CVSROOT/passwd和/cvsroot/project2/CVSROOT/passwd 里给他加一个用户名和密码相同的用户即可。最后，我们试用一下：
+
+#> cvs -d :pserver:trotter@192.168.1.200:/cvsroot/project1 login
+
+敲入命令回车后提示输入trotter的密码,你按照自己设置的密码输入,如果没有什么错误信息出现就是成功了(我的机器IP地址是192.168.1.200)
+***另外，感谢我所参考过的文章的所有作者*** 

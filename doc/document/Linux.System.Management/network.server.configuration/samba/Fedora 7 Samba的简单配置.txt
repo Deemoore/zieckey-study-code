@@ -1,0 +1,43 @@
+Fedora 7 Samba的简单配置
+
+　　概要：本文通过叙述F7下简单地配置两个目录来和windows共享资源，一个可读写，一个只读。
+
+　　一 Samba的安装
+　　挂载F7的DVD镜像，进入Fedora目录，安装samba的RPM包。
+
+　　rpm -ivh --aid samba*.rpm
+
+　　--aid 表示自动安装有依赖关系的RPM包。
+
+　　二 新建共享目录
+　　mkdir -p /var/temp/public（可读写）
+　　mkdir -p /var/temp/download(只读)
+
+　　三 写samba的配置文件
+　　mv /etc/samba/smb.conf /etc/samba/smb.old
+
+　　vi /etc/samba/smb.conf
+
+         [global]
+         workgroup = MYGROUP
+         security = share
+  
+         [public]
+         comment = Public Source
+         path = /var/temp/public
+         writable = yes
+         guest ok = yes
+        
+         [download]
+         comment = Download dir
+         path = /var/temp/download
+         read only = yes
+         guest ok = yes
+
+　　保存退出并输入testparm测试
+
+　　四   启动samba
+　　/etc/init.d/smb start
+　　/etc/init.d/nmb start
+
+　　五 在Windows XP测试成功。

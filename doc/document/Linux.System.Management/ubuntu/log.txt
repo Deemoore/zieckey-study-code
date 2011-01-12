@@ -1,0 +1,379 @@
+ubuntu安装使用小记
+0. 安装Ubuntu
+
+在Ubuntu网站上下在Ubuntu最新版，然后安装 ，我下载的是7.04版，
+安装很简单，这里就不多说拉。
+
+  	
+一、首先添加源，我用的这些源速度蛮不错的，可以删除掉sources.list中的所有源写入下面的源
+
+    sudo gedit /etc/apt/sources.list
+
+deb http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse
+
+deb http://mirror.lupaworld.com/ubuntu feisty main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-security main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-updates main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-backports main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-security main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-updates main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-backports main restricted universe multiverse cn99.com
+ 
+    sudo apt-get update
+    sudo apt-get dist-upgrade
+
+    安装中文支持：在 桌面工具栏的“系统－系统管理－语言支持” 里面把”Chinese”勾选上（一定要打勾，不要只是一条横线，否则中文支持不完全）。
+
+这里稍微说明一下，root用户的初始密码是“第一个用户的密码”，如果需要更改的话：
+~$ sudo passwd root 
+Password:    //第一个用户的密码 
+Enter new UNIX password:       //root密码 
+Retype new UNIX password: 
+passwd: password updated successfully 
+$sudo vi /etc/X11/gdm/gdm.conf #打开gnome的配置文件,在末行模式中输入：AllowRoot回车，找到AllowRoot＝false ,把false改为true，保存后退出。
+
+　　之后，重启系统时，就可以用 root 登录了。如果你想要禁用 root 帐号，则执行下列命令：
+
+　　$sudo passwd -l root
+Ubuntu 中的 root 帐号默认是被禁用了的。在这种情况之下，如果你想要使用 root 的权限来干些事情，就需要 sudo 指令。对某些朋友来说，他们可能需要激活 Ubuntu 中的 root 帐号。
+
+
+二. 安装中文输入法 
+
+下载小企鹅输入法：
+http://www.fcitx.org/download/fcitx-3.4.2-bin.tar.bz2
+这是二进制代码的，直接压运行的。
+
+zieckey@zieckey-laptop:~$ tar jxvf fcitx-3.4.2-bin.tar.bz2 
+zieckey@zieckey-laptop:~$ cd fcitx-3.4.2-bin/
+安装：
+zieckey@zieckey-laptop:~/fcitx-3.4.2-bin$ ./fcitx.install 
+
+
+三. 安装QQ聊天程序
+
+下载lumaqq
+下载页面：http://lumaqq.linuxsir.org/main/?q=node/245
+具体地址：
+http://lumaqq.linuxsir.org/download/patch/lumaqq_2005_patch_2006.02.02.15.00.zip
+http://lumaqq.linuxsir.org/download/2005/lumaqq_2005-linux_gtk2_x86_no_jre.tar.gz
+这个是不带JRE的，需要自己安装JRE并指明路径，导入环境变量
+
+将patch目录下大文件拷贝到Lumaqq原目录下大lib目录下,这样QQ就安装好了，不过还不能运行，因为没有java虚拟机，
+我们可以自己安装个java虚拟机，具体做法请参考：http://blog.chinaunix.net/u/16292/showart_223309.html
+
+四、安装Nvidia显卡驱动：（第6、7、8步最好记下来，因为会切换到终端）
+
+    1. 到http://www.nvidia.com/ 下载驱动,注意下载的安装包应该包含自己的显卡驱动
+    2. 删除原来的驱动（如果你装过驱动）
+    sudo apt-get --purge remove nvidia-glx
+    3. 备份当前的显示设置，这样可以在驱动安装失败时恢复到原来的设置，这步很重要
+    sudo cp /etc/X11/xorg.conf.backup /etc/X11/xorg.conf
+    4. 安装驱动程序编译环境
+    sudo apt-get install build-essential linux-headers-`uname -r`
+    5. 禁止系统使用默认的驱动
+    sudo gedit /etc/default/linux-restricted-modules-common
+    在最后的双引号中添加nv，即“”改成“nv”
+    6. 按Ctrl+Alt+F1，登录，停止gdm
+    sudo /etc/init.d/gdm stop
+    7. 进入下载的驱动安装文件 nvidia-linux-x86-1.0-9631-pkg1.run所在目录(请确定xorg-dev软件包已经安装，编译过程中可能会用到)
+    sudo sh nvidia-linux-x86-*.run
+    如果提示缺少某某模块(modules),询问是否上网下载，选no;
+    8. 安装完成后，启动gdm
+    sudo /etc/init.d/gdm start
+
+    此时，就会看到NVIDIA的LOGO了，驱动安装成功。
+
+    对宽屏来说，此时可能需要改变分辨率，在UBUNTU中，选择菜单“应用程序”─“系统工具”─“NVIDIA X Server Settings”，进入便可以改变分辨率;
+    同时要修改/etc/X11/xorg.conf文件，把里面的1024x768都修改为你选择的分辨率：
+    sudo gedit /etc/X11/xorg.conf
+    打开修改就可以了。
+    在这两处都修改才能保证每次重新启动后分辨率不会改回到原来的1024x768.
+
+    点击桌面工具栏的系统－首选项－桌面效果，会提示安装beryl。安装后重新启动，应用桌面效果。可以选择开启或者关闭桌面效果，也可以单独启用窗口晃动或 3D 工作区。全部窗口和状态栏都带有阴影效果，非常漂亮，真是爽呆了。（3D工作区用法：同时按Ctrl+Alt+左或者右键）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. 编译一个C++程序
+
+假设我们有一个如下的 C++ 源文件（main.cpp）：
+
+#include <iostream>
+using namespace std;
+ 
+int main()
+{
+        cout << "Hello, world!" << endl;
+        return 0;
+}
+
+
+则可以如下调用 g++ 命令编译、连接并生成可执行文件：
+zieckey@zieckey-laptop:~/coding/test$ g++ hello.cpp
+zieckey@zieckey-laptop:~/coding/test$ ./a.out 
+Hello, world!
+zieckey@zieckey-laptop:~/coding/test$
+
+
+
+
+
+
+
+安装MPlayer
+
+1. 下载
+http://www.mplayerhq.hu
+
+
+
+2. 安装
+
+zieckey@zieckey-laptop:~/temp/mplayer$ tar jxvf MPlayer-1.0rc1.tar.bz2 
+zieckey@zieckey-laptop:~/temp/mplayer$ cd MPlayer-1.0rc1/
+zieckey@zieckey-laptop:~/temp/mplayer/MPlayer-1.0rc1$ cat README
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+buntu7.04的设置
+ 
+[ 作者:stephen  加入时间:2007-04-30 10:31:35  来自:blog ]
+ 
+  	
+一、首先添加源，我用的这些源速度蛮不错的，可以删除掉sources.list中的所有源写入下面的源
+
+    sudo gedit /etc/apt/sources.list
+
+deb http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse
+
+deb http://mirror.lupaworld.com/ubuntu feisty main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-security main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-updates main restricted universe multiverse
+deb http://mirror.lupaworld.com/ubuntu feisty-backports main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-security main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-updates main restricted universe multiverse
+deb-src http://mirror.lupaworld.com/ubuntu feisty-backports main restricted universe multiverse cn99.com
+ 
+    sudo apt-get update
+    sudo apt-get dist-upgrade
+
+    安装中文支持：在 桌面工具栏的“系统－系统管理－语言支持” 里面把”Chinese”勾选上（一定要打勾，不要只是一条横线，否则中文支持不完全）。
+
+二、安装Nvidia显卡驱动：（第6、7、8步最好记下来，因为会切换到终端）
+
+    1. 到http://www.nvidia.com/ 下载驱动,注意下载的安装包应该包含自己的显卡驱动
+    2. 删除原来的驱动（如果你装过驱动）
+    sudo apt-get --purge remove nvidia-glx
+    3. 备份当前的显示设置，这样可以在驱动安装失败时恢复到原来的设置，这步很重要
+    sudo cp /etc/X11/xorg.conf.backup /etc/X11/xorg.conf
+    4. 安装驱动程序编译环境
+    sudo apt-get install build-essential linux-headers-`uname -r`
+    5. 禁止系统使用默认的驱动
+    sudo gedit /etc/default/linux-restricted-modules-common
+    在最后的双引号中添加nv，即“”改成“nv”
+    6. 按Ctrl+Alt+F1，登录，停止gdm
+    sudo /etc/init.d/gdm stop
+    7. 进入下载的驱动安装文件 nvidia-linux-x86-1.0-9631-pkg1.run所在目录(请确定xorg-dev软件包已经安装，编译过程中可能会用到)
+    sudo sh nvidia-linux-x86-*.run
+    如果提示缺少某某模块(modules),询问是否上网下载，选no;
+    8. 安装完成后，启动gdm
+    sudo /etc/init.d/gdm start
+
+    此时，就会看到NVIDIA的LOGO了，驱动安装成功。
+
+    对宽屏来说，此时可能需要改变分辨率，在UBUNTU中，选择菜单“应用程序”─“系统工具”─“NVIDIA X Server Settings”，进入便可以改变分辨率;
+    同时要修改/etc/X11/xorg.conf文件，把里面的1024x768都修改为你选择的分辨率：
+    sudo gedit /etc/X11/xorg.conf
+    打开修改就可以了。
+    在这两处都修改才能保证每次重新启动后分辨率不会改回到原来的1024x768.
+
+
+    点击桌面工具栏的系统－首选项－桌面效果，会提示安装beryl。安装后重新启动，应用桌面效果。可以选择开启或者关闭桌面效果，也可以单独启用窗口晃动或 3D 工作区。全部窗口和状态栏都带有阴影效果，非常漂亮，真是爽呆了。（3D工作区用法：同时按Ctrl+Alt+左或者右键）
+
+三、安装mplayer与解码器，设置中文字幕
+        sudo apt-get install mplayer mozilla-mplayer totem-xine libxine-extracodecs
+        sudo apt-get install gstreamer0.10-*
+        wget -c http://www.debian-multimedia.org/pool/main/w/w32codecs/w32codecs_20061022-0.0_i386.deb
+        sudo dpkg -i w32codecs_20061022-0.0_i386.deb
+
+       如果运行mplayer播放电影的时候出现以下字样而不能正常运行的时候
+
+open: No such file or directory
+[MGA] Couldn't open: /dev/mga_vid
+Error opening/initializing the selected video_out (-vo) device.
+ 
+       首先运行gmplayer，然后在preference－video里选择xv X11/Xv就可以正常播放了。
+
+        中文字幕设置方法：
+            1) 在 Preferences－Font 里面点击 ”Browse” 选择一个中文字体，如：
+                    /usr/share/fonts/truetype/arphic/uming.ttf
+                Encodeing 选择 Unicode。
+            2) 在 Preferences－Subtitle&OSD 里面的 Encoding 选择：
+             　　Simplified Chinese Charset(cp936)
+            3) 把 Preferences－Font 中的“Text scale”调整为3.8，默认字幕太大了。
+
+四、安装配置vim
+       1、安装vim
+            sudo apt-get install vim
+       2、配置文件
+           在用户家目录下建立.vimrc文件
+               cd; gedit .vimrc
+          写入以下内容：
+set nocompatible
+set hlsearch
+
+if !exists("syntax_on")
+syntax on
+endif
+
+"设置tab字符个数
+set tabstop=4
+set shiftwidth=4
+"自动缩进
+set autoindent
+"更方便的退格键
+set backspace=2
+
+"自动检测文件类型
+filetype on
+
+"配色文件
+colorscheme desert
+
+"字体
+if (has("gui_running"))
+set guifont=Bitstream\ Vera\ Sans\ Mono\ 10
+endif
+
+"----------------below for txt file
+"让文本文件也有高亮，thanks to xbeta@smth
+augroup filetypedetect
+au BufNewFile,BufRead *.* setf ztxt
+augroup END
+
+"缓冲区写入文件的时候自动检查文件类型
+au BufWritePost * filet detect
+
+"设定文件编码类型，彻底解决中文编码问题
+let &termencoding=&encoding
+set fileencodings=utf-8,gbk,ucs-bom,cp936
+
+五、安装星际译王stardict
+        sudo apt-get install stardict
+
+        到http: //stardict.sourceforge.net/Dictionaries.php下载词典，因为我需要用英汉和汉英词典，所以下载的是 http://stardict.sourceforge.net/Dictionaries_zh_CN.php页面中推荐的那几个词典以及计算机词汇。
+        解压为每个辞典一个目录，把词典目录放到/usr/share/stardict/dic中，启动stardict就可。Linux联盟收集整理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+我的机器是宏基5572A，集成的是Realtek ALC883 HD Audio声卡。安装ubuntu7能顺利识别网卡，不能识别声卡。我已把所有linux驱动都试了一遍，还是无法识别。
+
+点击音量控制按钮，系统提示如下：
+
+音量控制找不到要控制的任何元素和/或设备。这意味着您可能没有安装正确的 GStreamer 插件，或者您没有配置好声卡。
+
+请问如何解决？ 
+
+zieckey@zieckey-laptop:~/temp$ lspci
+00:00.0 Host bridge: Intel Corporation Mobile 945GM/PM/GMS/940GML and 945GT Express Memory Controller Hub (rev 03)
+00:01.0 PCI bridge: Intel Corporation Mobile 945GM/PM/GMS/940GML and 945GT Express PCI Express Root Port (rev 03)
+00:1b.0 Audio device: Intel Corporation 82801G (ICH7 Family) High Definition Audio Controller (rev 02)
+00:1c.0 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 1 (rev 02)
+00:1c.1 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 2 (rev 02)
+00:1c.2 PCI bridge: Intel Corporation 82801G (ICH7 Family) PCI Express Port 3 (rev 02)
+00:1d.0 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #1 (rev 02)
+00:1d.1 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #2 (rev 02)
+00:1d.2 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #3 (rev 02)
+00:1d.3 USB Controller: Intel Corporation 82801G (ICH7 Family) USB UHCI #4 (rev 02)
+00:1d.7 USB Controller: Intel Corporation 82801G (ICH7 Family) USB2 EHCI Controller (rev 02)
+00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev e2)
+00:1f.0 ISA bridge: Intel Corporation 82801GBM (ICH7-M) LPC Interface Bridge (rev 02)
+00:1f.2 IDE interface: Intel Corporation 82801GBM/GHM (ICH7 Family) Serial ATA Storage Controller IDE (rev 02)
+00:1f.3 SMBus: Intel Corporation 82801G (ICH7 Family) SMBus Controller (rev 02)
+01:00.0 VGA compatible controller: nVidia Corporation Quadro NVS 110M / GeForce Go 7300 (rev a1)
+02:00.0 Ethernet controller: Marvell Technology Group Ltd. 88E8038 PCI-E Fast Ethernet Controller (rev 14)
+03:00.0 Network controller: Intel Corporation PRO/Wireless 3945ABG Network Connection (rev 02)
+0a:09.0 CardBus bridge: Texas Instruments PCIxx12 Cardbus Controller
+0a:09.2 Mass storage controller: Texas Instruments 5-in-1 Multimedia Card Reader (SD/MMC/MS/MS PRO/xD)
+zieckey@zieckey-laptop:~/temp$ aplay -l 
+aplay: device_list:222: 找不到声卡…
+

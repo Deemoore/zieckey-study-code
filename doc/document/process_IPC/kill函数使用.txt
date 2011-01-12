@@ -1,0 +1,72 @@
+       kill(传送信号给指定的进程)
+表头文件
+     #include<sys/types.h>
+     #include<signal.h>
+定义函数 int kill(pid_t pid,int sig);
+函数说明
+	kill()可以用来送参数 sig 指定的信号给参数 pid 指定的进程。参数 pid 有几种情况:
+	pid>0 将信号传给进程识别码为 pid 的进程。
+	pid=0 将信号传给和目前进程相同进程组的所有进程
+	pid=-1 将信号广播传送给系统内所有的进程
+	pid<0 将信号传给进程组识别码为 pid 绝对值的所有进程
+返回值  执行成功则返回 0,如果有错误则返回-1。
+     EINVAL 参数 sig 不合法
+错误代码 ESRCH 参数 pid 所指定的进程或进程组不存在
+     EPERM 权限不够无法传送信号给指定进程
+
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+
+int main( void )
+{
+	pid_t childpid;
+	int status;
+	int retval;
+	
+	childpid = fork();
+	if ( -1 == childpid )
+	{
+		perror( "fork()" );
+		exit( EXIT_FAILURE );
+	}
+	else if ( 0 == childpid )
+	{
+		puts( "In child process" );
+		sleep( 100 );//让子进程睡眠，看看父进程的行为
+		exit(EXIT_SUCCESS);
+	}
+	else 
+	{
+		if ( 0 == (waitpid( childpid, &status, WNOHANG )))
+		{
+			retval = kill( childpid,SIGKILL );
+			
+			if ( retval )
+			{
+				puts( "kill failed." );
+				perror( "kill" );
+				waitpid( childpid, &status, 0 );
+			}
+			else
+			{
+				printf( "%d killed\n", childpid );
+			}
+			
+		}
+	}
+	
+	exit(EXIT_SUCCESS);
+}	
+[root@localhost src]# gcc killer.c 
+[root@localhost src]# ./a.out 
+In child process
+4545 killed
+
+在确信fork调用成功后，子进程睡眠100秒，然后退出。
+同时父进程在子进程上调用waitpid函数，但使用了WNOHANG选项，
+所以调用waitpid后立即返回。父进程接着杀死子进程，如果kill执行失败，
+返回－1，否这返回0。如果kill执行失败，父进程第二次调用waitpid，
+保证他在子进程退出后再停止执行。否则父进程显示一条成功消息后退出。

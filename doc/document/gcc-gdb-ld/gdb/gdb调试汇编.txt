@@ -1,0 +1,142 @@
+首先看一个最基本的nasm语法汇编程序hello.asm：
+
+section .text
+global main
+
+main:
+mov eax,4 ;4号调用
+mov ebx,1 ;ebx送1表示stdout
+mov ecx,msg ;字符串的首地址送入ecx
+mov edx,14 ;字符串的长度送入edx
+int 80h ;输出字串
+mov eax,1 ;1号调用
+int 80h ;结束
+msg:
+db "Hello World!",0ah,0dh
+
+我们想调用gdb进行调试，该怎么办呢？
+请看下面的示例：
+
+[root@localhost asm]# nasm -f elf hello.asm -g -F stabs
+[root@localhost asm]# gcc -o hello hello.o -g
+[root@localhost asm]# gdb hello			<========= 启动GDB
+GNU gdb Red Hat Linux (6.6-8.fc7rh)
+Copyright (C) 2006 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu"...
+Using host libthread_db library "/lib/i686/nosegneg/libthread_db.so.1".
+(gdb) 
+
+说明：
+最关键的就是这一行nasm的编译命令：
+[root@localhost asm]# nasm -f elf hello.asm -g -F stabs
+-f elf	用来指定输出文件的格式
+-F stabs 用来说明生成调试信息的格式，对于gcc来说都是用stabs， 
+-g	主要是激活调试信息
+
+好了，看看如何调试：
+(gdb) list 1			<================== l命令相当于list，从第1行开始列出程序源代码。
+1       section .text
+2       global main
+3
+4       main:
+5       mov eax,4 ;4号调用
+6       mov ebx,1 ;ebx送1表示stdout
+7       mov ecx,msg ;字符串的首地址送入ecx
+8       mov edx,14 ;字符串的长度送入edx
+9       int 80h ;输出字串
+10      mov eax,1 ;1号调用
+(gdb) break 5   <==================-- b 为 break 命令简写， 设置断点，在源程序第5行处。
+Breakpoint 1 at 0x8048380: file hello.asm, line 5.
+(gdb) break 6
+Breakpoint 2 at 0x8048385: file hello.asm, line 6.
+(gdb) break *main	<==================-- 设置断点，在源程序标号为“main”的地方设置断点
+Note: breakpoint 1 also set at pc 0x8048380.
+Breakpoint 3 at 0x8048380: file hello.asm, line 5.
+(gdb) info break	<==================-- 查看断点信息。
+Num Type           Disp Enb Address    What
+1   breakpoint     keep y   0x08048380 hello.asm:5
+2   breakpoint     keep y   0x08048385 hello.asm:6
+3   breakpoint     keep y   0x08048380 hello.asm:5
+(gdb) delete 1		<================== 删除1号断点
+(gdb) info break
+Num Type           Disp Enb Address    What
+2   breakpoint     keep y   0x08048385 hello.asm:6
+3   breakpoint     keep y   0x08048380 hello.asm:5
+(gdb) run		 <===================== 运行程序，run命令简写为r
+Starting program: /data/workspace/asm/hello 
+
+Breakpoint 1, main () at hello.asm:5
+5       mov eax,4 ;4号调用	
+(gdb) next		<===================== 单步运行程序
+6       mov ebx,1 ;ebx送1表示stdout
+(gdb) print $eax	<==================	查看寄存器eax的值(十进制)
+$1 = 4
+(gdb) info registers		<==================	查看所有寄存器的值
+eax            0x4      4
+ecx            0x29d1c08a       701612170
+edx            0x1      1
+ebx            0xd94ff4 14241780
+esp            0xbfc0ab0c       0xbfc0ab0c
+ebp            0xbfc0ab68       0xbfc0ab68
+esi            0x28bca0 2669728
+edi            0x0      0
+eip            0x8048385        0x8048385 <main+5>
+eflags         0x246    [ PF ZF IF ]
+cs             0x73     115
+ss             0x7b     123
+ds             0x7b     123
+es             0x7b     123
+fs             0x0      0
+gs             0x33     51
+(gdb) n		<===================== 单步运行程序
+7       mov ecx,msg ;字符串的首地址送入ecx
+(gdb) n		<===================== 单步运行程序
+8       mov edx,14 ;字符串的长度送入edx
+(gdb) p/x $ecx		<==================	查看所有寄存器的值(x表示结果以十六进制显示)
+$6 = 0x804839d
+(gdb) x/5cb 0x804839d		<=========  查看内存的值，5表示5个单元，c表示以字符形式显示，b表示安装字节读取，那么就是显示 0x804839d开始处的5个字节的内容
+0x804839d <msg>:        72 'H'  101 'e' 108 'l' 108 'l' 111 'o'
+(gdb) n
+9       int 80h ;输出字串
+(gdb) n
+Hello World!
+10      mov eax,1 ;1号调用
+(gdb) n
+11      int 80h ;结束
+(gdb) n
+
+Program exited with code 01.
+(gdb) 
+
+
+
+
+
+
+gdb 基本命令
+     gdb 支持很多的命令使你能实现不同的功能. 这些命令从简单的文件装入到允许你检查所调用的堆栈内容的复杂命令, 表27.1列出了你在用 gdb 调试时会用到的一些命令. 想了解 gdb 的详细使用请参考 gdb 的指南页.
+
+命   令 	描  述
+file 	装入想要调试的可执行文件.
+kill 	终止正在调试的程序.
+list 	列出产生执行文件的源代码的一部分.
+next 	执行一行源代码但不进入函数内部.
+step 	执行一行源代码而且进入函数内部.
+run 	执行当前被调试的程序
+quit 	终止 gdb
+watch 	使你能监视一个变量的值而不管它何时被改变.
+break 	在代码里设置断点, 这将使程序执行到这里时被挂起.
+make 	使你能不退出 gdb 就可以重新产生可执行文件.
+shell 	使你能不离开 gdb 就执行 UNIX shell 命令. 
+
+还可以用print命令显示某个寄存器的值，例如：print $eax
+   print/d $reg   以十进制显示reg的值
+   print/t $reg   二进制
+   print/x $reg   十六进制
+x命令用来显示特定内存位置的值，格式如下：
+   x/nyz          n是要显示的字段数，y是输出格式(c字符，x是16进制，d是十进制)，z是字段长度(b字节，h半字，w32位字)
+例如，x/42cb &output就是以字符模式显示output变量前42字节的值。

@@ -1,0 +1,25 @@
+class base
+{
+public:
+virtual ~base(){}
+void work(){ _do_work();}
+private:
+virtual void _do_work();// = 0;//{};//这个地方要么实现，要定义为纯虚函数，否则会出错，为什么？
+};
+class child : public base
+{
+public:
+child(){}
+private:
+virtual void _do_work(){ cout << "child do_work\n"; }
+};
+void test()
+{
+child t;
+t.work();
+base* pb = &t;
+pb->work();
+child* pc = dynamic_cast<child*>(pb);
+pc->work();
+return;
+}

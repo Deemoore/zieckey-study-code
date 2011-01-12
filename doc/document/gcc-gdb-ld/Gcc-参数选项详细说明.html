@@ -1,0 +1,785 @@
+<!--STATUS OK-->
+<html><head><meta http-equiv=content-type content="text/html; charset=gb2312"><title>Linux程序设计 — 节选自 Linux程序设计(第3版) 作者：Neil Matthew_老黎的自留地  -AyueLee&#39;s Blog</title>
+<style>.error{color:#FF0000;font-size:12px}</style>
+<script type="text/javascript" src="/ui/scripts/global.js"></script>
+<script language="javascript" src="/js/popup.js"></script>
+<script LANGUAGE="JavaScript" src="/js/g_spjs.js"></script>
+<script language="javascript">
+<!--
+
+var allkey="";
+var i=0;
+var flag=0;
+function setpv(allnum)
+{
+	var num = allnum.split('_');
+	document.getElementById("result").innerHTML=num[0];
+}
+		 
+function checkMail(s) 
+{ 
+  	var pattern=/\w+@\w+\.[a-z]+/; 
+  	if(pattern.test(s)) 
+    { 
+       return true; 
+    } 
+  	else 
+   { 
+      return false; 
+   } 
+} 
+
+
+function checkeandu(eanduid)
+{
+	var eanduvalue=G(eanduid).value;
+	var len=bytes(eanduvalue);
+	if(len>128)
+	{
+		showErr(2,"您输入的网址或邮箱太长，请保持在128字节以内。");
+		return false;
+	}
+	else
+	{ 
+		 return true;
+	}
+		
+}
+
+function cmtdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除评论");
+	pop.setContent("confirmCon","您确定要彻底删除这条评论吗？");
+	pop.setContent("callBack",delCallback2);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+function delCallback2(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+
+
+
+function checkname(strid)
+{
+	var ele=document.getElementById(strid);
+	var len=bytes(ele.value);
+	if(len>49)
+	{
+		showErr(1,"您输入的姓名太长，请保持在49字节以内。");
+		return false;
+	}
+	else 
+	{		
+		if(len==0)
+		{
+			document.getElementById(strid).value="匿名网友";
+		}
+		 return true;
+	}	
+	
+}
+
+function checktext(textid)
+{
+		document.getElementById(textid).value=trimlr(textid);
+		var str=trimrn(textid);
+		len=str.length;
+		if(len==0 || ((/^[\s,　]+$/gi).test(str)) )
+		{
+			showErr(3,"您必须输入评论内容，请检查。");
+			return false;
+		}
+		else 
+		{
+				if(len>1000)
+				{
+					showErr(3,"您输入的评论内容太长，请保持在500字以内。");
+					return false;
+				}
+			return true;
+		}	
+}
+
+function showErr(index,str)
+{
+	G(index+"_err").style.display="";
+	G(index+"_err_con").innerHTML=str;
+}
+function hidErr(index)
+{
+	G(index+"_err").style.display="none";
+	G(index+"_err_con").innerHTML="";
+}
+
+function alertPop(tit,con)
+{
+	var pop=new Popup({ contentType:4,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title",tit);
+	pop.setContent("alertCon",con);
+	pop.build();
+	pop.show();
+}
+
+function cmtfull()
+{
+	var cnum=0;
+	if(cnum>=50000)
+	{
+		alertPop("发表评论","单篇日志评论数最多为50000条.");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function checkcmtform()
+{
+	if(checkname("spBlogCmtor")&&checkeandu("spBlogCmtURL")&&checktext("spBlogCmtText")&&cmtfull())
+	{
+		submitForm();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+var g_pop=null;
+function submitForm()
+{
+	g_pop=new Popup({ contentType:1,isReloadOnClose:false,width:340,height:80});
+	g_pop.setContent("title","添加评论");
+	g_pop.setContent("contentUrl","");
+	g_pop.setContent("someDisabledBtn","btn_ok");
+	g_pop.build();
+	G("popFormSubmit").target=g_pop.iframeIdName;
+	g_pop.show();
+}
+
+function g_close_pop()
+{
+	g_pop.close();
+}
+
+function formatonlinpic()
+{
+var picobj=document.getElementsByName("onlinepic");
+var picnum=picobj.length;
+	
+	for(var i=0;i<picnum;i++)
+	{
+		if(picobj[i].width>200)
+		{
+			picobj[i].width=200;
+		}
+		if(picobj[i].height>200)
+		{
+			picobj[i].height=200;
+		}
+	}
+    try{document.getElementById("btn_ok").disabled = "";}catch(e){}
+}
+
+function addToFavor(){
+var blogTitle='Linux程序设计 — 节选自 Linux程序设计(第3版) 作者：Neil Matthew'.replace(/&#39;/g,'\'');
+window.open('http://cang.baidu.com/do/add?it='+encodeURIComponent(blogTitle+'_百度空间')+'&iu='+encodeURIComponent(location.href)+'&fr=sp#nw=1','_s','scrollbars=no,width=600,height=450,right=75,top=20,status=no,resizable=yes'); 
+return false;
+}
+
+var isIE = /*@cc_on!@*/false;
+function tracker(did,a){
+	return function(){
+		var t=new Date().getTime();
+		var href=a.href;
+        if(isIE){
+            var r = /href\s*=\s*("|')?([^\s]*)\1/gi;
+            if(r.test(a.outerHTML))
+                href = RegExp.$2;
+        }
+        new Image().src = "http://hi.baidu.com/sys/statlog/1.gif?m=" + did + "&v=" + encodeURIComponent(href) + "&c=" + encodeURIComponent(location.href) + "&t="+t;
+	}
+}
+
+function tracker_init(did){
+	var _s=document.getElementById(did);
+	var as = _s.getElementsByTagName('A');
+	for(var i = 0, j = as.length; i < j; i ++){
+		var a = as[i];
+		if(isIE){
+			a.attachEvent("onclick", tracker(did,a));
+		}else{
+			a.addEventListener("click", tracker(did,a), false);
+		}
+	}
+}
+
+
+
+//-->
+</script>
+
+
+</head>
+<body onLoad="formatonlinpic();">
+<center>
+<script type="text/javascript">
+/*<![CDATA[*/
+if(top.location != self.location){
+	top.location = self.location;
+}
+var myref = encodeURI("http://hi.baidu.com/yuuuuu/blog/item/58e18d16ab5c3253f2de32c7%2Ehtml");
+/*]]>*/
+</script>
+<link rel="stylesheet" type="text/css" href="/ui/css/mods.css" />
+
+<link rel="stylesheet" type="text/css" href="/yuuuuu/css/item/fbd85f4a059b3f2308f7ef5e.css" />
+
+<link rel="stylesheet" type="text/css" href="/space.css" />
+<style type="text/css"> 
+/*<![CDATA[*/
+
+#usrbar{padding:4px 10px 3px 0;font-size:12px;height:19px;line-height:19px;color:#000000;font-family:Arial;text-align:right;background:#ffffff;filter:alpha(opacity=65);-moz-opacity:0.5;width:auto !important;width:100%;letter-spacing:normal}
+#usrbar a,#usrbar a:link,#usrbar a:visited{color:#0000CC;text-decoration:underline}
+#ft{clear:both;height:20px;line-height:20px;color:#666666;font-size:12px;font-family:Arial;text-align:center}
+#ft a,#ft a:link,#ft a:visited{color:#7777CC;text-decoration:underline}
+#usrbar,#usrbar a,#usrbar a:link,#usrbar a:visited,#ft,#ft a,#ft a:link,#ft a:visited{letter-spacing:normal}
+/*]]>*/
+</style>
+
+
+<div id="usrbar"><nobr>
+
+			<a href="http://www.baidu.com/" target="_blank">百度首页</a> 
+		| <a id="hi_index" href="http://hi.baidu.com" target="_blank">百度空间</a>
+		<script type="text/javascript">
+		document.write('| <a href="http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u=http://hi.baidu.com' + encodeURI('/yuuuuu/blog/item/58e18d16ab5c3253f2de32c7%2Ehtml') + '">登录</a>');
+		</script>
+		
+</nobr></div>
+
+
+<div id="main" align="left">
+<!--[if IE]>
+<script>
+var objmain = document.getElementById("main");
+function updatesize(){ var bodyw = window.document.body.offsetWidth; if(bodyw <= 790) objmain.style.width="772px"; else if(bodyw >= 1016) objmain.style.width="996px"; else objmain.style.width="100%"; }
+updatesize(); window.onresize = updatesize;
+</script>
+<![endif]-->
+	<div id="header">
+	<div class="lc"><div class="rc"></div></div>
+<div class="tit"><a href="/yuuuuu" class="titlink" title="六月旅者的空间 http://hi.baidu.com/yuuuuu">老黎的自留地  -AyueLee&#39;s Blog</a></div>
+<div class="desc">Commit to Linux.- 这世界上难以自拔的，除了牙齿，大概就只有爱情了。</div>
+<div id="tabline">&nbsp;</div>
+	<div id="tab"><a href="/yuuuuu">主页</a><a href="/yuuuuu/blog" class="on">博客</a><a href="/yuuuuu/album">相册</a><span>|</span><a href="/yuuuuu/profile">个人档案</a>
+	<span>|</span><a href="/yuuuuu/friend">好友</a>
+
+
+
+	</div>
+</div>
+
+<div class="stage">
+<div class="stagepad">
+<div style="width:100%">
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="modth">
+	<tr><td class="modtl" width="7">&nbsp;</td>
+	<td class="modtc" nowrap><div class="modhead"><span class="modtit">查看文章</span></div></td>
+	<td class="modtc" nowrap align="right"></td>
+	<td class="modtr" width="7">&nbsp;</td>
+	</tr></table>
+
+<div id="m_blog" class="modbox">
+<div class="tit">Linux程序设计 — 节选自 Linux程序设计(第3版) 作者：Neil Matthew</div>
+<div class="date">2007-08-01  14:12</div>
+<table style="table-layout:fixed"><tr><td><div id="blog_text" class="cnt"><p class="11" style="MARGIN: 7.5pt 0cm">1.2&nbsp;&nbsp;&nbsp;&nbsp; Linux程序设计</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">许多人认为Linux程序设计就是用C语言编程。的确，UNIX最初是用C语言编写的，UNIX的大多数应用程序也是用C语言编写的，但C语言并不是Linux程序员或UNIX程序员的唯一选择。在本书中，我们将介绍几种其他的选择。</p>
+<div style="PADDING-RIGHT: 0cm; BORDER-TOP: #999999 1pt solid; PADDING-LEFT: 0cm; PADDING-BOTTOM: 4pt; MARGIN-LEFT: 0cm; MARGIN-RIGHT: 5.2pt; PADDING-TOP: 4pt; BORDER-BOTTOM: #999999 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none">
+<p class="aff4" style="MARGIN: 11.25pt 0cm 11.25pt 28.5pt; TEXT-INDENT: -28.5pt">事实上，UNIX的第一个版本是在1969年用PDP 7机器的汇编语言编写的。差不多也在那个时候，Dennis Ritchie发明了C语言，并于1973年与Ken Thompson一起用C语言重写了整个UNIX内核，这在那个连系统软件都是用汇编语言编写的时代是个了不起的壮举。</p>
+</div>
+<p class="MsoNormal" style="MARGIN-BOTTOM: 7.5pt; TEXT-INDENT: 19pt">对Linux系统来说，有各种各样的编程语言可供选用，其中许多是免费的，它们可以通过CD-ROM光盘获得或在因特网上通过FTP站点下载。下面列出了Linux程序员可用的部分编程语言。</p>
+<div align="center">
+<table class="MsoNormalTable" style="WIDTH: 90%; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-COLLAPSE: collapse; BORDER-BOTTOM-STYLE: none" cellspacing="0" cellpadding="0" width="90%" border="1">
+<tbody>
+    <tr>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 100%; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="100%">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Ada&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; C++</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Eiffel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Forth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fortran</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Java&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JavaScript</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Lisp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Modula 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Modula 3</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Oberon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Objective C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pascal</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Perl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PostScript&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Prolog</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">Python&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Smalltalk</p>
+        <p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 61.9pt">SQL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tcl/Tk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bourne Shell </p>
+</td>
+    </tr>
+</tbody>
+</table>
+</div>
+<p class="MsoNormal" style="MARGIN-TOP: 7.5pt; TEXT-INDENT: 19pt">我们将在第2章看到，如何用Linux的shell（bash）来开发小规模到中等规模的应用程序。在本书的其他章节，我们的注意力主要集中在C语言上。我们将集中精力从C语言程序员的视角探究Linux编程接口。我们假设读者具备C语言程序设计的基础。</p>
+<p class="111" style="MARGIN: 7.5pt 0cm">1.2.1&nbsp;&nbsp;&nbsp;&nbsp; Linux程序</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">Linux应用程序表现为两种特殊类型的文件：可执行文件和脚本文件。可执行文件是计算机可以直接运行的程序，它们相当于Windows中的.exe文件。脚本文件是一组指令的集合，这些指令将由另一个程序（即解释器）来执行，它们相当于Windows中的.bat文件、.cmd文件或解释执行的BASIC程序。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">Linux并不要求可执行程序或脚本具有特殊的文件名或扩展名。我们将在第2章讨论的文件系统属性用来指明一个文件是否为可执行的程序。在Linux中，我们可以用编译过的程序代替脚本（反之亦然）而不影响其他程序或调用者。事实上，在用户级别，这两者本质上没有任何不同。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">登录Linux系统时，我们与一个shell程序（通常是bash）进行交互，它像Windows中的命令提示窗口一样运行程序。它在一组给定目录路径下按照给出的程序名搜索与之同名的文件。搜索的目录存储在shell变量PATH里，这一点与Windows也很类似。搜索路径（也可以对这个路径进行添加）由系统管理员配置，它通常包含一些存储系统程序的标准路径，其中包括：</p>
+<p class="a2">l /bin：二进制文件目录，用于存放启动系统时用到的二进制文件。</p>
+<p class="a2">l /usr/bin：用户二进制文件目录，用于存放用户使用的标准程序。</p>
+<p class="a2">l /usr/local/bin：本地二进制文件目录，用于存放特定软件安装的程序。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">系统管理员（例如root用户）登录后使用的PATH变量还包含存放系统管理程序的目录，如/sbin和/usr/sbin。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">可选的操作系统组件和第三方应用程序可以安装在/opt目录下，安装程序可以通过用户安装脚本将路径添加到你的PATH环境变量中。</p>
+<div style="PADDING-RIGHT: 0cm; BORDER-TOP: #999999 1pt solid; PADDING-LEFT: 0cm; PADDING-BOTTOM: 4pt; MARGIN-LEFT: 0cm; MARGIN-RIGHT: 5.2pt; PADDING-TOP: 4pt; BORDER-BOTTOM: #999999 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none">
+<p class="aff4" style="MARGIN: 11.25pt 0cm 11.25pt 28.5pt; TEXT-INDENT: -28.5pt">从PATH中删除目录并不是一个好主意，除非你确信你了解这么做的后果。</p>
+</div>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">注意，Linux像UNIX一样，使用冒号（:）分隔PATH变量里的条目，而不是像MS-DOS和Windows使用分号（;）。（UNIX使用冒号“:”在先，所以应该问微软为什么Windows要采用不同的方式，而不是问UNIX为什么与之不同！）下面是一个PATH变量的例子：</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="10" width="378" src="http://book.csdn.net/BookFiles/353/img/image015.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">上面的PATH变量包含的条目有：标准程序存放位置、当前目录（.）、一个用户的主目录（home directory）和X视窗系统的目录。</p>
+<p class="aff6" style="MARGIN: 4.5pt 0cm; TEXT-INDENT: 20pt">记住，Linux用正斜线（/）分隔文件名里的目录名，而不是像Windows那样用反斜线（\）。而且这次还是UNIX的用法在先。</p>
+<p class="111" style="MARGIN: 7.5pt 0cm">1.2.2&nbsp;&nbsp;&nbsp;&nbsp; C语言编译器</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">在POSIX兼容的系统中，C语言编译器被称为c89。历史上，C语言编译器被简称为cc。许多年来，不同厂商销售的类UNIX系统中所带的C语言编译器均包含不同的功能和选项，但它们一般都称为cc。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">在准备起草POSIX标准时，事实上已经不可能制订出兼容所有厂商的标准cc命令了。于是，POSIX委员会决定为C语言编译器创建新的标准命令，这就是c89。只要使用这个命令，则在任何机器上，它的编译选项都相同。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">Linux系统尽量实现这些标准。在Linux系统中，你会发现c89、cc和gcc这些命令全部或部分地指向系统的C语言编译器，通常是GNU C编译器，或者简称gcc。在UNIX系统中，C语言编译器几乎总被称为cc。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 18.2pt">在本书中，我们将使用gcc，这是因为它随Linux的发行版一起提供，并且它支持ANSI C的标准语法。如果你发现你的UNIX系统中没有gcc，我们建议你设法获取并安装它。可以在http://www.gnu.org上找到它。我们在本书中用到gcc之处，只需简单地将其替换为你的系统中C语言编译器中相应的命令。</p>
+<p class="ad" style="MARGIN: 11.25pt 2pt 7.5pt; TEXT-INDENT: 18pt">实验：第一个Linux C语言程序</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">我们通过编写、编译和运行我们的第一个Linux程序来开始Linux的C语言程序开发。还是从最有名的HelloWorld程序开始吧。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(1) 下面是文件hello.c的源代码：</p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="57" width="557" src="http://book.csdn.net/BookFiles/353/img/image016.jpg"></p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="57" width="557" src="http://book.csdn.net/BookFiles/353/img/image017.jpg"></p>
+<p class="aff6" style="MARGIN: 4.5pt 0cm; TEXT-INDENT: 19pt">需要用一个编辑器来输入这个程序。在典型的Linux系统上有许多编辑器可用，较流行的编辑器是vi。本书的两位作者都喜欢emacs，所以我们建议你花一点时间来学习这个功能强大的编辑器的一些特性。要更深入地学习emacs，则可以使用它的在线指南。首先运行emacs命令以启动编辑器，然后输入Ctrl+H，接着输入字母t就进入了在线指南。emacs也有完整的用户手册。在emacs中输入Ctrl+H，接着输入字母i即可以得到相关信息。有些版本的emacs可能包含菜单，那就可以通过它访问手册和指南。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(2) 编译、链接和运行我们的程序。</p>
+<p class="-1" style="MARGIN: 7.5pt 0cm 7.5pt 19.3pt"><img height="49" width="138" src="http://book.csdn.net/BookFiles/353/img/image018.jpg"></p>
+<p class="ad" style="MARGIN: 11.25pt 2pt 7.5pt; TEXT-INDENT: 18pt">实验解析</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">调用GNU C语言编译器（在Linux中大多数情况下用cc也可以）将我们的C语言源代码转换为可执行文件hello。运行这个程序，打印出欢迎信息。虽然这只是最简单的一个例子，但如果在你的系统上能做到这一点，就能编译、运行本书中以后所有的例子了。如果无法完成上述操作，请检查你的系统以确保已安装了C语言编译器。例如，许多Linux发行版有个名为“Software Development（软件开发）”的安装选项，你应该在Linux系统安装过程中选中该项。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">因为这是我们运行的第一个程序，所以有些问题最好现在就指出来。hello程序很可能在你的主目录中。如果PATH变量不包含指向你的主目录的条目，shell就找不到hello程序。更进一步，如果PATH变量中的目录包含另一个名为hello的程序，就会执行那个程序。如果PATH中这样的目录出现在你的主目录之前，也会发生这种情况。为了避免这种潜在的问题，我们在程序名前加上一个./（例如./hello）。它特别指示shell去执行当前目录下给定名称的程序。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">如果你忘记用-o name选项告诉编译器将可执行程序放在何处，编译器则会把程序放在一个名为a.out的文件里（a.out的含义是assembler output，即汇编输出）。如果你确信编译了一个程序但又找不到它，别忘了看看有没有a.out文件！在UNIX的早期历史中，想在系统上玩游戏的人通常把游戏作为a.out来运行，以避免被系统管理员捉到，一些UNIX系统安装每晚会定期地删除所有名为a.out的文件。</p>
+<p class="111" style="MARGIN: 7.5pt 0cm">1.2.3&nbsp;&nbsp;&nbsp;&nbsp; 开发系统导引</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">对Linux开发人员来说，了解软件工具和开发资源在系统中存放的位置是很重要的。以下几节将对一些重要的目录和文件做简单的介绍。</p>
+<p class="4" style="TEXT-INDENT: 19pt">1．应用程序</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">应用程序通常存放在系统为之保留的特定目录中。系统为正常使用提供的程序，包括用于程序开发的工具，都可在目录/usr/bin中找到；系统管理员为某个特定的主机或本地网络添加的程序通常可在目录/usr/local/bin或/opt中找到。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">系统管理员一般喜欢使用/usr/local目录，因为它分离了厂商提供及后续添加的文件与系统本身提供的应用程序。保持/usr目录的这种组织方法的好处是：当你需要升级操作系统时，只需保留目录/usr/local里的内容。我们建议你在/usr/local目录结构下编译、运行自己的程序，并访问必需的文件。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">其他一些功能特性和编程系统都可能有其自己的目录结构和程序目录。其中最主要的就是X视窗系统，它通常安装在/usr/X11目录下，可选的安装位置还有用于修订版第6版的/usr/X11R6目录，XFree社团发布的用于Intel处理器芯片的各种XFree86变体也安装在这里，许多Linux发行版也用这个目录安装X视窗系统。其他类UNIX系统可能选择不同的位置，比如Solaris提供的Sun开放视窗系统就安装在/usr/openwin目录里。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">GNU编译系统的驱动程序gcc（在本章前面的编程示例中用过）一般位于/usr/bin或/usr/local/bin目录中，但它会从其他位置运行各种编译器支持的应用程序。这个位置是在编译编译器本身时指定的，并且随主机类型的不同而不同。对Linux系统来说，这个位置可能是/usr/lib/gcc-lib/目录下的一个版本特定的子目录。撰写本书时，在作者的一台机器上的这个目录是/usr/lib/gcc-lib/i486-suse-linux/3.3/.，GNU C/C++编译器的各个工具和GNU专用的头文件都保存在这里。</p>
+<p class="4" style="TEXT-INDENT: 19pt">2．头文件</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">用C语言及其他语言进行程序设计时，我们要用头文件来提供对常量的定义和对系统及库函数调用的声明。对C语言来说，这些头文件几乎总是在/usr/include目录及其子目录下。那些依赖于特定Linux版本的头文件通常可在目录/usr/include/sys和/usr/include/linux中找到。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">其他编程系统也有各自的include文件，并将其存储在可被相应编译器自动搜索到的目录里。例如，X视窗系统的/usr/include/X11目录和GNU C++的/usr/include/g++目录。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">调用C语言编译器时，我们可以使用-I标志来包含保存在子目录或非标准位置中的include文件。例如：</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt">$ gcc -I/usr/openwin/include fred.c</p>
+<p class="MsoNormal" style="TEXT-INDENT: 0cm">它指示编译器不仅在标准位置，也在/usr/openwin/include目录中查找程序fred.c中包含的头文件。请参看C语言编译器的使用手册（man gcc）以了解更多细节。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">用grep命令来搜索包含某些特定定义和函数原型的头文件是很方便的。假设我们想知道用来返回程序退出状态的#define定义的名字，就简单地切换到/usr/include目录下，然后用grep命令搜索可能的名字部分，如下所示：</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 2.1pt 19.3pt"><img height="76" width="491" src="http://book.csdn.net/BookFiles/353/img/image019.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 18pt">grep命令在当前目录下的所有以.h结尾的文件中搜索字符串EXIT_。在本例中，它在stdlib.h文件中找到了我们需要的定义。</p>
+<p class="4" style="TEXT-INDENT: 19pt">3．库文件</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">库是一组预先编译好的函数的集合，这些函数都是按照可重用的原则编写的。它们通常由一组相互关联的函数组成并执行某项常见的任务。比如屏幕处理函数库（curses和ncurses库）和数据库访问例程（dbm库）。我们将在后续的章节中介绍一些函数库。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">标准系统库文件一般存储在/lib和/usr/lib目录中。C语言编译器（或更确切地说是链接程序）需要知道要搜索哪些库文件，默认情况下，它只搜索标准C语言库。这是从那个计算机速度还很慢而且CPU运行周期还很昂贵的时代遗留下来的问题。仅把库文件放在标准目录中，然后希望编译器找到它是不够的，库文件必须遵循特定的命名规范并且需要在命令行中明确指定。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">库文件的名字总是以lib开头，随后的部分指明这是什么库（例如，c代表C语言库，m代表数学库）。文件名的最后部分以.开始，然后给出库文件的类型：</p>
+<p class="a2">l .a代表传统的静态函数库。</p>
+<p class="a2">l .so代表共享函数库（见后面的解释）。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">函数库通常以静态库和共享库两种格式存在，可用ls /usr/lib命令查看。我们可以通过给出完整的路径名或用-l标志来指示编译器要搜索的库文件。例如：</p>
+<p class="-1" style="MARGIN: 4.5pt 0cm 4.5pt 19.3pt">$ gcc -o fred fred.c /usr/lib/libm.a</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">这条命令指示编译器编译文件fred.c，将编译产生的程序文件命名为fred，并且除搜索标准的C语言函数库外，还搜索数学库以解决函数引用问题。下面的命令也能产生类似的结果：</p>
+<p class="-1" style="MARGIN: 4.5pt 0cm 4.5pt 19.3pt">$ gcc -o fred fred.c –lm</p>
+<p class="MsoNormal" style="TEXT-INDENT: 18pt">-lm（在字母l和m之间没有空格）是简写方式（简写在UNIX环境里很有用），它代表的是标准库目录（本例中是/usr/lib）中名为libm.a的函数库。-lm标志的另一个好处是如果有共享库，编译器会自动选择共享库。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">虽然库文件和头文件一样，通常都保存在标准位置，但我们也可以通过-L（大写字母）标志为编译器增加库的搜索路径。例如：</p>
+<p class="-1" style="MARGIN: 4.5pt 0cm 4.5pt 19.3pt">$ gcc -o x11fred -L/usr/openwin/lib x11fred.c -lX11</p>
+<p class="MsoNormal" style="TEXT-INDENT: 0cm">这条命令用/usr/openwin/lib目录中的libX11库版本来编译和链接程序x11fred。</p>
+<p class="4" style="TEXT-INDENT: 19pt">4．静态库</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">函数库最简单的形式是一组处于“准备好使用”状态的目标文件。当程序需要使用函数库中的某个函数时，它包含一个声明该函数的头文件。编译器和链接器负责将程序代码和函数库结合在一起以组成一个单独的可执行文件。我们必须用-l选项指明除标准C语言运行库外还需使用的库。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">静态库，也称作归档文件（archive），按惯例它们的文件名都以.a结尾。比如，标准C语言函数库/usr/lib/libc.a和X11函数库/usr/X11/lib/libX11.a。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">我们可以容易地创建和维护自己的静态库，只要使用ar（代表archive，即建立归档文件）程序和gcc –c命令对函数分别进行编译。我们应该尽可能把函数分别保存到不同的源文件中。如果函数需要访问公共数据，我们则把它们放在同一个源文件中并使用在该文件中声明的静态变量。</p>
+<p class="ad" style="MARGIN: 11.25pt 2pt 7.5pt; TEXT-INDENT: 18pt">实验：静态库</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">下面我们来创建一个小型函数库，它包含两个函数，然后在一个示例程序中调用其中一个函数。这两个函数分别是fred和bill，它们只打印欢迎信息。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(1) 首先，为两个函数分别创建各自的源文件（将它们分别命名为fred.c和bill.c）。下面是第一个源文件：</p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="86" width="557" src="http://book.csdn.net/BookFiles/353/img/image020.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">下面是第二个源文件：</p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="85" width="557" src="http://book.csdn.net/BookFiles/353/img/image021.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(2) 分别编译这些函数，产生要包含在库文件中的目标文件。这通过调用带有-c选项的C 语言编译器来实现，-c选项的作用是阻止编译器创建一个完整的程序。如果此时试图创建一个完整的程序将不会成功，因为我们还未定义main函数。</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 0pt 19.3pt">$ gcc -c bill.c fred.c</p>
+<p class="-1" style="MARGIN: 0cm 0cm 0pt 19.3pt; LINE-HEIGHT: 12pt">$ ls *.o</p>
+<p class="-1" style="MARGIN: 0cm 0cm 5.25pt 19.3pt; LINE-HEIGHT: 12pt">bill.o fred.o</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(3) 现在编写一个调用bill函数的程序。首先，为我们的库文件创建一个头文件。这个头文件将声明我们的库文件中的函数，它应该被所有希望使用我们的库文件的应用程序所包含。把头文件包含在源文件fred.c和bill.c中是有益的，它将帮助编译器发现所有错误。</p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="85" width="557" src="http://book.csdn.net/BookFiles/353/img/image022.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(4) 调用程序（program.c）非常简单。它包含库的头文件并且调用库中的一个函数。</p>
+<p class="a1" style="MARGIN: 4.7pt 0.5pt 4.7pt 1.4pt"><img height="99" width="557" src="http://book.csdn.net/BookFiles/353/img/image023.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(5) 现在，我们来编译并测试这个程序。我们暂时为编译器显式指定目标文件，然后要求编译器编译我们的文件并将其与预先编译好的目标模块bill.o链接。</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="62" width="214" src="http://book.csdn.net/BookFiles/353/img/image024.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(6) 现在，创建并使用一个库文件。我们用ar程序创建一个归档文件并将目标文件添加进去。这个程序之所以称为ar，是因为它将若干单独的文件归并到一个大的文件中以创建归档文件或集合。注意，我们也可以用ar程序来创建任何类型文件的归档文件（与许多UNIX工具一样，ar是一个通用工具）。</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="34" width="195" src="http://book.csdn.net/BookFiles/353/img/image025.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">(7) 库文件创建好了，两个目标文件也已添加。在某些系统，尤其是从Berkeley UNIX衍生的系统中，要想成功地使用函数库，还需要为函数库生成一个内容表。我们通过ranlib命令来完成这一工作。在Linux中，如果我们使用的是GNU的软件开发工具，这一步就不是必需的（但做了也无妨）。</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="9" width="106" src="http://book.csdn.net/BookFiles/353/img/image026.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">我们的函数库现在即可使用了。我们可以在编译器命令行的文件列表中添加该库文件以创建我们的程序，如下所示：</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="49" width="220" src="http://book.csdn.net/BookFiles/353/img/image027.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">也可以用-l选项来访问我们的函数库，但是因为其未保存在标准位置，所以我们必须用-L选项来指示编译器在何处可以找到它，如下所示：</p>
+<p class="-1" style="MARGIN: 5.25pt 0cm 5.25pt 19.3pt"><img height="10" width="226" src="http://book.csdn.net/BookFiles/353/img/image028.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 0cm">-L.选项指示编译器在当前目录（.）中查找函数库。-lfoo选项指示编译器使用名为libfoo.a的函数库（或者名为libfoo.so的共享库，如果它存在的话）。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">要查看目标文件、函数库或可执行文件里包含的函数，我们可使用nm命令。如果我们查看program和libfoo.a，就会看到函数库libfoo.a中包含fred和bill两个函数，而program里只包含函数bill。创建程序时，它只包含函数库中它实际需要的函数。虽然程序中的头文件包含函数库中所有函数的声明，但这并不将整个函数库包含在最终的程序中。</p>
+<p class="MsoNormal" style="MARGIN-BOTTOM: 7.5pt; TEXT-INDENT: 19pt">如果你熟悉Windows软件开发，就会发现两者之间有许多相似之处，如下表所示。</p>
+<div align="center">
+<table class="MsoNormalTable" style="WIDTH: 416.65pt; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-COLLAPSE: collapse; BORDER-BOTTOM-STYLE: none" cellspacing="0" cellpadding="0" width="556" border="1">
+<tbody>
+    <tr>
+        <td style="PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: center" align="center">项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 目</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: center" align="center">UNIX</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.55pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: center" align="center">Windows</p>
+</td>
+    </tr>
+    <tr>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 47.3pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">目标模块</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 54.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">func.o</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.55pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 43.1pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">FUNC.OBJ</p>
+</td>
+    </tr>
+    <tr>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 47.3pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">静态函数库</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 54.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">lib.a</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.55pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 43.1pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">LIB.LIB</p>
+</td>
+    </tr>
+    <tr>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 47.3pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">程序</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.5pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 54.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">program</p>
+</td>
+        <td style="PADDING-RIGHT: 5.4pt; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; WIDTH: 142.55pt; BORDER-TOP-STYLE: none; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none" valign="top" width="190">
+<p class="MsoNormal" style="MARGIN: 1.5pt 0cm 1.5pt 43.1pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 0cm; TEXT-ALIGN: left" align="left">PROGRAM.EXE</p>
+</td>
+    </tr>
+</tbody>
+</table>
+</div>
+<p class="4" style="MARGIN-TOP: 7.5pt; TEXT-INDENT: 19pt">5．共享库</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">静态库的一个缺点是，当我们同时运行许多应用程序并且它们都使用来自同一个函数库的函数时，就会在内存中有同一函数的多份拷贝，在程序文件自身中也有多份同样的拷贝。这将消耗大量宝贵的内存和磁盘空间。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">许多UNIX系统和Linux支持共享库，它克服了上述不足。对共享库及其在不同系统上实现方式的详细讨论超出了本书的范围，所以我们将仅讨论Linux下的实现。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">共享库的保存位置与静态库是一样的，但共享库有不同的文件名后缀。在典型的Linux系统中，标准数学库的共享版本是/usr/lib/libm.so。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">程序使用共享库时，它的链接方式是这样的：它本身不再包含函数代码，而是引用运行时可访问的共享代码。当编译好的程序被装载到内存中执行时，函数引用被解析并产生对共享库的调用，如果有必要共享库才被加载到内存中。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">通过这种方法，系统可只保留共享库的一份拷贝并供许多应用程序同时使用，并且在磁盘上也仅保存一份。另一个好处是共享库的更新可以独立于依赖它的应用程序。文件/usr/lib/libm.so是对实际库文件修订版本（/usr/lib/libm.so.N，其中N代表主版本号，在写作本书时它是6）的符号链接。Linux启动应用程序时，它会考虑应用程序需要的函数库版本，以防止新的主版本函数库致使旧的应用程序不能使用。</p>
+<div style="PADDING-RIGHT: 0cm; BORDER-TOP: #999999 1pt solid; PADDING-LEFT: 0cm; PADDING-BOTTOM: 4pt; MARGIN-LEFT: 0cm; MARGIN-RIGHT: 5.2pt; PADDING-TOP: 4pt; BORDER-BOTTOM: #999999 1pt solid; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none">
+<p class="aff4" style="MARGIN: 11.25pt 0cm 11.25pt 28.5pt; TEXT-INDENT: -28.5pt">下面例子的输出取自SuSE 8.2发行版。如果你使用的不是这个发行版，输出可能略有不同。</p>
+</div>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">对Linux系统来说，负责装载共享库并解析客户程序函数引用的程序（动态装载器）是ld.so，也可能是ld-linux.so.2或ld-lsb.so.1。搜索共享库的其他位置可以在文件/etc/ld.so.conf中配置，如果修改了这个文件，就需要用命令ldconfig来处理（例如，安装了X视窗系统后需要添加X11共享库）。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">我们可通过运行工具ldd来查看程序需要的共享库。例如，如果我们在自己的示例程序上运行ldd，将看到如下所示的输出结果：</p>
+<p class="-1" style="MARGIN: 7.5pt 0cm 7.5pt 19.3pt"><img height="36" width="382" src="http://book.csdn.net/BookFiles/353/img/image029.jpg"></p>
+<p class="MsoNormal" style="TEXT-INDENT: 0cm">在这个例子中，我们看到标准C语言函数库（libc）是共享的（.so）。我们的程序要求使用的主版本号是6。其他UNIX系统在访问共享库时也会有类似的安排，详情请参考系统文档。</p>
+<p class="MsoNormal" style="TEXT-INDENT: 19pt">共享库在许多方面类似于Windows中使用的动态链接库。.so库对应于.DLL文件，在程序运行时加载，而.a库类似于.LIB文件，包含在可执行程序中。</p></div></td></tr></table>
+<br>
+<div class="opt">
+<a href="/yuuuuu/blog/category/Linux" title="查看该分类中所有文章">类别：Linux</a>
+ 
+	
+	| <a title="将此文章添加到百度搜藏" href="http://cang.baidu.com/do/add" onClick="return addToFavor();" target="_blank">添加到搜藏</a>
+	
+	| 浏览(<span id="result"></span>)
+	| <a href="#send">评论</a>&nbsp;(0)
+
+<script language="javascript">
+/*<![CDATA[*/
+var pre = [true,'Open Source C# 開發工具', 'Open Source C# 開發工具','/yuuuuu/blog/item/5e06d3ce6b9d7b0193457e39.html'];
+var post = [true,'shell编程实例','shell编程实例', '/yuuuuu/blog/item/5c7a75383c780c2196ddd8c8.html'];
+if(pre[0] || post[0]){
+	document.write('<div style="height:5px;line-height:5px;">&nbsp;</div><div id="in_nav">');
+	if(pre[0]){
+		document.write('上一篇：<a href="' + pre[3] + '" title="' + pre[1] + '">' +  pre[2] + '</a>&nbsp;&nbsp;&nbsp;&nbsp;');
+	}
+	if(post[0]){
+		document.write('下一篇：<a href="' + post[3] + '" title="' + post[1] + '">' +  post[2] + '</a>');
+	}
+	document.write('</div>');
+}
+/*]]>*/
+</script>
+
+</div>
+<div class="line">&nbsp;</div>
+
+
+
+
+
+
+
+<div id="in_reader">
+<div class="tit">最近读者：</div>
+
+<script>
+
+	var g_spAnnony=true;
+
+
+var g_read=[
+	
+["qywyh","e1b971797779685a00","qywyh"],
+	
+["flyjackey767","7275666c796a61636b65793736373f02","flyjackey767"],
+	
+["%CC%EC%BA%A3%D2%BB%CF%DFgyh","d34f7570636779683603","upcgyh"],
+	
+["atizu","271b6174697a754403","atizu"],
+	
+["peich","cc287065696d69636861656cfc02","peimichael"],
+	
+["killdog","e5e24b696c6c646f67313938321d01","Killdog1982"],
+	
+["chenning007","5da06368656e6e696e6730373233a101","chenning0723"],
+	
+["dongyuejiang","93e1643179326a330400","d1y2j3"],
+
+{}
+];
+g_read.length=g_read.length-1;
+
+var _rh1="";
+var _rh2="";
+
+function wrreader(){
+	_rh1 += '<table width="100%" ><tr>';
+	_rh2+='<tr>';
+	if(g_spAnnony){
+		_rh1+='<td align="center" width="10%" ><img border="0" width="55" height="55" src="http://img.baidu.com/hi/img/portraitn.jpg"></td>';
+		_rh2+='<td>&nbsp;</td>';
+		if(g_read.length>0){
+			_rh1+='<td align="left" width="12%">';
+		}else{
+			_rh1+='<td align="left" width="100%">';
+		}
+		_rh1+="<a href='http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u="+myref+"' target='_self'>登录</a>后，您就出现在这里。</td>";
+		_rh2+='<td>&nbsp;</td>'
+	}
+	if(g_read.length==0){
+		if(!g_spAnnony){
+			_rh1+='<td align=left width="100%">最近还没有登录用户看过这篇文章……</td>';
+			_rh2+='<td>&nbsp;</td>';
+		}
+	}else{
+		for(i=0,len=g_read.length;i<len;i++){
+			_rh1+='<td align="center" valign="bottom" width="10%" class="user"><a href="/'+g_read[i][0]+'" target="_blank"><img border="0" src="http://himg.baidu.com/sys/portraitn/item/'+g_read[i][1]+'.jpg"></a></td>';
+			_rh2+='<td align="center" valign="top" class="user"><a href="/'+g_read[i][0]+'" target="_blank">'+g_read[i][2]+'</a></td>';
+		}
+	}
+	_rh1+='<td width="100%"></td></tr>';
+	_rh2+='<td></td></tr></table>';
+	document.write(_rh1+_rh2);
+}
+
+wrreader();
+</script>
+
+
+
+
+
+	</div>
+
+<div class="line">&nbsp;</div>
+
+
+
+<script language="JavaScript">
+allkey=allkey+"9a09c7caed311a46f31fe791_58e18d16ab5c3253f2de32c7_";
+</script>
+
+<div id="in_comment">
+<a name="comment"></a>
+<div class="tit">网友评论：</div>
+<script>
+function writecmt(type,id,cmtname,cmturl,portraitId){
+	var html1="";
+
+	if(type==1){
+			html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'><img  border='0' src='http://himg.baidu.com/sys/portraitn/item/"+portraitId+".jpg'><br>"+cmtname+"</a>";
+	}else{
+		if(cmtname=="" || cmtname=="匿名网友"){
+			if(cmturl==""){
+				html1="<a>匿名网友</a>";
+			}else{
+				html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a>";
+			}
+		}else{
+			if(cmturl==""){
+				html1="<div class='f14' style='display:inline'>网友:<a>"+cmtname+"</a></div>";
+			}else{
+				html1="<div class='f14' style='display:inline'>网友:<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a></div>";
+			}
+		}
+	}
+	document.write(html1);
+}
+
+</script>
+
+
+
+
+
+<div id="page"></div>
+
+</div>
+
+
+<div id="in_send">
+<a name="send"></a>
+<form name="form1" id="popFormSubmit" action="/yuuuuu/commit" method="post" onSubmit="return checkcmtform()">
+<input type="hidden" name="ct" value="8">
+<input type="hidden" name="cm" value="1">
+<input type="hidden" name="spBlogID" value="58e18d16ab5c3253f2de32c7">
+<script LANGUAGE="JavaScript">
+	document.write("<input type='hidden' name='spRefURL' value='"+encodeURI(window.location.href)+"'>");
+</script>
+<div class="tit">发表评论：</div>
+<table width="620" border="0" cellspacing="5" cellpadding="0">
+<tr>
+
+<td class="f14">姓　名：</td>
+<td><input type="text" name="spBlogCmtor" id="spBlogCmtor" style="width:220px" onChange="checkname('spBlogCmtor')" maxlength="49" onFocus="hidErr(1);"	tabindex=1>
+<script>
+document.write(" &nbsp;&nbsp; <a href='http://passport.baidu.com/?reg&tpl=sp&return_method=get&skip_ok=1&u=http://hi.baidu.com/sys/reg/' target='_blank'>注册</a>");
+document.write(" | <a href='http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u="+myref+"'>登录</a>");
+
+</script>
+
+<div style="display:none" id="nmerror">*姓名最长为50字节</div></td>
+</tr>
+
+<tr id="1_err" style="display:none">
+<td>&nbsp;</td>
+<td><div class="error" id="1_err_con"></div></td>
+</tr>
+
+<tr>
+<td class="f14">网址或邮箱：</td>
+<td><input type="text" name="spBlogCmtURL" id="spBlogCmtURL" style="width:360px" maxlength="128" onChange="checkeandu('spBlogCmtURL')" onFocus="hidErr(2);" tabindex=2> (选填)</td>
+<script>
+G("spBlogCmtor").value="";
+G("spBlogCmtURL").value="";
+</script>
+
+</tr>
+
+<tr id="2_err" style="display:none">
+<td>&nbsp;</td>
+<td><div class="error" id="2_err_con"></div></td>
+</tr>
+
+<tr>
+<td valign="top" class="f14">内　容：</td>
+<td><textarea name="spBlogCmtText" id="spBlogCmtText" style="width:520px;height:155px" onFocus="hidErr(3);" tabindex=3></textarea>
+<script>
+G("spBlogCmtor").value=G("spBlogCmtor").defaultValue;
+G("spBlogCmtText").value="";
+</script>
+</td>
+</tr>
+<tr id="3_err" style="display:none">
+<td>&nbsp;</td>
+<td><div class="error" id="3_err_con"></div></td>
+</tr>
+
+<tr id="vercode">
+<td valign="top" class="f14">验证码：</td>
+<td valign="top"><input type="hidden" name="spVcode" value="3035737061636531373235333537323230303030303030303030303030303132323331323338313169CBE8EF744D3BA9E37207F3F6E5D187" />
+<input type="text" onFocus="f_focus()" id="spVerifyKey" name="spVerifyKey" size="6"  maxlength="4" autocomplete="off" tabindex=4><br/>
+<script type="text/javascript">
+/*<![CDATA[*/
+var imgsrc="http://hiup.baidu.com/cgi-bin/genimg?3035737061636531373235333537323230303030303030303030303030303132323331323338313169CBE8EF744D3BA9E37207F3F6E5D187";
+function f_focus(){
+	if(G('yanzheng').style.display=="none" ){
+		G('verifypic').src=imgsrc;
+		G('yanzheng').style.display="block";
+	}
+}
+function newverifypic(){
+	G("verifypic").src = imgsrc +"&t="+ Math.random();
+	return false;
+}
+/*]]>*/
+</script>
+<div id="yanzheng" style="display:none">
+<img id='verifypic' width='120' height='40'><wbr /><a onFocus="this.blur();" href="#" onClick="return newverifypic();" title="看不清左边的字符" >看不清?</a>
+</div>
+</td>
+</tr>
+
+
+<tr>
+<td valign="top"class="f14">&nbsp;</td>
+<td valign="top" class="f14"><input id="btn_ok" name="btn_ok" type="submit" value="发表评论" tabindex=5></td>
+</tr>
+</table>
+</form>
+</div>
+
+
+
+
+<br>
+</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" height="8">
+<tr><td class="modbl" width="7">&nbsp;</td>
+<td class="modbc">&nbsp;</td>
+<td class="modbr" width="7">&nbsp;</td>
+</tr></table>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script language="javascript">
+<!--
+var hstr="/yuuuuu/brwstat?key1=1";
+document.write("<script src='"+hstr+"&key2="+allkey+"'><\/script>");
+//-->
+</script>
+<br><center><div id="ft">&copy;2008 Baidu</div></center>
+
+<script>
+if(document.getElementById("m_blog"))
+{
+	var imgarray = document.getElementById("m_blog").getElementsByTagName('img');
+	var imgw = document.getElementById("m_blog").offsetWidth;
+	imgw =imgw-40;
+	for(var i=0; i<imgarray.length; i++){
+	if(imgarray[i].className=="blogimg" && imgarray[i].width>=imgw) imgarray[i].width=imgw;
+	}
+}
+
+// Fix ff bugs
+var blog_text = document.getElementById('blog_text');
+blog_text.innerHTML = blog_text.innerHTML.replace(/href\s*=\s*("|')?(\.\.\/\.\.\/)/gi,"href=$1../$2");
+
+</script>
+</center>
+
+
+<img src="http://c.baidu.com/c.gif?t=6&p=3" style="display:none;"/>
+</body></html>

@@ -1,0 +1,57 @@
+假设在dos命令行建立这么一个数据库：
+
+CREATE TABLE [tbl_salary] (
+[name] varchar(20)  NULL,
+[salary] int  NULL
+);
+insert into tbl_salary values('张三',5600);
+insert into tbl_salary values('李四',6200);
+insert into tbl_salary values('王五',6000);
+ 
+ 
+另外，有这么个java程序：
+
+import java.sql.*;
+
+/**
+ * 这是个非常简单的SQLite的Java程序,
+ * 
+ * @author zieckey 
+ * 
+ */
+public class Test 
+{
+    public static void main(String[] args) 
+    {
+        try
+        {
+        	//连接SQLite的JDBC
+        	Class.forName("org.sqlite.JDBC");
+        	//建立一个数据库名zieckey.db的连接，如果不存在就在当前目录下创建之
+	        Connection conn = DriverManager.getConnection("jdbc:sqlite:zieckey.db");
+	        
+	        Statement stat = conn.createStatement();
+	
+	        ResultSet rs = stat.executeQuery("select * from tbl_salary;");			//查询数据	
+	        while (rs.next()) {													//将查询到的数据打印出来             		
+	            System.out.print("name = " + rs.getString("name") + "       ");	//列属性一
+	            System.out.println("salary = " + rs.getString("salary"));		//列属性二
+	        }
+	        rs.close();
+	        conn.close();		//结束数据库的连接												
+        }
+        catch( Exception e )
+        {
+        	e.printStackTrace ( );
+        }
+    }
+}
+
+
+编译运行结果如下：
+name = ????       salary = 5600
+name = ????       salary = 6200
+name = ??       salary = 6000
+
+这里中文部分出现了乱码，如何解决阿？
+怎么才能在java中取得正确的中文字符呢？

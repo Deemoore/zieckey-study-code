@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://fanqiang.chinaunix.net/a4/b7/20010508/112240.html -->
+<HTML><HEAD><TITLE>[ 永远的UNIX > Linux网络编程--7. TCP/IP协议 ]</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<STYLE type=text/css>BODY {
+	FONT: 12pt 宋体
+}
+TH {
+	FONT: 12pt 宋体
+}
+INPUT {
+	FONT: 12pt 宋体
+}
+SELECT {
+	FONT: 12pt 宋体
+}
+TEXTAREA {
+	FONT: 12pt 宋体
+}
+SELECT {
+	FONT: 12pt 宋体
+}
+checkbox {
+	FONT: 12pt 宋体
+}
+A:link {
+	COLOR: #e6a306; TEXT-DECORATION: underline
+}
+A:visited {
+	COLOR: #e6a306; TEXT-DECORATION: underline
+}
+A:hover {
+	COLOR: #ffff00; TEXT-DECORATION: underline
+}
+BODY {
+	FONT-SIZE: 12pt; FONT-FAMILY: "宋体", "serif"
+}
+TD {
+	FONT-SIZE: 12pt; FONT-FAMILY: "宋体", "serif"
+}
+P {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 150%
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.3157" name=GENERATOR></HEAD>
+<BODY text=#ffffff bgColor=#000000 
+background="Linux网络编程--7_ TCP-IP协议 ].files/bline.gif">
+<DIV align=center>
+<CENTER>
+<TABLE height=400 cellSpacing=0 cellPadding=0 width=750 border=0>
+  <TBODY>
+  <TR>
+    <TD height=45>
+      <P align=center><IMG alt="[ 永远的UNIX::UNIX技术资料的宝库 ]" 
+      src="Linux网络编程--7_ TCP-IP协议 ].files/title.gif"></P></TD></TR>
+  <TR>
+  <TR>
+    <TD vAlign=bottom align=left height=40><SMALL><A 
+      href="http://fanqiang.chinaunix.net/">首页</A> &gt; 编程技术 &gt; 网络编程 &gt; 
+      正文</SMALL></TD></TR>
+  <TR>
+    <TD width="100%" bgColor=#d09f0d colSpan=5 height=2><IMG height=1 
+      src="Linux网络编程--7_ TCP-IP协议 ].files/c.gif" width=1></TD></TR>
+  <TR>
+    <TD vAlign=center align=middle height=40><FONT size=5><B>Linux网络编程--7. 
+      TCP/IP协议</B></FONT></TD></TR>
+  <TR>
+    <TD align=middle height=20><FONT color=#999999><SMALL>http://linuxc.51.net 
+      作者:hoyt<HOYTLUO@21CN.COM> (2001-05-08 11:22:40)</SMALL></FONT></TD></TR>
+  <TR>
+    <TD align=middle>
+      <TABLE cellSpacing=0 cellPadding=0 width=700 align=center border=0>
+        <TBODY>
+        <TR>
+          <TD vAlign=top><FONT 
+            color=#cccccc><BR>&nbsp;&nbsp;&nbsp;&nbsp;你也许听说过TCP/IP协议,那么你知道到底什么是TCP,什么是IP吗?在这一章里面,我们一起来学习这个目前网络上用最广泛的协议.&nbsp; 
+            <BR><BR><BR>7.1&nbsp;网络传输分层&nbsp; 
+            <BR>如果你考过计算机等级考试,那么你就应该已经知道了网络传输分层这个概念.在网络上,人们为了传输数据时的方便,把网络的传输分为7个层次.分别是:应用层,表示层,会话层,传输层,网络层,数据链路层和物理层.分好了层以后,传输数据时,上一层如果要数据的话,就可以直接向下一层要了,而不必要管数据传输的细节.下一层也只向它的上一层提供数据,而不要去管其它东西了.如果你不想考试,你没有必要去记这些东西的.只要知道是分层的,而且各层的作用不同.&nbsp; 
+            <BR><BR>7.2&nbsp;IP协议&nbsp; 
+            <BR>IP协议是在网络层的协议.它主要完成数据包的发送作用.&nbsp;下面这个表是IP4的数据包格式&nbsp; 
+            <BR><BR>&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 
+            <BR>-------------------------------------------------- 
+            <BR>|版本&nbsp;&nbsp;&nbsp;|首部长度|服务类型|&nbsp;&nbsp;&nbsp;&nbsp;数据包总长&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>-------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;标识&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|DF&nbsp;|MF|&nbsp;碎片偏移&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>-------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;生存时间&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;协议&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;首部较验和&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------ 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------ 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目的IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>================================================= 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>-------------------------------------------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <BR><BR>下面我们看一看IP的结构定义<NETINET ip.h>&nbsp; <BR><BR>struct&nbsp;ip 
+            <BR>&nbsp;&nbsp;{ 
+            <BR>#if&nbsp;__BYTE_ORDER&nbsp;==&nbsp;__LITTLE_ENDIAN 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned&nbsp;int&nbsp;ip_hl:4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;header&nbsp;length&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned&nbsp;int&nbsp;ip_v:4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;version&nbsp;*/ 
+            <BR>#endif <BR>#if&nbsp;__BYTE_ORDER&nbsp;==&nbsp;__BIG_ENDIAN 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned&nbsp;int&nbsp;ip_v:4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;version&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned&nbsp;int&nbsp;ip_hl:4;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;header&nbsp;length&nbsp;*/ 
+            <BR>#endif 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int8_t&nbsp;ip_tos;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;type&nbsp;of&nbsp;service&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_short&nbsp;ip_len;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;total&nbsp;length&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_short&nbsp;ip_id;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;identification&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_short&nbsp;ip_off;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;fragment&nbsp;offset&nbsp;field&nbsp;*/ 
+            <BR>#define&nbsp;IP_RF&nbsp;0x8000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;reserved&nbsp;fragment&nbsp;flag&nbsp;*/ 
+            <BR>#define&nbsp;IP_DF&nbsp;0x4000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;dont&nbsp;fragment&nbsp;flag&nbsp;*/ 
+            <BR>#define&nbsp;IP_MF&nbsp;0x2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;more&nbsp;fragments&nbsp;flag&nbsp;*/ 
+            <BR>#define&nbsp;IP_OFFMASK&nbsp;0x1fff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;mask&nbsp;for&nbsp;fragmenting&nbsp;bits&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int8_t&nbsp;ip_ttl;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;time&nbsp;to&nbsp;live&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int8_t&nbsp;ip_p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;protocol&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_short&nbsp;ip_sum;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;checksum&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct&nbsp;in_addr&nbsp;ip_src,&nbsp;ip_dst;&nbsp;&nbsp;/*&nbsp;source&nbsp;and&nbsp;dest&nbsp;address&nbsp;*/ 
+            <BR>&nbsp;&nbsp;}; <BR><BR>ip_vIP协议的版本号,这里是4,现在IPV6已经出来了&nbsp; 
+            <BR><BR>ip_hlIP包首部长度,这个值以4字节为单位.IP协议首部的固定长度为20个字节,如果IP包没有选项,那么这个值为5.&nbsp; 
+            <BR><BR>ip_tos服务类型,说明提供的优先权.&nbsp; 
+            <BR><BR>ip_len说明IP数据的长度.以字节为单位.&nbsp; <BR><BR>ip_id标识这个IP数据包.&nbsp; 
+            <BR><BR>ip_off碎片偏移,这和上面ID一起用来重组碎片的.&nbsp; 
+            <BR><BR>ip_ttl生存时间.没经过一个路由的时候减一,直到为0时被抛弃.&nbsp; 
+            <BR><BR>ip_p协议,表示创建这个IP数据包的高层协议.如TCP,UDP协议.&nbsp; 
+            <BR><BR>ip_sum首部校验和,提供对首部数据的校验.&nbsp; 
+            <BR><BR>ip_src,ip_dst发送者和接收者的IP地址&nbsp; 
+            <BR><BR>关于IP协议的详细情况,请参考&nbsp;RFC791 <BR><BR>7.3&nbsp;ICMP协议&nbsp; 
+            <BR>ICMP是消息控制协议,也处于网络层.在网络上传递IP数据包时,如果发生了错误,那么就会用ICMP协议来报告错误.&nbsp; 
+            <BR><BR>ICMP包的结构如下:&nbsp; 
+            <BR><BR>&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 
+            <BR>--------------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类型&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;代码&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校验和&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>-------------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>-------------------------------------------------------------------- 
+            <BR><BR>ICMP在<NETINET ip_icmp.h>中的定义是&nbsp; <BR>struct&nbsp;icmphdr 
+            <BR>{ 
+            <BR>&nbsp;&nbsp;u_int8_t&nbsp;type;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;message&nbsp;type&nbsp;*/ 
+            <BR>&nbsp;&nbsp;u_int8_t&nbsp;code;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;type&nbsp;sub-code&nbsp;*/ 
+            <BR>&nbsp;&nbsp;u_int16_t&nbsp;checksum; <BR>&nbsp;&nbsp;union 
+            <BR>&nbsp;&nbsp;{ <BR>&nbsp;&nbsp;&nbsp;&nbsp;struct 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;{ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;id; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;sequence; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;echo;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;echo&nbsp;datagram&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int32_t&nbsp;&nbsp;&nbsp;gateway;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;gateway&nbsp;address&nbsp;*/ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;struct <BR>&nbsp;&nbsp;&nbsp;&nbsp;{ 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;__unused; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;mtu; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;frag;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;path&nbsp;mtu&nbsp;discovery&nbsp;*/ 
+            <BR>&nbsp;&nbsp;}&nbsp;un; <BR>}; 
+            <BR><BR>关于ICMP协议的详细情况可以查看&nbsp;RFC792 <BR><BR>7.4&nbsp;UDP协议&nbsp; 
+            <BR>UDP协议是建立在IP协议基础之上的,用在传输层的协议.UDP和IP协议一样是不可靠的数据报服务.UDP的头格式为:&nbsp; 
+            <BR><BR><BR>&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 
+            <BR>--------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UDP源端口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UDP目的端口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>--------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UDP数据报长度&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UDP数据报校验&nbsp;&nbsp;&nbsp;| 
+            <BR>--------------------------------------------------- 
+            <BR><BR>UDP结构在<NETINET udp.h>中的定义为:&nbsp; 
+            <BR>struct&nbsp;udphdr&nbsp;{ 
+            <BR>&nbsp;&nbsp;u_int16_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source; 
+            <BR>&nbsp;&nbsp;u_int16_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dest; 
+            <BR>&nbsp;&nbsp;u_int16_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len; 
+            <BR>&nbsp;&nbsp;u_int16_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check; <BR>}; 
+            <BR><BR>关于UDP协议的详细情况,请参考&nbsp;RFC768 <BR>7.5&nbsp;TCP&nbsp; 
+            <BR>TCP协议也是建立在IP协议之上的,不过TCP协议是可靠的.按照顺序发送的.TCP的数据结构比前面的结构都要复杂.&nbsp; 
+            <BR><BR>0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 
+            <BR>------------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;源端口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目的端口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序列号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------------------------ 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确认号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>------------------------------------------------------------------ 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|U|A|P|S|F|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>|首部长度|&nbsp;保留&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|R|C|S|Y|I|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;窗口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|G|K|H|N|N|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>----------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校验和&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;紧急指针&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 
+            <BR>----------------------------------------------------------------- 
+            <BR>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;填充字节&nbsp;&nbsp;&nbsp;| 
+            <BR>----------------------------------------------------------------- 
+            <BR><BR>TCP的结构在<NETINET tcp.h>中定义为:&nbsp; <BR>struct&nbsp;tcphdr 
+            <BR>&nbsp;&nbsp;{ <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;source; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;dest; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int32_t&nbsp;seq; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int32_t&nbsp;ack_seq; 
+            <BR>#if&nbsp;__BYTE_ORDER&nbsp;==&nbsp;__LITTLE_ENDIAN 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;res1:4; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;doff:4; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;fin:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;syn:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;rst:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;psh:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;ack:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;urg:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;res2:2; 
+            <BR>#elif&nbsp;__BYTE_ORDER&nbsp;==&nbsp;__BIG_ENDIAN 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;doff:4; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;res1:4; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;res2:2; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;urg:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;ack:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;psh:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;rst:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;syn:1; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;fin:1; <BR>#endif 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;window; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;check; 
+            <BR>&nbsp;&nbsp;&nbsp;&nbsp;u_int16_t&nbsp;urg_prt; 
+            <BR>};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <BR><BR>source发送TCP数据的源端口&nbsp; <BR>dest接受TCP数据的目的端口&nbsp; 
+            <BR><BR>seq标识该TCP所包含的数据字节的开始序列号&nbsp; 
+            <BR><BR>ack_seq确认序列号,表示接受方下一次接受的数据序列号.&nbsp; 
+            <BR><BR>doff数据首部长度.和IP协议一样,以4字节为单位.一般的时候为5&nbsp; 
+            <BR><BR>urg如果设置紧急数据指针,则该位为1&nbsp; <BR><BR>ack如果确认号正确,那么为1&nbsp; 
+            <BR><BR>psh如果设置为1,那么接收方收到数据后,立即交给上一层程序&nbsp; 
+            <BR><BR>rst为1的时候,表示请求重新连接&nbsp; <BR><BR>syn为1的时候,表示请求建立连接&nbsp; 
+            <BR><BR>fin为1的时候,表示亲戚关闭连接&nbsp; <BR><BR>window窗口,告诉接收者可以接收的大小&nbsp; 
+            <BR><BR>check对TCP数据进行较核&nbsp; 
+            <BR><BR>urg_ptr如果urg=1,那么指出紧急数据对于历史数据开始的序列号的偏移值&nbsp; 
+            <BR><BR>关于TCP协议的详细情况,请查看&nbsp;RFC793 
+            <BR><BR><BR>7.6&nbsp;TCP连接的建立&nbsp; 
+            <BR>TCP协议是一种可靠的连接,为了保证连接的可靠性,TCP的连接要分为几个步骤.我们把这个连接过程称为"三次握手".&nbsp; 
+            <BR><BR>下面我们从一个实例来分析建立连接的过程.&nbsp; 
+            <BR><BR>第一步客户机向服务器发送一个TCP数据包,表示请求建立连接.&nbsp;为此,客户端将数据包的SYN位设置为1,并且设置序列号seq=1000(我们假设为1000).&nbsp; 
+            <BR><BR>第二步服务器收到了数据包,并从SYN位为1知道这是一个建立请求的连接.于是服务器也向客户端发送一个TCP数据包.因为是响应客户机的请求,于是服务器设置ACK为1,sak_seq=1001(1000+1)同时设置自己的序列号.seq=2000(我们假设为2000).&nbsp; 
+            <BR><BR>第三步客户机收到了服务器的TCP,并从ACK为1和ack_seq=1001知道是从服务器来的确认信息.于是客户机也向服务器发送确认信息.客户机设置ACK=1,和ack_seq=2001,seq=1001,发送给服务器.至此客户端完成连接.&nbsp; 
+            <BR><BR>最后一步服务器受到确认信息,也完成连接.&nbsp; 
+            <BR><BR>通过上面几个步骤,一个TCP连接就建立了.当然在建立过程中可能出现错误,不过TCP协议可以保证自己去处理错误的.&nbsp; 
+            <BR><BR><BR>&nbsp;&nbsp;说一说其中的一种错误. 
+            <BR>&nbsp;&nbsp;听说过DOS吗?(可不是操作系统啊).今年春节的时候,美国的五大网站一起受到攻击.攻击者用的就是DOS(拒绝式服务)方式.概括的说一下原理. 
+            <BR>&nbsp;&nbsp;客户机先进行第一个步骤.服务器收到后,进行第二个步骤.按照正常的TCP连接,客户机应该进行第三个步骤. 
+            <BR>不过攻击者实际上并不进行第三个步骤.因为客户端在进行第一个步骤的时候,修改了自己的IP地址,就是说将一个实际上不存在的IP填充在自己IP数据包的发送者的IP一栏.这样因为服务器发的IP地址没有人接收,所以服务端会收不到第三个步骤的确认信号,这样服务务端会在那边一直等待,直到超时. 
+            <BR>这样当有大量的客户发出请求后,服务端会有大量等待,直到所有的资源被用光,而不能再接收客户机的请求. 
+            <BR>这样当正常的用户向服务器发出请求时,由于没有了资源而不能成功.于是就出现了春节时所出现的情况. <BR>(<A 
+            href="http://www.fanqiang.com/">http://www.fanqiang.com/</A>) 
+            </FONT>&nbsp;&nbsp;&nbsp;&nbsp;进入【<A 
+            href="http://www.chinaunix.net/">UNIX论坛</A>】 </TD></TR>
+        <TR>
+          <TD>
+            <HR>
+          </TD></TR>
+        <TR>
+          <TD><B>相关文章</B> </TD></TR>
+        <TR>
+          <TD><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010810/1200001101.html">Proxy源代码分析--谈谈如何学习linux网络编程</A> 
+            <SMALL>(2001-08-10 12:00:00)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112433.html">Linux网络编程--10. 
+            原始套接字 --11. 后记</A> <SMALL>(2001-05-08 11:26:09)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112359.html">Linux网络编程--9. 
+            服务器模型</A> <SMALL>(2001-05-08 11:23:59)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112324.html">Linux网络编程--8. 
+            套接字选项</A> <SMALL>(2001-05-08 11:23:24)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112240.html">Linux网络编程--7. 
+            TCP/IP协议</A> <SMALL>(2001-05-08 11:22:40)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112209.html">Linux网络编程--6. 
+            高级套接字函数</A> <SMALL>(2001-05-08 11:22:09)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112131.html">Linux网络编程--5. 
+            用户数据报发送</A> <SMALL>(2001-05-08 11:21:31)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112052.html">Linux网络编程--4. 
+            完整的读写函数</A> <SMALL>(2001-05-08 11:20:52)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/112014.html">Linux网络编程--3. 
+            服务器和客户机的信息函数</A> <SMALL>(2001-05-08 11:20:14)</SMALL></FONT><BR><A 
+            href="http://fanqiang.chinaunix.net/a4/b7/20010508/111934.html">Linux网络编程--2. 
+            初等网络函数介绍（TCP）</A> <SMALL>(2001-05-08 
+        11:19:34)</SMALL></FONT><BR></TD></TR>
+        <TR>
+        <TR>
+          <TD><BR>===<A 
+            href="http://fanqiang.chinaunix.net/cgi-bin/find.cgi?key=Linux网络编程">更多相关</A>===</TD></TR>
+        <TR>
+          <TD>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+  <TR>
+    <TD width="100%" bgColor=#d09f0d colSpan=5 height=2><IMG height=1 
+      src="Linux网络编程--7_ TCP-IP协议 ].files/c.gif" width=1></TD></TR>
+  <TR>
+    <TD vAlign=top width="100%" colSpan=5 height=40>
+      <P align=center><FONT color=#ffffff>★&nbsp;&nbsp;樊强制作 欢迎分享&nbsp;&nbsp;★ 
+      </FONT></P></TD></TR></TBODY></TABLE></CENTER></DIV></BODY></HTML>

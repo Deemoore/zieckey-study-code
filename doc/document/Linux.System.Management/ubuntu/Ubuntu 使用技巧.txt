@@ -1,0 +1,186 @@
+Ubuntu 使用技巧
+From OSS AtoZ
+Contents
+[hide]
+1 如何为APT设置代理 
+2 设置APT源 
+3 为在OpenOffice中正确显示DOC文件使用微软中文字体(商业目的慎用) 
+4 安装Adobe AcrobatReader 7.0中文版 
+5 安装VMware Workstation 5.0 
+6 安装Yahoo Messenger (推荐使用gaim代替) 
+7 安装Prozilla GUI 
+8 安装NeroLinux 2.0.0 
+9 安装Gnome下的MP3播放软件──Beep Media Player 
+10 使用MiniCom作为超级终端 
+11 制作PXE引导软盘 
+12 安装设置Skype 
+13 解决Firefox中播放Flash文件的声音问题 
+14 配置使用ADSL帐号拨号上网 
+15 如何查看Ubuntu的版本号 
+ 
+
+
+[edit]如何为APT设置代理 
+$ sudo vi etcaptapt.conf添加格式如下Acquirehttpproxy http192.168.2.13128;
+[edit]设置APT源 
+1. 在文件“etcaptsources.list”中添加如下内容 
+
+$ sudo vi etcaptsources.list 
+
+deb httpde.archive.ubuntu.comubuntu hoary main restricteddeb httpde.archive.ubuntu.comubuntu hoary-updates main restricteddeb httpde.archive.ubuntu.comubuntu hoary universedeb httpsecurity.ubuntu.comubuntu hoary-security main restricteddeb httpsecurity.ubuntu.comubuntu hoary-security universedeb httparchive.ubuntu.comubuntu hoary multiverse## Backportsdeb httpubuntu-backports.mirrormax.net hoary-backports main universe multiverse restricteddeb httpubuntu-backports.mirrormax.net hoary-extras main universe multiverse restricted## Ubunt.org.cndeb httparchive.ubuntu.org.cnubuntu-cn ubuntu.org.cn main universe multiverse restricted
+2. 更新apt源信息 
+
+$ apt-get update
+[edit]为在OpenOffice中正确显示DOC文件使用微软中文字体(商业目的慎用) 
+从Windows分区中复制Windows XP提供的中文字体$ sudo mkdir -p usrsharefontszh_CNTrueType$ sudo cp mediahda1windowsfontssimsun.ttc usrsharefontszh_CNTrueType$ sudo cp mediahda1windowsfontsSURSONG.TTF usrsharefontszh_CNTrueType$ sudo cp mediahda1windowsfontstahoma.ttf usrsharefontszh_CNTrueType$ sudo chmod 644 usrsharefontszh_CNTrueType$ cd usrsharefontszh_CNTrueType使用命令设置字体$ sudo mkfontscale$ sudo mkfontdir$ sudo fc-cache usrsharefontszh_CNTrueType
+[edit]安装Adobe AcrobatReader 7.0中文版 
+RPM包安装 
+1. 下RPM安装包 
+
+$ wget httpardownload.adobe.compubadobereaderunix7x7.0chsAdobeReader_chs-7.0.0-2.i386.rpm
+2. 转换RPM包为DEB包，并安装 
+
+$ sudo alien AdobeReader_chs-7.0.0-2.i386.rpm$ sudo dpkg -i adobereader-chs_7.0.0-3_i386.deb
+3. 建立acroread执行脚本链接 
+
+$ sudo ln -sf usrlocalAdobeAcrobat7.0binacroread usrbinacroread
+tar.gz包安装（推荐） 
+1. 下载tar.gz安装包 
+
+$ wget httpardownload.adobe.compubadobereaderunix7x7.0chsAdbeRdr70_linux_chs.tar.gz
+2. 安装软件包 
+
+$ tar zxvf AdbeRdr70_linux_chs.tar.gz$ sudo AdobeReaderINSTALL$ sudo ln -sf usrlocalAdobeAcrobat7.0binacroread usrbinacroread
+3. 设置程序菜单项 
+
+$ sudo vi usrshareapplicationsAcrobatReader.desktop输入如下内容[Desktop Entry]Name=Acrobat Reader 7Comment=Acrobat Reader 7Exec=usrlocalAdobeAcrobat7.0binacroreadIcon=usrlocalAdobeAcrobat7.0ResourceIconsAdobeReader.pngTerminal=falseType=ApplicationCategories=Application;Office;
+在Nautilus中建立PDF文件与Acrobat Reader的关联 
+在Firefox中安装Acrobat Reader插件 
+$ sudo usrlocalAdobeAcrobat7.0Browserinstall_browser_plugin将安装浏览器的 acroread 增效工具。请输入  Adobe Reader 7.0.0 的安装路径。 [usrlocalAdobeAcrobat7.0]1. 执行全局安装2. 执行用户指定的安装 (MozillaFirefoxNetscape)请输入您的选择 [12] 1请输入浏览器安装路径 - usrlibmozilla-firefox安装成功。添加文件 usrlibmozilla-firefoxpluginsnppdf.so您是否要安装另一个浏览器？ [yn] n
+删除已安装的Acrobat Reader 
+$ sudo rm -rf usrlocalAdobeAcrobat7.0$ sudo rm usrshareapplicationsAdobeReader.desktop$ sudo rm usrbinacroread
+[edit]安装VMware Workstation 5.0 
+准备工作 
+$ sudo apt-get install build-essential$ sudo apt-get install linux-headers-2.6.10-5-386$ sudo apt-get install linux-source-2.6.10$ cd usrsrc$ sudo tar jxvf linux-source-2.6.10.tar.bz2$ sudo ln -sf linux-source-2.6.10 linux
+安装VMware WS 5 
+1. 从VMware官方站点下载软件包VMware-workstation-5.0.0-13124.tar.gz 
+
+2. 安装 
+
+$ tar zxvf VMware-workstation-5.0.0-13124.tar.gz$ cd vmware-distrib$ sudo .vmware-install.pl$ sudo vmware-config.pl
+运行VMware 
+选择菜单“Applications”=“System Tools”=》“VMware Workstation”启动VMware程序。 
+
+卸载VMware 
+如需卸载VMware，执行以下命令 
+
+$ cd etcvmware$ sudo .installer.sh uninstall$ sudo rm -f usrshareapplicationsvmware-workstation.desktop
+[edit]安装Yahoo Messenger (推荐使用gaim代替)
+1. 下载DEB包 
+
+$ wget httpdownload.yahoo.comdlunixymessenger_1.0.4_1_i386.deb
+2. 安装 
+
+$ sudo apt-get install libgdk-pixbuf2 libglib1.2 libgtk1.2 libssl0.9.6$ sudo dpkg -i ymessenger_1.0.4_1_i386.deb
+3. 运行 
+
+$ usrbinymessenger &
+[edit]安装Prozilla GUI 
+1. 安装 
+
+$ sudo apt-get install prozgui
+2. 设置 
+
+$ sudo vi usrshareapplicationsprozgui.desktop输入如下内容[Desktop Entry]Name=Prozilla GUIComment=Prozilla Downloader GUIExec=usrbinprozguiIcon=usrsharepixmapsprozgui.xpmTerminal=falseType=ApplicationCategories=Application;Network;$ killall gnome-panel
+3. 使用选择“Applications”=“Internet”=“Prozilla GUI”。 
+
+[edit]安装NeroLinux 2.0.0 
+1. 下载NeroLinux的deb包 
+
+$ wget ftpftp5.us.nero.comnerolinux-2.0.0.2-x86.deb
+2. 安装NeroLinux依赖的包 
+
+$ sudo apt-get install libglib1.2 libgtk1.2
+3. 安装NeroLinux包 
+
+$ sudo dpkg -i nerolinux-2.0.0.2-x86.deb
+4. 启动NeroLinux程序选择菜单“Applications”=“System Tools”=“NeroLINUX”启动程序。 
+
+
+
+
+[edit]安装Gnome下的MP3播放软件──Beep Media Player 
+$ sudo apt-get install  beep-media-player bmp-skins
+[edit]使用MiniCom作为超级终端 
+1. 安装 
+
+$ sudo apt-get install minicom
+2. 配置菜单项 
+
+$ sudo vi usrshareapplicationsminicom.desktop添加一下内容[Desktop Entry]Name=MiniComComment=friendly menu driven serial communication programExec=usrbinminicomIcon=usrsharepixmapspppoeconf.xpmTerminal=trueType=ApplicationCategories=Application;Network;
+3. 进行初始化配置 
+
+a. 选择菜单“Applications”=》“Internet”=》“MiniCom”启动程序; 
+
+b. 在minicom界面中选择按键“CTRL-A Z”，即先选择“CTRL + A”组合键，释放组合键后再选择“Z”键; 
+
+c. 在帮助菜单下选择“O”键，选择“Serial port setup”子菜单后进行设置： 
+
+选择“E”键设置“BpsParBits”串口通讯速度为“9600”; 
+选择“Serial Device”为“devttyS0”（根据主机使用的串口进行设置）; 
+选择“Save setup as dfl”子菜单保存设置 
+d. 在minicom界面中选择按键“CTRL-A Q”退出程序。 
+
+[edit]制作PXE引导软盘 
+Ubuntu支持通过PXE网络启动引导安装程序进行安装，对于没有PXE启动芯片的主机，可以制作PXE引导软盘模拟网卡的PXE启动： 
+
+1. 下载PXE软盘引导映象文件 
+
+$ wget httpgrid-it.cnaf.infn.itfileadminsysadmpxe-floppyetherboot-net.img
+2. 制作PXE引导软盘 
+
+$ sudo dd if=etherboot-net.img of=devfd0
+3. 使用已制作的软件进行PXE启动 
+
+4. 参考资源 
+
+Using a PXE floppy to boot your non-PXE nodes 
+[edit]安装设置Skype 
+1. 安装 
+
+$ sudo apt-get install libqt3c102-mt$ wget -c httpdownload.skype.comlinuxskype_1.2.0.11-1_i386.deb$ sudo dpkg -i skype_1.2.0.11-1_i386.deb
+2. 设置 
+
+修改配置文件“esd.conf”的内容： 
+
+$ sudo vi etcesoundesd.conf配置以下内容auto_spawn=1
+重新起动Ubuntu系统; 
+
+3. 使用选择菜单“Applictions”=》“Internet”=》“Skype”启动程序。 
+
+4. 参考资源： 
+
+Ubuntu Skype Howto 
+httpubuntuforums.orgshowthread.phpt=31646&highlight=skype 
+[edit]解决Firefox中播放Flash文件的声音问题 
+在Firefox中安装Flash播放插件后执行命令： 
+
+$ sudo ln -s usrliblibesd.so.0 usrliblibesd.so.1
+参考资源： 
+
+Flash for i386 
+[edit]配置使用ADSL帐号拨号上网 
+1、安装pppoe软件包 
+
+$ sudo apt-get install pppoeconf
+2、配置adsl拨号的帐号信息 
+
+$ sudo pppoeconf
+3、进行adsl拨号建立网络连接 
+
+$ sudo pon dsl-provider
+4、断开adsl网络连接 
+
+$ sudo poff
+[edit]如何查看Ubuntu的版本号 
+$ cat etclsb-release

@@ -1,0 +1,91 @@
+Qt教程一 —— 第二章：调用退出
+
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+
+我们已经在第一章中创建了一个窗口，这让我们体会到Linux下GUI(图形用户界面/接口)编程的乐趣。
+
+我们现在使这个应用程序响应用户的输入信号(不包括窗口的最大化、关闭等固有的属性)，在用户让它退出的时候退出。
+
+我们也会使用一个比默认字体更好的一个字体。
+
+/****************************************************************
+**
+** Qt教程一 - 2
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qfont.h>
+
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    QPushButton quit( "Quit", 0 );
+    quit.resize( 75, 30 );
+    quit.setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    QObject::connect( &quit, SIGNAL(clicked()), &a, SLOT(quit()) );
+
+    a.setMainWidget( &quit );
+    quit.show();
+    return a.exec();
+}
+
+一行一行地解说
+
+    #include <qfont.h>
+
+因为这个程序使用了QFont，所以它需要包含qfont.h。Qt的字体提取和X中提供的可怕的字体提取大为不同，字体的载入和使用都已经被高度优化了。
+
+        QPushButton quit( "Quit", 0 );
+
+这时，按钮显示“Quit”，确切的说这就是当用户点击这个按钮时程序所要做的。这不是一个巧合。因为这个按钮是一个顶层窗口，我们还是把0作为它的父对象，也就是说他没有父对象，正如前面说说，这个按钮是一个顶层窗口，所以没有父对象。
+
+        quit.resize( 75, 30 );
+
+我们给这个按钮选择了另外一个大小，因为这个文本比“Hello world!”小一些。我们也可以使用QFontMetrics来设置正确的大小。
+
+        quit.setFont( QFont( "Times", 18, QFont::Bold ) );
+
+这里我们给这个按钮选择了一个新字体，Times字体中的18点加粗字体。注意在这里我们调用了这个字体。
+
+我们也可以改变整个应用程序的默认字体（使用QApplication::setFont()）。
+
+        QObject::connect( &quit,  ), &a, SLOT(quit()) );
+
+connect也许是Qt中最重要的特征了。注意connect()是QObject中的一个静态函数。不要把这个函数和socket库中的connect()搞混了。
+
+这一行在两个Qt对象（直接或间接继承QObject对象的对象）中建立了一种单向的连接。每一个Qt对象都有signals（信号--发送消息）和slots（槽--接收消息）。所有窗口部件都是Qt对象。它们继承QWidget，而QWidget继承QObject。第一个对象 “&quit”发送一个信号，以 SIGNAL(clicked() 方式发送一个 click() 信号;第二个对象“&a”得到这个信号并作出响应，响应通过SLOT(quit())方式到达 a.quit() 函数并执行该函数定义的功能。
+
+这里" QPushButton quit "的clicked()信号和" QApplication a "的quit()槽连接起来了，所以当这个按钮被按下的时候，
+这个按钮就发送一个信号，而与该信号连接的槽就捕捉到该信号，然后执行槽的函数体，这里就是 quit() 函数，然后这个程序就退出了。
+
+信号和槽文档详细描述了这一主题。
+
+行为
+
+当我们运行这个程序的时候，我们会看到这个窗口比第一章中的那个小一些，并且被一个更小的按钮充满。
+
+（请看上一章来学习如何创建一个makefile文件和连编应用程序。）
+
+
+练习
+
+1. 试着改变窗口的大小。按下按钮。注意！connect()看起来会有一些不同。
+
+2. 是不是在QPushButton中还有其它的我们可以连接到quit的信号？提示：QPushButton继承了QButton的绝大多数行为。 
+
+3. 试着改变这个按钮上显示的信息？例如改变为“Close”；
+
+4. 将quit.show();这个语句注释掉看看效果！
+
+5. 试着将 QPushButton quit( "Quit", 0 ); 改为一个指针类型的对象看看，
+例如 QPushButton ×pQuit = .....应该如何去实现呢？
+后面的代码又有那些变化呢？

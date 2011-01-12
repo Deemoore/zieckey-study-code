@@ -1,0 +1,16 @@
+INADDR_ANY
+
+
+/* 使用任意端口命名套接字 */
+
+server.sin_family = AF_INET;
+
+server.sin_port = INADDR_ANY;
+
+if (bind(sock, (struct sockaddr *)&server, sizeof(server)) < 0) {
+
+perror(“binding stream socket”);
+
+exit(1);
+
+}

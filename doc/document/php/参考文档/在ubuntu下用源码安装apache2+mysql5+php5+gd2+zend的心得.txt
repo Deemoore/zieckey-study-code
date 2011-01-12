@@ -1,0 +1,136 @@
+以前主要工作是用linux做web服务器的管理，很少使用桌面版
+
+同事前些天拿到了ubuntu的光盘，给了我一张，就装了，感觉挺不错
+而且一直讨厌windows下的瑞星大量的占用我的资源，于是现在把大部分的工作都转到linux下来了
+但写php脚本的时候，需要在本地调试
+虽然ubuntu很方便，可以用apt-get安装所有软件，但还是习惯了使用源码安装的方式，这样便于自己管理
+下面写一下自己的心得吧
+
+下面是所需要的软件，因为apache,php,mysql,ZendOptimizer很方便找到，我就不提供下载地址了
+可以在下列地址取得
+http://www.apache.org
+http://www.php.net
+http://www.mysql.com
+http://www.zend.com
+
+下面是这是安装GD时所需要的软件
+http://www.ijg.org/files/jpegsrc.v6b.tar.gz
+http://www.zlib.net/zlib-1.2.3.tar.gz
+http://prdownloads.sourceforge.net/libpng/libpng-1.2.8-config.tar.gz?download
+http://easynews.dl.sourceforge.net/sourceforge/freetype/freetype-2.1.3.tar.bz2
+http://telia.dl.sourceforge.net/sourceforge/freetype/freetype-2.1.3.tar.bz2
+
+我用的新手指南里的更新源，cn99不能用，取消了
+先安装make gcc g++
+sudo apt-get install build-essentia
+
+1.apache
+tar -zxvf httpd-2.2.0.tar.gz
+cd httpd-2.2.0
+./configure --prefix=/usr/local/apache --enable-module=so
+make
+make install
+
+2.freetype
+tar -xvjf freetype-2.1.3.tar.bz2
+cd freetype-2.1.3
+./configure
+make
+make install
+
+3.jpeg
+tar -xvzf jpegsrc.v6b.tar.gz
+cd jpeg-6b/
+./configure --enable-shared --enable-static
+make
+mkdir /usr/local/man
+mkdir /usr/local/man/man1
+make install
+
+4.zlib
+tar zxvf zlib-1.2.3.tar.gz
+cd zlib-1.2.3
+./configure
+make
+make install
+
+5.libpng
+tar zxvf libpng-1.2.8-config.tar.gz
+cd zlib-1.2.8
+./configure
+make
+make test
+make install
+
+6.gd2
+tar -zxvf gd-2.0.27.tar.gz
+cd gd-2.0.27/
+./configure --prefix=/usr/local/gd2
+make
+make install
+
+7.mysql
+安装mysql的时候，系统默认缺少一个组件libncurses5-dev
+sudo apt-get libncurses5-dev
+groupadd mysql
+useradd -g mysql mysql
+tar zxvf mysql-5.0.19.tar.gz
+cd mysql-5.0.19
+./configure --prefix=/usr/local/mysql
+make
+make install
+scripts/mysql_install_db
+chown -R root /usr/local/mysql
+chown -R mysql /usr/local/mysql/var
+chgrp -R mysql /usr/local/mysql
+cp support-files/my-medium.cnf /etc/my.cnf
+/usr/local/mysql/bin/mysqld_safe &
+/usr/local/mysql/bin/mysqladmin -u root password 'new-password'
+
+8.php
+安装php的时候，系统默认缺少两个组件
+sudo apt-get install FLEX
+sudo apt-get install libxml2 libxml2-dev
+
+tar zxvf php-5.1.2.tar.gz
+cd php-5.1.2
+./configure --with-gd=/usr/local/gd2 --with-apxs2=/usr/local/apache/bin/apxs --with-xml --with-mysql=/usr/local/mysql
+make
+make install
+cp php.ini-dist /usr/local/lib/php.ini
+
+9.config apche
+记得备份httpd.conf
+sudo cp /usr/local/apache/conf/httpd.conf /usr/local/apache/conf/httpd.conf.bak
+vi /usr/local/apache/conf/httpd.conf
+
+AddType application/x-httpd-php .php .phtml
+AddType application/x-httpd-php-source .phps
+
+apache里还有一些参数需要修改
+ServerName 如果不修改这项，启动apache的时候，会报错
+DocumentRoot 改成你希望指定的主目录
+IfModule dir_module 在这里加上你希望作为默认首页的文件，我加了index.htm index.php，中间打个空格就可以了
+
+如果你想启动apache支持shtml格式，可以这样操作
+找到下面这样一段文字
+This should be changed to whatever you set DocumentRoot to.
+把<Directory "/usr/local/apache/htdocs">改成你的主目录
+然后在这里加入Includes，注意区分大小写，因为我不希望有人能看到我的目录结构，所以把Index去掉了
+Options FollowSymLinks Includes
+完成这部以后，查找这两行，把前面的#去掉
+AddType text/html .shtml
+AddOutputFilter INCLUDES .shtml
+
+10.php config
+vi /usr/local/lib/php.ini
+register-golbals = On
+
+11.ZendOptimizer
+tar zxvf ZendOptimizer-2.6.2-linux-glibc21-i386.tar.gz
+cd ZendOptimizer-2.6.2-linux-glibc21-i386
+./install
+如果不出意外，一路按回车键就可以了
+
+这样安装的好处是文件比较统一，全部都安装在/usr/local目录里，很容易备份
+这些功能我基本够用了，大家如果需要用就试着安装一下吧

@@ -1,0 +1,24 @@
+粘住位
+
+　　SSVTX位有一段有趣的历史。在Unix的早期版本，这一位被称之为粘住位。如果一个可执行程序文件的这一位被设置了，那么在该程序第一次执行并结束时，该程序正文的一个文本被保存在交换区。(程序的正文部分是机器指令部分。)这使得下次执行该程序时能较快地将其装入内存区。其原因是：在交换区，该文件是被连续存放的，而在一般的Unix文件系统中，文件的各数据块很可能是随机存放的。对于常用的应用程序，例如文本编辑程序和编辑程序的各部分常设置它们所在文件的粘住位。自然，对交换区中可以同时存放的设置了粘住位的文件数有一定限制，以免过多占用交换区空间，但无论如何这是一个有用的技术。因为在系统再次自草前，文件的正文部分总是在交换区中，所以使用了名字"粘住"。后来的Unix版本称之为保存正文位，因此也就有了常数SSVTX。现今较新的Unix系统大多数都具有虚存系统，以及快速文件系统，所以可再需要使用这种技术。
+
+　　目前粘住位的主要作用是针对目录文件的。如果对一个目录设置了粘住位，则只有对该目录文件具有写许可数的用户并且满足下列条件之一，才能删除或换名该目录下的文件：拥有此文件，拥有此目录，或者是超级用户目录/tmp和 /var/spool/uucppublic是设置粘住位的后选者-这两个目录是任何用户都可在其中创建文件的目录。这两个目录对任一用户(用户、组和其他)的许可数通常都是读、写和执行。但是用户不应能删除或换名属于其他人的文件，为此在这两个目录的文件方式中都设置了粘住位。
+
+　　POSIX.1没有定义粘住位。但SVR4和4.3+BSD则支持这种特征。 
+
+[root@localhost temp]# mkdir stickydir
+[root@localhost temp]# chmod 777 stickydir/
+[root@localhost temp]# chmod o+t stickydir/
+[root@localhost temp]# ll
+总计 8
+drwxrwxrwt 2 root root 4096 10-19 11:58 stickydir
+[root@localhost temp]# su jane
+[jane@localhost temp]$ touch stickydir/janesfile
+[jane@localhost temp]$ exit
+exit
+[root@localhost temp]# su zieckey
+[zieckey@localhost temp]$ rm stickydir/janesfile 
+rm：是否删除有写保护的 普通空文件 “stickydir/janesfile”? y
+rm: 无法删除 “stickydir/janesfile”: 不允许的操作
+[zieckey@localhost temp]$ 
+

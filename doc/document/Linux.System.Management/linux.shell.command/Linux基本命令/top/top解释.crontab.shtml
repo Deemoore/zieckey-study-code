@@ -1,0 +1,1069 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+
+<title>
+	 3.1　top - 《LINUX系统故障诊断与排除》 - 免费试读 - book.csdn.net
+</title><meta name="keywords" content="图书,连载,免费试读,电子书,畅销书,热点书,原创,资讯,名人堂,书友会,作家,名家"><meta name="description" content="CSDN读书频道为中国最大的开发者网络平台开辟的IT人专有读书平台，提供最新热点图书的连载，章节试读，提供书友会，读者可以在浏览图书的同时，以书会友建立出版圈子，实时讨论出版热点，建立IT图书交流社区。"><meta http-equiv="Content-Type" content="text/html; charset=GB2312"><link href="top%E8%A7%A3%E9%87%8A.crontab_files/newindex2.css" rel="stylesheet" type="text/css">
+    <script src="top%E8%A7%A3%E9%87%8A.crontab_files/bookread.js" type="text/javascript"></script>
+    <link href="top%E8%A7%A3%E9%87%8A.crontab_files/arc2.css" rel="stylesheet" type="text/css">
+    <style>
+    a:link {
+	color: #336699;
+	 
+}
+a:visited {
+	color: #666699;
+	 
+}
+ 
+a img {
+	border-width:0;
+}
+    #friendlinks #linkup{margin-top:2px; margin-left:10px}
+#friendlinks #linkup2{margin-top:2px; margin-left:10px}
+#friendlinks #linkbottom{margin-left:10px}
+#friendlinks span{ font-weight:bold; color:yellow;}
+#friendlinks a{ margin-left:5px; text-decoration:none; color:white;}
+#friendlinks{padding-top:10px; width:1000px; margin:2px auto 2px auto; height:70px; background:url(/images/newindex/friendlinks_bg.gif) repeat-x }
+
+.content h6{font-size:12px; width:100%; height:22px;text-indent:1em;font-weight:bold;text-align:left;color:black;background:url(http://remark2.csdn.net/App_Themes/Default/images/r/listpage_titbg.gif) repeat-x;line-height:29px;padding:0 5px;}
+#Ian_RemarkTop li{text-align:left;line-height:15pt;padding-top:3px;padding-bottom:3px;}
+.cDRed{display:none;}
+
+    </style>
+</head><body>
+     <script src="top%E8%A7%A3%E9%87%8A.crontab_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-178341-4";
+urchinTracker();
+</script>
+<style>
+.CSDN-PHF
+{
+    width: 1000px;
+    margin: auto;
+    font-size: 12px;
+    text-align: left;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+.CSDN-PHF a,
+.CSDN-PHF a:link,
+.CSDN-PHF a:visited,
+.CSDN-PHF a:active
+{
+    color: #003366;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: normal;
+    text-decoration: none;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+
+/* CSDN Public Header style */
+#CSDNPH, #CSDNPF{text-align: center;}
+/* CSDN Public Header */
+#CSDNPH table{width: 100%; height: 20px; border: none;}
+#CSDNPH_line1{height: 20px;}
+#CSDNPH dl
+{
+    padding-left: 160px;
+    border-bottom: 3px solid #4682B4;
+    background: #FFFFFF url(http://www.csdn.net/ui/styles/public_header_footer/logo_csdn.gif) no-repeat top left;
+}
+#CSDNPH dd
+{
+    height: 60px;
+    text-align: left;
+    line-height: 20px;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/bgpheadtop.gif) no-repeat top right;
+}
+#data_for_drop_menu
+{
+    position: absolute;
+    top: 19px;
+    left: 0px;
+    width: 68px;
+    border: solid 1px #4682B4;
+    border-top: none;
+    text-align: left;
+    background-color: #FFFFFF;
+}
+#data_for_drop_menu div{padding: 1px 2px;margin: 0 2px;border-bottom: dotted 1px #D4D0C8;}
+#CSDNPHL td, #CSDNPH_line2 td{text-align: center; background-color: #4682B4;}
+#CSDNPH_line2 a:link, #CSDNPH_line2 a:visited, #CSDNPH_line2 a:hover, #CSDNPH_line2 a:active{color: #FFFFFF; padding: 0 2px;}
+#CSDNPH_line3 a{padding: 0 1px;}
+
+/* CSDN Public Footer style */
+#CSDNPF{line-height: 120%; text-align: center; overflow: hidden;}
+#CSDNPF .CSDN-PHF{text-align: center;}
+#CSDNPF .CSDN-PHF div{padding-left: 40px;}
+* html #CSDNPF hr{clear: both; height: 1px; border-top: 1px solid #4682B4;}
+#CSDNPF a.biaoshi
+{
+    left: -9%;
+    width: 40px;
+    height: 48px;
+    float: right;
+    display: block;
+    position: relative;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/biaoshi.gif) no-repeat center;
+}
+#CSDNPF a, #CSDNPF a:link, #CSDNPF a:visited, #CSDNPF a:active{color: #000000;}
+
+/* CSDN Public Header Single Line Style */
+#CSDNPHL{text-align: center; height: 20px;}
+#CSDNPHL a:link, #CSDNPHL a:visited, #CSDNPHL a:active, #CSDNPHL a:hover{color: #FFFFFF;padding: 0 1px;}.CSDN-PHF
+{
+    width: 1000px;
+    margin: auto;
+    font-size: 12px;
+    text-align: left;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+.CSDN-PHF a,
+.CSDN-PHF a:link,
+.CSDN-PHF a:visited,
+.CSDN-PHF a:active
+{
+    color: #003366;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: normal;
+    text-decoration: none;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+
+/* CSDN Public Header style */
+#CSDNPH, #CSDNPF{text-align: center;}
+/* CSDN Public Header */
+#CSDNPH table{width: 100%; height: 20px; border: none;}
+#CSDNPH_line1{height: 20px;}
+#CSDNPH dl
+{
+    padding-left: 160px;
+    border-bottom: 3px solid #4682B4;
+    background: #FFFFFF url(http://www.csdn.net/ui/styles/public_header_footer/logo_csdn.gif) no-repeat top left;
+}
+#CSDNPH dd
+{
+    height: 60px;
+    text-align: left;
+    line-height: 20px;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/bgpheadtop.gif) no-repeat top right;
+}
+#data_for_drop_menu
+{
+    position: absolute;
+    top: 19px;
+    left: 0px;
+    width: 68px;
+    border: solid 1px #4682B4;
+    border-top: none;
+    text-align: left;
+    background-color: #FFFFFF;
+}
+#data_for_drop_menu div{padding: 1px 2px;margin: 0 2px;border-bottom: dotted 1px #D4D0C8;}
+#CSDNPHL td, #CSDNPH_line2 td{text-align: center; background-color: #4682B4;}
+#CSDNPH_line2 a:link, #CSDNPH_line2 a:visited, #CSDNPH_line2 a:hover, #CSDNPH_line2 a:active{color: #FFFFFF; padding: 0 2px;}
+#CSDNPH_line3 a{padding: 0 1px;}
+
+/* CSDN Public Footer style */
+#CSDNPF{line-height: 120%; text-align: center; overflow: hidden;}
+#CSDNPF .CSDN-PHF{text-align: center;}
+#CSDNPF .CSDN-PHF div{padding-left: 40px;}
+* html #CSDNPF hr{clear: both; height: 1px; border-top: 1px solid #4682B4;}
+#CSDNPF a.biaoshi
+{
+    left: -9%;
+    width: 40px;
+    height: 48px;
+    float: right;
+    display: block;
+    position: relative;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/biaoshi.gif) no-repeat center;
+}
+#CSDNPF a, #CSDNPF a:link, #CSDNPF a:visited, #CSDNPF a:active{color: #000000;}
+
+/* CSDN Public Header Single Line Style */
+#CSDNPHL{text-align: center; height: 20px;}
+#CSDNPHL a:link, #CSDNPHL a:visited, #CSDNPHL a:active, #CSDNPHL a:hover{color: #FFFFFF;padding: 0 1px;}
+</style>
+<div id="CSDNPH"><div class="CSDN-PHF"><dl style="margin: 0pt;"><dd style="margin: 0pt;">
+  <div id="CSDNPH_line1">
+    <a href="http://passport.csdn.net/UserLogin.aspx">【登录】</a>
+    <a href="http://passport.csdn.net/CSDNUserRegister.aspx">【免费注册】</a>
+  </div>
+  <table id="CSDNPH_line2" border="0" cellpadding="0" cellspacing="1">
+    <tbody><tr>
+      <td><a target="_blank" rel="mz" href="http://www.csdn.net/">首页</a></td>
+      <td style=""><a target="_blank" rel="mz" href="http://news.csdn.net/">新闻</a></td>
+      <td style=""><a target="_blank" rel="mz" href="http://bbs.csdn.net/">论坛</a></td>
+      <td><a target="_blank" rel="mz" href="http://groups.csdn.net/">群组</a></td>
+      <td><a target="_blank" rel="mz" href="http://blog.csdn.net/">Blog</a></td>
+      <td><a target="_blank" rel="mz" href="http://dev.csdn.net/">文档</a></td>
+      <td><a target="_blank" rel="mz" href="http://download.csdn.net/">下载</a></td>
+      <td><a target="_blank" rel="mz" href="http://book.csdn.net/">读书</a></td>
+      <td><a target="_blank" rel="mz" href="http://tag.csdn.net/">Tag</a></td>
+      <td><a target="_blank" rel="mz" href="http://wz.csdn.net/">网摘</a></td>
+      <td><a target="_blank" rel="mz" href="http://search.csdn.net/">搜索</a></td>
+      <td><a target="_blank" rel="mz" href="http://gforge.osdn.net.cn/">开源</a></td>
+      <td><a target="_blank" rel="mz" href="http://faq.csdn.net/">FAQ</a></td>
+      <td><a target="_blank" rel="mz" href="http://www.dearbook.com.cn/">第二书店</a></td>
+      <td><a target="_blank" rel="mz" href="http://www.broadview.com.cn/">博文视点</a></td>
+      <td><a target="_blank" rel="mz" href="http://www.programmer.com.cn/">程序员</a></td> 
+    </tr>
+  </tbody></table>
+  <table id="CSDNPH_line3" border="0" cellpadding="0" cellspacing="0">
+    <tbody><tr>
+      <td><a style="color: rgb(255, 0, 0);">频道:</a></td>
+      <td><a target="_blank" rel="mz" href="http://sd.csdn.net/">研发</a></td>
+      <td><a target="_blank" rel="mz" href="http://database.csdn.net/">数据库</a></td>
+      <td><a target="_blank" rel="mz" href="http://middleware.csdn.net/">中间件</a></td>
+      <td><a target="_blank" rel="mz" href="http://itpro.csdn.net/">信息化</a></td>
+      <td><a target="_blank" rel="mz" href="http://live.csdn.net/">视频</a></td>
+      <td><a target="_blank" rel="mz" href="http://dotnet.csdn.net/">.NET</a></td>
+      <td><a target="_blank" rel="mz" href="http://java.csdn.net/">Java</a></td>
+      <td><a target="_blank" rel="mz" href="http://gamedev.csdn.net/">游戏</a></td>
+      <td><a target="_blank" rel="mz" href="http://mobile.csdn.net/">移动</a></td>
+      <td style="width: 36px;"> </td>
+      <td><a style="color: rgb(255, 0, 0);">服务:</a></td>
+      <td><a target="_blank" rel="mz" href="http://job.csdn.net/">人才</a></td>
+      <td><a target="_blank" rel="mz" href="http://prj.csdn.net/">外包</a></td>
+      <td><a target="_blank" rel="mz" href="http://training.csdn.net/">培训</a></td>
+      <td style="width: 70px;" onmouseover="$mz_.show(event, this)"><div style="position: absolute; margin-top: -9px; padding-left: 5px;"><a href="#" onclick="return false;">厂商专区</a><div id="data_for_drop_menu" style="display: none;">
+        <div><a target="_blank" rel="mz" href="http://www.csdn.net/bea/">BEA专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://www.csdn.net/ianywhere/">iAnywhere</a></div>
+        <div><a target="_blank" rel="mz" href="http://www.csdn.net/ibmc/">IBM专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://intel.csdn.net/">Intel专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://www.csdn.net/ijs/">IJS专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://sap.csdn.net/" id="a_f_p_">SAP专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://telelogic.csdn.net/">Telelogic</a></div>
+        <div><a target="_blank" rel="mz" href="http://www.csdn.net/sun/">SUN专区</a></div>
+        <div><a target="_blank" rel="mz" href="http://windowslive.csdn.net/domains/">定制邮局</a></div>
+        <div><a target="_blank" rel="mz" href="http://www.dearbook.com.cn/Subject/press/reyou.aspx">人邮出版</a></div>
+        <div><a target="_blank" rel="mz" href="http://msclub.csdn.net/">微软专区</a></div>
+      </div></div>
+      </td>
+    </tr>
+  </tbody></table>
+</dd></dl></div>
+<script type="text/javascript">/*<![CDATA[*/
+(function()
+{
+  var $=function(id){return document.getElementById(id)};
+  var a=$("CSDNPH").getElementsByTagName("A"),i;window["$mz_"]={};
+  for(i=0;i<a.length;i++)if(a[i].href&&a[i].rel=="mz")a[i].target="_blank";
+  var a=$("CSDNPH_line2").rows[0].cells;   for(i=0, n=a.length; i<n; i++){
+  a[i].onmouseout =function(){this.style.backgroundColor=""}
+  a[i].onmouseover=function(){this.style.backgroundColor="#336699";}}
+
+  //dropdowm menu
+  $mz_.B="object"==typeof(window.createPopup);//IE5.5+
+  if($mz_.B){$mz_.pop=window.createPopup();with($mz_.pop.document.body.style){
+  border="solid 1px #4682B4";borderTop="none";margin="0 3px";fontSize="12px";}
+  $mz_.pdoc=$mz_.pop.document; var s=$mz_.pdoc.createStyleSheet();
+  $mz_.pdoc.body.innerHTML=$("data_for_drop_menu").innerHTML;
+  s.cssText = "div{line-height: 20px; border-bottom: dotted 1px #D4D0C8;}"
+  +"a{color: #003366; font-size: 12px; font-family: \u5B8B\u4F53; text-decoration: none;}";
+  $mz_.pdoc.onclick=function(){var a=$mz_.pdoc.parentWindow.event.srcElement;
+  if(a.tagName=="A"){$("a_f_p_").href = a.href; $("a_f_p_").click();}}}
+
+  $mz_.show=function(e,td){window.event?event.cancelBubble=true:e.stopPropagation();
+  if($mz_.B) $mz_.pop.show(0, 20, 70, $("data_for_drop_menu").childNodes.length*21, td);
+  else $('data_for_drop_menu').style.display='';}
+  $mz_.hide=function(){if($mz_.B)$mz_.pop.hide();else $('data_for_drop_menu').style.display='none'}
+  $mz_.mouseout=function(e){window.event?event.cancelBubble=true:e.stopPropagation();}
+  
+  if(document.addEventListener) document.addEventListener("mouseover", function(){$mz_.hide()}, false);
+  else if(document.attachEvent) document.attachEvent("onmouseover", function(){$mz_.hide()});
+
+  function getCookie(name){var arr=document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+  if(arr!=null)return unescape(arr[2]);return null;}
+
+  $mz_.logout=function(e){new Image().src=e.href; if($mz_.login_info) $mz_.log.innerHTML=$mz_.login_info;}
+  $mz_.log=$("CSDNPH_line1");$mz_.login_info=$mz_.log.innerHTML; var user=getCookie("activeUserName");
+  if(user && user!="Guest") $mz_.log.innerHTML = "欢迎 <strong>"+ user +"</strong>   "
+    +"<a href='http://job.csdn.net/Con001_ProjectManage/Job/MyResume.aspx' target='_blank'>我的简历</a> | "
+    +"<a href='http://community.csdn.net/Expert/member/MyForum.asp?typenum=1' target='_blank'>我的帖子</a> | "
+    +"<a href='http://blog.csdn.net/"+ user +"/' target='_blank'>我的Blog</a> | "
+    +"<a href='http://wz.csdn.net/my/' target='_blank'>我的网摘</a> | "
+    +"<a href='http://club.book.csdn.net/people/myclub.aspx' target='_blank'>我的书架</a> "
+    +"<a href='http://passport.csdn.net/logonout.aspx' onclick='$mz_.logout(this); return false'>【注销】</a>"
+})();
+/*]]>*/</script>
+</div>
+	<table class="top" border="0" cellpadding="0" cellspacing="0">
+			<tbody><tr>
+				<td><a href="http://book.csdn.net/"><img alt="" src="top%E8%A7%A3%E9%87%8A.crontab_files/bookLogo.gif"></a></td>
+				<td>
+					<div id="ad_div"><a href="http://www.funfungolf.com/home/action-mtag-id-5.html" target="_blank"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/mwei0907.gif" border="0"></a></div>
+						<div class="tabs1">
+							<ul>
+							<li class="current"><a href="http://book.csdn.net/book/morelz.aspx"><span>精品连载</span></a></li>
+							<li><a href="http://club.book.csdn.net/people/myclub.aspx"><span>书友会</span></a></li>
+							<li><a href="http://club.book.csdn.net/book/bookrank.aspx"><span>图书指数榜</span></a></li>
+							<li><a href="http://club.book.csdn.net/people/putblog.aspx"><span>收藏秀</span></a></li>
+							<li><a href="http://club.book.csdn.net/people/morelist.aspx?username=bookread"><span>特色书架</span></a></li>
+							<li><a href="http://blog.csdn.net/group/bookread/" target="_blank"><span>出版圈子</span></a></li>
+							<li><a href="http://groups.csdn.net/bookread/" target="_blank"><span>读书讨论群</span></a></li>
+							<li><a href="http://blog.csdn.net/bookread/" target="_blank"><span>读书博客</span></a></li>
+							<li><a href="http://bank.csdn.net/" target="_blank"><span>社区银行</span></a></li>
+							</ul>
+  		              </div>
+				</td>
+			</tr>
+		</tbody></table>
+		
+		 
+		 <script type="text/javascript">
+     function IsBlank(obj) //查看对象的值是否为空
+    {
+      if(obj.replace(/^\s+|\s+$/,"")=="")
+		  {
+		 
+		    return true; 
+		  }
+		  else
+		  {
+		   return false;
+		  }
+		  
+     }
+    function SearchBook_Top()
+    {
+      if( !IsBlank(document.getElementById("txtTopKey").value))
+      {
+           var loc;
+         var szType;
+         if(document.getElementById("searchKind1").checked==true)
+          {    
+            szType= 2
+          }
+          else if (document.getElementById("searchKind2").checked==true)
+          {
+              szType=1;
+          }
+          else if (document.getElementById("searchKind3").checked==true)
+          { 
+            szType=3;
+          }
+           else if (document.getElementById("searchKind4").checked==true)
+          { 
+            szType=4;
+          }
+           else if (document.getElementById("searchKind5").checked==true)
+          { 
+            szType=5;
+          }
+          
+          if(szType==1)
+            loc="http://book.csdn.net/book/morelz.aspx?key="+escape(document.getElementById("txtTopKey").value);
+          else if(szType==2)
+             loc="http://club.book.csdn.net/book/s.aspx?key="+escape(document.getElementById("txtTopKey").value);
+             else if(szType==3)
+             loc="http://club.book.csdn.net/tag/"+escape(document.getElementById("txtTopKey").value)+"/1.html";
+             else if(szType==5)
+               loc="http://www.baidu.com/s?wd=site%3Abook.csdn.net%20"+document.getElementById("txtTopKey").value+"&cl=3";
+             else
+                loc="http://www.google.cn/search?q=site%3Abook.csdn.net%20"+document.getElementById("txtTopKey").value;
+          if(szType<=3)
+          self.location=loc;
+          else
+          window.open(loc,"gsearch");
+        
+      } 
+    }
+  </script>
+		<div class="searchMain">
+			<dl style="border: 1px solid rgb(89, 146, 172); padding: 2px;">
+				<dd style="padding: 5px 5px 5px 240px; background-color: rgb(149, 196, 217);">
+					 
+						<input class="searchDi" size="70" id="txtTopKey"> <input src="top%E8%A7%A3%E9%87%8A.crontab_files/search.gif" onclick="SearchBook_Top();return false;" type="image">&nbsp;&nbsp;&nbsp;&nbsp;图书品种：<font color="#ff0000"><b>235680</b></font>种<br>
+						 
+						<input name="aa" id="searchKind1" checked="checked" type="radio"> <label for="searchKind1">书友会</label> &nbsp;
+						<input name="aa" id="searchKind2" type="radio"> <label for="searchKind2">连载</label> &nbsp;
+					        <input name="aa" id="searchKind3" type="radio"> <label for="searchKind3">Tag</label>&nbsp;
+					        <input name="aa" id="searchKind4" type="radio"> <label for="searchKind4"><font color="#800080">用Google进行全文检索</font></label>&nbsp;
+					        <input name="aa" id="searchKind5" type="radio"> <label for="searchKind5"><font color="#800080">用百度进行全文检索</font></label>
+				 
+				</dd>
+				<dt style="padding: 5px 5px 5px 245px;">
+					热门搜索：
+					<a href="http://club.book.csdn.net/book/s.aspx?key=ASP.NET">ASP.NET</a>  
+					<a href="http://club.book.csdn.net/book/s.aspx?key=Ajax">Ajax</a>  
+					<a href="http://club.book.csdn.net/book/s.aspx?key=Spring">Spring</a>  
+					<a href="http://club.book.csdn.net/book/s.aspx?key=Hibernate">Hibernate</a>  
+					<a href="http://club.book.csdn.net/book/s.aspx?key=Java">Java</a>
+				</dt>
+			</dl>
+		</div>
+<link href="top%E8%A7%A3%E9%87%8A.crontab_files/newindex2.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/AdOut.htm"></script>
+      <div id="wrapper">
+        <div id="innerWrapper">
+            <div id="mainWrappe">
+             
+            <div id="pageContent">
+                <div class="col1">
+            
+            <!-- title -->
+            <div class="arcTitle" style="width: 100%;"><h1 style="text-align: left; width: 100%;"><a href="http://book.csdn.net/subject/1014action/" target="_blank"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/a.htm"></a></h1><br> 
+            
+                <h1 style="width: 100%;">
+                    <script src="top%E8%A7%A3%E9%87%8A.crontab_files/vote.js"></script><iframe src="top%E8%A7%A3%E9%87%8A.crontab_files/vote.htm" noresize="" border="0" marginwidth="0" framespacing="0" marginheight="0" vspace="0" style="float: left; margin-top: 0px;" scrolling="no" frameborder="0" height="75" width="54"></iframe><a href="http://book.csdn.net/bookfiles/331">
+                        LINUX系统故障诊断与排除
+                    </a>
+                </h1>
+                <div style="text-align: center; font-size: 15px;">
+                    <a href="http://book.csdn.net/bookfiles/331/10033113257.shtml">
+                        3.1　top&nbsp;
+                    </a>
+                </div>
+                <div style="text-align: center; font-size: 15px;">
+                    <a class="url" href="http://book.csdn.net/">http://book.csdn.net/</a>
+                    2007-4-17 14:30:00
+                </div>
+                <div class="clear">
+                </div>
+                <div style="border: 1px solid rgb(11, 95, 152); margin: 0px auto; width: 600px; float: left;">
+                    <div style="padding: 1px; float: left; width: 16px; background-color: rgb(11, 95, 152); color: White;">
+                        图书导读
+                    </div>
+                    <div style="float: right; width: 570px; text-align: left; line-height: 16pt; padding-left: 2px;">
+                        <!--导读-->
+                        <h1 id="divCurrentNode" style="color: rgb(184, 53, 7); width: 100%; text-align: left; font-size: 12px; padding-left: 2px;">当前章节:<a href="http://book.csdn.net/bookfiles/331/10033113257.shtml"><font color="red">3.1　top</font></a></h1>
+                        <div id="divRelateNode" style="padding-left: 2px;">
+                        <div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113254.shtml">2.2　操作系统严重错误</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113255.shtml">2.3　硬件机器检查</a></div><div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113256.shtml">2.4　小结</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113258.shtml">3.2　sar</a></div><div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113259.shtml">3.3　vmstat</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113260.shtml">3.4　iostat</a></div></div>
+                    </div>
+                </div>
+                <div class="clear">
+                </div>
+            </div>
+            <!-- main -->
+            <div id="main">
+                <div id="text">
+                  <div id="csdn_zhaig_ad_yahoo_2"></div>
+                  
+                 <link href="top%E8%A7%A3%E9%87%8A.crontab_files/css.htm" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p class="MsoNormal" style="text-indent: 21pt;">本章解释如何使用适用于Linux的大量性能工具及每个工具中信息的意义。即使已经使用top或者sar，也可能从本章学到相关知识。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">应该养成使用这些工具的习惯。当然要知道如何诊断性能问题，但也应该定期寻找可能指示问题的关键指标的变化。可以使用这些工具衡量新应用程序对性能的影响。就如同查看车内的温度表一样，要注意Linux系统的性能指标。本章介绍的工具有：</p>
+
+<p class="a9">·&nbsp;&nbsp; top</p>
+
+<p class="a9">·&nbsp;&nbsp; sar</p>
+
+<p class="a9">·&nbsp;&nbsp; vmstat</p>
+
+<p class="a9">·&nbsp;&nbsp; iostat</p>
+
+<p class="a9">·&nbsp;&nbsp; free</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">可以作为普通用户运行这些工具。它们都利用/proc文件系统得到它们的数据。这些性能工具和几个rpm一起提供。procps
+rpm提供top、free和vmstat。sysstat rpm提供sar和iostat。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top命令是一个优秀的交互式实用工具，用于监视性能。它提供关于整体Linux性能的几个概要行，但是报告进程信息才是top真正的长处。可以广泛自定义进程显示，也可以添加字段，按照不同指标排序进程列表，甚至从top注销进程。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">sar实用工具提供监视每一事件的能力。它至少有15个单独的报告类别，包括CPU、磁盘、网络、进程、交换区等等。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">vmstat命令报告关于内存和交换区使用的广泛信息。它也报告CPU和一些I/O信息。iostat报告存储输入/输出（I/O）统计资料。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">这些命令覆盖许多相同的地方。本节讨论如何使用这些命令并解释每个命令产生的报告，并不讨论所有15种sar语法，但是介绍了其中最常见的。</p>
+
+<h3>3.1&nbsp; top</h3>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top命令是最流行的性能工具之一。大多数系统管理
+员运行top查看Linux和UNIX系统的运行情况。top实用工具提供一种监视进程和Linux整体性能的理想方法。将Linux进程称作任务更准
+确，但是在本章中我们还是将它们称作进程，因为这个工具也这样称呼它们。<sup>1</sup>普通用户和root用户都可以运行top。图3-1显示一个空闲系统的典型top输出。</p>
+
+<p style="margin-top: 12pt;" align="center"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image118.jpg" alt="0131855158 1-15
+2.2.6" height="192" width="306"></p>
+
+<p style="margin-bottom: 12pt;" align="center">图3-1 &nbsp;top输出</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top显示有两个部分。大约前三分之一显示关于Linux的整体信息，其余行为各个进程信息。如果扩展窗口则显示更多进程而填充整个屏幕。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">更全面的Linux信息可以通过使用top之外的几
+个命令来得到。不过，通过一个命令在一个屏幕上显示所有信息比较理想。第一行显示最近1分钟、5分钟和15分钟的负载平均值。负载平均值表示在CPU上运
+行或者等待运行多少进程。uptime命令也可以用来显示负载平均值。接下来是进程信息，之后是CPU、内存和交换区。内存和交换区信息与free命令输
+出类似。在我们确定内存和CPU使用之后的下一个问题是哪些进程正在使用它。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">大部分进程信息也可以通过ps命令得到，但是top提供一种更易于阅读的格式。最有用的是用于提供帮助的h，它列出top的其他交互式命令。</p>
+
+<h3>3.1.1 &nbsp;添加和移除字段</h3>
+
+<p class="MsoNormal" style="text-indent: 21pt;">字段可以从显示中添加或移除。进程输出可以按照CPU、内存或者其他指标排序。这是一个查看什么进程抢夺内存的理想方法。各个Linux发布版本的top语法和交互式选项不同，帮助命令可以快速列出什么命令可用。有许多交互式选项可用，用户应该花费一些时间来试验它们。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">图3-2显示Red Hat Enterprise Linux ES release 3的帮助屏幕。</p>
+
+<p style="margin-top: 12pt;" align="center"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image119.jpg" alt="0131855158 1-15
+2.2.6" height="192" width="306"></p>
+
+<p style="margin-bottom: 12pt;" align="center">图3-2&nbsp; top的帮助屏幕</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">f命令用来从top输出中添加或者移除字段。图3-3是一个Red Hat Enterprise Linux ES release 3的帮助屏幕，显示什么字段可以添加。</p>
+
+<p style="margin-top: 12pt;" align="center"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image120.jpg" alt="0131855158 1-15
+2.2.6" height="192" width="306"></p>
+
+<p style="margin-bottom: 12pt;" align="center">图3-3&nbsp; top添加/移除字段的屏幕</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">图3-4显示一个SUSE Linux 9.0 top的帮助屏幕，可见它们提供的命令差别非常大。</p>
+
+<p style="margin-top: 12pt;" align="center"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image121.jpg" alt="0131855158 1-15
+2.2.6" height="192" width="306"></p>
+
+<p style="margin-bottom: 0.0001pt;" align="center">图3-4&nbsp; SUSE top的帮助屏幕</p>
+
+<h3 style="page-break-before: always;">3.1.2&nbsp; 解释输出</h3>
+
+<p class="MsoNormal" style="text-indent: 21pt;">让我们研究top信息的意义，以top的如下输出为例：</p>
+
+<p class="af3" style="margin-top: 3.9pt;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image122.jpg" height="215" width="428"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top输出的第一行显示负载平均值信息：</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image123.jpg" height="16" width="413"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">这个输出与uptime的输出类似。从中可看到Linux已经运行时间、当前时间和用户数量，以及1分钟、5分钟和15分钟负载平均值。接下来显示进程概要：</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image124.jpg" height="16" width="340"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">我们看到总共有73个进程，其中72个进程正在休
+眠，一个进程正在运行，没有僵化进程或者被停止的进程。当一个进程退出并且它的父进程没有通过wait（2）或者waitpid（2）函数等待它时，它就
+会成为僵化进程。这通常是由于父进程在它的子进程之前退出造成的。不同于进程表中的项，僵化进程不使用资源。停止的进程是已经向它发送STOP信号的进
+程。更多信息，请参见signal（7）手册页。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">接下来是CPU信息：</p>
+
+<p class="af3" style="margin-top: 3.9pt;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image125.jpg" height="32" width="424"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">CPU行描述CPU如何使用它们的CPU周期。
+top命令报告CPU在用户或者内核模式、运行良好进程以及处在空闲状态时所花费时间的百分比。iowait列显示没有进程在CPU上运行时，处理器等待
+I/O完成的时间的百分比。irq和softirq列表示处理硬件和软件中断所花费的时间。早于2.6版本的Linux内核不报告irq、softirq
+和iowait。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">接下来是内存信息：</p>
+
+<p class="af3" style="margin-top: 3.9pt;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image126.jpg" height="34" width="426"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">前三个指标提供内存使用的概要，列出了总的可用内存、已使用内存和自由内存，它们都是确定对于Linux内存是否足够所需信息。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">接下来五个指标标识已使用的内存如何分配。shrd
+字段显示共享的内存使用，buff是缓冲使用的内存。分配给内核或者用户进程的内存可以处在三种不同状态：活动（active）、不活动脏
+（inactive dirty）和不活动干净（inactive
+clean）。活动在top中用aotv表示，表示该内存最近被使用。不活动脏在top中用in_d表示，表示该内存最近没有使用，可以回收。要回收内
+存，必须将它的内容写到磁盘，这个进程命名为“清洗”，也可称作内存的第四种临时状态。一旦被清洗，不活动脏内存成为不活动干净内存，在top中用
+in_c表示。由Norm Murray和Neil Horman合著的<i>Understanding Virtual </i><i>Memory in Red Hat Enterprise Linux 3</i>是一本优秀的参考书，网址为http:people.redhat.com/nhorman/papers/
+rhel3_vm.pdf。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">接下来是交换区信息：</p>
+
+<p class="af3"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image127.jpg" height="16" width="417"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">av字段是可用的交换区总量，之后是已用数量和自由数量，最后是内核用于缓存的内存数量。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top显示的其余部分是进程信息：</p>
+
+<p class="af3"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image128.jpg" height="68" width="426"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top显示尽可能多的能适合屏幕的进程。top（1）手册页中提供了字段说明的描述。表3-1提供了这些字段的概要。</p>
+
+<p class="a1">表3-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+top进程字段</p>
+
+<table class="MsoNormalTable" style="border: medium none ; width: 420pt; margin-left: 5.4pt; border-collapse: collapse;" border="1" cellpadding="0" cellspacing="0" width="560">
+ <tbody><tr>
+  <td style="border-style: solid solid solid none; border-color: windowtext windowtext windowtext -moz-use-text-color; border-width: 1pt 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="ae">字&nbsp;&nbsp;&nbsp;
+  段</p>
+  </td>
+  <td style="border-style: solid none; border-color: windowtext -moz-use-text-color; border-width: 1pt medium; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="ae">说&nbsp;&nbsp;&nbsp;
+  明</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">PID</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程id编号</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">USER</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程所有者的用户名</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">PRI</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程的优先级</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">SIZE</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程大小，包括它的代码、栈和数据区域，以千字节为单位</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">RSS</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程使用的内存总量，以千字节为单位</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">SHARE</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程使用的共享内存数量</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">STAT</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">进程的状态，通常R表示运行，S表示休眠</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">%CPU</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">自从最近的屏幕更新以来，这个进程使用的CPU百分比</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">%MEM</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">这个进程使用的内存百分比</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">TIME</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">自从进程启动以来，这个进程使用的CPU时间量</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">CPU</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">最近执行进程的CPU</p>
+  </td>
+ </tr>
+ <tr>
+  <td style="border-style: none solid solid none; border-color: -moz-use-text-color windowtext windowtext -moz-use-text-color; border-width: medium 1pt 1pt medium; padding: 0cm 5.4pt; width: 152.25pt;" valign="top" width="203">
+  <p class="a2" style="text-align: center;" align="center">COMMAND</p>
+  </td>
+  <td style="border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color windowtext; border-width: medium medium 1pt; padding: 0cm 5.4pt; width: 267.75pt;" valign="top" width="357">
+  <p class="a2" style="text-indent: 36.6pt;">正在执行的命令</p>
+  </td>
+ </tr>
+</tbody></table>
+
+
+
+<h3>3.1.3 &nbsp;保存自定义</h3>
+
+<p class="MsoNormal" style="text-indent: 21pt;">一个非常好的top功能是保存当前配置。可以使用交互式命令s任意更改显示，然后按w保存该视图。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top在用户的主目录中写入一个.toprc文件，用来保存配置，以便下一次这个用户启动top时使用相同的显示选项。</p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top也寻找默认配置文件/etc/toprc。这
+是一个全局配置文件，当任何用户运行实用工具时，top将读取该文件。这个文件可以使top以安全模式运行，也可以设置刷新延迟。安全模式阻止非root
+用户注销或者更改进程的正常值，也阻止非root用户更改top的刷新值。Red Hat Enterprise Linux ES release
+3的一个/etc/toprc示例文件如下所示：</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image129.jpg" height="16" width="97"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">s表示安全模式，3定义三秒钟刷新间隔。其他发布版
+本可能有不同的/etc/toprc格式。注销进程是一个非常实用的功能。如果用户有一个失控的进程，通过top命令可以轻易找到并注销它，具体步骤为：
+运行top，通过u命令显示用户的所有进程，然后使用k注销它。top不只是一个优秀的性能监视工具，它也可以用来通过注销那些产生问题的进程从而改进性
+能。</p>
+
+<h3>3.1.4&nbsp; 批处理模式</h3>
+
+<p class="MsoNormal" style="text-indent: 21pt;">top也可以以批处理模式运行。尝试运行以下命令：</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image130.jpg" height="16" width="161"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">-n 1告诉top只显示一次迭代，-b选项表示以适合写入文件的文本形式输出或者定向到另一个程序（例如less）。类似以下两行脚本的命令可以顺利完成cron工作：</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image131.jpg" height="52" width="366"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">可以将它添加到crontab，并每隔15分钟收集一次输出。</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image132.jpg" height="33" width="215"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">通过批处理可以轻松完成所有任务，无需用户的干涉。
+所有进程都被列出，输出并不是每5秒钟刷新一次。如果用户的主目录中存在一个.toprc配置文件，那么它用来格式化显示。以下是在一个多CPU
+Linux服务器上运行top批处理模式的输出。注意，其中没有显示top输出的所有258个进程。</p>
+
+<p class="af3" style="margin: 3.9pt 0cm;"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image133.jpg" height="249" width="445"></p>
+
+<p class="af3"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/image134.jpg" height="361" width="445"></p>
+
+<p class="MsoNormal" style="text-indent: 21pt;">现在读者可能明白了为什么top会如此流行。top的交互式本质和容易自定义输出的能力使它成为诊断问题的优秀工具。</p>
+
+
+
+</div>
+                <!-- page -->
+                <div class="page" style="text-align: center;">
+                    <a href="http://book.csdn.net/bookfiles/331/10033113256.shtml">上一页</a>&nbsp;&nbsp;&nbsp;<a href="http://book.csdn.net/bookfiles/331/index.html">首页</a>&nbsp;&nbsp;&nbsp;<a href="http://book.csdn.net/bookfiles/331/10033113258.shtml">下一页</a>
+                </div>
+                <div class="content" style="text-align: right; width: 99%;">
+   
+   <script type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/LzReview.htm"></script><script src="top%E8%A7%A3%E9%87%8A.crontab_files/bookread.js"></script><script src="top%E8%A7%A3%E9%87%8A.crontab_files/WebUtil.js"></script><script src="top%E8%A7%A3%E9%87%8A.crontab_files/WebUtilConfig.js"></script><link href="top%E8%A7%A3%E9%87%8A.crontab_files/LzReview.css" rel="stylesheet" type="text/css"><div id="lzOutBox"><dl class="LzReviewList"><dt><a href="http://book.csdn.net/hi/bookself.aspx?username=ben0133" target="_blank">ben0133</a> 发表于 <em>2008-1-31 11:05:35</em></dt><dd> 很不错的书，作者由浅入深讲解的非常详细，无论你是初学者还是有多年经验的开发者，都会从中受益的。</dd></dl></div><dl id="LzContainer"><dt>发表评论   <a href="http://book.csdn.net/hi/BookClub_BookDetails.aspx?id=128613">更多评论</a></dt><dd><textarea id="lzRContent">--填写评论内容--</textarea></dd><dd><a href="http://passport.csdn.net/UserLogin.aspx?from=http://book.csdn.net/bookfiles/331/">登录后再提交评论</a></dd></dl><script src="top%E8%A7%A3%E9%87%8A.crontab_files/LzReviewExtend.js"></script><script>lz_book_id=331;lz_dearbookid=128613;lz_book_name='LINUX系统故障诊断与排除';</script>
+		
+<!--引用评论结束--> 
+
+                </div>
+                <div style="border: 1px solid rgb(11, 95, 152); margin: 0px auto; width: 600px; float: left;">
+                    <div style="padding: 1px; float: left; width: 16px; background-color: rgb(11, 95, 152); color: White;">
+                        图书导读
+                    </div>
+                    <div style="float: right; width: 570px; text-align: left; line-height: 16pt; padding-left: 2px;">
+                        <!--导读-->
+                        <h1 id="divCurrentNode2" style="color: rgb(184, 53, 7); width: 100%; text-align: left; font-size: 12px; padding-left: 2px;">当前章节:<a href="http://book.csdn.net/bookfiles/331/10033113257.shtml"><font color="red">3.1　top</font></a></h1>
+                        <div id="divRealteNod2" style="padding-left: 2px;">
+                        <div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113254.shtml">2.2　操作系统严重错误</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113255.shtml">2.3　硬件机器检查</a></div><div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113256.shtml">2.4　小结</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113258.shtml">3.2　sar</a></div><div style="float: left; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113259.shtml">3.3　vmstat</a></div><div style="float: right; width: 49%;">·<a href="http://book.csdn.net/bookfiles/331/10033113260.shtml">3.4　iostat</a></div></div>
+                    </div>
+                </div>
+                <div class="clear">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="todayCommend" style="width: 100%;">
+                <div class="title">
+                    <h5>
+                        同类图书推荐</h5>
+                </div>
+                <div class="blank6 clear">
+                </div>
+                <div id="divSameSort" class="content">
+                <li style="margin: 0pt; padding: 0pt; float: left; width: 19%; list-style-type: none; text-align: center;"><a href="http://book.csdn.net/bookfiles/873/" title="编译原理(原书第2版)"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/TS00251207__.jpg" border="0/" height="112px" width="80px"></a><p><a href="http://book.csdn.net/bookfiles/873/" title="编译原理(原书第2版)">编译原理(原...</a></p></li><li style="margin: 0pt; padding: 0pt; float: left; width: 19%; list-style-type: none; text-align: center;"><a href="http://book.csdn.net/bookfiles/872/" title="PHP 6 与MySQL 5 基础教程"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/TS00251205__.jpg" border="0/" height="112px" width="80px"></a><p><a href="http://book.csdn.net/bookfiles/872/" title="PHP 6 与MySQL 5 基础教程">PHP 6 与My...</a></p></li><li style="margin: 0pt; padding: 0pt; float: left; width: 19%; list-style-type: none; text-align: center;"><a href="http://book.csdn.net/bookfiles/871/" title="大象--Thinking in UML"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/TS00251137__.jpg" border="0/" height="112px" width="80px"></a><p><a href="http://book.csdn.net/bookfiles/871/" title="大象--Thinking in UML">大象--Thin...</a></p></li><li style="margin: 0pt; padding: 0pt; float: left; width: 19%; list-style-type: none; text-align: center;"><a href="http://book.csdn.net/bookfiles/870/" title="软件质量管理实践:软件缺陷预防、清除、管理实用方法"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/TS00250666__.jpg" border="0/" height="112px" width="80px"></a><p><a href="http://book.csdn.net/bookfiles/870/" title="软件质量管理实践:软件缺陷预防、清除、管理实用方法">软件质量管...</a></p></li><li style="margin: 0pt; padding: 0pt; float: left; width: 19%; list-style-type: none; text-align: center;"><a href="http://book.csdn.net/bookfiles/869/" title="Java彩色UML建模"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/TS00251177__.jpg" border="0/" height="112px" width="80px"></a><p><a href="http://book.csdn.net/bookfiles/869/" title="Java彩色UML建模">Java彩色UM...</a></p></li></div>
+            </div>
+            <!-- 评论 -->
+            <div class="clear">
+            </div>
+            <div class="todayCommend" style="width: 100%;">
+                 
+                <div class="blank6 clear">
+                </div>
+                
+            </div>
+            <!-- 今日推荐 -->
+            <div class="clear">
+            </div>
+            
+            <div id="tagad" style="text-align: left;">
+             <div id="csdn_zhaig_ad_yahoo" style="width: 99%;">
+                </div>
+                <script type="text/javascript">
+                ad_width=468;
+ad_height=60;
+adcss=2;
+unionuser=22;
+  
+ad_type='j';
+count=3;
+                </script>
+                   <script src="top%E8%A7%A3%E9%87%8A.crontab_files/showads.htm" type="text/javascript"></script>
+                   <script src="top%E8%A7%A3%E9%87%8A.crontab_files/tag.js" type="text/javascript"></script>
+
+            </div>
+        </div>
+             
+            </div>
+            <div id="sidebar">
+               <div class="ad">
+                        
+                                  <script type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/bookflash.js"></script>
+    <div id="focusViwer" style="width: 100%;" align="left"><embed type="application/x-shockwave-flash" src="top%E8%A7%A3%E9%87%8A.crontab_files/pixviewer.swf" id="focusflash" name="focusflash" bgcolor="#cccccc" quality="High" allowscriptaccess="sameDomain" menu="false" wmode="opaque" flashvars="pics=http://book.csdn.net/smallimg/081110qh.jpg|http://book.csdn.net/smallimg/081103hz.jpg|http://book.csdn.net/smallimg/081023jx.jpg|http://book.csdn.net/smallimg/ryts0821.jpg|http://book.csdn.net/smallimg/bw080721.jpg&amp;links=http://book.csdn.net/bookfiles/829/|http://book.csdn.net/bookfiles/801/|http://book.csdn.net/bookfiles/824/|http://book.csdn.net/bookfiles/794/|http://book.csdn.net/bookfiles/757/&amp;texts=C#高级编程(第6版) |代码之美|Linux内核完全剖析--基于0.12内核 | WCF揭秘 |梦断代码 |Python核心编程|开发者突击&amp;borderwidth=290&amp;borderheight=252&amp;textheight=20" height="272" width="290"></div>
+            <div>
+                          <marquee onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="110"><b></b> </marquee>
+                       </div>
+   <script type="text/javascript">
+	<!--
+	
+	var focus_width=290;
+	var focus_height=252;
+	var text_height=20;
+	var swf_height = focus_height+text_height
+	
+	var pics='http://book.csdn.net/smallimg/081110qh.jpg|http://book.csdn.net/smallimg/081103hz.jpg|http://book.csdn.net/smallimg/081023jx.jpg|http://book.csdn.net/smallimg/ryts0821.jpg|http://book.csdn.net/smallimg/bw080721.jpg'
+	var links='http://book.csdn.net/bookfiles/829/|http://book.csdn.net/bookfiles/801/|http://book.csdn.net/bookfiles/824/|http://book.csdn.net/bookfiles/794/|http://book.csdn.net/bookfiles/757/'
+	var texts='C#高级编程(第6版) |代码之美|Linux内核完全剖析--基于0.12内核 | WCF揭秘 |梦断代码 |Python核心编程|开发者突击'	
+		var FocusFlash = new sinaFlash("http://book.csdn.net/html/index/pixviewer.swf", "focusflash", focus_width, swf_height, "7", "#cccccc", false, "High");
+	FocusFlash.addParam("allowScriptAccess", "sameDomain");
+	FocusFlash.addParam("menu", "false");
+	FocusFlash.addParam("wmode", "opaque");
+
+	FocusFlash.addVariable("pics", pics);
+	FocusFlash.addVariable("links", links);
+	FocusFlash.addVariable("texts", texts);
+	FocusFlash.addVariable("borderwidth", focus_width);
+	FocusFlash.addVariable("borderheight", focus_height);
+	FocusFlash.addVariable("textheight", text_height);
+	FocusFlash.write("focusViwer");
+	
+	//-->
+	</script>
+
+                            
+                    </div>
+                    <div class="zhuantituijian">
+                        <dl>
+                            <dt>热点推荐</dt>
+                            <dd>
+                                <strong>【活动】</strong><a title="" href="http://book.csdn.net/subject/0708action/" target="_blank"><font color="#ff0000"><strong>写百字读书心得 赢"万元"图书大奖</strong></font></a><br><strong>【活动】</strong><a title="" href="http://book.csdn.net/subject/0707cbi/" target="_blank"><font color="#ff0000"><strong>7月新的C币获取原则推出</strong></font></a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0706wg/" target="">专业网管笔记　成就资深网管</a><br><strong>【专题】</strong><a href="http://book.csdn.net/subject/0706ryasp/">重磅出击----Asp.net2.0</a><br><strong>【活动】</strong><a title="" href="http://news.csdn.net/n/20070525/104534.html" target="_blank">6月5日与微软专家在线讨论Vista安全</a><br><strong>【专题】</strong><a href="http://book.csdn.net/subject/0705soa/">SOA袭来，技术人员如何提升自己? </a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0704jolt/" target="_blank">历届Jolt大奖全回顾。17届最新发布</a><br><strong>【专题】</strong><a href="http://book.csdn.net/manage/indexMang/editpage.aspx?name=%C8%C8%B5%E3%CD%C6%BC%F6%B9%DC%C0%ED_1html1newindex1newhot.htm#">07年技术最新热点：Ruby on Rails</a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0704WhyPF/" target="_blank">徜徉在经验与科学之间</a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0704doitus/" target="_blank">时代DIY 自己动手开发自己的搜索引擎</a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0703programming/" target="_blank">O'reilly经典图书Programming系列<br></a><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0703Excel/" target="_blank">引起众多MVP关注的Excel</a><br><strong>【专题】</strong><a title="" href="http://book.csdn.net/subject/0704aspnet/" target="_blank">征服ASP.NET2.0 Ajax Web开发技术详解</a>
+                            </dd>
+                        </dl>
+                    </div>
+                 　
+                   
+   <div class="remenTAG">
+                        <dl>
+                            <dt>热门TAG</dt>
+                            <dd style="line-height: 18pt;">
+                              &nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/GOOD/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="14" target="_blank">GOOD</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E5%A5%BD/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="18" target="_blank">好</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/11/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="17" target="_blank">11</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E6%8E%A8%E8%8D%90/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="12" target="_blank">推荐</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/a/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="21" target="_blank">a</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E6%94%AF%E6%8C%81/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="11" target="_blank">支持</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E4%B8%8D%E9%94%99/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="21" target="_blank">不错</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/123/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="20" target="_blank">123</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/c#/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="14" target="_blank">c#</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E5%A5%BD%E4%B9%A6/1.html" style="font-size: 14px; color: rgb(84, 85, 85);" title="45" target="_blank">好书</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/java/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="29" target="_blank">java</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/tag/1.html" style="font-size: 14px; color: rgb(84, 85, 85);" title="48" target="_blank">tag</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/%E8%BF%98%E6%98%AF%E5%BE%88%E4%B8%8D%E9%94%99%E7%9A%84%E4%B8%80%E6%9C%AC%E4%B9%A6%E5%95%8A%EF%BC%8C%E6%9C%89%E6%97%B6%E9%97%B4%E4%B8%80%E5%AE%9A%E8%A6%81%E4%BB%94%E7%BB%86%E7%9A%84%E7%9C%8B%E7%9C%8B%E5%8F%AF%E4%BB%A5%E5%AD%A6%E5%88%B0%E4%B8%8D%E5%B0%91%E4%B8%9C%E8%A5%BF%E5%95%8A%EF%BC%81/1.html" style="font-size: 13px; color: rgb(84, 85, 85);" title="20" target="_blank">还是很不错的一本书啊，有时间一定要仔细的看看可以学到不少东西啊！</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://club.book.csdn.net/tag/1/1.html" style="font-size: 15px; color: rgb(99, 153, 176);" title="61" target="_blank">1</a>
+                            </dd>
+                        </dl>
+                    </div>  
+                    
+                    
+<script type="text/javascript">  
+    function Du_GC(type)
+    {  
+  
+      var request_url="/UserServer/GetDataServer.aspx";       // 请求url
+       var request_pars = "type="+type //请求参数
+       var my  =   new  Ajax.Request(
+       request_url, 
+        {
+       method: 'get',
+       parameters: request_pars,
+       onComplete: Du_done
+      } );  
+    }
+    function Du_done(originalRequest)
+   {
+      var szRes=originalRequest.responseText;
+ 
+      if(szRes=="")
+         $("txtDu").innerHTML="暂无信息";
+      else
+        $("txtDu").innerHTML=szRes;
+
+    }
+    function Du_ClearStyle()
+    {
+      
+     $("liZD").className="";
+     $("liDG").className="";
+     $("liR").className="";
+    
+      
+    }
+     function Du_ShowStr(li,type)
+    {
+    Du_ClearStyle();
+       $(li).className="current";
+       Du_GC(type);
+    }
+    </script>
+ <div class="du">
+                        <div class="tabs2">
+                            <ul>
+                                <!-- CSS Tabs -->
+                                <li class="current" id="liZD"><a href="#" onclick="Du_ShowStr('liZD','reading');return false;"><span><strong>最新在读</strong></span></a></li>
+                                <li class="" id="liDG"><a href="#" onclick="Du_ShowStr('liDG','readed');return false;"><span>最新读过</span></a></li>
+                                <li class="" id="liR"><a href="#" onclick="Du_ShowStr('liR','review');return false;"><span>周评论最多</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="duContent">
+                            <ul id="txtDu"><li><a href="http://club.book.csdn.net/book/92394.html" title="C++ Primer中文版(第4版）（一本久负盛名的C++经典教程）">C++ Primer中文版(第4版）（一本...</a></li>
+<li><a href="http://club.book.csdn.net/book/90969.html" title="代码大全（第二版）（两届Software Jolt Award震撼大奖得主！）">代码大全（第二版）（两届Softwa...</a></li>
+<li><a href="http://club.book.csdn.net/book/119984.html" title="C＃高级编程(第4版)">C＃高级编程(第4版)</a></li>
+<li><a href="http://club.book.csdn.net/book/12305.html" title="设计模式--可复用面向对象软件的基础">设计模式--可复用面向对象软件的...</a></li>
+<li><a href="http://club.book.csdn.net/book/58611.html" title="C++编程思想（第2卷）实用编程技术——计算机科学丛书">C++编程思想（第2卷）实用编程技...</a></li>
+<li><a href="http://club.book.csdn.net/book/12645.html" title="C程序设计语言（第2版·新版）">C程序设计语言（第2版·新版）</a></li>
+<li><a href="http://club.book.csdn.net/book/108132.html" title="C#入门经典（第3版）">C#入门经典（第3版）</a></li>
+<li><a href="http://club.book.csdn.net/book/110554.html" title="JavaScript 高级程序设计——图灵程序设计丛书">JavaScript 高级程序设计——图灵...</a></li>
+<li><a href="http://club.book.csdn.net/book/119976.html" title="算法导论（原书第2版）">算法导论（原书第2版）</a></li>
+<li><a href="http://club.book.csdn.net/book/6019.html" title="Java编程思想（第2版）">Java编程思想（第2版）</a></li>
+</ul>
+                        </div>
+                    </div>
+                    <script>
+                      Du_ShowStr('liZD','reading');
+                    </script>
+                    <!--<div>
+                        <a href="#">
+                            <img alt="" src="/images2/BookRank.gif"></a></div>-->
+                    <div class="zuixinshujia">
+                        <dl>
+                            <dt>最新书架</dt>
+                            <dd>
+                                <ul>
+                                     <ul> <li><a title="" href="http://club.book.csdn.net/people/mylist600.html" target="_blank"><font color="#ff0000">Web 2.0开发利器：RoR学习书架</font></a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist687.html" target="_blank"><font color="#ff0000">最新版PHP+MySQL编程开发经典书籍</font></a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist672.html" target="_blank"><font color="#ff0000">五种移动开发平台经典书架</font></a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist642.html" target="_blank"><font color="#ff0000">SQL Server 2005学习必看的几本图书</font></a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist599.html" target="_blank"><font color="#ff0000">AJAX学习必备三本书 </font></a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist511.html" target="_blank">2006年度计算机图书分类排行榜</a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist512.html" target="_blank">2006年度.NET类图书读者评选Top10 </a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist513.html" target="_blank">2006JAVA类图书读者评选Top10 </a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist519.html" target="_blank">2006年度数据库类图书读者评选Top10 </a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist514.html" target="_blank" a="">2006年度操作系统类图书读者评选Top10</a></li> <li><a title="" href="http://club.book.csdn.net/people/mylist516.html" target="_blank" a="">2006年度设计语言类图书读者评选Top10 </a></li></ul>
+                                </ul>
+                               </dd>                           
+                        </dl>
+                    </div>
+            </div>
+            </div>
+            </div>
+            </div> <!-- 页脚 -->
+        <div id="foot">
+         <img src="top%E8%A7%A3%E9%87%8A.crontab_files/readbook.htm" alt="" height="0" width="0">
+          </div>
+            <style>
+/* 页脚 */
+#CFBig {
+	width: 1000px;
+	clear: both;
+	margin: auto;
+	text-align: center;
+	font-family: Tahoma, sans-serif;
+	font-size: 12px;
+}
+#CFBig #CFContent {
+	margin: auto;
+	width: 90%;
+	text-align: center;
+}
+#CFBig #CFContent p {
+	margin: 2px;
+}
+#CFBig hr {
+	height: 1px;
+	color: #4682B4;
+}
+#CFBig #CFBiaoShi {
+	width: 40px;
+	float: right;
+}
+#CFBig a:link {
+	color: #000;
+	text-decoration: none;
+}
+#CFBig a:visited {
+	color: #000;
+	text-decoration: none;
+}
+#CFBig a:hover {
+	color: #369;
+	text-decoration: none;
+}
+#CFBig a:active {
+	color: #000;
+	text-decoration: none;
+}
+</style>
+<!-- 页脚 -->
+<div style="text-align: center;" id="foot">
+    <div id="CFBig">
+        <hr>
+        <div id="CFContent">
+            
+            <p><a href="http://www.csdn.net/help/intro.htm">网站简介</a> | <a href="http://www.csdn.net/help/ads.htm">广告服务</a> | <a href="http://www.csdn.net/help/vip.htm">VIP资费标准</a> | <a href="http://www.csdn.net/help/bankaccount.htm">银行汇款帐号</a> | <a href="http://www.csdn.net/help/sitemap.htm">网站地图</a> | <a href="http://www.csdn.net/help/help.htm">帮助</a> | <a href="http://www.csdn.net/help/contact.htm">联系方式</a> | <a href="http://job.csdn.net/Jobs/f9c75c9f2ad14404a604669b757b9ed0/viewcompany.aspx">诚聘英才</a> | <a href="http://www.csdn.net/help/english.htm">English</a> | <a href="http://www.csdn.net/help/about.htm">版权声明</a> | <a onclick="window.location.href='mai'+'lto:'+'adm'+'in@c'+'sdn.n'+'et?subject=Report To CSDN';return false" href="#">问题报告</a></p>
+            <p>北京创新乐知广告有限公司 &nbsp;&nbsp;版权所有,&nbsp;&nbsp;京 ICP 证 070598 号</p>
+            <p>世纪乐知(北京)网络技术有限公司 提供技术支持 </p>
+            <p style="">Copyright &#169; 2000-2008, CSDN.NET, All Rights Reserved</p>
+<p><a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010"><img src="top%E8%A7%A3%E9%87%8A.crontab_files/BiaoShi.gif" alt="" border="0" height="31" width="25"></a></p>
+        </div>
+        <hr>
+    </div>
+</div>
+ 
+<script language="JavaScript" type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/counter_002.js"></script><script type="text/javascript" charset="UTF-8" src="top%E8%A7%A3%E9%87%8A.crontab_files/msg.js"></script><img src="top%E8%A7%A3%E9%87%8A.crontab_files/visitlog.htm" alt="" border="0" height="1" width="1"><iframe id="myframe" name="myframe" border="0" src="top%E8%A7%A3%E9%87%8A.crontab_files/dd333.htm" scrolling="no" frameborder="no" height="0" width="0"></iframe> 
+<script type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="top%E8%A7%A3%E9%87%8A.crontab_files/msg.js"></script>
+<script type="text/javascript" src="top%E8%A7%A3%E9%87%8A.crontab_files/webad.js"></script>
+<!-- /页脚 -->
+
+            <script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=115 border=0 width=0 height=0>");</script><img src="top%E8%A7%A3%E9%87%8A.crontab_files/pv.xml" border="0" height="0" width="0">
+            
+     <link type="text/css" rel="stylesheet" href="top%E8%A7%A3%E9%87%8A.crontab_files/message2.css"><div id="_popup_msg_container" style="display: block;"><!--2009-11-04-->
+
+<div style="display: block; height: 240px;" wistate="max" id="im_popupWindow_miniMsg" class="im_popupWindow">
+	<h6 class="wi_draggable"><a href="http://www.csdn.net/" target=" _blank" style="color: rgb(0, 0, 0); display: block; text-align: left; width: 200px; font-size: 12px; font-family: '微软雅黑','宋体',Arial;">近期热点文章推荐</a>           
+	<a onclick="_message_tips_pop('down');return false;" href="#"><img alt="close" class="founctionpic3" src="top%E8%A7%A3%E9%87%8A.crontab_files/csdnim080507verpic3.gif">    </a></h6>
+    <div id="im_popupWindow_miniMsgContent" class="wi_content">
+      <div class="kuai">
+<div id="im2009">
+<style type="text/css">
+<!--
+	
+	#im2009 { position:relative; width:280px; height:215px; background-color:#F1F3FF; overflow:hidden;}
+	.titlel { width:278px; height:20px; background-color:#0791DA; color:#ffffff; font-size:13px; font-weight:bold; text-align:center; overflow:hidden; line-height:20px}
+	#im2009 H2{ color: #FFFFFF; font-weight: bold; font-size:14px; }
+	#im2009 UL{ width:90%; height:160px; float:left; margin-left:2; padding:1px 10px; overflow:hidden;}
+	#im2009 UL LI{ list-style:none; font-size:12px; overflow:hidden; width:260px; white-space:nowrap; padding-bottom:0; }
+	.blue A:link { color:#0000EF; text-decoration:none;}
+	.blue A:hover { color:#0000EF; text-decoration:none;}
+	.blue A:active { color:#0000EF; text-decoration:none;}
+	.blue A:visited { color:#0000EF; text-decoration:none;}
+	
+	.bottom { margin-bottom:0; height:50px; padding:5px}
+	.bottom A:link { color:#FF9900; text-decoration:none; font-size:12px;}
+	.bottom A:hover { color:#FF9900; text-decoration:none; font-size:12px;}
+	.bottom A:active { color:#FF9900; text-decoration:none; font-size:12px;}
+	.bottom A:visited { color:#FF9900; text-decoration:none; font-size:12px;}
+-->
+</style>
+	<div class="titlel">近期热点文章推荐</div>
+    <ul>
+        <li class="blue"><a href="http://g.csdn.net/5145547" target="_blank">1、 【正式版】Flash Builder 4</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145676" target="_blank">2、 微软体感游戏控制器项目更名为Kinect</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145675" target="_blank">3、 华为巨轮转入稳健航道：增速放慢利润提高</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145674" target="_blank">4、 苹果CEO乔布斯：全球最佳营销王</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145673" target="_blank">5、 Yelp联合创始人兼CTO离职</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145649" target="_blank">6、 传IBM将收购数据存储软件公司Storw</a></li>
+        <li class="blue"><a href="http://g.csdn.net/5145648" target="_blank">7、 Linux基金会：微软在智能手机市场已败</a></li>
+		<li class="blue"><a href="http://g.csdn.net/5133861" target="_blank">8、 Java多线程编程要点</a></li>
+    </ul>
+    
+    <div class="bottom"><a href="http://news.csdn.net/" target="_blank">更多新闻、精彩评论敬请关注CSDN新闻频道</a>
+</div></div></div></div></div></div><img style="display: none;" src="top%E8%A7%A3%E9%87%8A.crontab_files/count_new.htm"></body></html>

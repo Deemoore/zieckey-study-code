@@ -1,0 +1,48 @@
+
+
+我们在嵌入式开发过程中，要进行交叉编译，那么就建立两套开发环境，
+一套用于客户端目标板（如arm开发板）的环境，另一套用于本地计算机的模拟开发环境。
+为了将这两套环境统一于一个开发文件夹共用源代码，
+我们可以通过对项目文件进行一个小的修改即可达到目的。
+
+我们以下面的例子来说明。
+这里假设你有一个小的qt程序，这个程序可以在 qt 的 examples下面的 hello 程序， 
+他由一个C++ header  hello.h和两个source file  main.cpp、hello.cpp组成。 
+
+首先，要创建一个工程文件，如：hello_zieckey.pro 
+内容如下:
+
+TEMPLATE = app
+INCLUDEPATH += .
+
+CONFIG  += qt zieckey
+#CONFIG  += qt apple
+
+# Input
+HEADERS += hello.h
+SOURCES += main.cpp hello.cpp
+#Output
+zieckey:TARGET = ./zieckey/out_zieckey		
+apple:TARGET = ./apple/out_apple
+
+我们用./zieckey/out_zieckey  和  ./apple/out_apple两种输出文件代替两种开发环境,
+以起到引导作用。
+
+CONFIG  += qt zieckey
+#CONFIG  += qt apple
+这两行是告诉编译器用的是 qt库 并且设置了两个变量 zieckey apple
+在后面 #Output 这里将起作用，如果apple这个变量被注销不起作用，
+那么只有zieckey这一行起作用，此时编译生成./zieckey/out_zieckey文件。
+相反如果是apple起作用，那么编译生成./apple/out_apple文件。
+
+这就好比两个环境，用的是同一源码，生成不同的可执行文件。
+
+到这里你应该可以明白了，怎么在pro项目文件中，定义变量，以产生不同的编译结果。
+
+
+
+
+
+
+
+

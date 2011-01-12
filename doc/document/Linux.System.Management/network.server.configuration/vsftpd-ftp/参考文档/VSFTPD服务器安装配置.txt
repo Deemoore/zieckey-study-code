@@ -1,0 +1,364 @@
+2. FTP 原理
+
+FTP Transfer Protocol 件传输协议的缩写,在RFC 959中具体说明。
+
+FTP会话时包含了两个通道，一个叫控制通道，一个叫数据通道。
+
+控制通道：控制通道是和FTP服务器进行沟通的通道，连接FTP，发送FTP指令都是通过控制通道来完成的。
+
+数据通道：数据通道是和FTP服务器进行文件传输或者列表的通道。
+
+FTP协议中，控制连接均有客户端发起，而数据连接有两种工作方式：PORT方式和PASV方式
+
+PORT模式(主动方式)
+
+    FTP 客户端首先和FTP Server的TCP 21端口建立连接，通过这个通道发送命令，客户端需要接收数据的时候在这个通道上发送PORT命令。 PORT命令包含了客户端用什么端口(一个大于1024的端口)接收数据。在传送数据的时候，服务器端通过自己的TCP 20端口发送数据。 FTP server必须和客户端建立一个新的连接用来传送数据。
+PASV模式(被动方式)
+
+    在建立控制通道的时候和PORT模式类似，当客户端通过这个通道发送 PASV 命令的时候，FTP server打开一个位于1024和5000之间的随机端口并且通知客户端在这个端口上传送数据的请求，然后FTP server 将通过这个端口进行数据的传送，这个时候FTP server不再需要建立一个新的和客户端之间的连接传送数据。
+
+如果从C/S模型这个角度来说，PORT对于服务器来说是OUTBOUND，而PASV模式对于服务器是INBOUND，这一点请特别注意，尤其是在使用防火墙的企业里，这一点非常关键，如果设置错了，那么客户将无法连接。
+
+3. VSFTPD
+vsftpd 是一个 UNIX 类操作系统上运行的服务器的名字，它可以运行在诸如 Linux, BSD, Solaris, HP-UX 以及 IRIX 上面。它支持很多其他的 FTP 服务器不支持的特征。比如： 
+
+非常高的安全性需求 
+带宽限制 
+良好的可伸缩性 
+创建虚拟用户的可能性 
+IPv6支持 
+中等偏上的性能 
+分配虚拟 IP 的可能性 
+高速 
+vsftpd 的名字代表"very secure FTP daemon", 安全是它的开发者 Chris Evans 考虑的首要问题之一。在这个 FTP 服务器设计开发的最开始的时候，高安全性就是一个目标。
+
+一个例子就是 vsftpd 是在 chroot 模式下工作的，chroot 模式就是为程序（这里就是 vsftpd 了）单独指定一个新的目录，它也就不能访问那个目录之外的程序和文件了 --- 所以这也称为“被锁上的”。一个可能被潜在的攻击者破坏的 FTP 服务器将被从系统的其他部分独立开来，从而避免了更大的损失。
+
+由于有了如此多的特性，其中 FTP 服务的安全性应该是最重要的，vsftpd 比其他 FTP 服务器更加优越。WU-FTPD http://www.wu-ftpd.org/ 在这里可以被视作一个反面的例子，因为它在过去的几年中出现了太多的安全缺陷。
+
+4. VSFTPD的基本配置
+4.1 安装
+
+源代码安装
+
+    详细参阅：http://www.vsftpdrocks.org/source/
+下载源代码
+
+        wget ftp://vsftpd.beasts.org/users/cevans/vsftpd-1.2.1.tar.gz
+
+解压
+
+        tar zxvf vsftpd-1.2.1.tar.gz
+
+进入源代码目录
+
+        cd vsftpd-1.2.1
+
+编译
+
+        make
+
+创建用户
+
+    如果不存在 nobody用户，请创建
+
+        useradd nobody
+
+创建目录
+
+    vsftpd 需要 /usr/share/empty 目录，如果不存在，请创建：
+
+        mkdir /usr/share/empty
+
+安装
+
+        make install
+
+复制配置文件到/etc目录
+
+        cp vsftpd.conf /etc
+
+以独立方式启动vsftpd服务
+
+        /usr/local/sbin/vsftpd &
+
+
+
+
+
+5. 配置文件说明
+
+/etc/vsftpd.conf
+
+    vsftpd的主配置文件 /etc/ftpusers 记录不允许访问FTP服务器的用户名单管理员可以把一些对系统安全有威胁的敏感账户记录在这个文件中，以免对系统造成威胁
+
+                # /etc/ftpusers: list of users disallowed FTP access. See ftpusers(5).
+
+                root
+                daemon
+                bin
+                sys
+                sync
+                games
+                man
+                lp
+                mail
+                news
+                uucp
+                nobody
+
+/etc/vsftpd.user_list
+
+    此文件与userlist_file 选项有关， 也可通过userlist_file选项指定其他文件，默认为/etc/vsftpd.user_list，设置userlist_enable＝YES时方可生效，默认（userlist_deny=YES）指定不能访问服务器的用户列表，如设定userlist_deny=NO，则FTP服务器仅允许此列表中的用户访问。
+/etc/init.d/vsftpd
+
+    vsftpd的启动脚本
+/var/log/vsftpd.log
+
+    vsftpd的日志文件
+
+5.1 配置相关内容参阅：
+
+            man vsftpd.conf
+
+或参阅：我翻译的VSFTPD.CONF联机手册 http://etony.9966.org/doc/other/vsftpd-man-zh.html
+
+5.2 系统的启动与停止
+
+启动服务
+
+                /etc/init.d/vsftpd start
+
+重启服务
+
+                /etc/init.d/vsftpd restart
+
+停止服务
+
+                /etc/init.d/vsftpd stop
+
+    也可以使用 rcconf 工具设置vsftpd 服务是否在系统引导时启动
+
+
+
+6. 配置示例
+
+一个示例文件
+
+            # 以独立模式启动
+            listen=YES
+
+
+            #同时允许200客户端连入，每个IP最多允许4个进程
+            max_clients=200
+            max_per_ip=4
+
+            允许匿名访问，只有下载权限。 禁止本地（系统）用户登录
+            # Access rights
+            anonymous_enable=YES
+            local_enable=NO
+            write_enable=NO
+            anon_upload_enable=NO
+            anon_mkdir_write_enable=NO
+            anon_other_write_enable=NO
+
+
+            # 禁止匿名用户下载具有全局读取权限的文件，目录中的用户和组信息列取时都显示为 "ftp".
+            #被动模式下，服务器端口范围限制在50000~60000
+
+            anon_world_readable_only=YES
+            connect_from_port_20=YES
+            hide_ids=YES
+            pasv_min_port=50000
+            pasv_max_port=60000
+
+            # 生成详细的上载和下载日志，禁止使用"ls -R"命令,
+
+            xferlog_enable=YES
+            ls_recurse_enable=NO
+            ascii_download_enable=NO
+            async_abor_enable=YES
+
+
+            # 以节省资源模式运行（针对 Linux 2.4 内核），
+            #远程客户端最大 FTP 命令间隔超过120秒，或空闲的数据连接超过300秒，都将被断开
+            #匿名客户端允许的最大数据传输速率50000b/s
+            one_process_model=YES
+            idle_session_timeout=120
+            data_connection_timeout=300
+            anon_max_rate=50000
+
+7. 为VSFTPD配置虚拟用户（文本方式）
+7.1 创建虚拟与用户数据库
+
+1. 创建loguser.txt，格式如下：
+
+                    userid
+                    pass
+            
+
+比如我创建两个用户：tony 密码为tonypass，etony密码为etonypass 则loguser.txt的内容如下：
+
+                    tony
+                    tonypass
+                    etony
+                    etonypass
+            
+
+2. 安装数据库生成工具：
+
+                    # aptitude install  libdb3-util
+            
+
+3. 生成数据库：
+
+                    # db_load -T -t hash -f loguser.txt /etc/vsftpd_login.db
+            
+
+4. 设置数据库文件的访问权限：
+
+                    # chmod 600 /etc/vsftpd_login.db
+            
+
+7.2 配置PAM文件
+
+修改/etc/pam.d/vsftpd 内容如下：
+
+            auth required /lib/security/pam_userdb.so db=/etc/vsftpd_login
+            account required /lib/security/pam_userdb.so db=/etc/vsftpd_login
+
+7.3 为虚拟用户创建本地系统用户
+
+            useradd -d /home/ftpsite virtual
+            mkdir /home/ftpsite
+            chown virtual.virtual /home/ftpsite
+            ls -ld /home/ftpsite
+            drwxr-sr-x 2 virtual virtual 48 2006-08-18 05:48 /home/ftpsite
+
+在目录下创建一些内容
+
+            echo "etony's vsftpd server" > /home/ftpsite/msg
+
+            chown virtual.virtual /home/ftpsite/msg
+
+7.4 创建/etc/vsftpd.conf
+
+根据需要创建/etc/vsftpd.conf，但要确保含有一下设置：
+
+            anonymous_enable=NO
+            local_enable=YES
+            write_enable=NO
+            anon_upload_enable=NO
+            anon_mkdir_write_enable=NO
+            anon_other_write_enable=NO
+            chroot_local_user=YES
+            guest_enable=YES
+            guest_username=virtual
+            listen=YES
+            listen_port=21
+            pasv_min_port=30000
+            pasv_max_port=30999
+
+
+7.5 启动vsftpd
+
+            /etc/init.d/vsftpd start|restart
+
+7.6 测试
+
+            $ lftp localhost -u tony,tonypass
+            lftp tony@localhost:~> ls
+            -rw-r--r--    1 1001     1001           22 Aug 17 21:49 msg
+            lftp tony@localhost:/> exit
+            $ lftp localhost -u tony,tonyp
+            lftp tony@localhost:~> ls
+            ls: Login failed: 530 Login incorrect.
+
+8. 为VSFTPD配置虚拟用户(数据库方式）
+8.1 安装MySQL数据库
+
+            # aptitude install  mysql-server  libpam-mysql
+
+当前MySQL数据库版本为5.0.24-1 libpam-mysql 0.6.2-1
+
+            tonybox:/var/log# mysql -u root
+            Welcome to the MySQL monitor.  Commands end with ; or \g.
+            Your MySQL connection id is 7 to server version: 5.0.22-Debian_4-log
+
+            Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+            mysql>
+            mysql>
+            mysql> create database vsftpd;
+            Query OK, 1 row affected (0.04 sec)
+
+            mysql> use vsftpd
+            Database changed
+            mysql> create table users(name char(20), passwd char(20));
+            Query OK, 0 rows affected (0.02 sec)
+
+            mysql> insert into users values('tony',password('passtony'));
+            Query OK, 1 row affected (0.02 sec)
+
+            mysql> insert into users values('etony',password('passetony'));
+            Query OK, 1 row affected (0.01 sec)
+
+            mysql> grant select, insert on vsftpd.users to vsftpduser@localhost identified by 'vsftpdpass';
+            Query OK, 0 rows affected (0.02 sec)
+
+8.2 创建用户
+
+            tonybox:/var/log# mysql -u vsftpduser -p
+            Enter password:
+            Welcome to the MySQL monitor.  Commands end with ; or \g.
+            Your MySQL connection id is 10 to server version: 5.0.22-Debian_4-log
+
+            Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+            mysql> use vsftpd
+            Reading table information for completion of table and column names
+            You can turn off this feature to get a quicker startup with -A
+
+            Database changed
+
+            mysql> select * from users;
+            +----+-------+------------------+
+            | id | name  | passwd           |
+            +----+-------+------------------+
+            |  1 | tony  | 2351315b1bd1bd58           |
+            |  2 | etony | 59c0cde4781fb0be |
+            +----+-------+------------------+
+            2 rows in set (0.00 sec)
+
+
+            mysql>
+
+8.3 配置PAM文件
+
+修改/etc/pam.d/vsftpd 内容如下：
+
+            auth required /lib/security/pam_mysql.so user=vsftpduser passwd=vsftpdpass host=localhost db=vsftpd table=users usercolumn=name passwdcolumn=passwd crypt=2
+
+            account required /lib/security/pam_mysql.so user=vsftpduser passwd=vsftpdpass host=localhost db=vsftpd
+            
+            table=users usercolumn=name passwdcolumn=passwd crypt=2
+
+crypt 的值
+
+            0: 在数据库中明文存储
+            1: 使用crypt()函数加密存储
+            2: 使用MySQL PASSWORD()函数加密存储
+
+8.4 其他配置
+
+同 为VSFTPD配置虚拟用户（文本方式）
+8.5 测试
+
+            tonybox:~# lftp localhost -u etony,passetony
+            lftp etony@localhost:~> ls
+            -rw-r--r--    1 1001     1001           22 Aug 17 21:49 msg
+            lftp etony@localhost:/>
+
+注：
+
+与mysql-server-5.0对应的libpam-mysql由于使用的PASSWORD（）函数与服务器端使用的PASSWORD()不匹配， 故无法实现密码加密，仅可实现在数据库中明文存储ftp用户密码。 mysql-server-4.1 与 libpam-mysql( 0.5.0-6)可以实现在数据库中使用加密存储ftp用户密码

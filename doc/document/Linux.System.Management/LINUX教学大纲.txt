@@ -1,0 +1,124 @@
+RED HAT LINUX教学大纲
+
+教学目的：通过本课程的学习，全面系统地了解的linux应用：主要包括linux简介、安装与设定 、基本操作、实用软件、系统管理、架设服务器、内核升级七大部分。掌握linux系统的安装，网络连接的设定，实用软件的使用，文件系统及磁盘阵列的建立，服务器的架设，系统的升级。
+工具资料：机械工业出版社或清华大学出版社：red hat linux9.0实务应用；red hat linux9.0架站实务；red hat linux9.0系统管理
+内容及课时安排：
+内 容 课 时
+一、linux综述 2
+&Oslash; Linux的起源
+&Oslash; Linux的各种版本：
+&Oslash; Linux的中文版本
+&Oslash; 软硬件需求
+■ 硬件需求
+■ 如何获取Linux
+
+二、Linux的安装与设定 4
+
+&Oslash; 安装Linux
+■ Linux的硬盘分区
+■ 选择启动方式
+■ 设置显卡
+■ 创建启动盘，设置X WINDOW 及启动Linux
+&Oslash; 安装问题
+■ 设置GRUB启动管理程序
+■ 设置LILO启动管理程序
+■ 如何删除Linux
+■ 更改X WINDOW的设置
+■ 安装声卡
+■ 安装打印机
+三、基本操作 6
+&Oslash; 图形操作环境
+■ 窗口环境简介
+■ sawfish和GNOME的基本操作与设置
+■ 完美的KDE桌面环境
+&Oslash; 文字操作环境
+■ 如何进入文字模式
+■ 登录，退出，关机，远程登录
+■ 文件与目录的操作
+■ 使用光盘,软盘和U盘
+■ 软件包管理命令
+■ 打包文件
+■ 压缩与解压缩
+■ 任务调度命令
+■ 其它命令
+四、实用软件………………………………………………………………………6
+&Oslash; 攵本编辑器
+&Oslash; 网络工具软件
+■ 用调制解调器上网
+■ ADSL上网
+■ 网卡上网
+■ telenet,ftp,ping和xhost
+■ 收发电子邮件
+■ 远程控制
+&Oslash; 应用工具软件
+&Oslash; 视听娱乐软件
+五、系统管理 20
+&Oslash; 账号与磁盘空间管理
+■ 管理员账号
+■ 用户账号
+■ 增加大量用户
+■ 停用与删除用户账号
+■ 自定义组
+■ 用户磁盘空间
+&Oslash; 系统查看
+■ 查看登录用户
+■ 管理运行的进程
+■ 网络状况
+■ 查看工具
+&Oslash; 基本网络配置
+n 基本网络配置的内容
+n 网络配置相关文件
+n 网络相关命令
+n 程序配置网络
+n netconfig网络测试的一般方法
+&Oslash; 图形界面管理工具
+n 图形化软件包管理软件——gnorpm
+n 图形化界面管理软件------webmin
+&Oslash; 文件系统与权限设置
+n 系统的目录
+n 文件系统的结构
+n 目录与文件的使用权限
+n 用户与组的关系
+n 链接与符号连结
+&Oslash; 创建磁盘阵列
+n 创建linear磁盘阵列
+n 创建RAID-0磁盘阵列
+n 创建RAID-1磁盘阵列
+n 创建RAID-5磁盘阵列
+&Oslash; 用户环境
+n shell简介
+n shell的各种功能
+n shell的特殊字符
+n shell的环境变量与设置
+&Oslash; shell脚本介绍
+n 创建及执行shell脚本
+n 变量的设置及取用
+n 创建shell脚本
+六、架设服务器 12
+&Oslash; NFS服务器—— linux上的网络磁盘机
+n NFS的功用
+n 安装和启动NFS服务器
+n 设置NFS服务器
+n 由客户端挂载NFS目录
+&Oslash; 架设samba服务器
+n samba服务器简介
+n 调整samba服务器配置文件
+n 使用samba服务器
+n samba服务器的相关程序
+&Oslash; 架设www服务器
+n 安装www服务器
+n 设置www服务器
+n 启动与管理网站
+&Oslash; 架设mail服务器
+n 关于e-mail系统
+n 设置mail服务器
+n 查看邮件结构与邮件的发送情况
+n 安装读邮件的pop/imap服务器
+&Oslash; 架设ftp服务器
+n 安装ftp服务器
+n 设置ftp服务器
+n 相关的ftp命令
+七、系统内核的升级 2
+&Oslash; 内核升级的准备
+&Oslash; 设置内核
+&Oslash; 编译内核

@@ -1,0 +1,122 @@
+Qt教程一 —— 第四章：使用窗口部件
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+这个例子显示了如何创建一个我们自己的窗口部件，描述如何控制一个窗口部件的最小大小和最大大小，并且介绍了窗口部件的名称。
+我们将会保持这个程序的简单性，并且也是只使用一个单一的父窗口部件和一个独立的子窗口部件。
+
+/****************************************************************
+**
+** Qt教程一 - 4
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qfont.h>
+
+
+class MyWidget : public QWidget
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QWidget( parent, name )
+{
+    setMinimumSize( 200, 120 );
+    setMaximumSize( 200, 120 );
+
+    QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+    quit->setGeometry( 62, 40, 75, 30 );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+}
+
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    w.setGeometry( 100, 100, 200, 120 );
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+
+一行一行地解说
+
+    class MyWidget : public QWidget
+    {
+    public:
+        MyWidget( QWidget *parent=0, const char *name=0 );
+    };
+
+这里我们创建了一个新类。因为这个类继承了QWidget，所以新类也是一个窗口部件，并且可以成为一个顶层窗口或者子窗口部件（像第三章里面的按钮）。
+
+这个类只有一个成员函数--构造函数（当然另外还要加上从QWidget继承来的成员函数）。这个构造函数是一个标准的Qt窗口部件构造函数，当我们创建窗口部件时，我们应该总是包含一个这个类似的构造函数。
+
+第一个参数是指向它的父窗口部件的指针。为了生成一个顶层窗口，我们指定一个空指针作为父窗口部件。就像我们看到的那样，这个窗口部件默认地被认做是一个顶层窗口，因为他带有一个缺损的参数：QWidget *parent=0
+
+第二个参数是这个窗口部件的名称。这个不是显示在窗口标题栏或者按钮上的文本。这只是分配给窗口部件的一个名称，以后可以用来查找这个窗口部件。
+
+    MyWidget::MyWidget( QWidget *parent, const char *name )
+            : QWidget( parent, name )
+
+构造函数的实现从这里开始。像大多数窗口部件一样，它把parent和name传递给了QWidget的构造函数。
+
+    {
+        setMinimumSize( 200, 120 );
+        setMaximumSize( 200, 120 );
+
+因为这个窗口部件不知道如何处理重新定义大小，我们把它的最小大小和最大大小设置为相等的值，这样我们就确定了它的大小。在下一章，我们将演示窗口部件如何响应用户的重新定义大小事件。
+
+        QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+        quit->setGeometry( 62, 40, 75, 30 );
+        quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+这里我们创建并设置了这个窗口部件的一个名称为“quit”的子窗口部件（新窗口部件的父窗口部件是this）。这个窗口部件名称和按钮文本没有关系，只是在这一情况下碰巧相似。
+
+注意quit是这个构造函数中的局部变量。MyWidget不能跟踪它，但Qt可以，当MyWidget被删除的时候，默认地它也会被删除。这就是为什么MyWidget不需要一个析构函数的原因。（另外一方面，如果我们选择删除一个子窗口部件，也没什么坏处，这个子窗口部件会自动告诉Qt它即将死亡。）
+
+setGeometry()调用和上一章的move()和resize()是一样的。
+
+        connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+    }
+
+因为MyWidget类不知道这个应用程序对象，它不得不连接到Qt的指针，qApp。
+
+一个窗口部件就是一个软件组件并且它应该尽量少地知道关于它的环境，因为它应该尽可能的通用和可重用。
+
+知道了应用程序的名称将会打破上述原则，所以在一个组件，比如MyWidget，需要和应用程序对象对话的这种情况下，Qt提供了一个别名，qApp。
+
+    int main( int argc, char **argv )
+    {
+        QApplication a( argc, argv );
+
+        MyWidget w;
+        w.setGeometry( 100, 100, 200, 120 );
+        a.setMainWidget( &w );
+        w.show();
+        return a.exec();
+    }
+
+这里我们举例说明了我们的新子窗口部件，把它设置为主窗口部件，并且执行这个应用程序。
+
+行为
+
+这个程序和上一章的在行为上非常相似。不同点是我们实现的方式。无论如何它的行为还是有一些小差别。试试改变它的大小，我们会看到什么？
+
+（请看第一章来学习如何创建一个makefile文件和连编应用程序。）
+
+练习
+
+试着在main()中创建另一个MyWidget对象。发生了什么？
+
+试着添加更多的按钮或者把除了QPushButton之外的东西放到窗口部件中。 

@@ -1,0 +1,69 @@
+为了打开文件 temp/txt ,需要对当前工作目录 .、temp/目录具有执行权限。然后对该文件temp/txt还要有想应权限，
+这取决于你以何种模式打开它（只读、读写等）。
+
+但是这个对于root用户来说，似乎不起作用。可以看下面的实验
+
+[zieckey@localhost ~]$ mkdir temp
+[zieckey@localhost ~]$ ls
+temp
+[zieckey@localhost ~]$ echo aaaaa > temp/txt
+[zieckey@localhost ~]$ ls temp/
+txt
+[zieckey@localhost ~]$ cat temp/txt 
+aaaaa
+[zieckey@localhost ~]$ ll temp/
+总计 8
+-rw-rw-r-- 1 zieckey zieckey 6 10-05 15:10 txt
+[zieckey@localhost ~]$ chmod a-r temp/txt 
+[zieckey@localhost ~]$ cat temp/txt 
+cat: temp/txt: 权限不够
+[zieckey@localhost ~]$ echo BBBB >> temp/txt
+[zieckey@localhost ~]$ cat temp/txt 
+cat: temp/txt: 权限不够
+[zieckey@localhost ~]$ chmod a+r temp/txt 
+[zieckey@localhost ~]$ cat temp/txt 
+aaaaa
+BBBB
+[zieckey@localhost ~]$ echo ccccc >> temp/txt
+[zieckey@localhost ~]$ cat temp/txt 
+aaaaa
+BBBB
+ccccc
+[zieckey@localhost ~]$ chmod a-w temp/txt 
+[zieckey@localhost ~]$ echo ddddddd >> temp/txt
+bash: temp/txt: 权限不够
+[zieckey@localhost ~]$ ll
+总计 8
+drwxrwxr-x 2 zieckey zieckey 4096 10-05 15:10 temp
+[zieckey@localhost ~]$ chmod a-x temp/
+[zieckey@localhost ~]$ cd temp/
+bash: cd: temp/: 权限不够
+[zieckey@localhost ~]$ cat temp/txt 
+cat: temp/txt: 权限不够
+[zieckey@localhost ~]$ ll
+总计 8
+drw-rw-r-- 2 zieckey zieckey 4096 10-05 15:10 temp
+[zieckey@localhost ~]$ 
+[zieckey@localhost ~]$ su root
+口令：
+[root@localhost zieckey]# ll temp/txt 
+-r--r--r-- 1 zieckey zieckey 17 10-05 15:12 temp/txt
+[root@localhost zieckey]# cat temp/txt 
+aaaaa
+BBBB
+ccccc
+[root@localhost zieckey]# ll temp
+总计 8
+-r--r--r-- 1 zieckey zieckey 17 10-05 15:12 txt
+[root@localhost zieckey]# ll 
+总计 8
+drw-rw-r-- 2 zieckey zieckey 4096 10-05 15:10 temp
+[root@localhost zieckey]# chmod a-rwx temp/
+[root@localhost zieckey]# cat temp/txt 
+aaaaa
+BBBB
+ccccc
+[root@localhost zieckey]# 
+
+对于root用户，即使所有的权限都没有了‘chmod a-rwx temp/’ 也能对该temp/目录进行任何操作。这难道就是root用户的超级权限吗？
+

@@ -1,0 +1,48 @@
+int   select(  
+			 int   nfds,                                                        
+			 fd_set   FAR   *readfds,                                
+			 fd_set   FAR   *writefds,                              
+			 fd_set   FAR   *exceptfds,                            
+			 const   struct   timeval   FAR   *timeout      
+			 );  
+如上述，select中需要几个fd_set结构的参数，用来指定你所关心的socket。  
+下面四个宏被定义用来使操作fd_set结构更简单：  
+FD_CLR(s,   *set)    
+从fd_set结构：set中删掉s指明的套接字    
+FD_ISSET(s,   *set)    
+判断套接字s是否在set中，返回非0则证明s在set中。反之不在。  
+FD_SET(s,   *set)    
+把套接字s加入到set中  
+FD_ZERO(*set)    
+初始化set,全置0     
+
+这是判断socket是否有数据可读/可写用的。  
+
+FD_ZERO(&fdRead)   ;   //   清空读  
+FD_SET((unsigned   int)YourSocketId,&fdRead);  
+int ret   =   select(0,&fdRead,NULL,NULL,&tmvTimeout);  
+if   (ret   ==   SOCKET_ERROR)  
+{   //   select   函数出错  
+	printf("Select()   Socket   error:   %		d..\n",GetLastError   ());  
+		continue;  
+}  
+else   if   (ret   >   0)  
+{//   有数据可读，数据处理  
+}    
+else   if   (ret==0)  
+{//   没有数据可读  
+}            
+
+
+
+
+
+四个宏的定义如下:  
+
+#define   FD_CLR(fd,   set)   do   {           u_int   __i;           for   (__i   =   0;   __i   <   ((fd_set   FAR   *)(set))->fd_count   ;   __i++)   {                   if   (((fd_set 																					   FAR   *)(set))->fd_array[__i]   ==   fd)   {                           while   (__i   <   																					   ((fd_set   FAR   *)(set))->fd_count-1)   {                                   ((fd_set   FAR   																					   *)(set))->fd_array[__i]   =                                           ((fd_set   FAR   *)																					   (set))->fd_array[__i+1];                                   __i++;                           }   ((fd_set   FAR   *)(set))->fd_count--;                           break; }           }   }   while(0)  
+
+#define   FD_SET(fd,   set)   do   {           u_int   __i;           for   (__i   =   0;   __i   <   ((fd_set   FAR   *)(set))->fd_count;   __i++)   {                   if   (((fd_set   																					FAR   *)(set))->fd_array[__i]   ==   (fd))   {                           break;                 }           }           if   (__i   ==   ((fd_set   FAR   *)(set))->fd_count)   {             	if   (((fd_set   FAR   *)(set))->fd_count   <   FD_SETSIZE)   {                           		((fd_set   FAR   *)(set))->fd_array[__i]   =   (fd);                           ((fd_set   FAR   			*)(set))->fd_count++;                   }           }   }   while(0)  
+
+#define   FD_ZERO(set)   (((fd_set   FAR   *)(set))->fd_count=0)  
+
+#define   FD_ISSET(fd,   set)   __WSAFDIsSet((SOCKET)(fd),   (fd_set   FAR   *)(set))  

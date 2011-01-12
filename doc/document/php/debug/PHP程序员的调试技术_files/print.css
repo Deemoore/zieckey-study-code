@@ -1,0 +1,16 @@
+.print {
+	border: 1px solid #BCBCBC;
+	padding:5px;
+	background-color: #FFF;
+	width: 778px;
+	margin: 0px auto;
+	text-align:left;
+}
+.print .head{
+	font-weight:bold;
+	font-size:20px;
+}
+.print h5{font-size:13px;}
+
+.print .subhead{color:#FF8000;font-weight:bold;padding-top:10px;}
+.print .editor{text-align:right;}

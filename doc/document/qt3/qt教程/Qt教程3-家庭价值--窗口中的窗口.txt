@@ -1,0 +1,77 @@
+Qt教程一 —— 第三章：家庭价值
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+这个例子演示了如何创建一个父窗口部件，然后在这个父窗口部件上再创建一个子窗口部件。
+
+我们将会保持这个程序的简单性，并且只使用一个单一的父窗口部件和一个独立的子窗口部件。
+
+
+/****************************************************************
+**
+** Qt教程一 - 3
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qfont.h>
+#include <qvbox.h>
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    QVBox box;
+    box.resize( 200, 120 );
+
+    QPushButton quit( "Quit", &box );
+    quit.setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    QObject::connect( &quit, SIGNAL(clicked()), &a, SLOT(quit()) );
+
+    a.setMainWidget( &box );
+    box.show();
+
+    return a.exec();
+}
+
+一行一行地解说
+
+    #include <qvbox.h>
+
+我们添加了一个头文件qvbox.h用来获得我们要使用的布局类。
+
+        QVBox box;
+
+这里我们简单地创建了一个垂直的盒子容器。QVBox把它的子窗口部件排成一个垂直的行，一个在其它的上面，根据每一个子窗口部件的QWidget::sizePolicy()来安排空间。
+
+        box.resize( 200, 120 );
+
+我们它的高设置为120像素，宽为200像素。
+
+        QPushButton quit( "Quit", &box );
+
+子窗口部件产生了。这里看看第二个参数" &box "，意思就是" QPushButton quit "这个小窗口(按钮)的父窗口是" box "。
+
+QPushButton通过一个文本（“Quit”）和一个父窗口部件（box）生成的。子窗口部件总是放在它的父窗口部件的最顶端。当它被显示的时候，它被父窗口部件的边界挡住了一部分。
+
+父窗口部件，QVBox，自动地把这个子窗口部件添加到它的盒子中央。因为没有其它的东西被添加了，这个按钮就获得了父窗口部件的所有空间。
+
+        box.show();
+
+当父窗口部件被显示的时候，它会调用所有子窗口部件的显示函数（除非在这些子窗口部件中我们已经明确地使用QWidget::hide()）。
+
+行为
+
+这个按钮不再充满整个窗口部件。相反，它获得了一个相当“自然的”大小。这是因为现在的这个新的顶层窗口，使用了按钮的大小提示和大小变化策略来设置这个按钮的大小和位置。（请看QWidget::sizeHint()和QWidget::setSizePolicy()来获得关于这几个函数的更详细的信息。）
+
+（请看第一章来学习如何创建一个makefile文件和连编应用程序。）
+
+练习
+
+试着改变窗口的大小。按钮是如何变化的？按钮的大小变化策略是什么？
+如果我们运行这个程序的时候使用了一个大一些的字体，按钮的高度发生了什么变化？
+如果我们试图让这个窗口真的变小，发生了什么？ 

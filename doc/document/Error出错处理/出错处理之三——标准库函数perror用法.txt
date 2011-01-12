@@ -1,0 +1,34 @@
+perror(打印出错误原因信息字符串)
+
+表头文件 
+	#include<stdio.h>
+	
+定义函数 
+	void perror(const char *s);
+	
+函数说明
+	perror ( )用 来 将 上 一 个 函 数 发 生 错 误 的 原 因 输 出 到 标 准 错误
+	(stderr) 。参数 s 所指的字符串会先打印出,后面再加上错误原因
+	字符串。此错误原因依照全局变量 errno 的值来决定要输出的字符串。
+
+范例：
+
+#include <stdio.h>
+
+int main(void)
+{
+	FILE *fp ;
+	fp = fopen( "/root/noexitfile", "r+" );
+	if ( NULL == fp )
+	{
+		perror("/root/noexitfile");
+	}
+	
+	return 0;
+}
+
+运行结果：
+[root@localhost io]# gcc perror.c 
+[root@localhost io]# ./a.out 
+/root/noexitfile: No such file or directory
+

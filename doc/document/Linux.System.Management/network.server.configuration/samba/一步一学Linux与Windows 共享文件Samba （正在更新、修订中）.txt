@@ -1,0 +1,332 @@
+1 Samba 简介
+
+Samba（SMB是其缩写） 是一个网络服务器，用于Linux和Windows共享文件之用；Samba 即可以用于Windows和Linux之间的共享文件，也一样用于Linux和Linux之间的共享文件；不过对于Linux和Linux之间共享文件有更好的网络文件系统NFS，NFS也是需要架设服务器的；
+
+大家知道在Windows 网络中的每台机器即可以是文件共享的服务器，也可以同是客户机；Samba 也一样能行，比如一台Linux的机器，如果架了Samba Server 后，它能充当共享服务器，同时也能做为客户机来访问其它网络中的Windows共享文件系统，或其它Linux的Sabmba 服务器；
+
+我们在Windows网络中，看到共享文件功能知道，我们直接就可以把共享文件夹当做本地硬盘来使用。在Linux的中，就是通过Samba的向网络中的机器提供共享文件系统，也可以把网络中其它机器的共享挂载在本地机上使用；这在一定意义上说和FTP是不一样的。
+
+Samba 用的netbios协议，如果您用Samba 不成功，
+
+Linux与Windows 、Linux 和 Linux
+
+2 Samba 功能和应用范围
+
+Samba 应该范围主要是Windows和Linux 系统共存的网络中使用；如果一个网络环境都是Linux或Unix类的系统，没有必要用Samba，应该用NFS更好一点；
+
+那Samba 能为我们提供点什么服务呢？主要是共享文件和共享打印机；
+
+3 Samba 两个服务器相关启动程序、客户端及服务器配置文件等；
+
+3.1 Samba 有两个服务器，一个是smb，另一个是nmb；
+
+smb 是Samba 的主要启动服务器，让其它机器能知道此机器共享了什么；如果不打开nmb服务器的话，只能通过IP来访问，比如在Windows的IE浏览器上打入下面的一条来访问；
+
+
+\\192.168.1.5\共享目录
+\\192.168.1.5\opt
+
+
+
+而nmb是解析用的，解析了什么呢？就是把这台Linux机器所共享的工作组及在此工作组下的netbios name解析出来；
+
+一般的情况下，在RPM包的系统，如果是用RPM包安装的Samba ，一般可以通过如下的方式来启动Samba服务器；
+
+
+[root@localhost ~]# /etc/init.d/smb start
+启动 SMB 服务： [ 确定 ]
+启动 NMB 服务： [ 确定 ]
+
+
+
+如果停止呢？就在smb后面加stop ；重启就是restart
+
+
+[root@localhost ~]# /etc/init.d/smb stop
+[root@localhost ~]# /etc/init.d/smb restart
+
+
+对于所有系统来说，通用的办法就是直接运行smb 和nmb；当然您要知道smb和nmb所在的目录才行；如果是自己编译的Samba ，您应该知道您把Samba放在哪里了；
+
+
+[root@localhost ~]# /usr/sbin/smbd
+[root@localhost ~]# /usr/sbin/nmbd
+
+
+
+查看服务器是否运行起来了，则用下面的命令；
+
+[root@localhost ~]# pgrep smbd
+[root@localhost ~]# pgrep nmbd
+
+
+关掉Samba服务器，也可以用下面的办法，大多是通用的；要root权限来执行；
+
+
+[root@localhost ~]# pkill smbd
+[root@localhost ~]# pkill nmbd
+
+
+3.2 查看Samba 服务器的端口及防火墙；
+
+查看这个有何用呢？有时你的防火墙可能会把smbd服务器的端口封掉，所以我们应该smbd服务器所占用的端口；下面查看中，我们知道smbd所占用的端口是139和445 ；
+
+[root@localhost ~]# netstat -tlnp |grep smb
+tcp 0 0 0.0.0.0:139 0.0.0.0:* LISTEN 10639/smbd
+tcp 0 0 0.0.0.0:445 0.0.0.0:* LISTEN 10639/smbd
+
+如果您有防火墙，一定要把这两个端口打开。如果不知道怎么打开。可能你和我一样是新手，还是把防火墙规则清掉也行；
+
+[root@localhost ~]# iptables -F
+或
+[root@localhost ~]# /sbin/iptables -F
+
+3.3、查看Samba 服务器的配置文件；
+
+如果我们是用Linux发行版自带的Samba软件包，一般情况下Samba服务器的配置文件都位于/etc/samba目录中，服务器的主配置文件是smb.conf；也有有户配置文件 smbpasswd、smbusers和lmhosts等（最好您查看一下这些文件的内容）；还有一个文件是secrets.tdb，这个文件是Samba 服务器启动手自动生成的；我们慢慢根据教程的进度来适当地增加这些文件的说明吧；一下子都说出来，感觉内容太多；所以只能一点一点的来了；
+
+3.4、Samba 在Linux 中的一些工具（服务器端和客户端）；
+
+smbcacls smbcontrol smbencrypt smbmount smbprint smbstatus smbtree
+smbclient smbcquotas smbmnt smbpasswd smbspool smbtar smbumount
+smbd nmbd mount
+
+
+
+其中服务器端的是smbd、nmbd、smbpasswd ；其它的大多是客户端；这些并不是都需要一定要精通的，但至少得会用几个；比如smbmount（也就是mount 加参数的用法），还用smbclient等；
+
+3.5 在Linux 中的常用工具mount（smbmount）和smbclient；Windows查看Linux共享的方法 ；
+
+3.5.1 在Linux系统中查看网络中Windows共享文件及Linux中的Samba共享文件；
+
+一般的情况下，我们要用到smbclient；常用的用法也无非是下面的；
+
+
+[root@localhost ~]# smbclient -L //ip地址或计算机名
+
+这个以后慢慢补充吧；
+
+3.5.2 在Windows中访问Linux Samba服务器共享文件的办法；
+
+这个简单吧，在网上领居，查看工作组就能看得到，或者在浏览器上输入如下的
+
+
+\\ip地址或计算机名
+
+这样就能看到这个机器上有什么共享的了，点鼠标操作完成；如果访问不了，不要忘记把Linux的防火墙规划清掉，或让相应的端口通过；
+
+3.5.3 smbfs文件系统的挂载；
+
+mount 的用法，加载网络中的共享文件夹到本地机；mount就是用于挂载文件系统的，SMB做为网络文件系统的一种，也能用mount挂载；smbmount说到底也是用mount的一个变种；
+
+mount 挂载smbfs的用法；
+
+mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l //ip地址/共享文件夹名 挂载点
+或
+mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l //计算机名/共享文件夹名 挂载点
+或
+mount -t smbfs -o codepage=cp936 //ip地址或计算机名/共享文件夹名 挂载点
+
+
+
+smbmount的用法：
+smbmount -o username=用户名,password=密码 , -l //ip地址或计算机名/共享文件夹名 挂载点
+smbmount //ip地址或计算机名/共享文件夹名 挂载点
+
+
+
+说明：
+
+如果您的服务器是以share共享的，则无需用户名和密码就能挂载，如果出现要密码的提示，直接回车就行；您也可以用smbmount 来挂载，这样就无需用mount -t smbfs来指定文件系统的类型了；
+
+对于挂载点，我们要自己建立一个文件夹，比如我们可以建在/opt/smbhd，这由您说的算吧；
+
+在mount的命令中，我们发现有这样的一个参数codepage=cp936，这是服务器端文件系统的编码的指定，cp936 就是简体中文，当然您可以用utf8等，尝试一下吧。
+
+如果您挂载了远程的smbfs文件系统出现的是简体中文乱码，就要考虑挂载时要指定编码了；
+
+4、由最简单的一个例子说起，匿名用户可读可写的实现；
+
+第一步： 更改smb.conf
+
+我们来实现一个最简单的功能，让所有用户可以读写一个Samba 服务器共享的一个文件夹；我们要改动一下smb.conf ；首先您要备份一下smb.conf文件；
+
+[root@localhost ~]# cd /etc/samba
+[root@localhost samba]# mv smb.conf smb.confBAK
+
+然后我们来重新创建一个smb.conf文件；
+
+
+[root@localhost samba]#touch smb.conf
+
+
+然后我们把下面这段写入smb.conf中；
+
+[global]
+workgroup = LinuxSir
+netbios name = LinuxSir05
+server string = Linux Samba Server TestServer
+security = share
+[linuxsir]
+        path = /opt/linuxsir
+        writeable = yes
+        browseable = yes
+        guest ok = yes
+
+//////////////////////////////////////////////////////////////////////////////////////////////////这段不行
+[global]                                       #这段是全局配置，是必段写的。其中有如下的几行；
+
+
+workgroup = LinuxSir                           #就是Windows中显示的工作组；在这里我设置的是LinuxSir
+netbios name = LinuxSir05                      #就是在Windows中显示出来的计算机名；
+server string = Linux Samba Server TestServer  #就是Samba服务器说明，可以自己来定义；这个不是什么重要的；
+security = share                               #这是验证和登录方式，这里我们用了share ；验证方式有好多种，这是其中一种；
+                                               #另外一种常用的是user的验证方式；如果用share呢，就是不用设置用户和密码了；
+
+hosts allow = 192.168.0
+log file =/var/log/samba/%m.log
+max log size = 50         
+[linuxsir]                        # 这个在Windows中显示出来是共享的目录；
+        path = /opt/linuxsir      # 可以设置要共享的目录放在哪里；
+        writeable = yes           # 是否可写，这里我设置为可写；
+        browseable = yes          # 是否可以浏览，可以；
+        guest ok = yes            # 匿名用户以guest身份是登录；
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+注解：
+
+[global]这段是全局配置，是必段写的。其中有如下的几行；
+
+workgroup 就是Windows中显示的工作组；在这里我设置的是LinuxSir
+netbios name 就是在Windows中显示出来的计算机名；
+server string 就是Samba服务器说明，可以自己来定义；这个不是什么重要的；
+security 这是验证和登录方式，这里我们用了share ；验证方式有好多种，这是其中一种；另外一种常用的是user的验证方式；如果用share呢，就是不用设置用户和密码了；
+
+[linuxsir] 这个在Windows中显示出来是共享的目录；
+path = 可以设置要共享的目录放在哪里；
+writeable 是否可写，这里我设置为可写；
+browseable 是否可以浏览，可以；
+guest ok 匿名用户以guest身份是登录；
+
+第二步：建立相应目录并授权；
+
+[root@localhost ~]# mkdir -p /opt/linuxsir
+[root@localhost ~]# id nobody
+uid=99(nobody) gid=99(nobody) groups=99(nobody)
+[root@localhost ~]# chown -R nobody:nobody /opt/linuxsir
+
+
+
+注释：关于授权nobody，我们先用id命令查看了nobody用户的信息，发现他的用户组也是nobody，我们要以这个为准。有些系统nobody用户组并非是nobody ；
+
+第三步：启动smbd和nmbd服务器；
+
+[root@localhost ~]# smbd
+[root@localhost ~]# nmbd
+
+第四步：查看smbd进程，确认Samba 服务器是否运行起来了；
+
+
+
+[root@localhost ~]# pgrep smbd
+13564
+13568
+
+
+
+第五步：访问Samba 服务器的共享；
+
+
+在Linux 中您可以用下面的命令来访问；
+[root@localhost ~]# smbclient -L //LinuxSir05
+Password: 注：直接按回车
+
+
+
+在Windows中，您可以用下面的办法来访问；
+//LinuxSir05/
+
+增加两个选项
+
+呵呵，不知道大家知道不知道这个
+dos charset = gbk
+unix charset = gbk
+
+可以是utf-8,gbk,gb2312,gb18030
+dos charset 用来设置linux访问windows 共享时的字符集
+unix charset 用来设置windows客户机访问samb服务器的字符集
+samba 共享码码问题一直存在，上面两个选项能解决大多数问题，不过除非你全部用utf-8编码，否则不是100%都行的。
+
+另外还可以在编译内核的时候可以设置
+CONFIG_SMB_NLS_REMOTE="cp936" 来定义远程主机使用的字符集
+By Anonymous at 周二, 2006/01/24 - 17:04 | 回复
+给你一个好建议
+
+北南兄,你的做法令人钦佩.
+不过,建议你下次再写,一定先去网上看看有没有人做过同样的工作.
+关于samba的设置,有一位鸟兄写得不错.此人写了一系列的文章.
+关于samba的文章也非常详细.不知道你是否看过?
+http://linux.vbird.org/linux_server/0370samba.php
+By Anonymous at 周六, 2006/01/21 - 12:47 | 回复
+谢谢台兄建议；
+
+我没有看过；
+
+网上的SMB文档一大堆；我看smb的说明文档及为全面。只要对英文稍有认识的就可以完全读懂。就是读不懂，按上面的给的配置代码来操作也能行；
+
+本不想写这样的教程。但基于我以前写了一些基础文档，我想我不会少这一篇两篇的。记得ROSE兄说过，别人写是别人的风格，你写是你的风格。
+
+本来也想从网上抄几篇过来。。但这并不符合我的作事风格，当然也不符合SIR的风格。如果一个站整天抄来抄去的。中文所有的站都转这几篇文档。我不知道这是悲哀还是什么的。如果能写的人都不写了。我看大家到时去哪转？？
+
+我写SMB的意义，并不是别人说做过了，我还要去做，也就是大家常说的“本来都有轮子了，你还要再去发明轮子有必要吗？”。
+
+现在我声明一下，对于开源文档，重新“发明轮子”，这是极有必要的。特别是中文的DOC。是极有必要重新发明“轮子”。我的目的是引导大家参与写文档。而非中文Linux DOC真的少我北南这一篇SMB文档。
+
+
+可能有的弟兄已经看到了在文档提要部份中的“作者：北南南北，正在增加中... ... 需要您的参与；
+来自：LinuxSir.Org
+简介：本文只是讲一讲我们最常用的Linux与Windows共享文件，主要是为新手指一指路。如何建立最简单的Samba服务器，并讲述遇到问题应该从何处寻找解决方案；正在更新之中，希望您的参加 ... ... 谢谢；
+
+我真正的意图并非要SMB文档，而是让会SMB的弟兄参与进来，让大家有这种”人人为我，我为人人“的心胸。中文项目为什么总是失败？问题出在几乎很少人参与。所以这就有lumaqq 、fcitx ...... 总是一个开发者在挺着的原因。
+
+我想把SIR的首页做成引导大家理解”互助共享“这一理念的实验室；这也是我一直在写文档的真正原因。。。。。。。
+
+谢谢建议。。。。
+
+北南 呈上
+By 北南南北 at 周六, 2006/01/21 - 15:17 | 回复
+如果一个站整天抄来抄去的。。。。
+
+如果一个站整天抄来抄去的。中文所有的站都转这几篇文档。我不知道这是悲哀还是什么的。如果能写的人都不写了。我看大家到时去哪转？？
+
+强烈支持南北大侠的观点，LINUX之福，菜鸟之福。祝南北大虾新年快乐，也祝SIR里的各位兄弟姐妹们新年快乐
+By Anonymous at 周日, 2006/01/22 - 15:54 | 回复
+光GUEST用户没什么用啊
+
+光GUEST用户没什么用啊,要像WIN系统那样能自由控制目录等权限才好啊
+By Anonymous (没有被验证) at 周四, 2006/01/19 - 17:43 | 回复
+呵。兄弟，这不是从最简单的开始写起吗？
+
+smb在我认为他的功能太强大了，并不是我一下就能说的清楚的。。
+
+所以只能从最简单的功能写起。主要是给初学者在学习时，用这个最小的例子来获得一点信心。。
+
+我看兄弟有能力写SMB DOC，为何不出出手呢？？？我是表示欢迎的。。
+
+任何一个文档都是从最简单的开始写起。。主要是把一些基础的东西给初学者。并不是我不想写USER验证模式。主要是为了让新手一步一步的学会基本的操作。。。
+
+授之与鱼不如授之与渔。。。。所以我才写SMB。。。。想把最基本的操作告诉新手。。
+
+欢迎大家补充。。。。因为我在标题和提要上写着，欢迎参与。。。
+By 北南南北 at 周四, 2006/01/19 - 20:14 | 回复
+写文档，越深入，需要科普的知识越多
+
+SP。写文档，越深入，需要科普的知识越多。
+
+所以只能 暂时按照用户接收程度分类总结；P
+
+这个权且当做初级篇；P，期望中级应用＋高级配置篇的早日归纳完成。辛苦您了
+By Anonymous (没有被验证) at 周五, 2006/01/20 - 00:02 | 回复

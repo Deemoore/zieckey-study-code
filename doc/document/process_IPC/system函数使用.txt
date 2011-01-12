@@ -1,0 +1,53 @@
+system函数通过把system传递给/bin/sh -c 来执行 string 所指定的命令，string中可以包含选项和参数，
+接着整个命令行(/bin/sh -c string)又传递给系统调用execve,如果没有找到/bin/sh，system返回127，
+如果出现其他错误则返回－1，如果执行成功则返回string的代码。但是如果string为NULL，
+system返回一个非0值，否则返回0。
+
+#include <stdlib.h>
+int system( const char* string );
+
+请看下面的例子：
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	int retval;
+	
+	retval = system( "ls -l -t" );
+	if ( 127 == retval )
+	{
+		fprintf( stderr, "/bin/sh not available\n" );
+		exit(127);
+	}
+	else if ( -1 == retval )
+	{
+		perror( "system" );
+		exit(EXIT_FAILURE);
+	}
+	else if ( 0 != retval )
+	{
+		fprintf( stderr, "command returned %d \n", retval );
+		perror( "ls" );
+	}
+	else
+	{
+		puts( "command successfully executed" );
+	}
+	
+	return 0;
+}
+
+[root@localhost src]# gcc system.c 
+[root@localhost src]# ./a.out 
+总计 96
+-rwxr-xr-x 1 root root 5539 09-30 00:55 a.out
+-rwxr-xr-x 1 root root  443 09-30 00:55 system.c
+-rwxr-xr-x 1 root root  480 09-30 00:13 execve.c
+-rwxr-xr-x 1 root root  542 09-30 00:00 child_fork.c
+-rwxr-xr-x 1 root root 1811 09-29 21:33 fork.c
+-rwxr-xr-x 1 root root  162 09-29 18:54 getpid.c
+command successfully executed
+
+

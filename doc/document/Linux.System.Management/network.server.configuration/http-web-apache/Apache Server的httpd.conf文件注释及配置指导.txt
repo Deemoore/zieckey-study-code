@@ -1,0 +1,192 @@
+Apache Server的httpd.conf文件注释及配置指导
+
+我们把httpdconf文件进行了简单的注释,这里只是把其中注释了的提出来,便于浏览
+
+如果您想对照原文浏览,我们也为您准备了
+
+这里是httpdconf文件zip,本页面上的注释里面都有
+
+为了朋友们不至于把文件搞混,我给它另外命了一个名phpstarhttpdconf
+
+如果您还有什么问题,请看想细信息:http://wwwapacheorg/docs/。
+
+以下是详细内容
+--------------------------------------------------------------------------------
+
+开始之前：
+
+１、配置和写文件名时注意:如果您给出文件名以"/"开头,则服务器会用绝对目录。
+
+２、如果给出的文件名不以"/"开头,如:"logs/foolog",
+　　而当前服务器跟目录是"/usr/local/apache/",
+　　那么服务器就会认为这个log文件在这里:"/usr/local/apache/logs/foolog"
+
+３、注意:在整个配置过程中所有的文件名中都要用斜线"/",而不用反斜线""。
+　　如:用 "c:/apache" 而不用 "c:apache" , 这里跟DOS不一样
+
+
+--------------------------------------------------------------------------------
+
+Apache服务器的配置指令别分成三个相对集中的部分
+
+1 配置Apache服务器在整个运行过程中的环境变量
+
+2 配置主服务器或默认服务器运行时的详细接口参数
+
+3 设置虚拟服务器,使得在同一个Apache服务器上可完成不同IP地址或不同主机名的web请求
+
+　　即:一台物理上的服务器可被设置为有很多个IP地址或很多个主机名的虚拟服务器
+
+第一部分：　环境设定
+
+# 设置服务器的的启动方式:独立启动（standalone），还是借由互联网络伺服程序inetd来启动。
+# 缺省值是使用独立启动（standalone）。
+ServerType standalone
+
+# 设置服务器目录，用来存放服务器的配置文件、错误文件、记录文件的目录。
+# 注意:在目录的最后不能再加斜线"/" 。
+ServerRoot "C:/Apache"
+
+# 服务程序启动时，它把父程序 httpd 的程序码process id存往这个
+# log/httpdpid 文件。这个文件名称可以配合 PidFile 指令加以改变
+PidFile logs/httpdpid
+
+# 设置Apache服务器执行程序的记录文件。
+ScoreBoardFile logs/apache_status
+
+# 下面这两项看个人的喜好,如果您觉得httpdconf文件太长,不好找到需要的东西。
+# 那么您可以将所需的设置放在srmconf中它只有几行,然后在下面打开它:
+# 下面的两个设置,在标准配置中是打开的,我们可以不打开它
+# 去除下一行前面的"#" , 启用srmconf
+#ResourceConfig conf/srmconf
+#AccessConfig conf/accessconf
+
+# 服务器与客户端的最大等待时间
+# 如果客户端在300秒还没有连上，或者服务器300秒还没有传送数据到客户端，就会自动断线。Timeout 300
+
+# 设置是否支持续传功能缺省是支持
+KeepAlive On
+
+# 设置支持续传功能的数目。数目越多则浪费的硬盘空间越多, 性能也越好。
+# 设置为0则没有限制。
+MaxKeepAliveRequests 100
+
+# 设置保持续传的最大等待时间
+# 如果连接上的某位使用者在15秒后还没有向服务器发出要求，则他不能使用续传功能。
+KeepAliveTimeout 15
+
+# 设置同时间内子进程数目,为了安全,设置为零
+MaxRequestsPerChild 0
+
+# 设置服务器使用进程的数目。
+# 这是以服务器的响应速度为准的, 数目太大则会变慢
+ThreadsPerChild 50
+
+# 允许使用另外的Port或IP地址访问服务器 您可以打开它。
+#Listen 3000
+#Listen 12345678:80
+
+# 设置Apache监听的IP地址，这也是您在本机上的虚拟服务器的IP地址
+BindAddress 127001
+
+# 打开当前未激活预定义的模块,这里除非您真的需要,否则不要更改它
+#LoadModule anon_auth_module modules/ApacheModuleAuthAnondll
+
+
+# 设置服务器产生的状态信息。如果设置为"On",则产生详细的信息
+#ExtendedStatus On
+
+
+
+
+--------------------------------------------------------------------------------
+
+第二部分　　详细接口参数设定
+
+# 设置服务器独立使用时监听的端口。
+Port 80
+
+# 设置服务器管理者的E-Mail地址
+ServerAdmin siron@phpstarcom
+
+# 服务器的主机名。如果你有固定的IP地址，则不需要设置
+ServerName localhost
+
+# 设置存放站点html文件的目录
+DocumentRoot "C:/Apache/htdocs"
+
+# 设置/目录的指令。具体说明如下：
+# 　　Option：定义在目录内所能执行的操作。
+# 　　　　　　None表示只能浏览
+# 　　　　　　FollowSymLinks允许页面连接到别处，
+# 　　　　　　ExecCGI允许执行CGI，
+# 　　　　　　MultiViews允许看动画或是听音乐之类的操作，
+# 　　　　　　Indexes允许服务器返回目录的格式化列表，
+# 　　　　　　Includes允许使用SSI。
+# 　　这些设置可以复选。All则可以做任何事，但不包括MultiViews。
+# AllowOverride：
+#　　　　　　 加None参数表示任何人都可以浏览该目录下的文件,但不会读取该文件。
+# 　　　　　　FileInfo 允许控制文件型态之指令的使用,
+# 　　　　　　AuthConfig 允许验认指令的使用，
+# 　　　　　　Indexes 允许控制目录索引之指令的使用,
+# 　　　　　　Limit 允许控制存取主机之指令的使用,
+# 　　　　　　Options 允许控制特定目录特色之指令的使用
+# 　　　　　　设为 All 的话服务器将会允许所有的指令
+
+　　ptions FollowSymLinks
+　　AllowOverride None
+
+
+# 定义首先显示的文件。
+# 您可以这样更改 DirectoryIndex indexhtml indexhtm
+DirectoryIndex indexhtml
+
+# 定义每个目录访问控制文件的名称
+AccessFileName htaccess
+
+# 定义代理服务器不要缓存你的页面 缺省不使用
+#CacheNegotiatedDocs
+
+# 这个指令设定 mime 型态配置档所在的位置,
+# 文件名称是相对于 ServerRoot 的, 不建议变更这个文件
+TypesConfig conf/mimetypes
+
+# 服务器会将错误讯息记录到一个记录档去,
+# 文件名称可以藉由 ErrorLog 指令设定
+# 可以为不同的虚拟主机设定不同的错误记录
+ErrorLog logs/errorlog
+
+# 设定记录档的格式
+LogFormat "%h %l %u %t "%r" %>s %b" common
+
+
+
+
+# Alias 指令使文件可以存放在 DocumentRoot 之外的本地文件系统里
+# ScriptAlias 指令与 Alias 指令相同, 只不过它还标记改目录包含CGI或PHP指令文件
+# AddType 指令以指定的内容型态作为该文件名称结尾的文件的副文件名
+Alias /icons/ "C:/Apache/icons/"
+Alias /test/ "c:/php/test/"
+Alias /admin/ "c:/admin/phpMyAdmin/"
+ScriptAlias /php/ "c:/php/"
+AddType application/x-httpd-php php
+AddType application/x-httpd-php3 php3
+Action application/x-httpd-php "/php/phpexe"
+
+# AddIcon, AddIconByEncoding and AddIconByType 都
+# 是用来设定显示不同文件型态所使用的图示列表；对於每种列
+# 出的文件型态，显示列出的第一个符合的图示。
+AddIconByType VID,/icons/moviegif video/
+AddIcon /icons/binarygif bin exe
+
+# 缺省的文件图示
+DefaultIcon /icons/unknowngif
+
+# 有问题或错误发生的状况下，可以配置Apache做四种反应
+# 1 输出自定的customized讯息文本
+#ErrorDocument 500 "The server made a boo boo
+# 2 重导到某个本地的 URL 以处理该问题／错误
+#ErrorDocument 404 /missinghtml
+#ErrorDocument 404 /cgi-bin/missing_handlerpl
+# 3 重导到某个外部的 URL 以处理该问题／错误
+#ErrorDocument 402 http://someother_servercom/subscription_infohtml

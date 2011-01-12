@@ -1,0 +1,4 @@
+将下面这一行
+http_access deny all
+改为：
+http_access allow all

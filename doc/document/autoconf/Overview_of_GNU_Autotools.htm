@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="KEYWORDS" content="Overview of GNU Autotools,Understanding Linux,Understanding SUSE Linux,Systems Engineering in SUSE Linux,Systems Engineering in C and C-plus-plus,User:Matt ryan,Category:C,Category:C-plus-plus,Category:GNU Autoconf,Category:GNU Automake">
+<meta name="robots" content="index,follow">
+<link rel="shortcut icon" href="http://developer.novell.com/favicon.ico">
+<title>Overview of GNU Autotools - Developer Community</title>
+
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/jquery.js"></script>
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/hdr_script_2008.js"></script><script type="text/javascript" src="Overview_of_GNU_Autotools_files/contact_phone_var_js.txt"></script><script type="text/javascript" src="Overview_of_GNU_Autotools_files/main_2008.js"></script><script type="text/javascript" src="Overview_of_GNU_Autotools_files/hdr_menu_2009_en-us.js"></script>
+<style type="text/css">
+	@import url(/common/inc/css/tier4_2008.css);
+</style>
+<style type="text/css" media="screen,projection">/*<![CDATA[*/ @import "/wiki/skins/monobook/main.css"; /*]]>*/</style>
+<link rel="stylesheet" type="text/css" media="print" href="Overview_of_GNU_Autotools_files/commonPrint.css">
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/index.php"></script><script type="text/javascript" src="Overview_of_GNU_Autotools_files/wikibits.js"></script>
+<style type="text/css">/*<![CDATA[*/
+@import "/wiki/index.php?title=MediaWiki:Monobook.css&action=raw&ctype=text/css&smaxage=18000";
+@import "/wiki/index.php?title=-&action=raw&gen=css&maxage=18000";
+/*]]>*/</style>
+<style type="text/css">
+body { text-align:left; }
+</style>
+
+<!--Start of Omniture naming Script -->
+<script type="text/javascript">
+//<![CDATA[
+	var s_pageName="developer.novell.com";
+//]]>
+</script>
+<!--End of Omniture naming Script -->
+
+</head><body class="ns-0">
+
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/eluminate.js"></script>
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/cmdatatagutils.js"></script>
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/metrics.js"></script><script src="Overview_of_GNU_Autotools_files/ga.js" type="text/javascript"></script>
+
+<div id="hdr">
+	<p id="hdr_home"><a href="http://developer.novell.com/" accesskey="2"><img src="Overview_of_GNU_Autotools_files/novell_logo_redonblack.png" alt="Novell Home" title="Novell Home" width="113" height="41"></a></p>
+	<ul id="hdr_lnks">
+		<li id="hdr_lnks_skip"><a href="#top" accesskey="1">Skip to Content</a></li>
+		<li id="hdr_lnks_menu"><a href="http://developer.novell.com/menu.php" accesskey="3">+ Menu</a></li>
+	</ul>
+	<div id="n_menu">
+		<div id="n_menu_content"><div id="n_menu_blocks"><div class="n_menu_block" id="left_b"><h3><a href="http://www.novell.com/solutions">Solutions</a></h3><ul><li><a href="http://www.novell.com/solutions/data-center/"><b class="n_menu_dc">Data Center</b></a></li><li><a href="http://www.novell.com/solutions/enterprise-linux-servers/">Enterprise Linux Servers</a></li><li><a href="http://www.novell.com/solutions/virtualization-workload">Virtualization &amp; Workload Management</a></li><li><a href="http://www.novell.com/solutions/business-service-management/">Business Service Management</a></li></ul><ul><li><a href="http://www.novell.com/solutions/end-user-computing/"><b>End-User Computing</b></a></li><li><a href="http://www.novell.com/solutions/collaboration/">Collaboration</a></li><li><a href="http://www.novell.com/solutions/enterprise-linux-desktops/">Enterprise Linux Desktops</a></li><li><a href="http://www.novell.com/solutions/endpoint-management/">Endpoint Management</a></li></ul><ul><li><a href="http://www.novell.com/solutions/identity-and-security/"><b>Identity &amp; Security</b></a></li><li><a href="http://www.novell.com/solutions/compliance-management/">Compliance Management</a></li><li><a href="http://www.novell.com/solutions/identity-and-access/">Identity &amp; Access Management</a></li><li><a href="http://www.novell.com/solutions/security-management/">Security Management</a></li></ul><div class="n_menu_solutions"><a href="http://www.novell.com/solutions/">Not Sure? <i>Try our solution finder <span>+</span></i></a></div></div><div class="n_menu_block" id="center_b"><h3><a href="http://www.novell.com/products/">Products</a></h3><ul><li><a href="http://www.novell.com/products/accessmanager/">Access Manager</a></li><li><a href="http://www.novell.com/products/compliancemanagementplatform/">Compliance Management Platform</a></li><li><a href="http://www.novell.com/products/groupwise/">GroupWise</a></li><li><a href="http://www.novell.com/products/identitymanager/">Identity Manager</a></li><li><a href="http://www.novell.com/products/openenterpriseserver/">Open Enterprise Server</a></li><li><a href="http://www.novell.com/products/forge">PlateSpin Forge</a></li><li><a href="http://www.novell.com/products/migrate/">PlateSpin Migrate</a></li><li><a href="http://www.novell.com/products/orchestrate/">PlateSpin Orchestrate</a></li><li><a href="http://www.novell.com/products/sentinel/">Sentinel</a></li><li><a href="http://www.novell.com/partners/technology/isv/appliance/"> SUSE Appliance Program</a></li><li><a href="http://www.novell.com/products/server/">SUSE Linux Enterprise Server</a></li><li><a href="http://www.novell.com/products/teaming/">Teaming + Conferencing</a></li><li><a href="http://www.novell.com/products/zenworks/configurationmanagement/">ZENworks Configuration Management</a></li><li><a href="http://www.novell.com/products/zenworks/endpointsecuritymanagement/">ZENworks Endpoint Security Management</a></li></ul><p class="n_menu_products"><a href="http://www.novell.com/products/"><i>All Products</i> <span>+</span></a></p></div><div class="n_menu_block" id="right_b"><h3><a href="http://www.novell.com/services/">Services</a></h3><ul><li><a href="http://www.novell.com/support/">Technical Support</a></li><li><a href="http://www.novell.com/training/">Technical Training</a></li><li><a href="http://www.novell.com/consulting/">IT Consulting</a></li><li><a href="http://download.novell.com/">Downloads</a></li><li><a href="http://www.novell.com/center/" rel="nofollow">Customer Center</a></li><li><a href="http://forums.novell.com/">Support Forums</a></li><li><a href="http://www.novell.com/documentation/">Documentation</a></li></ul><h3 id="n_menu_pc"><a href="http://www.novell.com/communities/">Partners &amp; Community</a></h3><ul><li><a href="http://www.novell.com/partners/">Partners</a></li><li><a href="http://developer.novell.com/wiki/index.php/Developer_Home" rel="nofollow">Developers</a></li><li><a href="http://www.novell.com/communities/nui/" rel="nofollow">Users</a></li><li><a href="http://www.novell.com/communities/coolsolutions/">Cool Solutions</a></li><li><a href="http://www.novell.com/company/blogs/">Blogs</a></li></ul></div><div id="srch_frm_2009"><form id="hdr-srch-frm" method="get" action="/SearchInterface/searchApp"><input name="action" value="QueryAction.submitBasicSearch" type="hidden"><input name="type_basic" value="" type="hidden"><input name="sortOrder" value="" type="hidden"><input name="pageNumber" value="1" type="hidden"><h4>Search</h4><br><div id="searchbox"><input name="q" size="20" id="hdr-srch-input" type="text"><input name="hdrsrchsubmit" src="Overview_of_GNU_Autotools_files/mnu_srch_arrow.png" id="hdr-srch-arrow" value="" type="image"></div><br style="clear: left;"></form><div id="n_menu_login"><ul><li><a href="https://www.novell.com/ICSLogin/?%22http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools#Writing_A_Basic_configure.ac%22">Login</a><ul><li><a href="https://secure-www.novell.com/selfreg/jsp/createAccount.jsp">Create an Account</a></li><li id="n_lang_select"><a href="http://www.novell.com/common/util/langselect.php?referer=http%3A//developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools%23Writing_A_Basic_configure.ac">Change Language</a></li></ul></li></ul></div><div class="n_menu_block" id="n_menu_about"><h3><a href="http://www.novell.com/company/">About Novell</a></h3><ul><li><a href="http://www.novell.com/company/contacts-offices/" rel="nofollow">Contact Us</a></li><li><a href="http://www.novell.com/success/" rel="nofollow">Our Customers</a></li><li><a href="http://www.novell.com/events/" rel="nofollow">Events Center</a></li><li><a href="http://www.novell.com/connectionmagazine/">Connection Magazine</a></li><li><a href="http://www.novell.com/news/press/room">Press Room</a></li><li><a href="http://www.novell.com/prblogs/">Novell News Blog</a></li></ul></div></div></div><br style="clear: both;"></div>
+	<div id="n_menu_close"><a href="#" onclick="hideNovellMenuWithSlide();this.blur();return false;">- Close Menu</a></div><div id="n_menu_canopy"><p id="n_menu_home"><a href="http://developer.novell.com/" accesskey="2"><img src="Overview_of_GNU_Autotools_files/novell_logo_redonblack.png" alt="Novell Home" title="Novell Home" width="113" height="41"></a></p></div></div>
+</div>
+
+<script type="text/javascript" src="Overview_of_GNU_Autotools_files/hdr_2008.js"></script>
+ <div id="globalWrapper">
+		<div id="column-one">
+			<div class="portlet" id="p-logo">
+			  <a style="background-image: url(/wiki/skins/common/images/wiki.png);" href="http://developer.novell.com/wiki/index.php/Developer_Home" title="Developer Home"></a>
+			</div>
+			<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+						<div class="portlet" id="p-navigation">
+			  <h5>Navigation</h5>
+			  <div class="pBody">
+				<ul>
+								  <li id="n-mainpage"><a title="Visit the Main Page [alt-z]" accesskey="z" href="http://developer.novell.com/wiki/index.php/Developer_Home">Developer Home</a></li>
+				 				  <li id="n-library"><a href="http://developer.novell.com/wiki/index.php/Developer_Library">Developer library</a></li>
+				 				  <li id="n-YesTitle"><a href="http://developer.novell.com/devnet/yes/">YES Certified Program</a></li>
+				 				  <li id="n-projects"><a href="http://developer.novell.com/wiki/index.php/Project_Hosting">Project hosting</a></li>
+				 				  <li id="n-currentevents"><a title="Find background information on current events" href="http://developer.novell.com/wiki/index.php/Current_events">Current events</a></li>
+				 				  <li id="n-help"><a title="The place to find out." href="http://developer.novell.com/wiki/index.php/Help:Contents">Help</a></li>
+				 				</ul>
+			  </div>
+			</div>
+						<div class="portlet" id="p-tb">
+			  <h5>Wiki Toolbox</h5>
+			  <div class="pBody">
+				<ul>
+				  				  <li id="t-whatlinkshere"><a title="List of all wiki pages that link here [alt-j]" accesskey="j" href="http://developer.novell.com/wiki/index.php/Special:Whatlinkshere/Overview_of_GNU_Autotools">What links here</a></li>
+				  				  <li id="t-recentchangeslinked"><a title="Recent changes in pages linked from this page [alt-k]" accesskey="k" href="http://developer.novell.com/wiki/index.php/Special:Recentchangeslinked/Overview_of_GNU_Autotools">Related changes</a></li>
+				  				  									  				  				  				  				  				  <li id="t-upload"><a title="Upload images or media files [alt-u]" accesskey="u" href="http://developer.novell.com/wiki/index.php/Special:Upload">Upload file</a></li>				  				  <li id="t-specialpages"><a title="List of all special pages [alt-q]" accesskey="q" href="http://developer.novell.com/wiki/index.php/Special:Specialpages">Special pages</a></li>				  				</ul>
+			  </div>
+			</div>
+			<div id="p-search" class="portlet">
+			  <h5><label for="searchInput">Search</label></h5>
+			  <div class="pBody">
+				<form name="searchform" action="/wiki/index.php/Special:Search" id="searchform">
+				  <input id="searchInput" name="search" accesskey="f" type="text">
+				  <input name="go" class="searchButton" id="searchGoButton" value="Go" type="submit">&nbsp;<input name="fulltext" class="searchButton" value="Search" type="submit">
+				</form>
+			  </div>
+			</div>
+
+<!-- Working here -->
+<!-- End Working here -->
+
+					</div><!-- end of the left (by default at least) column -->
+
+		<div id="column-content">
+			<div id="wikicontent">
+			  <a name="top" id="contentTop"></a>
+			  			  <h1 class="firstHeading">Overview of GNU Autotools</h1>
+			  <div id="bodyContent">
+				<h3 id="siteSub">From Developer Community</h3>
+				<div id="contentSub"></div>
+												<!-- start content -->
+				<p><b>Author:  <a href="http://developer.novell.com/wiki/index.php/User:Matt_ryan" title="User:Matt ryan">Matt ryan</a></b>
+</p><p>If you are used to Linux or UNIX, familiar with C or C++
+development, or have ever downloaded and installed a source
+distribution that wasn't a source RPM, you probably have some
+familiarity with GNU Autotools. If you want to find out how they work
+and how they work together, what they are useful for, and how to make
+use of they in your application, this document is for you. It is
+intended to give a basic introduction to the use of the GNU Autotools
+toolchain, particularly on SUSE Linux.
+</p><p><br>
+</p>
+<table id="toc" class="toc"><tbody><tr><td><div id="toctitle"><h2>Contents</h2> <span class="toctoggle">[<a href="javascript:toggleToc()" class="internal" id="togglelink">hide</a>]</span></div>
+<ul>
+<li class="toclevel-1"><a href="#Introduction_to_GNU_Autotools"><span class="tocnumber">1</span> <span class="toctext">Introduction to GNU Autotools</span></a>
+<ul>
+<li class="toclevel-2"><a href="#What_GNU_Autotools_Are_For"><span class="tocnumber">1.1</span> <span class="toctext">What GNU Autotools Are For</span></a></li>
+<li class="toclevel-2"><a href="#What_GNU_Autotools_Are_Not_For"><span class="tocnumber">1.2</span> <span class="toctext">What GNU Autotools Are Not For</span></a></li>
+<li class="toclevel-2"><a href="#When_Should_I_Use_GNU_Autotools.3F"><span class="tocnumber">1.3</span> <span class="toctext">When Should I Use GNU Autotools?</span></a></li>
+<li class="toclevel-2"><a href="#When_Should_I_Not_Use_GNU_Autotools.3F"><span class="tocnumber">1.4</span> <span class="toctext">When Should I Not Use GNU Autotools?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Tools_in_the_Toolchain"><span class="tocnumber">2</span> <span class="toctext">Tools in the Toolchain</span></a></li>
+<li class="toclevel-1"><a href="#Building_Your_Application"><span class="tocnumber">3</span> <span class="toctext">Building Your Application</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Toolchain_Interactions"><span class="tocnumber">3.1</span> <span class="toctext">Toolchain Interactions</span></a></li>
+<li class="toclevel-2"><a href="#Writing_NEWS.2C_README.2C_AUTHORS.2C_and_ChangeLog"><span class="tocnumber">3.2</span> <span class="toctext">Writing NEWS, README, AUTHORS, and ChangeLog</span></a></li>
+<li class="toclevel-2"><a href="#Writing_A_Basic_configure.ac"><span class="tocnumber">3.3</span> <span class="toctext">Writing A Basic configure.ac</span></a></li>
+<li class="toclevel-2"><a href="#Writing_A_Basic_Makefile.am"><span class="tocnumber">3.4</span> <span class="toctext">Writing A Basic Makefile.am</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Ready_To_Go"><span class="tocnumber">4</span> <span class="toctext">Ready To Go</span></a></li>
+<li class="toclevel-1"><a href="#For_More_Information"><span class="tocnumber">5</span> <span class="toctext">For More Information</span></a></li>
+</ul>
+</td></tr></tbody></table>
+<p><script type="text/javascript"> if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=1" title="Overview of GNU Autotools">edit</a>]</div><a name="Introduction_to_GNU_Autotools"></a><h2>Introduction to GNU Autotools</h2>
+<p>The term "GNU Autotools" is used to refer to a set of tools maintained by the <a href="http://www.fsf.org/" class="external text" title="http://www.fsf.org/" rel="nofollow">Free Software Foundation</a> and the <a href="http://www.gnu.org/" class="external text" title="http://www.gnu.org/" rel="nofollow">GNU Project</a>.
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=2" title="Overview of GNU Autotools">edit</a>]</div><a name="What_GNU_Autotools_Are_For"></a><h3>What GNU Autotools Are For</h3>
+<p>The GNU Autotools origins stem from the need to create software
+packages that are more cross-platform compatible. Thus, the reason to
+use the GNU Autotools in your application development is if you need
+the ability for your software to be properly built for multiple
+platforms or hardware architectures. Some people also prefer to
+distribute their software in source code form; likewise, some prefer to
+receive it in source code form. They would prefer to build the software
+locally on the deployment machine rather than obtain a binary version
+of the package. If you prefer that your target users build your
+software locally or if your target users prefer to build your software
+locally, you may want to consider using GNU Autotools for your software
+(although one might contend that a source <a href="http://developer.novell.com/wiki/index.php/Category:RPM" title="Category:RPM">RPM</a> would be better suited in some cases).
+</p><p>Of course, GNU Autotools only make sense for software that needs to be compiled to run on the target platform - primarily <a href="http://developer.novell.com/wiki/index.php/Category:C" title="Category:C">C</a> and <a href="http://developer.novell.com/wiki/index.php/Category:C-plus-plus" title="Category:C-plus-plus">C++</a> applications.
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=3" title="Overview of GNU Autotools">edit</a>]</div><a name="What_GNU_Autotools_Are_Not_For"></a><h3>What GNU Autotools Are Not For</h3>
+<p>Although you can make specifications within the tools of other
+software packages that your software depends on, we recommend that you
+enforce these dependencies primarily via <a href="http://developer.novell.com/wiki/index.php/Category:RPM" title="Category:RPM">RPM</a>, because doing so allows your end users to make use of RPM-based tools like <a href="http://developer.novell.com/wiki/index.php/Category:YaST" title="Category:YaST">YaST</a> that can automatically resolve dependencies by selecting additional packages to install.
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=4" title="Overview of GNU Autotools">edit</a>]</div><a name="When_Should_I_Use_GNU_Autotools.3F"></a><h3>When Should I Use GNU Autotools?</h3>
+<ul><li> If you are using a compiled language, like <a href="http://developer.novell.com/wiki/index.php/Category:C" title="Category:C">C</a> or <a href="http://developer.novell.com/wiki/index.php/Category:C-plus-plus" title="Category:C-plus-plus">C++</a>, you <b>may</b>
+want to use GNU Autotools to help build your application for the target
+platform (read on to see if any further criteria fit your situation).
+Interpreted languages like <a href="http://developer.novell.com/wiki/index.php/Category:Perl" title="Category:Perl">Perl</a> or <a href="http://developer.novell.com/wiki/index.php/Category:Python" title="Category:Python">Python</a>
+don't really fit this requirement. (Editor's Note: We would be
+interested to hear counterpoints in this regard if you have them.)
+</li><li> If you cannot predict the environment (operating system
+and/or hardware platform) that your target audience will be using, you
+may wish to consider using GNU Autotools, as doing so will help your
+product become less platform-dependent. This may be true regardless of
+how you distribute your software. For example, you may distribute
+binary RPMs, but if your application needs to run on a variety of
+environments, you may still want to use GNU Autotools so that someone
+can do a targeted build of the RPM for a specific environment. Examples
+of developers in this situation might include:
+<ul><li> Maintainers of open source software projects that may need to
+be compiled on any number of operating systems or hardware
+architectures, obviously unknown to the maintainer
+</li><li> Developers of commercial software that may need to be built for several operating systems or hardware architectures
+</li><li> Enterprise IT developers that need to deploy software into a heterogeneous environment
+</li></ul>
+</li><li> If you prefer to distribute source only, or if your target
+audience prefers a source only distribution, you may want to use GNU
+Autotools and distribute a tarball with the source and build files
+included (although we would also suggest that you consider a source RPM
+instead).
+</li><li> If you want your software to become a part of a Linux
+distribution, using GNU Autotools will make it much easier for
+distributions to incorporate your product into their distro.
+</li></ul>
+<p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=5" title="Overview of GNU Autotools">edit</a>]</div><a name="When_Should_I_Not_Use_GNU_Autotools.3F"></a><h3>When Should I Not Use GNU Autotools?</h3>
+<p>Well, we wouldn't be so presumptuous as to tell you that you can't
+use GNU Autotools for a particular situation if you really want to.
+However, we do have some guidelines. These guidelines are based on a
+simple premise - use the right tool for the right job. The right job
+for GNU Autotools is to manage platform differences in creating
+targeted application builds.
+</p>
+<ul><li> Although it is possible to use GNU Autotools as a way to
+specify and enforce dependencies of your software package, we recommend
+that you delegate this task to <a href="http://developer.novell.com/wiki/index.php/Category:RPM" title="Category:RPM">RPM</a>,
+which in our view is the preferred means of application package
+distribution on Linux. If you prefer a source distribution to a binary
+distribution, distribute a source RPM (which may make use of GNU
+Autotools within - for the purpose of creating a targeted build).
+</li><li> If your target audience prefers a binary distribution, you
+should probably distribute an RPM. Your target audience may prefer a
+binary distribution if they are a non-technical audience. They may also
+be technical but not be concerned about building all of their own
+software locally. Note: This particular item primarily refers to how
+you distribute your software - you may still want to use GNU Autotools
+as the build mechanism for your software even if you distribute RPMs.
+</li><li> If you are deploying into a homogenous environment, using
+GNU Autotools may be more effort than it is worth to you unless you are
+already familiar with them. A simple Makefile may do the trick if you
+only have one or two environments to worry about. This may occur, for
+example, in an IT environment with a single workstation platform.
+</li></ul>
+<p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=6" title="Overview of GNU Autotools">edit</a>]</div><a name="Tools_in_the_Toolchain"></a><h2>Tools in the Toolchain</h2>
+<p>Historically, writers of software faced a specific problem: How to
+write a single software package that could be easily built on different
+platforms without requiring that the developer of the package consider
+every conceivable deployment platform. In order to solve this problem,
+the <i>configure</i> tool was born.  <i>configure</i> would create a
+script that, when executed on the target platform, would configure the
+build so that platform inconsistencies could be addressed. Maintainers
+of <i>configure</i> would handle platform differences, leaving the developer of the software package to focus on his package specifically.
+From this point, new tools were created to help developers make use of <i>configure</i>.  Autoconf specifically helped developers to generate their <i>configure</i> script; automake was created to help developers create the appropriate input file required by autoconf; etc.
+</p><p>Below is a list of all the tools in the GNU Autotools toolchain and the role of each tool in building the application.
+</p>
+<ul><li> <b><a href="http://developer.novell.com/wiki/index.php?title=Category:Aclocal&amp;action=edit" class="new" title="Category:Aclocal">aclocal</a></b> - Generates local macros into <i>aclocal.m4</i> to be used by automake - simplifies the creation of standard macros that automake needs to handle platform dependencies.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php?title=Category:Autoheader&amp;action=edit" class="new" title="Category:Autoheader">autoheader</a></b> - Creates a template of #define statements in <i>config.h.in</i> to be used by configure that will define platform constants and other similar things.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php?title=Category:Libtoolize&amp;action=edit" class="new" title="Category:Libtoolize">libtoolize</a></b> - Puts files into place that are required by <i>libtoool</i>.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php/Category:GNU_Automake" title="Category:GNU Automake">automake</a></b> - Generates <i>Makefile.in</i> from <i>aclocal.m4</i>, <i>configure.ac</i> and <i>Makefile.am</i>.  It used to be that you had to write your own <i>Makefile.in</i>; automake simplifies this.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php/Category:GNU_Autoconf" title="Category:GNU Autoconf">autoconf</a></b> - Generates <i>configure</i> from <i>aclocal.m4</i> and <i>configure.ac</i>.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php?title=Category:GNU_Configure&amp;action=edit" class="new" title="Category:GNU Configure">configure</a></b> - Builders will run this script to configure the build for the local machine.  Generates <i>Makefile</i> from <i>Makefile.in</i> and <i>config.h.in</i>.
+</li><li> <b><a href="http://developer.novell.com/wiki/index.php/Category:GNU_Libtool" title="Category:GNU Libtool">libtool</a></b> - Simplifies the inclusion of dynamic libraries depending upon the platform.
+</li></ul>
+<p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=7" title="Overview of GNU Autotools">edit</a>]</div><a name="Building_Your_Application"></a><h2>Building Your Application</h2>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=8" title="Overview of GNU Autotools">edit</a>]</div><a name="Toolchain_Interactions"></a><h3>Toolchain Interactions</h3>
+<p>The table below diagrams the interactions between the tools and how you use them to create your executable.
+</p>
+<table style="background: rgb(221, 221, 221) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" cellpadding="4" cellspacing="4">
+<tbody><tr>
+<td width="100px;">
+</td><td> <b>Action To Take</b>
+</td><td> <b>How To Accomplish</b>
+</td><td> <b>Input Files</b>
+</td><td> <b>Output Expected</b>
+</td><td> <b>Where Used</b>
+</td></tr>
+<tr style="background: rgb(238, 238, 238) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 1
+</td><td> <a href="http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools#Writing_NEWS.2C_README.2C_AUTHORS.2C_and_ChangeLog" title="Overview of GNU Autotools"> Create <i>NEWS</i>, <i>README</i>, <i>AUTHORS</i>, and <i>ChangeLog</i></a>
+</td><td> Edited by hand by developer.  May contain any pertinent text.
+</td><td> None
+</td><td> <i>NEWS</i>, <i>README</i>, <i>AUTHORS</i>, <i>ChangeLog</i>
+</td><td> Step 7
+</td></tr>
+<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 2
+</td><td> <a href="http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools#Writing_A_Basic_configure.ac" title="Overview of GNU Autotools"> Create <i>configure.ac</i></a>
+</td><td> Edited by hand by developer
+</td><td> None
+</td><td> <i>configure.ac</i>
+</td><td>
+<ul><li> Step 4
+</li><li> Step 6
+</li><li> Step 8
+</li></ul>
+</td></tr>
+<tr style="background: rgb(238, 238, 238) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 3
+</td><td> <a href="http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools#Writing_A_Basic_Makefile.am" title="Overview of GNU Autotools"> Create <i>Makefile.am</i></a>
+</td><td> Edited by hand by developer
+</td><td> None
+</td><td> <i>Makefile.am</i>
+</td><td> Step 7
+</td></tr>
+<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 4
+</td><td> Create <i>aclocal.m4'</i>
+</td><td> Generated automatically by invoking <i>aclocal</i>
+</td><td> <i>configure.ac</i> from Step 2
+</td><td> <i>aclocal.m4</i>
+</td><td> Steps 5 and 8
+</td></tr>
+<tr style="background: rgb(238, 238, 238) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 5
+</td><td> Create <i>config.h.in</i>
+</td><td> Generated automatically by invoking <i>autoheader</i>
+</td><td> <i>aclocal.m4</i> from Step 4
+</td><td> <i>config.h.in</i>
+</td><td> Step 9
+</td></tr>
+<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 6
+</td><td> Create <i>config.guess</i>, <i>config.sub</i>, and <i>ltmain.sh</i>
+</td><td> Generated automatically by invoking <i>libtoolize -c</i>
+</td><td> <i>configure.ac</i> from Step 2
+</td><td>
+<ul><li> <i>config.guess</i>
+</li><li> <i>config.sub</i>
+</li><li> <i>ltmain.sh</i>
+</li></ul>
+</td><td> Step 7
+</td></tr>
+<tr style="background: rgb(238, 238, 238) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 7
+</td><td> Create <i>Makefile.in</i>, <i>install-sh</i>, <i>missing</i>, <i>INSTALL</i>, <i>COPYING</i>, and <i>depcomp</i>
+</td><td> Generated automatically by invoking <i>automake -ac</i>
+</td><td> <i>Makefile.am</i> from Step 3.
+<p>Also requires the presence of:
+</p>
+<ul><li> Files from Step 1: <i>NEWS</i>, <i>README</i>, <i>AUTHORS</i>, <i>ChangeLog</i>
+</li><li> Files from Step 6: <i>config.guess</i>, <i>config.sub</i>, <i>ltmain.sh</i>
+</li></ul>
+</td><td> <i>Makefile.in</i>, <i>install-sh</i>, <i>missing</i>, <i>INSTALL</i>, <i>COPYING</i>, <i>depcomp</i>
+</td><td> Step 9
+</td></tr>
+<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 8
+</td><td> Create <i>configure</i>
+</td><td> Generated automatically by invoking <i>autoconf</i>
+</td><td>
+<ul><li> <i>aclocal.m4</i> from Step 4
+</li><li> <i>configure.ac</i> from Step 2
+</li></ul>
+</td><td> <i>configure</i>
+</td><td> Step 9
+</td></tr>
+<tr style="background: rgb(238, 238, 238) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 9
+</td><td> Create <i>Makefile</i>
+</td><td> Generated automatically by invoking <i>configure</i>
+</td><td>
+<ul><li> <i>configure</i> from Step 8
+</li><li> <i>config.h.in</i> from Step 5
+</li><li> <i>Makefile.in</i> from Step 7
+</li></ul>
+</td><td> <i>Makefile</i>
+</td><td> Step 10
+</td></tr>
+<tr style="background: rgb(255, 255, 255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;">
+<td> Step 10
+</td><td> Create executable
+</td><td> Generated by executing <i>make</i>
+</td><td> <i>Makefile</i> from Step 9
+</td><td> executable
+</td><td>
+</td></tr></tbody></table>
+<p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=9" title="Overview of GNU Autotools">edit</a>]</div><a name="Writing_NEWS.2C_README.2C_AUTHORS.2C_and_ChangeLog"></a><h3>Writing <i>NEWS</i>, <i>README</i>, <i>AUTHORS</i>, and <i>ChangeLog</i></h3>
+<p>These files are required by <i>automake</i>.  More correctly, these files must <b>exist</b> in order for <i>automake</i> to run successfully.  The contents of these files are not really relevant to <i>automake</i>.  You can just put placeholders, or you can put the correct contents into each (the names are pretty self-explanatory).
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=10" title="Overview of GNU Autotools">edit</a>]</div><a name="Writing_A_Basic_configure.ac"></a><h3>Writing A Basic <i>configure.ac</i></h3>
+<p>There are several sections to a <i>configure.in</i> file and many possible instructions that you can include; however, the basics are pretty straightforward.
+</p><p>The first instruction in <i>configure.in</i> must be AC_INIT, of the format AC_INIT(<i>file_with_main_function</i>):
+</p>
+<pre>AC_INIT(fissle.cpp)
+</pre>
+<p>Next instruction:  AM_INIT_AUTOMAKE.  The format is AM_INIT_AUTOMAKE(<i>executable_name</i>,<i>version</i>):
+</p>
+<pre>AM_INIT_AUTOMAKE(fissle,1.0)
+</pre>
+<p>Note:  Be sure you type <b>AM</b>_INIT_AUTOMAKE, not <b>AC</b>_INIT_AUTOMAKE.  This is a mistake I make often!
+</p><p><br>
+Next instruction:  AC_CONFIG_HEADERS.  This declares <i>config.h</i> as our configuration-specific header file.  The format is AC_CONFIG_HEADERS(<i>header_file</i>):
+</p>
+<pre>AC_CONFIG_HEADERS(config.h)
+</pre>
+<p><br>
+In the next section of <i>configure.ac</i> we declare the programs that we depend on in order to build our package.  There are predefined macros for most of them.
+</p><p>For example, I know that I need C++ and libtool during the build stage.  I include the following:
+</p>
+<pre>AC_PROG_CXX
+AC_PROG_LIBTOOL
+</pre>
+<p>Generic macros like AC_CHECK_PROG make it possible for me to check the existence of programs that don't have a predefined macro.
+</p><p><br>
+In the next section of <i>configure.ac</i> we check for
+libraries that our package depends on. Finding these libraries will
+also add them to the linking path. Here's an example of including the
+pcre++ library, for perl-compatible regular expressions for C++:
+</p>
+<pre>AC_CHECK_LIB(pcre++,pcre_exec,,echo "ERROR: Required library pcre++ not found" &amp;&amp; exit)
+</pre>
+<p>Note that I have to look for a function in the library, not just the
+library itself. This is a bit tougher in C++ if you are using a class,
+not a plain function. Use the <i>strings</i> command on a library to figure out the name of an appropriate symbol to check for.
+</p><p>If you use many functions in a library, you may wish to check
+for all of them to ensure that the library gives you the functionality
+you need.
+</p><p><br>
+The very last thing in your <i>configure.ac</i> is:
+</p>
+<pre>AC_OUTPUT(Makefile)
+</pre>
+<p>Here's the complete <i>configure.ac</i>:
+</p>
+<pre>AC_INIT(fissle.cpp)
+AM_INIT_AUTOMAKE(fissle,1.0)
+AC_CONFIG_HEADERS(config.h)
+
+AC_PROG_CXX
+AC_PROG_LIBTOOL
+
+AC_CHECK_LIB(pcre++,pcre_exec,,echo "ERROR: Required library pcre++ not found" &amp;&amp; exit)
+
+AC_OUTPUT(Makefile)
+</pre>
+<p><br>
+This <i>configure.ac</i> is sufficient to generate a useful <i>configure</i> script.  There are a lot more things you can do in <i>configure.ac</i> that we have not covered here.  We recommend reading the <a href="http://www.gnu.org/software/autoconf/manual/autoconf.pdf" class="external text" title="http://www.gnu.org/software/autoconf/manual/autoconf.pdf" rel="nofollow">GNU Autoconf Manual</a> for complete information.
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=11" title="Overview of GNU Autotools">edit</a>]</div><a name="Writing_A_Basic_Makefile.am"></a><h3>Writing A Basic <i>Makefile.am</i></h3>
+<p>Here's an example of a very basic <i>Makefile.am</i>:
+</p>
+<pre>bin_PROGRAMS = fissle
+fissle_SOURCES = fissle.cpp
+INCLUDES = $(all_includes)
+fissle_LDFLAGS = $(all_libraries)
+noinst_HEADERS = 
+</pre>
+<p>This is pretty simple but enough to get me started.  <i>bin_PROGRAMS</i>
+identifies the name of the program I'm building. From that point I
+specify the sources, includes, and libraries that need to be
+considered. In the case of includes and libraries, I tell it to use the
+settings from configure, if any. <i>noinst_HEADERS</i> will include a
+list of header files that are not installed with the package but are
+used to build my application (which is probably all of them unless I'm
+offering a devel package).
+</p><p>That's enough to get my application to build.  As with <i>configure.ac</i>, there are a lot more things that you can do in <i>Makefile.am</i> than what we've covered here.  We recommend reading the <a href="http://www.gnu.org/software/automake/manual/html_mono/automake.html" class="external text" title="http://www.gnu.org/software/automake/manual/html mono/automake.html" rel="nofollow">GNU Automake Manual</a> for more complete information.
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=12" title="Overview of GNU Autotools">edit</a>]</div><a name="Ready_To_Go"></a><h2>Ready To Go</h2>
+<p>Now that you've created your starting files, you are ready to go.
+Using GNU Autotools can seem daunting at first, but with a little
+digging you can get it figured out pretty quickly. The trick is to
+first understand the files that you need to begin and to put those
+files in place, and second, to make sure you execute the correct
+commands in the correct order. I was surprised how well it worked once
+I figured those two things out.
+</p><p>Of course, like we said earlier, there is an awful lot more to
+know than what we've covered here. We've tried to refer you to the
+experts when it comes to all the things you can do with the GNU
+Autotools. We hope that this information is enough to get you started
+and to be helpful in providing for you a basic overview of GNU
+Autotools.
+</p><p><br>
+</p>
+<div class="editsection" style="float: right; margin-left: 5px;">[<a href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit&amp;section=13" title="Overview of GNU Autotools">edit</a>]</div><a name="For_More_Information"></a><h2>For More Information</h2>
+<ul><li> <a href="http://www.suse.de/%7Esh/automake/automake.pdf" class="external text" title="http://www.suse.de/~sh/automake/automake.pdf" rel="nofollow">Open Source Development Tools</a> - A presentation by Stefan Hundhammer of SUSE
+</li><li> <b>GNU Autoconf, Automake, and Libtool</b> - a book by Vaughan, Elliston, Tromey, and Taylor (<a href="http://developer.novell.com/wiki/index.php?title=Special:Booksources&amp;isbn=1578701902" class="internal">ISBN 1578701902</a>)
+</li><li> <a href="http://sources.redhat.com/autobook" class="external text" title="http://sources.redhat.com/autobook" rel="nofollow">Online Version</a> of the book listed above
+</li></ul>
+<div class="printfooter">
+Retrieved from "<a href="http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools">http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools</a>"</div>
+				<div id="catlinks"><p class="catlinks"><a href="http://developer.novell.com/wiki/index.php?title=Special:Categories&amp;article=Overview_of_GNU_Autotools" title="Special:Categories">Categories</a>: <a href="http://developer.novell.com/wiki/index.php/Category:Understanding_Linux" title="Category:Understanding Linux">Understanding Linux</a> | <a href="http://developer.novell.com/wiki/index.php/Category:Understanding_SUSE_Linux" title="Category:Understanding SUSE Linux">Understanding SUSE Linux</a> | <a href="http://developer.novell.com/wiki/index.php/Category:Systems_Engineering_in_SUSE_Linux" title="Category:Systems Engineering in SUSE Linux">Systems Engineering in SUSE Linux</a> | <a href="http://developer.novell.com/wiki/index.php/Category:Systems_Engineering_in_C_and_C-plus-plus" title="Category:Systems Engineering in C and C-plus-plus">Systems Engineering in C and C-plus-plus</a></p></div>				<!-- end content -->
+				<div class="visualClear"></div>
+			  </div>
+			</div>
+		<div class="visualClear"></div>
+		<div id="footer">
+			<div id="p-cactions">
+			  <ul>
+				<li id="ca-nstab-main" class="selected"><a title="View the content page [alt-c]" accesskey="c" href="http://developer.novell.com/wiki/index.php/Overview_of_GNU_Autotools">Article</a></li><li id="ca-talk" class="new"><a title="Discussion about the content page [alt-t]" accesskey="t" href="http://developer.novell.com/wiki/index.php?title=Talk:Overview_of_GNU_Autotools&amp;action=edit">Discussion</a></li><li id="ca-edit"><a title="You can edit this page. Please use the preview button before saving. [alt-e]" accesskey="e" href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=edit">Edit</a></li><li id="ca-history"><a title="Past versions of this page. [alt-h]" accesskey="h" href="http://developer.novell.com/wiki/index.php?title=Overview_of_GNU_Autotools&amp;action=history">History</a></li>			  </ul>
+			</div>
+			<div id="p-personal">
+			  <h5>Personal tools</h5>
+			  <div class="pBody">
+				<ul>
+				<li id="pt-login"><a title="You are encouraged to log in, it is not mandatory however. [alt-o]" accesskey="o" href="http://developer.novell.com/wiki/index.php?title=Special:Userlogin&amp;returnto=Overview_of_GNU_Autotools">Create an account or log in</a></li>				</ul>
+			  </div>
+			</div>
+			<ul id="f-list">
+			  <li id="f-lastmod"> Updated 24 November 2005</li>			  <li id="f-viewcount">Views 25,092</li>			  			  			  <li id="f-disclaimer"><a href="http://developer.novell.com/wiki/index.php/Developer_Community:Legal" title="Developer Community:Legal">Legal</a></li>			</ul>
+			<div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="Overview_of_GNU_Autotools_files/poweredby_mediawiki_88x31.png" alt="MediaWiki"></a></div>			
+		</div>
+	</div>
+</div>
+
+<div id="ftr">
+	<div id="ftr_tagline">
+		<p><a href="http://www.novell.com/company/strategy.html" onclick="return openTagLinePopup(this.href);">Novell<span class="reg">®</span> Making IT Work As One<span class="trade">™</span></a></p>
+	</div>
+	<div id="ftr_container">
+		<ul id="ftr_nav">
+			<li id="ftr_careers"><a href="http://www.novell.com/company/careers/index.html">Careers</a></li>
+			<li id="ftr_contact"><a href="http://www.novell.com/company/contacts-offices/">Contact Us</a></li>
+			<li id="ftr_fb"><a href="http://www.novell.com/inc/feedback/feedback.jsp">Feedback</a></li>
+			<li id="ftr_privacy"><a href="http://www.novell.com/company/legal/">Legal</a></li>
+			
+
+		<li id="ftr_pf"><a href="javascript:showPrinterFriendly();void(true);">Print</a></li></ul>
+
+		<p id="ftr_copy">© 2009 Novell, Inc. All Rights Reserved.</p>
+
+		<div id="ftr_code">
+			<script type="text/javascript" src="Overview_of_GNU_Autotools_files/ftr_2008.js"></script>
+			<script type="text/javascript" src="Overview_of_GNU_Autotools_files/superstats.js"></script>
+			<noscript>
+<div id="ftr_omniture"><img
+src="http://novellcom.112.2O7.net/b/ss/novellcom/1/G.6--NS/0"
+height="1" width="1" alt="" /></div> </noscript>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="Overview_of_GNU_Autotools_files/elqCfg.js"></script>
+	<script type="text/javascript" src="Overview_of_GNU_Autotools_files/elqImg.js"></script><layer hidden="true"><img src="Overview_of_GNU_Autotools_files/svrGP.gif" width="1" border="0" height="1"></layer>
+	<script type="text/javascript" charset="utf-8">
+	//<![CDATA[
+		var elqPPS = '70';
+	//]]>
+	</script>
+	<script type="text/javascript" src="Overview_of_GNU_Autotools_files/elqScr.js"></script><script type="text/javascript" language="JavaScript" src="Overview_of_GNU_Autotools_files/svrGP.htm"></script>
+	<script type="text/javascript" charset="utf-8">
+		//<![CDATA[
+		var hasjQuery = jQuery || false;
+		if(hasjQuery) {
+			$(document).ready(function(){
+				if($("input[name=elqCustomerGUID]").length > 0){ //set the Eloqua Customer GUID for all forms
+					$("input[name=elqCustomerGUID]").val(GetElqCustomerGUID());
+				}
+			});
+		}
+		//]]>
+	</script>
+</div><!-- Served by anan in 0.30 secs. -->
+</body></html>

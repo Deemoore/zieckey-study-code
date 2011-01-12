@@ -1,0 +1,487 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  
+  
+
+  
+
+
+  
+
+  
+    <title>
+      Howto/DBGAndPHPEclipse – PHPEclipse
+    </title>
+        <link rel="search" href="http://www.phpeclipse.com/search">
+        <link rel="help" href="http://www.phpeclipse.com/wiki/TracGuide">
+        <link rel="alternate" 
+href="http://www.phpeclipse.com/wiki/Howto/DBGAndPHPEclipse?format=txt" 
+type="text/x-trac-wiki" title="Plain Text">
+        <link rel="up" href="http://www.phpeclipse.com/wiki/Howto" 
+title="View parent page">
+        <link rel="start" href="http://www.phpeclipse.com/wiki">
+        <link rel="stylesheet" href="DBGAndPHPEclipse_files/trac.css" 
+type="text/css"><link rel="stylesheet" 
+href="DBGAndPHPEclipse_files/wiki.css" type="text/css"><link 
+rel="stylesheet" href="DBGAndPHPEclipse_files/mentalaxis.css" 
+type="text/css">
+        <link rel="shortcut icon" 
+href="http://www.phpeclipse.com/chrome/site/eclipseFav.ico" 
+type="image/x-icon">
+        <link rel="icon" 
+href="http://www.phpeclipse.com/chrome/site/eclipseFav.ico" 
+type="image/x-icon">
+      <link type="application/opensearchdescription+xml" rel="search" 
+href="http://www.phpeclipse.com/search/opensearch" title="Search 
+PHPEclipse">
+    <script type="text/javascript" src="DBGAndPHPEclipse_files/jquery.js"></script><script type="text/javascript" src="DBGAndPHPEclipse_files/trac.js"></script><script type="text/javascript" src="DBGAndPHPEclipse_files/search.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+  </head><body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.phpeclipse.com/"><img 
+src="DBGAndPHPEclipse_files/eclipsebutton_med.png" alt="" width="80" 
+height="86"></a>
+      </div>
+      <form id="search" action="/search" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input id="proj-search" name="q" size="18" type="text">
+          <input value="Search" type="submit">
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="http://www.phpeclipse.com/login">Login</a></li><li><a
+ href="http://www.phpeclipse.com/prefs">Preferences</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/TracGuide">Help/Guide</a></li><li><a
+ href="http://www.phpeclipse.com/about">About Trac</a></li><li 
+class="last"><a href="http://www.phpeclipse.com/register">Register</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first active"><a href="http://www.phpeclipse.com/wiki">Wiki</a></li><li><a
+ href="http://www.phpeclipse.com/timeline">Timeline</a></li><li><a 
+href="http://www.phpeclipse.com/roadmap">Roadmap</a></li><li><a 
+href="http://www.phpeclipse.com/browser">Browse Source</a></li><li><a 
+href="http://www.phpeclipse.com/report">View Tickets</a></li><li><a 
+href="http://www.phpeclipse.com/search">Search</a></li><li><a 
+href="https://hudson.phpeclipse.com:8443/hudson">Builds</a></li><li><a 
+href="http://www.phpeclipse.com/discussion">Discussion</a></li><li 
+class="last"><a href="http://www.phpeclipse.com/blog">Blog</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><a 
+href="http://www.phpeclipse.com/wiki/Howto">Up</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/WikiStart">Start Page</a></li><li><a
+ href="http://www.phpeclipse.com/wiki/TitleIndex">Index</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/Howto/DBGAndPHPEclipse?action=history">History</a></li><li
+ class="last"><a 
+href="http://www.phpeclipse.com/wiki/Howto/DBGAndPHPEclipse?action=diff&amp;version=5">Last
+ Change</a></li>
+          </ul>
+        <hr>
+      </div>
+    <div id="content" class="wiki">
+      <p class="path noprint">
+        <a class="pathentry" title="View Howto" 
+href="http://www.phpeclipse.com/wiki/Howto">Howto</a><span 
+class="pathentry sep">/</span><a class="pathentry" title="View 
+Howto/DBGAndPHPEclipse" 
+href="http://www.phpeclipse.com/wiki/Howto/DBGAndPHPEclipse">DBGAndPHPEclipse</a>
+        <br style="clear: both;">
+      </p>
+      <div class="wikipage searchable">
+        
+          <p>
+</p><div class="wiki-toc"><ol><li><a href="#DBGandPHPEclipse">DBG and <span
+ class="searchword0">PHPEclipse</span></a><ol><li><a 
+href="#Introduction">Introduction</a></li><li>
+<a href="#ProjectPaths">Project Paths</a></li><li>
+<a href="#DBGconfig">DBG config</a><ol><li><ol><li><ol><li><a 
+href="#debugger.JIT_hostclienthost"><span class="searchword1">debug</span>ger.JIT_host
+ = clienthost</a></li></ol></li></ol></li></ol></li><li>
+<a href="#TestProject">Test Project</a></li><li>
+<a href="#DebuggingScript"><span class="searchword1">Debug</span>ging 
+Script</a></li><li>
+<a href="#DBGDebugProfile">DBG <span class="searchword1">Debug</span> 
+Profile</a></li></ol></li></ol></div><p>
+</p>
+<h1 id="DBGandPHPEclipse">DBG and <span class="searchword0">PHPEclipse</span><a
+ title="Link to this section" href="#DBGandPHPEclipse" class="anchor"> ¶</a></h1>
+<h2 id="Introduction">Introduction<a title="Link to this section" 
+href="#Introduction" class="anchor"> ¶</a></h2>
+<p>
+This guide will focus on using the DBG <span class="searchword1">Debug</span>ger
+ with <span class="searchword0">PHPEclipse</span>. It will cover the dbg
+ config file for the server (apache), <span class="searchword2">setting</span>
+ up a DBG profile in <span class="searchword0">PHPEclipse</span> and 
+starting your <span class="searchword1">debug</span> session. The 
+installation of DBG on the server is outside of the scope of this 
+document. Please refer to the <a class="ext-link" 
+href="http://dd.cron.ru/dbg/installation.php"><span class="icon">&nbsp;</span>DBG
+ website</a> for guidance on installing DBG on your server. This guide 
+was written using <a class="ext-link" href="http://www.centos.org/"><span
+ class="icon">&nbsp;</span>CentOs 5</a> as it's example server. Your 
+system may be different. If so please open a ticket and mention the 
+change. This guide will be updated to reflect changes for different 
+platforms. 
+</p>
+<p>
+<strong>Special Note:</strong><br>
+Before you begin insure that you have only the DBG plugin from the <span
+ class="searchword0">PHPEclipse</span> update site installed. You can go
+ to Help-&gt;Software Updates -&gt; Manage Configuration to check for X<span
+ class="searchword1">Debug</span> plugin. If it is installed, just 
+disable it. The two debugging tools not working well together is a known
+ issue in the 1.2.0 release of PHPEclipse.
+</p>
+<p>
+<strong>Special Note 2:</strong><br>
+As of <span class="searchword0">PHPEclipse</span> 1.2.x trying to <span 
+class="searchword1">debug</span> an RSE project will not work. The src 
+needs to be on local disk, or a mapped nfs mount/ smb directory.
+</p>
+<h2 id="ProjectPaths">Project Paths<a title="Link to this section" 
+href="#ProjectPaths" class="anchor"> ¶</a></h2>
+<p>
+Getting the paths to work is a big issue with Eclipse and <span 
+class="searchword1">Debug</span>ging. I am going to try to make this as 
+clear as possible. First we have our apache website path. Our apache 
+config may look something like this
+</p>
+<pre class="wiki">&lt;VirtualHost *:80&gt;
+    ServerAdmin ed_mann@dont_spam_me.ok
+    DocumentRoot /home/ed_mann/dev30
+    ServerName dev30.arctechnologies.net
+    ErrorLog logs/dev30-error.log
+    CustomLog logs/dev30-access.log common
+&lt;/VirtualHost&gt;
+</pre><p>
+From above we can find that our Remote Src path is the DocumentRoot 
+which is set to /home/ed_mann/dev30. <br>
+Remote Path = /home/ed_mann/dev30
+You will need to replace that Remote Path with the path you get from 
+your Apache conf file, or your virtual host configuration.<br>
+</p>
+<p>
+Now on our local machine where we are running Eclipse our workspace is 
+in<br>
+/home/ed_mann/workspace <br>
+and the project is called dev30 <br>
+So our total local path would be <br>
+local path = /home/ed_mann/workspace/dev30 <br>
+</p>
+<p>
+Please change this to your workspace and project name path. We will be 
+using this information later. So keep it in mind or write it down. <br>
+<strong>Notice</strong> how our apache path does not have workspace, but
+ our local path does. That is ok. The server that is hosting the files 
+stores it in the ed_mann directory, but you can use a nfs/smb/fuse 
+export to mount the files into /home/ed_mann/workspace. So if the paths 
+are not the same it's ok. Eclipse only needs to know where on each end 
+is the source files.
+</p>
+<h2 id="DBGconfig">DBG config<a title="Link to this section" 
+href="#DBGconfig" class="anchor"> ¶</a></h2>
+<p>
+Your server may have a /etc/php.d directory with extra configuration 
+options in it for php. If not you will need to add the following code to
+ your php.ini file. If you have a php.d directory create a new file in 
+that directory named dbg.ini and add the following code:
+</p>
+<pre class="wiki">extension=dbg.so
+[<span class="searchword1">debug</span>ger]
+debugger.enabled = true
+debugger.profiler_enabled = true
+debugger.JIT_host = clienthost
+debugger.JIT_port = 10001
+</pre><p>
+Once the code is added restart Apache. Create a php file in your 
+document root for the website you can call it whatever you want we will 
+use info.php in this document. Add the following code to the info.php 
+file.
+</p>
+<pre class="wiki">&lt;?php
+ print (phpinfo());
+?&gt;
+</pre><p>
+When you have done this, now with your browser type in the url address 
+to get to this page. Example http://localhost/info.php <br>
+Look for the section that resembles the image below <br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/dbg_phpinfo.png"><img
+ src="DBGAndPHPEclipse_files/dbg_phpinfo.png" alt="dbg php info" 
+title="dbg php info"></a> <br>
+If you do not see DBG in the section like above check your <span 
+class="searchword2">setting</span>s, make any needed changes and restart
+ apache.
+</p>
+<h5 id="debugger.JIT_hostclienthost"><span class="searchword1">debug</span>ger.JIT_host
+ = clienthost<a title="Link to this section" 
+href="#debugger.JIT_hostclienthost" class="anchor"> ¶</a></h5>
+<p>
+Note that the DBG <span class="searchword1">debug</span>ger currently 
+relies on the PHP variable HTTP_SERVER_VARS to determine the IP address 
+of your debug session. By default CentOS 5 disables this variable, so 
+you will find remote debugging does not work. You need to add the 
+directive
+</p>
+<pre class="wiki">register_long_arrays On
+</pre><p>
+to php.ini for remote <span class="searchword1">debug</span>ging to 
+work.
+</p>
+<h2 id="TestProject">Test Project<a title="Link to this section" 
+href="#TestProject" class="anchor"> ¶</a></h2>
+<p>
+Once you have DBG installed into php on the server you can now configure
+ DBG in Eclipse. Start Eclipse and activate the <span 
+class="searchword0">PHPEclipse</span> perspective if it is not already. 
+You will need to import a project to use from your webserver or create a
+ new project on the web server. Configuring the web server for projects 
+is out of the scope for this document that exercise is left up to the 
+reader. Once you have your project established create a new file called 
+dbg.php. <br>
+Starting of simple we will just add the following to the dbg.php file.
+</p>
+<pre class="wiki">&lt;?php
+ print("DBG Test");
+?&gt;
+</pre><p>
+Now with your browser connect to the page with your browser Example: 
+http://localhost/My_Project/dbg.php. <br>
+Once you have done this and verified that the text appears you are ready
+ to configure a DBG Profile and our <span class="searchword1">debug</span>
+ script.
+</p>
+<h2 id="DebuggingScript"><span class="searchword1">Debug</span>ging 
+Script<a title="Link to this section" href="#DebuggingScript" 
+class="anchor"> ¶</a></h2>
+<p>
+You should have verified your environment is setup to <span 
+class="searchword1">debug</span> using the steps above. Now we need to 
+write some code that will allow us to test debugging our php script. In 
+our dbg.php file we are going to remove the print("DBG Test"); statement
+ with a little loop that will allow us to step into the code.
+</p>
+<pre class="wiki">&lt;?php
+ 
+for ($i =1; $i &lt;= 10; $i++){
+  print (" we are at ". $i. "&lt;br /&gt;");
+}
+?&gt;
+</pre><p>
+On the line that starts our for loop toggle a breakpoint. You can do 
+this by right-clicking in the gutter and selecting Toggle Breakpoint
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_toggle_breakpoint.png"><img
+ src="DBGAndPHPEclipse_files/debug_toggle_breakpoint.png" alt="dbg debug
+ toggle breakpoint" title="dbg debug toggle breakpoint"></a> <br>
+<br>
+You should see a blue dot appear to signify where the breakpoint is. Now
+ change to the <span class="searchword1">Debug</span> Perspective. 
+Window-&gt;Open Perspective -&gt; <span class="searchword1">Debug</span>
+ <br>
+Now we can configure our DBG Debug Profile. We will only need to do this
+ once per project.
+</p>
+<h2 id="DBGDebugProfile">DBG <span class="searchword1">Debug</span> 
+Profile<a title="Link to this section" href="#DBGDebugProfile" 
+class="anchor"> ¶</a></h2>
+<p>
+In Eclipse click on the <span class="searchword1">debug</span> icon in 
+the top navigation bar. Select Open <span class="searchword1">Debug</span>
+ Dialog <br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/open_debug_dialog.png"><img
+ src="DBGAndPHPEclipse_files/open_debug_dialog.png" alt="open debug 
+dialog" title="open debug dialog"></a> <br>
+<br>
+You should get the <span class="searchword1">Debug</span> Dialog Window.
+ We will create a new PHP DBG Script by double clicking on the PHP DBG 
+Script list entry.<br>
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_dialog.png"><img
+ src="DBGAndPHPEclipse_files/debug_dialog.png" alt="dbg debug dialog" 
+title="dbg debug dialog"></a> <br>
+<br>
+The file page that it defaults to when you create a new configuration 
+should not need any changes. Just edit the configuration name to 
+something more meaningful to you. Click on the Environment tab with the 
+PHP icon and we will make our needed changes.
+</p>
+<ol><li>Select Remote <span class="searchword1">Debug</span>
+</li><li>Select the browser that you want to use. If you are going to 
+use the internal <span class="searchword0">PHPEclipse</span> browser 
+just select Open with DBGSession URL in internal Browser. If you want to
+ use external browser select Open with DEBSession URL in internal 
+Browser and then also select Use external Web browser as well. There is a
+ <a class="assigned ticket" href="http://www.phpeclipse.com/ticket/670" 
+title="Bugs: Debug Dialog Browser select (assigned)">ticket</a> open to 
+have the way these options work changed.
+</li><li>Set your remote Sourcepath to the remote path that you 
+determined was correct for your environment when you read the section 
+earlier on Project Paths.
+</li><li>Click Add in the Mapped Path section to add map path for our 
+local and remote paths.
+<ol class="loweralpha"><li>Local path is the path that is to your 
+workspace + project See Project paths from above.
+</li><li>Remote Path is the remote path that you get from apache 
+configuration or VirtualHost config.
+</li></ol></li></ol><p>
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_evo_config.png"><img
+ src="DBGAndPHPEclipse_files/debug_evo_config.png" alt="dbg debug evo 
+config" title="dbg debug evo config"></a> <br>
+<br>
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_map_path.png"><img
+ src="DBGAndPHPEclipse_files/debug_map_path.png" alt="dbg debug map 
+path" title="dbg debug map path"></a> <br>
+<br>
+</p>
+<p>
+Once you have these items configured you just need to apply them and you
+ are ready to <span class="searchword1">debug</span>. Click the <span 
+class="searchword1">Debug</span> button, You should have already set 
+breakpoints and activated the Debug Perspective.<br>
+Your browser should then get the URL set and the debugger should connect
+ to the Eclipse Debug session. The script should start executing but 
+stop at our breakpoint. You should be able to step into the for loop.
+</p>
+
+        
+        
+      </div>
+          <h3>Attachments</h3>
+          <ul>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/dbg_phpinfo.png"
+ title="View attachment">dbg_phpinfo.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/dbg_phpinfo.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="12360 bytes">12.1 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A18%3A44-0500&amp;precision=second"
+ title="2008-06-02T15:18:44-0500 in Timeline">2 years</a> ago.
+                <q>dbg php info</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_dialog.png"
+ title="View attachment">debug_dialog.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/debug_dialog.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="41954 bytes">41.0 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A19%3A07-0500&amp;precision=second"
+ title="2008-06-02T15:19:07-0500 in Timeline">2 years</a> ago.
+                <q>dbg debug dialog</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_evo_config.png"
+ title="View attachment">debug_evo_config.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/debug_evo_config.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="58857 bytes">57.5 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A19%3A23-0500&amp;precision=second"
+ title="2008-06-02T15:19:23-0500 in Timeline">2 years</a> ago.
+                <q>dbg debug evo config</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_map_path.png"
+ title="View attachment">debug_map_path.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/debug_map_path.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="11123 bytes">10.9 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A19%3A33-0500&amp;precision=second"
+ title="2008-06-02T15:19:33-0500 in Timeline">2 years</a> ago.
+                <q>dbg debug map path</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/debug_toggle_breakpoint.png"
+ title="View attachment">debug_toggle_breakpoint.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/debug_toggle_breakpoint.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="17618 bytes">17.2 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A19%3A44-0500&amp;precision=second"
+ title="2008-06-02T15:19:44-0500 in Timeline">2 years</a> ago.
+                <q>dbg debug toggle breakpoint</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/DBGAndPHPEclipse/open_debug_dialog.png"
+ title="View attachment">open_debug_dialog.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/DBGAndPHPEclipse/open_debug_dialog.png"
+ title="Download" class="trac-rawlink"><img 
+src="DBGAndPHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="11280 bytes">11.0 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A19%3A58-0500&amp;precision=second"
+ title="2008-06-02T15:19:58-0500 in Timeline">2 years</a> ago.
+                <q>open debug dialog</q>
+              </li>
+          </ul>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="last first">
+          <a rel="nofollow" 
+href="http://www.phpeclipse.com/wiki/Howto/DBGAndPHPEclipse?format=txt">Plain
+ Text</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" xml:lang="en" lang="en"><hr>
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img 
+src="DBGAndPHPEclipse_files/trac_logo_mini.png" alt="Trac Powered" 
+width="107" height="30"></a>
+      <p class="left">
+        Powered by <a href="http://www.phpeclipse.com/about"><strong>Trac
+ 0.11.5</strong></a><br>
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+      </p>
+      <p class="right">Visit the Trac open source project at<br><a 
+href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body></html>

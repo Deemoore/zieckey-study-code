@@ -1,0 +1,154 @@
+2009.6.20、 STL list 的iterator指针被破坏
+有一个类，含有一个监听该类动作的Listener list：m_ListenerList
+m_ListenerList 里面存放Listener* 接口指针。
+有addListener、removeListener、notify动作
+在做单元测试的时候没有什么问题，可是在集成测试的时候，
+系统偶尔会出现莫名其妙的问题，
+后来追踪了好久发现是这里的这个 m_ListenerList 在做add、remove动作的时候出现问题。
+
+问题是什么？
+线程一在调用 notify 通知 m_ListenerList 中所有监听者，
+在这一过程中，另外的线程二调用 removeListener 接口删除一个监听者，
+结果破坏了 iterator 指针，出现问题。
+
+解决办法：
+std::pair<Listener*,bool>
+添加一个bool变量，表示该Listener是该删除还是有效的（通知它）。
+add 的时候，将该bool置为true
+remove 的时候，将该bool置为false
+notify 的时候，碰到true通知，false，就删除
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================
+============================================================================================
+============================================================================================
+2009.7.20、CURL异步调用问题
+
+
+我们摒弃了CURL的同步调用机制，自己使用 select I/O 接管了 CURL 收发数据的管理。具体上有一个 CURLService 调度线程（线程池）， 里面有若干 CURLWorkThread 工作线程，每一个CURL任务都实例化一个 CURLWork 工作任务放入线程池工作。
+
+开始的时候，调用 curl_multi_socket_action 会建立一个 socket(fd)，
+curl_multi_socket_action 函数返回前会调用我们自己的 sock_cb 回调函数，
+我们在 sock_cb 中就可以取得刚建立好的 socket(fd)。然后将这个 socket(fd) 与之对应的 CURLWork 建立关系管理起来。
+然后在 CURLService 调度线程里做 select 调度，从而实现了 CURL 的异步调用。
+
+开始的时候还可以正常工作，后来，却出现了 10038 错误（winsock，）MSDN上 10038 错误的说明：
+Socket operation on nonsocket. 
+An operation was attempted on something that is not a socket. Either the socket handle parameter did not reference a valid socket, or for select, a member of an fd_set was not valid.
+
+经过调试可以排除 “for select, a member of an fd_set was not valid.” 这个可能性，
+那么问题原因定位到 socket(fd) 错误上，bad socket。
+
+我们自己的程序没有修改socket(fd)，更没有关闭连接，这迫使我们进入curl库内部，
+
+我们尝试过，直接用ip代替url，是可以正常工作的。
+可是用 url ，CURL库内部的dns解析也是正确的，可以正常解析出 url对应的ip，
+值得指出的是，CURL库解析DNS是异步方式的，它会新建一个线程去单独做这个解析工作。
+问题会出在哪里呢？？？
+
+经过大半天的跟踪debug，发现curl库两次调用了socket函数返回sockfd，也就是说它建立了两个不同的sockfd，
+而我们的程序在 sock_cb 中只有一次赋值，因为我们想当然的认为 curl 只为每一个任务建立一个连接（只有一个sockfd），
+
+CURL为什么会两次建立socket呢？
+
+了解到，CURL第一个调用 curl_multi_socket_action， 就会建立一个socket(fd)，然后调用 sock_cb 通知我们写的接口程序，
+这样外部程序就可以做select调度。这个socket(fd)并没有做连接工作，但是外面的select调度却可以捕捉到该sockfd的事件，
+这是最令人迷惑的地方，外部以为这个sockfd是正常的（实际上是不正常的）。
+下次外部再次（或再几次）调用 curl_multi_socket_action 的时候，curl内部又建立一个socket，这个socket才是真正做我们的事情，
+连接、发送、接收数据。
+
+可是这个socket(fd)我们外部程序并没有捕捉到，还是用原有的那个socket(fd)做select，结果就出现 10038 错误。
+
+我们把curl后来建立的那个socket(fd)再次与CURLWork绑定，给select做调度，解决问题。
+
+中间还有一个小插曲，再次绑定后并没有立刻解决问题，后来找到原因，我们的CURLWork与socket(fd)绑定的时候，
+是通过一个map<sockfd,CURLWork*>给select的，原来的那个socket(fd)继续在map表里。
+
+
+
+回过头来看看，正是因为curl的dns解析是异步的，如果解析过程非常快，那么它一开始调用sock_cb函数通知外部程序的时候，
+那个socket(fd)就是第二个建立好的socket，如果解析过程慢了，它内部会返回一个临时的socket(fd)，
+等待第二次调用 curl_multi_socket_action，我们的问题正是由于dns解析慢了，curl返回了一个临时的socket(fd)给外部做select，
+等它真正建立好socket的时候，我们却没有及时跟新select fdset里面的那个socket(fd)，从而导致问题的出现。
+
+
+
+
+============================================================================================
+============================================================================================
+============================================================================================
+2009.8.20
+
+从内存栈被破坏开始
+
+那天发现一个bug，线程运行中出现段错误，错误现场感觉是因为线程的栈被非法修改过了，
+为了验证栈被修改这一个猜想，我把出错的函数调用 pollSockets() 修改如下:
+
+			char aa[c_nNumBuf];
+			for( int i = 0; i < c_nNumBuf; ++i )
+			{
+				aa[i]='a';
+			}
+
+			/// Poll working sockets.
+			pollSockets();
+
+			for( int i = 0; i < c_nNumBuf; ++i )
+			{
+				H_ASSERT( aa[i] =='a' );
+			}
+			
+发现现在每次都在 ‘H_ASSERT( aa[i] =='a' );’ 断言处错误，从而证实我的猜想。
+
+那么，为什么 pollSockets 函数里面会把栈破坏呢？？
+
+调用pollSockets函数栈被破坏，所以我比较关心pollSockets函数开始处定义的几个变量，
+
+进去一个，发现开始处定义了几个 fd_set :
+	fd_set readset, writeset, exceptset ;
+	
+我对这几个 fd_set 变量非常怀疑，为了验证我的怀疑，
+我把这几个 fd_set 改为类的成员变量，结果发现，在错误时类的堆内存被破坏，
+现在几乎可以肯定是由于对这几个 fd_set 变量的非法操作导致错误。
+
+我突然想到了，我们用的select系统调用有一个maxfdp1参数，这个参数有一个限制不能大于1024，
+为什么不能大于1024呢？我开始查阅资料，原来 Berkeley Socket 最初设计的时候，
+fd_set 描述符集通常用整数数组中的位域表示，数组元素的每一位对应一个文件描述符。
+例如，一个整数占32位，那么整数数组的第一个元素代表文件描述符0到31，
+数组的第二个元素代表文件描述符32到63，以此类推。
+
+maxfdp1 是最大的fd的数值加1，说明最大的fd数值不能大于1024，
+那么会不会是我在做select操作的时候fd_set里面有大于1024的fd呢？
+其实最开始的设计程序的时候，选择select是因为它简单，跨平台，
+而且当时项目本身不会同时有很多并发的连接，
+同时，我还做了限制，让select每调用的fd个数小于100个，
+
+然后 maxfdp1 不是个数，而是最大的fd数值加一，这是我开始忽视的地方。
+
+我大概明白了，就是因为我给select的fd数值有大于1024的情况，我用上面同样的方法证实我的推理。
+
+这个问题费了我近一天的时间。
+
+
+
+
+============================================================================================
+============================================================================================
+============================================================================================
+2009.9.8
+
+curl库有一个函数 curl_formadd 的参数个数是可变的，有一个需要传入long型的参数，
+我们在用的时候传入的是一个int型的数，测试在windows上做，32位机，没有问题。
+
+可是后来集成到一起，在Linux 64位机上测试就出现问题，out_of_memory 错误，
+找了很久，最后重新编译了curl库的debug版，跟踪进去之后才发现这个问题，
+原来应用层调用的时候没有做强制转换。

@@ -1,0 +1,78 @@
+linux gprof命令
+
+
+
+gprof介绍
+gprof是GNU profiler工具。可以显示程序运行的“flat profile”，包括每个函数的调用次数，每个函数消耗的处理器时间。也可以显示“调用图”，包括函数的调用关系，每个函数调用花费了多少时间。还可以显示“注释的源代码”，是程序源代码的一个复本，标记有程序中每行代码的执行次数。
+
+为gprof编译程序
+在编译或链接源程序的时候在编译器的命令行参数中加入“-pg”选项，编译时编译器会自动在目标代码中插入用于性能测试的代码片断，这些代码在程序在运行时采集并记录函数的调用关系和调用次数，以及采集并记录函数自身执行时间和子函数的调用时间，程序运行结束后，会在程序退出的路径下生成一个 gmon.out文件。这个文件就是记录并保存下来的监控数据。可以通过命令行方式的gprof或图形化的Kprof来解读这些数据并对程序的性能进行分析。另外，如果想查看库函数的profiling，需要在编译是再加入“-lc_p”编译参数代替“-lc”编译参数，这样程序会链接libc_p.a 库，才可以产生库函数的profiling信息。如果想执行一行一行的profiling，还需要加入“-g”编译参数。
+例如如下命令行：
+gcc -Wall -g -pg -lc_p example.c -o example
+
+记住一定要在编译和链接的时候都使用-pg选项
+
+执行gprof
+执行如下命令行，即可执行gprof：
+gprof OPTIONS EXECUTABLE-FILE gmon.out BB-DATA [YET-MORE-PROFILE-DATA-FILES...] [> OUTFILE]
+
+gprof产生的信息
+%                         the percentage of the total running time of the
+time                      program used by this function.
+                            函数使用时间占所有时间的百分比。
+cumulative           a running sum of the number of seconds accounted
+seconds              for by this function and those listed above it.
+                            函数和上列函数累计执行的时间。
+self                     the number of seconds accounted for by this
+seconds              function alone.   This is the major sort for this
+                           listing.
+                           函数本身所执行的时间。
+calls                    the number of times this function was invoked, if
+                           this function is profiled, else blank.
+                           函数被调用的次数
+self                    the average number of milliseconds spent in this
+ms/call                function per call, if this function is profiled,
+                          else blank.
+                           每一次调用花费在函数的时间microseconds。
+total                   the average number of milliseconds spent in this
+ms/call                function and its descendents per call, if this
+                           function is profiled, else blank.
+                           每一次调用，花费在函数及其衍生函数的平均时间microseconds。
+name                  the name of the function.   This is the minor sort
+                           for this listing. The index shows the location of
+                           the function in the gprof listing. If the index is
+                           in parenthesis it shows where it would appear in
+                           the gprof listing if it were to be printed.
+                           函数名
+                           
+                          
+
+运行程序:
+./a.out
+
+分析gmon.out:
+gprof -b a.out gmon.out                          
+
+
+
+
+
+-b不再输出统计图表中每个字段的详细描述。
+
+-p 只输出函数的调用图（Call graph 的那部分信息）。
+
+-q 只输出函数的时间消耗列表。
+
+-E Name不再输出函数Name 及其子函数的调用图，此标志类似于 -e 标志，但它在总时间和百分比时间的计算中排除了由函数Name 及其子函数所用的时间。
+
+-e Name 不再输出函数Name 及其子函数的调用图（除非它们有未被限制的其它父函数）。可以给定多个 -e 标志。一个 -e 标志只能指定一个函数。
+
+-F Name 输出函数Name 及其子函数的调用图，它类似于 -f 标志，但它在总时间和百分比时间计算中仅使用所打印的例程的时间。可以指定多个 -F 标志。一个 -F 标志只能指定一个函数。-F 标志覆盖 -E 标志。
+
+-f Name输出函数Name 及其子函数的调用图。可以指定多个 -f 标志。一个 -f 标志只能指定一个函数。
+
+-z 显示使用次数为零的例程（按照调用计数和累积时间计算）。
+
+到这为止你可能对gprof 有了一个比较感性的认识了，你可能会问如何用它去分析一个真正的Open Source 呢！下面就让我们去用gprof去分析一个Open Source，看看如何去在真实的环境中使用它。 
+
+

@@ -1,0 +1,57 @@
+类型转换过程中产生临时对象问题
+
+序列化和反序列化函数原型声明：
+MemoryDataStream& MemoryDataStream::operator << ( std::string& val );
+MemoryDataStream& MemoryDataStream::operator >> ( std::string& val );
+
+这样使用：
+MemoryDataStream file;
+std::string nameSrc = "Jane";
+file << (std::string)nameSrc;
+std::string nameDe;
+file >> (std::string)nameDe;
+这个有问题吗？
+
+下面两句话都会因为C方式的强制转换而产生一个新的对象。
+file << (std::string)nameSrc;//这里功能没有问题，但是产生了一个新的对象，不好。
+file >> (std::string)nameDe;//这里功能完全错误了，序列化到新的对象中，达不到我们想要的功能
+
+
+C方式的强制类型转换在某些情况下会产生临时对象，那么C++中static_cast等类型转换操作符是不是就不会呢？
+
+
+我们做一个实验：
+
+void fillContent( std::string& out )
+{
+    out = "hello little Jane.";
+} 	
+
+std::string name("1");
+fillContent( (std::string)name );
+	//调用完上面的函数，name值没变化，说明产生了临时对象。
+fillContent( static_cast<std::string>(name) );
+	//调用完上面的函数，name值没变化，说明产生了临时对象。
+fillContent( name );
+	//调用完上面的函数，name值变为"hello little Jane."，是我们需要的效果。
+	
+你也许会问为什么要做类型转换呢？自己思考吧。
+只举几个例子:
+例如对一个enum序列化，不做类型转换行吗？
+
+再比如对long型变量做序列化时，如果在32位机就是32位，如果到64位机上读的话，就会破坏原始数据序列。
+例如，32位机：
+long i = 1000;
+MemoryDataStream file;
+file << i;
+
+64位机
+MemoryDataStream file;
+//网络接收数据到file
+long i = 0;
+file >> i;  //本来发送方只发送了4个字节，可是这里解析却要读8个字节，肯定会出错。
+
+
+正确的做法是都做类型转换：
+序列化的时候 file << (u64)i;
+反序列化的时候 file >> (u64)i;

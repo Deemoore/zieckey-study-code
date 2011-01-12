@@ -1,0 +1,39 @@
+# ll /etc/profile /dev/tty0 /dev/sda1 /dev/cdrom /dev/log /home/incoming /tmp/fifo
+
+lrwxrwxrwx 1 root root    4 10-04 17:43 /dev/cdrom -> scd0
+srw-rw-rw- 1 root root    0 10-04 17:44 /dev/log
+brw-r----- 1 root disk 8, 1 2008-10-05 /dev/sda1
+crw-rw---- 1 root root 4, 0 2008-10-05 /dev/tty0
+-rw-r--r-- 1 root root  937 2006-01-31 /etc/profile
+prw-r--r-- 1 root root    0 10-04 21:01 /tmp/fifo
+
+/home/incoming:
+总计 8
+drwxr-xr-x 2 root root 4096 10-04 20:58 dir
+
+
+c 字符特殊文件
+b 块特殊文件
+s 套接字文件
+l 符号连接文件
+- 普通文件
+d 目录文件
+p FIFO文件
+
+
+
+上面每行中：
+    第一列：
+        第1个字符表示文件的类型（d表示目录，-表示普通文件）；
+        第2-4字符表示文件属主对此文件的访问权限（如：“rwx”和“rwx”）；
+        第5-7字符表示用户组对此文件的访问权限（如：“rwx”和“r-x”）；
+        第8-10字符表示其他用户对此文件的访问权限（如：“r-x”和“r--”）；
+        其中，访问权限用三个字符表示，顺序是“rwx”，“r”表示可读、“w”表示
+            可写、“x”表示可执行。若某项禁止访问则为“-”，如：“r-x”表示可读、
+            不可写、可执行；
+    第二列：是文件数量（如：2和1）；
+    第三列：此文件的属主名（如：root和wjm）；
+    第四列：用户组名（如：group和newservice）；
+    第五列：文件所占字节数（如：48和321）；
+    第六至七列：最后修改的日期和时间（如：“10-04 21:01”和“2006-01-31”）；
+    最后一列：文件名（如：/tmp/fifo和/dev/tty0）。 

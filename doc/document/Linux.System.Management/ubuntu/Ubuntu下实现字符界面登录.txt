@@ -1,0 +1,66 @@
+使用过桌面环境一段时间之后，你可能想玩一下command console模式，这个时候怎么退出桌面环境呢？是不是可以直接像redhat那样用组合键Ctrl＋Alt＋（F1~F6）就行了呢？肯定是不行的，不信各位装一下试试，那怎么办呢？是不是可以修改一下/etc/inittab文档中的默认值呢？其实也不行，甚至你在ubuntu中找不到这个文档，那是不是就没有办法了？？？办法当然是有的，要不然ubuntu还能算是linux吗？打开/etc目录下的文件，你会发现有如下的一些文件：
+
+    init.d   rc0.d   rc1.d   rc2.d   rc3.d   rc4.d   rc5.d   rc6.d   rcS.d
+
+    首先说明一下这些文件代表的是什么内容：
+
+    init.d：这里面是与系统相关的一些进程；
+
+    rc0.d~rc6.d：这里面是与run level 0~6模式相关的一些进程，其实就是一些到init.d中进程的软连接；
+
+    rcS.d：这里面是与上电系统初始化相关的一些进程。
+
+    其中rc2.d~rc5.d对应的多用户模式下的相关进程，rc1.d对应的单用户模式下的相关进程，rc0.d是关机过程中相应的进程，rc6.d重启过程中相关的进程。进入文件夹中，你会发现一些软连接是以K开头的，就表示关闭进程（kill），而以S开头的就是打开进程（start）。说了这么多，与我们进入到command console有什么关系呢？确实有很大的关系，其中有一个gdm进程就是管理桌面登录环境的，这个是我们使用桌面环境中所用到的进程，在使用桌面方式安装ubuntu后，默认情况下就是通过gbm来登录的。网上有些网友说直接在系统服务中（运行services-admin）关闭gbm，然后重启就可以了，其实不然，我试过的，直接关闭后，我甚至无法登录系统了，因为没有任何的登录提示了，连文字模式下的login都没有了，这个原因我后来才知道，是因为我使用了boot splash的原因。那么这样是不是表明系统坏了，其实没有什么太大问题，直接重启后，选择recovery mode进入单用户模式，然后在rc2.d中添加一个到/etc/init.d/gdm的软链接就可以了。
+
+    再回到上面所说的那个问题，我相信很多玩过ubuntu的网友都曾遇到过的问题，我为什么只能看到一个启动画面，一个进度条在动，怎么没有启动文字提示我启动到什么位置了？或者是没有启动画面，只有文字提示（其实这样还好一些，因为这样直接关掉gbm，重启就可以进入到文字模式了，但是可惜我的不是这样的）。这个问题的原因就是boot splash在作怪，boot spalsh就是linux下仿windows启动画面的一个东西，没什么太大的用处，至少我觉得除了让启动过程更好看以外，一无是处。既然已经和 boot splash扯上关系了，那怎么去掉它呢？打开/boot/grub/menu.list，你会发现下面的一行启动代码：
+
+    kernel     /boot/vmlinuz-2.6.17-10-generic root=/dev/sda1 ro quiet splash
+
+    initrd     /boot/initrd.img-2.6.17-10-generic
+
+    quiet
+
+    savedefault
+
+    boot
+
+    其中quiet的意思就是启动是屏蔽启动文字，而splash就是要使用启动画面，全部去掉就可以完全恢复到文字启动模式了，然后关闭gdm进程的自启动功能，这样我们就可以运行在command console模式下了
+
+（这有个问题:启动后会在执行/etc/rc.d/rc.local处停下，只有你按Enter后才出现登陆提示符，不然过一段时间又重复出现。。。。。。。？？？？？？？)
+现在已没有此现象了：chmod -x /etc/rc.local，不过
+Ubuntu 6.10 dolphin9-laptop tty1 
+dolphin9-laptop login: * Starting Hardware abstraction layer hald
+*Starting System Tools Backends system-tools-backends 
+Starting powernowd 
+Starting anac(h)ronistic cron :anacron 
+Starting deferred execution scheduler atd 
+Starting Common Unix Printing System :cupsd 
+Starting periodic command scheduler... 
+Enabling additional executable binary formats binfmt-suppoer 
+CHecking battery start.. {oK}
+
+
+
+2./etc/rc.*中关掉任何gdm/xdm/kdm就可以了。
+3.在系统>服务里面把GDM勾掉，可以在文本界面与xWindow之间切换。？？？？
+4.关于ubuntu没有/etc/inittab
+和debian的runlevel 2-5 默认设置都一样,所以你更改runlevel为3也没用，得自行更改..将/etc/rc$(default runlevel).d目录下S99gdm链接删除就OK了! 也可以把它改名为K99gdm
+或者更简单:
+sudo apt-get install sysv-rc-config //安装这个perl管理工具
+也可用sysv-rc-conf 使 gdm 在2-5运行级别停用
+服务里面把gdm的勾去掉
+
+$services-admin
+找到"图形登陆管理器(gdm)",将它的服务关了再重启就直接进入字符界面了.
+
+如果想重新启用x,可以这样启动它:
+$startx
+
+如果还想从gdm登陆界面启动,可以在字符界面下执行:
+$sudo /etc/init.d/gdm start
+
+ubuntu 下只有4个级别，ms靠修改inittab不行了
+# Runlevel 0 is halt.
+# Runlevel 1 is single-user.
+# Runlevels 2-5 are multi-user.
+# Runlevel 6 is reboot.

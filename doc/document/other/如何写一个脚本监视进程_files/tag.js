@@ -1,0 +1,1 @@
+var s={tag:"#innerContent",maxWord:10,clickable:1};$cE.setSite(s);

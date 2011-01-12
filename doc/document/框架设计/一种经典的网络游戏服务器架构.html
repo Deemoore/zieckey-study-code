@@ -1,0 +1,1268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head id="Head"><title>
+	一种经典的网络游戏服务器架构 - 饭中淹的避难所~~~~~ - C++博客
+</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta id="metaKeywords" name="keywords" content="一种经典的网络游戏服务器架构" /><link id="MainCss" type="text/css" rel="stylesheet" href="http://www.cppblog.com/Skins/Cogitation/style.css" /><link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cppblog.com/johndragon/rss.aspx" /></head>
+<body>
+    <form name="Form1" method="post" action="46768.html" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="
+__VIEWSTATE" value="" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=PyW-m2hLmppJ9byT1bYEqw2&amp;t=633740135971222506" type="text/javascript"></script>
+
+<script language=JavaScript>
+									function ctlent(evt,id)
+											{
+												if(evt.ctrlKey && evt.keyCode == 13)
+												{	
+													try
+													{
+														TempSave(id);
+													}
+													catch(ex)
+													{
+													}
+													finally
+													{
+													    __doPostBack('AjaxHolder$PostComment$btnSubmit','')
+													}
+												}
+		
+												}</script>
+												<script language=JavaScript>function SetReplyAuhor(author){document.getElementById('AjaxHolder_PostComment_tbComment').value+="@"+author+"\n";document.getElementById('AjaxHolder_PostComment_tbComment').focus();return false}</script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHVyf9RpZLpA94PR0yylGVrHR75KduCbtx9Wbjv2jQEzXmeH0no0z7nxVOXJo-onw_3WI2pcwKr3w2&amp;t=633740135971222506" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHysvkgwLW9yk7rUGj5M-geQRTOmI9WMPaWNcTLoZx7IpNZpIR4LFVQ0&amp;t=633069160780000000" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHysvkgwLW9yk7rUGj5M-geQRTOmI9WMPaVSfXvXlH0xWaTv3M_TRDPzVKh75E08VU1&amp;t=633069160780000000" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+        
+<div id="top">
+	
+<div>
+	<table>
+		<tr>
+			<td class="HeaderTitles">
+				<h1 class="HeaderTitle"><a id="Header1_HeaderTitle" class="HeaderMainTitle" href="http://www.cppblog.com/johndragon/">饭中淹的避难所~~~~~</a></h1>
+				<p id="tagline">偶尔来避难的地方~</p>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="HeaderBar">
+	<table id="HeaderBar" class="HeaderBar" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="HeaderBarTab" nowrap>
+&nbsp;
+<a id="Header1_MyLinks1_HomeLink" href="http://www.cppblog.com/">C++博客</a>&nbsp;::
+<a id="Header1_MyLinks1_MyHomeLink" href="http://www.cppblog.com/johndragon/">首页</a>&nbsp;::
+<a id="Header1_MyLinks1_NewPostLink" href="http://www.cppblog.com/johndragon/admin/EditPosts.aspx?opt=1">新随笔</a>&nbsp;::
+<a id="Header1_MyLinks1_ContactLink" accesskey="9" href="http://www.cppblog.com/johndragon/contact.aspx?id=1">联系</a>&nbsp;::
+<a id="Header1_MyLinks1_Syndication" href="http://www.cppblog.com/johndragon/Rss.aspx">聚合</a>
+<a id="Header1_MyLinks1_XMLLink" class="XMLLink" href="http://www.cppblog.com/johndragon/Rss.aspx"><img src="http://www.cppblog.com/images/xml.gif" style="border-width:0px;" /></a>&nbsp;::
+<a id="Header1_MyLinks1_Admin" href="http://www.cppblog.com/johndragon/admin/EditPosts.aspx">管理</a>&nbsp;::
+
+</td>
+			<td><img id="Header1_BlueTab" src="../../../../../Skins/Cogitation/Images/BlueTabRight.gif" align="absmiddle" style="border-width:0px;" /></td>
+			<td class="HeaderBarTabBack" nowrap width="100%">
+				
+<div class="BlogStatsBar">
+	<table class="BlogStatsBar">
+		<tr>
+			<td width="100%">
+			</td>
+			<td class="BlogStatsBar" nowrap>
+				&nbsp;
+				43 
+				随笔&nbsp;::
+				0 文章
+				::
+				147 评论
+				::
+				0 Trackbacks
+			</td>
+		</tr>
+	</table>
+</div>
+
+			</td>
+		</tr>
+	</table>
+</div>
+
+</div>
+<div id="leftmenu" style="display:none">
+	
+	    <table id="Calendar1_entryCal" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0" style="border-width:1px;border-style:solid;border-collapse:collapse;">
+	<tr><td colspan="7" style="background-color:Silver;"><table class="CalTitle" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">
+		<tr><td class="CalNextPrev" style="width:15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V2982')" style="color:Black" title="Go to the previous month">&lt;</a></td><td align="center" style="width:70%;">2008年4月</td><td class="CalNextPrev" align="right" style="width:15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V3043')" style="color:Black" title="Go to the next month">&gt;</a></td></tr>
+	</table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center" style="width:14%;">30</td><td class="CalOtherMonthDay" align="center" style="width:14%;">31</td><td align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/01.html"><u>1</u></a></td><td align="center" style="width:14%;">2</td><td align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/03.html"><u>3</u></a></td><td align="center" style="width:14%;">4</td><td class="CalWeekendDay" align="center" style="width:14%;">5</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;">6</td><td align="center" style="width:14%;">7</td><td align="center" style="width:14%;">8</td><td align="center" style="width:14%;">9</td><td align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/10.html"><u>10</u></a></td><td align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/11.html"><u>11</u></a></td><td class="CalWeekendDay" align="center" style="width:14%;">12</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/13.html"><u>13</u></a></td><td align="center" style="width:14%;">14</td><td align="center" style="width:14%;">15</td><td align="center" style="width:14%;">16</td><td align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/17.html"><u>17</u></a></td><td align="center" style="width:14%;">18</td><td class="CalWeekendDay" align="center" style="width:14%;">19</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;"><a href="http://www.cppblog.com/johndragon/archive/2008/04/20.html"><u>20</u></a></td><td align="center" style="width:14%;">21</td><td align="center" style="width:14%;">22</td><td align="center" style="width:14%;">23</td><td align="center" style="width:14%;">24</td><td align="center" style="width:14%;">25</td><td class="CalWeekendDay" align="center" style="width:14%;">26</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;">27</td><td align="center" style="width:14%;">28</td><td align="center" style="width:14%;">29</td><td align="center" style="width:14%;">30</td><td class="CalOtherMonthDay" align="center" style="width:14%;">1</td><td class="CalOtherMonthDay" align="center" style="width:14%;">2</td><td class="CalOtherMonthDay" align="center" style="width:14%;">3</td></tr><tr><td class="CalOtherMonthDay" align="center" style="width:14%;">4</td><td class="CalOtherMonthDay" align="center" style="width:14%;">5</td><td class="CalOtherMonthDay" align="center" style="width:14%;">6</td><td class="CalOtherMonthDay" align="center" style="width:14%;">7</td><td class="CalOtherMonthDay" align="center" style="width:14%;">8</td><td class="CalOtherMonthDay" align="center" style="width:14%;">9</td><td class="CalOtherMonthDay" align="center" style="width:14%;">10</td></tr>
+</table>
+
+		
+<h3>公告</h3>
+<div class="News">
+	<a href="http://www4.clustrmaps.com/counter/maps.php?url=http://www.cppblog.com/johndragon" id="clustrMapsLink"><img src="http://www4.clustrmaps.com/counter/index2.php?url=http://www.cppblog.com/johndragon" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
+</a>
+<a href="http://feedjit.com/ir1/39d271d3c3474891/"><img src="http://feedjit.com/b/39d271d3c3474891.png" alt="" ISMAP /></a>
+</div>
+
+		
+<h3>常用链接</h3>
+<ul>
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl01_lnkLinkItem" href="http://www.cppblog.com/johndragon/MyPosts.html">我的随笔</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl02_lnkLinkItem" href="http://www.cppblog.com/johndragon/MyComments.html">我的评论</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl03_lnkLinkItem" href="http://www.cppblog.com/johndragon/OtherPosts.html">我参与的随笔</a></li>
+	</ul>
+<H3>留言簿<span style="font-size:11px;font-weight:normal;">(10)</span></H3>
+<ul>
+	<li>
+		<a id="SingleColumn1__b0831d_lnkMessages" href="http://www.cppblog.com/johndragon/Contact.aspx?id=1">给我留言</a>
+	<li>
+		<a id="SingleColumn1__b0831d_lnkPublicMsgView" href="http://www.cppblog.com/johndragon/default.aspx?opt=msg">查看公开留言</a>
+	<li>
+		<a id="SingleColumn1__b0831d_lnkPrivateMsgView" href="http://www.cppblog.com/johndragon/admin/MyMessages.aspx">查看私人留言</a>
+	</li>
+</ul>
+
+		<h3>随笔分类</h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_Link" href="http://www.cppblog.com/johndragon/category/12888.html">XLIBPLUS</a> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_RssLink" title="Subscribe to XLIBPLUS" href="http://www.cppblog.com/johndragon/category/12888.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_Link" href="http://www.cppblog.com/johndragon/category/12889.html">数据算法分析(4)</a> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_RssLink" title="Subscribe to 数据算法分析(4)" href="http://www.cppblog.com/johndragon/category/12889.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_Link" href="http://www.cppblog.com/johndragon/category/12886.html">游戏服务器(1)</a> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_RssLink" title="Subscribe to 游戏服务器(1)" href="http://www.cppblog.com/johndragon/category/12886.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_Link" href="http://www.cppblog.com/johndragon/category/12887.html">游戏客户端(1)</a> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_RssLink" title="Subscribe to 游戏客户端(1)" href="http://www.cppblog.com/johndragon/category/12887.html/rss">(rss)</a></li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案</h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl01_Link" href="http://www.cppblog.com/johndragon/archive/2010/03.html">2010年3月 (3)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl02_Link" href="http://www.cppblog.com/johndragon/archive/2010/02.html">2010年2月 (3)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl03_Link" href="http://www.cppblog.com/johndragon/archive/2010/01.html">2010年1月 (5)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl04_Link" href="http://www.cppblog.com/johndragon/archive/2009/12.html">2009年12月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl05_Link" href="http://www.cppblog.com/johndragon/archive/2009/11.html">2009年11月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl06_Link" href="http://www.cppblog.com/johndragon/archive/2009/09.html">2009年9月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl07_Link" href="http://www.cppblog.com/johndragon/archive/2009/07.html">2009年7月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl08_Link" href="http://www.cppblog.com/johndragon/archive/2009/06.html">2009年6月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl09_Link" href="http://www.cppblog.com/johndragon/archive/2009/03.html">2009年3月 (2)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl10_Link" href="http://www.cppblog.com/johndragon/archive/2009/02.html">2009年2月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl11_Link" href="http://www.cppblog.com/johndragon/archive/2009/01.html">2009年1月 (3)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl12_Link" href="http://www.cppblog.com/johndragon/archive/2008/06.html">2008年6月 (2)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl13_Link" href="http://www.cppblog.com/johndragon/archive/2008/04.html">2008年4月 (10)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl14_Link" href="http://www.cppblog.com/johndragon/archive/2007/05.html">2007年5月 (1)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl15_Link" href="http://www.cppblog.com/johndragon/archive/2007/04.html">2007年4月 (7)</a> </li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl16_Link" href="http://www.cppblog.com/johndragon/archive/2007/03.html">2007年3月 (1)</a> </li>
+			
+				</ul>
+			
+	
+		<h3>新闻档案</h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_Link" href="http://www.cppblog.com/johndragon/news/2007/05.html">2007年5月 (1)</a> </li>
+			
+				</ul>
+			
+	
+		<h3>我的其他BLOG</h3>
+		
+				<ul>
+			
+				</ul>
+			
+	
+
+<script language="JavaScript">
+function SearchGoogle(key,evt,site)
+		{
+			if(evt.keyCode==13 || evt.keyCode==0 || evt.type =='click')
+			{
+				key.focus();
+				var keystr = encodeURIComponent(key.value);
+				url = "http://www.google.com/search?q=";
+				url = url+keystr;
+				url += "&ie=UTF-8&oe=GB2312&hl=zh-CN&domains="+site+"&sitesearch="+site;
+				window.location=url;
+				return false;
+			}
+		}
+</script>
+<H3>搜索</H3>
+<ul>
+	<li>
+		<li><input style="WIDTH: 130px" type="text" name="q" id="q" onkeydown="return SearchGoogle(document.getElementById('q'),event,'www.cppblog.com/johndragon')">&nbsp;<input onclick="SearchGoogle(document.getElementById('q'),event,'www.cppblog.com/johndragon')" type="button" value="搜索" name="sa">
+	</li>
+</ul>
+
+<h3>最新评论
+	<a id="SingleColumn1__392f748_RSSHyperlink1" href="http://www.cppblog.com/johndragon/CommentsRSS.aspx"><img src="/images/xml.gif" style="border-width:0px;" /></a></h3>
+<div class="RecentComment">
+	
+			<ul>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__392f748_CommentList_ctl01_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/04/06/47641.html#111725">1. re: MMORPG客户端技巧(1) - 偏移网格</a>
+			</li>
+			<li style="word-break:break-all">
+				是啊,不解,不解,搬移周围的是因为周围的景物不在当前屏幕范围之内,要卷屏
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--wangwan</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__392f748_CommentList_ctl02_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/03/18/106512.html#109967">2. re: WOF(名将三国)MOTIONDATA中的PKX文件的解析</a>
+			</li>
+			<li style="word-break:break-all">
+				请问下用什么来解文件？
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--请教下</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__392f748_CommentList_ctl03_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/03/12/106512.html#109553">3. re: WOF(名将三国)MOTIONDATA中的PKX文件的解析[未登录]</a>
+			</li>
+			<li style="word-break:break-all">
+				评论内容较长,点击标题查看
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--123</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__392f748_CommentList_ctl04_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/02/28/106386.html#108603">4. re: WOF(名将三国)的TGL文件格式[未登录]</a>
+			</li>
+			<li style="word-break:break-all">
+				- -名将三国能成功，但是快乐西游（9城的另一个游戏）里面也有好多tgl文件，我拖进去却没反应啊。能帮下吗？谢谢大虾
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--123</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__392f748_CommentList_ctl05_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/02/28/106386.html#108602">5. re: WOF(名将三国)的TGL文件格式[未登录]</a>
+			</li>
+			<li style="word-break:break-all">
+				我拖放了 怎么没反应。。就是一直白屏
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--123</li>
+		
+			</ul>
+		
+</div>
+
+<h3>阅读排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="word-break:break-all">
+		
+			<li>
+				<a id="SingleColumn1__1d2a5f3_TopList_ctl01_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.aspx">1. 一种经典的网络游戏服务器架构(8545)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1d2a5f3_TopList_ctl02_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2007/04/14/21845.aspx">2. 使用IOCP需要注意的一些问题~~(不断补充)(4783)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1d2a5f3_TopList_ctl03_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2008/04/11/46817.aspx">3. 对string类的思考(2319)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1d2a5f3_TopList_ctl04_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/01/25/106386.aspx">4. WOF(名将三国)的TGL文件格式(1896)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1d2a5f3_TopList_ctl05_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2009/01/27/72639.aspx">5. 我用什么看小说? 当然是我制作的阅读器了.(1703)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+<h3>评论排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="word-break:break-all">
+		
+			<li>
+				<a id="SingleColumn1__86d63a_TopList_ctl01_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.aspx">1. 一种经典的网络游戏服务器架构(29)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__86d63a_TopList_ctl02_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/01/25/106386.aspx">2. WOF(名将三国)的TGL文件格式(14)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__86d63a_TopList_ctl03_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2007/04/14/21845.aspx">3. 使用IOCP需要注意的一些问题~~(不断补充)(13)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__86d63a_TopList_ctl04_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2007/04/23/22641.aspx">4. 通用的类成员函数调用方法.(12)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__86d63a_TopList_ctl05_Hyperlink1" href="http://www.cppblog.com/johndragon/archive/2010/01/27/106512.aspx">5. WOF(名将三国)MOTIONDATA中的PKX文件的解析(10)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+	
+	<!--
+	<br><br>
+	<p align="center">
+	<a href="http://www.WebHost4Life.com/default.asp?refid=MarkHWagner">
+	<img src="http://www.WebHost4Life.com/images/banner3.gif" width="120"
+	height="60" border="0" alt="Join WebHost4Life.com"></a>
+	</p>
+-->
+</div>
+<div id="main">
+	
+					
+<div class="post">
+	<div class="postTitle">
+		<a id="viewpost1_TitleUrl" href="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.html">一种经典的网络游戏服务器架构</a>
+	</div>
+	
+	<div class="postText">
+		<p>首先，二话不说，上图（用Windows画图画的。。。）<br><br><img height=768 alt="" src="http://www.cppblog.com/images/cppblog_com/johndragon/servergraph.jpg" width=988 border=0><br>这个图是一个区的架构图，所有区的架构是一样的。上面虚线框的ServerGroup和旁边方框内的架构一样。图上的所有x N的服务器，都是多台一起的。红线，绿线，和蓝线图上也有图示，这里就不多介绍了。关于Agent Server大家也能看出来，其实就是Gate。<br>这里主要介绍下图上的标记了号码的位置的数据连接的内容和意义。<br><br>1-&nbsp;&nbsp;&nbsp;这是一条WebService的管道，在用户激活该区帐号，或者修改帐号密码的时候，通过这条通道来插入和更新用户的帐号信息。<br>2-&nbsp;&nbsp;&nbsp;这也是一条WebService管道，用来获取和控制用户该该组内的角色信息，以及进行付费商城代币之类的更新操作。<br>3-&nbsp;&nbsp;&nbsp;这是一条本地的TCP/IP连接，这条连接主要用来进行服务器组在登陆服务器的注册，以及登陆服务器验证帐户后，向用户服务器注册帐户登陆信息，以及进行对已经登陆的帐户角色信息进行操作（比如踢掉当前登陆的角色），还有服务器组的信息更新（当前在线玩家数量等）。<br>4-&nbsp;&nbsp;&nbsp;这也是一条本地TCP/IP连接，这条连接用来对连接到GameServer的客户端进行验证，以及获取角色数据信息，还有传回GameServer上角色的数据信息改变。<br>5-&nbsp;&nbsp;&nbsp;这条连接也是一条本地的TCP/IP连接，它用来进行公共信息服务器和数个游戏服务器间的交互，用来交换一些游戏世界级的信息（比如公会信息，跨服组队信息，跨服聊天频道等）。<br>6-&nbsp;&nbsp;&nbsp;这里的两条连接，想表达的意思是，UserServer和GameServer的Agent是可以互换使用的，也就是玩家进入组内之后，就不需要再切换Agent。如果不怕乱套，也可以把登陆服务器的Agent也算上，这样用户整个过程里就不需要再更换Agent，减少重复连接的次数，也提高了稳定性。（毕竟连接次数少了，也降低了连不上服务器的出现几率）<br><br>在这个架构里面，GameServer实际上是一个游戏逻辑的综合体，里面可以再去扩展成几个不同的逻辑服务器，通过PublicServer进行公共数据交换。<br>UserServer实际上扮演了一个ServerGroup的领头羊的角色，它负责向LoginServer注册和更新服务器组的信息（名字，当前人数），并且对Agent进行调度，对选择了该组的玩家提供一个用户量最少的Agent。同时，它也兼了一个角色管理服务器的功能，发送给客户端当前的角色列表，角色的创建，删除，选择等管理操作，都是在这里进行的。而且，它还是一个用户信息的验证服务器，GameServer需要通过它来进行客户端的合法性验证，以及获取玩家选择的角色数据信息。<br><br><br>采用这种架构的游戏，通常有以下表现。<br>1- 用户必须激活一个大区，才能在大区内登陆自己的帐号。<br>2- 用户启动客户端的时候，弹出一个登陆器，选择大区。<br>3- 用户启动真正的客户端的时候，一开始就是输入帐号密码。<br>4- 帐号验证完成之后，进行区内的服务器选择。<br>5- 服务器选择完成之后，进入角色管理。同时，角色在不同的服务器里不能共享。<br><br>市面上符合上面几个表现特征的游戏相当的多，而且也不乏旷世巨作。这个架构不是一个新的架构，但是它足够经典和完善，并且逻辑简单而清晰，用来做MMORPG，或者其它网络游戏的服务器架构，是一种不错的选择。<br><br></p>
+
+	</div>
+	
+	<div class="postfoot">
+		posted on 2008-04-10 19:14 <a href='http://www.cppblog.com/johndragon/'>饭中淹</a> 阅读(8545) <a href='#Post'>评论(29)</a> &nbsp;<a href="http://www.cppblog.com/johndragon/admin/EditPosts.aspx?postid=46768">编辑</a>&nbsp;<a href="http://www.cppblog.com/johndragon/AddToFavorite.aspx?id=46768">收藏</a> <a href='http://www.cppblog.com/johndragon/services/trackbacks/46768.aspx'>引用</a>  
+	</div>
+</div>
+<img src ="http://www.cppblog.com/johndragon/aggbug/46768.html?webview=1" width = "1" height = "1" />
+
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.html"
+dc:identifier="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.html"
+dc:title="一种经典的网络游戏服务器架构"
+trackback:ping="http://www.cppblog.com/johndragon/services/trackbacks/46768.aspx" />
+</rdf:RDF>
+-->
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('AjaxHolder$scriptmanager1', document.getElementById('Form1'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls(['tAjaxHolder$UpdatePanel1'], [], [], 90);
+//]]>
+</script>
+
+<div id="AjaxHolder_UpdatePanel1">
+	    
+    <a name="pagedcomment"></a>
+<a name = "评论" />
+<br>
+<div id="comments">
+	<h3>评论</h3>
+		
+		
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46777">#</a>&nbsp;<a name="46777"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-10 21:24
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl00_NameLink" href="http://www.cppblog.com/kevinlynx/" target="_blank">Kevin Lynx</a>
+					</div>
+					<div class="postText">
+						饭叔叔关于服务器架构的文章，收藏加细读.:D&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;Kevin Lynx&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=Kevin+Lynx" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl00_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl00$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl00_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46801">#</a>&nbsp;<a name="46801"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-11 08:44
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl01_NameLink" href="http://www.cppblog.com/mzty/" target="_blank">梦在天涯</a>
+					</div>
+					<div class="postText">
+						图画的很好！&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;梦在天涯&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e6%a2%a6%e5%9c%a8%e5%a4%a9%e6%b6%af" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl01_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl01$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl01_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46829">#</a>&nbsp;<a name="46829"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-11 13:34
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl02_NameLink" target="_blank">xiaolige</a>
+					</div>
+					<div class="postText">
+						能上点bigworld等单一世界的服务端架构吗，期待ing&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;xiaolige&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=xiaolige" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl02_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl02$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl02_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46830">#</a>&nbsp;<a name="46830"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-11 13:43
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl03_NameLink" href="http://www.cppblog.com/Bugs/" target="_blank">Bugs</a>
+					</div>
+					<div class="postText">
+						已阅&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;Bugs&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=Bugs" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl03_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl03$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl03_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构[未登录]" href="/johndragon/archive/2008/04/10/46768.html#46838">#</a>&nbsp;<a name="46838"></a>re: 一种经典的网络游戏服务器架构[未登录]
+							<span>
+								2008-04-11 14:42
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl04_NameLink" target="_blank">noname</a>
+					</div>
+					<div class="postText">
+						和SunOnline(奇迹世界)的架构差不多啊&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;noname&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=noname" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl04_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl04$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl04_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46913">#</a>&nbsp;<a name="46913"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-12 15:21
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl05_NameLink" target="_blank">dophi</a>
+					</div>
+					<div class="postText">
+						有收获&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;dophi&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=dophi" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl05_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl05$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl05_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#46994">#</a>&nbsp;<a name="46994"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-13 18:25
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl06_NameLink" href="http://www.cppblog.com/duzhongwei/" target="_blank">杜中伟</a>
+					</div>
+					<div class="postText">
+						我想以后会需要,顶,以后能找到了.&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;杜中伟&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e6%9d%9c%e4%b8%ad%e4%bc%9f" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl06_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl06$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl06_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#47191">#</a>&nbsp;<a name="47191"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-16 09:43
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl07_NameLink" target="_blank">alittlewolf</a>
+					</div>
+					<div class="postText">
+						有几个问题:<br>(1) Public Server是否会成为瓶颈呢? <br>(2) User Server压力会不会过大?<br>(3) Login Server是不是也要考虑分布式?<br>(4) Group DB是通过何种方式保证性能? 分布式数据库? 引入高价的存储设备?&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;alittlewolf&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=alittlewolf" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl07_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl07$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl07_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#47192">#</a>&nbsp;<a name="47192"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-16 09:46
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl08_NameLink" target="_blank">alittlewolf</a>
+					</div>
+					<div class="postText">
+						另外一个不解的地方是, 为什么所有Server前面都放着Agent Server? 从安全性方面考虑?  告别Game Server Group前面的Agent Server Group, 望解释.&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;alittlewolf&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=alittlewolf" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl08_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl08$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl08_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#47193">#</a>&nbsp;<a name="47193"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-16 09:47
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl09_NameLink" target="_blank">alittlewolf</a>
+					</div>
+					<div class="postText">
+						另外一个不解的地方是, 为什么所有Server前面都放着Agent Server? 从安全性方面考虑? 特别是Game Server Group前面的Agent Server Group, 望解释. &nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;alittlewolf&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=alittlewolf" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl09_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl09$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl09_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#47194">#</a>&nbsp;<a name="47194"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-04-16 09:59
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl10_NameLink" href="http://www.cppblog.com/johndragon/" target="_blank">饭中淹</a>
+					</div>
+					<div class="postText">
+						@alittlewolf<br>(1) 每组承载量，一般是10000人左右。在目前主流服务器硬件条件下，PublicServer为这些人做服务是轻松的。<br>(2) UserServer 没有太大压力，只是做为一个验证平台，角色管理的资源消耗也不大，这个在实际中已经验证过了。<br>(3) LoginServer 没什么必要分布式，虽然一般登陆的压力比较大，但是对于一个组来说，登陆验证都是消耗最小的一个操作，没有长期压力。而且它的硬件条件也是比较好的，所以不用分布式的，那样会增加整个系统的复杂性。<br>(4) 一般这种架构下，GroupDB和UserServer之间会做一个Cache，杜绝频繁的数据库读写。处于安全性和性能考虑，可以选择带有集群功能的数据库。不过从成本出发，一般是单台的DB服务器，一个库搞定。<br><br>(5) Agent是用来进行用户过滤，分流和调度的。同时也是出于安全性考虑。另外也是为了降低后台服务器的压力。而且用Agent可以实现很多比较效率的处理方式。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;饭中淹&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%a5%ad%e4%b8%ad%e6%b7%b9" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl10_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl10$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl10_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#53587">#</a>&nbsp;<a name="53587"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-06-16 20:12
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl11_NameLink" href="http://www.cppblog.com/yuantao82/" target="_blank">Hellfire</a>
+					</div>
+					<div class="postText">
+						目前主流的mmo应该都是这种架构，足够用了。关键点在一个agent，<br>安全性，负载均衡， 后台服务的屏蔽，都有保障了。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;Hellfire&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=Hellfire" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl11_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl11$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl11_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58703">#</a>&nbsp;<a name="58703"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-13 11:43
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl12_NameLink" target="_blank">非风</a>
+					</div>
+					<div class="postText">
+						一些疑问，希望得到博主的解答：<br><br>PublicServer要完成跨服组队信息，跨服聊天频道功能，那么它不应该放置在方框中，不能属于特定的组中，因为它还需要和其他组交换数据。<br><br>ControlAndDataCenter的功能是什么?是不是它仅仅就是一个DB 中心，全国所有区域服务器的一个数据中心，区域服务器从它拿玩家的帐号信息？<br>如果是UserServer为什么要连接它,前面在激活时候所有数据已经获取到了AreaDB中？<br><br><br>AreaDB仅仅是一个DB它如何通过○1 向ControlAndDataCenter要数据？<br><br>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;非风&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%9d%9e%e9%a3%8e" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl12_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl12$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl12_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58706">#</a>&nbsp;<a name="58706"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-13 11:54
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl13_NameLink" href="http://www.cppblog.com/johndragon/" target="_blank">饭中淹</a>
+					</div>
+					<div class="postText">
+						1- PublicServer是组内跨服组队和聊天,也就是在一个服务器名字下面的跨服.这里跨服是物理服. <br><br>2- 控制和数据中心的功能是提供数据推送和信息收集,以及服务器状态控制.<br>他和userserver进行通信，是为了进行数据更新，信息收集和状态控制，在2的说明里已经提到了。<br><br>3- 这里面的所有db都不是单纯的一个数据库，而是一套称为dbproxy或者dbagent的东西，它有逻辑处理能力。<br>但是，它不会向数据中心要数据。在我的设计里，数据中心是请求者，而非被请求者。所有数据更新的发起者都是数据中心，因为所有用户信息的修改都在这里进行。AreaDB只是被动的接受数据中心的数据更新，而不向数据中心要数据。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;饭中淹&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%a5%ad%e4%b8%ad%e6%b7%b9" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl13_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl13$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl13_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58917">#</a>&nbsp;<a name="58917"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 11:02
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl14_NameLink" target="_blank">laofu</a>
+					</div>
+					<div class="postText">
+						一组服务器10000人，现在一般不怎么火的游戏一组能上2000就不错了，这么庞大的一组服务器不会造成成本很高么&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;laofu&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=laofu" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl14_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl14$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl14_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58921">#</a>&nbsp;<a name="58921"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 11:32
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl15_NameLink" href="http://www.cppblog.com/johndragon/" target="_blank">饭中淹</a>
+					</div>
+					<div class="postText">
+						因为各个服务器的逻辑都是分开的,所以可以有选择的灵活部署,这样可以根据实际情况有效的节约成本.&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;饭中淹&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%a5%ad%e4%b8%ad%e6%b7%b9" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl15_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl15$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl15_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58935">#</a>&nbsp;<a name="58935"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 14:53
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl16_NameLink" target="_blank">非风</a>
+					</div>
+					<div class="postText">
+						@饭中淹<br>多谢楼主解答，不过还是有一些疑问，我说一下自己对这个架构的理解。<br>     从用户登录开始，用户登录连接网关，发数据到loginserver校验账户密码，如果areaDB中没有账户信息，向数据中心要账户密码，插入areaDB，以后校验账户就可以直接在区域DB中做了，如果账户密码校验成功，发送本区的组列表给客户端，玩家选择某个服务器，login获取生成一个key发给userserver，同时把key发给客户端以及一个网关的ip端口，客户端使用其连接，发送key到Userserver，比对key，非法踢掉客户端连接，合法userserver向数据中心获取账户详细信息，比如账户上剩余点卡等，同时向GroupDB获取本组中的自己的角色，得到这些信息都发给客户端，客户端选择一个角色进入游戏，userserver从数据库读取该角色的完全信息，根据玩家之前的位置确定进入那个gameserver（我认为游戏服务器是根据地图划分的，不知道对不对？），角色数据传到gameserver，同时客户端根据这些数据进入场景，gameserver得到信息同时告知publicserver（publicserver连DB做什么？我猜测可以获取工会以及工会成员信息，对否？）<br><br><br>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;非风&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%9d%9e%e9%a3%8e" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl16_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl16$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl16_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58946">#</a>&nbsp;<a name="58946"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 16:51
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl17_NameLink" href="http://www.cppblog.com/johndragon/" target="_blank">饭中淹</a>
+					</div>
+					<div class="postText">
+						@非风<br>是的,差不多的.<br>不过我不会让AreaDB去数据中心请求数据。<br>我在上面说的是，只有用户进行激活，才会把用户资料放到AreaDB<br><br>而且点卡都是按照Area来冲值的。<br><br>所有的游戏需要的资料都在Area本地提供，不会向数据中心请求数据。<br>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;饭中淹&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%a5%ad%e4%b8%ad%e6%b7%b9" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl17_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl17$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl17_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58954">#</a>&nbsp;<a name="58954"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 17:52
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl18_NameLink" target="_blank">laofu</a>
+					</div>
+					<div class="postText">
+						向数据中心请求数据的话，在刚开区的时候数据中心压力肯定很大&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;laofu&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=laofu" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl18_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl18$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl18_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58957">#</a>&nbsp;<a name="58957"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 18:13
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl19_NameLink" target="_blank">非风</a>
+					</div>
+					<div class="postText">
+						@饭中淹<br>明白，官网提供功能，玩家自己到官网激活，完成数据中心到区域数据的转移。充值自己选区，数据中心把数据更新到相应的areaDB中，这样避免很多程序问题。<br><br>另外userserver和数据中心的数据交换是不是会是这个架构的瓶颈？玩家登入登出都需要userserver和数据中心交换数据，而数据中心一定是在外网，而且所有区唯一，象网易同时在线上百万，数据中心承受的压力相当大，会很影响性能吧？尽管这个连接是短连接。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;非风&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%9d%9e%e9%a3%8e" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl19_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl19$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl19_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#58958">#</a>&nbsp;<a name="58958"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-08-15 18:17
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl20_NameLink" href="http://www.cppblog.com/johndragon/" target="_blank">饭中淹</a>
+					</div>
+					<div class="postText">
+						@非风<br><br>玩家登入登出，userserver不需要和数据中心交换数据.<br><br>数据中心只是查询和收集服务器信息或者个人信息的时候才需要和userserver进行交互。<br><br>玩家的角色信息都是保存在GroupDB里面的。<br>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;饭中淹&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%a5%ad%e4%b8%ad%e6%b7%b9" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl20_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl20$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl20_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#60892">#</a>&nbsp;<a name="60892"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-09-04 11:03
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl21_NameLink" target="_blank">XiaoA</a>
+					</div>
+					<div class="postText">
+						@饭中淹<br><br>其实对Agent的作用还是很不解.首先从走路来说, pc---&gt;发送走路到agent,agent---&gt;将消息转发到gameserver---&gt;gameserver<br><br>感觉这时候有问题了.gameserver是不是要广播到所有的agent?然后agent在通知所有的人? 还是在gameserver纪录一个用户的agent,先产生哪些用户需要接收这个人的消息,然后再直接通知这些用户所在的agent,agent再通知pc,pc实现行走?<br><br>另外,这样是不是会加大网络延时?这样对技能的冷却时间是不是有很高的要求?&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;XiaoA&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=XiaoA" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl21_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl21$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl21_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#62892">#</a>&nbsp;<a name="62892"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-09-27 14:42
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl22_NameLink" target="_blank">非风</a>
+					</div>
+					<div class="postText">
+						game可以根据消息号作处理了，agent仅仅是个门，负责进出&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;非风&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e9%9d%9e%e9%a3%8e" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl22_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl22$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl22_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#70342">#</a>&nbsp;<a name="70342"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-12-25 17:18
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl23_NameLink" target="_blank">minus</a>
+					</div>
+					<div class="postText">
+						结构太过复杂，没有必要&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;minus&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=minus" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl23_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl23$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl23_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#70344">#</a>&nbsp;<a name="70344"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2008-12-25 17:26
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl24_NameLink" target="_blank">minus</a>
+					</div>
+					<div class="postText">
+						把横向的连接都去掉，6也去掉简洁多了，也合理多了&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;minus&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=minus" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl24_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl24$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl24_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#79287">#</a>&nbsp;<a name="79287"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2009-04-08 17:53
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl25_NameLink" target="_blank">似水流年</a>
+					</div>
+					<div class="postText">
+						提个问题：Game Server间是否进行直接通信。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;似水流年&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=%e4%bc%bc%e6%b0%b4%e6%b5%81%e5%b9%b4" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl25_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl25$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl25_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#87211">#</a>&nbsp;<a name="87211"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2009-06-09 17:10
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl26_NameLink" href="http://www.cppblog.com/liquidx/" target="_blank">liquidx</a>
+					</div>
+					<div class="postText">
+						可以来我博客看看&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;liquidx&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=liquidx" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl26_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl26$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl26_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#88088">#</a>&nbsp;<a name="88088"></a>re: 一种经典的网络游戏服务器架构
+							<span>
+								2009-06-19 12:14
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl27_NameLink" target="_blank">tesla</a>
+					</div>
+					<div class="postText">
+						好文，不错，收藏了<br><br>推荐一个专业服务器、工作站硬件的优秀网站<br>中关村服务器配件网  www.xasun.com<br>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;tesla&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=tesla" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl27_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl27$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl27_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+				<div class="post">			
+					<div class="postTitle">
+						<a title="permalink: re: 一种经典的网络游戏服务器架构" href="/johndragon/archive/2008/04/10/46768.html#103518">#</a>&nbsp;<a name="103518"></a>re: 一种经典的网络游戏服务器架构<a name="Post"></a>
+							<span>
+								2009-12-19 11:55
+							</span>
+						<a id="AjaxHolder_Comments_CommentList_ctl28_NameLink" target="_blank">zxl3d</a>
+					</div>
+					<div class="postText">
+						首先肯定楼主的架构很强大，但Agent过于复杂，是否可以不要。&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;zxl3d&quot;)" href="/johndragon/archive/2008/04/10/46768.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.cppblog.com/comment?author=zxl3d" target="_blank">更多评论</a>
+						<br>
+						<a id="AjaxHolder_Comments_CommentList_ctl28_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl28$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl28_EditLink"></a>
+					</div>
+				</div>
+				<br>
+			
+</div><div id="AjaxHolder_Comments_divRefreshComments" style="text-align:right;margin-right:10px;margin-bottom:5px;font-size:12px;"><a id="AjaxHolder_Comments_refreshList" href="javascript:__doPostBack('AjaxHolder$Comments$refreshList','')">刷新评论列表</a></div>
+<style>
+td { font-size: 12px }
+.commentTextBox 
+{ 
+    font-family : Verdana; 
+    font-size: 13px;
+ }
+</style>
+<!--Beging Temp Save-->
+<STYLE>.userData { BEHAVIOR: url(#default#userdata) }
+	</STYLE>
+<DIV class="userData" id="CommentsPersistDiv"></DIV>
+<script type="text/javascript">
+function pageLoad()
+{
+    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(handleInitializeRequest);
+    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(handleEndRequest);
+}
+
+function handleInitializeRequest(sender, args)
+{
+    var prm = Sys.WebForms.PageRequestManager.getInstance();
+    var eid = args.get_postBackElement().id;
+    if (eid.indexOf("DeleteLink")>0) 
+    {
+       args.get_postBackElement().innerHTML = "<font color='red'>正在删除...</font>";         
+    }    
+    if (eid.indexOf("btnSubmit")>0) 
+    {
+       document.getElementById("AjaxHolder_PostComment_ltSubmitMsg").innerHTML="正在提交...";
+       document.getElementById("AjaxHolder_PostComment_btnSubmit").disabled = true;
+       
+    }    
+   
+}	
+
+function TempSave(ElementID)
+{
+	try
+	{
+	CommentsPersistDiv.setAttribute("CommentContent",document.getElementById(ElementID).value);
+	CommentsPersistDiv.save("CommentXMLStore");
+	}
+	catch(ex)
+	{
+	}
+	
+}
+function Restore(ElementID)
+{
+	CommentsPersistDiv.load("CommentXMLStore");
+	document.getElementById(ElementID).value=CommentsPersistDiv.getAttribute("CommentContent");
+}	
+			
+			
+</script>
+<!--Ene TempSave-->
+<div class="commentform">
+<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
+</script>
+<script type="text/javascript">
+try{
+  GS_googleAddAdSenseService("ca-pub-4210569241504288");
+  GS_googleEnableAllServices();
+  } catch (e) { }
+</script>
+<script type="text/javascript">
+try{
+  GA_googleAddSlot("ca-pub-4210569241504288", "cppblog_blogpost_bottom");
+  GA_googleAddSlot("ca-pub-4210569241504288", "cppblog_commentbox_up");
+  } catch (e) { }
+</script>
+<script type="text/javascript">
+try{
+  GA_googleFetchAds();
+  } catch (e) { }
+</script>
+<span id="AjaxHolder_PostComment_ltSubmitMsg" style="color:Red;"></span>
+<br />
+<a name="Feedback"></a>
+	<TABLE cellSpacing="1" cellPadding="1" border="0">
+		<tr>			
+		<td colspan="3">
+		<a href="http://job.cnblogs.com/zt/yeshj/" target="_blank">沪江网诚聘C++开发工程师</a><br/>
+		<div id="itnews_block" style="line-height:180%;" class="other_info_list">IT新闻：<br/>· <a href="http://news.cnblogs.com/n/60779/" target="_blank">大更新？苹果将举行iPhone 4.0固件发布会</a><br/>· <a href="http://news.cnblogs.com/n/60777/" target="_blank">盖茨夫妇入围美《时代》周刊全球最具影响人物</a><br/>· <a href="http://news.cnblogs.com/n/60776/" target="_blank">传惠普将在6月推出平板电脑 功能多于iPad</a><br/>· <a href="http://news.cnblogs.com/n/60774/" target="_blank">ThinkPad：固守与新生</a><br/>· <a href="http://news.cnblogs.com/n/60773/" target="_blank">卡巴斯基吊唁王江民：是个令人尊敬竞争对手</a><br/></div>
+		专题：<a href="http://kb.cnblogs.com/zt/android/" target="_blank">Android</a>&nbsp; <a href="http://kb.cnblogs.com/zt/iPad/" target="_blank">iPad</a></li> <a href="http://kb.cnblogs.com/zt/jquery/" target="_blank">jQuery</a> <a href="http://kb.cnblogs.com/zt/chrome/" target="_blank">Chrome OS</a><br/>
+		</td>
+		</tr>
+		<TR>
+			<TD colSpan="3">
+<Script Type="Text/Javascript">
+try{
+  GA_googleFillSlot("cppblog_commentbox_up");
+  } catch (e) { }
+</Script>
+<br/> </TD>
+		</TR>
+		<TR>
+			<TD width="75"></TD>
+			<TD></TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TD colSpan="2">
+			<a href="http://www.cnblogs.com" target="_blank">博客园首页</a>&nbsp; <a href="http://news.cnblogs.com" target="_blank">IT新闻</a>&nbsp; <!--<a href="http://home.cnblogs.com/ing/" target="_blank">闪存</a>&nbsp;  --><a href="http://kb.cnblogs.com/" target="_blank">知识库</a>&nbsp;  <a href="http://a4.yeshj.com/rd/34143/" target="_blank">学英语</a>&nbsp;  <a href="http://job.cnblogs.com/cate-cpp_programmer/" target="_blank">C++程序员招聘</a>
+			</TD>
+		</TR>
+		<TR>
+			<TD width="55">标题</TD>
+			<TD><input name="AjaxHolder$PostComment$tbTitle" type="text" value="re: 一种经典的网络游戏服务器架构" id="AjaxHolder_PostComment_tbTitle" class="commenttb" style="width:320" /></TD>
+			<TD><span id="AjaxHolder_PostComment_RequiredFieldValidator1" style="color:Red;visibility:hidden;">请输入标题</span></TD>
+		</TR>
+		<TR>
+			<TD>姓名</TD>
+			<TD><input name="AjaxHolder$PostComment$tbName" type="text" id="AjaxHolder_PostComment_tbName" class="commenttb" style="width:320" /></TD>
+			<TD><span id="AjaxHolder_PostComment_RequiredFieldValidator2" style="color:Red;visibility:hidden;">请输入你的姓名</span></TD>
+		</TR>
+		<TR>
+			<TD>主页</TD>
+			<TD><input name="AjaxHolder$PostComment$tbUrl" type="text" id="AjaxHolder_PostComment_tbUrl" class="commenttb" style="width:320" /></TD>
+			<TD><FONT face="宋体"></FONT></TD>
+		</TR>
+		<tr>
+			<td align="left" colSpan="3">
+				<table id="AjaxHolder_PostComment_tbCaptchaImage" class="CommentForm" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td colspan="3">
+							<span id="AjaxHolder_PostComment_Requiredfieldvalidator4" style="color:Red;display:none;">请输入验证码</span>
+							<span id="AjaxHolder_PostComment_lblImage" style="color:Red;font-weight:bold;"></span>
+						</td>
+		</tr>
+		<tr>
+			<td width="78">验证码</td>
+			<td><input name="AjaxHolder$PostComment$CodeNumberTextBox" type="text" id="AjaxHolder_PostComment_CodeNumberTextBox" />*</td>
+			<td align="left">
+							<img src="../../../../../Modules/CaptchaImage/JpegImage.aspx" id="AjaxHolder_PostComment_Img1" />
+						</td>
+		</tr>
+	</table>
+	
+			</td>
+		</tr>
+		<TR>
+			<TD colSpan="3">内容(提交失败后,可以通过“恢复上次提交”恢复刚刚提交的内容)
+				<span id="AjaxHolder_PostComment_RequiredFieldValidator3" style="color:Red;visibility:hidden;">请输入评论内容</span><BR>
+				<textarea name="AjaxHolder$PostComment$tbComment" rows="10" cols="50" id="AjaxHolder_PostComment_tbComment" class="commentTextBox" onkeydown="ctlent(event,'AjaxHolder_PostComment_tbComment')" style="Width:480;Height:220"></textarea></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3">
+		<span id="AjaxHolder_PostComment_Message" style="color:Red;"></span>
+		</td>
+		<TR>
+			<TD colSpan="3"><input id="AjaxHolder_PostComment_chkRemember" type="checkbox" name="AjaxHolder$PostComment$chkRemember" checked="checked" tabindex="-1" /><label for="AjaxHolder_PostComment_chkRemember">Remember Me?</label></TD>
+		</TR>
+		<TR>
+			<TD height="23"><input type="submit" name="AjaxHolder$PostComment$btnSubmit" value="提交" onclick="TempSave('AjaxHolder_PostComment_tbComment');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;AjaxHolder$PostComment$btnSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="AjaxHolder_PostComment_btnSubmit" />
+				</TD>
+			<td colSpan="2" height="23">&nbsp;
+				<a id="AjaxHolder_PostComment_lnkLogin" href="http://www.cppblog.com/login.aspx?ReturnURL=http://www.cppblog.com/johndragon/archive/2008/04/10/46768.html&amp;SourceURL=/johndragon/archive/2008/04/10/46768.html">登录</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_linkLoginComment" OnClick="if(document.getElementById('AjaxHolder_PostComment_tbComment').value != '') return confirm('未提交的评论内容将会丢失, 你真的要进入高级评论吗?');" href="http://www.cppblog.com/johndragon/archive/2008/04/10/46768.html?login=1#Post">使用高级评论</a>&nbsp;&nbsp;<a href="http://www.cppblog.com/RequireRegister.aspx">新用户注册</a>&nbsp;&nbsp;<A href="#Top">返回页首</A>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_lbRestore" OnClick="Restore('AjaxHolder_PostComment_tbComment'); return false;" href="/johndragon/archive/2008/04/10/46768.html#Post">恢复上次提交</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+		</TR>
+		<TR>
+			<TD colSpan="3">[使用Ctrl+Enter键可以直接提交]</TD>
+		</TR>
+		<tr>
+		<td colspan="3">
+		<a href="http://a4.yeshj.com/rd/34138/" target="_blank">每天10分钟，轻松学英语</a>
+		</td>
+		</tr>
+		<TR>
+		<TD colSpan="3">
+		<script type="text/javascript">
+		try{
+		  GA_googleFillSlot("cppblog_blogpost_bottom");
+		  } catch (e) { }
+		</script>
+		</TD>
+		</TR>
+		<tr>			
+		<td colspan="3">
+		<div id="job_block" style="line-height:180%;">推荐职位：<br/>· <a href="http://job.cnblogs.com/offer/6318/" target="_blank">飞信服务器端高级.NET开发工程师(新媒传信)</a><br/>· <a href="http://job.cnblogs.com/offer/6319/" target="_blank">.NET飞信官网开发工程师(新媒传信)</a><br/>· <a href="http://job.cnblogs.com/offer/6492/" target="_blank">Web前端研发工程师(百度)</a><br/>· <a href="http://job.cnblogs.com/zt/yeshj/#offer3" target="_blank">C++开发工程师(沪江网)</a><br/>· <a href="http://job.cnblogs.com/zt/yeshj/#offer2" target="_blank">前端开发工程师(沪江网)</a><br/>· <a href="http://job.cnblogs.com/zt/yeshj/#offer6" target="_blank">产品经理(沪江网)</a><br/>· <a href="http://job.cnblogs.com/zt/yeshj/#offer9" target="_blank">运维工程师(沪江网)</a><br/></div><div id="cnblogs_posts" style="line-height:180%;">博客园首页随笔：<br/>· <a href="http://www.cnblogs.com/dagehaoshuang/archive/2010/04/06/1705422.html" target="_blank">ado.net entity framework 查询性能比较</a><br/>· <a href="http://www.cnblogs.com/carysun/archive/2010/04/06/WF3-designtime-performance-i.html" target="_blank">WF3设计时性能I</a><br/>· <a href="http://www.cnblogs.com/VCdog/archive/2010/04/06/1705395.html" target="_blank">心理一直很难受（王江民老师的逝世）</a><br/>· <a href="http://www.cnblogs.com/lonely7345/archive/2010/04/06/1705170.html" target="_blank">[翻译] DSL和模型驱动开发的最佳实践(3/4)</a><br/>· <a href="http://www.cnblogs.com/VCdog/archive/2010/04/06/1705134.html" target="_blank">【原创】VC在单文档的项目中，各个类之间的引用</a><br/></div><div id="job_block" style="line-height:180%;">知识库：<br/>· <a href="http://kb.cnblogs.com/page/60775/" target="_blank">线上软件 vs. 桌面软件</a><br/>· <a href="http://kb.cnblogs.com/page/60741/" target="_blank">开源软件许可协议简介</a><br/>· <a href="http://kb.cnblogs.com/page/60735/" target="_blank">全新的移动互联网</a><br/>· <a href="http://kb.cnblogs.com/page/60661/" target="_blank">30岁面霸IT男30次面试失败经历</a><br/>· <a href="http://kb.cnblogs.com/page/60629/" target="_blank">程序开发与性格特征</a><br/></div>
+		</td>
+		</tr>
+		<TR>
+			<TD colSpan="3" height="5"></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3"></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3" height="1">网站导航:<div id="blogsite">
+			<a href="http://www.cnblogs.com">博客园</a>&nbsp;&nbsp;
+			<a href="http://news.cnblogs.com">IT新闻</a>&nbsp;&nbsp;
+			<a href="http://home.cnblogs.com">博客园个人主页</a>&nbsp;&nbsp;
+			<a href="http://www.blogjava.net">BlogJava</a>&nbsp;&nbsp;
+			<a href="http://www.cnweblog.com">博客生活</a>&nbsp;&nbsp;
+			<a href="http://www.cnitblog.com">IT博客网</a>&nbsp;&nbsp;
+			<a href="http://www.phpweblog.net">PHP博客</a>&nbsp;&nbsp;
+			<a href="http://space.cnblogs.com">博客园社区</a>&nbsp;&nbsp;
+			<a href="/johndragon/archive/2008/04/10/46768.html?opt=admin">管理</a>
+			</div></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3">
+				
+<br/>
+
+<br/>
+
+</TD>
+		</TR>
+	</TABLE>	
+</div>
+<div id="AjaxHolder_PostComment_ValidationSummary1" style="color:Red;display:none;">
+
+	</div>
+
+</div>
+
+				
+</div>
+
+
+<p id="footer">
+	Powered by: 
+	<br />
+	
+	<a id="Footer1_Hyperlink3" NAME="Hyperlink1" href="http://www.cppblog.com/" style="font-family:Verdana;font-size:12px;">C++博客</a>
+	<br />
+	Copyright &copy; 饭中淹
+</p>
+    
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("AjaxHolder_PostComment_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2"), document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var AjaxHolder_PostComment_RequiredFieldValidator1 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator1"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1");
+AjaxHolder_PostComment_RequiredFieldValidator1.controltovalidate = "AjaxHolder_PostComment_tbTitle";
+AjaxHolder_PostComment_RequiredFieldValidator1.errormessage = "请输入标题";
+AjaxHolder_PostComment_RequiredFieldValidator1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator1.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator2 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator2"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2");
+AjaxHolder_PostComment_RequiredFieldValidator2.controltovalidate = "AjaxHolder_PostComment_tbName";
+AjaxHolder_PostComment_RequiredFieldValidator2.errormessage = "请输入你的姓名";
+AjaxHolder_PostComment_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator2.initialvalue = "";
+var AjaxHolder_PostComment_Requiredfieldvalidator4 = document.all ? document.all["AjaxHolder_PostComment_Requiredfieldvalidator4"] : document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4");
+AjaxHolder_PostComment_Requiredfieldvalidator4.controltovalidate = "AjaxHolder_PostComment_CodeNumberTextBox";
+AjaxHolder_PostComment_Requiredfieldvalidator4.errormessage = "请输入验证码";
+AjaxHolder_PostComment_Requiredfieldvalidator4.display = "Dynamic";
+AjaxHolder_PostComment_Requiredfieldvalidator4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_Requiredfieldvalidator4.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator3 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator3"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3");
+AjaxHolder_PostComment_RequiredFieldValidator3.controltovalidate = "AjaxHolder_PostComment_tbComment";
+AjaxHolder_PostComment_RequiredFieldValidator3.errormessage = "请输入评论内容";
+AjaxHolder_PostComment_RequiredFieldValidator3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator3.initialvalue = "";
+var AjaxHolder_PostComment_ValidationSummary1 = document.all ? document.all["AjaxHolder_PostComment_ValidationSummary1"] : document.getElementById("AjaxHolder_PostComment_ValidationSummary1");
+AjaxHolder_PostComment_ValidationSummary1.showmessagebox = "True";
+AjaxHolder_PostComment_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        
+document.getElementById('AjaxHolder_PostComment_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('AjaxHolder_PostComment_ValidationSummary1'));
+}
+Sys.Application.initialize();
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2'));
+}
+
+document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3'));
+}
+//]]>
+</script>
+</form>
+    <script type="text/javascript">
+        if (document.getElementById('cnblogsgooglead') != null) {
+            document.getElementById('cnblogsgooglead').innerHTML = document.getElementById('cnblogsgoogleadcode').innerHTML;
+            document.getElementById('cnblogsgoogleadcode').innerHTML = '';
+        }
+
+        if (document.getElementById('leftcontent') != null) {
+            if (document.getElementById('leftcontent').style.display == 'none') {
+                document.getElementById('leftcontent').style.display = 'inline';
+            }
+        }
+        if (document.getElementById('Blogleftcontent') != null) {
+            if (document.getElementById('cnblogsleftcontent').style.display == 'none') {
+                document.getElementById('cnblogsleftcontent').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsleftcontent') != null) {
+            if (document.getElementById('cnblogsleftcontent').style.display == 'none') {
+                document.getElementById('cnblogsleftcontent').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('rightmenu') != null) {
+            if (document.getElementById('rightmenu').style.display == 'none') {
+                document.getElementById('rightmenu').style.display = 'inline';
+            }
+        }
+        if (document.getElementById('leftmenu') != null) {
+            if (document.getElementById('leftmenu').style.display == 'none') {
+                document.getElementById('leftmenu').style.display = 'inline';
+            }
+            if (document.getElementById('lefttemp') != null) {
+                document.getElementById('leftmenu').innerHTML = document.getElementById('lefttemp').innerHTML;
+                document.getElementById('lefttemp').innerHTML = '';
+            }
+        }
+
+        if (document.getElementById('left') != null) {
+            if (document.getElementById('left').style.display == 'none') {
+                document.getElementById('left').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsleftmenu') != null) {
+            if (document.getElementById('cnblogsleftmenu').style.display == 'none') {
+                document.getElementById('cnblogsleftmenu').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('menu') != null) {
+            if (document.getElementById('menu').style.display == 'none') {
+                document.getElementById('menu').style.display = 'inline';
+            }
+        }
+
+        if (document.getElementById('cnblogsmenu') != null) {
+            if (document.getElementById('cnblogsmenu').style.display == 'none') {
+                document.getElementById('cnblogsmenu').style.display = 'inline';
+            }
+        }
+    </script>    
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-476124-5");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+ 在Linux下编译安装MySQL
+
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Right Reserved!
+
+Linux环境说明：
+	RedHat Linux 9
+	mysql-4.0.12
+
+1. mysql在linux下的编译和安装
+[root@localhost zieckey]# mkdir /usr/local/mysql
+[root@localhost zieckey]# cp mysql-4.0.12.tar.gz /home/
+[root@localhost root]# cd /home/
+解压
+[root@localhost home]# tar zxvf mysql-4.0.12.tar.gz
+[root@localhost home]# cd mysql-4.0.12
+配置，生成Makefile
+[root@localhost mysql-4.0.12]# ./configure --prefix=/usr/local/mysql --without-debug --with-extra-charsets=gb2312 --enable-assembler --without-isam  --without-innodb --with-pthread --enable-thread-safe-client
+编译
+[root@localhost mysql-4.0.12]# make
+安装
+[root@localhost mysql-4.0.12]# make install
+
+[root@localhost mysql-4.0.12]# scripts/mysql_install_db
+
+创建一个数据库管理员
+[root@localhost mysql-4.0.12]# groupadd mysql
+[root@localhost mysql-4.0.12]# useradd -g  mysql mysql
+
+
+改变权限
+[root@localhost mysql]# chown -R root  /usr/local/mysql
+[root@localhost mysql]# chown -R mysql /usr/local/mysql/var
+[root@localhost mysql]# chgrp -R mysql /usr/local/mysql
+
+
+
+配置环境变量，以便于编程
+[root@localhost mysql-4.0.12]# cd /usr/local/mysql/bin/
+[root@localhost bin]# export PATH=$PATH:/usr/local/mysql/bin/
+[root@localhost bin]# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/mysql/lib/mysql/
+[root@localhost bin]# env
+
+
+启动mysql服务器
+[root@localhost root]# cd /usr/local/mysql/bin/
+[root@localhost bin]# ./mysqld_safe -u mysql&
+Starting mysqld daemon with databases from /usr/local/mysql/var
+查看是否启动了
+[root@localhost root]# pgrep mysql
+15931
+15950
+15951
+
+
+启动一个mysql客户端
+[root@localhost root]# /usr/local/mysql/bin/mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1 to server version: 4.0.12
+ 
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+ 
+mysql>
+创建一个数据库
+mysql> create database cusemysql;
+Query OK, 1 row affected (0.00 sec)
+ 
+并使用这个数据库
+mysql> use cusemysql;
+Database changed
+在给数据库内创建一个表
+mysql> create table children(childno int not null unique,fname varchar(20),age int);
+Query OK, 0 rows affected (0.00 sec)
+ 
+在该表内插入一项数据
+mysql> insert into children values(5,"花儿",10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from children;
++---------+-------+------+
+| childno | fname | age  |
++---------+-------+------+
+|       5 | 花儿  |   10 |
++---------+-------+------+
+1 row in set (0.03 sec)
+ 
+mysql>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+下面是在Ubuntu下的安装过程：
+
+
+1、下载mysql5的linux版本。
+地址:http://dev.mysql.com/get/Downloads/MySQL-5.0/mysql-5.0.20.tar.gz/from/http://mirror.vmmatrix.net/mysql/
+
+2、安装GCCt等必备的软件：
+在终端下执行(网通用户请用交大的源)：
+sudo apt-get install gcc cpp g++ libncurses5-dev
+sudo apt-get install make autoconf automake libtool
+
+3、解压:
+对于*.tar.gz的文件使用命令tar zxvf *.tar.gz来解压;
+对于*.tar.bz2的文件使用命令tar jxvf *.tar.bz2来解压.
+将mysql,php,apache以及gd安装到/opt/目录下,便于管理.
+具体过程可参考：
+把桌面上刚下的MySQL复制到/tmp下：cp Desktop/mysql-5.0.20.tar.gz /tmp
+进入/tmp目录：cd /tmp
+解压并展开：tar zxvf mysql-5.0.20.tar.gz
+
+4、编译安装MySQL:
+进入到解压后的mysql目录:
+cd mysql-5.0.20
+假设我常用用户是zieckey,则在终端输入下面的命令:
+./configure --prefix=/opt/mysql --with-mysqld-user=zieckey --with-extra-charsets=all --with-unix-socket-path=/tmp/mysql.sock
+
+--prefix=/opt/mysql 把mysql-5.0.20指定安装到/opt/mysql目录中；
+--with-extra-charsets=all 对多语言的支持；
+--with-unix-socket-path=/tmp/mysql.sock 这个是指定mysql服务器启动后，联机套接字文件所处的位置和文件名，也就是说，如果mysql服务器成功启动后，就能在/tmp 目录中看到mysql.sock文件。如果看不到，肯定是mysql启动不了。
+--with-mysqld-user=zieckey 这个是让mysql服务器也能让系统中普通用户zieckey也能启动mysql服务器。用普通用户来启动mysql的好处是：mysql的进程会自己死掉自动退出。当然root用户也可以，不过有时mysql有些进程死了，但不会自动退出，root自己也杀不掉。所以用普通用户就有这样的好处，大多不会出现mysql进程已死，但不会退出的情况；
+当您看到“Thank you for choosing MySQL!”时，说明成功。
+
+也许会看到如下信息：
+checking for termcap functions library... configure: error: No curses/termcap library found
+这说明系统中某些库文件没有，那么我们要安装这些库文件。安装上libncurses5-dev (不同的系统可能名字也有所差异)这个包就好了
+
+sudo apt-get install libncurses5-dev
+
+
+5、编译安装
+
+sudo make
+sudo make install
+sudo scripts/mysql_install_db
+
+6、后期配置
+
+创建一个数据库管理员
+sudo groupadd mysql
+sudo useradd -g  mysql mysql
+
+改变权限
+sudo chown -R root  /home/zieckey/programfiles/mysql
+sudo chown -R mysql /home/zieckey/programfiles/mysql/var
+sudo chgrp -R mysql /home/zieckey/programfiles/mysql
+sudo chown -R zieckey /home/zieckey/programfiles/mysql/var           //如果希望使用zieckey这个用户来启动mysql的话
+sudo chgrp -R zieckey /home/zieckey/programfiles/mysql
+
+配置环境变量
+
+cd    //回到你的用户目录。
+cp .bashrc .bashrc_bak    //备份.bashrc
+gedit ~/.bashrc
+
+在最后加入：
+
+MySQL_HOME=/home/zieckey/programfiles/mysql
+PATH=$MySQL_HOME/bin:$PATH
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MySQL_HOME/lib/mysql/
+export JAVA_HOME CLASSPATH MySQL_HOME  LD_LIBRARY_PATH PATH  
+
+然后在终端输入：source ~/.bashrc    //使刚修改的起作用
+
+7、启动mysql服务器
+zieckey@zieckey-laptop:~/temp/mysql-5.0.41$ mysqld_safe -u mysql&
+[1] 21845
+zieckey@zieckey-laptop:~/temp/mysql-5.0.41$ Starting mysqld daemon with databases from /home/zieckey/programfiles/mysql/var
+
+查看是否启动了
+zieckey@zieckey-laptop:~/temp/mysql-5.0.41$ pgrep mysql
+21845
+21866
+
+启动一个mysql客户端
+zieckey@zieckey-laptop:~/temp/mysql-5.0.41$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 5.0.41 Source distribution
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use test
+Database changed
+mysql> show tables;
+Empty set (0.01 sec)
+
+mysql> 
+
+
+至此,MySQL安装完成
+

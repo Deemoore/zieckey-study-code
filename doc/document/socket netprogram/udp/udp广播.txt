@@ -1,0 +1,7 @@
+需要设置两个路由：
+[root@localhost net]# route add -net 224.0.0.0 netmask 224.0.0.0 dev lo
+[root@localhost net]# route add -net 224.0.0.0 netmask 224.0.0.0 dev eth0
+
+另外需要设置一下udp的属性：
+setsockopt( m_sockfd, level, optname, optval, optlen);
+

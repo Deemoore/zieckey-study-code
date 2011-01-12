@@ -1,0 +1,293 @@
+Red Hat 9 Linux下编译sqlite-3.3.8并在QT3.1下连接全过程详细记录
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved
+			
+
+下文介绍的内容都是基于 Linux RedHat 9.0 平台的。
+
+一、sqlite-3.3.8编译安装
+请阅读在安装包里的 INSTALL 文件。SQLite已经内置了，你不需要安装任何附加的软件（additional software）。
+这里简单介绍一下：
+假设你得到的是源代码sqlite-3.3.8.tar.gz，这里将告诉你怎么编译它。
+解压sqlite-3.3.8.tar.gz 到 /home目录下
+For example:
+tar zxvf sqlite-3.3.8.tar.gz -C /home
+cd /home
+mkdir sqlite-3.3.8-ix86
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+
+如果出现下列错误
+../sqlite-3.3.8/src/tclsqlite.c: In function `DbUpdateHandler':
+../sqlite-3.3.8/src/tclsqlite.c:333: warning: passing arg 3 of `Tcl_ListObjAppendElement' makes pointer from integer without a cast
+../sqlite-3.3.8/src/tclsqlite.c: In function `tclSqlFunc':
+../sqlite-3.3.8/src/tclsqlite.c:419: warning: passing arg 1 of `Tcl_NewByteArrayObj' discards qualifiers from pointer target type
+这个都是tcl相关的错误,可以先安装ActiveTcl以解决.假如你不需要tcl支持,那么这个错误可以这样避免:
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --disable-tcl --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+不出意外,将不会出现错误,那么
+Libraries have been installed in:
+   /home/sqlite-3.3.8-ix86/lib
+
+库文件已经生成在 /home/sqlite-3.3.8-ix86/lib 目录下
+可执行文件sqlite3已经生成在 /home/sqlite-3.3.8-ix86/bin 目录下
+下面创建一个新的数据库文件名叫"zieckey.db" (当然你可以使用不同的名字) 来测试数据库.
+直接输入: /home/sqlite-3.3.8-ix86/bin/sqlite3 test.db
+如果出现下面字样表明编译安装已经成功了.
+SQLite version 3.3.8
+Enter ".help" for instructions
+sqlite>
+
+二、使用QT3连接SQLite
+
+[root@localhost zieckey]# mkdir test-qt3-sqlite3
+[root@localhost zieckey]# cd test-qt3-sqlite3/
+打开Designer
+[root@localhost test-qt3-sqlite3]# designer&
+[4] 8357
+新建一个C++ Project
+新建一个 Dialog
+在该dialog上放置一个 PushButton 和一个 LineEdit
+并设置相应的属性
+保存到 test-qt3-sqlite3 目录下
+新建一个 C++ Main-file (main.cpp )
+再保存
+
+然后生成 *.h,*.cpp文件
+[root@localhost test-qt3-sqlite3]# uic -o mainform.h mainform.ui	
+[root@localhost test-qt3-sqlite3]# uic -i mainform.h -o mainform.cpp mainform.ui
+注：这里的 mainform.ui 是你的 Dialog 的保存文件名字。
+
+
+修改 *.pro文件，如下：
+
+SOURCES	+= main.cpp mainform.cpp
+HEADERS += mainform.h
+
+unix {
+  UI_DIR = .ui
+  MOC_DIR = .moc
+  OBJECTS_DIR = .obj
+}
+
+TEMPLATE	=app
+CONFIG	+= qt warn_on release
+LANGUAGE	= C++
+
+
+SQLITE_PATH=/home/sqlite-3.3.8-ix86
+
+DEPENDPATH  += $$SQLITE_PATH/include
+INCLUDEPATH	+= $$SQLITE_PATH/include
+LIBS	+= -L$$SQLITE_PATH/lib
+LIBS +=  -lsqlite3
+
+TARGET  = test-sqlite.out
+
+
+
+
+
+
+
+
+
+编辑 mainform.h
+/****************************************************************************
+** Form interface generated from reading ui file 'mainform.ui'
+**
+** Created: 日 11月 5 16:24:45 2006
+**      by: The User Interface Compiler ($Id: qt/main.cpp   3.1.1   edited Nov 21 17:40 $)
+**
+** WARNING! All changes made in this file will be lost!
+****************************************************************************/
+
+#ifndef MAINFORM_H
+#define MAINFORM_H
+
+#include <qvariant.h>
+#include <qdialog.h>
+
+#include "sqlite3.h"            //注意，这里一定要添加进来
+
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
+class QLineEdit;
+class QPushButton;
+
+class MainForm : public QDialog
+{
+    Q_OBJECT
+
+public:
+    MainForm( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~MainForm();
+
+    QLineEdit* showMsgLineEdit;
+    QPushButton* openButton;
+
+public slots:
+    virtual void openDBSlot();         //注意，这里是新建的一个SLOT
+
+protected:
+
+protected slots:
+    virtual void languageChange();
+};
+
+#endif // MAINFORM_H
+
+
+
+
+
+
+
+
+
+编辑 mainform.cpp
+/****************************************************************************
+** Form implementation generated from reading ui file 'mainform.ui'
+**
+** Created: 日 11月 5 16:25:05 2006
+**      by: The User Interface Compiler ($Id: qt/main.cpp   3.1.1   edited Nov 21 17:40 $)
+**
+** WARNING! All changes made in this file will be lost!
+****************************************************************************/
+
+#include "mainform.h"
+
+#include <qvariant.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
+#include <qimage.h>
+#include <qpixmap.h>
+
+/* 
+ *  Constructs a MainForm as a child of 'parent', with the 
+ *  name 'name' and widget flags set to 'f'.
+ *
+ *  The dialog will by default be modeless, unless you set 'modal' to
+ *  TRUE to construct a modal dialog.
+ */
+MainForm::MainForm( QWidget* parent, const char* name, bool modal, WFlags fl )
+    : QDialog( parent, name, modal, fl )
+
+{
+    if ( !name )
+	setName( "MainForm" );
+
+    showMsgLineEdit = new QLineEdit( this, "showMsgLineEdit" );
+    showMsgLineEdit->setGeometry( QRect( 150, 230, 350, 21 ) );
+
+    openButton = new QPushButton( this, "openButton" );
+    openButton->setGeometry( QRect( 150, 70, 91, 30 ) );
+    languageChange();
+    resize( QSize(600, 480).expandedTo(minimumSizeHint()) );
+
+    // signals and slots connections
+    connect( openButton, SIGNAL( clicked() ), this, SLOT( openDBSlot() ) );
+}
+
+/*
+ *  Destroys the object and frees any allocated resources
+ */
+MainForm::~MainForm()
+{
+    // no need to delete child widgets, Qt does it all for us
+}
+
+/*
+ *  Sets the strings of the subwidgets using the current
+ *  language.
+ */
+void MainForm::languageChange()
+{
+    setCaption( tr( "A test Showing how to connect SQLite3 in QT3" ) );
+    openButton->setText( tr( "Open DB" ) );
+}
+
+void MainForm::openDBSlot()
+{
+    //qWarning( "MainForm::openDBSlot(): Not implemented yet" );
+    sqlite3 *db=NULL;
+    int rc;
+    rc = sqlite3_open("zieckey.db", &db); //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+    if( rc )
+	{
+		QString errMsgQString;
+		errMsgQString.sprintf("Can't open database: %s\n", sqlite3_errmsg(db) );
+		showMsgLineEdit->setText(errMsgQString);
+		sqlite3_close(db);
+    }
+    else 
+		showMsgLineEdit->setText( "open zieckey.db successfully!\n" );
+
+    sqlite3_close(db); //关闭数据库
+}
+
+
+
+
+
+
+main.cpp如下，它不用做任何更改，如果我们是按照上面说的那样生成main.cpp的话
+#include <qapplication.h>
+#include "mainform.h"
+
+int main( int argc, char ** argv )
+{
+    QApplication a( argc, argv );
+    MainForm w;
+    w.show();
+    a.connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
+    return a.exec();
+}
+
+
+
+
+
+
+
+这一切做好了后，我们就可以开始编译了.
+这里说明一下，在这之后，我们关心的只有四个文件：
+main.cpp  mainform.h   mainform.cpp   *.pro
+
+[root@localhost test-qt3-sqlite3]# qmake
+[root@localhost test-qt3-sqlite3]# make
+中间也许会有很多警告信息，这个不是太大问题，如果没有错误，那么我们可以运行了：
+[root@localhost test-qt3-sqlite3]# ./test-sqlite.out
+也许会出现下面这样的错误：
+[root@localhost test-qt3-sqlite3]# ./test-sqlite.out
+./test-sqlite.out: error while loading shared libraries: libsqlite3.so.0: cannot open shared object
+file: No such file or directory
+这个好办：
+[root@localhost qt3-sqlite3]# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/sqlite-3.3.8-ix86/lib
+[root@localhost qt3-sqlite3]# ./test-sqlite.out
+
+这样就好了。
+看到运行的效果了没？
+点击一下界面上的按钮，看看有什么反应？
+应该是这样的：
+那个标签条上显示：   open zieckey.db successfully!
+
+
+说明：实际应用的时候，在qt3下根本就不需要显示的调用 uic 生成 .h .cpp 文件，
+这里是方便行文才这样做的。
+
+我也将源代码打包上传。需要的朋友可以下载。
+
+总结：这里我们知道了sqlite3.3.8的Linux环境下编译、QT Designer 的基本用法、QT编程的基本实现;
+最重要的是我们知道了怎么在qt下连接sqlite。本文纯粹是交流之作，仅作抛砖引玉之用。
+欢迎交流。

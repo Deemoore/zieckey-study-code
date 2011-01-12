@@ -1,0 +1,175 @@
+qt-designer使用教程
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved!
+
+第三章  编写自己的槽
+
+上一章我们学习了 QT Designer 的基本使用方法，并且知道来如何添加信号和槽了。
+这一章我们看看如何编写自己的槽来响应一些信号。
+
+好的我们开始这一章。
+[root@localhost root]# mkdir /home/DesignerTutorial
+[root@localhost root]# mkdir /home/DesignerTutorial/tutorial3
+[root@localhost root]# cd /home/DesignerTutorial/tutorial3
+[root@localhost tutorial3]# designer&
+[1] 4233
+[root@localhost tutorial3]#
+
+
+
+这里我们看到"Qt Designer - New/Open"对话框，这是一个新建对话框，
+我们先选择对话框上的第一个"C++ Project"，确定，然后更改名字，这里我们改为 tutorial3.pro 保存，
+默认情况是保存到我们打开 designer 的目录，
+也就是刚刚创建的文件夹 /home/DesignerTutorial/tutorial3
+
+这样我们就创建了一个工程文件 *.pro。下面我们再创建一个对话框。
+从菜单栏的 File->New 打开新建对话框，选择第二个：Dialog，
+然后也同样保存到刚刚创建的文件夹 /home/DesignerTutorial/tutorial3 下。
+这时侯,你的 QT Designer 中就会出现一个 From1 来. 
+更改右下角"Property Editor/Signal Handlers"那个窗口
+			里的 caption ，原内容 "Form1"改为 "我的第三个QT Desiger程序--编写自己的槽",
+            里的 name    , 原内容 "Form1"改为 "form_main"
+可以看到这时候窗口的标题栏文字"Form1"已经改变为 "我的第三个QT Desiger程序--编写自己的槽",不是吗？
+
+现在我们点击一下左边窗口上面的 ToolBox 中的那个 PushButton (标有 OK 的图标）
+并且用鼠标选择一个合适的大小. 在这个 PushButton 上面用用鼠标双击一下，
+我们就可以改变按钮上显示的字了。
+这里我们把"pushButton1"这几个字,换成 “加”, 然後用选择 OK 就可以了. 现在我们
+看到, 那个按钮上的标签已将变成 “加” 了. 
+更改右下角那个"Property Editor/Signal Handlers"窗口里的 name , 
+原内容 "pushButton1"改为 "pushBtnAdd" 
+
+以同样的方法，再放置一个按钮PushButton到窗口上，改 pushButton2 为"关闭" ， 
+将右下角那个窗口里的 name 的原内容 "pushButton2"改为 "pushBtnClose" .
+
+现在我们放置两个输入数字的窗口，这个控件是 LineEdit 
+以同样的方法放置两个 LineEdit 到窗口上 ，
+更改右下角那个窗口里的 name 内容 , 
+			其中一个由原内容 "lineEdit1" 改为 "lineEditAdd1"
+    		另一个由原内容 "lineEdit2" 改为 "lineEditAdd2"    
+   
+我们再放置一个加法结果输出的窗口，这个控件我们选择另一个，它是 TextLabel 
+当然你也可以选择你喜欢的控件，比如：LineEdit,也可以。
+
+以同样的方法放置一个 TextLabel 到窗口上 ，改 "textLabel1" 为"结果输出" ， 
+更改右下角那个窗口里的 name 内容 , 原内容 "textLabel1"改为 "textLabelResult"
+这里可以用鼠标将其大小拉长些，一便容纳我们的输出数据。
+    	
+我们这时侯需要给“关闭”按钮一个 signal（信号）, 这样当您点击这个“关闭”按钮的时侯，
+QT 才知道如何去处理这个信号。
+我们按一下 F3（connect singnal slot）然後在那个“关闭”按钮上面点击一下，
+这时侯我们就看到了 Close Connection 的 Dialog 了. 在 Signal 中选择 clicked, 在 slot 中,先选
+择 close() 就好了,在 Reciever 中选择 form_main. 这时侯选择 OK. 
+	       
+下面我们自己写个信号的处理槽来实现加法。
+按一下 F3（或者有菜单栏选择 Edit->Connections ）,然後在那个 “加” 按钮上点击一下。
+这时侯我们就看到了 "View and Edit Connection" 的 Dialog 了。 
+在 Signal 中选择 clicked, 在 Receiver 中选择 "form_main"
+在 Slot 中,都是QT为我们准备好的槽，我们可以不选择，或者先选择 close() 就好了。 
+不要关闭这个窗口，点击右边的“Edit Slots...”按钮，然后就可以看见" Edit Functions "窗口,
+该窗口也可以通过“主菜单 Edit->Slots” 打开。
+点击 "New Function" 按钮，将"newSlot()"改为 "addSlot()" ,然后选择 OK。
+这个时候我们再回到 "View and Edit Connection"对话框中，
+在 Slot 中我们现在看到了刚刚自己创建的槽"addSlot()",对吗？是的，我们选择"addSlot()"。
+
+现在我们必须在"addSlot()"槽中添加数据处理的代码，这样它才能做我们期望的事情。
+在主窗体"form_main"的空白处双击鼠标左键，
+弹出对话框"Creating ui.h file",我们选择"Yes",然后可以看到一个编辑窗口，内容如下：
+/****************************************************************************
+** ui.h extension file, included from the uic-generated form implementation.
+**
+** If you wish to add, delete or rename functions or slots use
+** Qt Designer which will update this file, preserving your code. Create an
+** init() function in place of a constructor, and a destroy() function in
+** place of a destructor.
+*****************************************************************************/
+
+
+void form_main::addSlot()
+{
+
+
+}
+
+
+这正是我们需要的，不是吗？因为我们正想编辑"addSlot()"这个槽。
+好的我们在"addSlot()"函数体中添加如下代码，那么这个文件的所有内容看起来像这样：
+/****************************************************************************
+** ui.h extension file, included from the uic-generated form implementation.
+**
+** If you wish to add, delete or rename functions or slots use
+** Qt Designer which will update this file, preserving your code. Create an
+** init() function in place of a constructor, and a destroy() function in
+** place of a destructor.
+*****************************************************************************/
+
+
+void form_main::addSlot()
+{
+    QString str1, str2, strResult;
+    double add1 = 0.0, add2 = 0.0, result = 0.0;
+    
+    //得到输入的字符
+    str1 = lineEditAdd1->text();
+    str2 = lineEditAdd2->text();
+    
+    //转换为数字
+    bool ok1 = FALSE, ok2 = FALSE;
+    add1 = str1.toDouble( &ok1 );
+    add2 = str2.toDouble( &ok2 );
+    
+    if ( ok1 &&  ok2 )
+    {	//如果输入 的是数字的话
+	result = add1 + add2;
+	strResult.sprintf( "%f + %f = %f", add1, add2, result );
+	textLabelResult->setText( strResult );
+    }
+    else
+    {	
+	QMessageBox::warning( this, "Input Error",
+        "Could not convert the input to the numbers\n"
+        "Please try again.\n\n",
+        "Retry",
+        "Quit", 0, 0, 1 );
+    }
+}
+
+
+
+
+因为我们刚刚用到了QString、QMessageBox这两个类，我们必须包含他们的头文件。
+下面我们在"Object Explorer"中添加这个两个类的头文件，选择"Menbers"标签，
+在"Includes (In declaration)"处，右击鼠标选择"New",
+然后输入：qstring.h
+以同样的方法输入：qmessagebox.h
+
+这时侯我们只需要一个小小的 main.cpp 就可以编译了。
+同样我们的 QT Designer 也可以为我们生成 main.cpp 。
+从菜单栏的 File->New 打开新建对话框，选择最后一个：C++ Main-File(main.cpp).
+然后也同样保存到刚刚创建的文件夹 /home/DesignerTutorial/tutorial3 下。
+
+好了，现在来编译我们的程序。
+生成Makefile文件：
+[root@localhost tutorial3]# qmake
+编译：
+[root@localhost tutorial3]# make
+[root@localhost DesignerTutorial3]# ls
+form_main.ui  main.cpp  Makefile  tutorial3  tutorial3.pro
+可以看到 tutorial3 ,这就是我们的可执行程序，
+运行：
+[root@localhost tutorial3]# ./tutorial3
+ 
+在两个输入框中输入数字，点击“加”按钮，看看效果
+再输入非数字字符，看看效果。
+怎么样？不错吧
+
+
+你现在可以试着多添加几个按钮，分别写上“加”“减”“乘”“除”等，
+然后添加与其对应的槽，去实现“加”“减”“乘”“除”等算法。
+你一定可以做到的，我相信你能。Just do it！
+
+
+总结：
+这里我们学习了在Linux下 QT Designer 的基本使用方法，并且知道如何添加自己的信号处理槽。
+同样很简单，不是吗？

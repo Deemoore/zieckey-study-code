@@ -1,0 +1,407 @@
+body{	
+	background-image: url(images/bg.jpg); 
+	background-repeat: repeat-yes;
+	margin : 0px;
+	color:#AAAAAA;
+	font-size:13px;
+	font-family:georgia,Verdana,Helvetica,Arial;
+	line-height: 22px; 
+	font-style: normal;
+	word-break:break-all;
+	line-height:150%;
+    SCROLLBAR-FACE-COLOR: #111111; 
+    SCROLLBAR-HIGHLIGHT-COLOR:  #555555; 
+    SCROLLBAR-SHADOW-COLOR: #555555; 
+    SCROLLBAR-3DLIGHT-COLOR: #111111; 
+    SCROLLBAR-ARROW-COLOR: #555555;
+    SCROLLBAR-TRACK-COLOR: #111111; 
+    SCROLLBAR-DARKSHADOW-COLOR: #4C4C4C; 
+}
+
+
+td {
+	FONT-SIZE: 13px; 
+	COLOR: #AAAAAA; 
+	FONT-FAMILY: georgia,Verdana,Helvetica,Arial;
+	word-break:break-all;
+	line-height:150%
+}
+
+.postcontent{
+	margin-top:10px;
+	background-repeat:no-repeat;
+}
+
+.mytd{
+	margin : 0px;
+	color:red;
+	font-size:12px;
+	line-height: 22px; 
+	font-style: normal;
+	FONT-FAMILY: Verdana,Helvetica,Arial
+}
+
+/* 编辑、评论 */
+
+a:visited, a:active, a:link {	
+	color : #8d8c8c;
+	text-decoration : none;
+}
+
+
+a:hover {
+	color: orange;
+	text-decoration : underline;
+}
+
+h1 {
+	margin : 0px;
+	margin-top : 10px;
+	margin-bottom : 10px;
+	font-size : 12px;
+	color:#AAAAAA;
+	border-bottom:1px dashed #CCCCCC;
+	padding:3px;
+	text-align:left;
+}
+
+/*
+h1 a:visited,
+h1 a:active,
+h1 a:link {
+	color : #000;
+}
+
+h1 a:hover {
+	color : #47F;
+	text-decoration : none;
+}
+*/
+h2 {
+	margin-top : 10px;
+	margin-bottom : 3px;
+	font-size : 13px;
+}
+
+h3 {
+	font-size : 14.7px;
+}
+
+
+
+/* 自定义 */
+td.banner{
+	background-repeat:no-repeat;
+	background-position:right middle;
+}
+
+table.index{
+	margin-top:0px
+}
+
+.sub {
+	color:#666666;
+	font-size:14.7px;
+	margin-top:10px;
+}
+
+
+
+/* section style */
+
+#menu h1 {
+	color: red;
+	font-family: "trebuchet ms", "lucida grande", verdana, arial, sans-serif;	
+	font-size: 14.7px;
+	font-weight: bold;
+	margin: 0px;
+}
+
+#menu ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px 0px 15px 5px;
+	font-size: 12px;
+	line-height:160%
+}
+
+
+
+a.listitem:visited, a.listitem:active, a.listitem:link {	
+	color : #999999;
+	text-decoration : none;
+}
+
+a.listitem:hover {
+	color: brown;
+	text-decoration : underline;
+}
+
+#Category {
+	margin : 0px;
+	color:#8d8c8c;
+	font-size:11px;
+	line-height: 22px; 
+	font-style: normal
+}
+
+.Catedesc {
+	padding-left:20px;
+	padding-bottom:20px;
+
+	background-image: url(images/main_background.gif);
+	background-position: top left;
+	background-repeat: repeat-y;
+	text-align: justify;
+
+	color: #808080;
+	font-size: 12px;
+	font-family: verdana, arial, sans-serif;	
+	text-transform: uppercase;
+}
+
+/* section posts style */
+h1.block_title {
+	color:#E0E0E0;
+	font-family: verdana, arial, sans-serif;	
+	font-size: 14.7px;
+	font-weight: bold;
+	height: 40px;
+	padding: 10px 0px 0px 0px;
+	margin-bottom:30px;
+	text-align:middle;
+}
+
+h1.block_title img {
+  vertical-align: middle;
+  color:red;
+}
+
+h1.block_title a:visited, h1.block_title a:active, h1.block_title a:link {
+	color: gray;
+}
+
+#header a {
+  color: #E0E0E0;
+  font-family: verdana, arial, sans-serif;	
+  font-size: 16px;
+  font-weight: bold;
+}
+
+div.block {
+  background-image: url(images/main_background.gif);
+  background-position: top left;
+  background-repeat: repeat-y;
+  font-size: 8pt;
+  text-align: justify;
+}
+
+div.block_footer {
+
+  height: 10px;
+}
+
+
+div.post {
+  padding-left: 20px;
+  font-size: 13px;
+ 
+}
+
+div.posttitle {
+  color: #355EA0;
+	font-family: verdana, arial, sans-serif;	
+	font-size: 14.7px;
+	font-weight: bold;
+}
+
+.posttitle a:visited, .posttitle a:active, .posttitle a:link {	
+	color : white;
+	font-size:14.7px;
+	text-decoration : none;
+}
+
+.posttitle a:hover {
+	color: brown;
+	font-size:14.7px;
+	text-decoration : underline;
+}
+
+/* 用户题记 阅读 评论*/
+div.itemdesc {
+	padding-top:10px;
+	text-align:right;
+	color: #808080;
+	font-size: 11px;
+	font-family: verdana, arial, sans-serif;	
+	text-transform: uppercase;
+
+}
+
+
+div.seperator {
+
+  margin: 0px 0px 10px 0px;
+}
+
+div.entrylistitem {
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+a.entrylisttitle, a.entrylisttitle:visited, a.entrylisttitle:link, a.entrylisttitle:active {
+	color: #B8D839;
+	font-family: georgia , verdana, arial, sans-serif;	
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.moreinfo {
+  font-size: 8pt;
+  text-align: justify;
+}
+
+div.moreinfotitle {
+	color: gray;
+	font-family: "trebuchet ms", "lucida grande", verdana, arial, sans-serif;	
+	font-size: 14.7px;
+	font-weight: bold;
+}
+
+/* section comment style */
+commentform{
+  font-size: 12px;
+}
+div.comment_footer
+ {
+
+	color:#8d8c8c;
+	text-align:right;
+}
+
+.footer {
+	border:dashed 1px gray;
+	padding:10px;
+
+}
+
+div.comments {
+  font-size: 12px;
+}
+
+div.comment {
+  border: 1px dashed #DDDDDD;
+  margin: 10px 0px 10px 0px;
+  padding: 10px;
+}
+
+div.comment_author {
+  margin: 5px 0px 5px 0px;
+}
+
+div.comment_content {
+  margin: 5px 0px 5px 0px;
+}
+
+
+#postcomment {
+	border: 1px solid #DDDDDD;
+  font-size: 12px;
+  padding: 10px;
+  text-align: justify;
+  margin-top: 15px;
+  width: 435px;
+}
+
+#postcomment div {
+	color: #808080;
+  font-size: 10px;
+	font-weight: bold;
+  margin: 5px 0px 5px 0px;
+}
+
+#postcomment input.text, textarea {
+  font-size: 14.7px;
+  font-family:verdana;
+  line-height:130%;
+}
+
+
+/* section calendar style */
+.Cal
+{
+
+	width:100%;
+	font-family:georgia;
+	font-size: 12px;
+	margin-top:10px;
+	margin-bottom:10px;
+	height:140px;
+	border-color:#444444;
+	
+	 	
+}
+
+.CalTitle
+{
+	background-color :#333333;
+	font-family:georgia;
+	font-size: 12px;
+	margin-left : 0px;
+	padding : 0px;
+	height:100%;
+	font-weight:bold;
+}
+
+.CalOtherMonthDay
+{
+	color:#575757;
+	font-family:georgia;
+	
+}
+
+.CalSelector
+{
+	background-color:#444444;
+	
+}
+
+a.CalNextPrev,a.CalNextPrev:link, a.CalNextPrev:visited, a.CalNextPrev:active
+{
+	color:white;
+}
+
+.CalNextPrev
+{
+	color:white;
+}
+
+
+.CalDayHeader
+{
+	background-color:#444444;
+	font-weight:bold;
+	font-family:verdana;
+	
+}
+
+.CalSelectedDay
+{
+    background-color:#111111;
+   
+     
+}
+
+.CalWeekendDay
+{
+	font-family:georgia;
+}
+
+.CalTodayDay
+{
+	background-color:#666666;
+	color:white;
+    font-weight:bold;
+	font-family:verdana;
+
+}	

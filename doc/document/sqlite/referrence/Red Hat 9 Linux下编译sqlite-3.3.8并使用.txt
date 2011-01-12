@@ -1,0 +1,184 @@
+Red Hat 9 Linux下编译sqlite-3.3.8并使用
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved
+			
+
+下文介绍的内容都是基于 Linux RedHat 9.0 平台的。
+
+一、sqlite-3.3.8编译安装
+请阅读在安装包里的 INSTALL或者README 文件。SQLite已经内置了，你不需要安装任何附加的软件（additional software）。
+Windows users可以下载SQLite扩展DLL。
+这里简单介绍一下：
+假设你得到的是源代码sqlite-3.3.8.tar.gz，这里将告诉你怎么编译它。
+解压sqlite-3.3.8.tar.gz 到 /home目录下
+For example:
+tar zxvf sqlite-3.3.8.tar.gz -C /home
+cd /home
+mkdir sqlite-3.3.8-ix86
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+
+如果出现下列错误
+../sqlite-3.3.8/src/tclsqlite.c: In function `DbUpdateHandler':
+../sqlite-3.3.8/src/tclsqlite.c:333: warning: passing arg 3 of `Tcl_ListObjAppendElement' makes pointer from integer without a cast
+../sqlite-3.3.8/src/tclsqlite.c: In function `tclSqlFunc':
+../sqlite-3.3.8/src/tclsqlite.c:419: warning: passing arg 1 of `Tcl_NewByteArrayObj' discards qualifiers from pointer target type
+...
+
+这个都是tcl相关的错误,可以先安装ActiveTcl以解决.假如你不需要tcl支持,那么这个错误可以这样避免:
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --disable-tcl --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+不出意外,将不会出现错误,那么
+Libraries have been installed in:
+   /home/sqlite-3.3.8-ix86/lib
+
+库文件已经生成在 /home/sqlite-3.3.8-ix86/lib 目录下
+可执行文件sqlite3已经生成在 /home/sqlite-3.3.8-ix86/bin 目录下
+下面创建一个新的数据库文件名叫"zieckey.db" (当然你可以使用不同的名字) 来测试数据库.
+直接输入: /home/sqlite-3.3.8-ix86/bin/sqlite3 test.db
+如果出现下面字样表明编译安装已经成功了.
+SQLite version 3.3.8
+Enter ".help" for instructions
+sqlite>
+
+
+
+二 SQLite的基本语法
+
+这一章我们将会学习到sqlite的基本语法，sqlite的语法现象和SQL92是比较相象的，
+或者说sqlite3兼容大部份SQL92的语法现象。
+下面我们看看怎么用这些语法现象来创建数据库以及对数据库的各种操作。
+
+2.1 新建一个数据库
+例如我们想新建一个数据库命名为zieckey.db ，可以直接在shell下输入 sqlite3 zieckey.db ，
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite>
+
+这里 SQLite version 3.0.8 是SQLite的版本信息。也就是说本文使用的sqlite版本为 version 3.0.8 .
+这样就创建了一个新的数据库文件，命名为 zieckey.db
+
+2.2 创建表和插入值
+刚刚我们创建了一个新的数据库zieckey.db，加入我们想在其中新建一个名为 SensorData 的表，其包含五个列元素。
+可以用CREATE TABLE语法命令。
+CREATE TABLE语句基本上就是"CREATE TABLE"关键字后跟一个新的表名以及括号内的一堆定义和约束。表名可以是字符串或者标识符。以"sqlite_"开头的表名是留给sqlite数据库引擎使用的。每个字段的定义是字段名后跟字段的数据类型，接着是一个或多个的字段约束。字段的 数据类型并不限制字段中可以存放的数据。更多信息，参见sqlite的CREATE TABLE语法。
+
+这里具体作法如下：
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> CREATE TABLE SensorData(
+...> ID INTEGER PRIMARY KEY,
+...> SensorID INTEGER,
+...> SiteNum INTEGER,
+...> Time VARCHAR(12),
+...> SensorParameter REAL
+...> );
+
+注意sqlite下除了特殊命令都要以分号 “;” 结尾，否则它将一直等待第一个分号的出现才判断这条命令结束。
+
+现在我们可以用 schema 命令看看我们刚刚创建的表。具体作法如下：
+
+sqlite> .schema
+CREATE TABLE SensorData(
+ID INTEGER PRIMARY KEY,
+SensorID INTEGER,
+SiteNum INTEGER,
+Time VARCHAR(12),
+SensorParameter REAL
+);
+sqlite>
+
+.schema 是用来查看数据库中所有的表的定义内容。如果后面跟了具体的表名称，则显示该表的内容。
+
+假如我们想想SensorData表中插入具体列元素值，该怎么办呢？这里可以用INSERT语句。
+INSERT语句有两种基本形式。一种带有"VALUES"关键字，在已有表中插入一个新的行。若不定义字段列表，那么值的数目将与表中的字段数目相同。否则值的数目须与字段列表中的字段数目相同。不在字段列表中的字段被赋予缺省值或NULL(当未定义缺省值)。
+INSERT的第二种形式从SELECT语句中获取数据。若未定义字段列表，则从SELECT得到的字段的数目必须与表中的字段数目相同，否则应与定义的字段列表中的字段数目相同。SELECT的每一行结果在表中插入一个新的条目。SELECT可以是简单的或者复合的。如果SELECT语句带有 ORDER BY子句，ORDER BY会被忽略。
+这里我们可以这样做：
+
+sqlite> INSERT INTO "SensorData" VALUES(NULL, 1, 0, '200605011206', 18.9);
+sqlite> INSERT INTO "SensorData" VALUES(2, 1, 0, '200605011306', 16.4);
+sqlite> INSERT INTO "SensorData" VALUES(3, 1, 0, '200605011406', 15.3);
+sqlite> INSERT INTO "SensorData" VALUES(4, 1, 0, '200605011506', 15.5);
+sqlite>
+
+很简单对不对？简直太easy了。
+
+
+
+
+
+2.3 在线帮助
+
+前面两节，我们已经知道了sqlite语法最基本的用法。下面可以看看如何获得联机帮助。
+很简单，输入 .help 就行了。注意要help前加上“.”，这与上面说的以分号结尾有点不同，因为help命令被视为特殊命令。
+
+sqlite> .help
+.databases List names and files of attached databases
+.dump ?TABLE? ... Dump the database in an SQL text format
+.echo ON|OFF Turn command echo on or off
+.exit Exit this program
+.explain ON|OFF Turn output mode suitable for EXPLAIN on or off.
+.header(s) ON|OFF Turn display of headers on or off
+.help Show this message
+.import FILE TABLE Import data from FILE into TABLE
+.indices TABLE Show names of all indices on TABLE
+.mode MODE ?TABLE? Set output mode where MODE is on of:
+csv Comma-separated values
+column Left-aligned columns. (See .width)
+html HTML <table> code
+insert SQL insert statements for TABLE
+line One value per line
+list Values delimited by .separator string
+tabs Tab-separated values
+tcl TCL list elements
+.nullvalue STRING Print STRING in place of NULL values
+.output FILENAME Send output to FILENAME
+.output stdout Send output to the screen
+.prompt MAIN CONTINUE Replace the standard prompts
+.quit Exit this program
+.read FILENAME Execute SQL in FILENAME
+.schema ?TABLE? Show the CREATE statements
+.separator STRING Change separator used by output mode and .import
+.show Show the current values for various settings
+.tables ?PATTERN? List names of tables matching a LIKE pattern
+.timeout MS Try opening locked tables for MS milliseconds
+.width NUM NUM ... Set column widths for "column" mode
+sqlite>
+
+这里看到的命令都带有“.”开头，或者说sqlite下，只有这些命令是需要带“.”的。我们会经常用到的命令有：
+
+.output FILENAME
+.output stdout
+.quit
+.read FILENAME
+.schema ?TABLE?
+.dump ?TABLE? ...
+.echo ON|OFF
+.exit
+在下面会涉及到这些具体内容的。我们慢慢来。
+
+
+2.4 查看当前数据库下的所有表
+当数据库越来越大时，我们也许并不太记得数据库中有多少个表了，这时就需要查看当前数据库下的有些什么表。
+我们可以用 .tables 命令 。
+
+sqlite> .tables
+SensorData
+sqlite>
+2.5 退出sqlite3
+对于初学者，也许不知道怎么安全退出，不过如果是从头看到此处的读者也许已经知道了，
+因为刚才 .help 命令已经告诉我们答案了。安全退出有两个命令：.exit 和 .quit
+好了，我们已经新建一个名为zieckey.db的数据库，并在其中新建一个名为 SensorData 的表.
+现在我们想退出，那么可以用到刚刚提到的 .exit 和 .quit 命令。
+例如我们可以这样退出：
+sqlite> .exit
+这里需要说明一下，如果不是用 .exit 和 .quit 这两个命令退出，我们对数据库的修改有可能丢失。

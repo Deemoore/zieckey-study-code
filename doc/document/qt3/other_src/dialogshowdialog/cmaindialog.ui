@@ -1,0 +1,82 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CMainDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CMainDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showPushButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>130</y>
+                <width>85</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>show</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>msgLineEdit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>280</x>
+                <y>131</y>
+                <width>121</width>
+                <height>30</height>
+            </rect>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>showPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CMainDialog</receiver>
+        <slot>showFindDialogSlot()</slot>
+    </connection>
+    <connection>
+        <sender>msgLineEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CMainDialog</receiver>
+        <slot>setCFDMsgSlot(const QString&amp;)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in declaration">cfinddialog.h</include>
+    <include location="local" impldecl="in implementation">cmaindialog.ui.h</include>
+</includes>
+<variables>
+    <variable access="private">int newa;</variable>
+    <variable access="public">CFindDialog *cfd;</variable>
+</variables>
+<signals>
+    <signal>sendText(const QString &amp;s)</signal>
+</signals>
+<slots>
+    <slot>showFindDialogSlot()</slot>
+    <slot>setCFDMsgSlot( const QString &amp; s )</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

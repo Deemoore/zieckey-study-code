@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+
+<title>Makefile.am详解 - 技术文档 - 程序开发 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区</title>
+<meta name="keywords" content="Makefile.am详解 - 技术文档 - 程序开发 Linux时代 - 开源、自由、共享 - 中国最大的Linux技术社区">
+<meta name="description" content="Makefile.am详解 - 技术文档 - 程序开发  程序开发 Linux 技术文档">
+
+<link href="Makefile.am%E8%AF%A6%E8%A7%A3_files/all.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+
+<!--
+
+.STYLE1 {color: #FF0000}
+
+.STYLE2 {font-size: 14px}
+
+-->
+
+</style>
+
+</head><body>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="950">
+
+  <tbody><tr>
+
+    <td height="27">	<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody><tr><form name="login" action="http://linux.chinaunix.net/bbs/logging.php?action=login" method="post"></form>
+	<td><script language="javascript" src="Makefile.am%E8%AF%A6%E8%A7%A3_files/loginbox.htm"></script><input value="eb595b8d" name="formhash" type="hidden"><input value="index.php" name="referer" type="hidden"><input value="" name="loginmode" type="hidden"><input value="1" name="styleid" type="hidden"><input value="0" name="cookietime" type="hidden"><input value="username" name="loginfield" type="hidden"><input value="0" name="questionid" type="hidden"> <input style="border: 0pt none ; background: transparent url(http://www.chinaunix.net/images_new/login.gif) repeat scroll 0% 0%; width: 56px; height: 17px; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; line-height: 22px; color: rgb(21, 66, 139);" value="" type="submit"><input value="登录" name="loginsubmit" type="hidden">　　<a href="http://bbs.chinaunix.net/">游客访问</a> | <a href="http://bbs.chinaunix.net/register.php" target="_blank"><font color="red">免费注册</font></a> | <a href="http://bbs.chinaunix.net/member.php?action=lostpasswd">忘记密码</a> | <a href="http://bbs.chinaunix.net/logging.php?action=login">会员登录</a></td>
+	
+	<td align="right">
+	·<a href="http://www.chinaunix.net/" class="list1">ChinaUnix首页</a>
+
+	·<a href="http://bbs.chinaunix.net/" class="list1">论坛</a>
+	·<a href="http://blog.chinaunix.net/" class="list1">博客</a>&nbsp;
+	</td>
+	</tr>
+	</tbody></table></td>
+
+  </tr>
+
+  <tr>
+
+    <td bgcolor="#cccccc" height="1"></td>
+
+  </tr>
+
+  <tr>
+
+    <td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+      <tbody><tr>
+
+        <td height="84"><img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/logo.jpg"></td>
+
+        <td align="right"><iframe src="Makefile.am%E8%AF%A6%E8%A7%A3_files/iframe.htm" scrolling="no" width="725" frameborder="0" height="80"></iframe></td>
+
+      </tr>
+
+    </tbody></table></td>
+
+  </tr>
+
+  <tr>
+
+    <td><table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+      <tbody><tr>
+
+        <td width="3"><img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/bgtop1.jpg" width="3" height="26"></td>
+
+        <td class="whitetop" background="Makefile.am%E8%AF%A6%E8%A7%A3_files/bgtop2.gif" width="944">
+<a href="http://linux.chinaunix.net/" target="_blank">Linux首页</a> |
+<a href="http://linux.chinaunix.net/news/">Linux新闻</a> |
+<a target="_blank" href="http://linux.chinaunix.net/bbs" style="color: red;"><b>Linux论坛</b></a> |
+<a href="http://linux.chinaunix.net/techdoc/">Linux文档</a> |
+<a target="_blank" href="http://download.chinaunix.net/disc/linux/">Linux下载</a> |
+<a target="_blank" href="http://blog.chinaunix.net/techart.php?frmid=6">Linux博客</a> |
+<a target="_blank" href="http://search.chinaunix.net/">Linux搜索</a> |
+<a target="_blank" href="http://linux.chinaunix.net/bbs/index.php?gid=68">开源项目孵化平台</a>
+ |
+<a target="_blank" href="http://linux.chinaunix.net/ebook/" style="color: red;">《开源时代》</a></td>
+
+        <td align="right" width="3"><img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/bgtop3.jpg" width="3" height="26"></td>
+
+      </tr>
+
+    </tbody></table></td>
+
+  </tr>
+
+</tbody></table>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="950">
+
+<tbody><tr>
+
+    <td class="BlkLightblue" valign="bottom">
+<a target="_blank" href="http://linux.chinaunix.net/techdoc/beginner/">
+		新手入门</a> | <span lang="zh-cn">
+		<a target="_blank" href="http://linux.chinaunix.net/techdoc/install/">
+		安装启动</a> | </span>
+		<a target="_blank" href="http://linux.chinaunix.net/techdoc/system/">
+		管理员指南</a> | <a target="_blank" href="http://man.chinaunix.net/">开发手册</a> 
+		| <a target="_blank" href="http://linux.chinaunix.net/techdoc/desktop/">
+		桌面应用</a> |
+		<a target="_blank" href="http://linux.chinaunix.net/techdoc/develop/">
+		程序开发</a> |
+		<a target="_blank" href="http://linux.chinaunix.net/techdoc/database/">
+		数据库</a> | <span lang="zh-cn">
+		<a target="_blank" href="http://linux.chinaunix.net/techdoc/net/">网络技术</a>|
+<a target="_blank" href="http://linux.chinaunix.net/topics/2007-01-25/15/index.shtml">
+CentOS</a></span> |
+<a target="_blank" href="http://linux.chinaunix.net/search2.php?key=fedora&amp;id=0">
+Fedora</a> <span lang="zh-cn">| </span>
+<a target="_blank" href="http://linux.chinaunix.net/search2.php?key=mysql&amp;id=0">
+MySQL</a>
+
+<span lang="zh-cn">| </span>
+<a target="_blank" href="http://linux.chinaunix.net/search2.php?key=apache&amp;id=0">
+Apache</a>
+
+<span lang="zh-cn">| </span>
+<a target="_blank" href="http://linux.chinaunix.net/search2.php?key=ubuntu&amp;id=0">
+<font color="#ff0000">Ubuntu</font></a>
+
+<span lang="zh-cn">| </span>
+<a target="_blank" href="http://linux.chinaunix.net/topics/2008-07-10/18/index.shtml">
+<font color="#ff0000">Gentoo</font></a>| 
+<b>
+<a target="_blank" href="http://linux.chinaunix.net/topics/2008-07-30/19/index.shtml">
+<font color="#ff0000">OSCON08</font></a></b>
+</td>
+
+</tr>
+<tr><td>
+
+</td></tr>
+  <tr>
+
+    <td valign="bottom" height="30">&nbsp;&nbsp;<a href="http://linux.chinaunix.net/">Linux时代</a> &gt;&gt;  <a href="http://linux.chinaunix.net/techdoc/" class="list1">技术文档</a> &gt;&gt; <a href="http://linux.chinaunix.net/techdoc/develop/" class="list1">程序开发</a></td>
+
+  </tr>
+
+  <tr>
+
+    <td bgcolor="#cccccc" height="1"></td>
+
+  </tr>
+
+  <tr>
+
+    <td height="8"></td>
+
+  </tr>
+
+</tbody></table><table align="center" border="0" cellpadding="0" cellspacing="0" width="950">
+
+  <tbody><tr>
+
+    <td class="BLKtext" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" width="660">
+
+      <tbody><tr>
+
+        <td height="8">&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td class="Ftext1" height="30">Makefile.am详解</td>
+
+      </tr>
+
+      <tr>
+
+        <td><table align="center" border="0" cellpadding="0" cellspacing="0" width="80%">
+
+          <tbody><tr>
+
+            <td bgcolor="#cccccc" height="1"></td>
+
+          </tr>
+
+        </tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td align="center" height="40">来源: 
+ ChinaUnix博客 　日期：
+2009.02.09 19:36　(共有<span class="STYLE1" id="postcount">0</span>条评论)  <a href="http://linux.chinaunix.net/bbs/thread-1061563-1-1.html" target="_blank">我要评论</a></td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td class="F14">
+实战Makefile.am<br>
+Makefile.am是一种比Makefile更高层次的规则。只需指定要生成什么目标，它由什么源文件生成，要安装到什么目录等构成。<br>
+表一列出了可执行文件、静态库、头文件和数据文件，四种书写Makefile.am文件个一般格式。<br>
+<img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/116867af784.jpg" onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onclick="if(!this.resized) {return true;} else {window.open('http://121.img.pp.sohu.com/images/blog/2007/10/29/17/29/116867af784.jpg');}" onmousewheel="return imgzoom(this);" alt="" border="0"><br>
+表 1Makefile.am一般格式<br>
+ <br>
+对于可执行文件和静态库类型，如果只想编译，不想安装到系统中，可以用noinst_PROGRAMS代替bin_PROGRAMS，noinst_LIBRARIES代替lib_LIBRARIES。<br>
+Makefile.am还提供了一些全局变量供所有的目标体使用：<br>
+<img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/116867b39c1.jpg" onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onclick="if(!this.resized) {return true;} else {window.open('http://121.img.pp.sohu.com/images/blog/2007/10/29/17/0/116867b39c1.jpg');}" onmousewheel="return imgzoom(this);" alt="" border="0"><br>
+表 2 Makefile.am中可用的全局变量<br>
+在Makefile.am中尽量使用相对路径，系统预定义了两个基本路径：<br>
+<img src="Makefile.am%E8%AF%A6%E8%A7%A3_files/11686839bab.jpg" onload="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onmouseover="if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.style.cursor='hand'; this.alt='Click here to open new window\nCTRL+Mouse wheel to zoom in/out';}" onclick="if(!this.resized) {return true;} else {window.open('http://119.img.pp.sohu.com/images/blog/2007/10/29/17/0/11686839bab.jpg');}" onmousewheel="return imgzoom(this);" alt="" border="0"><br>
+表 3Makefile.am中可用的路径变量<br>
+在上文中我们提到过安装路径，automake设置了默认的安装路径：<br>
+1)标准安装路径<br>
+默认安装路径为：$(prefix) = /usr/local，可以通过./configure --prefix=的方法来覆盖。<br>
+其它的预定义目录还包括：bindir = $(prefix)/bin, libdir = $(prefix)/lib, datadir = $(prefix)/share, sysconfdir = $(prefix)/etc等等。<br>
+2) 定义一个新的安装路径<br>
+比如test, 可定义testdir = $(prefix)/test, 然后test_DATA =test1 test2，则test1，test2会作为数据文件安装到$(prefix)/ /test目录下。<br>
+我们首先需要在工程顶层目录下（即project/）创建一个Makefile.am来指明包含的子目录：<br>
+SUBDIRS=src/lib src/ModuleA/apple/shell src/ModuleA/apple/core <br>
+CURRENTPATH=$(shell /bin/pwd)<br>
+INCLUDES=-I$(CURRENTPATH)/src/include -I$(CURRENTPATH)/src/ModuleA/apple/include <br>
+export INCLUDES<br>
+由于每个源文件都会用到相同的头文件，所以我们在最顶层的Makefile.am中包含了编译源文件时所用到的头文件，并导出，见蓝色部分代码。<br>
+我们将lib目录下的swap.c文件编译成libswap.a文件，被apple/shell/apple.c文件调用，那么lib目录下的Makefile.am如下所示：<br>
+noinst_LIBRARIES=libswap.a<br>
+libswap_a_SOURCES=swap.c<br>
+INCLUDES=-I$(top_srcdir)/src/includ<br>
+细心的读者可能就会问：怎么表1中给出的是bin_LIBRARIES，而这里是noinst_LIBRARIES？这<br>
+是因为如果只想编译，而不想安装到系统中，就用noinst_LIBRARIES代替bin_LIBRARIES，对于可执行文件就用<br>
+noinst_PROGRAMS代替bin_PROGRAMS。对于安装的情况，库将会安装到$(prefix)/lib目录下，可执行文件将会安装<br>
+到${prefix}/bin。如果想安装该库，则Makefile.am示例如下：<br>
+bin_LIBRARIES=libswap.a<br>
+libswap_a_SOURCES=swap.c<br>
+INCLUDES=-I$(top_srcdir)/src/include<br>
+swapincludedir=$(includedir)/swap<br>
+swapinclude_HEADERS=$(top_srcdir)/src/include/swap.h<br>
+最后两行的意思是将swap.h安装到${prefix}/include /swap目录下。<br>
+接下来，对于可执行文件类型的情况，我们将讨论如何写Makefile.am？对于编译apple/core目录下的文件，我们写成的Makefile.am如下所示：<br>
+noinst_PROGRAMS=test<br>
+test_SOURCES=test.c <br>
+test_LDADD=$(top_srcdir)/src/ModuleA/apple/shell/apple.o $(top_srcdir)/src/lib/libswap.a <br>
+test_LDFLAGS=-D_GNU_SOURCE<br>
+DEFS+=-D_GNU_SOURCE<br>
+#LIBS=-lpthread<br>
+由于我们的test.c文件在链接时，需要apple.o和libswap.a文件，所以我们需要在<br>
+test_LDADD中包含这两个文件。对于Linux下的信号量/读写锁文件进行编译，需要在编译选项中指明-D_GNU_SOURCE。所以在<br>
+test_LDFLAGS中指明。而test_LDFLAGS只是链接时的选项，编译时同样需要指明该选项，所以需要DEFS来指明编译选项，由于<br>
+DEFS已经有初始值，所以这里用+=的形式指明。从这里可以看出，Makefile.am中的语法与Makefile的语法一致，也可以采用条件表达<br>
+式。如果你的程序还包含其他的库，除了用AC_CHECK_LIB宏来指明外，还可以用LIBS来指明。<br>
+如果你只想编译某一个文件，那么Makefile.am如何写呢？这个文件也很简单，写法跟可执行文件的差不多，如下例所示：<br>
+noinst_PROGRAMS=apple<br>
+apple_SOURCES=apple.c<br>
+DEFS+=-D_GNU_SOURCE<br>
+我们这里只是欺骗automake，假装要生成apple文件，让它为我们生成依赖关系和执行命令。所以当你运行完automake命令后，然后修改apple/shell/下的Makefile.in文件，直接将LINK语句删除，即：<br>
+…….<br>
+clean-noinstPROGRAMS:<br>
+&nbsp; &nbsp; -test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)<br>
+apple$(EXEEXT): $(apple_OBJECTS) $(apple_DEPENDENCIES) <br>
+&nbsp; &nbsp; @rm -f apple$(EXEEXT)<br>
+#$(LINK) $(apple_LDFLAGS) $(apple_OBJECTS) $(apple_LDADD) $(LIBS)<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>
+<br>
+<b>本文来自ChinaUnix博客，如果查看原文请点：</b><a href="http://blog.chinaunix.net/u2/61254/showart_1821022.html" target="_blank">http://blog.chinaunix.net/u2/61254/showart_1821022.html</a> 
+</td>
+
+      </tr>
+
+
+      <tr>
+
+        <td align="right" height="20"> 　 <a href="http://linux.chinaunix.net/bbs/thread-1061563-1-1.html" target="_blank">发表评论</a>
+
+  <a href="http://linux.chinaunix.net/bbs/thread-1061563-1-1.html" target="_blank">查看评论</a>(共有<span class="STYLE1" id="postcount2">0</span>条评论)
+
+</td>
+
+      </tr>
+      <tr>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      
+
+    </tbody></table>
+
+
+</td>
+
+    <td width="8">&nbsp;</td>
+
+    <td bgcolor="#fff9eb" valign="top" width="245">
+<center><br>
+<form action="/search2.php" method="get">
+<input name="key" size="15" type="text"><input name="id" value="0" type="hidden"><input value="搜索" type="submit">
+</form>
+<br>
+</center>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+      <tbody><tr>
+
+        <td class="F13" background="Makefile.am%E8%AF%A6%E8%A7%A3_files/bg245.jpg" height="27"><table width="100%"><tbody><tr><td class="F13">最新资讯</td><td align="right"><a href="http://linux.chinaunix.net/news" target="_blank">更多&gt;&gt;</a>&nbsp;</td></tr></tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td class="BLKtext" bgcolor="#ffffff" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" width="97%">
+
+          <tbody><tr>
+
+            <td height="5"></td>
+
+          </tr>
+
+          <tr>
+
+            <td>· <a href="http://linux.chinaunix.net/news/2009/09/01/1132923.shtml" title="Linux内核再爆高危漏洞，一个命令可获root权限" target="_blank">Linux内核再爆高危漏洞，一个命..</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132922.shtml" title="FSF和GNOME召集女性参与开源社区" target="_blank">FSF和GNOME召集女性参与开源社区</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132921.shtml" title="开源项目和新闻界打交道时需注意事" target="_blank">开源项目和新闻界打交道时需注..</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132919.shtml" title="缠讼6年 SCO赢得Linux侵犯其Unix版权案上诉" target="_blank">缠讼6年 SCO赢得Linux侵犯其Un..</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132917.shtml" title="Skype Linux Beta新版发布 增强音视频功能" target="_blank">Skype Linux Beta新版发布 增强..</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132915.shtml" title="袁萌：我要为Linux草根队加油！" target="_blank">袁萌：我要为Linux草根队加油！</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132914.shtml" title="卫赫士：开源不是商业模式" target="_blank">卫赫士：开源不是商业模式</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132913.shtml" title="Novell凭借全面基础架构引领云计算迅猛发展" target="_blank">Novell凭借全面基础架构引领云..</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132912.shtml" title="LVS(Linux Vitual Server)在行动" target="_blank">LVS(Linux Vitual Server)在行动</a><br>
+· <a href="http://linux.chinaunix.net/news/2009/09/01/1132908.shtml" title="开源虚拟厂商Xen拟推出Cloud Xen云计算基础平台" target="_blank">开源虚拟厂商Xen拟推出Cloud X..</a><br>
+</td>
+
+          </tr>
+
+          <tr>
+
+            <td height="5"></td>
+
+          </tr>
+
+        </tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td bgcolor="#ffffff" height="10"></td>
+
+      </tr>
+
+      <tr></tr></tbody></table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+      <tbody><tr>
+
+        <td class="F13" background="Makefile.am%E8%AF%A6%E8%A7%A3_files/bg245.jpg" height="27"><table width="100%"><tbody><tr><td class="F13">论坛热点</td><td align="right"><a href="http://linux.chinaunix.net/bbs" target="_blank">更多&gt;&gt;</a>&nbsp;</td></tr></tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td class="BLKtext" bgcolor="#ffffff" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" width="97%">
+
+          <tbody><tr>
+
+            <td height="5"></td>
+
+          </tr>
+
+          <tr>
+
+            <td>· <a href="http://linux.chinaunix.net/bbs/thread-1132268-1-1.html" title="使用linux二年后却陷入了新手般的问题～" target="_blank">使用linux二年后却陷入了新手..</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132251-1-1.html" title="redhad 4  cacti安装问题求救！！！" target="_blank">redhad 4  cacti安装问题求救..</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132169-1-1.html" title="袁萌：Linux挽救了Windows一条命" target="_blank">袁萌：Linux挽救了Windows一条命</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1131778-1-1.html" title="如何在RHEL5.3下安装windows 2003" target="_blank">如何在RHEL5.3下安装windows..</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1131813-1-1.html" title="安装redhat5出现的问题" target="_blank">安装redhat5出现的问题</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1131754-1-1.html" title="如何访问局域网里面的linux服务器" target="_blank">如何访问局域网里面的linux服..</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132398-1-1.html" title="新手上路，关于Linux下网络连接的问题" target="_blank">新手上路，关于Linux下网络连..</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132254-1-1.html" title="RHCS配置问题" target="_blank">RHCS配置问题</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132177-1-1.html" title="盘阵分区问题" target="_blank">盘阵分区问题</a><br>
+· <a href="http://linux.chinaunix.net/bbs/thread-1132035-1-1.html" title="Ping不通主机名" target="_blank">Ping不通主机名</a><br>
+</td>
+
+          </tr>
+
+          <tr>
+
+            <td height="5"></td>
+
+          </tr>
+
+        </tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td bgcolor="#ffffff" height="10"></td>
+
+      </tr>
+
+      <tr></tr></tbody></table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+      <tbody><tr>
+
+        <td class="F13" background="Makefile.am%E8%AF%A6%E8%A7%A3_files/bg245.jpg" height="27"><table width="100%"><tbody><tr><td class="F13">文档更新</td><td align="right"><a href="http://linux.chinaunix.net/techdoc" target="_blank">更多&gt;&gt;</a>&nbsp;</td></tr></tbody></table></td>
+
+      </tr>
+
+      <tr>
+
+        <td class="BLKtext" bgcolor="#ffffff" valign="top"><table align="center" border="0" cellpadding="0" cellspacing="0" width="97%">
+
+          <tbody><tr>
+
+            <td height="5"></td>
+
+          </tr>
+
+          <tr>
+
+            <td>· <a href="http://linux.chinaunix.net/techdoc/develop/2009/07/21/1125287.shtml" title="android 开发网点" target="_blank">android 开发网点</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/net/2009/07/21/1125285.shtml" title="Nfs 穿过iptables" target="_blank">Nfs 穿过iptables</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/beginner/2009/07/21/1125284.shtml" title="tcp要点学习-基础概念" target="_blank">tcp要点学习-基础概念</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/develop/2009/07/21/1125283.shtml" title="gcc/gdb" target="_blank">gcc/gdb</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/system/2009/07/21/1125281.shtml" title="Linux 意义和目的是什么?" target="_blank">Linux 意义和目的是什么?</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/system/2009/07/21/1125279.shtml" title="成都嵌入式培训－chmod命令详解" target="_blank">成都嵌入式培训－chmod命令详解</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/system/2009/07/21/1125278.shtml" title="linux面试题参考答案" target="_blank">linux面试题参考答案</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/system/2009/07/21/1125276.shtml" title="成都嵌入式培训－Linux操作系统发展简史" target="_blank">成都嵌入式培训－Linux操作系统发..</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/net/2009/07/21/1125274.shtml" title="tcp要点学习-断开连接" target="_blank">tcp要点学习-断开连接</a><br>
+· <a href="http://linux.chinaunix.net/techdoc/system/2009/07/21/1125273.shtml" title="成都嵌入式培训-Linux操作系统12则经典应用技巧" target="_blank">成都嵌入式培训-Linux操作系统12..</a><br>
+</td>
+
+          </tr>
+
+   
+        </tbody></table></td>
+
+      </tr>
+
+
+      <tr></tr></tbody></table>
+</td>
+
+  </tr>
+
+</tbody></table>
+<script src="Makefile.am%E8%AF%A6%E8%A7%A3_files/threadcount.htm"></script>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="950">
+
+  <tbody><tr>
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+</tbody></table>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="950">
+
+  <tbody><tr>
+
+    <td bgcolor="#308cf6" height="2"></td>
+
+  </tr>
+
+  <tr>
+
+    <td align="center" height="30"><a href="http://www.chinaunix.net/about/index.shtml" target="_blank">关于我们</a> | <a href="http://www.chinaunix.net/about/connect.html" target="_blank">联系方式</a> | <a href="http://www.chinaunix.net/about/service.html" target="_blank">广告合作</a> | <a href="http://www.chinaunix.net/about/hr.html" target="_blank">诚聘英才</a> | <a href="http://www.chinaunix.net/about/channel.html" target="_blank">网站地图</a> | <a href="http://www.chinaunix.net/about/friend.html" target="_blank">友情链接</a> | <a href="http://linux.chinaunix.net/bbs/register.php" target="_blank">免费注册</a></td>
+
+  </tr>
+
+  <tr>
+
+    <td bgcolor="#308cf6" height="2"></td>
+
+  </tr>
+
+  <tr>
+
+    <td align="center"><p>Copyright &#169; 2001-2008 ChinaUnix.net All Rights Reserved</p>
+
+        <p>感谢所有关心和支持过ChinaUnix的朋友们<br>
+	</p><p>京ICP证041476号
+
+</p></td>
+
+  </tr>
+
+</tbody></table>
+
+</body></html>

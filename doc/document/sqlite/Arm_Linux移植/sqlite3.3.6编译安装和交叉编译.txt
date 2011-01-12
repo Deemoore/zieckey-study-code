@@ -1,0 +1,96 @@
+sqlite-3.3.6编译安装与交叉编译
+
+下文介绍的内容都是基于 Linux RedHat 9.0 平台的。
+
+一、PC机编译安装
+请阅读在安装包里的 INSTALL 文件。或者使用PEAR installer with "pear install sqlite"。SQLite已经内置了，你不需要安装任何附加的软件（additional software）。
+Windows users可以下载SQLite扩展DLL（php_sqlite.dl）。
+这里简单介绍一下：
+假设你得到的是源代码sqlite-3.3.6.tar.gz，这里将告诉你怎么编译它。
+解压sqlite-3.3.6.tar.gz 到 /home目录下
+For example:
+	tar zxvf sqlite-3.3.6.tar.gz -C /home            
+	cd /home
+	mkdir sqlite-ix86-linux
+	cd /home/sqlite-ix86-linux/
+	../sqlite-3.3.6/configure --prefix=/home/sqlite-ix86-linux/
+编译并安装，然后生成帮助文档	
+	make && make install	 && make doc
+
+如果出现下列错误
+../sqlite-3.3.6/src/tclsqlite.c: In function `DbUpdateHandler':
+../sqlite-3.3.6/src/tclsqlite.c:333: warning: passing arg 3 of `Tcl_ListObjAppendElement' makes pointer from integer without a cast
+../sqlite-3.3.6/src/tclsqlite.c: In function `tclSqlFunc':
+../sqlite-3.3.6/src/tclsqlite.c:419: warning: passing arg 1 of `Tcl_NewByteArrayObj' discards qualifiers from pointer target type
+这个都时tcl相关的错误,可以先安装ActiveTcl以解决.假如你不需要tcl支持,那么这个错误可以这样避免:
+	cd /home/sqlite-ix86-linux/
+    ../sqlite-3.3.6/configure --disable-tcl  --prefix=/home/sqlite-ix86-linux/
+编译并安装，然后生成帮助文档	
+	make && make install	 && make doc
+不出意外,将不会出现错误,那么
+库文件已经生成在 /home/sqlite-ix86-linux/lib 目录下 
+可执行文件sqlite3已经生成在 /home/sqlite-ix86-linux/bin 目录下 
+下面创建一个新的数据库文件名叫"zieckey.db" (当然你可以使用不同的名字) 来测试数据库.
+直接输入:  /home/sqlite-ix86-linux/bin/sqlite3 test.db
+如果出现下面字样表明编译安装已经成功了.
+SQLite version 3.3.6
+Enter ".help" for instructions
+sqlite>
+
+
+二、交叉编译sqlite.3.3.6.tar.gz库文件
+	tar zxvf sqlite-3.3.6.tar.gz -C /home     (这一步前面已经有了,为了完整性,这里还是写出来)
+	mkdir /home/sqlite-arm-linux
+
+设置交叉编译环境
+	export PATH=/usr/local/arm-linux/bin:$PATH
+	
+	cd /home/sqlite-arm-linux/
+	../sqlite-3.3.6/configure  --disable-tcl --prefix=/home/sqlite-arm-linux/ --host=arm-linux
+	这步出现错误而没有生成Makefile
+	configure: error: unable to find a compiler for building build tools
+	
+	前面检查arm-linux-gcc都通过了，怎么还说没有找到编译器呢？花了点时间看configure的脚本，太复杂了，又结合configure.ac看了一下。原来是要设置config_TARGET_CC和config_BUILD_CC两个环境变量。config_TARGET_CC是交叉编译器，config_BUILD_CC是主机编译器。重来：
+
+	export config_BUILD_CC=gcc
+	export config_TARGET_CC=arm-linux-gcc
+	../sqlite-3.3.6/configure  --disable-tcl --prefix=/home/sqlite-arm-linux/ --host=arm-linux
+又出现如下错误
+	checking for /usr/include/readline.h... configure: error: cannot check for file existence when cross compiling
+说readline.h的错,找到readline.h在/usr/include/readline/readline.h目录,我想这样解决
+	ln -s /usr/include/readline/readline.h /usr/include/readline.h
+但还是不行
+	../sqlite-3.3.6/configure  --disable-tcl --prefix=/home/sqlite-arm-linux/ --host=arm-linux
+还是出现如下同样的错误
+	checking for /usr/include/readline.h... configure: error: cannot check for file existence when cross compiling
+	
+上面说是要检查交叉编译环境，我可以肯定我的交叉编译环境是正确的，
+所以我决定欺骗configure，我是这样做的
+	cd /home/sqlite-3.3.6
+将该目录下的 configure 文件的部分内容修改下(这里是根据   test "$cross_compiling" = yes &&  找到的 ),
+这样可以让configure不去检查你的交叉编译环境。
+  20420行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+  20446行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+ 在回去重新配置下：
+  	cd /home/sqlite-arm-linux/
+	../sqlite-3.3.6/configure  --disable-tcl --prefix=/home/sqlite-arm-linux/ --host=arm-linux
+中间打印信息出现如下错误信息,
+checking for /usr/include/readline.h... configure: error: cannot check for file existence when cross compiling
+但是还是生成了Makefile文件一个libtool脚本，这些将在make时用到.	
+注意:
+如果Makefile文件中有如下语句
+BCC = arm-linux-gcc -g -O2 
+请将其改掉，改成：
+BCC = gcc -g -O2 	
+	
+编译并安装
+	make && make install	 
+这里如果不出意外,将不会出现错误,那么
+库文件已经生成在 /home/sqlite-ix86-linux/lib 目录下 	
+
+好了，就到这里
+
+	
+	
+	
+	

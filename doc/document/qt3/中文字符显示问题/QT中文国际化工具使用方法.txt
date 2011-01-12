@@ -1,0 +1,70 @@
+﻿QT中文国际化工具使用方法
+
+源文件：
+/****************************************************************
+**
+** main.cpp
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qtranslator.h>
+
+int main( int argc, char **argv )
+{
+    QApplication app( argc, argv );
+
+	 //注意一下三行，这里是翻译必须的，也是与普通程序不同的地方
+    QTranslator translator( 0 );
+    translator.load( "tt1_CN", "." );//这里的“tt1_CN”与下面的 .pro 文件中的一致
+    app.installTranslator( &translator );
+
+    QPushButton hello( QPushButton::tr("Hello world!"), 0 );//要翻译的文字一定要用 tr("") 
+
+    app.setMainWidget( &hello );
+    hello.show();
+    return app.exec();
+}
+
+
+tt1.pro文件：
+
+TEMPLATE        = app
+CONFIG          += qt warn_on
+SOURCES         = main.cpp
+TRANSLATIONS    = tt1_CN.ts
+
+
+准备工作：
+生成tt1_CN.ts文件
+zieckeylaptop:/home/work/tr_test # lupdate tt1.pro
+翻译
+zieckeylaptop:/home/work/tr_test # linguist tt1_CN.ts
+生成程序运行时调用文件tt1_CN.qm
+zieckeylaptop:/home/work/tr_test # lrelease tt1_CN.ts
+
+其实可以用文本编辑器看看tt1_CN.ts文件，该文件说白了是个xml格式文件，
+在翻译时甚至都可以不用linguist工具，而可以直接在此用文本编辑器编辑
+
+<!DOCTYPE TS><TS>
+<context>
+    <name>QPushButton</name>
+    <message>
+        <source>Hello world!</source>
+        <translation type="unfinished">你好阿！</translation>
+    </message>
+</context>
+</TS>
+
+好了，编译程序：
+先生成makefile文件
+zieckeylaptop:/home/work/tr_test # qmake
+在编译
+zieckeylaptop:/home/work/tr_test # make
+g++ -c -pipe -O2 -march=i586 -mtune=i686 -fmessage-length=0 -Wall -D_FORTIFY_SOURCE=2 -g -fno-strict-aliasing -Wall -W -O2 -march=i586 -mtune=i686 -fmessage-length=0 -Wall -D_FORTIFY_SOURCE=2 -g -fno-strict-aliasing  -DQT_NO_DEBUG -DQT_SHARED -DQT_TABLET_SUPPORT -DQT_THREAD_SUPPORT -I/usr/lib/qt3/mkspecs/default -I. -I/usr/include -I/usr/lib/qt3/include -o main.o main.cpp
+g++  -o tt1 main.o    -L/usr/lib/ -L/usr/lib/qt3/lib/ -L/usr/X11R6/lib/ -lqt-mt -lXext -lX11 -lm
+运行：
+zieckeylaptop:/home/work/tr_test # ./tt1
+
+

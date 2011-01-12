@@ -1,0 +1,121 @@
+二、架设Web服务器
+　　Apache是使用范围最广的Web服务器工具套件，这里我们将详细介绍如何在Red Hat Linux 9.0环境里安装、启动和配置Apache服务器。
+
+　　1.安装Apache服务器
+　　在安装Red Hat Linux 9.0时，会提示是否安装Apache服务器。如果不能确定是否已经安装，可以在终端命令窗口输入以下命令：
+
+　　[root@ahpeng root] rpm -qa | grep httpd
+
+　　如果结果显示为"httpd-2.0.40-21"，则说明系统已经安装Apache服务器。
+
+　　如果安装Red Hat Linux 9.0时没有选择Apache服务器，则可以在图形环境下单击"主菜单→系统设置→添加删除应用程序"菜单项，在出现的"软件包管理"对话框里确保选中" 万维网服务器"选项，然后单击"更新"按钮，按照屏幕提示插入安装光盘即可开始安装。
+
+　　另外，你也可以直接插入第1张安装光盘，定位到/RedHat/RPMS下的httpd-2.0.40-21.i386.rpm安装包，然后在终端命令窗口运行以下命令即可开始安装进程：
+
+　　[root@ahpeng RPMS] rpm -ivh httpd-2.0.40-21.i386.rpm
+
+　　安装好Apache服务器，可以在终端命令窗口运行以下命令来启动Apache服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/httpd start
+
+　　重新启动Apache服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/httpd restart
+
+　　关闭Apache服务：
+
+　　［root@ahpeng root］ /etc/rc.d/init.d/httpd stop
+
+　　确认Apache服务已经启动后，我们可以在Web浏览器里输入以下地址，如果可以看到默认的Apache首页，则说明Apache服务器工作正常。
+
+　　Htpp://WebServerAddress
+
+　　此处的WebServerAddress指代Web服务器的IP地址或者域名。即是说WebServerAddress应该用实际的Web服务器的IP地址或者域名来代替。
+
+　　2.配置httpd.conf文件
+　　在早期Apache服务器版本里，其配置内容分散在httpd.conf、srm.conf、access.conf三个文件里。而新版本的 Apache服务器，则统一在httpd.conf里进行配置。对于默认安装的Red Hat Linux来说，该配置文件位于/etc/httpd/conf目录下，如果安装的是tar.gz版本，则该文件位于 /usr/local/apache/conf目录。
+
+　　利用httpd.conf，我们可以对Apache服务器进行全局配置、主要或预设服务器的参数定义、虚拟主机的设置。httpd.conf是一个文本文件，我们可以用Vi、Kate等文本编辑工具进行修改。通过分析该 httpd.conf配置文件，我们不难发现：
+
+　　该配置文件分为若干个小节，例如Section 1: Global Environment(第一小节：全局环境)；Section 2: 'Main' server configuration(第二小节：主服务器配置)等。
+
+　　每个小节都有若干个配置参数，其表达形式为"配置参数名称 具体值"，每个配置参数都有详尽的英文解释(用#号引导每一个注释行)。
+
+　　为了帮助大家理解，这里给出httpd.conf的最常用配置参数：
+
+　　(1)DocumentRoot
+
+　　该参数指定Apache服务器存放网页的路径，默认所有要求提供HTTP服务的连接，都以这个目录为主目录。以下为Apache的默认值：
+
+　　DocumentRoot "/var/www/html"
+
+　　(2)MaxClients
+
+　　该参数限制Apache所能提供服务的最高数值，即同一时间连接的数目不能超过这个数值。一旦连接数目达到这个限制，Apache服务器则不再为别的连接提供服务，以免系统性能大幅度下降。本例假设最大连接数是150个：
+
+　　MaxClients 150
+
+　　(3)Port
+
+　　该参数用来指定Apache服务器的监听端口。一般来说，标准的HTTP服务默认端口号是80，一般不要更改这个数值。本例为80端口：
+
+　　Port 80
+
+　　(4)ServerName
+
+　　该参数使得用户可以自行设置主机名，以取代安装Apache服务器主机的真实名字。此名字必须是已经在DNS服务器上注册的主机名。如果当前主机没有已注册的名字，也可以指定IP地址。本例将服务器名设为Peter.vicp.net：
+
+　　ServerName Peter.vicp.net
+
+　　(5)MaxKeepAliveRequests
+
+　　当使用保持连接(Persistent Connection)功能时，可以使用本参数决定每次连接所能发出的要求数目的上限。如果此数值为0，则表示没有限制。建议尽可能使用较高的数值，以充分发挥Apache的高性能，本例设置每次连接所能发出的要求数目上限为100：
+
+　　MaxKeepAliveRequests 100
+
+　　(6)MaxRequestsPerChild
+
+　　该参数限制每个子进程(Child Process)在结束前所能处理的请求数目，一旦达到该数目，这个子进程就会被中止，以避免长时间占据Apache(或者Apache服务器所采用的函数库)，防止造成内存或者其他系统资源的超负荷。
+
+　　需要注意的是，该参数的数值并不包括保持连接所发出的请求数目。举例说明，如果某个子进程负责某一个请求，该请求随后带来保持连接功能所需的10个请求，这时候对于该参数而言，Apache服务器会认为这个子进程只处理了1个要求，而非11个要求。
+
+　　以下设置最多可以处理10个要求：
+
+　　MaxRequestsPerChild 10
+
+　　(7)MaxSpareServers 和MinSpareServers
+
+　　提供Web服务的HTTP守护进程，其数目会随连接的数目而变动。Apache服务器采用动态调整的方法，维持足够的HTTP守护进程数目，以处理目前的负载，也就是同时保持一定的空闲HTTP守护进程来等候新的连接请求。
+
+　　Apache会定期检查有多少个HTTP守护进程正在等待连接请求，如果空闲的HTTP守护进程多于MaxSpareServers参数指定的值，则 Apache会终止某些空闲进程；如果空闲HTTP守护进程少于MinSpareServers参数指定的值，则Apache会产生新的HTTP守护进程。本例将最高空闲守护进程设置为20个，将最低的空闲守护进程设置为5个：
+
+　　MaxSpareServers 20
+
+　　MinSpareServers 5
+
+　　当然这只是Apache的一些基本设置项，大家可以根据自己的实际情况加以灵活的修改，以充分发挥Apache的潜能。如果修改配置文件之后没能立即生效，可以重启Apache服务。
+
+注意：修改之前一定要先备份！
+
+　　3.图形化配置界面
+　　图形化配置直观、简单，足够应付Apache服务器的日常管理维护工作。我们可以通过单击"主菜单→系统设置→服务器设置→HTTP服务器"菜单项，或者直接在"运行命令"对话框里输入"apacheconf"命令并回车，来访问"Apache配置"对话框。可以看到该配置对话框共有4个标签页。
+
+　　(1)"主"标签页
+
+　　在"服务器名"框中可以输入服务器的名称，等同于httpd.conf文件里的"ServerName"字段。"网主电子邮件地址"框中可以输入管理员的邮件地址，等同于httpd.conf文件里的"ServerAdmin"字段。单击"可用地址"选项组中的"添加"(或者"编辑")按钮，我们可以添加或者修改服务器的IP地址和端口。
+
+　　(2)"虚拟主机"标签页
+
+　　所谓的虚拟主机服务就是指将一台计算机虚拟成多台Web服务器。利用Apache服务器提供的"虚拟主机"服务，我们可以利用一台计算机提供多个Web服务。
+
+　　用Apache设置虚拟主机服务通常可以采用两种方案：基于IP地址的虚拟主机和基于名字的虚拟主机。基于IP地址的虚拟主机的实现方法有一个严重的不足，每增加一个虚拟主机，就必须增加一个IP地址。所以这里介绍如何创建基于名字的虚拟主机。
+
+　　假设一台Apache服务器的IP地址是210.79.81.212，主机名称为www.companyname.net，同时它拥有两个别名： sales.companyname.net、marketing.companyname.net。虽然这3个网站的IP地址相同，都指向 210.79.81.212，但是由于架设了基于名字的虚拟主机，所以可以指向不同的网页。
+
+　　设置时，请单击"虚拟主机"标签页上的"添加"按钮，在打开的配置对话框的"主机信息"下拉列表框里选中"基于名称的虚拟主机"选项，然后输入合适的数据IP地址、主机名称等，记住，还要添加合适的别名，如图2所示。
+
+
+
+　　"Apache配置"对话框的其他两个标签页的设置内容基本等同于前面所介绍的httpd.conf参数配置，这里就不再介绍了。
+
+

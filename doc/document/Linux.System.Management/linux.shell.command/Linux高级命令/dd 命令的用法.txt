@@ -1,0 +1,108 @@
+dd 命令的用法
+
+
+
+
+dd [选项=value]
+选项：
+if=file 输入文件名　标准输入确省
+of=file 输出文件名，标准输出确省
+ibs=n 输入块大小，n字节（默认512）
+obs=n 输出块大小,n字节（默认512）
+bs=n 同时设置输入输出块大小
+cbs=n 转换缓冲区大小
+files=n 在中断之前拷贝和转换n个输入文件
+skip=n 拷贝之前越过n个输入块
+oseek=n 拷贝之前从输出文件开始查找n个块
+iseek 拷贝之前从输入文件开始查找n个块
+seek=n 等同于oseek
+cono=ascic 将EBCDIC码转换为ASCII
+　　　ebcdic ASCII->EBCDIC
+      ibm ASCII转换为EBCDIC码时轻微不同的映象
+　　　blolk 将新栈中断的ASCII码记录转换为固定长度
+　　　unblock 将固定长度的ASCII码记录转换为新行中断记录
+　　　lcase 变换字将至低等情况
+　　　ucase 变换字将至高等情况
+　　　swab 交换每对字节
+　　　noerrir 出错时不停止处理
+　　　sync 将每个块填充到ibs
+      ...,...   几个逗号分隔的
+dd命令是将从标准输入中读取的数据按参数指定的方法进变换后送到标准输出。除了数据变换外，还可以利用一些参数修改一些数据的物理属性。如块的大小等。
+dd命令的选项及含义：
+bs=blocksize 指定输 入输出块的大小，该选项使ibs和obs 选项无效。
+if=filename 指定将要拷贝输入的文件名
+of=file 输出文件名，标准输出确省
+ibs=blocksize 指定输入文件的块大小。 （默认512）
+obs=blocaksize 指定输出块大小 （默认512）
+ifskip=numberofeof 指定前跳过的eof标志的个数
+files=numberofblocks 在拷贝前，在输入文件上跳过指定数目的块。
+of=filename 指定创建的输出文件名
+seek=recordnumber 拷贝文件时，指定输入文件的开始记录号。
+conv=conversionparameter 指定数据转换的类型，描述数据转换类型的参数有ASCII,EBCDIC,block,unblock.lcase,,ucase.
+示例：将file.dd 输出到磁盘文件。
+dd if=file.dd of=/dev/rfd0135ds18
+将EBCDIC格式存放的文件转换为ASCII文件
+dd if=file1 of =file2 conv=ascii
+将磁带上的三个文件拷贝到文件file1
+dd if=/dev/mnt0 fskip=2 of =file1
+dd [选项=value]
+选项：
+if=file 输入文件名　标准输入确省
+of=file 输出文件名，标准输出确省
+ibs=n 输入块大小，n字节（默认512）
+obs=n 输出块大小,n字节（默认512）
+bs=n 同时设置输入输出块大小
+cbs=n 转换缓冲区大小
+files=n 在中断之前拷贝和转换n个输入文件
+skip=n 拷贝之前越过n个输入块
+oseek=n 拷贝之前从输出文件开始查找n个块
+iseek 拷贝之前从输入文件开始查找n个块
+seek=n 等同于oseek
+cono=ascic 将EBCDIC码转换为ASCII
+　　　ebcdic ASCII->EBCDIC
+      ibm ASCII转换为EBCDIC码时轻微不同的映象
+　　　blolk 将新栈中断的ASCII码记录转换为固定长度
+　　　unblock 将固定长度的ASCII码记录转换为新行中断记录
+　　　lcase 变换字将至低等情况
+　　　ucase 变换字将至高等情况
+　　　swab 交换每对字节
+　　　noerrir 出错时不停止处理
+　　　sync 将每个块填充到ibs
+      ...,...   几个逗号分隔的
+dd命令  
+功能：把指定的输入文件拷贝到指定的输出文件中，并且在拷贝过程中可以进行格式转换。可以用该命令实现DOS下的diskcopy命令的作用。先用dd命令把软盘上的数据写成硬盘的一个寄存文件，再把这个寄存文件写入第二张软盘上，完成diskcopy的功能。需要注意的是，应该将硬盘上的寄存文件用rm 命令删除掉。系统默认使用标准输入文件和标准输出文件。  
+语法：dd [选项]  
+if =输入文件（或设备名称）。  
+of =输出文件（或设备名称）。  
+ibs = bytes 一次读取bytes字节，即读入缓冲区的字节数。  
+skip = blocks 跳过读入缓冲区开头的ibs*blocks块。  
+obs = bytes 一次写入bytes字节，即写入缓冲区的字节数。  
+bs = bytes 同时设置读/写缓冲区的字节数（等于设置ibs和obs）。  
+cbs = byte 一次转换bytes字节。  
+count=blocks 只拷贝输入的blocks块。  
+conv = ASCII 把EBCDIC码转换为ASCIl码。  
+conv = ebcdic 把ASCIl码转换为EBCDIC码。  
+conv = ibm 把ASCIl码转换为alternate EBCDIC码。  
+conv = block 把变动位转换成固定字符。  
+conv = ublock 把固定位转换成变动位。  
+conv = ucase 把字母由小写转换为大写。  
+conv = lcase 把字母由大写转换为小写。  
+conv = notrunc 不截短输出文件。  
+conv = swab 交换每一对输入字节。  
+conv = noerror 出错时不停止处理。  
+conv = sync 把每个输入记录的大小都调到ibs的大小（用NUL填充）。  
+　  
+例1：要把一张软盘的内容拷贝到另一张软盘上，利用/tmp作为临时存储区。把源盘插入驱动器中，输入下述命令：  
+$ dd if =/dev/fd0 of = /tmp/tmpfile  
+拷贝完成后，将源盘从驱动器中取出，把目标盘插入，输入命令：  
+$ dd if = /tmp/tmpfile of =/dev/fd0  
+软盘拷贝完成后，应该将临时文件删除：  
+$ rm /tmp/tmpfile  
+　  
+例2：把net.i这个文件写入软盘中，并设定读/写缓冲区的数目。  
+（注意：软盘中的内容会被完全覆盖掉）  
+$ dd if = net.i of = /dev/fd0 bs = 16384  
+　  
+例3：将文件sfile拷贝到文件 dfile中。  
+$ dd if=sfile of=dfile  
+

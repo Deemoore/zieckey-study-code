@@ -1,0 +1,139 @@
+gcc的使用例解
+
+		作者：zieckey (zieckey@yahoo.com.cn)
+		All Rights Reserved!
+
+
+	Linux系统下的gcc（GNU C Compiler）是GNU推出的功能强大、性能优越的多平台编译器，是GNU的代表作品之一。gcc是可以在多种硬体平台上编译出可执行程序的超级编译器，其执行效率与一般的编译器相比平均效率要高20%~30%。
+	
+	GCC 可同时用来编译 C 程序和 C++ 程序。一般来说，C 编译器通过源文件的后缀名来判断是 C 程序还是 C++ 程序。
+在 linux 中，C 源文件的后缀名为 .c，而 C++ 源文件的后缀名为 .C 或 .cpp。
+
+　　但是，gcc 命令只能编译 C++ 源文件，而不能自动和 C++ 程序使用的库连接。
+因此，通常使用 g++ 命令来完成 C++ 程序的编译和连接，该程序会自动调用 gcc 实现编译。
+
+	在使用gcc编译器的时候，我们必须给出一系列必要的调用参数和文件名称。gcc编译器的调用参数大约有100多个，其中多数参数我们可能根本就用不到，这里只介绍其中最基本、最常用的参数。
+
+gcc最基本的用法是∶gcc [options] [filenames]
+
+其中options就是编译器所需要的参数，filenames给出相关的文件名称。
+
+	下面我们以实例来说明 gcc 的用法。 	
+	
+　　假设我们有一个如下的 C 语言源文件（hello.c）：
+
+#include <stdio.h>
+int main()
+{
+        printf("Hello, world! \n");
+        return 0;
+}
+
+
+则可以如下调用 gcc 命令编译、连接并生成可执行文件：
+[root@zieckey hello_world]# gcc -o out hello.c
+[root@zieckey hello_world]# ./out
+Hello, world!
+[root@zieckey hello_world]#
+
+注解：
+1. 	-o output_filename，确定输出文件的名称为output_filename，同时这个名称不能和源文件同名。如果不给出这个选项，gcc就给出预设的可执行文件a.out。
+这里我们指定生成的输出文件名为out，当然你也可以改用其他你喜欢的或者更有意义名字。
+2. 	./out 是执行刚刚通过 gcc 命令生成的源程序的可执行文件
+
+
+	好的，很简单对不！？
+	下面我们来看看C++程序怎么编译？
+
+	假设我们有一个如下的 C++ 源文件（hello.cpp）：
+
+#include <iostream>
+using namespace std;  
+int main()
+{
+        cout << "Hello, world!" << endl;
+        return 0;
+}
+
+
+则可以如下调用 g++ 命令编译、连接并生成可执行文件：
+[root@zieckey hello_world]# g++ -o out hello.cpp
+[root@zieckey hello_world]# ./out
+Hello, world!
+[root@zieckey hello_world]#
+
+同样很简单,对不？！
+
+是的。确实是很简单。
+
+
+
+	好了，下面看看稍稍难点的实例。
+
+	如果你有两个或少数几个C源文件，也可以简单的利用GCC编译、连接并生成可执行文件。例如，假设你有两个源文件 main.c 和 calcFactorial.c 两个源文件，现在要编译生成一个计算阶乘的程序。
+
+
+　　清单 calcfactorial.c
+
+// name： calcfactorial.c
+// A function is defined in this file.
+// Author : zieckey
+// date : 2006/11/13
+
+#include <stdio.h>
+
+int calcFactorial (int n)
+{
+	if (n <= 1)
+		return 1;
+		
+	else if ( n > 15 )
+	{
+		printf("Please input a number less than 15 , try again! \n");	
+		return 0;
+	}	
+	
+
+	else
+		return calcFactorial (n - 1) * n;
+}
+
+清单 main.c
+
+// name： main.c
+// This file is used to test how to use GCC.It is very simple,ha!
+// Author : zieckey
+// date : 2006/11/13
+
+#include <stdio.h>
+
+int calcFactorial (int n);
+
+int main (void)
+{
+	int n , result ;
+
+	printf("Please input a number which you want to calculator :");
+	scanf("%d",&n);
+	
+	result = calcFactorial ( n );
+	
+	if ( 0 == result )
+		printf( "There something wrong with the input number!\n");
+	else
+		printf( "The result of calcFactorial %d is : %d \n" , n , result );
+	
+	return 0;
+	
+}
+
+
+这两个文件编辑好了后 ，那么我们可以这样来编译他们：
+[root@localhost exam-source-file]# gcc calcfactorial.c main.c
+默认情况下生成一个 a.out 的文件.运行看看：
+[root@localhost exam-source-file]# ./a.out
+Please input a number which you want to calculator :10
+The result of calcFactorial 10 is : 3628800
+
+
+上面我们简要介绍了gcc编译器最常用的功能和用法，更为详尽的资料可以参看Linux系统的联机帮助(在shell下输入 “man gcc” 就可以了)。

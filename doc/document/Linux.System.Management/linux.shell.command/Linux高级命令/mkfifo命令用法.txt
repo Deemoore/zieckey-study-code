@@ -1,0 +1,84 @@
+MKFIFO
+Section: User Commands (1)
+Updated: 1998年11月
+Index Return to Main Contents  
+NAME(名称）
+mkfifo - 创建FIFO(命名管道）  
+SYNOPSIS(总览）
+mkfifo [options] file...
+
+POSIX options(选项）： [-m mode]
+
+GNU options(选项）（最短格式）： [-m mode] [--help] [--version] [--]  
+DESCRIPTION(描述)
+mkfifo 使用指定的文件名创建FIFO(也称为"命名管道").
+
+"FIFO"是一种特殊的文件类型，它允许独立的进程通讯. 一个进程打开FIFO文件进行写操作,而另一个进程对之进行读操作, 然后数据便可以如同在shell或者其它地方常见的的匿名管道一样流线执行.
+
+默认情况下,创建的FIFO的模式为0666('a+rw')减去umask中设置的位.  
+OPTIONS(选项)
+
+-m mode, --mode=mode
+    设置创建的FIFO的模式为 mode, 这可以是 chmod(1) 中的符号模式,并使用默认模式作为起始点. 
+
+ 
+GNU STANDARD OPTIONS(GNU标准选项)
+
+--help
+    在标准输出上打印一条用法信息,并以成功状态退出. 
+--version
+    在标准输出上打印版本信息,然后以成功状态退出. 
+-- 
+    终止选项列表. 
+    
+下面通过例子来说明该命令的用法：
+创建一fifo
+[root@localhost ~]# mkfifo -m 777  myfifo
+将cat命令的输出作为此myfifo的输入，并放在后太运行
+[root@localhost ~]# cat /etc/passwd > myfifo &
+[10] 6285
+再用cut命令从该myfifo中读出数据进行处理
+[root@localhost ~]# cut -d: -f1-3 < myfifo 
+root:x:0
+bin:x:1
+daemon:x:2
+adm:x:3
+lp:x:4
+sync:x:5
+shutdown:x:6
+halt:x:7
+mail:x:8
+news:x:9
+uucp:x:10
+operator:x:11
+games:x:12
+gopher:x:13
+ftp:x:14
+nobody:x:99
+rpm:x:37
+vcsa:x:69
+apache:x:48
+mailnull:x:47
+smmsp:x:51
+rpc:x:32
+distcache:x:94
+ntp:x:38
+nscd:x:28
+mysql:x:27
+webalizer:x:67
+squid:x:23
+tcpdump:x:72
+dbus:x:81
+avahi:x:70
+hsqldb:x:96
+torrent:x:499
+sshd:x:74
+rpcuser:x:29
+nfsnobody:x:65534
+haldaemon:x:68
+xfs:x:43
+gdm:x:42
+zieckey:x:500
+[10]   Done                    cat /etc/passwd > myfifo
+[root@localhost ~]# 
+

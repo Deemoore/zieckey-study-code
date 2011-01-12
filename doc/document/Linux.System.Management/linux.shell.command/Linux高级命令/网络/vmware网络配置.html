@@ -1,0 +1,1352 @@
+<html><head>
+
+<title>[精彩] vmware 网络配置实例二 windows xp host + linux guest - ChinaUnix.net</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312">
+<meta name="keywords" content="Linux,Freebsd,Solaris,Sco,HP-UX,IBM-AIX,cisco,oracle,java,cgi,mysql,perl,Apache,proFTP,Sendmail,Qmail,DNS,Squid,Rsync,SSL"> 
+<meta name="description" content="ChinaUnix.net">
+<style type="text/css">
+h1{
+font-size:24px;
+margin: 0px;
+}
+td,select,input {font-size:14px}
+.content {
+font-family: Tahoma,MS Shell Dlg,宋体;
+font-size: 14px;
+line-height: 130%
+}
+.l17 {line-height:170%;}
+.f24 {font-size:24px;}
+.f14{font-size:14px;line-height:130%;}
+A:link {color: #0000ff;}
+A:visited {color: #800080;}
+A:active,A:hover {color : #ff0000}
+A.a02:link,A.a02:visited {text-decoration:none;color: #0000ff;}
+A.a02:active,A.a02:hover {text-decoration:none;color : #ff0000}
+</style>
+
+
+</head><body topmargin="5" leftmargin="0" marginheight="5" marginwidth="0">
+<center>
+
+<!--导航start-->
+<table border="0" cellpadding="0" cellspacing="0" width="760">
+<tbody><tr><td>
+<script src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/title.js"></script><style type="text/css">A.title1:link {font-size:17.9px;font-family:arial;font-weight:bold;text-decoration:none;color:#ffffff;}A.title1:visited {font-size:17.9px;font-family:arial;font-weight:bold;text-decoration:none;color:#ffffff;}A.title1:active {font-size:17.9px;font-family:arial;font-weight:bold;text-decoration:none;color:#ffffff;}A.title1:hover {font-size:17.9px;font-family:arial;font-weight:bold;text-decoration:none;color:#ffffff;}A.title2:link {text-decoration:none;color:#000000;font-size:12px}A.title2:visited {text-decoration:none;color:#000000;font-size:12px}A.title2:active {text-decoration:none;color:#ff0000;font-size:12px}A.title2:hover {text-decoration:none;color:#ff0000;font-size:12px}</style><table align="center" border="0" cellpadding="0" cellspacing="0" width="760"><tbody><tr><td colspan="2" bgcolor="#000000" height="1"><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/c.gif" width="1" height="1"></td></tr><tr><td colspan="2" height="2"></td></tr><tr><td align="center" bgcolor="#94aad6" width="150" height="18"><a href="http://www.chinaunix.net/" class="title1">ChinaUnix.net</a></td><td align="right" width="600">	<table border="0" cellpadding="0" cellspacing="0" width="600"><tbody><tr align="center"><td align="right"><a href="http://www.chinaunix.net/" class="title2">首页</a> | <a href="http://bbs.chinaunix.net/" class="title2">论坛</a> | <a href="http://blog.chinaunix.net/" class="title2" target="_blank"><font color="#ff0000">博客</font></a> | <a href="http://linux.chinaunix.net/" class="title2">Linux</a> | <a href="http://job.chinaunix.net/" class="title2" target="_blank"><font color="#ff0000">人才</font></a> | <a href="http://peixun.chinaunix.net/" class="title2" target="_blank"><font color="#ff0000">培训</font></a> | <a href="http://www.chinaunix.net/jh" class="title2">精华</a> | <a href="http://wiki.chinaunix.net/" class="title2" target="_blank">Wiki</a> | <a href="http://book.chinaunix.net/" class="title2" target="_blank"><font color="red">读书</font></a> | <a href="http://fanqiang.chinaunix.net/" class="title2" target="_blank">资料</a> | <a href="http://man.chinaunix.net/" class="title2" target="_blank">手册</a> | <a href="http://download.chinaunix.net/" class="title2" target="_blank"><font color="#ff0000">下载</font></a> | <a href="http://search.chinaunix.net/" class="title2">搜索</a></td></tr>	</tbody></table></td></tr><tr><td colspan="2" height="2"></td></tr><tr><td colspan="2" bgcolor="#000000" height="1"><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/images.htm" width="1" height="1"></td></tr></tbody></table>
+</td></tr>
+</tbody></table>
+<!--导航end-->
+<!--头部结束-->
+
+<!--通栏广告开始-->
+<table border="0" cellpadding="0" cellspacing="0" width="760">
+<tbody><tr><td height="2"></td></tr>
+<tr><td>
+<script src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/jh_top.js"></script>
+</td></tr>
+</tbody></table>
+<!--通栏广告结束-->
+
+<table border="0" cellpadding="0" cellspacing="0" width="760" height="30">
+<tbody><tr><td align="left" valign="middle">
+<font color="#0000ff"><a href="http://www.chinaunix.net/" class="a02">ChinaUnix首页</a> &gt; 
+<a href="http://www.chinaunix.net/jh" class="a02">精华文章</a> &gt; 
+<a href="http://www.chinaunix.net/jh/4" class="a02">Linux</a> &gt; 正文</font>
+</td>
+<form name="_search" action="http://search.chinaunix.net/cgi-bin/search" method="post&quot;"></form>
+<td align="right" valign="middle">
+<input name="key" size="20" value="" class="t2" type="text"> <input name="enter" value="搜索" type="submit">
+</td>
+
+</tr>
+</tbody></table>
+<table border="0" cellpadding="0" cellspacing="0" width="760">
+<tbody><tr><td height="3"></td></tr>
+<tr><td bgcolor="#747474" height="1"><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/c_002.gif" width="1" height="1"></td></tr>
+</tbody></table>
+
+<table border="0" cellpadding="0" cellspacing="0" width="760">
+<tbody><tr><td rowspan="2" align="center" bgcolor="#edf0f5" valign="top">
+<br>
+	<table border="0" cellpadding="0" cellspacing="0" width="90%">
+	<tbody><tr><th class="f24"><font color="#05006c"><h1>[精彩] vmware 网络配置实例二 windows xp host + linux guest</h1></font></th></tr>
+	<tr><td height=""><hr bgcolor="#d9d9d9" size="1"></td></tr>
+	<tr><td align="center" height="20"> http://www.chinaunix.net 作者:<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a>&nbsp;&nbsp;发表于：2007-08-09 15:36:02</td></tr>
+	<tr><td align="center" height="30">
+【<a href="http://linux.chinaunix.net/bbs/post.php?action=reply&amp;fid=4&amp;tid=374483" target="_blank">发表评论</a>】
+【<a href="http://linux.chinaunix.net/bbs/viewthread.php?tid=374483" target="_blank">查看原文</a>】
+【<a href="http://linux.chinaunix.net/bbs/forumdisplay.php?fid=4">Linux讨论区</a>】【<a href="javascript:window.close()">关闭</a>】
+	</td></tr>
+	<tr><td class="l17"><font id="zoom" class="f14">
+<!-- 正文begin -->
+	<table style="table-layout: fixed;" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td>
+<br>
+vmware&nbsp;网络配置实例二&nbsp;windows&nbsp;host&nbsp;+&nbsp;linux&nbsp;guest
+<br>（yunqing（2005-03-24）按：很多朋友问到ping不通host的情况，请检查一下host里的防火墙设置，多数的windows&nbsp;xp&nbsp;sp2下的防火墙都设置成不响应）
+<br>前言：前几天写了一个vmware的配置的一个案例，主要关于linux&nbsp;host+windows&nbsp;guest的情况
+（http://bbs.chinaunix.net/forum/viewtopic.php?t=367907&amp;
+highlight=yunqing），适用于经常跑linux而把windows当成副业的朋友。发布以后反应不大，后来发现坛子里的朋友使
+windows&nbsp;host&nbsp;来跑linux&nbsp;guest的居多&nbsp;，且有很多帖子谈到网络问题，自己想没有那么难
+吧，就试了一把，把过程写下来希望对网络有问题的朋友有所帮助。
+<br><b>&nbsp;版权属yunqing所有，首发chinaunix.net，转贴引用请包含此行声明</b>
+<br>&nbsp;
+<br>正文：
+<br>&nbsp;
+<br>本人使用的是vmware&nbsp;workstation&nbsp;4.52，host机器运行的是
+windows&nbsp;Xp&nbsp;professional&nbsp;，如果你还在使
+vmware&nbsp;workstation&nbsp;4.0建议下载一个升级包，不过我想即使不做问题也不大。
+<br>&nbsp;
+<br>1。安装&nbsp;vmware&nbsp;workstation，很简单，一路ok过去，相信大部分朋友已经装好。
+<br>&nbsp;
+<br>2。创建新的guest系统。选择类型。因为我以发生问题最多的redhat&nbsp;9做试验，所以就选
+redhat&nbsp;linux，选custom，网络接口选hostonly（如果你已经安装好&nbsp;了，用了nat或bridge也没有关
+系，在虚拟机的属性里改成hostonly就行了。）
+<br>&nbsp;
+<br>3。创建后启动虚拟机，插入安装rh9的第一张盘。选择定制安装，我只保留了gonme,&nbsp;X，&nbsp;和graphical&nbsp;internet,节省安装空间和时间。
+<br>&nbsp;
+<br>4。安装过程很顺利，没有问题，完成后重新启动虚拟机，发现在更新fstab的时候挂了起来，估计是连接cdrom活软盘时候超时。kill掉虚
+拟机，更改设置，把光驱和软盘的autoconnect&nbsp;when&nbsp;power&nbsp;on清除掉。重启虚拟机，没有问题，进入
+最后设置，声卡，图形界面均没有问题。
+<br>&nbsp;
+<br>5。按照要求在虚拟机里安装vmware-tool,对鼠标和图形进行更好地支持。
+<br>如果你在图形界面下，首先要切换到文本模式。
+<br>右键点击桌面，打开一个終端
+<br>在終端里：
+<br>su
+<br>#/sbin/telinit&nbsp;3
+<br>图形界面消失，敲回车几下，在文本方式下登录。
+<br>在windows的vmware的窗口菜单中选vm-&gt;;install&nbsp;vmware&nbsp;tools
+<br>在虚拟机中：
+<br>su
+<br>&nbsp;mount&nbsp;/dev/cdrom&nbsp;/mnt/cdrom
+<br>&nbsp;&nbsp;cd&nbsp;/tmp
+<br>&nbsp;&nbsp;&nbsp;tar&nbsp;zxf&nbsp;/mnt/vmware-linux-tools.tar.gz
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;vmware-tools-distrib
+<br>&nbsp;&nbsp;&nbsp;./vmware-install.pl
+<br>&nbsp;&nbsp;&nbsp;回答并设置屏幕分辨率，除了分辨率需要选择外，直接回车就行了。
+<br>&nbsp;&nbsp;&nbsp;返回到默认的图形界面（运行级别5）
+<br>&nbsp;&nbsp;&nbsp;/sbin/telinit&nbsp;5
+<br>&nbsp;
+<br>&nbsp;&nbsp;&nbsp;6.登录虚拟机，打开一个終端：
+<br>&nbsp;&nbsp;&nbsp;/sbin/ifconfig
+<br>&nbsp;&nbsp;&nbsp;发现eth0没有起来。
+<br>&nbsp;&nbsp;&nbsp;不要惊慌。
+<br>&nbsp;&nbsp;&nbsp;－－－－－－－－－－－－－以下是网络设置－－－－－－－－－－－－－－－
+<br>&nbsp;&nbsp;&nbsp;7。到windows&nbsp;XP&nbsp;中，查看所有的网络连接，你应该发现除了原有的网卡之
+外，又多了Vmnet1和Vmnet8。如果你看了一下说明书应该知道，vmnet1是hostonly的接口，而Vmnet8是使用NAT的网络接口。
+在这里我们既不想用VMWARE自带的DHCP也不想用他的NAT所以我们知关心VMnet1
+<br>&nbsp;&nbsp;&nbsp;在进一步操作之前先说一下idea:
+<br>&nbsp;&nbsp;&nbsp;我们将使用hostonly这个网络接口连接虚拟机和主机，然后利用
+windows&nbsp;Xp/2000里面自带的internet连接共享（实际上是一个简单的路由NAT)来让虚拟机&nbsp;通过原来的网卡进
+行外网的访问。
+<br>&nbsp;&nbsp;&nbsp;那么为什么不使用桥接的方式呢，我在前一篇文章
+（linux&nbsp;host&nbsp;+&nbsp;windows&nbsp;guest)里面已经有些讨论，请参考。不过最现实的原因是桥接
+需要一个不同于&nbsp;原主机上的另外一个独立的IP地址，这对于有些情况（IP和MAC绑定，网管不同意），比较难办到。
+<br>&nbsp;&nbsp;&nbsp;OK，&nbsp;let's&nbsp;go
+<br>&nbsp;&nbsp;&nbsp;（1）查看你的连接外网的网卡的属性，选择“高级”标签，设置成允许共享，并设定允许的网络接口为VMNET1,如下图。
+<br>&nbsp;
+<br>&nbsp;&nbsp;&nbsp;(2)再插看一下你的VMnet1&nbsp;的属性，看一下TCP/IP协议的设置，你发现已经被自动设置为192.168.0.1/255.255.255.0，如下图。
+<br>&nbsp;
+<br>&nbsp;&nbsp;&nbsp;（3）windows下的设置完成，转入到跑linux的虚拟机。将你的eth0的ip地址设置为静态的（如果安装时没有选静态的话）&nbsp;&nbsp;
+<br>（4）windows下的设置完成，转入到跑linux的虚拟机。将你的eth0的ip地址设置为静态的（如果安装时没有选静态的话）。
+<br>&nbsp;&nbsp;&nbsp;按红帽子图标－＞系统设置－＞网络（或其它你了解的方法）
+<br>&nbsp;&nbsp;&nbsp;ip：&nbsp;192.168.0.2(或其它在此网段上的地址）
+<br>&nbsp;&nbsp;&nbsp;netmask:&nbsp;255.255.255.0
+<br>&nbsp;&nbsp;&nbsp;default&nbsp;gateway:&nbsp;192.168.0.1
+<br>&nbsp;&nbsp;&nbsp;dns:输入你自己的DNS
+<br>&nbsp;&nbsp;&nbsp;保存设置。如果你还没有设置好主机名称：
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;/etc/sysconfig
+<br>&nbsp;&nbsp;&nbsp;vi&nbsp;network
+<br>&nbsp;&nbsp;&nbsp;编辑HOSTNAME
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;/etc
+<br>&nbsp;&nbsp;&nbsp;vi&nbsp;hosts
+<br>&nbsp;&nbsp;&nbsp;加入：
+<br>&nbsp;&nbsp;&nbsp;192.168.0.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yourhostname
+<br>&nbsp;&nbsp;&nbsp;重新启动服务
+<br>&nbsp;&nbsp;&nbsp;su
+<br>&nbsp;&nbsp;&nbsp;/sbin/service&nbsp;network&nbsp;restart
+<br>&nbsp;&nbsp;&nbsp;(4)测试一下
+<br>&nbsp;&nbsp;&nbsp;网关：&nbsp;ping&nbsp;192.168.0.1
+<br>&nbsp;&nbsp;&nbsp;dns:&nbsp;ping&nbsp;dnsserver
+<br>
+<br>另请参阅：
+<br>
+<br>vmware&nbsp;配置实例一&nbsp;linux&nbsp;host&nbsp;+&nbsp;windows&nbsp;guest&nbsp;+&nbsp;firewall
+<br>http://bbs.chinaunix.net/forum/viewtopic.php?t=367907&amp;highlight=yunqing
+<br>
+<br>vmware&nbsp;网络设置三：理解虚拟网络的类型
+<br>http://bbs.chinaunix.net/forum/viewtopic.php?t=376768&amp;highlight=yunqing<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/vm-rh-step2.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/vm-rh-step1.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br>
+<br>
+<br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-07-27 08:51:51</b><br><br>
+非常感谢，我去试试，
+<br>
+<br>还有一个问题，就是你在设置时连接共享时是使用哪块网卡设置的
+<br>
+<br>是真实的物理网卡吗？
+<br>
+<br>那这样设置的话，和VMnet8好像没关系了吧
+<br>
+<br>如果使用NAT方式呢？数据又是怎么&nbsp;走的呢，<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=60406" target="_blank">chenzq1604</a> 回复于：2004-07-27 14:19:46</b><br><br>
+顶上去<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-07-27 18:03:29</b><br><br>
+引用：<i><u>原帖由&nbsp;"wingger"&nbsp;发表：</u><br>非常感谢，我去试试，
+<br>
+<br>还有一个问题，就是你在设置时连接共享时是使用哪块网卡设置的
+<br>
+<br>是真实的物理网卡吗？
+<br>
+<br>那这样设置的话，和VMnet8好像没关系了吧
+<br>
+<br>如果使用NAT方式呢？数据又是怎么&nbsp;走的呢，</i><br>
+<br>
+<br>设置连接共享的网卡就是机器上连接外网的物理网卡，如果你原来只有一个网卡，那么就是它。
+<br>
+<br>这样的设置，是和vmnet8没有关系了。vmnet1,vmnet0,&nbsp;vmnet8都是预设的网络接口，分别是指
+hostonly,&nbsp;bridge和nat.&nbsp;他们几个同时存在，以适应不同的虚拟机的配置。例如，如果虚拟机的网络被设置成使用
+NAT，那么虚拟机内的eth0实际上是连接到vmnet8。
+<br>
+<br>使用NAT的方式我没有试验，不能多说什么，从资料上看，可能要要将vmnet8桥接到外网的网卡上，并且要修改一下注册表（因为默认的情况下vmware的网络接口不允许桥接，以防止它的dhcp包的泄漏）。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-07-28 09:11:46</b><br><br>
+我只试了NAT方式，HOST-ONLY的没试过，在网络上都找不到这方式的，
+<br>
+<br>有的基本上安装，安装很简单，没什么好说的
+<br>
+<br>我找了VMware的帮助文件，都是概念，原理我还是有点不明不白
+<br>
+<br>我以为NAT是最简单的了，
+<br>
+<br>有篇文章还写要在win上要设置路由（或安装代理软件）？
+<br>
+<br>不知大家有没有兴趣试试，
+<br>
+<br>我现在内存不大，用VM上的LINUX，速度挺慢的，没法试<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=60406" target="_blank">chenzq1604</a> 回复于：2004-07-28 10:16:06</b><br><br>
+yunqing&nbsp;兄,小弟也有类似的问题一直没有得到解答.
+<br>
+<br>我有一台服务器,上面安装了WIN2003有两块网卡,一块接公网(固定IP),一个接内网,因为公司是用其ADSL专线,所以我就在2003下
+建立了一个NAT,由于它内存大有2G,我在上面安装了VMware&nbsp;4.5&nbsp;8848版&nbsp;,安装了Linux系统,但就
+是一直不能上网,但可以接通局域网.
+<br>
+<br>&nbsp;&nbsp;&nbsp;服务器的为192.168.1.1和219.137.243.23网关为路由219.137.243.1.
+我把VMware设置为Bridge方式,在Linux下设置Eth0&nbsp;IP为192.168.1.3,GateWay&nbsp;为
+192.168.1.1这样可以PING通192的网段但不能PING219.137.243.1的网段,也PING&nbsp;不通本地DNS,但如果
+在Linux下IP为另一个公网IP219.137.243.25的话,网关不变就可以上公网,但上不了内部网了,请问怎么解决?&nbsp;非常感谢!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-07-28 10:52:33</b><br><br>
+引用：<i><u>原帖由&nbsp;"chenzq1604"&nbsp;发表：</u><br>yunqing&nbsp;兄,小弟也有类似的问题一直没有得到解答.
+<br>
+<br>我有一台服务器,上面安装了WIN2003有两块网卡,一块接公网(固定IP),一个接内网,因为公司是用其ADSL专线,所以我就在2003下建立了一个NAT,由于它内存大有2G,我在上?.........</i><br>
+<br>
+<br>这个和使用什么连接方式有关，
+<br>NAT
+<br>桥
+<br>HOst-only各不一样
+<br>这个问题，我们也在试<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-07-30 06:04:56</b><br><br>
+引用：<i><u>原帖由&nbsp;"chenzq1604"&nbsp;发表：</u><br>yunqing&nbsp;兄,小弟也有类似的问题一直没有得到解答.
+<br>
+<br>我有一台服务器,上面安装了WIN2003有两块网卡,一块接公网(固定IP),一个接内网,因为公司是用其ADSL专线,所以我就在2003下建立了一个NAT,由于它内存大有2G,我在上�..........</i><br>
+<br>方法1：
+<br>将虚拟机的网络设成NAT,将linux下的eth0设成DHCP试试
+<br>
+<br>方法2：
+<br>虚拟机网络设成hostonly，在windows&nbsp;2003中添加一个
+<br>vmnet1到外网的nat.&nbsp;vmnet1&nbsp;地址设为192.168.2.1,linux下的
+<br>eth0设成192.168.1.x,gateway:192.168.2.1
+<br>
+<br>方法仅供参考，（我没有这个高级的平台，无法试验）
+<br>
+<br>关于几种网络的类型，请参阅我的另一篇文：
+<br>http://bbs.chinaunix.net/forum/viewtopic.php?t=376768&amp;highlight=yunqing<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=60406" target="_blank">chenzq1604</a> 回复于：2004-07-30 10:54:33</b><br><br>
+引用：<i><u>原帖由&nbsp;"yunqing"&nbsp;发表：</u><br>
+<br>方法1：
+<br>将虚拟机的网络设成NAT,将linux下的eth0设成DHCP试试
+<br>
+<br>方法2：
+<br>虚拟机网络设成hostonly，在windows&nbsp;2003中添加一个
+<br>vmnet1到外网的nat.&nbsp;vmnet1&nbsp;地址设为192.168.2.1,linux下的
+<br>eth0设成192.168.1.x,g..........</i><br>
+<br>我的机不像你上面的图帖的那样可以用ICS启动NAT，我的是“路由和远程访问”启用的不行，我也试过了在“路由和远程访问”中给虚拟的两块网卡加入NAT，好象还是不行。您讲的方法我还没有试过，我明天试试，多谢了！<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/1_21791091155888.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed">如果在2003下用“路由和远程访问”工具启用了路由的话会提示这句</span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=137165" target="_blank">idhly</a> 回复于：2004-07-31 20:34:07</b><br><br>
+好文章啊,&nbsp;顶一下...<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=106978" target="_blank">ColdME</a> 回复于：2004-08-01 14:07:53</b><br><br>
+不好意思，我按照你说的做可是无法测试通过，既不能ping&nbsp;dns，更不能直接ping&nbsp;域名了，但可以ping&nbsp;vmnet1（192.168.0.1），估计是host上的nat没起来，是这样吗？请教如何解决？
+<br>我使用的host&nbsp;os是win2k&nbsp;server，还望阁下不吝赐教，非常感谢，^_^<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-08-01 19:27:52</b><br><br>
+引用：<i><u>原帖由&nbsp;"ColdME"&nbsp;发表：</u><br>不好意思，我按照你说的做可是无法测试通过，既不能ping&nbsp;dns，更不能直接ping&nbsp;域名了，但可以ping&nbsp;vmnet1（192.168.0.1），估计是host上的nat没起来，是这样吗？请教如何解决？
+<br>我使用的host&nbsp;os是win2k&nbsp;server，还&amp;#65533;.........</i><br>
+<br>上面的配置是基于windows&nbsp;xp的（这也是大多数朋友的情况)server版的host我还没有进行过测试（以后有时间我会补上），我猜测要把vmnet1加入到路由和远程服务里面。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-08-01 20:46:50</b><br><br>
+NAT的不一样<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=91106" target="_blank">andrewleading_h</a> 回复于：2004-08-03 19:36:25</b><br><br>
+老大，可以可以帮一下忙
+<br>我怎么把windows下的source也让suse用啊
+<br>有没有具体的设置方法
+<br>
+<br>我的msn:&nbsp;andrewleading_he@hotmail.com
+<br>
+<br>在线等待中...谢谢了.<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=91106" target="_blank">andrewleading_h</a> 回复于：2004-08-03 19:37:38</b><br><br>
+我把安装文件cope到win下面了，想在suse上面装那些东西，可是怎么样让suse也看到那些东西恩...郁闷...<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=91106" target="_blank">andrewleading_h</a> 回复于：2004-08-03 19:38:35</b><br><br>
+我现在吃饭去了，半小时后回来，请指教...<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-08-03 19:53:57</b><br><br>
+引用：<i><u>原帖由&nbsp;"andrewleading_he"]我把安装文件cope到win下面了，想在suse上面装那些东西，可是怎么样让suse也看到那些东西恩...郁闷...</u></i><u><br>&nbsp;发表：</u><br>
+<br>你是意思是？
+<br>上面这篇文章是windows&nbsp;host&nbsp;+&nbsp;linux&nbsp;guest的，如果你要在linux上装
+vmware，请参考另外一篇文章：linux&nbsp;host&nbsp;+&nbsp;windows&nbsp;guest
+<br>
+<br>如果你的问题是想在里奴性下使用windows分区里的文件，首先要mount&nbsp;上你的分区，具体请参见精华区里的文章。
+<br>fat32&nbsp;的分区：
+<br>mount&nbsp;-t&nbsp;vfat&nbsp;/dev/hdx&nbsp;/mnt/somewheretomount
+<br>
+<br>ntfs：
+<br>mount&nbsp;-t&nbsp;ntfs&nbsp;/dev/hdx&nbsp;/mnt/somewheretomount<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=91106" target="_blank">andrewleading_h</a> 回复于：2004-08-03 20:09:44</b><br><br>
+我试过&nbsp;mount&nbsp;了，还是看不到文件
+<br>可以通过msn在线指导一下吗？
+<br>
+<br>我就是在windows上面安装的
+<br>你的那一篇文章我也看过，写的不错，不过都是关于网络上面的东西...<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=171414" target="_blank">xsaint</a> 回复于：2004-08-07 16:34:16</b><br><br>
+我一直都想用VMare上网，看了你的文章后终于实现了。谢谢。
+<br>
+<br>顶，好贴！对初学者的帮助很大噢~~<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-08-12 23:43:04</b><br><br>
+引用：<i><u>原帖由&nbsp;"chenzq1604"&nbsp;发表：</u><br>
+<br>我的机不像你上面的图帖的那样可以用ICS启动NAT，我的是“路由和远程访问”启用的不行，我也试过了在“路由和远程访问”中给虚拟的两块网卡加入NAT，好象还是不行。您讲的方法我还没有试过，我明天试试，多谢了！</i><br>
+<br>
+<br>我已经写了一个windows2003下的设置方法，请参阅：
+<br>http://bbs.chinaunix.net/forum/viewtopic.php?t=385217&amp;highlight=yunqing<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=117773" target="_blank">aircraft</a> 回复于：2004-08-19 01:41:55</b><br><br>
+我的redhat&nbsp;9.0&nbsp;的网卡设置成利用dhcp获得动态ip，但是eth0总是不能激活，不知道是什么原因？我是用nat方式的。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=178717" target="_blank">千千阙歌</a> 回复于：2004-08-23 17:48:17</b><br><br>
+各位达人，我也按照所说的方法试了一次，可是有点问题，请指点。
+<br>1。在linux下可以ping通VMnet1(10.1)，ping不同xp下的网卡地址（10.10）
+<br>2。还有，我是adsl拨号，是在哪块网卡上启动共享，是真是网卡？还是虚拟拨号的网卡？
+<br>3。xp下可以ping通VMnet1(10.1),ping不同linux下的eth0（10.2）
+<br>4。还有一点小弟不太明白，netconfig那个dns怎么设置？我在xp和linux下都没有启动这个服务好像。
+<br>小弟初学，真心希望高人指点，谢谢了！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=178717" target="_blank">千千阙歌</a> 回复于：2004-08-23 20:38:45</b><br><br>
+没有那位达人回答一下吗？继续等，多谢了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=179612" target="_blank">wangqidi</a> 回复于：2004-08-27 16:38:47</b><br><br>
+……
+<br>在終端里：&nbsp;
+<br>su&nbsp;
+<br>#/sbin/telinit&nbsp;3&nbsp;
+<br>图形界面消失，敲回车几下，在文本方式下登录。&nbsp;
+<br>在windows的vmware的窗口菜单中选vm-&gt;;install&nbsp;vmware&nbsp;tools&nbsp;
+<br>在虚拟机中：&nbsp;
+<br>su&nbsp;
+<br>&nbsp;mount&nbsp;/dev/cdrom&nbsp;/mnt/cdrom&nbsp;
+<br>&nbsp;&nbsp;cd&nbsp;/tmp&nbsp;
+<br>&nbsp;&nbsp;&nbsp;tar&nbsp;zxf&nbsp;/mnt/vmware-linux-tools.tar.gz&nbsp;
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;vmware-tools-distrib&nbsp;
+<br>&nbsp;&nbsp;&nbsp;./vmware-install.pl&nbsp;
+<br>&nbsp;&nbsp;&nbsp;回答并设置屏幕分辨率，除了分辨率需要选择外，直接回车就行了。&nbsp;
+<br>&nbsp;&nbsp;&nbsp;返回到默认的图形界面（运行级别5）&nbsp;
+<br>&nbsp;&nbsp;&nbsp;/sbin/telinit&nbsp;5&nbsp;
+<br>&nbsp;&nbsp;
+<br>……
+<br>su&nbsp;
+<br>&nbsp;mount&nbsp;/dev/cdrom&nbsp;/mnt/cdrom&nbsp;
+<br>&nbsp;&nbsp;cd&nbsp;/tmp&nbsp;
+<br>&nbsp;&nbsp;&nbsp;tar&nbsp;zxf&nbsp;/mnt/vmware-linux-tools.tar.gz&nbsp;
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;vmware-tools-distrib&nbsp;
+<br>&nbsp;&nbsp;&nbsp;./vmware-install.pl&nbsp;
+<br>
+<br>这个是怎么输入的啊？
+<br>是一行一回车吗？
+<br>我怎么老是出现错误呢？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=16377" target="_blank">waldner</a> 回复于：2004-09-12 11:03:32</b><br><br>我
+按照你说的方法设置，现在我已经可以用我的win2000&nbsp;ping到我的linux&nbsp;redhat&nbsp;9,但是我的虚拟机
+R9却ping不到我的win2000,即192.168.0.1，就是设定的网关了。怎么回事？会是什么样的问题呢？谢谢<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=173069" target="_blank">bdboy</a> 回复于：2004-09-25 22:50:12</b><br><br>
+谢谢v！
+<br>文章不错
+<br>可是我的是2k服务器，应该怎么设置阿，真心求教！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=187863" target="_blank">lyrebird</a> 回复于：2004-10-07 06:15:34</b><br><br>
+我在我的机器上没有安装成功&nbsp;xp&nbsp;host&nbsp;+&nbsp;fedora&nbsp;1.0
+<br>
+<br>我现在的情况是&nbsp;linux&nbsp;guest上可以ping自己,&nbsp;192.168.0.2
+<br>可是无法ping&nbsp;&nbsp;gateway.&nbsp;192.168.0.1,&nbsp;就更别说dns了
+<br>
+<br>我现在物理网卡上共享了,&nbsp;vnet1上的ip设成了192.168.0.1
+<br>
+<br>还有什么地方需要设置的呢?
+<br>
+<br>启动的时候在启动sendmail服务的时候停了很长时间,&nbsp;有1分多种<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=26424" target="_blank">platinum</a> 回复于：2004-10-07 07:02:58</b><br><br>
+引用：<i><u>原帖由&nbsp;"andrewleading_he"&nbsp;发表：</u><br>老大，可以可以帮一下忙
+<br>我怎么把windows下的source也让suse用啊
+<br>有没有具体的设置方法
+<br>
+<br>我的msn:&nbsp;andrewleading_he@hotmail.com
+<br>
+<br>在线等待中...谢谢了.</i><br>
+<br>不可能的
+<br>win的函数库和linux的函数库都不一样，无法通过编译的
+<br>如果可以的话，就不存在什么“移植”问题了，任何东西放到LINUX下编译一下，不就可以用了吗，还费劲写“XXX&nbsp;for&nbsp;Linux”干什么<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=187863" target="_blank">lyrebird</a> 回复于：2004-10-07 07:14:52</b><br><br>
+解决了,&nbsp;原来是网卡开始的设置不对
+<br>
+<br>引用：<i><u>原帖由&nbsp;"lyrebird"&nbsp;发表：</u><br>我在我的机器上没有安装成功&nbsp;xp&nbsp;host&nbsp;+&nbsp;fedora&nbsp;1.0
+<br>
+<br>我现在的情况是&nbsp;linux&nbsp;guest上可以ping自己,&nbsp;192.168.0.2
+<br>可是无法ping&nbsp;&nbsp;gateway.&nbsp;192.168.0.1,&nbsp;就更别说dns了
+<br>
+<br>我现在物理网卡上共享了,&nbsp;vnet1上的ip设成了..........</i><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=24274" target="_blank">cane</a> 回复于：2004-10-07 09:47:40</b><br><br>
+我在以前也遇到了这个问题，后来解决了还是有点稀里糊涂的，现在看到你的文章，真的不错。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=83062" target="_blank">amicool</a> 回复于：2004-10-08 16:31:21</b><br><br>
+方法总算测试成功了，在这个linux下面可以轻易的访问其他机器和公网。
+<br>但是，如果在一个局域网中，好像别的机器不能访问这个机器，我试了在VMnet1中把192.168.0.1手工修改ip为内部网ip地址，linux下面也是手工修改，好像还是不能被其他机器访问？？
+<br>奇怪？～～<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2004-10-09 05:22:59</b><br><br>
+一点也不奇怪，你的vmware下的虚拟机是通过windowsxp&nbsp;NAT&nbsp;出去的，一般情况下，网络上其他主机是看不到它的。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=26424" target="_blank">platinum</a> 回复于：2004-10-09 07:47:28</b><br><br>
+引用：<i>那
+么为什么不使用桥接的方式呢，我在前一篇文章（linux&nbsp;host&nbsp;+&nbsp;windows&nbsp;guest)里面已
+经有些讨论，请参考。不过最现实的原因是桥接需要一个不同于&nbsp;原主机上的另外一个独立的IP地址，这对于有些情况（IP和MAC绑定，网管不同
+意），比较难办到。
+<br></i><br>
+<br>鄙人认为不是这样的
+<br>即使使用VMnet0(default&nbsp;bridged)，也不必担心因为网管绑定IP和MAC而无法上网，其实只要将宿主系统配置成单臂路由就可以了，寄生系统既可以通过宿主系统进行NAT上网，其他人又可以直接访问到寄生系统，一举两得&nbsp;:D<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=192068" target="_blank">ping1125</a> 回复于：2004-10-22 10:14:43</b><br><br>
+好帖！一直在找这样的东东。谢谢！
+<br>另：菜鸟提问：我按你说的做，可是以文本方式登录后准备vmware的窗口菜单中选vm-&gt;;install&nbsp;vmware&nbsp;tools&nbsp;时却选不了菜单，鼠标也回不到windows中来。不知道是什么原因？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=192068" target="_blank">ping1125</a> 回复于：2004-10-22 10:47:41</b><br><br>
+好帖！一直在找这样的东东。谢谢！
+<br>另：菜鸟提问：我按你说的做，可是以文本方式登录后准备vmware的窗口菜单中选vm-&gt;;install&nbsp;vmware&nbsp;tools&nbsp;时却选不了菜单，鼠标也回不到windows中来。不知道是什么原因？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=182761" target="_blank">sinboy2002</a> 回复于：2004-10-22 12:02:03</b><br><br>
+顶。
+<br>我较喜欢&nbsp;hostonly&nbsp;灵活性，<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=195635" target="_blank">voscaptain</a> 回复于：2004-11-02 16:52:00</b><br><br>
+引用：<i><u>原帖由&nbsp;"yunqing"&nbsp;发表：</u><br>正文：
+<br>&nbsp;
+<br>本人使用的是vmware&nbsp;workstation&nbsp;4.52，host机器运行的是
+windows&nbsp;Xp&nbsp;professional&nbsp;，如果你还在使
+vmware&nbsp;workstation&nbsp;4.0建议下载一个升级包，不过我想即使不做问题也不大。
+<br>&nbsp;
+<br>1。安装&nbsp;vmware&nbsp;workstat..........</i><br>
+<br>
+<br>你好！我按你的方法设置了，可就是在linux下ping不了192.168.0.1，windows&nbsp;xp下也ping不了
+192.168.0.2，不知是什么原因？我们是校园网络，独立IP，在linux下DNS是设置成了我们学校的DNS，不知对否？请大师吝教，谢谢。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=155015" target="_blank">bqsc</a> 回复于：2004-11-02 17:41:39</b><br><br>
+我没有交换机，设置NAT主机可以PING通LINUX，反过来不行，设置&nbsp;hostonly&nbsp;却LINUX可以品通VMNET1，反之不可。
+<br>怎么样设置才可以互相访问呢？不要用连接共享啊，我已经共享了一台电脑了。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-06 20:09:09</b><br><br>
+good<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=65667" target="_blank">jeffreyli</a> 回复于：2004-11-07 09:27:52</b><br><br>
+不错，好文:em02:&nbsp;&nbsp;:em02:<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-07 15:34:08</b><br><br>
+:em10:&nbsp;&nbsp;:em10:&nbsp;&nbsp;:em10:&nbsp;
+<br>
+<br>不行<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=150483" target="_blank">zd724</a> 回复于：2004-11-07 15:47:39</b><br><br>
+ding<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-07 18:38:43</b><br><br>
+发现忘了选择
+<br>connected
+<br>connect&nbsp;at&nbsp;power&nbsp;on
+<br>
+<br>折磨我一天了。。。。。
+<br>
+<br>顺便补个NAT方式的：
+<br>用VMnet8，安装好后，选择NAT方式，然后在win主机上用ipconfig查看VMnet8的IP地址，
+<br>一般是192.168.X.1/255.255.255.0,
+<br>此时VMnet8的设置应该是自动获取IP，现在改成静态IP，并把此IP直接填入VMnet8里，不设网关。
+<br>
+<br>同时在VM网络设置里的NAT项中查看VMnet8，一般是192.168.X.2/255.255.255.0......
+<br>
+<br>这个地址就是VMnet8，NAT的网关
+<br>
+<br>现在在LINUX下把网卡IP设置成和VMnet8一个网段的IP（192.168.X.Z/255.255.255.0)，网关设置成刚才查看的那个IP192.168.X.2即可<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=4930" target="_blank">noah007</a> 回复于：2004-11-07 19:20:14</b><br><br>
+在NAT方式中，VM实际上虚拟了一个网关设备，但很多人误以为那个IP就是主机的IP，这是误区之一。
+<br>实际上如果希望主机能通过虚拟终端访问VM，需要另外给VM8设置IP，之所以不能设置网关，是因为WIN的BUG（实际上如果你在VM8中也设
+置了网关，你可以在命令窗口中用ROUTE&nbsp;PRINT看到俩条0.0.0.0的缺省路由），会造成俩个子网的不稳定表现。
+<br>因为VM和主机的VM8在同一个广播域中，所以无需配置网关。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=75635" target="_blank">yangtou</a> 回复于：2004-11-07 20:13:48</b><br><br>
+其实nat下，把vm的网关设置成192.168.X.1，一样可以用的<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=128614" target="_blank">想发芽的石头</a> 回复于：2004-11-08 07:49:51</b><br><br>
+网关只是一个网络设备，只要IP不冲突，不是广播地址不是网络地址，随你设成什么<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-08 21:50:29</b><br><br>
+我安装好LINUX后
+<br>启动LINXU后在VM里的选择install&nbsp;vmware&nbsp;tools
+<br>
+<br>把/mnt/vmware-linux-tools.tar.gz这个软件cp到你想要的目录
+<br>tar&nbsp;vzxf&nbsp;/mnt/vmware-linux-tools.tar.gz&nbsp;/*解压
+<br>
+<br><pre>cd&nbsp;vmware-tools-distrib&nbsp;
+<br>./vmware-install.pl&nbsp;</pre>
+<br>
+<br>安装，问安装目录在哪，就直接回车，问是否就安Y键
+<br>
+<br>最后会提示必面到文本界面下执行vmware-config-tools.pl才能正确设置,&nbsp;
+<br>
+<br><pre>/sbin/telinit&nbsp;3
+<br>/usr/bin/vmware-config-tools.pl</pre>
+<br>
+<br>进入文本界面，执行vmware-config-tools.pl，回答并设置屏幕分辨率，除了分辨率需要选择外，直接回车就行了。&nbsp;
+<br>设置好后，返回到默认的图形界面（运行级别5）&nbsp;
+<br>
+<br><pre>/sbin/telinit&nbsp;5&nbsp;</pre>
+<br>
+<br>可以用啦！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-10 20:45:30</b><br><br>我
+也碰到前面有几位朋友碰到的情况了，我的系统是xp&nbsp;pro(host)＋turbo&nbsp;linux(guest)。按照文章的说明做
+了，但是现在是xp下能ping通linux的eth0&nbsp;192.168.0.100，但是从linux下面不能ping通vmnet1的
+192.168.0.1。
+<br>ifconfig显示网卡状态一切正常，但是就是不通，请问各位大侠这可能是什么原因呢？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-10 22:28:56</b><br><br>
+引用：<i><u>原帖由&nbsp;"ysgl"&nbsp;发表：</u><br>我
+也碰到前面有几位朋友碰到的情况了，我的系统是xp&nbsp;pro(host)＋turbo&nbsp;linux(guest)。按照文章的说明做
+了，但是现在是xp下能ping通linux的eth0&nbsp;192.168.0.100，但是从linux下面不能ping通vmnet1的
+192.168.0.1。
+<br>ifc..........</i><br>
+<br>
+<br>你是什么方式&nbsp;，我用的是NAT，可参考一下，改成NAT试试<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-10 22:37:51</b><br><br>
+我用的是host&nbsp;only模式<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-10 22:48:35</b><br><br>
+改用nat方式之后可以从guest&nbsp;linux系统里面上网
+<br>不过我就是想搞明白，为啥用host&nbsp;only的方式就不能上网呢？奇怪，不知道哪里设置得不对，我看好多人也碰到了一样的状况，如果斑竹能解决了对大家也很有帮助啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-10 23:51:04</b><br><br>
+引用：<i><u>原帖由&nbsp;"ysgl"&nbsp;发表：</u><br>改用nat方式之后可以从guest&nbsp;linux系统里面上网
+<br>不过我就是想搞明白，为啥用host&nbsp;only的方式就不能上网呢？奇怪，不知道哪里设置得不对，我看好多人也碰到了一样的状况，如果斑竹能解决了对大家也很有帮助啊</i><br>
+<br>
+<br>汗，我原来也试host-only，结果也不行，不知道哪里错了，后来NAT可以，我就没试那么多，能用就用了，需要再来试<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=128614" target="_blank">想发芽的石头</a> 回复于：2004-11-11 08:20:40</b><br><br>
+host-only方式似乎需要在本地连接的高级属性里设置连接共享。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-11 08:45:10</b><br><br>
+引用：<i><u>原帖由&nbsp;"想发芽的石头"]host-only方式似乎需要在本地连接的高级属性里设置连接共享。</u></i><u><br>&nbsp;发表：</u><br>
+<br>
+<br>是的，yunming在贴子里说得很详细了，不过我没再试验&nbsp;了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 09:05:28</b><br><br>我
+已经做了internet连接共享的，但是就是不行，从guest&nbsp;linux里面不能ping通vmnet1的网关，外网什么的就更不通了；
+但是从host&nbsp;winxp&nbsp;里面是可以ping通guest&nbsp;linux里面的eth0的。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=128614" target="_blank">想发芽的石头</a> 回复于：2004-11-11 11:22:53</b><br><br>
+请贴出
+<br>xp：
+<br>ipconfig&nbsp;/a
+<br>route&nbsp;print
+<br>linux:
+<br>ifconfig&nbsp;-a
+<br>netstat&nbsp;-rn
+<br>的结果
+<br>如果xp打过sp2，请关闭防火墙（暂时）<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 14:15:37</b><br><br>
+以下是winxp下ipconfig/all的输出
+<br>&gt;;ipconfig/all
+<br>
+<br>Windows&nbsp;IP&nbsp;Configuration
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host&nbsp;Name&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;ysg
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Primary&nbsp;Dns&nbsp;Suffix&nbsp;&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node&nbsp;Type&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;Unknown
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP&nbsp;Routing&nbsp;Enabled.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;No
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WINS&nbsp;Proxy&nbsp;Enabled.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;No
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS&nbsp;Suffix&nbsp;Search&nbsp;List.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;bgctv
+<br>
+<br>Ethernet&nbsp;adapter&nbsp;VMware&nbsp;Network&nbsp;Adapter&nbsp;VMnet8:
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connection-specific&nbsp;DNS&nbsp;Suffix&nbsp;&nbsp;.&nbsp;:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;VMware&nbsp;Virtual&nbsp;Ethernet&nbsp;Adapter&nbsp;for
+<br>VMnet8
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physical&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;00-50-56-C0-00-08
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dhcp&nbsp;Enabled.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;No
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;192.168.2.1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subnet&nbsp;Mask&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;255.255.255.0
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;Gateway&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:
+<br>
+<br>Ethernet&nbsp;adapter&nbsp;VMware&nbsp;Network&nbsp;Adapter&nbsp;VMnet1:
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connection-specific&nbsp;DNS&nbsp;Suffix&nbsp;&nbsp;.&nbsp;:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;VMware&nbsp;Virtual&nbsp;Ethernet&nbsp;Adapter&nbsp;for
+<br>VMnet1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physical&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;00-50-56-C0-00-01
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dhcp&nbsp;Enabled.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;No
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;192.168.0.1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subnet&nbsp;Mask&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;255.255.255.0
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;Gateway&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:
+<br>
+<br>Ethernet&nbsp;adapter&nbsp;3Com:
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connection-specific&nbsp;DNS&nbsp;Suffix&nbsp;&nbsp;.&nbsp;:&nbsp;bgctv
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;3Com&nbsp;EtherLink&nbsp;III&nbsp;LAN&nbsp;PC&nbsp;Card&nbsp;(3C58
+<br>9B/3C589C)&nbsp;(Ethernet)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Physical&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;00-60-97-41-A7-81
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dhcp&nbsp;Enabled.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;Yes
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Autoconfiguration&nbsp;Enabled&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;Yes
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP&nbsp;Address.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;x.x.17.71
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subnet&nbsp;Mask&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;x.x.240.0
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;Gateway&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;x.x.16.1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DHCP&nbsp;Server&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;x.x.1.12
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS&nbsp;Servers&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;211.99.129.210
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;211.99.129.211
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;202.99.8.1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lease&nbsp;Obtained.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;2004
+年11月11日&nbsp;8:50:19
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lease&nbsp;Expires&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;:&nbsp;2004
+年11月24日&nbsp;14:29:20<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 14:26:22</b><br><br>
+以下是winxp里面的ping和路由的显示
+<br>C:\&gt;;ping&nbsp;192.168.0.1
+<br>
+<br>Pinging&nbsp;192.168.0.1&nbsp;with&nbsp;32&nbsp;bytes&nbsp;of&nbsp;data:
+<br>
+<br>Reply&nbsp;from&nbsp;192.168.0.1:&nbsp;bytes=32&nbsp;time&lt;1ms&nbsp;TTL=128
+<br>Reply&nbsp;from&nbsp;192.168.0.1:&nbsp;bytes=32&nbsp;time&lt;1ms&nbsp;TTL=128
+<br>Reply&nbsp;from&nbsp;192.168.0.1:&nbsp;bytes=32&nbsp;time&lt;1ms&nbsp;TTL=128
+<br>Reply&nbsp;from&nbsp;192.168.0.1:&nbsp;bytes=32&nbsp;time&lt;1ms&nbsp;TTL=128
+<br>
+<br>Ping&nbsp;statistics&nbsp;for&nbsp;192.168.0.1:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Packets:&nbsp;Sent&nbsp;=&nbsp;4,&nbsp;Received&nbsp;=&nbsp;4,&nbsp;Lost&nbsp;=&nbsp;0&nbsp;(0%&nbsp;loss),
+<br>Approximate&nbsp;round&nbsp;trip&nbsp;times&nbsp;in&nbsp;milli-seconds:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Minimum&nbsp;=&nbsp;0ms,&nbsp;Maximum&nbsp;=&nbsp;0ms,&nbsp;Average&nbsp;=&nbsp;0ms
+<br>
+<br>C:\&gt;;ping&nbsp;192.168.0.100
+<br>
+<br>Pinging&nbsp;192.168.0.100&nbsp;with&nbsp;32&nbsp;bytes&nbsp;of&nbsp;data:
+<br>
+<br>Reply&nbsp;from&nbsp;192.168.0.100:&nbsp;bytes=32&nbsp;time=62ms&nbsp;TTL=64
+<br>Reply&nbsp;from&nbsp;192.168.0.100:&nbsp;bytes=32&nbsp;time&lt;1ms&nbsp;TTL=64
+<br>Reply&nbsp;from&nbsp;192.168.0.100:&nbsp;bytes=32&nbsp;time=11ms&nbsp;TTL=64
+<br>Reply&nbsp;from&nbsp;192.168.0.100:&nbsp;bytes=32&nbsp;time=15ms&nbsp;TTL=64
+<br>
+<br>Ping&nbsp;statistics&nbsp;for&nbsp;192.168.0.100:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Packets:&nbsp;Sent&nbsp;=&nbsp;4,&nbsp;Received&nbsp;=&nbsp;4,&nbsp;Lost&nbsp;=&nbsp;0&nbsp;(0%&nbsp;loss),
+<br>Approximate&nbsp;round&nbsp;trip&nbsp;times&nbsp;in&nbsp;milli-seconds:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Minimum&nbsp;=&nbsp;0ms,&nbsp;Maximum&nbsp;=&nbsp;62ms,&nbsp;Average&nbsp;=&nbsp;22ms
+<br>
+<br>C:\&gt;;route&nbsp;print
+<br>===========================================================================
+<br>Interface&nbsp;List
+<br>0x1&nbsp;...........................&nbsp;MS&nbsp;TCP&nbsp;Loopback&nbsp;interface
+<br>0x2&nbsp;...00&nbsp;50&nbsp;56&nbsp;c0&nbsp;00&nbsp;08&nbsp;......&nbsp;VMware&nbsp;Virtual&nbsp;Ethernet&nbsp;Adapter&nbsp;for&nbsp;VMnet8
+<br>0x3&nbsp;...00&nbsp;50&nbsp;56&nbsp;c0&nbsp;00&nbsp;01&nbsp;......&nbsp;VMware&nbsp;Virtual&nbsp;Ethernet&nbsp;Adapter&nbsp;for&nbsp;VMnet1
+<br>0x10006&nbsp;...00&nbsp;60&nbsp;97&nbsp;41&nbsp;a7&nbsp;81&nbsp;......&nbsp;3Com&nbsp;EtherLink&nbsp;III&nbsp;LAN&nbsp;PC&nbsp;Card&nbsp;(3C589B/3C589
+<br>C)&nbsp;(Ethernet)
+<br>===========================================================================
+<br>===========================================================================
+<br>Active&nbsp;Routes:
+<br>Network&nbsp;Destination&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Netmask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gateway&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interface&nbsp;&nbsp;Metric
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.x.16.1&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;255.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.0&nbsp;&nbsp;&nbsp;&nbsp;255.255.255.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.0&nbsp;&nbsp;&nbsp;&nbsp;255.255.255.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;x.x.123.123&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.x.16.1&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.x.16.0&nbsp;&nbsp;&nbsp;&nbsp;255.255.240.0&nbsp;&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;127.0.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;&nbsp;x.x.17.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;224.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;240.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;224.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;240.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;224.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;240.0.0.0&nbsp;&nbsp;&nbsp;&nbsp;219.236.17.71&nbsp;&nbsp;&nbsp;219.236.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30
+<br>&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br>&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br>&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;192.168.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br>&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;255.255.255.255&nbsp;&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;x.x.17.71&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br>Default&nbsp;Gateway:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.x.16.1
+<br>===========================================================================
+<br>Persistent&nbsp;Routes:
+<br>&nbsp;&nbsp;None
+<br>
+<br>C:\&gt;;<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 14:37:19</b><br><br>
+ifconfig&nbsp;&nbsp;-a和netstat&nbsp;-an的输出
+<br>
+<br>抱歉，连续贴了2次都没贴上去，连ie都非法了
+<br>
+<br>xp的防火墙没有开启的<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/network_02.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/network_01.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=128614" target="_blank">想发芽的石头</a> 回复于：2004-11-11 14:39:37</b><br><br>
+linux的呢？
+<br>xp的防火墙关了，可以ping通吗<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 16:38:28</b><br><br>
+有没有可能是linux的防火墙的问题呢？
+<br>安装的时候我选的是默认的中等<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-11 17:09:28</b><br><br>
+引用：<i><u>原帖由&nbsp;"ysgl"&nbsp;发表：</u><br>有没有可能是linux的防火墙的问题呢？
+<br>安装的时候我选的是默认的中等</i><br>
+<br>
+<br>你在LINUX里停止防火墙
+<br>service&nbsp;network&nbsp;stop<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 18:36:40</b><br><br>
+引用：<i><u>原帖由&nbsp;"wingger"&nbsp;发表：</u><br>
+<br>
+<br>你在LINUX里停止防火墙
+<br>service&nbsp;network&nbsp;stop</i><br>÷
+<br>
+<br>？？？这不是停止防火墙的吧？这不是把我的网络给断了吗？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-11-11 18:40:47</b><br><br>
+不好意思，敲错了
+<br>service&nbsp;iptables&nbsp;stop或/etc/rc.d/init.d/iptables&nbsp;stop<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 19:00:09</b><br><br>
+斑竹，好像不行啊，用service&nbsp;iptables&nbsp;stop说是没有这个服务；
+<br>用第二个命令试也找不到这个<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 19:07:17</b><br><br>
+要不斑竹你加我msn吧，我们msn上面讨论
+<br>我的msn是youshungang@hotmail.com，无论如何，多谢指教了！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=141027" target="_blank">ysgl</a> 回复于：2004-11-11 19:41:31</b><br><br>
+呵呵，已经搞定，原来是天网防火墙搞的怪，它把linux发出的icmp包给拦截了。我只注意到了xp的防火墙，没有注意到天网，所以捣鼓了老长时间还没解决，倒是劳烦斑竹和各位大侠费心了。希望各位有同样经历的朋友看看自己的防火墙是不是还开着。
+<br>
+<br>多谢大家关心了！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=144924" target="_blank">AlanZoo</a> 回复于：2004-11-18 21:35:31</b><br><br>
+Hi,yunqing,
+<br>vmware&nbsp;网络设置问题求教
+<br>
+<br>我的配置：&nbsp;
+<br>Host:&nbsp;Windows&nbsp;2000&nbsp;professional&nbsp;
+<br>VMware:&nbsp;Workstation&nbsp;4.5.2&nbsp;build&nbsp;8848&nbsp;
+<br>Guest:&nbsp;Red&nbsp;Hat&nbsp;Linux&nbsp;9.0&nbsp;
+<br>网络环境:公司局域网，动态分配IP.通过公司分配的代理帐号可以上外网。&nbsp;
+<br>按照文中的方法配置，除了DNS没填。&nbsp;
+<br>
+<br>在Host和Guest中均可以ping通192.168.0.1，192.168.0.2。&nbsp;
+<br>Guest可以ping通Host在局域网中动态非配的IP，但不能ping通公司的服务器，不能访问公司内部网页，无法ping通外网。&nbsp;
+<br>
+<br>请问，有什么方法可以让guest访问外网?&nbsp;
+<br>Thanks!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=144924" target="_blank">AlanZoo</a> 回复于：2004-11-20 12:42:40</b><br><br>
+把host中的防火墙关掉后，现在已经可以上网了。
+<br>非常感谢yunqing的热心帮助！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=33485" target="_blank">firekylin</a> 回复于：2004-12-01 20:14:58</b><br><br>
+版主，一直用不能用vmware。试了N次。你能上MSN，指点一下吗？我的ID，nemo_yin@hotmail.com。前些天已经加你了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=33485" target="_blank">firekylin</a> 回复于：2004-12-01 20:32:24</b><br><br>我
+使用的winXP,本地网卡的地址为自动分配的192.168.5.61,&nbsp;255.255.0.0，网关为192.168.0.1。
+vmNet1的地址为10.0.1.1，&nbsp;vmNet2的地址为10.1.1.1.掩码均为
+255.255.255.0。&nbsp;Linux中网卡的地址为10.1.1.100.&nbsp;255.255.255.0。网关为
+10.1.1.1。在Linux中我可以ping到10.1.1.1，在winXP中可以ping到10.1.1.100。vmware使用的是NAT方
+式。可是现在仍然上不了网。请教各位有什么办法可以解决？谢了。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=68267" target="_blank">wingger</a> 回复于：2004-12-01 20:45:01</b><br><br>
+NAT方式上网：
+<br>NAT用VMnet8，因此安装好后，选择NAT方式，然后在win主机上用ipconfig查看VMnet8的IP地址，&nbsp;
+<br>一般是192.168.X.1/255.255.255.0,&nbsp;
+<br>
+<br>2、此时VMnet8的设置应该是自动获取IP，把动态的现在改成静态IP，并把此IP直接填入VMnet8里，不设网关。&nbsp;
+<br>
+<br>3、同时在VM网络设置里的NAT项中查看VMnet8，一般是192.168.X.2/255.255.255.0......&nbsp;
+<br>这个地址就是VMnet8，NAT的网关&nbsp;
+<br>
+<br>4、现在在LINUX下把网卡IP设置成和VMnet8一个网段的IP（192.168.X.Z/255.255.255.0)，网关设置成刚才查看的那个IP192.168.X.2即可<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=204499" target="_blank">hzxjygy</a> 回复于：2004-12-03 03:06:21</b><br><br>
+host&nbsp;&nbsp;&nbsp;nat我都试了&nbsp;&nbsp;就是不能上网
+<br>ping&nbsp;虚拟机的ip可以ping通
+<br>ping网关就是不行&nbsp;&nbsp;说不能到达
+<br>玉米&nbsp;:(&nbsp;&nbsp;:(&nbsp;
+<br>谁来帮帮忙啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=204681" target="_blank">为什么我是菜鸟�</a> 回复于：2004-12-03 16:19:07</b><br><br>
+:(&nbsp;各位大虾！&nbsp;看看我的设置有错不？<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/lin4.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/lin3.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=204681" target="_blank">为什么我是菜鸟�</a> 回复于：2004-12-03 16:29:22</b><br><br>
+还有这样
+<br>
+<br>我可以相互PING通
+<br>
+<br>但是使用SMB后也无法访问&nbsp;&nbsp;登陆LINUX时候&nbsp;&nbsp;就这样！
+<br>请大家指教下！<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/lin2.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/lin5.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=201639" target="_blank">dxkun1980</a> 回复于：2004-12-03 16:38:14</b><br><br>
+我们学校用的是拨号上网！
+<br>在XP下用的是锐捷，在linux下用什么拨号软件啊？
+<br>急求!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=124131" target="_blank">tntking</a> 回复于：2004-12-20 15:09:52</b><br><br>
+小区光纤，主机网卡自动获得IP，开机就能上，VM下安装了REDHAT9，在VM下该怎样上网，看过论坛里的一些帖子，都说要设置IP什么的，我这种情况该怎么做？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=212414" target="_blank">naiive</a> 回复于：2005-01-02 14:40:52</b><br><br>
+我用的是VMWare-WorkStation&nbsp;4.5.1,host是WinXP,guest是RH9
+<br>我主机的网络环境是在公司里面用的是内部网IP&nbsp;192.168.3.*,按照作者的步骤进行后在Linux下面ping不到192.168.0.1和192.168.0.2(我们公司有些机器是用这些IP的)不知道是不是跟这个有关系，谢谢！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-01-30 01:52:20</b><br><br>
+su&nbsp;
+<br><b>mount&nbsp;/dev/cdrom&nbsp;/mnt/cdrom&nbsp;
+<br>cd&nbsp;/tmp&nbsp;
+<br>tar&nbsp;zxf&nbsp;/mnt/vmware-linux-tools.tar.gz&nbsp;
+<br>cd&nbsp;vmware-tools-distrib&nbsp;
+<br>./vmware-install.pl&nbsp;</b>回答并设置屏幕分辨率，除了分辨率需要选择外，直接回车就行了。&nbsp;
+<br>返回到默认的图形界面（运行级别5）&nbsp;
+<br>/sbin/telinit&nbsp;5&nbsp;
+<br>
+<br>
+<br>用粗体表示的命令是按照上面所示每一行后回车吗?烦yunqing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>精灵
+<br>能告之,我是按照每一行后回车,但是并没有出现要求调整分辨率的对话,另外<b>./vmware-install.pl&nbsp;</b>在"/"前面一小点是须要的吗?
+<br>烦能告之际<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2005-01-30 06:52:43</b><br><br>
+是要回车
+<br>./是显式地指明执行当前目录下的这个文件。除非你已经将当前目录加入到PATH里，你还是要输入这两个字符的。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2005-01-30 06:57:46</b><br><br>
+引用：<i><u>原帖由&nbsp;"naiive"&nbsp;发表：</u><br>我用的是VMWare-WorkStation&nbsp;4.5.1,host是WinXP,guest是RH9
+<br>我主机的网络环境是在公司里面用的是内部网IP&nbsp;192.168.3.*,按照作者的步骤进行后在Linux下面ping不到192.168.0.1和192.168.0.2(我们公司有些机器是用这些..........</i><br>
+<br>换成另外的保留地址如：10.1.1.1/255.255.255.0<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-01-30 18:17:38</b><br><br>
+我照着输的,怎么会出现如下画面,盼高手出手<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/123_28681107080236.gif" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed">画面</span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-01-31 19:14:19</b><br><br>
+没有人能帮我一把吗?<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2005-01-31 21:23:39</b><br><br>
+引用：<i><u>原帖由&nbsp;"oceanwind"]没有人能帮我一把吗?</u></i><u><br>&nbsp;发表：</u><br>
+<br>你输入命令里面的空格了吗。建议现练习一下常用的linux/unix命令。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-01 19:50:42</b><br><br>
+我只是想装个虚拟机玩玩,还要学这么多东西,是不是像DOS命令啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=222380" target="_blank">zmlul</a> 回复于：2005-02-03 23:03:15</b><br><br>
+“5。按照要求在虚拟机里安装vmware-tool,对鼠标和图形进行更好地支持。&nbsp;
+<br>如果你在图形界面下，首先要切换到文本模式。&nbsp;
+<br>右键点击桌面，打开一个終端&nbsp;
+<br>在終端里：&nbsp;
+<br>su&nbsp;
+<br>#/sbin/telinit&nbsp;3&nbsp;
+<br>图形界面消失，敲回车几下，在文本方式下登录。&nbsp;
+<br>在windows的vmware的窗口菜单中选vm-&gt;;install&nbsp;vmware&nbsp;tools&nbsp;
+<br>在虚拟机中：&nbsp;
+<br>su&nbsp;
+<br>mount&nbsp;/dev/cdrom&nbsp;/mnt/cdrom&nbsp;
+<br>cd&nbsp;/tmp&nbsp;
+<br>tar&nbsp;zxf&nbsp;/mnt/vmware-linux-tools.tar.gz&nbsp;
+<br>cd&nbsp;vmware-tools-distrib&nbsp;
+<br>./vmware-install.pl&nbsp;
+<br>回答并设置屏幕分辨率，除了分辨率需要选择外，直接回车就行了。&nbsp;
+<br>返回到默认的图形界面（运行级别5）&nbsp;
+<br>/sbin/telinit&nbsp;5&nbsp;
+<br>”
+<br>这是你说的第5步，为什么要从图形界面转到纯終端下然后再转出来呢？
+<br>就在图形界面下右键打开一个終端，然后都在里面执行不行吗？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=213571" target="_blank">kikor</a> 回复于：2005-02-03 23:34:41</b><br><br>
+我来说一下我遇到的问题：
+<br>HOST:&nbsp;&nbsp;&nbsp;Win2k&nbsp;Pro&nbsp;sp4
+<br>GUEST:&nbsp;FreeBSD5.3&nbsp;,&nbsp;SuSE...&nbsp;and&nbsp;so&nbsp;on
+<br>ISP:&nbsp;杭州网通
+<br>DNS:&nbsp;218.108.248.200
+<br>GUEST最初用bridged方式上网，设置方法是：
+<br>&nbsp;&nbsp;连接设备-&gt;;属性-&gt;;共享-&gt;;对“本地连接”启用Internet连接共享
+<br>这时候本地连接(也就是物理网卡)IP为192.168.0.1，在GUEST里设置IP为192.168.0.2，网关
+192.168.0.1，子网掩码255.255.255.0，一开始无论如何无法访问WWW网络，但是可以PING到
+DNS（218.108.248.200），PING到所有网站的IP（比如GOOGLE），但是PING不到域名（比如
+WWW.GOOGLE.COM），进了KDE也无法访问网站，即时用GOOGLE的IP地址也无法访问。搞的我一度认为有很严重的RPWT。
+<br>然后第二天，印象中没做任何改动，只装了个FEDORA&nbsp;V3，忽然可以访问网络了。然后试了试其他GUEST，也都忽然可以了。
+<br>然后，又过了几天，重装了FREEBSD，设置依旧，可是又出现可以PING却无法上网的问题。用楼主的HOST-ONLY，不行，问题和前面的同志一样。
+<br>最后，用NAT方式，解决了上网的问题。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-26 15:08:32</b><br><br>
+我安装到了这句
+<br>cd&nbsp;/vmware-tools-distrib时提示没有文件或是目录
+<br>难道我哪里有错吗?(见附图)
+<br>还请高手指教<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/123_47911109401666.gif" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-26 23:22:22</b><br><br>
+顶一下<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2005-02-27 00:59:08</b><br><br>
+引用：<i>这是你说的第5步，为什么要从图形界面转到纯終端下然后再转出来呢？
+<br>就在图形界面下右键打开一个終端，然后都在里面执行不行吗？</i><br>
+<br>是vmware的要求，必须在文本界面下安装，因为它要为Xserver加载一些模块。
+<br>
+<br>引用：<i>我安装到了这句
+<br>cd&nbsp;/vmware-tools-distrib时提示没有文件或是目录&nbsp;</i><br>
+<br>原文中没有&nbsp;"/"<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-27 11:31:31</b><br><br>
+明白了,谢谢,
+<br>我试过取消前面斜杠,安装OK了
+<br>但另外的我在XP中设置连接共享时,没有出现选择VMNET1的下拉列表框,能告诉我怎样设置吗?见附图<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/456.gif" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-27 11:46:19</b><br><br>
+我在设备管理器中看到VMNET1和VMNET8好象是驱动不正常,不知怎么回事,如图,
+<br>盼高手指点<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/3_21251109475957.gif" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-02-27 15:56:42</b><br><br>
+顶一下先<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=65814" target="_blank">whd</a> 回复于：2005-03-16 15:18:08</b><br><br>
+我的winxp&nbsp;pro&nbsp;主机+vmware&nbsp;redhat&nbsp;9&nbsp;&nbsp;虚拟机，现在问题是我得redhat上网或与winxp通信都没问题，&nbsp;
+<br>我现在想的是，把redhat做&nbsp;nat服务器，&nbsp;让winxp&nbsp;pro&nbsp;通过它去上网，这样大家就很
+容易的实现在单机上模拟网络环境了，以后squid&nbsp;，iptables，sokets5什么的都可以直接试验后再去真实环境中做了，方便又没
+风险，&nbsp;
+<br>这样做的话该如何设置网卡呢，&nbsp;
+<br>
+<br>我想应该大家都关心这个问题，这比直接让虚拟机能上网有实际意义多了吧，&nbsp;
+<br>希望大家关注，&nbsp;我试了一下，用的是bridge和host&nbsp;only，用bridge做虚拟机redhat的对外网卡，上
+网ok，&nbsp;host&nbsp;only&nbsp;做对内的内网网卡，&nbsp;如winxp&nbsp;pro实际网卡位于同一网段，现
+在两者也能通信了，但xp不能通过redhat的nat上网&nbsp;
+<br>，不知是否和网卡设置有关。研究中。。。&nbsp;。。。&nbsp;
+<br>
+<br>希望大家支持<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-03-16 19:18:38</b><br><br>我
+家里用ADSL上网,我的主机是XP&nbsp;SP2,VMWARE中的GUEST&nbsp;OS是RED&nbsp;FLAG&nbsp;4.1,
+也有装过REDHAT9.0,每次启动时都讲VMNET0&nbsp;IS&nbsp;NOT&nbsp;RUNNING,也去了VMWARE本身的论坛
+还是没有取得答案,VMWARE论坛中有一个案例与我的接近但是照它的去作,还是作不下去.下面是我是VMWARE论坛中的关于这个问题的解答:
+<br>需钩选网络连接--右键--属性--常规中的&nbsp;VMWARE&nbsp;BRIDGE&nbsp;PROTOCOL
+<br>如果VMWARE&nbsp;BRIDGE&nbsp;PROTOCOL这一项,那么点--安装&nbsp;
+<br>
+<br>选&gt;;服务&gt;;点安装&nbsp;&gt;;&nbsp;添加...&nbsp;
+<br>
+<br>点&nbsp;&gt;;&nbsp;从磁盘
+<br>
+<br>点&gt;;&nbsp;浏览&nbsp;...&nbsp;
+<br>
+<br>找到&nbsp;C:\Program&nbsp;Files\VMware\VMware&nbsp;Workstation&nbsp;双击&nbsp;netbridge.inf&nbsp;
+<br>
+<br>点&nbsp;&gt;;&nbsp;OK&nbsp;&gt;;&nbsp;照着提示走就OK.&nbsp;
+<br>
+<br>安装后注意不要忘了将它钩上
+<br>
+<br>
+<br>这样就可以了并且有一个人这样就成功了
+<br>
+<br>但是我在选&gt;;服务&gt;;点安装&nbsp;&gt;;&nbsp;添加...时WINDOWS给我一个提示框:未能添加所需的组件,原因系统未能找到相关的文件
+<br>
+<br>这个是因为HOST&nbsp;OS&nbsp;XP&nbsp;SP2哪里的设置问题吗?
+<br>&nbsp;
+<br>有人告诉:晕，这么几年的帖子也能让你翻出来
+<br>你试试找到那个文件，然后按右键选安装
+<br>
+<br>但是点击安右键,安装,画面晃动了一下,但是还是在网络连接--右键--属性--常规中看不到VMWARE&nbsp;BRIDGE&nbsp;PROTOCOL.
+<br>能有个指点一下吗?
+<br>
+<br>上面的相关贴子地址:http://www.patching.net/bbs/viewdoc.asp?id=630&amp;bordid=4<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170077" target="_blank">ys_freedom</a> 回复于：2005-03-16 19:20:57</b><br><br>
+恩，不错:)
+<br>兄弟够意思！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=237158" target="_blank">NTT2</a> 回复于：2005-03-16 19:59:10</b><br><br>
+VM里为什么很多虚拟系统建立的时候都要选第2项呢?网络的那个,HOST&nbsp;ONLY..............<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=237589" target="_blank">fhzlstudio</a> 回复于：2005-03-16 20:58:17</b><br><br>
+我没有用桥接方式刚装完fc3后在vm的虚拟网络类型里选择共享主机ip上网然后在fc3里激活网卡就可以上网了.相比在虚拟的windows下我虚拟机网络设置简单多了.<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=219961" target="_blank">oceanwind</a> 回复于：2005-03-17 22:47:47</b><br><br>
+能有个解答一下VMNET1和8有个黄叹号的问题?
+<br>盼了N久了
+<br>先谢了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=240639" target="_blank">lionyue</a> 回复于：2005-03-18 00:17:17</b><br><br>
+绝顶好的文章。
+<br>顶一下，谢谢作者的努力和贡献
+<br>鞠躬，鞠躬！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=19142" target="_blank">wuik</a> 回复于：2005-03-24 16:56:36</b><br><br>
+winxp（host）+red&nbsp;hat&nbsp;&nbsp;9.01
+<br>按楼主操作要求，一切很正常
+<br>最后一步怎么ping不通192.168.0.1呢？
+<br>显示主机不可达！望高手指点！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=170366" target="_blank">yunqing</a> 回复于：2005-03-24 18:54:35</b><br><br>
+引用：<i><u>原帖由&nbsp;"wuik"&nbsp;发表：</u><br>winxp（host）+red&nbsp;hat&nbsp;&nbsp;9.01
+<br>按楼主操作要求，一切很正常
+<br>最后一步怎么ping不通192.168.0.1呢？
+<br>显示主机不可达！望高手指点！</i><br>
+<br>看一下你的主机里的防火墙设置<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=154092" target="_blank">zz_kevin</a> 回复于：2005-03-24 19:29:09</b><br><br>
+防火墙禁止ping吧
+<br>呵呵<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=19142" target="_blank">wuik</a> 回复于：2005-03-24 19:41:22</b><br><br>
+引用：<i>
+<br>看一下你的主机里的防火墙设置
+<br></i><br>
+<br>谢谢支持，但是把防火墙和杀毒软件都关掉还是不行呢？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=242301" target="_blank">blaze_jiang</a> 回复于：2005-03-26 18:55:47</b><br><br>我
+是winxp+linux(rh9)，请问为何安装vmtools之后，显示的颜色深度只有[color=red]256[/color]色呢？改为上百
+万种颜色之后重启就不能使用xwindows了呢？请问如何解决,拜谢！！！ps：我以前没有用过&nbsp;linux，是个大大的菜鸟。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=244466" target="_blank">花乡娱乐者</a> 回复于：2005-03-27 14:08:08</b><br><br>
+求助，为什么我宿主机，虚拟机间可以ping通，但是虚拟机却ping不通dns阿？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=168747" target="_blank">yh7525158</a> 回复于：2005-03-29 21:13:10</b><br><br>
+求助，XP+AS4，HOST_ONLY,AS4里面连自己的都PING&nbsp;不通，WHY？？？
+<br>网络配置里面的ETH0状态是不活跃，是不是有关系啊？？
+<br>执行/sbin/service&nbsp;network&nbsp;restart
+<br>提示ETH0有一个不符合的MAC地址
+<br>什么问题》》》
+<br>怎么处理啊？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=168747" target="_blank">yh7525158</a> 回复于：2005-03-29 21:18:22</b><br><br>
+顶上面
+<br>发现原因是因为我装AS4的时候是在另外一台电脑，所以MAC地址不同
+<br>在系统设置里面的网络中有一个是探测MAC地址，可以重新推测MAC地址
+<br>问题解决<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=168747" target="_blank">yh7525158</a> 回复于：2005-03-29 22:32:28</b><br><br>
+OK成功用AS4登录,感觉为什么用虚拟机还是比我用HOST的XP打开网页快,想不通啊
+<br>个人感觉这种方式设置很简单,就好像我们平时用双网卡共享上网一样<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=247344" target="_blank">摆渡工</a> 回复于：2005-03-31 19:50:37</b><br><br>
+引用：<i><u>原帖由&nbsp;"花乡娱乐者"]求助，为什么我宿主机，虚拟机间可以ping通，但是虚拟机却ping不通dns阿？</u></i><u><br>&nbsp;发表：</u><br>
+<br>我也是这个问题啊，
+<br>我使用的是winxp（host）+red&nbsp;hat&nbsp;&nbsp;9.0&nbsp;，
+<br>xp中没有开防火墙，望哪位大虾指点一二<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=248909" target="_blank">yyeeyu</a> 回复于：2005-04-03 06:39:53</b><br><br>
+这辈子头一次用linux上网
+<br>谢谢了阿<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=185477" target="_blank">sulong1234</a> 回复于：2005-04-08 14:29:08</b><br><br>
+能不能介绍下window2000&nbsp;host+vm&nbsp;linux&nbsp;9的配置啊？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=247685" target="_blank">szjack</a> 回复于：2005-04-12 22:49:04</b><br><br>
+winxp（host）+red&nbsp;hat&nbsp;&nbsp;8.0&nbsp;
+<br>按楼主操作要求，一切很正常&nbsp;
+<br>HOST可以ping通GUEST的192.168.0.2网卡,GUEST也可以PING通HOST的192.168.0.1,但不可以PING通外网地址,&nbsp;我不知GUEST网卡的DNS该输什么？&nbsp;
+<br>
+<br>望高手指点！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=199250" target="_blank">daiqr12345</a> 回复于：2005-04-20 11:24:54</b><br><br>
+真他妈的猪头，标题太长不能发，重新编辑时竟然清空了，天理何在！！！！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=250263" target="_blank">wwenxin</a> 回复于：2005-04-21 14:36:32</b><br><br>
+引用：<i><u>原帖由&nbsp;"wingger"&nbsp;发表：</u><br>NAT方式上网：
+<br>NAT用VMnet8，因此安装好后，选择NAT方式，然后在win主机上用ipconfig查看VMnet8的IP地址，&nbsp;
+<br>一般是192.168.X.1/255.255.255.0,&nbsp;
+<br>
+<br>2、此时VMnet8的设置应该是自动获取IP，把动态的现在改成静态IP?.........</i><br>
+<br>
+<br>成功！
+<br>非常感谢，原来我以前的网关都设置错了。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=259548" target="_blank">tingfeng1984</a> 回复于：2005-05-04 21:36:56</b><br><br>
+如果本身就是通过代理上网，好像上述方法就有问题
+<br>首先我在windows下讲本地连接改成共享vm1都不可以，（提示说：无法启动共享，一个已经使用ip地址配置的lan连接需要自动ip地址）
+<br>然后我试着手工改动，将vm1的地址改成与主机在同一网段，结果连主机页上不了网，该回来可以，不知道是不是因为主机就是代理，而不成功，小弟网络比较菜！盼各位大侠指点<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=125161" target="_blank">txkss</a> 回复于：2005-05-04 22:44:59</b><br><br>
+请问guest中的dns设置的是谁的地址啊？
+<br>
+<br>是电信的地址吗？
+<br>
+<br>还是什么其它的？
+<br>
+<br>谢谢<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=267877" target="_blank">roninchina</a> 回复于：2005-05-15 22:04:24</b><br><br>
+win2k&nbsp;pro,&nbsp;rh9,&nbsp;vm5
+<br>
+<br>host和guest互相ping没问题，但是guest里ping外部ip就不行，
+<br>用traceroute看到了192.168.0.1就停掉了，感觉是真实网卡和vmnet1的共享绑定没搞好。但是折腾了将近一天也没搞定。
+<br>
+<br>向高手求救！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=207910" target="_blank">sugarplum</a> 回复于：2005-05-17 09:50:33</b><br><br>
+我按照楼主的步骤做了一下，ping&nbsp;192。168。0。1不通。而且我的host也不能上网了。我的电脑不知道为什么只要网上邻居里面虚拟机的网卡是启用的时候，我的host就不能上网，只有停用虚拟机的网卡才可以。
+<br>还有在guest下从“红帽标志”里面的“系统设置”的“网络”里面看到的eth0是inactive，但是按照楼主说的重启时，看到eth0是已经激活的。这是什么原因啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=204586" target="_blank">塔T塔</a> 回复于：2005-05-17 14:42:46</b><br><br>
+真想试试，不过内存太小了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=23163" target="_blank">zanglx</a> 回复于：2005-05-17 15:54:00</b><br><br>
+内存小。跑VMWARE很吃力啊！！1<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=240077" target="_blank">fupei</a> 回复于：2005-05-23 17:28:47</b><br><br>
+我想问一下,怎么把网络设置成NAT&nbsp;呀,或者HOST-ONLY&nbsp;默认是HOST-ONLY吗?
+<br>如果我的是机子本身用的是两块网卡共享上网的中的客户机,那么我在XP下面装的VMWARE还能上网吗?
+<br>由于我刚学LINUX,什么都不懂,请多帮忙!不胜感激!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=121143" target="_blank">skating</a> 回复于：2005-05-29 22:31:11</b><br><br>
+我试验了一晚上,&nbsp;基本搞定.&nbsp;我的系统是
+xp&nbsp;pro(host)＋redhat&nbsp;linux9(guest)。用brige始终有问题,最后用了nat.&nbsp;不用
+改xp下面的网络属性设置,&nbsp;在linux下设置ip地址为static:192.168.254.X;&nbsp;网关设为
+192.168.254.2即可.&nbsp;
+<br>因为我是小局域网通过ADSL上网,因此不适合用host&nbsp;only方式.
+<br>
+<br>另外xp&nbsp;pro(host)＋mandrake&nbsp;linux9.2(guest)老是提示eth0无法启动,不知为何?<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=269551" target="_blank">dfyUAN</a> 回复于：2005-06-01 19:26:58</b><br><br>
+为什么我在安装VMware&nbsp;Tools时遇到这个问题
+<br>？
+<br>另外有两个安装程序，第一个rpm正常安装了，第二个tar.gz在时装下按不上？<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/vm_18531117625211.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=208656" target="_blank">wangfc</a> 回复于：2005-06-09 13:20:51</b><br><br>
+求救!!!!
+<br>我在winxp&nbsp;professional虚拟了linuxAS3.0用host-only方
+式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主机
+ping&nbsp;VMnet1:192.168.0.1可以通,但虚拟机eth0:192.168.0.10ping主机和192.168.0.1都
+不通!!!!!为什么?谢谢了.....................<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=281950" target="_blank">cwl_cn</a> 回复于：2005-06-17 16:29:19</b><br><br>
+顶<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=294526" target="_blank">lindaye</a> 回复于：2005-07-24 13:59:39</b><br><br>
+通过host，guest能够上网了，也能够相互ping&nbsp;通，在guest里面，自己也可以telnet自己，但我想在host里telnet&nbsp;guest就不行，已折腾了好几天了，苦啊！望那位高人可以教教小弟！（放火墙也都关了）
+<br>
+<br>
+<br>谢谢<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/2_91621122184726.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/1_84151122184702.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=294526" target="_blank">lindaye</a> 回复于：2005-07-24 14:00:38</b><br><br>
+通过host，guest能够上网了，也能够相互ping&nbsp;通，在guest里面，自己也可以telnet自己，但我想在host里telnet&nbsp;guest就不行，已折腾了好几天了，苦啊！望那位高人可以教教小弟！（放火墙也都关了）
+<br>
+<br>
+<br>谢谢<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/4_63511122184834.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/3_12671122184820.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed"></span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=105345" target="_blank">panpass</a> 回复于：2005-08-01 12:33:48</b><br><br>
+pcnet32&nbsp;device&nbsp;eth1&nbsp;does&nbsp;not&nbsp;seem&nbsp;to&nbsp;be&nbsp;present,&nbsp;----这个提示怎么解决啊？我用的是主机网络，eth1老也无法激活<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=305386" target="_blank">sesame216</a> 回复于：2005-08-23 00:29:21</b><br><br>
+都能ping通了，但是在虚拟机下ping&nbsp;dns&nbsp;不通&nbsp;请教是为什么？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=126406" target="_blank">mi_mi_mi</a> 回复于：2005-08-24 13:27:20</b><br><br>
+我用vmware&nbsp;gsx&nbsp;3.2&nbsp;建了一个以XP为host，以linux为虚拟机的环境，并在虚拟机上安装了
+informix&nbsp;se&nbsp;及&nbsp;sybase&nbsp;11.9.2.&nbsp;&nbsp;双方都能ping通，并且
+在linux中不但可以访问本机（指虚拟机）的数据库，还能访问同一网上其它主机上的数据库。但反过来就不行，不单是其它主机或工作站上无法访问虚拟机上
+的数据库（informix,&nbsp;sybase），就连在host上都不行。请问这是为什么？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=306189" target="_blank">yanchangbo</a> 回复于：2005-08-24 20:20:50</b><br><br>
+为什么windows2000终端机为什么不能访问主机&nbsp;:?:<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=306232" target="_blank">lubsn</a> 回复于：2005-08-25 00:05:03</b><br><br>
+我的是Windows&nbsp;XP&nbsp;sp2+Vmware+Red&nbsp;Hat&nbsp;Linux&nbsp;9.0&nbsp;
+<br>用vmnet1是hostonly的接口,&nbsp;
+<br>Linux&nbsp;中:&nbsp;ip:192.168.0.2&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netmask:&nbsp;255.255.255.0&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gateway:&nbsp;192.168.0.1&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS:202.202.0.33&nbsp;
+<br>vmnet1中ip:192.168.0.1&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netmask:&nbsp;255.255.255.0&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gateway:&nbsp;不填&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS:202.202.0.33&nbsp;
+<br>win中也打开Internet连接共享.&nbsp;
+<br>问题是上不了外网!!!但在linux中可以Ping&nbsp;内网和外网,win中也可以&nbsp;Ping&nbsp;Linux中的IP.&nbsp;
+<br>用Mozilla打开外网网页时出现&nbsp;"&nbsp;此文档中无数据",&nbsp;&nbsp;这是为什么呢????&nbsp;
+<br>&gt;<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=307226" target="_blank">a123a</a> 回复于：2005-08-27 23:10:40</b><br><br>
+用NAT最快设置:先在WIN下用IPCONFIG&nbsp;看下VM8的IP(此时应该是设为自动得到IP),记下后在到LINUX下设IP为VM8的同一网段下的IP,网关为同一网段下的任一IP
+<br>例:我自己的IP设置:
+<br>WIN下的VM8查自动分配的为:192.168.254.1&nbsp;&nbsp;&nbsp;255.255.255.0
+<br>LINUX下我手动分配为:IP&nbsp;192.168.254.3&nbsp;&nbsp;&nbsp;255.255.255.0
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+网关:192.168.254.2
+<br>以上做好就可以共享上网了<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=67555" target="_blank">breadso</a> 回复于：2005-08-30 11:12:06</b><br><br>
+引用：<i><u>原帖由&nbsp;"lindaye"&nbsp;发表：</u><br>通过host，guest能够上网了，也能够相互ping&nbsp;通，在guest里面，自己也可以telnet自己，但我想在host里telnet&nbsp;guest就不行，已折腾了好几天了，苦啊！望那位高人可以教教小弟！（放火墙也都关了）
+<br>
+<br>谢谢</i><br>
+<br>
+<br>我和你遇到一样的问题，host无法telnet&nbsp;guest，那位英雄出来救救我们！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=310626" target="_blank">wuhu297</a> 回复于：2005-09-06 17:57:49</b><br><br>
+引用：<i><u>原帖由&nbsp;"wingger"&nbsp;发表：</u><br>
+<br>可以用啦！！！</i><br>
+<br>谢谢，让我第一次成功安装LINUX&nbsp;下的软件。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=231329" target="_blank">mo_sky</a> 回复于：2005-09-07 09:28:03</b><br><br>
+我就納悶了，怎麼這麼多人"喜歡”用Vmware？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=312444" target="_blank">dir007</a> 回复于：2005-09-11 21:16:32</b><br><br>
+我的主机是2000PRO
+<br>虚拟机&nbsp;装的也是2000PRO&nbsp;
+<br>主要是测试软件的。。。
+<br>
+<br>我用NAT的方式，安装VM后生成两个网卡，V&nbsp;M1&nbsp;和
+V&nbsp;M&nbsp;8&nbsp;，V&nbsp;M8&nbsp;相当也内网网卡。可以ping&nbsp;&nbsp;通外网IP，，但是
+就是不能解析，如：www.163.com
+<br>在IE地址栏里打上他的IP却可以访问。
+<br>是不是因为真机《主机》没有安装DNS服务啊
+<br>
+<br>我的上网方式是ADSL不带路由，网通的饿，
+<br>-----听说网通为了发展用户，不允许一个电脑以上使用同一个ADSL上网。。
+<br>
+<br>谁指点一下看看是什么原因啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=289978" target="_blank">lanborokk</a> 回复于：2005-09-15 16:40:26</b><br><br>
+试过以后，非常顺利，感谢的说。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=280351" target="_blank">hongshancha</a> 回复于：2005-09-15 18:54:37</b><br><br>
+我设置好了以后,可以ping通了,但是在win中访问linux是要用户名和密码,我输入普通用户名和root&nbsp;都说密码错误是怎么回事,我用的是win2000<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=314998" target="_blank">zm3d_007</a> 回复于：2005-09-19 09:40:13</b><br><br>
+谢谢！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=113581" target="_blank">saiwa</a> 回复于：2005-09-29 11:51:18</b><br><br>
+因为在做网络测试，所以需要双向都能ping通。<br><table class="attachtable" align="center" border="3" cellpadding="1" cellspacing="4"><tbody><tr><td colspan="2" align="center"><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/vmip.jpg" border="0"><br><br></td></tr><tr><td><table align="center" border="0" cellpadding="0" cellspacing="4" width="100%"><tbody><tr><td class="attachrow"><span class="genmed">设置图</span></td></tr></tbody></table></td></tr></tbody></table><br><br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=326237" target="_blank">li1630</a> 回复于：2005-10-21 00:12:05</b><br><br>
+什麼看不到圖片啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=326237" target="_blank">li1630</a> 回复于：2005-10-21 00:14:51</b><br><br>
+我也有類出的情況但現在還沒有得到解決看了你的貼後感覺很好！但只不過有點難過的是，沒有圖片讓我對著去動手！！！！
+<br>看能否再加一些圖片後再髮上去呢？忍兄！
+<br>我是的2003系統！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;現在正急著呢！！請幫忙！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=326237" target="_blank">li1630</a> 回复于：2005-10-21 00:15:40</b><br><br>
+我也有類出的情況但現在還沒有得到解決看了你的貼後感覺很好！但只不過有點難過的是，沒有圖片讓我對著去動手！！！！
+<br>看能否再加一些圖片後再髮上去呢？忍兄！
+<br>我是的2003系統！
+<br>&nbsp;&nbsp;&nbsp;&nbsp;現在正急著呢！！請幫忙！！！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=291690" target="_blank">xy-coordinate</a> 回复于：2005-12-12 09:24:26</b><br><br>
+写得不错！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=220498" target="_blank">qiner</a> 回复于：2005-12-15 11:25:36</b><br><br>
+按搂主人的方法测试怎么都没成功,不知道什么原因!
+<br>
+<br>我的是winxp(ADSL动态IP的,不知道是不是也按搂主的方法来设置呢?)+redhat<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=89845" target="_blank">ishacker</a> 回复于：2006-02-01 21:11:29</b><br><br>
+好文章啊,&nbsp;顶一下...<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=367412" target="_blank">zkeen</a> 回复于：2006-02-09 23:47:47</b><br><br>
+按照楼主的吩咐，我调通了！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=372851" target="_blank">wbc37</a> 回复于：2006-02-16 17:58:50</b><br><br>
+请教楼主一个问题,虚拟机上装的oracle数据库,我在主机上为什么访问不了呢
+<br>另外,我在虚拟机上启动的http服务也访问不了,怎样解决,严重感谢
+<br>(我用的是host-only方式,主机和虚拟机可以互相ping&nbsp;通)<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=373133" target="_blank">okokwzb</a> 回复于：2006-02-18 21:52:12</b><br><br>
+保存设置。如果你还没有设置好主机名称：
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;/etc/sysconfig
+<br>&nbsp;&nbsp;&nbsp;vi&nbsp;network
+<br>&nbsp;&nbsp;&nbsp;编辑HOSTNAME
+<br>&nbsp;&nbsp;&nbsp;cd&nbsp;/etc
+<br>&nbsp;&nbsp;&nbsp;vi&nbsp;hosts
+<br>&nbsp;&nbsp;&nbsp;加入：
+<br>&nbsp;&nbsp;&nbsp;192.168.0.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yourhostname
+<br>&nbsp;&nbsp;&nbsp;重新启动服务
+<br>&nbsp;&nbsp;&nbsp;su
+<br>&nbsp;&nbsp;&nbsp;/sbin/service&nbsp;network&nbsp;restart
+<br>这一步应怎么操作,怎么我每次进去的都是只读文件,根本就作不了的,
+<br>(host能ping到192.168.0.2&nbsp;&nbsp;guest&nbsp;也能ping&nbsp;到192.168.0.1)但就是上不到网,还有就是每项次开机都有这样的提示:把billgates加到/ect/hosts中也许能解决该问题
+<br>大佬帮一下吧,谢谢<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=385852" target="_blank">Andyleilei</a> 回复于：2006-03-18 15:55:35</b><br><br>
+我用得NET&nbsp;就能上网了&nbsp;嘿嘿&nbsp;第一次<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=385744" target="_blank">yucat</a> 回复于：2006-03-19 01:06:46</b><br><br>
+你把linux里的firewall关掉就可以在windows下telnet你的linux了，我已经telnet上了
+<br>但是我的linux虚拟机怎么都上不去internet，不知道是哪里设置有问题<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=389564" target="_blank">v0id</a> 回复于：2006-03-22 17:10:57</b><br><br>
+照着做啦,&nbsp;&nbsp;还是不行&nbsp;&nbsp;ping&nbsp;的通&nbsp;192.168.0.2&nbsp;&nbsp;&nbsp;ping&nbsp;不通&nbsp;192.168.0.1<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=389564" target="_blank">v0id</a> 回复于：2006-03-22 19:45:12</b><br><br>
+主机是win　xp　pro　sp2　的，装的vmware４.５.２
+<br>
+<br>linux　的　iso　文件是从　verycd　下来的，总共３张碟和一张文挡．
+<br>但是好象里面有一些东西不全，比如没有ipconfig文件．．．（因为我第一次接触linux，具体不是太清楚）我选择host-nly，本地连接共享且设置为vnet1
+<br>vmware－tools　也装了，提示＂enjoy　＂．然后配置网络：
+<br>ip：１９２.１６８.０.２
+<br>子网掩码：２５５.２５５.２５５.０
+<br>默认网关：１９２.１６８.０.１
+<br>ＤＮＳ：真实的网关，和用１９２.１６８.０.１，我２个都试过了，都不行
+<br>然后ping　１９２.１６８.０.２　可以，
+<br>ping　１９２.１６８.０.１　就没动静了．<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=215228" target="_blank">wikingki</a> 回复于：2006-03-26 18:39:04</b><br><br>
+好帖，LZ和各楼的朋友们辛苦了。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=180826" target="_blank">xnkjdx1998</a> 回复于：2006-04-07 10:19:45</b><br><br>
+我在xp&nbsp;sp2上安装redhat&nbsp;es&nbsp;版本，现在做的设置如下
+<br>winxp操作
+<br>1、网络连接类型为hostonly
+<br>2、关闭xp防火墙
+<br>3、设置xp网络共享
+<br>4、vmnet1&nbsp;IP：192.168.0.1/255.255.255.0
+<br>linux操作
+<br>修改IP地址为：192.168.0.2/255.255.255.0
+<br>gate：192.168.0.1
+<br>
+<br>从linux与xp可以相互ping通
+<br>彼此的ftp及telnet都不通，请问是怎么回事？
+<br>也上不了外网
+<br>谢谢<br><br>[<u>&nbsp;本帖最后由&nbsp;xnkjdx1998&nbsp;于&nbsp;2006-4-7&nbsp;11:38&nbsp;编辑&nbsp;</u>]<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=196962" target="_blank">lanqs</a> 回复于：2006-04-08 12:04:36</b><br><br>
+谢谢。受益匪浅<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=420022" target="_blank">eagle110</a> 回复于：2006-05-22 22:40:36</b><br><br>
+我想请问一下我的学校内网的IP是邦定的。IP：172.16.XX.XX&nbsp;子网掩码：255.255.255.0&nbsp;网关:172.16.41.225&nbsp;这样的风网要怎么设置啊？？？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=427419" target="_blank">yhw157</a> 回复于：2006-06-09 10:53:02</b><br><br>
+感谢yunqing，奏效<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=437830" target="_blank">bitisunny</a> 回复于：2006-07-04 15:34:43</b><br><br>
+我用hostonly不成功，
+<br>我在家是通过电力宽带上网，并且接路由器连上我们几台机子，路由器自动获取ip，xp里面共享时，总出错，说得把host&nbsp;ip改称192.168.0.1&nbsp;，因为这个ip已经被路由器用了，所以共享不了。也无法进行下面的操作。
+<br>
+<br>请问有什么解决办法？谢谢。
+<br>
+<br>还有，我尝试用NAT，一直不成功，能不能给个更详细的配置说明，谢谢。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=266234" target="_blank">solo_lxy</a> 回复于：2006-07-06 16:01:46</b><br><br>
+哎，我跟楼上的兄弟一样的情况.guest里的Debian和Redhat都上不了网。郁闷，真希望有人能把详细配置给写出来，我几乎实验了上面所有哥们说的方法了，就是没一个是成功的！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=437830" target="_blank">bitisunny</a> 回复于：2006-07-10 23:18:48</b><br><br>
+引用：<i>原帖由&nbsp;<u>solo_lxy</u>&nbsp;于&nbsp;2006-7-6&nbsp;16:01&nbsp;发表
+<br>哎，我跟楼上的兄弟一样的情况.guest里的Debian和Redhat都上不了网。郁闷，真希望有人能把详细配置给写出来，我几乎实验了上面所有哥们说的方法了，就是没一个是成功的！&nbsp;</i><br>
+<br>
+<br>hehe,兄弟，我的问题解决了，用的是hostonly。
+<br>方法是我改了D-link路由的ip地址，其默认地址是192.168.0.1,我把它改成192.168.1.1，这样一来就不会跟&nbsp;xp&nbsp;host&nbsp;机共享时的ip
+<br>
+<br>（192.168.0.1）冲突了。
+<br>接下来的设置方法跟楼主的说明一样。
+<br>
+<br>若是你接路由试不通，可以先去掉路由，直接接modem按搂主的办法试通了再加路由试一试。祝你成功！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=266234" target="_blank">solo_lxy</a> 回复于：2006-07-11 19:16:32</b><br><br>
+[font=黑体][color=LimeGreen][size=4]楼上的兄弟，首先恭喜你成功了。
+<br>前两天我使用nat的方式不断的摸索也成功了，解决的方法可以看[url=http://bbs.chinaunix.net
+/viewthread.php?tid=786629&amp;extra=&amp;page=1]这里。事后想了想，主要是自己没把原理搞清楚导致
+的，教训啊。[/size][/color][/font]<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=238007" target="_blank">ycxm</a> 回复于：2006-07-13 09:47:55</b><br><br>
+引用：<i>原帖由&nbsp;<u>saiwa</u>&nbsp;于&nbsp;2005-9-29&nbsp;11:51&nbsp;发表
+<br>因为在做网络测试，所以需要双向都能ping通。&nbsp;</i><br>
+<br>
+<br>
+<br>很好啊,&nbsp;
+<br>不过在LINUX上网方面要乍做啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=238007" target="_blank">ycxm</a> 回复于：2006-07-14 08:42:39</b><br><br>
+引用：<i>原帖由&nbsp;<u>想发芽的石头</u>&nbsp;于&nbsp;2004-11-11&nbsp;11:22&nbsp;发表
+<br>请贴出
+<br>xp：
+<br>ipconfig&nbsp;/a
+<br>route&nbsp;print
+<br>linux:
+<br>ifconfig&nbsp;-a
+<br>netstat&nbsp;-rn
+<br>的结果
+<br>如果xp打过sp2，请关闭防火墙（暂时）&nbsp;</i><br>
+<br>
+<br>我很菜,&nbsp;&nbsp;1.请问一下XP的防火墙在哪关上?
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;LINUX的DNS如何设置,&nbsp;我在2000下没设它,
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+我们是个局域网内,&nbsp;该如何设置<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=238007" target="_blank">ycxm</a> 回复于：2006-07-14 14:44:42</b><br><br>
+我用NAT,&nbsp;FC3下,&nbsp;配成功了,&nbsp;上网很爽,
+<br>
+<br>就是太慢了,&nbsp;&nbsp;这个VM太好了啊<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=238007" target="_blank">ycxm</a> 回复于：2006-07-15 09:50:35</b><br><br>
+this&nbsp;is&nbsp;very&nbsp;good&nbsp;!!!&nbsp;
+<br>
+<br>My&nbsp;is&nbsp;Host(win2000)&nbsp;&nbsp;&nbsp;VM4.5(RH7.3)
+<br>
+<br>OK!&nbsp;Bye!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=444283" target="_blank">zazl168</a> 回复于：2006-07-20 23:05:52</b><br><br>
+好东东啊
+<br>yun哥讲的太详细了
+<br>对我太有帮助了
+<br>感激涕淋啊!<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=446746" target="_blank">yiercorn</a> 回复于：2006-07-27 17:41:13</b><br><br>
+帮忙解决一下:
+<br>我是用nat方式,按照上面的那些说法,设置基本上感觉没有什么问题了..不过有些网可以上,有些就连不上,改那个vmware的dns又可以上一些网,但是原来不改变的时候那个可以上的网变的不能上的..错误都是:连接超时.......<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=254129" target="_blank">gudai</a> 回复于：2006-09-13 11:05:16</b><br><br>
+楼主的文章只适合&nbsp;adsl拨号用户
+<br>
+<br>对于局域网用户不适用。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=254129" target="_blank">gudai</a> 回复于：2006-09-13 11:30:49</b><br><br>
+局域网用户
+<br>
+<br>windows&nbsp;host&nbsp;+&nbsp;linux&nbsp;guest
+<br>
+<br>桥接，改linux的ip，gateway，dns
+<br>
+<br>可以上了，阿门。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=460516" target="_blank">manniu</a> 回复于：2006-09-19 17:32:24</b><br><br>
+好贴<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=467359" target="_blank">DDRS</a> 回复于：2006-09-19 19:51:10</b><br><br>
+我的虚拟系统是XP的。。。按照你的方法设好之后。还是不能共享上网。。请求高解！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=409169" target="_blank">Ramer</a> 回复于：2006-09-22 10:44:37</b><br><br>
+现在我的host&nbsp;和guest已经组成局域网了，但是我的host的是用8080端口的代理上网的，没有设置DNS，现在guest无法上网，请问请问guest&nbsp;的DNS怎么设置？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=467882" target="_blank">xiaozi2400</a> 回复于：2006-09-22 14:34:01</b><br><br>
+我的系统是xp,用vmware装了个Redhat&nbsp;9.0,并让其共享主机的网络，可以上网。
+<br>&nbsp;&nbsp;但是老出现“运行代理服务器程序&nbsp;您有多个网络设备正在进行网络通信”，然后就得重新连接网络！（我们是校园网，用的华为的客户端），希望高手能给解答！&nbsp;在这里先谢谢大家了！<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=73351" target="_blank">i18n</a> 回复于：2006-12-17 17:40:52</b><br><br>
+全部看了一编，我的情况是这样
+<br>host:windowsxp+sp2(防火墙关掉）
+<br>guest:debian&nbsp;3.1r4
+<br>
+<br>在xp上adsl拨号上网。首先通过nat的方式安装debian,啥也没设，就可以上网了。
+<br>然后用楼主大哥说的host-only方式，怎么也上不去，linux可以ping&nbsp;vnet1的网关（192.168.0.1），不能上网
+<br>adsl拨号得到的公共ip也可以ping通。就是不让上网，想不明白
+<br>
+<br>我想hostonly的方式，其实也是用xp提供一个nat服务器，nat方式就是vmware自己的nat服务器，不知道这样理解对不对？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=106989" target="_blank">lgwfw</a> 回复于：2007-01-09 13:37:49</b><br><br>
+呵呵，多谢楼主，我按楼主说的做了，能ping通，但是，浏览不了网页，请问怎么设置，？
+<br>对了，mozilla总显示超时，！<br><br>[<u>&nbsp;本帖最后由&nbsp;lgwfw&nbsp;于&nbsp;2007-1-9&nbsp;14:06&nbsp;编辑&nbsp;</u>]<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=291088" target="_blank">whuang9527</a> 回复于：2007-04-07 20:51:31</b><br><br>
+按照上面的方法，配置后确实能够上网，也可以ping通局域网，但是局域网里面的机器ping不了linux地址。
+<br>还有什么其他的办法吗？我的服务器是win2003,linux是2.6内核。防火墙都关掉了。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=532207" target="_blank">kebon22</a> 回复于：2007-04-08 10:55:07</b><br><br>
+我的共享连接不能共享？
+<br>怎么办呢？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=569625" target="_blank">StuartPage</a> 回复于：2007-05-31 16:43:37</b><br><br>
+我按照“vmware&nbsp;网络配置实例二&nbsp;windows&nbsp;xp&nbsp;host&nbsp;+&nbsp;linux&nbsp;
+<br>
+<br>guest”这个帖子配置了vmware上的Linux之后，Linux可以ping通自己（192.168.0.2），也能够ping通网关(192.168.0.1)了。但是，还是不能
+<br>
+<br>ping通母机（192.168.0.3）。我已经把XP上的防火墙都给关了。可是还是不行。
+<br>还有就是我还在配置过程中，修改了Virtual&nbsp;NetWork&nbsp;Editor对话框中Host&nbsp;Virtual&nbsp;Network&nbsp;Mapping选项卡下VMnet1的下拉条右侧箭头打开
+<br>
+<br>的subnet小对话框中的ip&nbsp;address的值为192.168.0.0，而ip&nbsp;mask我没有改。ip&nbsp;address以前的值是192.168.141.0。这个操作在您的贴子里并
+<br>
+<br>没有。我不知道这么改对不对。但是，现在我的虚拟Linux与母机XP不能相互的ping通。可是，他们都可以ping通VMnet1这个网关。您能不能帮
+<br>
+<br>我诊断一下，这是什么原因呀？&nbsp;
+<br>&nbsp;还有就是如果不把subnet中的ip&nbsp;address改成192.168.0.0的话，&nbsp;linux在ping网关VMnet1的时，一直是显示unreachable错误。&nbsp;
+<br>跪请大虾们帮忙给点建议。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=569625" target="_blank">StuartPage</a> 回复于：2007-05-31 16:45:56</b><br><br>
+我按照“vmware&nbsp;网络配置实例
+二&nbsp;windows&nbsp;xp&nbsp;host&nbsp;+&nbsp;linux&nbsp;guest”这个帖子配置了
+vmware上的Linux之后，Linux可以ping通自己（192.168.0.2），也能够ping通网关(192.168.0.1)了。但是，
+还是不能ping通母机（192.168.0.3）。我已经把XP上的防火墙都给关了。可是还是不行。
+<br>还有就是我还在配置过程中，修改了Virtual&nbsp;NetWork&nbsp;Editor对话框中
+Host&nbsp;Virtual&nbsp;Network&nbsp;Mapping选项卡下VMnet1的下拉条右侧箭头打开的subnet小对
+话框中的ip&nbsp;address的值为192.168.0.0，而ip&nbsp;mask我没有改。ip&nbsp;address以前的值是
+192.168.141.0。这个操作在您的贴子里并没有。我不知道这么改对不对。但是，现在我的虚拟Linux与母机XP不能相互的ping通。可是，
+他们都可以ping通VMnet1这个网关。这是什么原因呀？&nbsp;
+<br>&nbsp;还有就是如果不把subnet中的ip&nbsp;address改成192.168.0.0的话，&nbsp;linux在ping网关VMnet1的时，一直是显示unreachable错误。&nbsp;
+<br>
+<br>跪请大虾们帮忙给点建议。<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=590155" target="_blank">chenhuibest</a> 回复于：2007-08-08 16:22:14</b><br><br>
+感谢楼主，我已经按您的方法实验成功能上网了。但我们教研室就一个帐号，平时我们在windows是通过E-border代理上网，而现在在linux如何上网设置代理啊？<br><br>
+<hr><b>&nbsp;<a href="http://linux.chinaunix.net/bbs/viewpro.php?uid=569486" target="_blank">ShadowMagic</a> 回复于：2007-08-09 15:36:02</b><br><br>
+不错哦。。。。。。。。呵呵。。。。。。。。。。。<br><br>
+
+<br>
+<br>
+</td></tr>
+<tr><td bgcolor="#747474" height="1"><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/c_002.gif" width="1" height="1"></td></tr>
+<tr><td><br>
+原文链接：<a href="http://linux.chinaunix.net/bbs/viewthread.php?tid=374483">http://linux.chinaunix.net/bbs/viewthread.php?tid=374483</a><br>
+转载请注明作者名及原文出处<br><br><br>
+                          
+  </td></tr></tbody></table>
+<!-- 正文end -->
+	
+		</font></td></tr>
+	</tbody></table>
+</td></tr>
+</tbody></table>
+
+<hr size="2" width="760">
+<script src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/tail.js"></script><center><style type="text/css">.copyright		{ font-size: 12px; font-family: 'song',Verdana; color: #444444; letter-spacing: -1px;}a.copyright		{ color: #444444; text-decoration: none;}a.copyright:hover { color: #; text-decoration: underline;}</style><br><br><span class="copyright">Copyright &#169; 2001-2006 ChinaUnix.net &nbsp;&nbsp;All Rights Reserved<br><br><img src="vmware%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE_files/mail_admin.gif" border="0" width="178" height="14"><p>感谢所有关心和支持过ChinaUnix的朋友们</p><p>京ICP证041476号</p></span></center>
+</center>
+</body></html>

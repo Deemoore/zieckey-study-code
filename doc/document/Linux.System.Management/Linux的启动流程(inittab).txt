@@ -1,0 +1,182 @@
+Linux的启动流程(/etc/inittab)
+
+1. 从BIOS到KERNEL
+
+BIOS自检－>MBR(GRUB)－>KERNEL－>KERNEL自解压－>内核初始化－>内核启动
+
+BIOS自检
+当电脑开机的时候，电脑会进入BIOS，BIOS的工作主要是侦测电脑的周边配套设备是否工作正常，如CPU的类型、速度、缓存等
+主板类型
+内存的速度，容量
+硬盘的大小，类型和工作模式
+风扇速度等
+主要是为了检查这些设备在开机的时候是否能通过检测，如果能通过检测，说明电脑可以正常的工作。
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+一、载入启动程序
+
+BIOS自检完成后，BIOS会根据用户设置的启动顺序来由那个设备来启动电脑的操作系统，这个设备一般是硬盘。
+
+也就是进入到硬盘的MBR区域（引导扇区），这个区域中的有512个字节的大小，其中前446个字节中保存的程序是选择启动分区，也就是电脑由那个硬盘分区来载入开机的程序。那么在这个446个字节的空间中保存的就是启动程序，然后由这个小程序来加载存储在其他位置的操作系统，也就是启动grub程序。
+
+当找到启动设备（硬盘）时，第一阶段所用的boot loader（存放在引导扇区）被装载到RAM中并被执行。这里的boot loader在大小上小于一个扇区的大小，也就是512字节，而它的任务，就是加载第二阶段的boot loader。
+当负责第二阶段的boot loader位于内存中并被执行时，通常会显示一个一闪而过的屏幕，然后linux以及可选的初始化内存盘（一种临时的根文件系统，如果想得到具体的介绍，请访问http://likunarmstrong.bokee.com/5502266.html)会被装载到存储器中。当系统镜像被加载时，第二阶段的boot loader将把控制权转交给内核镜像，与此同时，内核开始自解压并初始化。在这个阶段，第二阶段的boot loader会检查系统的硬件，枚举那些附加的硬件设备，挂载根设备，之后加载需要的内核模块。完成之后，第一个用户空间程序（init）开始执行，更高层次的系统初始化开始。
+这就是从表面上看，linux的启动过程。好了，现在，让我们更进一步，更深入地探索linux启动过程中的一些细节。
+
+二、 系统的启动
+系统启动的阶段，依赖于linux在哪个硬件设备上启动。在嵌入式系统中，当系统被打开或者重新启动的时候，就要使用启动加载的环境。这方面的例子包括U -BOOT，RedBoot，和Lucent推出的MicroMonitor。嵌入式平台通常是绑定了启动监视器的。这些程序位于目标硬件上flash存储器的特定位置，提供了将linux内核镜像下载到flash存储器的方法，并在接下来的过程中执行它。除了拥有存储和启动linux镜像的功能外，这些启动监视器还能进行一定程度上的系统检测和硬件初始化。在一个嵌入式的目标板中，这些启动监视器通常覆盖了第一阶段与第二阶段boot loader的功能。
+
+/************************************************************************************************/
+小知识：如何查看你的MBR内容。如果你希望查看你MBR的具体内容，请用以下命令：
+# dd if=/dev/hda of=mbr.bin bs=512 count=1
+# od -xa mbr.bin
+需要以root身份运行的dd命令，读取你的第一个集成电子驱动器或者IDE驱动器的前512字节，并将他们写入
+mbr.bim文件。od命令则是以十六进制和ASCII码形式打印出这个二进制文件
+/************************************************************************************************/
+
+在个人电脑中，linux的启动是从0xFFFF0地址开始的。BIOS的第一步动作就是进行上电自检（POST）。POST的工作是检查硬件设备。BIOS的第二步动作就是枚举本地设备并初始化。
+由于BIOS功能使用上的不同，它由两个部分组成：POST码runtime服务。POST完成后，它将从存储器中被清除，但是BIOS runtime服务会被保留，用于目标操作系统。
+为了启动操作系统，BIOS的runtime服务将搜索那些激活状态的或是可引导启动的设备，搜索的顺序则由CMOS设置决定（也就是我们平时所谓的在 BIOS中设置的启动顺序）。一个软驱，一台光驱，一个硬盘上的分区，网络上的设备甚至一个usb 闪存盘都可以作为一个启动设备。
+当然，linux通常是从硬盘启动的。硬盘上的MBR（主启动记录）包含有基本的boot loader，它是一个512字节大小的扇区，位于磁盘的第一个扇区（0磁头0磁道1扇区）。当MBR被装载到RAM中后，BIOS就会将控制权转交给MBR。
+
+三、 第一阶段boot loader
+位于MBR中的主boot loader是一个512字节的镜像，其中不仅包含了程序代码，还包含了一个小的分区表，如图2所示。最初的446字节是主boot loader，它里面就包含有可执行代码以及错误消息文本。接下来的64字节是分区表，其中包含有四个分区的各自的记录（一个分区占16字节）。MBR通过特殊数字0xAA55（译者注：在电子界中AA55确实是具有传奇色彩的数字，想知道为什么么？将它展开成二进制形式，看看有什么规律）作为两个字节的结束标志。0x55AA同时也是MBR有效的校验确认。
+
+主boot loader的工作是寻找并加载第二boot loader。它通过分析分区表，找出激活分区来完成这个任务，当它找到一个激活分区时，它将继续扫描剩下的分区表中的分区，以便确认他们都是未激活的。确认完毕后，激活分区的启动记录从设备中被读到RAM，并被执行。
+
+四、 第二阶段boot loader
+起着次作用，或者说是第二boot loader，可以更加形象得被称为内核加载程序。这个阶段的任务就是加载linux内核，以及可选的初始化内存盘。
+
+/*******************************************************************/
+小知识：GRUB阶段的boot loaders
+在/boot/grub目录中包含有stage1,stage2和stage1.5的boot loaders，同时还有不少可选的loaders（例如，CD-ROM使用的就是iso9660_stage_1_5）
+/*******************************************************************/
+
+把第一阶段和第二阶段的boot loaders联合起来，就是在x86个人电脑中，我们所说的linux loader（LILO）或者GRand Unified Bootloader(GRUB)。由于GRUB修正了一些LILO中存在的缺陷，因此下面就让我们来看看GRUB（如果你希望得到更多的关于GRUB， LILO和与之相关话题的讨论资源，请见文后的参考资料）
+对于GRUB来说，一个比较好的方面就是它包含了linux文件系统的知识。与LILO使用裸扇区不同的是，GRUB能够从ext2或者ext3文件系统中加载linux内核。它是通过将本来两阶段的boot loader转换成三个阶段的boot loader。在第一阶段（MBR）中会启动stage1.5的boot loader来理解linux内核镜像中的特殊的文件系统格式，例如，reiserfs_stage1-5(用于从reiserf日志文件系统中进行加载)或e2fs+stage1_5(用于从wxt2或ext3文件系统进行加载）。当stage1.5的boot loader被加载并运行时，stage2 的boot loader才能被加载。
+当stage2被加载时，GRUB能根据请求的情况显示一个可选内核的清单（在 /etc/grub.conf 中进行定义，同时还有几个软符号链接 /etc/grub/menu.lst 和 /etc/grub.conf)。你可以选择一个内核，修改其附加的内核参数。同时，你可以选择使用命令行的shell来对启动过程进行更深层次的手工控制。
+在第二阶段boot loader存在与内存中后，就可以对文件系统进行查询了，同时，默认的内核镜像以及初始化内存盘镜像也被加载到内存中。一切准备完毕之后，第二阶段的boot loader就会调用内核镜像。
+
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+2. 内核启动：创建1＃进程并执行，由它创建若干内核线程（kernel thread），然后装入并执行程序/sbin/init（变成一个用户进程）。此后，init根据/etc/inittab配置文件来执行相应的脚本进行系统初始化，如设置键盘、字体，装载模块，设置网络等。
+
+对于Redhat来说，执行的顺序为：
+
+/etc/rc.d/rc.sysinit # 由init执行的第一脚本
+
+/etc/rc.d/rc $RUNLEVEL # init执行指定运行级别（$RUNLEVEL为缺省的运行模式）的各脚本；
+
+/etc/rc.d/rc.local #运行模式2、3、5时会运行的脚本
+
+/sbin/mingetty（或getty） # 等待用户登录
+
+/etc/inittab中指定了系统的运行级别（RUNLEVEL），init根据运行级别启动相关的服务（一些后台进程），实现不同的功能。
+
+RUNLEVEL值为:0－6
+
+0：halt， 1：单用户，2：多用户，3：多用户并启动NFS服务
+
+4：保留，5：运行xdm（X window）以图形界面方式登录
+
+6：reboot
+
+3./etc/inittab文件
+
+/etc/inittab的文件内容如下：
+
+# 设定系统开机预设的RUNLEVEL：
+
+id:3:initdefault:
+
+# 开始进行RUNLEVEL的服务启动前，使用来侦测与初始化系统环境的设定文件：
+
+si::sysinit:/etc/rc.d/rc.sysinit
+
+# 7 个不同 run level 的，需要启动的服务的 scripts 放置路径：
+
+l0:0:wait:/etc/rc.d/rc 0
+
+l1:1:wait:/etc/rc.d/rc 1
+
+l2:2:wait:/etc/rc.d/rc 2
+
+l3:3:wait:/etc/rc.d/rc 3
+
+l4:4:wait:/etc/rc.d/rc 4
+
+l5:5:wait:/etc/rc.d/rc 5
+
+l6:6:wait:/etc/rc.d/rc 6
+
+# 是否允许按下 [ctrl]+[alt]+[del] 就重新开机的设定项目：
+
+ca::ctrlaltdel:/sbin/shutdown -t3 -r now
+
+# 本机端终端机启动的个数：
+
+1:2345:respawn:/sbin/mingetty tty1
+
+2:2345:respawn:/sbin/mingetty tty2
+
+3:2345:respawn:/sbin/mingetty tty3
+
+4:2345:respawn:/sbin/mingetty tty4
+
+5:2345:respawn:/sbin/mingetty tty5
+
+6:2345:respawn:/sbin/mingetty tty6
+
+# 在 X Window (RUNLEVEL 5) 环境下的启动 script 设定项目：
+
+x:5:once:/etc/X11/prefdm -nodaemon
+
+这个文件的语法是这样的：
+
+标识符：级别：init 的动作行为:指令项目
+
+1. 标识符：
+
+最多四个字符，代表 init 的主要工作项目，只是一个简单的代表说明。
+
+2. 级别：
+
+该项目在哪些 run level 底下进行的意思。如果是 35 则代表 runlevel 3 与 5 都会执行。
+
+3. init 的动作行为：
+
+主要可以进行的动作项目意义有：
+
+initdefault ：代表预设的 run level 设定值；
+
+sysinit ：代表系统初始化的动作项目；
+
+ctrlaltdel ：代表 [ctrl]+[alt]+[del] 三个按键是否可以重新开机的设定；
+
+wait ：代表后面接的指令项目必须要执行完毕才能继续后面的动作；
+
+respawn ：代表后面接的， init 仍会主动的『重新』启动。
+
+更多的设定项目请参考 man inittab 的说明。
+
+4. 指令项目：
+
+亦即应该可以进行的指令，通常是一些 script 啰。
+
+说明：如根据上面的文件，init程序执行时根据/etc/inittab文件的内容，完成以下功能
+
+(1)获取RUNLEVEL（文件中的这一行 id:3:initdefault:）为3
+
+(2)执行rc.sysinit（文件中的这一行 si::sysinit:/etc/rc.d/rc.sysinit）
+
+(3)执行/etc/rc.d/rc3.d目录中的脚本（文件中的这一行 l3:3:wait:/etc/rc.d/rc 3，且因为本例RUNLEVEL为3）
+
+(4)然后设定是否允许按下 [ctrl]+[alt]+[del] 就重新开机（文件中的这一行 ca::ctrlaltdel:/sbin/shutdown -t3 -r now，当然如果不允许，可把此行注释掉）
+
+(5)启动六个终端界面tty1-tty6
+
+(6)最后如果我们使用的是 run level 5 ，那么除了这六个终端机之外， init 还会执行/etc/X11/prefdm -nodaemon 其主要的功能就是在启动 X Window ！
+
+
+

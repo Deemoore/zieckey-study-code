@@ -1,0 +1,767 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+
+
+
+
+
+
+<meta name="description" content="Openismus: Using Automake and Autoconf with C++">
+<meta name="keywords" content="Using Automake and Autoconf with C++ Explanation Description make configure autoheader autoscan egcs">
+<link rel="stylesheet" href="automake_files/style.css" type="text/css">
+
+<title>Using Automake and Autoconf with C++</title>
+
+</head><body>
+
+<!-- SSI fragments/menu.html_fragment begin -->
+<div id="menu">
+ <div class="menu_title"><a href="http://www.openismus.com/" title="Openismus"><img src="automake_files/openismus_web_logo.png" alt="Openismus"></a></div>
+ <div class="menu_item_group_box">
+  <div class="menu_item_box"><a href="http://www.openismus.com/projects/" title="Services that Openismus offers, and projects that we maintain">Services / Projects</a></div>
+  <div class="menu_item_box"><a href="http://www.openismus.com/documents/" title="Documents and press releases">Documents</a></div>
+  <div class="menu_item_box"><a href="http://www.openismus.com/about.shtml" title="About Openismus and how to find us">About</a></div>
+ </div>
+</div>
+
+<!-- SSI fragments/menu.html_fragment end -->
+
+<div class="contentsbox">
+
+
+
+<h2>Using Automake and Autoconf with C++</h2>
+
+
+
+<h3>Contents</h3>
+
+
+
+<ul>
+
+  <li><a href="#Introduction">Introduction</a></li>
+
+  <li><a href="#makeandconfigure">make and configure</a></li> 
+
+  <li><a href="#automakeandautoconf">automake and autoconf</a></li>  
+
+  <li><a href="#SubDirectories">Sub Directories</a></li>  
+
+  <li><a href="#ExampleFiles">Example Files</a></li>  
+
+  <li><a href="#RecommendedReading">Recommended Reading</a></li>
+
+  <li><a href="#Translations">Translations</a></li>  
+
+</ul> 
+
+ 
+
+<h3><a name="Introduction"></a>Introduction</h3> 
+
+
+ 
+
+<blockquote> 
+
+ 
+
+<p>The <b>automake</b> and <b>autoconf</b> tools can be used to manage C++  
+
+projects under Unix. They should save a lot of time compared to <b>make</b> and <b>configure</b>, 
+
+while ensuring that your project is structured according to GNU standards.</p>
+
+
+
+<p>However, it is difficult for   
+
+beginners to get started.    
+
+Hopefully, this tutorial will provide enough information for C++ programmers who    
+
+are new to Unix to create their first C++ projects, while gaining a superficial    
+
+understanding of what the tools are doing.</p>   
+
+  
+
+<p>I am not an expert on automake and autoconf, so I   
+
+welcome constructive advice on this tutorial. If you find problems with the examples, please try to provide patches.</p>  
+
+ 
+</blockquote> 
+
+ 
+
+<h3><a name="makeandconfigure"></a>make and configure</h3>                
+
+              
+
+<blockquote>              
+
+  <p>The <b>make</b> tool can be used to manage multi-file projects. <b>make</b>              
+
+  uses the <b>Makefile</b> file in your project folder, which lists the various               
+
+  compiling and linking steps, targets, and dependencies. make is well explained             
+
+  in <a href="http://www.elitecoders.de/mags/cscene/CS2/CS2-10.html">C-Scene:                  
+
+  Multi-File Projects and the GNU Make Utility</a>.</p>             
+
+             
+
+  <p>A <b>configure</b> script can be used to aid cross-platform compiling. A              
+
+  suitable <b>configure</b> script should interpret a <b>Makefile.in</b> file              
+
+  and then create a platform-specific <b>Makefile</b> file. It will do this              
+
+  after performing several tests to determine the characteristics of the              
+
+  platform.</p>             
+
+             
+
+  <p>This allows a user to type './configure' and then 'make' to compile a              
+
+  project on his platform.</p>             
+
+             
+
+</blockquote>             
+
+<h3><a name="automakeandautoconf"></a>automake and autoconf</h3>                
+
+              
+
+<blockquote>              
+
+  <p>Obviously most well-written Makefiles and configure scripts will look very                
+
+  similar. In fact, GNU provide guidelines about what should be in these files.                
+
+  Therefore, GNU created <b>automake</b> and <b>autoconf</b> to simplify the                
+
+  process and ensure that the Makefile and configure script conform to GNU                
+
+  standards.</p>               
+
+               
+
+  <p>Here is a brief explanation of how these tools are used. You can see           
+
+  examples of the files used by these tools in the <a href="#ExampleFiles">Examples           
+
+  Files</a> section.&nbsp;</p>              
+
+              
+
+  <p>Note: These tools use the <b>m4 </b>programming language. <b>aclocal</b> adds <b>aclocal.m4</b>                 
+
+  to your project directory, which contains some <b>m4</b> macros which are                 
+
+  needed.</p>              
+
+              
+
+  <h4>autoconf</h4>             
+
+             
+
+  <blockquote>             
+
+             
+
+  <p><b>autoconf</b> looks for a file called <b>configure.ac</b> (or, previously, configure.in). It then                
+
+  creates the <b>configure</b>  script, based on the macros which it finds.</p>                          
+
+              
+
+  <p>Whenever you add a macro to <b>configure.ac</b>, you should run <b>aclocal</b>           
+
+  as well as <b>autoconf</b>, because <b>aclocal</b> scans <b>configure.ac</b>           
+
+  to find which macros it should provide.</p>              
+
+              
+
+  <h5>Lines which every configure.ac should have</h5>              
+
+              
+
+  <blockquote>          
+
+             
+
+  <p>Every configure.ac should have lines like the following:</p>              
+
+              
+
+    <pre>AC_INIT(hello.cc)
+
+AM_INIT_AUTOMAKE(hello,0.1)
+
+AC_PROG_CC
+
+AC_PROG_CXX
+
+AC_PROG_INSTALL
+
+AC_OUTPUT(Makefile)</pre>          
+
+    <p>The AC_INIT macro can take any source file as an argument. It just checks           
+
+    that the file is there, which should, in turn, mean that the source           
+
+    directory is there.</p>          
+
+    <p>The AM_INIT_AUTOMAKE line adds several standard checks. It takes the           
+
+    program name and version number as arguments.</p>          
+
+    <p>AC_PROG_CC indicates that the source code may be in C. If the source code           
+
+    is C++ then we also need AC_PROG_CXX.</p>          
+
+    <p>AC_PROG_INSTALL will generate an install target so that users may just           
+
+    type 'make install' to install the software.</p>          
+
+    <p>AC_OUTPUT indicates the name of the Makefile which will be generated.</p>          
+
+  </blockquote>          
+
+  <h5>Using a Config Header</h5>          
+
+  <blockquote>          
+
+    <p>The AM_CONFIG_HEADER(config.h) line indicates that you will be using a           
+
+    config.h file. <b>autoconf</b> will then need a <b>config.h.in</b>  file,           
+
+    which it processes to create the <b>config.h</b> file. This is #included by           
+
+    your source code and provides a way               
+
+  for people to customise the configuration for their platform, via #defines. <b>config.h.in</b>           
+
+    can be generated automatically with the <b>autoheader</b> tool.</p>              
+
+              
+
+  <p>However, you need a stamp-h file in your project to ensure that automake              
+
+  regenerates config.h from config.h.in. Type 'touch stamp-h' to add this file              
+
+  to your project.</p>             
+
+             
+
+  </blockquote>           
+
+             
+
+  </blockquote>             
+
+  <h4>automake</h4>             
+
+             
+
+  <blockquote>             
+
+             
+
+  <p><b>automake</b> looks for a file called <b>Makefile.am</b>. It then creates                 
+
+  a <b>Makefile.in</b>, based on the macros which it finds. This is later used by the <b>configure</b> script (see                 
+
+  above).</p>               
+
+               
+
+  <h5>GNU-style projects, or not</h5>               
+
+               
+
+  <blockquote>
+
+
+               
+
+  <p>Because <b> automake</b>
+tries to make a GNU-style project by default, it will add a COPYING
+file and complain if some other necessary informative text files are
+missing. You can add blank files with the following command:</p>               
+
+              
+
+  <pre>touch NEWS README AUTHORS ChangeLog</pre>              
+
+              
+
+  <p>If you do not want these GNU-style files, then you could add the following 
+  to your <b>Makefile.am</b> instead:</p>              
+
+              
+
+  <pre>AUTOMAKE_OPTIONS = foreign</pre>              
+
+              
+
+  <p>Thanks to Marc van Woerkom for this suggestion.</p>              
+
+              
+
+  </blockquote>
+
+              
+
+  <h5>Telling automake about your source files</h5>              
+
+              
+
+  <blockquote>          
+
+    <p>Use lines like the following to name your program and list its source           
+
+    files:</p>              
+
+              
+
+  <pre>bin_PROGRAMS = hello
+
+hello_SOURCES = hello.h hello.cc main.cc</pre>              
+
+              
+
+  <p>Note that the second variable is prefixed with the value of the first           
+
+  variable. This is a common practice with <b>autoconf</b> and <b>automake</b>.</p>              
+
+              
+
+  </blockquote>          
+
+             
+
+  </blockquote>            
+
+            
+
+  <h4>The Whole Process</h4>           
+
+           
+
+  <blockquote>         
+
+           
+
+  <p>Assuming that you have written appropriate Makefile.am and configure.ac             
+
+  files (there are examples below), you should be able to build your project by             
+
+  entering the following commands:</p>            
+
+            
+
+  <ul>            
+
+    <li><b>             
+
+
+             
+
+'autoheader'            
+
+            
+
+
+            
+
+      </b>            
+
+ - creates config.h.in             
+
+             
+
+             
+
+    </li>             
+
+    <li><b>'touch NEWS README AUTHORS ChangeLog'</b>             
+
+             
+
+    </li>             
+
+    <li><b>'touch stamp-h'</b>             
+
+             
+
+    </li>             
+
+    <li><b>aclocal - </b>adds aclocal.m4 to directory. Defines some m4 macros used by the              
+
+  auto tools.             
+
+             
+
+    </li>             
+
+    <li><b>                         
+
+'autoconf            
+
+            
+
+            
+
+      </b>            
+           
+ '- creates configure from configure.ac              
+
+              
+
+    </li>              
+
+    <li><b>'automake'</b>              
+
+ - Creates Makefile.in from Makefile.am              
+              
+    </li>              
+
+    <li>                            
+<b>'./configure'</b> - creates Makefile from Makefile.in              &gt;              
+
+              
+
+    </li>              
+
+    <li><b>              
+
+'make'                          
+
+      </b></li>             
+
+  </ul>             
+
+  <p>Just repeat the last 5 steps to completely rebuild the project. Most projects have an <b>autogen.sh</b> script that runs everything up to the configure step.</p>             
+
+           
+  </blockquote>         
+
+            
+
+</blockquote>             
+
+<h3><b><a name="SubDirectories"></a>Sub Directories</b></h3>                
+             
+
+              
+
+<blockquote>              
+
+  <p>Project files should, of course, be organised in sub              
+
+  folders. Ideally, all of the source files should be in a folder called 'src' in               
+
+  the project folder, with all of the other files (such as makefiles, configure               
+
+  scripts, and readmes) separate at the top. Projects which have several levels             
+
+  of folders are called 'Deep' projects. I have listed the necessary steps here,             
+
+  but you should look at the <a href="#ExampleFiles">Example Files</a> section             
+
+  to see them in context.</p>             
+
+  <p>When using sub-directories, you need to do the              
+
+  following:</p>             
+
+  <p><b>1.</b> Add a SUBDIRS entry to the top-level <b>Makefile.am</b>. For             
+
+  example:</p>             
+
+  <pre>SUBDIRS = doc intl po src tests</pre>            
+
+  <p>Note that the directory names are separated only by spaces.</p>             
+
+  <p><b>2.</b> Add a <b> Makefile.am</b> file to every sub directory. The              
+
+  sub-directories do not need configure.ac files. Be sure to add the Makefiles        
+
+  to the list in the AC_OUPUT macro in the top-level <b>configure.ac</b>.</p>            
+
+  <h4>For sub directories containing additional source code</h4>            
+
+  <blockquote>       
+
+  <p><b>3.</b> Add the AC_PROG_RANLIB macro to your <b>configure.ac</b>.            
+
+  This will allow you to build code in sub-directories into temporary libraries,            
+
+  which <b>make</b> will then link in with the rest of the code.</p>          
+
+  <p><b>4.</b> Add some macros to the<b> Makefile.am</b>           
+
+  of any source directory under src. These will build a non-installing library.           
+
+  You need to give the library a name beginning with 'lib', specify the sources,           
+
+  and specify the locations of any header files. For           
+
+  example:</p>          
+
+  <pre>noinst_LIBRARIES = libfoo.a
+
+libfoo_a_SOURCES = foo.h foo.cc
+
+INCLUDES = -I@top_srcdir@/src/includes</pre>          
+
+  <p>Notice that the SOURCES macro uses the library name with an underscore           
+
+  instead of a dot. Also, notice the use of the top_srcdir variable to refer to           
+
+  the top-level of the project.</p>          
+
+  <p><b>5.</b> Use a LDADD_ macro in the <b>Makefile.am</b> of a higher           
+
+  directory to link the temporary library with any code that uses it. For           
+
+  example,</p>          
+
+  <pre>LDADD = foofiles/libfoo.a</pre>          
+
+  </blockquote>      
+
+  <h4>For sub directories containing non-source files</h4>          
+
+  <blockquote>      
+
+    <p><b>3.</b> The Makefile.am in the sub-directory should contain a line like       
+
+    the following:</p>          
+
+    <p>EXTRA_DIST = somefile.txt someotherfile.html</p>          
+
+    <p>This tells automake that you want the files to be distributed, but that       
+
+    they do not need to be compiled.</p>          
+
+  </blockquote>      
+
+
+</blockquote>                  
+
+<h3><b><a name="ExampleFiles"></a>Example Files</b></h3>                
+
+<blockquote>             
+
+  <p>Here are some example <b>configure.ac</b> and <b>Makefile.am</b>               
+
+  files. They are sufficient to manage a C++ project which uses the Standard               
+
+  Library.</p>              
+
+  <p>See the <b>automake</b> and <b>autoconf</b>  <a href="http://www.gnu.org/manual/manual.html"> manuals</a> for           
+
+  information on the macros and variable names used in these files. I do not           
+
+  want to make this seem more complicated by explaining each line of these           
+
+  examples.</p>             
+
+  <p>These examples are for a 'Deep' project with the            
+
+  following structure:</p>            
+
+  <pre><b>helloworld_cc</b>
+
+    configure.ac
+
+    Makefile.am
+
+    <b>src
+
+        </b>Makefile.am
+
+
+        helloworld.h
+
+	helloworld.cc
+
+        main.cc
+
+
+
+        <b>foofiles
+
+            </b>Makefile.am
+
+            foo.h
+
+            foo.cc</pre>           
+
+</blockquote>           
+
+  <blockquote>            
+
+    <h4>configure.ac</h4>            
+
+    <blockquote>            
+
+    <pre>AC_INIT(src/hello.cc)
+
+AM_INIT_AUTOMAKE(hello,0.1)
+
+AM_CONFIG_HEADER(config.h)
+
+AC_PROG_CC
+
+AC_PROG_CXX
+
+AC_PROG_INSTALL
+
+AC_PROG_LIBTOOL
+
+AC_OUTPUT(Makefile src/Makefile src/foofiles/Makefile)</pre>          
+
+    </blockquote>            
+
+    <h4>Makefile.am</h4>            
+
+    <blockquote>            
+
+    <pre>SUBDIRS = src</pre>            
+
+    </blockquote>            
+
+    <h4>Makefile.am for the src directory</h4>              
+
+    <blockquote>              
+
+      <pre>bin_PROGRAMS = hello
+
+hello_SOURCES = hello.h hello.cc main.cc
+
+SUBDIRS = foofiles
+
+LDADD = foofiles/libfoo.a</pre>          
+
+    </blockquote>              
+
+    <h4>Makefile.am for foofiles directory under src</h4>             
+
+    <blockquote>            
+
+      <pre>noinst_LIBRARIES = libfoo.a
+
+libfoo_a_SOURCES = foo.h foo.cc
+
+INCLUDES = -I@top_srcdir@/</pre>             
+
+    </blockquote>            
+
+    <p>You may download a simple example project here: <a href="http://www.openismus.com/documents/linux/automake/helloworld_cc-0.3.tar.gz">helloworld_cc-0.3.tar.gz</a></p>           
+
+  </blockquote>           
+
+           
+
+  <h3><a name="RecommendedReading"></a>Recommended Reading</h3>                 
+
+
+<ul>               
+
+  <li><a href="http://www.openismus.com/documents/linux/building_libraries/building_libraries.shtml">Building C/C++ libraries with automake and autoconf</a></li>
+  <li><a href="http://www.openismus.com/documents/linux/using_libraries/using_libraries.shtml">Using C/C++ libraries with automake and autoconf</a></li> 
+  
+  <li><a href="http://sources.redhat.com/autobook/">GNU Autoconf, Automake, and 
+    Libtool</a>: New online book by the creators.</li>                
+
+  <li><a href="http://www.elitecoders.de/mags/cscene/CS2/CS2-10.html">C-Scene:                    
+
+  Multi-File Projects and the GNU Make Utility</a></li>                  
+
+  <li><a href="http://www.gnu.org/manual/manual.html">GNU's automake and                
+
+    autoconf manuals</a></li>               
+
+  <li><a href="http://www.amath.washington.edu/%7Elf/tutorials/autoconf/">Learning autoconf and automake</a></li>               
+
+  <li><a href="http://www.st-andrews.ac.uk/%7Eiam/docs/tutorial.html">Learning&nbsp;           
+
+    the GNU Development tools</a></li>              
+
+  <li><a href="http://www.amazon.com/exec/obidos/ISBN=1565921127/murrayswebpages/">Programming              
+
+    with GNU Software,&nbsp; Mike Loukides &amp; Andy Oram</a></li>             
+
+</ul>             
+
+<h3><a name="Translations"></a>Translations</h3> 
+ 
+<p>I have found the following translations of this article;
+</p><ul>
+<li><a href="http://tom.verbreyt.be/flux/rechner/doc/vertaald">Dutch</a></li>
+<li><a href="http://www.sojia.org/cc/devel/auto1/">Chinese</a></li>
+</ul>
+
+                 
+
+
+<!-- SSI fragments/footer_article.html_fragment begin -->
+<p>
+  <font size="1">Copyright © Murray Cumming, Openismus GmbH.</font>
+</p>           
+
+<!-- Creative Commons License -->
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/2.0/"><img alt="Creative Commons License" src="automake_files/somerights20.gif"></a><br>
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/2.0/">Creative Commons License</a>.
+<!-- /Creative Commons License -->
+
+
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <license rdf:resource="http://creativecommons.org/licenses/by-sa/2.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-sa/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+   <requires rdf:resource="http://web.resource.org/cc/ShareAlike" />
+</License>
+
+</rdf:RDF>
+
+-->     
+
+<div class="pushtoright">
+<p><a href="http://www.openismus.com/" title="Openismus">Openismus</a> | <a href="http://www.openismus.com/impressum.shtml" title="Corporate imprint">Impressum</a></p>
+</div>
+
+
+
+<!-- SSI fragments/footer_article.html_fragment end -->
+
+</div>
+
+      
+
+</body></html>

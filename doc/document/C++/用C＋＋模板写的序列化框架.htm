@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>用C＋＋模板写的序列化框架--潘凯的博客</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Expires" CONTENT="0"> 
+<META CONTENT="一个在局域网内聊天传输文件的工具源码用C＋＋模板写的序列化框架WTL::CString中的一点缺陷及修改  博客 博客中国 博客动力 blog blogdriver blogger 中国" NAME="description"> 
+<META NAME="keywords" CONTENT="潘凯的博客 一个在局域网内聊天传输文件的工具源码用C＋＋模板写的序列化框架WTL::CString中的一点缺陷及修改 博客 博客中国 博客动力 blog blogdriver blogger 中国"> 
+<link href="diary.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" src="/jsp/js/UBB.js"></script>
+<script type="text/javascript" src="/jsp/js/blog.js"></script>	
+</head>
+<body>
+	<div style="width:750px;margin-left:auto;margin-right:auto;text-align:right;font-size:12px;">
+<a href="http://www.bokee.com" target="_blank">首页</a> | 
+<a href="http://group.bokee.com" target="_blank">博客群</a> | 
+<a href="http://blogs.bokee.com" target="_blank">公社</a> | 
+<a href="http://column.bokee.com" target="_blank">专栏</a> | 
+<a href="http://bbs.bokee.com" target="_blank">论坛</a> | 
+<a href="http://photo.bokee.com" target="_blank">图片</a> | 
+<a href="http://news.bokee.com/" target="_blank">资讯</a> | 
+<a href="http://reg.bokee.com/account/web/register.jsp"><FONT COLOR="#FF6600">注册</FONT></a> | 
+<a href="http://help.bokee.com:8086/help/index.html" target="_blank">帮助</a> | 
+<a href="http://lianbo.booso.com" target="_blank"><FONT COLOR="#FF6600">博客联播</FONT></a> | 		
+<a href="http://ping.bokee.com:81/memcm/random.b"><FONT COLOR="#FF6600">随机访问</FONT></a>
+</div>
+  <div id="container">
+    <div id="header"><h1 class="title"><a href="index.html">潘凯的博客</a></h1></div>
+	<div id="category">	<a href="1033085.html" title="上一篇">一个在局域网内聊天传输文件的工具源码</a>- -|
+		<a href="index.html">回首页</a> | <a href="catalog_2005.html">2005年索引</a>
+	| - -<a href="1033255.html" title="下一篇">WTL::CString中的一点缺陷及修改</a></div>
+ <div class="entity">
+			    <h2 class="diaryTitle">用C＋＋模板写的序列化框架</h2>				 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 
+				 <p>
+<p>　　在这个框架中包含了一个序列化的基本框架，一套基本的类型识别系统，可以识别基础类型，复杂类型，自定义类型，STD的容器类型，而且可以这个基础上进行递归的扩展。<br />　　可以将复杂的数据结构序列化到文件，并从文件中恢复。<br />　　包含了完整的自动单元测试，和测试案例。</p><p> </p><br /><p>　　写这个序列化框架最初是想用在一个大型的项目上，在那个项目中有一些相当复杂的在运行时构建出来的树形数据结构，如果可以将这个内存树序列化起来可以大大节约下次创建的时间。另外在自己做的一些小工具中，有些数据想保存在文件中，以后再从文件中读取，用序列化的方式也十分方便。而且那时正好系统的学习了一下C++模板技术，感觉在一般的编程活动中很难用到一些比较高级的模板技术，所以想用C++模板技术来写这个序列化框架。最后那个项目中没有使用这个序列化框架，但我至少达到了第二个目标，写这个序列化框架让我对C++模板技术有了更深层次的理解。<br />　　在这个框架中包含了一个序列化的基本框架，一套基本的类型识别系统，可以识别基础类型，复杂类型，自定义类型，STD的容器类型，而且可以这个基础上进行递归的扩展。<br />　　在写这个框架的同时，我也写了完整的测试案例。如果没有测试案例，要调试这样的框架可就真是难与登天，因为模板方面的错误，编译器报出来的信息很难看，有的根本就没用。<br />　　代码是在VC7.1下写的，也只能在VC7.1下用，VC6对于C++模板的支持非常有限，而其他的编译器在这方面的支持也有出入。如果要用于其他的编译器可能要修改部分类型识别方面的代码。测试框架我用的是cppunit(1.9.14)，这是个开源的测试框架，可以在www.xprogramming.com下载到。其中类型识别方面的代码我主要是参考了《C++ template》一书，和boost中的部分代码。<br />　　由于是用模板写的比MFC中的运行时序列化框架在效率上的表现要好得多。使用起来也相当的简单。如果要学习C++模板的高级技术，研究一下这个框架可以获益良多。由于是框架代码，我写得相当规范，有注释，也有完整的测试案例，可以进行自动的回归测试。<br /><br /><br />　　使用的方法比较简单请参考(fileRWTest.cpp)文件中的测试案例。<br /><br />普通的数据类型：<br />　　(unsigned char, unsigned short, unsigned int, unsigned long, signed char, signed short, signed int, signed long, bool, char, wchar_t, unsigned long long, signed long long, float, double, long double)可以直接序列化及反序列化。<br /><br />对于指针类型：<br />　　会序列化指针具体指向的对象，如果指针指向的对象的类型是序列化框架无法识别的类型会报出编译错误。注意在反序列化时，只需要传一个空指针即可，序列化框架会将被序列化的对象的值反序列化到堆上，并将地址付给指针。如果传一个有值的指针，在DEBUG模式下会在运行时引发一个断言错误。在RELEASE下会导致原来指针指向的对象被泄漏。<br /><br />对于字符指针：<br />　　对于字符指针(即char*和wchar_t*类型)做为特殊处理，序列化框架认为字符指针为一个以&quot;0&quot;或L&quot;0&quot;结尾的字符串。会将整个字符串(除去&quot;/0&quot;和L&quot;0&quot;)序列化。反序列化时，传入一个空的字符指针即可。<br />需要注意的是字符串必须以&quot;/0&quot;和L&quot;0&quot;结尾，否则会发生严重的内存错误。<br />如果将字符串数组做字符指针用，以下代码也需要注意：<br />char * pstr = new char[10];<br />strcpy(pstr, &quot;PK&quot;);<br />*pMedia &lt;&lt; pstr;<br />--------------------------<br />char * pstr = 0;<br />*pMedia &gt;&gt; pstr;<br />　　反序列化后pstr指向的是一个长度为3的字符数组。也就是说，将原来数组/0之后的部分去掉了。<br /><br />对于普通数据类型的数组：<br />　　会将整个数组以内存拷贝的方式序列化到内存，即使没被真正赋值的元素。反序列化时传一个相同类型的数组即可。需要注意的是，传进的数组的容量必须大于或等于被序列化的数组的容量，否则会引发数组越界的内存错误，在DEBUG模式下，会引发一个断言错误。<br /><br />非普通数据类型的数组：<br />　　数组元素的类型可以是除普通数据类型之外的所有被序列化框架所支持的类型。序列化时会针对每一个元素调用序列化框架对它的具体序列化特化，反序列化时亦然。由于在RELEASE模式下类类型的数组在申明后，编译器会生成调用相应类的缺省构造函数的代码。但对于原始类型，如指针数组类型如果不显式的手工初始化，数组中的值是无意的随机值。这种情况序列化框架无法识别，会赞成严重的内存错误。另对于指针数组的某些元素为NULL的情况，序列化框架也无法处理，在DEBUG模式下会引发一个断言错误。<br />　　因些如果是指针数组除非数组中的元素全部为有意义的指针，否则不应该做为一个数组来序列化，而应该加入相应的遍历逻辑，将有意思的元素逐个序列化。<br />　　对于一般的数组，如果有意思的只是其中的少部分元素，也应该以上述方式进行序列化，以提高性能。<br /><br />自定义数据类类型：<br />　　不需要拷贝构造函数，不需要拷贝赋值函数，不需要析构函数的类。如老式的struct结构类型。这种类型可以通过直接拷贝内存而被高效的序列化及化序列化。只需要让一个类从_data_class_tag派生，序列化框架就会将它当成普通的数据类类型处理。<br /><br />自定义复杂类型：<br />　　对于非数据类类型，必须从CSerializable派生，关在类的定义中加入SERIALIZABLE(name, x)宏，name是该类的名字，x是相应的版本号。版本号的引入主要是避免在一个类被修改后，和以前生成的序列化文件一起使用，以免引起内存错误。在类中还必须实现virtual bool Serialize(CMedia *) const;函数，在该函数中写具体的序列化代码。该函数的内容很简单，按序列化及反序列化用为两段，简单的为每一个需要序列化及反序列化的成员函数调用即可，如下列：<br />if (pMedia-&gt;IsStoring()) {<br />    *pMedia &lt;&lt; m_1 &lt;&lt; m_2 &lt;&lt; m_3 &lt;&lt; m_4 &lt;&lt; m_5;<br />    return true;<br />}<br />if (pMedia-&gt;IsLoading()) {<br />    *pMedia &gt;&gt; m_1 &gt;&gt; m_2 &gt;&gt; m_3 &gt;&gt; m_4 &gt;&gt; m_5;<br />    return true;<br />}<br />　　注意序列化和反序列化的顺序这要错。<br /><br />std::string及std::wstring类型：<br />　　使用比较简单。值得注意的是和将字符串数组做字符指针用的情况一样。如果申明了一个容量很大的string(一般是为了避免在追加时的内存重分配开销)，却只用了一小部分。序列化并反序列化，string对象的容量只是刚好有内存的那部分。<br /><br />std::pair类型:<br />　　只要是pair的first和second必须是序列化框架所支持的类型就可以被正常的序列化及反序列化。<br /><br />std容器类型：<br />　　(vector,list,deque,stack,queue,set,multiset,map,multimap)<br />　　支以上的容器类型，其中容器中的元素类型必须是序列化框架所支持的类型。</p><p>附件 serialization.rar：<a href="http://blog.blogchina.com/upload/2005-03-27/20050327150335955107.rar">http://blog.blogchina.com/upload/2005-03-27/20050327150335955107.rar</a></p></p>
+             <p class="diaryFoot">【作者: <a href="javascript:void(0);" onClick="window.open('http://publishblog.blogchina.com/blog/postMessage.b?receiver=216563','发送短消息','width=520, height=455')">潘凯</a>】【访问统计:<script language="JavaScript" src="http://counter.blogchina.com/PageServlet?pageid=1033196&blogid=215620"></script>】【2005年03月27日 星期日 15:05】【<a href="http://reg.bokee.com/account/web/register.jsp"><FONT COLOR="#FF6600">注册</FONT></a>】【<a href="javascript:window.print();" >打印</a>】 </td>
+             </p>
+				</div>
+<div class="operation">
+<script language="JavaScript" src="/jsp/js/request_ads.js?id=1000"></script>
+<script src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
+</div>
+
+ <div class="operation">
+ <a name="search"><H3>搜索</H3></a>
+	<script type="text/javascript">
+<!--
+ function submitFormWithChannel(channelname) {
+  document.gform.channel.value=channelname;
+  document.gform.submit();
+  return;
+ }
+//-->
+<!-- End of Script for Clickable Google Logo -->
+
+</script>
+<form id="gform" name="gform" method="get" action="http://www.google.cn/search" target="_top">
+<table border="0" bgcolor="#ffffff" width=700>
+  <tr>
+   <td nowrap="nowrap" valign="center" align="middle" height="32">
+
+<!-- Clickable Google Logo -->
+   <a href="javascript:submitFormWithChannel('logo')">
+       <img src="http://blogteam.bokee.com/pub/images/logo_Google.gif" alt="Google" width="75" height="23" border="0" align="middle"> </a>
+<!-- Google Web Union Search Box -->
+    <input type="text" name="q" size="40" maxlength="255" value=""></input>
+<input type="button" name="sb" value="站内搜索" onclick="javascript:document.getElementById('channel').value='sitesearch';document.getElementById('sitesearch').value='bokee.com';document.getElementById('gform').submit();">
+</input>
+     <input type="button" name="sa" value="搜索"  onclick="javascript:document.getElementById('channel').value='internetsearch';document.getElementById('sitesearch').value='';document.getElementById('gform').submit();">
+
+</input>
+<input type="hidden" id="sitesearch" name="sitesearch" value="" />
+<input type="hidden" name="client" value="aff-bokee">
+</input>
+<input type="hidden" name="ie" value="gbk">
+</input>
+<input type="hidden" name="oe" value="gbk">
+</input>
+<input type="hidden" name="hl" value="zh-CN">
+</input>
+<input type="hidden" id="channel" name="channel" value="search">
+</input></td>
+   <td nowrap="nowrap"><!-- End of Google Web Union Search Box -->  </td>
+  </tr>
+</table>
+</form> 
+ </div>
+
+
+ <div class="operation"> 
+    <a name="trackback"><H3>Trackback</H3></a>
+      <p class="trackback">你可以使用这个链接引用该篇文章 http://publishblog.blogchina.com/blog/tb.b?diaryID=1033196
+ </p>
+    <p> 来自<a href=http://www.zhulu.org >逐鹿流行榜</a>的<a href="http://www.zhulu.org" target="_blank"><a href=http://www.zhulu.org >逐鹿流行榜</a></a>的引用：<br>    </p>
+          <p><a href=http://www.zhulu.org >逐鹿流行榜</a></p>
+ </div>
+
+  				
+<div class="operation">
+     <a name="comment"><H3>回复</H3></a>
+	 <table width="700" border="0" cellpadding="0" cellspacing="0">     
+<tr align="left">
+<td rowspan="2" align="center">
+<img src="http://blog.bokee.com/img/unknowman.gif">
+
+</td>
+<td colspan="4"><H4><a name="comment$(remark.remarkID)"> - 评论人：玉米</a>
+<span>&nbsp;&nbsp;2009-02-10 04:45:36&nbsp;<a  > <img src="http://blog.bokee.com/img/linkblog.jpg" border="0" > </a>　 
+</span></H4>
+ </td>
+</tr>    
+<tr align="left">
+<td colspan="4" valign="top"><P class="comment">2 你好，现在通过下面链接可以备份您的博客： http://home.myspace.cn/blogmove.aspx  快去看看^_^ bokee.com 215620<br>
+</P></td>
+</tr>
+<tr align="left">
+<td rowspan="2" align="center">
+<img src="http://blog.bokee.com/img/unknowman.gif">
+
+</td>
+<td colspan="4"><H4><a name="comment$(remark.remarkID)"> - 评论人：Evan.Zhang</a>
+<span>&nbsp;&nbsp;2007-12-31 00:11:40&nbsp;<a  > <img src="http://blog.bokee.com/img/linkblog.jpg" border="0" > </a>　 
+</span></H4>
+ </td>
+</tr>    
+<tr align="left">
+<td colspan="4" valign="top"><P class="comment">您好潘先生，在网上看到您这篇文章感觉很吸引人。<br><br>但是搜索遍了所有的网站都没有下载到序列化框架的源代码。<br><br>如果方便可以发一份给我吗？谢谢您！<br><br>我的信箱是：littlerun@126.com<br><br>辛苦了！<br>
+</P></td>
+</tr>
+<tr align="left">
+<td rowspan="2" align="center">
+<img src="http://blog.bokee.com/img/unknowman.gif">
+
+</td>
+<td colspan="4"><H4><a name="comment$(remark.remarkID)"> - 评论人：Evan.Zhang</a>
+<span>&nbsp;&nbsp;2007-12-31 00:10:52&nbsp;<a  > <img src="http://blog.bokee.com/img/linkblog.jpg" border="0" > </a>　 
+</span></H4>
+ </td>
+</tr>    
+<tr align="left">
+<td colspan="4" valign="top"><P class="comment">您好潘先生，在网上看到您这篇文章感觉很吸引人。<br><br>但是搜索遍了所有的网站都没有下载到序列化框架的源代码。<br><br>如果方便可以发一份给我吗？谢谢您！<br><br>我的信箱是：littlerun@126.com<br><br>辛苦了！<br>
+</P></td>
+</tr>
+<tr align="left">
+<td rowspan="2" align="center">
+<img src="http://blog.bokee.com/img/unknowman.gif">
+
+</td>
+<td colspan="4"><H4><a name="comment$(remark.remarkID)"> - 评论人：Evan.Zhang</a>
+<span>&nbsp;&nbsp;2007-12-31 00:10:06&nbsp;<a  > <img src="http://blog.bokee.com/img/linkblog.jpg" border="0" > </a>　 
+</span></H4>
+ </td>
+</tr>    
+<tr align="left">
+<td colspan="4" valign="top"><P class="comment">您好潘先生，在网上看到您这篇文章感觉很吸引人。<br><br>但是搜索遍了所有的网站都没有下载到序列化框架的源代码。<br><br>如果方便可以发一份给我吗？谢谢您！<br><br>我的信箱是：littlerun@126.com<br><br>辛苦了！<br>
+</P></td>
+</tr>
+<tr align="left">
+<td rowspan="2" align="center">
+<img src="http://blog.bokee.com/img/unknowman.gif">
+
+</td>
+<td colspan="4"><H4><a name="comment$(remark.remarkID)"> - 评论人：畅</a>
+<span>&nbsp;&nbsp;2005-10-13 12:16:38&nbsp;<a  > <img src="http://blog.bokee.com/img/linkblog.jpg" border="0" > </a>　 
+</span></H4>
+ </td>
+</tr>    
+<tr align="left">
+<td colspan="4" valign="top"><P class="comment">我又来溜达了.<br><br>看了您昨天崽崽的日记,把我笑坏了.希望您能永远保持那轻松 自我调侃的心态<br>真好.<br><br>这个博客网,需要给钱否?<br>
+</P></td>
+</tr>
+</table>
+ </div>
+  <div class="operation"> 
+    <table width="700" border="0" cellpadding="0" cellspacing="0" class="comment">
+      <form id="replyForm" method="POST">
+        <input type="hidden" name="blogID" value="215620">
+        <input type="hidden" name="diaryID" value="1033196">
+        <input type="hidden" name="blogDomino" value="lunatic">
+<script>
+if(getCookie('userID') == null){        
+document.write('<tr><td width="70">发布人：</td>');
+document.write('<td width="150"> <input name="remark.authorNameFUI" type="text" size="20" class="inputStyle" maxlength="20"></td>');
+document.write('<td width="70">邮箱：</td>');
+document.write('<td width="435"> <input name="remark.authorEmail" type="text" size="20" class="inputStyle" maxlength="40"></td>');
+document.write('</tr><tr><td>主　页：</td>');
+document.write('<td colspan="3"> <input name="remark.authorURL" type="text" class="inputStyle" value="HTTP://" size="63" maxlength="100"></td></tr>');
+}else{
+document.write('<input type="hidden" name="remark.authorNameFUI" value="Blogchina网友">');
+}
+</script>
+     <tr>
+      <td width="70">验证码：</td>
+      <td><input name="validateCode"  type="text" class="inputStyle" maxlength="4" size="20"></td><td>&nbsp;&nbsp<img src="http://publishblog.blogchina.com/servlet/getValidateImg" border="0"></td>
+     </tr>          
+        <tr align="left"> 
+          <td colspan="4">评论内容：<br/> <textarea name="remark.remarkFUI" id="remark" cols="60" rows="8" class="textStyle" >
+          </textarea> 
+          </td> 
+        </tr>
+        <tr align="left"> 
+          <td colspan="4"> 　　　　　　 　　　　　　 
+            <input typ="button" value="提交" onClick="reply()" >
+            　 
+            <input type="reset" value="重置" > </td>
+        </tr>
+      </form>
+    </table>
+  </div>
+</div>	
+<script type="text/javascript" src="http://lunatic.blogchina.com/extend3.js"></script> 
+<div id="footer"><a href="http://blog.bokee.com/">2003-2004 BOKEE.COM All rights reserved</a><br/>
+<a href="http://www.blogdriver.com/">Powered by BlogDriver 2.1</a>
+</div>
+
+<script type="text/javascript">
+
+<!--
+
+Empty_show = "empty.gif";
+
+TelSense_ad_output = "ZoneID";
+
+TelSense_ad_format = "";
+
+Product_zoneID = "167";
+
+Web_userID = "193";
+
+//-->
+
+</script>
+
+<!-- <script type="text/javascript" src="http://luliangtest.bokee.com/show.php"> -->
+
+</script>
+
+</body>
+</html>

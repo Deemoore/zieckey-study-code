@@ -1,0 +1,442 @@
+             进程间通讯－－消息队列
+
+1．  创建消息队列
+
+       #include <sys/types.h>
+       #include <sys/ipc.h>
+       #include <sys/msg.h>
+       int msgget(key_t key, int msgflg);
+
+                   成功返回队列ID,失败返回－1。
+
+参数
+
+
+说明
+
+key
+
+
+创建/打开队列key值,由ftok产生，可以直接给常量
+
+msgflg
+
+
+创建/打开方式IPC_CREAT、IPC_EXCL、IPC_NOWAIT
+
+            通常是msgflg =IPC_CREAT| IPC_EXCL|0666,意思是若不存在key值的队列则创建，否则如果存在则打开队列，0666意思与一般文件权限一样,XXX-本用户，同组用户，其他用户的读写执行的权限。
+
+       # include <sys/types.h>
+       # include <sys/ipc.h>
+       key_t ftok(const char *pathname, int proj_id);
+
+//获取pathname相对应的一个键值, pathname必须是存在并且可读取的文件，proj_id表示序号，用来区别同时的存在文件。成功返回key值，失败返回－1。
+
+
+
+2．  队列读写
+
+       #include <sys/types.h>
+       #include <sys/ipc.h>
+       #include <sys/msg.h>
+
+a)         读取数据――阻塞读取消息队列,直到解除阻塞。
+
+ssize_t msgrcv(int msqid, struct msgbuf *msgp, size_t msgsz, long msgtyp, int msgflg);
+
+参数
+
+
+说明
+
+msqid
+
+
+已打开的消息队列id
+
+msgp
+
+
+接收存放的消息队列缓存结构
+
+msgsz
+
+
+消息数据长度
+
+msgtyp
+
+
+消息类型。=0 读取队列中第一个数据。
+
+msgflg
+
+
+读取标志通常使用IPC_NOWAIT：即没有满足条件的消息，立即返回，此时，错误代码errno=ENOMSG
+
+IPC_EXCEPT：与msgtyp>0配合使用，返回队列中第一个类型不为msgtyp的消息
+
+MSG_NOERROR:截断超长数据
+
+缓冲内容结构如下：
+
+struct msgbuf {
+long mtype;    /* 消息类型 must be > 0 */
+char mtext[1]; /* 消息数据 这里只是一个数组的首地址，并非是只有一个字符 */
+            };
+
+msgrcv()解除阻塞的条件三个条件：
+
+1．  消息队列中有了满足条件的消息（或使用了）；
+
+2．  msqid代表的消息队列被删除；
+
+3．  调用msgrcv（）的进程被信号中断；
+
+a)         发送数据
+
+int msgsnd(int msqid, struct msgbuf *msgp, size_t msgsz, int msgflg);
+
+参数
+
+
+说明
+
+msqid
+
+
+已打开的消息队列id
+
+msgp
+
+
+发送存放的消息队列缓存结构
+
+msgsz
+
+
+消息数据长度
+
+msgflg
+
+
+消息类型。=0 读取队列中第一个数据。
+
+
+
+
+
+
+
+
+3．  消息队列控制
+
+       #include <sys/types.h>
+       #include <sys/ipc.h>
+       #include <sys/msg.h>
+       int msgctl(int msqid, int cmd, struct msqid_ds *buf);
+
+          成功返回0，失败返回－1。
+
+参数
+
+
+说明
+
+msqid
+
+
+已打开的消息队列id
+
+cmd
+
+
+控制类型选项
+
+IPC_STAT:取得队列状态
+
+IPC_SET:设置队列属性
+
+IPC_RMID：删除消息队列
+
+buf
+
+
+存放队列的属性结构
+
+
+
+       队列属性如下：
+
+struct msqid_ds
+{
+  struct ipc_perm msg_perm; /* structure describing operation permission */
+  __time_t msg_stime; /*最后一次发送消息的时间 */
+  unsigned long int __unused1; /*保留*/
+  __time_t msg_rtime; /* 最后一次接收数据时间 */
+  unsigned long int __unused2;     /*保留*/
+  __time_t msg_ctime; /* 最后修改时间 */
+  unsigned long int __unused3; /*保留*/
+  unsigned long int __msg_cbytes; /* 当前队列字节数 */
+  msgqnum_t msg_qnum; /* 当前队列的消息数 */
+  msglen_t msg_qbytes; /* 队列中容量 */
+  __pid_t msg_lspid; /* 最后发送消息的进程号 */
+  __pid_t msg_lrpid; /* 最后接收队列的进程号*/
+  unsigned long int __unused4; /*保留*/
+  unsigned long int __unused5; /*保留*/
+};
+
+
+4、例子
+
+/*msgserver.c*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/stat.h>
+
+#define MSG_FILE "/boot"
+#define BUFFER 255
+#define PERM S_IRUSR|S_IWUSR
+/* 服务端创建的消息队列最后没有删除,我们要使用ipcrm命令来删除的 */
+/* ipcrm -q <msqid> */
+
+struct msgtype {
+    long mtype;
+    char buffer[BUFFER+1];
+};
+
+int main()
+{
+    struct msgtype msg;
+    key_t key;
+    int msgid;
+
+    key = ftok(MSG_FILE,'a');
+    if( -1 == key )
+    {
+        fprintf(stderr,"Creat Key Error:%s\n", strerror(errno));
+        exit(1);
+    }
+
+    msgid = msgget(key, PERM|IPC_CREAT|IPC_EXCL);
+    if( -1 == msgid )
+    {
+        fprintf(stderr, "Creat Message Error:%s\n", strerror(errno));
+        exit(1);
+    }
+    printf("msqid = %d\n", msgid);
+
+    while(1)
+    {
+        msgrcv(msgid, &msg, sizeof(struct msgtype), 1, 0);
+        printf("Server Receive Message: %s\n", msg.buffer);
+        printf("Message type : %d\n", msg.mtype);
+        msg.mtype = 8888;
+        int cmpret = strncmp( msg.buffer, "quit", 4 );
+        printf( "cmp ret = %d\n", cmpret );
+
+        strcpy( msg.buffer, "Hi, this is the server message." );
+        msgsnd(msgid, &msg, sizeof(struct msgtype), 0);
+
+        if ( 0 == cmpret )
+            break;
+    }
+
+    msgctl ( msgid, IPC_RMID, NULL );
+
+    exit(0);
+}
+
+/* msgclient.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/stat.h>
+
+#define MSG_FILE "/boot"
+#define BUFFER 255
+#define PERM S_IRUSR|S_IWUSR
+
+struct msgtype {
+    long mtype;
+    char buffer[BUFFER+1];
+};
+
+int main(int argc, char **argv)
+{
+    struct msgtype msg;
+    key_t key;
+    int msgid;
+
+    if(argc != 2)
+    {
+        fprintf(stderr,"Usage:%s 'your message string'\n", argv[0]);
+        exit(1);
+    }
+
+    if((key=ftok(MSG_FILE,'a'))==-1)
+    {
+        fprintf(stderr,"Creat Key Error:%s\n", strerror(errno));
+        exit(1);
+    }
+
+    if((msgid=msgget(key, PERM))==-1)
+    {
+        fprintf(stderr,"Creat Message Error:%s\n", strerror(errno));
+        exit(1);
+    }
+    printf("msqid = %d\n", msgid);
+
+    msg.mtype = 1;
+    strncpy(msg.buffer, argv[1], BUFFER);
+    msgsnd(msgid, &msg, sizeof(struct msgtype), 0);
+    memset(&msg, '\0', sizeof(struct msgtype));
+    msgrcv(msgid, &msg, sizeof(struct msgtype), 8888, 0);
+    fprintf(stderr, "Client receive:%s\n", msg.buffer);
+    exit(0);
+}
+
+
+
+
+
+
+附:
+
+msgsnd/msgrcv系统调用
+功能描述：
+在消息队列上进行收发消息。为了发送消息，调用进程对消息队列必须有写权能。接收消息时必须有读权能。
+
+
+
+用法：
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg);
+
+ssize_t msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp, int msgflg);
+
+
+
+参数：
+msqid：消息队列的识别码。
+msgp：指向消息缓冲区的指针，此位置用来暂时存储发送和接收的消息，是一个用户可定义的通用结构，形态如下
+
+struct msgbuf {
+    long mtype;     /* 消息类型，必须 > 0 */
+    char mtext[1];  /* 消息文本 */
+};
+
+msgsz：消息的大小。
+msgtyp：从消息队列内读取的消息形态。如果值为零，则表示消息队列中的所有消息都会被读取。
+msgflg：用来指明核心程序在队列没有数据的情况下所应采取的行动。如果msgflg和常数IPC_NOWAIT合用，则在msgsnd()执行时若是消息队列已满，则msgsnd()将不会阻塞，而会立即返回-1，如果执行的是msgrcv()，则在消息队列呈空时，不做等待马上返回-1，并设定错误码为 ENOMSG。当msgflg为0时，msgsnd()及msgrcv()在队列呈满或呈空的情形时，采取阻塞等待的处理模式。
+
+
+
+返回说明：
+成功执行时，msgsnd()返回0，msgrcv()返回拷贝到mtext数组的实际字节数。失败两者都返回-1，errno被设为以下的某个值
+[对于msgsnd]
+EACCES：调用进程在消息队列上没有写权能，同时没有CAP_IPC_OWNER权能
+EAGAIN：由于消息队列的msg_qbytes的限制和msgflg中指定IPC_NOWAIT标志，消息不能被发送
+EFAULT：msgp指针指向的内存空间不可访问
+EIDRM：消息队列已被删除
+EINTR：等待消息队列空间可用时被信号中断
+EINVAL：参数无效
+ENOMEM：系统内存不足，无法将msgp指向的消息拷贝进来
+[对于msgrcv]
+E2BIG：消息文本长度大于msgsz，并且msgflg中没有指定MSG_NOERROR
+EACCES：调用进程没有读权能，同时没具有CAP_IPC_OWNER权能
+EAGAIN：消息队列为空，并且msgflg中没有指定IPC_NOWAIT
+EFAULT：msgp指向的空间不可访问
+EIDRM：当进程睡眠等待接收消息时，消息已被删除
+EINTR：当进程睡眠等待接收消息时，被信号中断
+EINVAL：参数无效
+ENOMSG：msgflg中指定了IPC_NOWAIT，同时所请求类型的消息不存在
+
+参考：
+
+http://blog.csdn.net/zhsp1029/archive/2008/03/11/2171462.aspx
+http://blog.chinaunix.net/u1/53810/showart_425856.html
+http://blog.csdn.net/lcrystal623/archive/2007/03/16/1531183.aspx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+msgsnd/msgrcv系统调用
+功能描述：
+在消息队列上进行收发消息。为了发送消息，调用进程对消息队列必须有写权能。接收消息时必须有读权能。
+
+
+
+用法：
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg);
+
+ssize_t msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp, int msgflg);
+
+
+
+参数：
+msqid：消息队列的识别码。
+msgp：指向消息缓冲区的指针，此位置用来暂时存储发送和接收的消息，是一个用户可定义的通用结构，形态如下
+
+struct msgbuf {
+    long mtype;     /* 消息类型，必须 > 0 */
+    char mtext[1];  /* 消息文本 */
+};
+
+msgsz：消息的大小。
+msgtyp：从消息队列内读取的消息形态。如果值为零，则表示消息队列中的所有消息都会被读取。
+msgflg：用来指明核心程序在队列没有数据的情况下所应采取的行动。如果msgflg和常数IPC_NOWAIT合用，则在msgsnd()执行时若是消息队列已满，则msgsnd()将不会阻塞，而会立即返回-1，如果执行的是msgrcv()，则在消息队列呈空时，不做等待马上返回-1，并设定错误码为 ENOMSG。当msgflg为0时，msgsnd()及msgrcv()在队列呈满或呈空的情形时，采取阻塞等待的处理模式。
+
+
+
+返回说明：
+成功执行时，msgsnd()返回0，msgrcv()返回拷贝到mtext数组的实际字节数。失败两者都返回-1，errno被设为以下的某个值
+[对于msgsnd]
+EACCES：调用进程在消息队列上没有写权能，同时没有CAP_IPC_OWNER权能
+EAGAIN：由于消息队列的msg_qbytes的限制和msgflg中指定IPC_NOWAIT标志，消息不能被发送
+EFAULT：msgp指针指向的内存空间不可访问
+EIDRM：消息队列已被删除
+EINTR：等待消息队列空间可用时被信号中断
+EINVAL：参数无效
+ENOMEM：系统内存不足，无法将msgp指向的消息拷贝进来
+[对于msgrcv]
+E2BIG：消息文本长度大于msgsz，并且msgflg中没有指定MSG_NOERROR
+EACCES：调用进程没有读权能，同时没具有CAP_IPC_OWNER权能
+EAGAIN：消息队列为空，并且msgflg中没有指定IPC_NOWAIT
+EFAULT：msgp指向的空间不可访问
+EIDRM：当进程睡眠等待接收消息时，消息已被删除
+EINTR：当进程睡眠等待接收消息时，被信号中断
+EINVAL：参数无效
+ENOMSG：msgflg中指定了IPC_NOWAIT，同时所请求类型的消息不存在

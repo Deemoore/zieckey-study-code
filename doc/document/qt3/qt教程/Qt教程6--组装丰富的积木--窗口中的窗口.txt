@@ -1,0 +1,161 @@
+Qt教程一 —— 第六章：组装丰富的积木！
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+这个例子显示了如何把两个窗口部件封装成一个新的组件和使用许多窗口部件是多么的容易。首先，我们使用一个自定义的窗口部件作为一个子窗口部件。
+
+/****************************************************************
+**
+** Qt教程一 - 6
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qslider.h>
+#include <qlcdnumber.h>
+#include <qfont.h>
+#include <qvbox.h>
+#include <qgrid.h>
+
+class LCDRange : public QVBox
+{
+public:
+    LCDRange( QWidget *parent=0, const char *name=0 );
+};
+
+LCDRange::LCDRange( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+    QSlider * slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+    connect( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+}
+
+class MyWidget : public QVBox
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    QGrid *grid = new QGrid( 4, this );
+
+    for( int r = 0 ; r < 4 ; r++ )
+        for( int c = 0 ; c < 4 ; c++ )
+            (void)new LCDRange( grid );
+}
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+
+一行一行地解说
+
+    class LCDRange : public QVBox
+    {
+    public:
+        LCDRange( QWidget *parent=0, const char *name=0 );
+    };
+
+LCDRange窗口部件是一个没有任何API的窗口部件。它只有一个构造函数。这种窗口部件不是很有用，所以我们过一会儿会加入一些API。
+
+    LCDRange::LCDRange( QWidget *parent, const char *name )
+            : QVBox( parent, name )
+    {
+        QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+        QSlider * slider = new QSlider( Horizontal, this, "slider" );
+        slider->setRange( 0, 99 );
+        slider->setValue( 0 );
+        connect( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+    }
+
+这里直接利用了第五章里面的MyWidget的构造函数。唯一的不同是按钮被省略了并且这个类被重新命名了。如果我们还是不很清楚这个构造函数里面的语句含义的话，我们在重复说明如下。
+
+		QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd" );
+
+lcd是一个QLCDNumber，一个可以按像LCD的方式显示数字的窗口部件。这个实例被设置为显示两个数字，并且是this的子窗口部件。它被命名为“lcd”。
+
+        QSlider * slider = new QSlider( Horizontal, this, "slider" );
+        slider->setRange( 0, 99 );
+        slider->setValue( 0 );
+
+QSlider是一个经典的滑块，用户可以通过在拖动一个东西在一定范围内调节一个整数数值的方式来使用这个窗口部件。这里我们创建了一个水平的滑块，设置它的范围是0~99（包括0和99，参见QSlider::setRange()文档）并且它的初始值是0。
+
+        connect( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+
+这里我们是用了信号/槽机制把滑块的valueChanged()信号和LCD数字的display()槽连接起来了。
+这一行在两个Qt对象（直接或间接继承QObject对象的对象）中建立了一种单向的连接。每一个Qt对象都有signals（信号--发送消息）和slots（槽--接收消息）。所有窗口部件都是Qt对象。它们继承QWidget，而QWidget继承QObject。第一个对象 “slider”发送一个信号，以 SIGNAL(valueChanged(int) 方式发送一个 valueChanged(int) 信号,并且带有参数，该参数随之一起发送出去;第二个对象“lcd”得到这个信号并作出响应，响应通过 SLOT(display(int)) 方式到达 lcd->display(int),并传入一个参数，该参数由信号中发出的参数决定，然汉执行该函数定义的功能。
+
+    class MyWidget : public QVBox
+    {
+    public:
+        MyWidget( QWidget *parent=0, const char *name=0 );
+    };
+
+MyWidget也是除了一个构造函数之外没有包含任何API。好的我们来添加一些API。
+
+    MyWidget::MyWidget( QWidget *parent, const char *name )
+            : QVBox( parent, name )
+    {
+        QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+        
+首先实例化了一个 QPushButton 按钮，        
+        
+        quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+        
+然后设置按钮的字体，        
+
+        connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+之后我们设置了这个按钮的响应信号，当我们点击按钮的时候，应用程序退出.
+这个按钮被放在 MyWidget 中。
+
+        QGrid *grid = new QGrid( 4, this );
+
+我们创建了一个四列的QGrid对象。这个QGrid窗口部件可以自动地把自己地子窗口部件排列到行列中，你可以指定行和列的数量，并且QGrid可以发现它的新子窗口部件并且把它们安放到网格中。
+
+        for( int r = 0 ; r < 4 ; r++ )
+            for( int c = 0 ; c < 4 ; c++ )
+                (void)new LCDRange( grid );
+
+四行，四列。
+
+我们创建了一个4*4个LCDRanges，所有这些都是这个grid对象的子窗口部件。这个QGrid窗口部件会安排它们。这样我们就有了一个“Quit”按钮和许多LCDRange对象。
+
+
+    }
+
+这就是全部了。
+
+行为
+
+这个程序显示了在同一时间使用许多窗口部件是多么的容易。其中的滑块和LCD数字的行为在前一章已经提到过了。这里就是实现的不同。
+
+（请看第一章来学习如何创建一个makefile文件和连编应用程序。）
+
+练习
+
+在开始的时候使用不同的或者随机的值初始化每个滑块。
+
+源代码中的“4”出现了3次。如果你改变QGrid构造函数中调用的那个，会发生什么？改变另外两个又会发生什么呢？为什么呢？
+
+现在你可以进行第七章了。 

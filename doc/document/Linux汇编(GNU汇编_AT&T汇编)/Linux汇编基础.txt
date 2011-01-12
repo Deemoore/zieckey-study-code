@@ -1,0 +1,76 @@
+汇编语言作为一种高效的，而且紧密结合硬件平台的编程语言，在操作系统，嵌入式开发等领域都有着十分重要的作用。正因为汇编依赖于硬件结构（CPU指令码），因此不同体系结构上的汇编语言也大相径庭。本文简单介绍了Linux下的AT&T语法(即GNU as 汇编语法)，以及在Linux下汇编的基本方法。
+
+AT&T语法起源于AT&T贝尔实验室，是在当时用于实现Unix系统的处理器操作码语法之上而形成的，AT&T语法和Intel语法主要区别如下：
+AT&T使用$表示立即数，Intel不用，因此表示十进制2时，AT&T为$2，而Intel就是2
+AT&T在寄存器前加%，比如eax寄存器表示为%eax
+AT&T 处理操作数的顺序和Intel相反，比如，movl %eax, %ebx是将eax中的值传递给ebx，而Intel是这样的mov ebx, eax
+AT&T在助记符的后面加上一个单独字符表示操作中数据的长度，比如movl $foo, %eax等同于Intel的mov eax, word ptr foo
+长跳转和调用的格式不同，AT&T为ljmp $section, $offset，而Intel为jmp section:offset
+主要的区别就是这些，其他的细节还有很多，下面给出一个具体的例子来说明
+
+#cpuid.s Sample program
+
+.section .data
+
+output:
+.ascii "The processor Vendor ID is 'xxxxxxxxxxxx'\n"
+
+.section .text
+.globl _start
+
+_start:
+
+movl $0, %eax
+
+cpuid
+
+movl $output, %edi
+
+movl %ebx, 28(%edi)
+
+movl %edx, 32(%edi)
+
+movl %ecx, 36(%edi)
+
+movl $4, %eax
+
+movl $1, %ebx
+
+movl $output, %ecx
+
+movl $42, %edx
+
+int $0x80
+
+movl $1, %eax
+
+movl $0, %ebx
+
+int $0x80
+
+
+这个程序的作用是查询CPU的厂商ID，其中：
+
+,ascii定义字符串（和Intel格式完全不同）.section是声明段的语句，.data和.text是段名，分别为数据段和代码段， _start是gas（GNU汇编器）的默认入口标签，表示程序从这里开始执行。.globl将_start声明成了外部程序访问的标签。cpuid为指令请求CPU的指定信息，该指令用eax作为输入，ebx,edx,ecx作为输出，这里将0作为cpuid的输入指令，请求返回CPU的厂商ID字符串。返回的结果，一个12字节的字符串，分别存储在三个寄存器中，其中ebx存放低4位，edx中间4位，ecx高4位（注意顺序！）。接下来定义一个指针edi，edi指向output的开始地址，然后接着的3条语句将output里的x替换为厂商信息。28（%edi）中的28表示偏移量，即整个地址为%edi里的地址加上28个字节，这个地址正好是output里第一个x的地址。再接下来就是打印结果了，这里用到了Linux的一个系统调用（int 0x80），该系统调用的参数分别为：eax 系统调用号，ebx 要写入的文件描述符，ecx 字符串首地址，edx 字符串长度，程序里这些个参数的值分别为4，1（标准输出），output的地址和42。最后再次调用1号系统调用-退出函数，返回shell，这次 ebx中的值是返回给shell的退出代码，0表示无异常
+
+然后汇编连接运行程序：
+[root@zieckey-laptop src]# as -o cpuid.o cpuid.s 
+[root@zieckey-laptop src]# ld cpuid.o -o cpuid
+[root@zieckey-laptop src]# ./cpuid
+The processor Vendor ID is 'GenuineIntel'
+[root@zieckey-laptop src]# 
+
+本人的电脑是Pentium M的CPU所以返回的结果是GenuineIntel。
+
+几点说明：
+
+1）Linux的标准汇编环境为as，ld，gdb,gprof,objdump等GNU开发调试工具，除了gdb外，其他全部随binutils包发布。其中as使用的是AT&T语法。在Linux下也可以使用Nasm来进行Intel格式的汇编程序编写
+
+2）Linux下汇编的系统调用为int 0x80，和DOS下的int 21h大同小异，只不过传递参数不同
+
+3）段声明语句.section不需要像Intel格式那样在段结尾的时候加上段结束标志（SEGMENT/ENDS），下一个段的开始自动标志着上个段的结束
+
+4）简单程序的入口标签不是必须要定义的，ld会自己判断入口，但是会给出警告
+
+5）本文部分内容来源于Richard Blum的《Professional Assembly Language》一书
+

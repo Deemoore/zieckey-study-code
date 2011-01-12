@@ -1,0 +1,81 @@
+qt-designer使用教程
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved
+
+第二章  调用退出
+
+上一章我们学习了 QT Designer 的基本使用方法，这一章我们添加一些稍稍复杂的功能。
+
+现在我们做一些准备工作，上次我们说过，我们最好为每一个QT程序建立一个单独的文件夹，
+这样就可以让我们更方便的使用QT为我们提供的工具，例如qmake等。
+
+[root@localhost root]# mkdir /root/DesignerTutorial2
+[root@localhost root]# cd /root/DesignerTutorial2
+
+然后打开 QT Designer ,直接在命令行下输入：designer，如下：
+[root@localhost DesignerTutorial2]# designer&
+[3] 16544
+[root@localhost DesignerTutorial2]#
+
+这里我们看到"Qt Designer - New/Open"对话框，这是一个新建对话框，
+我们先选择对话框上的第一个"C++ Project"，确定，然后更改名字，这里我们改为 tutorial2.pro 保存，
+默认情况是保存到我们刚刚创建的文件夹 /root/DesignerTutorial2
+
+这样我们就创建了一个 *.pro 文件。下面我们再创建一个对话框。
+从菜单栏的 File->New 打开新建对话框，选择第二个：Dialog，
+然后也同样保存到刚刚创建的文件夹 /root/DesignerTutorial2 下。
+这时侯,你的 QT Designer 中就会出现一个 From1 来. 
+更改右下角那个窗口里的 caption ，原内容 "Form1"改为 "我的第二个QT Desiger程序--调用退出",
+                       name    , 原内容 "Form1"改为 "form_main"
+可以看到这时候窗口的标题栏文字已经改变为"Form1"改为 "我的第二个QT Desiger程序--调用退出",不是吗？
+
+现在我们点击一下左边窗口上面的 ToolBox 中的那个 PushButton (标有 OK 的图标）
+并且用鼠标选择一个合适的大小. 在这个 PushButton 上面用用鼠标双击一下，
+我们就可以改变按钮上显示的字了。
+这里我们把"pushButton1"这几个字,换成 “退出我的程序”, 然後用选择 OK 就可以了. 
+现在我们看到, 那个按钮上的标签已将变成 “退出我的程序” 了. 
+更改右下角那个窗口"Property Editor"里的 name  , 原内容 "pushButton1"改为 "pBtnClose"
+
+现在我们想在程序运行的时候点击这个 “退出我的程序” 按钮就关闭我们的应用程序，
+那么我们该怎么做呢？
+也许你已经想到了为它添加一个信号和槽，是这样的吗？
+那么恭喜你，你已经了解了QT的核心内容了。
+
+我们按一下 F3（或者有菜单栏选择 Edit->Connections ）,然後在那个 “退出我的程序” 按钮上点击一下。
+这时侯我们就看到了 View and Edit Connection 的 Dialog 了. 在 Signal 中选择 clicked, 在 slot 中,先选
+择 close() 就好了,在 Reciever 中选择 form_main. 这时侯选择 OK. 
+
+我们就算是基本完成了。保存下。 如果想看看这个小程序长什麽样子.
+可以用 CTRL+T来看 PreView. 点击按钮看看，窗口关闭了，对吗？
+
+这时侯我们只需要一个小的 main.cpp 就可以编译了。同样我们的 QT Designer 也可以为我们生成 main.cpp 。
+从菜单栏的 File->New 打开新建对话框，选择最后一个：C++ Main-File(main.cpp).
+然后也同样保存到刚刚创建的文件夹 /root/DesignerTutorial2 下。
+
+好了，现在来编译我们的程序。
+生成Makefile文件：
+[root@localhost DesignerTutorial2]# qmake
+编译：
+[root@localhost DesignerTutorial2]# make
+/usr/lib/qt-3.1/bin/uic form_main.ui -o .ui/form_main.h
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/main.o main.cpp
+/usr/lib/qt-3.1/bin/uic form_main.ui -i form_main.h -o .ui/form_main.cpp
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/form_main.o .ui/form_main.cpp
+/usr/lib/qt-3.1/bin/moc .ui/form_main.h -o .moc/moc_form_main.cpp
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/moc_form_main.o .moc/moc_form_main.cpp
+g++  -o tutorial2 .obj/main.o .obj/form_main.o .obj/moc_form_main.o  -L/usr/lib/qt-3.1/lib -L/usr/X11R6/lib -lqt-mt -lXext -lX11 -lm
+[root@localhost DesignerTutorial2]# ./tutorial2
+
+[root@localhost DesignerTutorial2]# ls
+form_main.ui  main.cpp  Makefile  tutorial2  tutorial2.pro
+可以看到 tutorial2 ,这就是我们的可执行程序，
+运行：
+[root@localhost DesignerTutorial2]# ./tutorial2
+ 
+点击按钮看看，窗口关闭了，这不正是我们期望的吗？
+
+总结：
+这里我们学习了在Linux下 QT Designer 的基本使用方法，并且知道如何添加一个部件的信号。
+同样很简单，不是吗？
+

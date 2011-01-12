@@ -1,0 +1,102 @@
+函数名: abort
+功 能: 异常终止一个进程
+用 法: void abort(void);
+头文件：#include <stdlib.h>
+说明：abort函数是一个比较严重的函数，当调用它时，会导致程序异常终止，
+而不会进行一些常规的清除工作，比如释放内存等。
+程序例:
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	puts( "About to abort....\n" );
+	abort();
+	
+	puts( "This will never be executed!\n" );
+	exit( EXIT_SUCCESS );
+}
+[root@localhost error_process]# gcc abort.c 
+[root@localhost error_process]# ./a.out 
+About to abort....
+
+已放弃
+
+
+表头文件 #include<stdlib.h>
+定义函数 void exit(int status);
+
+exit()用来正常终结目前进程的执行,并把参数 status 返回给父进程,
+而进程所有的缓冲区数据会自动写回并关闭未关闭的文件。
+它并不像abort那样不做任何清理工作就退出，而是在完成所有的清理工作后才退出程序。
+
+
+     atexit(设置程序正常结束前调用的函数)
+
+表头文件 #include<stdlib.h>
+定义函数 int atexit (void (*function)(void));
+
+	atexit()用来设置一个程序正常结束前调用的函数。当程序通过调
+	用 exit()或从 main 中返回时,参数 function 所指定的函数会先被
+	调用,然后才真正由 exit()结束程序。
+	
+返回值  如果执行成功则返回 0,否则返回-1,失败原因存于 errno 中。
+
+#include <stdlib.h>
+#include <stdio.h>
+
+void my_exit(void)
+{
+	printf( "Before exit....\n" );
+}
+
+int main(void)
+{
+	atexit( my_exit );
+	return 0;
+}
+[root@localhost error_process]# gcc atexit.c 
+[root@localhost error_process]# ./a.out 
+Before exit....
+
+
+
+     strerror(返回错误原因的描述字符串)
+
+表头文件     #include<string.h>
+定义函数     char * strerror(int errnum);
+          strerror()   用来依参数 errnum 的错误代码来查询其错误原因的描述字符串,然后将该字符串指针返回。
+          这时如果把 errno 传个strerror，就可以得到可读的提示信息，而不再是一个冷冰冰的数字了。
+          
+返回值      返回描述错误原因的字符串指针。
+
+#include <string.h>
+#include <stdio.h>
+
+int main(void)
+{
+	int i;
+	
+	for ( i=0; i<10; i++ )
+	{
+		printf( "%d:%s\n", i, strerror(i) );
+	}	
+	
+	return 0;
+}
+
+[root@localhost error_process]# gcc strerror.c 
+[root@localhost error_process]# ./a.out 
+0:Success
+1:Operation not permitted
+2:No such file or directory
+3:No such process
+4:Interrupted system call
+5:Input/output error
+6:No such device or address
+7:Argument list too long
+8:Exec format error
+9:Bad file descriptor
+[root@localhost error_process]# 
+
+

@@ -1,0 +1,467 @@
+<html lang="zh">
+<head>
+<title>Error messages - CVS 中文手册</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="CVS 中文手册">
+<meta name="generator" content="makeinfo 4.7">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Troubleshooting.html#Troubleshooting" title="Troubleshooting">
+<link rel="next" href="Connection.html#Connection" title="Connection">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc { font-variant:small-caps }
+  span.roman { font-family: serif; font-weight: normal; } 
+body { 
+	margin: 2%;
+	padding: 0 5%;
+	background: #f2f2f9;
+}
+
+h1,h2,h3,h4,h5 {
+    padding: 0.5em 0 0 5%;
+    font-family: Tahoma, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+h1 {
+    padding: 0.5em 0 0.5em 5%;
+    color: #ffe710;
+    background: #0f6bcc;
+    border-bottom: solid 1px black;
+}
+
+h2 { text-decoration: underline; }
+
+h4 { font-style: italic; }
+
+pre {
+  margin: 0 5%;
+  padding: 0.5em;
+}
+
+pre.example {
+  border: solid 1px #aaaaff;
+  background: #eeeeff;
+  padding-bottom: 1em;
+}
+
+pre.verbatim {
+  border: solid 1px gray;
+  background: white;
+  padding-bottom: 1em;
+}
+
+div.node {
+  background: #eeeeee;
+  margin: 0 -5% 0 -2%;
+  padding: 0.5em 0.5em;
+  border: solid 1px #abaaaa;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  color: #333333;
+}
+
+.node a {
+  color: #770000;
+}
+
+.node a:visited {
+  color: #550000;
+}
+
+dt { 
+  font-weight: bold;
+}
+
+dd, li {
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+}
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Error-messages"></a>下一个：&nbsp;<a rel="next" accesskey="n" href="Connection.html#Connection">Connection</a>,
+上层：&nbsp;<a rel="up" accesskey="u" href="Troubleshooting.html#Troubleshooting">Troubleshooting</a>
+<hr><br>
+</div>
+
+<h3 class="appendixsec">F.1 Partial list of error messages</h3>
+
+<p>Here is a partial list of error messages that you may
+see from <span class="sc">cvs</span>.  It is not a complete list&mdash;<span class="sc">cvs</span>
+is capable of printing many, many error messages, often
+with parts of them supplied by the operating system,
+but the intention is to list the common and/or
+potentially confusing error messages.
+
+   <p>The messages are alphabetical, but introductory text
+such as <span class="samp">cvs update: </span> is not considered in
+ordering them.
+
+   <p>In some cases the list includes messages printed by old
+versions of <span class="sc">cvs</span> (partly because users may not be
+sure which version of <span class="sc">cvs</span> they are using at any
+particular moment). 
+<!-- If we want to start retiring messages, perhaps we -->
+<!-- should pick a cutoff version (for example, no more -->
+<!-- messages which are specific to versions before 1.9) -->
+<!-- and then move the old messages to an "old messages" -->
+<!-- node rather than deleting them completely. -->
+
+     <dl>
+<!-- FIXME: What is the correct way to format a multiline -->
+<!-- error message here?  Maybe @table is the wrong -->
+<!-- choice?  Texinfo gurus? -->
+<dt><var>file</var><code>:</code><var>line</var><code>: Assertion '</code><var>text</var><code>' failed</code><dd>The exact format of this message may vary depending on
+your system.  It indicates a bug in <span class="sc">cvs</span>, which can
+be handled as described in <a href="BUGS.html#BUGS">BUGS</a>.
+
+     <br><dt><code>cvs </code><var>command</var><code>: authorization failed: server </code><var>host</var><code> rejected access</code><dd>This is a generic response when trying to connect to a
+pserver server which chooses not to provide a
+specific reason for denying authorization.  Check that
+the username and password specified are correct and
+that the <code>CVSROOT</code> specified is allowed by <span class="samp">--allow-root</span>
+in <span class="file">inetd.conf</span>.  See <a href="Password-authenticated.html#Password-authenticated">Password authenticated</a>.
+
+     <br><dt><code>cvs </code><var>command</var><code>: conflict: removed </code><var>file</var><code> was modified by second party</code><dd>This message indicates that you removed a file, and
+someone else modified it.  To resolve the conflict,
+first run <span class="samp">cvs add </span><var>file</var>.  If desired, look
+at the other party's modification to decide whether you
+still want to remove it.  If you don't want to remove
+it, stop here.  If you do want to remove it, proceed
+with <span class="samp">cvs remove </span><var>file</var> and commit your
+removal. 
+<!-- Tests conflicts2-142b* in sanity.sh test for this. -->
+
+     <br><dt><code>cannot change permissions on temporary directory</code><dd>
+     <pre class="example">          Operation not permitted
+     </pre>
+     <p>This message has been happening in a non-reproducible,
+occasional way when we run the client/server testsuite,
+both on Red Hat Linux 3.0.3 and 4.1.  We haven't been
+able to figure out what causes it, nor is it known
+whether it is specific to Linux (or even to this
+particular machine!).  If the problem does occur on
+other unices, <span class="samp">Operation not permitted</span> would be
+likely to read <span class="samp">Not owner</span> or whatever the system
+in question uses for the unix <code>EPERM</code> error.  If
+you have any information to add, please let us know as
+described in <a href="BUGS.html#BUGS">BUGS</a>.  If you experience this error
+while using <span class="sc">cvs</span>, retrying the operation which
+produced it should work fine. 
+<!-- This has been seen in a variety of tests, including -->
+<!-- multibranch-2, multibranch-5, and basic1-24-rm-rm, -->
+<!-- so it doesn't seem particularly specific to any one -->
+<!-- test. -->
+
+     <br><dt><code>cvs [server aborted]: Cannot check out files into the repository itself</code><dd>The obvious cause for this message (especially for
+non-client/server <span class="sc">cvs</span>) is that the <span class="sc">cvs</span> root
+is, for example, <span class="file">/usr/local/cvsroot</span> and you try
+to check out files when you are in a subdirectory, such
+as <span class="file">/usr/local/cvsroot/test</span>.  However, there is a
+more subtle cause, which is that the temporary
+directory on the server is set to a subdirectory of the
+root (which is also not allowed).  If this is the
+problem, set the temporary directory to somewhere else,
+for example <span class="file">/var/tmp</span>; see <code>TMPDIR</code> in
+<a href="Environment-variables.html#Environment-variables">Environment variables</a>, for how to set the
+temporary directory.
+
+     <br><dt><code>cannot commit files as 'root'</code><dd>See <span class="samp">'root' is not allowed to commit files</span>.
+
+     <!-- For one example see basica-1a10 in the testsuite -->
+<!-- For another example, "cvs co ." on NT; see comment -->
+<!-- at windows-NT/filesubr.c (expand_wild). -->
+<!-- For another example, "cvs co foo/bar" where foo exists. -->
+<br><dt><code>cannot open CVS/Entries for reading: No such file or directory</code><dd>This generally indicates a <span class="sc">cvs</span> internal error, and
+can be handled as with other <span class="sc">cvs</span> bugs
+(参阅 <a href="BUGS.html#BUGS">BUGS</a>).  Usually there is a workaround&mdash;the
+exact nature of which would depend on the situation but
+which hopefully could be figured out.
+
+     <!-- This is more obscure than it might sound; it only -->
+<!-- happens if you run "cvs init" from a directory which -->
+<!-- contains a CVS/Root file at the start. -->
+<br><dt><code>cvs [init aborted]: cannot open CVS/Root: No such file or directory</code><dd>This message is harmless.  Provided it is not
+accompanied by other errors, the operation has
+completed successfully.  This message should not occur
+with current versions of <span class="sc">cvs</span>, but it is documented
+here for the benefit of <span class="sc">cvs</span> 1.9 and older.
+
+     <br><dt><code>cvs server: cannot open /root/.cvsignore: Permission denied</code><dt><code>cvs [server aborted]: can't chdir(/root): Permission denied</code><dd>See <a href="Connection.html#Connection">Connection</a>.
+
+     <br><dt><code>cvs [checkout aborted]: cannot rename file </code><var>file</var><code> to CVS/,,</code><var>file</var><code>: Invalid argument</code><dd>This message has been reported as intermittently
+happening with <span class="sc">cvs</span> 1.9 on Solaris 2.5.  The cause is
+unknown; if you know more about what causes it, let us
+know as described in <a href="BUGS.html#BUGS">BUGS</a>.
+
+     <br><dt><code>cvs [</code><var>command</var><code> aborted]: cannot start server via rcmd</code><dd>This, unfortunately, is a rather nonspecific error
+message which <span class="sc">cvs</span> 1.9 will print if you are
+running the <span class="sc">cvs</span> client and it is having trouble
+connecting to the server.  Current versions of <span class="sc">cvs</span>
+should print a much more specific error message.  If
+you get this message when you didn't mean to run the
+client at all, you probably forgot to specify
+<code>:local:</code>, as described in <a href="Repository.html#Repository">Repository</a>.
+
+     <br><dt><code>ci: </code><var>file</var><code>,v: bad diff output line: Binary files - and /tmp/T2a22651 differ</code><dd><span class="sc">cvs</span> 1.9 and older will print this message
+when trying to check in a binary file if
+<span class="sc">rcs</span> is not correctly installed.  Re-read the
+instructions that came with your <span class="sc">rcs</span> distribution
+and the <span class="sc">install</span> file in the <span class="sc">cvs</span>
+distribution.  Alternately, upgrade to a current
+version of <span class="sc">cvs</span>, which checks in files itself
+rather than via <span class="sc">rcs</span>.
+
+     <br><dt><code>cvs checkout: could not check out </code><var>file</var><dd>With <span class="sc">cvs</span> 1.9, this can mean that the <code>co</code> program
+(part of <span class="sc">rcs</span>) returned a failure.  It should be
+preceded by another error message, however it has been
+observed without another error message and the cause is
+not well-understood.  With the current version of <span class="sc">cvs</span>,
+which does not run <code>co</code>, if this message occurs
+without another error message, it is definitely a <span class="sc">cvs</span>
+bug (参阅 <a href="BUGS.html#BUGS">BUGS</a>). 
+<!-- My current suspicion is that the RCS in the rcs (not -->
+<!-- cvs/winnt/rcs57nt.zip) directory on the _Practical_ -->
+<!-- CD is bad (remains to be confirmed). -->
+<!-- There is also a report of something which looks -->
+<!-- very similar on SGI, Irix 5.2, so I dunno. -->
+
+     <br><dt><code>cvs [login aborted]: could not find out home directory</code><dd>This means that you need to set the environment
+variables that <span class="sc">cvs</span> uses to locate your home directory. 
+See the discussion of <code>HOME</code>, <code>HOMEDRIVE</code>, and <code>HOMEPATH</code> in
+<a href="Environment-variables.html#Environment-variables">Environment variables</a>.
+
+     <br><dt><code>cvs update: could not merge revision </code><var>rev</var><code> of </code><var>file</var><code>: No such file or directory</code><dd><span class="sc">cvs</span> 1.9 and older will print this message if there was
+a problem finding the <code>rcsmerge</code> program.  Make
+sure that it is in your <code>PATH</code>, or upgrade to a
+current version of <span class="sc">cvs</span>, which does not require
+an external <code>rcsmerge</code> program.
+
+     <br><dt><code>cvs [update aborted]: could not patch </code><var>file</var><code>: No such file or directory</code><dd>This means that there was a problem finding the
+<code>patch</code> program.  Make sure that it is in your
+<code>PATH</code>.  Note that despite appearances the message
+is <em>not</em> referring to whether it can find <var>file</var>. 
+If both the client and the server are running a current
+version of <span class="sc">cvs</span>, then there is no need for an
+external patch program and you should not see this
+message.  But if either client or server is running
+<span class="sc">cvs</span> 1.9, then you need <code>patch</code>.
+
+     <br><dt><code>cvs update: could not patch </code><var>file</var><code>; will refetch</code><dd>This means that for whatever reason the client was
+unable to apply a patch that the server sent.  The
+message is nothing to be concerned about, because
+inability to apply the patch only slows things down and
+has no effect on what <span class="sc">cvs</span> does. 
+<!-- xref to update output.  Or File status? -->
+<!-- Or some place else that -->
+<!-- explains this whole "patch"/P/Needs Patch thing? -->
+
+     <br><dt><code>dying gasps from </code><var>server</var><code> unexpected</code><dd>There is a known bug in the server for <span class="sc">cvs</span> 1.9.18
+and older which can cause this.  For me, this was
+reproducible if I used the <span class="samp">-t</span> global option.  It
+was fixed by Andy Piper's 14 Nov 1997 change to
+src/filesubr.c, if anyone is curious. 
+If you see the message,
+you probably can just retry the operation which failed,
+or if you have discovered information concerning its
+cause, please let us know as described in <a href="BUGS.html#BUGS">BUGS</a>.
+
+     <br><dt><code>end of file from server (consult above messages if any)</code><dd>The most common cause for this message is if you are
+using an external <code>rsh</code> program and it exited with
+an error.  In this case the <code>rsh</code> program should
+have printed a message, which will appear before the
+above message.  For more information on setting up a
+<span class="sc">cvs</span> client and server, see <a href="Remote-repositories.html#Remote-repositories">Remote repositories</a>.
+
+     <br><dt><code>cvs [update aborted]: EOF in key in RCS file </code><var>file</var><code>,v</code><dt><code>cvs [checkout aborted]: EOF while looking for end of string in RCS file </code><var>file</var><code>,v</code><dd>This means that there is a syntax error in the given
+<span class="sc">rcs</span> file.  Note that this might be true even if <span class="sc">rcs</span> can
+read the file OK; <span class="sc">cvs</span> does more error checking of
+errors in the RCS file.  That is why you may see this
+message when upgrading from <span class="sc">cvs</span> 1.9 to <span class="sc">cvs</span>
+1.10.  The likely cause for the original corruption is
+hardware, the operating system, or the like.  Of
+course, if you find a case in which <span class="sc">cvs</span> seems to
+corrupting the file, by all means report it,
+(参阅 <a href="BUGS.html#BUGS">BUGS</a>). 
+There are quite a few variations of this error message,
+depending on exactly where in the <span class="sc">rcs</span> file <span class="sc">cvs</span>
+finds the syntax error.
+
+     <p><a name="index-mkmodules-625"></a><br><dt><code>cvs commit: Executing 'mkmodules'</code><dd>This means that your repository is set up for a version
+of <span class="sc">cvs</span> prior to <span class="sc">cvs</span> 1.8.  When using <span class="sc">cvs</span>
+1.8 or later, the above message will be preceded by
+
+     <pre class="example">          cvs commit: Rebuilding administrative file database
+     </pre>
+     <p>If you see both messages, the database is being rebuilt
+twice, which is unnecessary but harmless.  If you wish
+to avoid the duplication, and you have no versions of
+<span class="sc">cvs</span> 1.7 or earlier in use, remove <code>-i mkmodules</code>
+every place it appears in your <code>modules</code>
+file.  For more information on the <code>modules</code> file,
+see <a href="modules.html#modules">modules</a>.
+
+     <!-- This message comes from "co", and I believe is -->
+<!-- possible only with older versions of CVS which call -->
+<!-- co.  The problem with being able to create the bogus -->
+<!-- RCS file still exists, though (and I think maybe -->
+<!-- there is a different symptom(s) now). -->
+<!-- FIXME: Would be nice to have a more exact wording -->
+<!-- for this message. -->
+<br><dt><code>missing author</code><dd>Typically this can happen if you created an RCS file
+with your username set to empty.  <span class="sc">cvs</span> will, bogusly,
+create an illegal RCS file with no value for the author
+field.  The solution is to make sure your username is
+set to a non-empty value and re-create the RCS file. 
+<!-- "make sure your username is set" is complicated in -->
+<!-- and of itself, as there are the environment -->
+<!-- variables the system login name, &c, and it depends -->
+<!-- on the version of CVS. -->
+
+     <br><dt><code>cvs [checkout aborted]: no such tag </code><var>tag</var><dd>This message means that <span class="sc">cvs</span> isn't familiar with
+the tag <var>tag</var>.  Usually this means that you have
+mistyped a tag name; however there are (relatively
+obscure) cases in which <span class="sc">cvs</span> will require you to
+<!-- Search sanity.sh for "no such tag" to see some of -->
+<!-- the relatively obscure cases. -->
+try a few other <span class="sc">cvs</span> commands involving that tag,
+before you find one which will cause <span class="sc">cvs</span> to update
+<a name="index-CVSROOT_002fval_002dtags-file_002c-forcing-tags-into-626"></a><a name="index-val_002dtags-file_002c-forcing-tags-into-627"></a>the <span class="file">val-tags</span> file; see discussion of val-tags in
+<a href="File-permissions.html#File-permissions">File permissions</a>.  You only need to worry about
+this once for a given tag; when a tag is listed in
+<span class="file">val-tags</span>, it stays there.  Note that using
+<span class="samp">-f</span> to not require tag matches does not override
+this check; see <a href="Common-options.html#Common-options">Common options</a>.
+
+     <br><dt><code>*PANIC* administration files missing</code><dd>This typically means that there is a directory named
+<span class="sc">cvs</span> but it does not contain the administrative files
+which <span class="sc">cvs</span> puts in a CVS directory.  If the problem is
+that you created a CVS directory via some mechanism
+other than <span class="sc">cvs</span>, then the answer is simple, use a name
+other than <span class="sc">cvs</span>.  If not, it indicates a <span class="sc">cvs</span> bug
+(参阅 <a href="BUGS.html#BUGS">BUGS</a>).
+
+     <br><dt><code>rcs error: Unknown option: -x,v/</code><dd>This message will be followed by a usage message for
+<span class="sc">rcs</span>.  It means that you have an old version of
+<span class="sc">rcs</span> (probably supplied with your operating
+system), as well as an old version of <span class="sc">cvs</span>. 
+<span class="sc">cvs</span> 1.9.18 and earlier only work with <span class="sc">rcs</span> version 5 and
+later; current versions of <span class="sc">cvs</span> do not run <span class="sc">rcs</span> programs. 
+<!-- For more information on installing @sc{cvs}, see -->
+<!-- (FIXME: where?  it depends on whether you are -->
+<!-- getting binaries or sources or what). -->
+<!-- The message can also say "ci error" or something -->
+<!-- instead of "rcs error", I suspect. -->
+
+     <br><dt><code>cvs [server aborted]: received broken pipe signal</code><dd>This message can be caused by a loginfo program that fails to
+read all of the log information from its standard input. 
+If you find it happening in any other circumstances,
+please let us know as described in <a href="BUGS.html#BUGS">BUGS</a>.
+
+     <br><dt><code>'root' is not allowed to commit files</code><dd>When committing a permanent change, <span class="sc">cvs</span> makes a log entry of
+who committed the change.  If you are committing the change logged
+in as "root" (not under "su" or other root-priv giving program),
+<span class="sc">cvs</span> cannot determine who is actually making the change. 
+As such, by default, <span class="sc">cvs</span> disallows changes to be committed by users
+logged in as "root".  (You can disable this option by passing the
+<code>--enable-rootcommit</code> option to <span class="file">configure</span> and recompiling <span class="sc">cvs</span>. 
+On some systems this means editing the appropriate <span class="file">config.h</span> file
+before building <span class="sc">cvs</span>.)
+
+     <br><dt><code>Too many arguments!</code><dd>This message is typically printed by the <span class="file">log.pl</span>
+script which is in the <span class="file">contrib</span> directory in the
+<span class="sc">cvs</span> source distribution.  In some versions of
+<span class="sc">cvs</span>, <span class="file">log.pl</span> has been part of the default
+<span class="sc">cvs</span> installation.  The <span class="file">log.pl</span> script gets
+called from the <span class="file">loginfo</span> administrative file. 
+Check that the arguments passed in <span class="file">loginfo</span> match
+what your version of <span class="file">log.pl</span> expects.  In
+particular, the <span class="file">log.pl</span> from <span class="sc">cvs</span> 1.3 and
+older expects the log file as an argument whereas the
+<span class="file">log.pl</span> from <span class="sc">cvs</span> 1.5 and newer expects the
+log file to be specified with a <span class="samp">-f</span> option.  Of
+course, if you don't need <span class="file">log.pl</span> you can just
+comment it out of <span class="file">loginfo</span>.
+
+     <br><dt><code>cvs [update aborted]: unexpected EOF reading </code><var>file</var><code>,v</code><dd>See <span class="samp">EOF in key in RCS file</span>.
+
+     <br><dt><code>cvs [login aborted]: unrecognized auth response from </code><var>server</var><dd>This message typically means that the server is not set
+up properly.  For example, if <span class="file">inetd.conf</span> points
+to a nonexistent cvs executable.  To debug it further,
+find the log file which inetd writes
+(<span class="file">/var/log/messages</span> or whatever inetd uses on
+your system).  For details, see <a href="Connection.html#Connection">Connection</a>, and
+<a href="Password-authentication-server.html#Password-authentication-server">Password authentication server</a>.
+
+     <br><dt><code>cvs commit: Up-to-date check failed for `</code><var>file</var><code>'</code><dd>This means that someone else has committed a change to
+that file since the last time that you did a <code>cvs
+update</code>.  So before proceeding with your <code>cvs
+commit</code> you need to <code>cvs update</code>.  <span class="sc">cvs</span> will merge
+the changes that you made and the changes that the
+other person made.  If it does not detect any conflicts
+it will report <span class="samp">M </span><var>file</var> and you are ready
+to <code>cvs commit</code>.  If it detects conflicts it will
+print a message saying so, will report <span class="samp">C </span><var>file</var>,
+and you need to manually resolve the
+conflict.  For more details on this process see
+<a href="Conflicts-example.html#Conflicts-example">Conflicts example</a>.
+
+     <br><dt><code>Usage:	diff3 [-exEX3 [-i | -m] [-L label1 -L label3]] file1 file2 file3</code><dd>
+     <pre class="example">          Only one of [exEX3] allowed
+     </pre>
+     <p>This indicates a problem with the installation of
+<code>diff3</code> and <code>rcsmerge</code>.  Specifically
+<code>rcsmerge</code> was compiled to look for GNU diff3, but
+it is finding unix diff3 instead.  The exact text of
+the message will vary depending on the system.  The
+simplest solution is to upgrade to a current version of
+<span class="sc">cvs</span>, which does not rely on external
+<code>rcsmerge</code> or <code>diff3</code> programs.
+
+     <br><dt><code>warning: unrecognized response `</code><var>text</var><code>' from cvs server</code><dd>If <var>text</var> contains a valid response (such as
+<span class="samp">ok</span>) followed by an extra carriage return
+character (on many systems this will cause the second
+part of the message to overwrite the first part), then
+it probably means that you are using the <span class="samp">:ext:</span>
+access method with a version of rsh, such as most
+non-unix rsh versions, which does not by default
+provide a transparent data stream.  In such cases you
+probably want to try <span class="samp">:server:</span> instead of
+<span class="samp">:ext:</span>.  If <var>text</var> is something else, this
+may signify a problem with your <span class="sc">cvs</span> server. 
+Double-check your installation against the instructions
+for setting up the <span class="sc">cvs</span> server. 
+<!-- FIXCVS: should be printing CR as \r or \015 or some -->
+<!-- such, probably. -->
+
+     <br><dt><code>cvs commit: [</code><var>time</var><code>] waiting for </code><var>user</var><code>'s lock in </code><var>directory</var><dd>This is a normal message, not an error.  See
+<a href="Concurrency.html#Concurrency">Concurrency</a>, for more details.
+
+     <br><dt><code>cvs commit: warning: editor session failed</code><dd><a name="index-Exit-status_002c-of-editor-628"></a>This means that the editor which <span class="sc">cvs</span> is using exits with a nonzero
+exit status.  Some versions of vi will do this even when there was not
+a problem editing the file.  If so, point the
+<code>CVSEDITOR</code> environment variable to a small script
+such as:
+
+     <pre class="example">          #!/bin/sh
+          vi $*
+          exit 0
+     </pre>
+     <!-- "warning: foo was lost" and "no longer pertinent" (both normal). -->
+<!-- Would be nice to write these up-they are -->
+<!-- potentially confusing for the new user. -->
+</dl>
+
+   </body></html>
+

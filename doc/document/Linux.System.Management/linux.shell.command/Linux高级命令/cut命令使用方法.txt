@@ -1,0 +1,56 @@
+我们经常会遇到需要取出分字段的文件的某些特定字段，例如 /etc/password就是通过":"分隔各个字段的。
+可以通过cut命令来实现。例如，我们希望将系统账号名保存到特定的文件，就可以：
+[root@localhost ~]# cut -d: -f1 /etc/passwd > /tmp/zieckey_usr,txt
+[root@localhost ~]# cat /tmp/zieckey_usr,txt 
+root
+bin
+daemon
+adm
+lp
+sync
+shutdown
+halt
+mail
+news
+uucp
+operator
+games
+gopher
+ftp
+nobody
+rpm
+vcsa
+apache
+mailnull
+smmsp
+rpc
+distcache
+ntp
+nscd
+mysql
+webalizer
+squid
+tcpdump
+dbus
+avahi
+hsqldb
+torrent
+sshd
+rpcuser
+nfsnobody
+haldaemon
+xfs
+gdm
+zieckey
+[root@localhost ~]# 
+
+解释 cut -d: -f1 /etc/passwd > /tmp/zieckey_usr,txt 命令
+-d用来定义分隔符，默认为tab键，-f表示需要取得哪个字段
+当然也可以通过cut取得文件中每行中特定的几个字符，例如：
+cut -c3-5 /etc/passwd
+就是输出/etc/passwd文件中每行的第三到第五个字符。
+-c 和 －f 参数可以跟以下子参数：
+N 第N个字符或字段
+N- 从第一个字符或字段到文件结束
+N-M 从第N个到第M个字符或字段
+-M 从第一个到第M个字符或字段

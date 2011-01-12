@@ -1,0 +1,93 @@
+#theme-select  {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 12px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#theme-select UL {
+	LIST-STYLE-TYPE: none
+}
+#theme-select A IMG {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+#theme-select {
+	BACKGROUND: #fff; WIDTH: 500px; ZOOM: 1; POSITION: relative; HEIGHT: 425px
+}
+#theme-select A {
+	COLOR: #649e8e; TEXT-DECORATION: underline
+}
+#theme-select H4 {
+	FONT-SIZE: 12px; MARGIN-BOTTOM: 5px
+}
+#theme-select #theme-head {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/images/pop-head-bg.gif) #bfbfbf repeat-x 50% bottom; POSITION: relative; HEIGHT: 30px
+}
+.theme-close-window {
+	RIGHT: 10px; POSITION: absolute; TOP: 10px
+}
+#theme-browse {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; LEFT: 0px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; POSITION: absolute; TOP: 30px
+}
+#theme-cat {
+	FLOAT: left; WIDTH: 140px
+}
+#theme-cat-list UL {
+	OVERFLOW: hidden; HEIGHT: 280px
+}
+#go-up A {
+	BORDER-RIGHT: #fff 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #fff 1px solid; DISPLAY: block; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; MARGIN: 2px 3px; BORDER-LEFT: #fff 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #fff 1px solid; TEXT-ALIGN: center
+}
+#go-down A {
+	BORDER-RIGHT: #fff 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #fff 1px solid; DISPLAY: block; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; MARGIN: 2px 3px; BORDER-LEFT: #fff 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #fff 1px solid; TEXT-ALIGN: center
+}
+#go-up A:hover {
+	BORDER-RIGHT: #b2c8c2 1px solid; BORDER-TOP: #f5fffc 1px solid; BACKGROUND: #f1f8f6; BORDER-LEFT: #f5fffc 1px solid; BORDER-BOTTOM: #b2c8c2 1px solid
+}
+#go-down A:hover {
+	BORDER-RIGHT: #b2c8c2 1px solid; BORDER-TOP: #f5fffc 1px solid; BACKGROUND: #f1f8f6; BORDER-LEFT: #f5fffc 1px solid; BORDER-BOTTOM: #b2c8c2 1px solid
+}
+#theme-cat-list {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid; HEIGHT: 330px
+}
+#theme-cat-list LI A {
+	BORDER-RIGHT: #ccc 1px solid; PADDING-RIGHT: 4px; BORDER-TOP: #ccc 1px solid; DISPLAY: block; PADDING-LEFT: 4px; PADDING-BOTTOM: 4px; MARGIN: 4px 5px; BORDER-LEFT: #ccc 1px solid; COLOR: #000; PADDING-TOP: 4px; BORDER-BOTTOM: #ccc 1px solid; ZOOM: 1; TEXT-DECORATION: none
+}
+#theme-cat-list LI A:hover {
+	BACKGROUND: #d5e0dd; TEXT-DECORATION: none
+}
+#theme-cat-list .this-theme-cat A {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #ccc 1px solid; BACKGROUND: #d5e0dd; BORDER-LEFT: #ccc 1px solid; BORDER-BOTTOM: #eee 1px solid
+}
+#theme-list {
+	MARGIN-LEFT: 10px; POSITION: relative
+}
+#theme-thumb-list TD {
+	WIDTH: 120px
+}
+#theme-thumb-list DL {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 7px; PADDING-BOTTOM: 3px; MARGIN: 3px 2px; PADDING-TOP: 3px
+}
+#theme-thumb-list .this-theme DL {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/images/this-theme-bg.gif) no-repeat left top
+}
+#theme-thumb-list DT IMG {
+	BORDER-RIGHT: #999 1px solid; BORDER-TOP: #999 1px solid; BORDER-LEFT: #999 1px solid; BORDER-BOTTOM: #999 1px solid
+}
+#theme-thumb-list DD {
+	LINE-HEIGHT: 1.2em
+}
+.theme-pages {
+	RIGHT: 10px; POSITION: absolute; TOP: 0px
+}
+#theme-thumb-list {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid; HEIGHT: 330px
+}
+#theme-list {
+	FLOAT: left; WIDTH: 330px
+}
+#theme-foot {
+	LEFT: 0px; WIDTH: 500px; BOTTOM: 0px; POSITION: absolute
+}
+.theme-close-btn {
+	RIGHT: 10px; BOTTOM: 8px; POSITION: absolute
+}
+.theme-news {
+	LEFT: 10px; BOTTOM: 8px; POSITION: absolute
+}

@@ -1,0 +1,809 @@
+嵌入式数据库SQLite的编译、安装和使用
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved
+			
+
+下文介绍的内容在 RedHat Linux 9.0 平台上测试通过的。
+
+引言：sqlite简介
+
+sqlite是嵌入式SQL数据库引擎SQLite（SQLite Embeddable SQL Database Engine）的一个扩展。
+SQLite是一个实现嵌入式SQL数据库引擎小型C语言库（C library），实现了独立的，可嵌入的，零配置的SQL数据库引擎。
+特性包括：事务操作是原子，一致，孤立，并且持久的，即使在系统崩溃和电源故障之后。零配置——不需要安装和管理。
+实现了绝大多数SQL92标准。整个数据库存储在一个单一的文件中。数据库文件可以在不同字节序的机器之间自由地共享。
+支持最大可达2T的数据库。字符串和BLOB类型的大小只受限于可用内存。完整配置的少于250KB，忽略一些可选特性的少于150KB。
+在大多数常见操作上比流行的客户/服务器数据库引擎更快。 简单易于使用的API。 内建TCL绑定。
+另外提供可用于许多其他语言的绑定。具有良好注释的源代码，代码95%有较好的注释。
+独立：没有外部依赖。源代码位于公共域，可用于任何用途。
+用 SQLite连接的程序可以使用SQL数据库，但不需要运行一个单独的关系型数据库管理系统进程（separate RDBMS process）。
+SQLite不是一个用于连接到大型数据库服务器（big database server）的客户端库（client library），
+而是非常适合桌面程序和小型网站的数据库服务器。SQLite直接读写（reads and writes directly）在硬盘上的数据库文件。
+
+本文将告诉你怎么开始体验 SQLite ，这里没有长长的说明和冗烦的配置。
+
+
+一、sqlite-3.3.8编译安装
+请阅读在安装包里的 INSTALL或者README 文件。SQLite已经内置了，你不需要安装任何附加的软件（additional software）。
+Windows users可以下载SQLite扩展DLL。
+这里简单介绍一下：
+假设你得到的是源代码sqlite-3.3.8.tar.gz，这里将告诉你怎么编译它。
+解压sqlite-3.3.8.tar.gz 到 /home目录下
+For example:
+tar zxvf sqlite-3.3.8.tar.gz -C /home
+cd /home
+mkdir sqlite-3.3.8-ix86
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+
+如果出现下列错误
+../sqlite-3.3.8/src/tclsqlite.c: In function `DbUpdateHandler':
+../sqlite-3.3.8/src/tclsqlite.c:333: warning: passing arg 3 of `Tcl_ListObjAppendElement' makes pointer from integer without a cast
+../sqlite-3.3.8/src/tclsqlite.c: In function `tclSqlFunc':
+../sqlite-3.3.8/src/tclsqlite.c:419: warning: passing arg 1 of `Tcl_NewByteArrayObj' discards qualifiers from pointer target type
+...
+
+这个都是tcl相关的错误,可以先安装ActiveTcl以解决.假如你不需要tcl支持,那么这个错误可以这样避免:
+cd /home/sqlite-3.3.8-ix86/
+../sqlite-3.3.8/configure --disable-tcl --prefix=/home/sqlite-3.3.8-ix86
+编译并安装，然后生成帮助文档
+make && make install && make doc
+不出意外,将不会出现错误,那么
+Libraries have been installed in:
+   /home/sqlite-3.3.8-ix86/lib
+
+库文件已经生成在 /home/sqlite-3.3.8-ix86/lib 目录下
+可执行文件sqlite3已经生成在 /home/sqlite-3.3.8-ix86/bin 目录下
+下面创建一个新的数据库文件名叫"zieckey.db" (当然你可以使用不同的名字) 来测试数据库.
+直接输入: /home/sqlite-3.3.8-ix86/bin/sqlite3 test.db
+如果出现下面字样表明编译安装已经成功了.
+SQLite version 3.3.8
+Enter ".help" for instructions
+sqlite>
+
+
+
+二 、SQLite的基本语法
+
+这一章我们将会学习到sqlite的基本语法，sqlite的语法现象和SQL92是比较相象的，
+或者说sqlite3兼容大部份SQL92的语法现象。
+下面我们看看怎么用这些语法现象来创建数据库以及对数据库的各种操作。
+
+2.1 新建一个数据库
+例如我们想新建一个数据库命名为zieckey.db ，可以直接在shell下输入 sqlite3 zieckey.db ，
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite>
+
+这里 SQLite version 3.0.8 是SQLite的版本信息。也就是说本文使用的sqlite版本为 version 3.0.8 .
+这样就创建了一个新的数据库文件，命名为 zieckey.db
+
+2.2 创建表和插入值
+刚刚我们创建了一个新的数据库zieckey.db，加入我们想在其中新建一个名为 SensorData 的表，其包含五个列元素。
+可以用CREATE TABLE语法命令。
+CREATE TABLE语句基本上就是"CREATE TABLE"关键字后跟一个新的表名以及括号内的一堆定义和约束。表名可以是字符串或者标识符。以"sqlite_"开头的表名是留给sqlite数据库引擎使用的。每个字段的定义是字段名后跟字段的数据类型，接着是一个或多个的字段约束。字段的 数据类型并不限制字段中可以存放的数据。更多信息，参见sqlite的CREATE TABLE语法。
+
+这里具体作法如下：
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> CREATE TABLE SensorData(
+...> ID INTEGER PRIMARY KEY,
+...> SensorID INTEGER,
+...> SiteNum INTEGER,
+...> Time VARCHAR(12),
+...> SensorParameter REAL
+...> );
+
+注意sqlite下除了特殊命令都要以分号 “;” 结尾，否则它将一直等待第一个分号的出现才判断这条命令结束。
+
+现在我们可以用 schema 命令看看我们刚刚创建的表。具体作法如下：
+
+sqlite> .schema
+CREATE TABLE SensorData(
+ID INTEGER PRIMARY KEY,
+SensorID INTEGER,
+SiteNum INTEGER,
+Time VARCHAR(12),
+SensorParameter REAL
+);
+sqlite>
+
+.schema 是用来查看数据库中所有的表的定义内容。如果后面跟了具体的表名称，则显示该表的内容。
+
+假如我们想想SensorData表中插入具体列元素值，该怎么办呢？这里可以用INSERT语句。
+INSERT语句有两种基本形式。一种带有"VALUES"关键字，在已有表中插入一个新的行。若不定义字段列表，那么值的数目将与表中的字段数目相同。否则值的数目须与字段列表中的字段数目相同。不在字段列表中的字段被赋予缺省值或NULL(当未定义缺省值)。
+INSERT的第二种形式从SELECT语句中获取数据。若未定义字段列表，则从SELECT得到的字段的数目必须与表中的字段数目相同，否则应与定义的字段列表中的字段数目相同。SELECT的每一行结果在表中插入一个新的条目。SELECT可以是简单的或者复合的。如果SELECT语句带有 ORDER BY子句，ORDER BY会被忽略。
+这里我们可以这样做：
+
+sqlite> INSERT INTO "SensorData" VALUES(NULL, 1, 0, '200605011206', 18.9);
+sqlite> INSERT INTO "SensorData" VALUES(2, 1, 0, '200605011306', 16.4);
+sqlite> INSERT INTO "SensorData" VALUES(3, 1, 0, '200605011406', 15.3);
+sqlite> INSERT INTO "SensorData" VALUES(4, 1, 0, '200605011506', 15.5);
+sqlite>
+
+很简单对不对？简直太easy了。
+
+
+
+
+
+2.3 在线帮助
+
+前面两节，我们已经知道了sqlite语法最基本的用法。下面可以看看如何获得联机帮助。
+很简单，输入 .help 就行了。注意要help前加上“.”，这与上面说的以分号结尾有点不同，因为help命令被视为特殊命令。
+
+sqlite> .help
+.databases List names and files of attached databases
+.dump ?TABLE? ... Dump the database in an SQL text format
+.echo ON|OFF Turn command echo on or off
+.exit Exit this program
+.explain ON|OFF Turn output mode suitable for EXPLAIN on or off.
+.header(s) ON|OFF Turn display of headers on or off
+.help Show this message
+.import FILE TABLE Import data from FILE into TABLE
+.indices TABLE Show names of all indices on TABLE
+.mode MODE ?TABLE? Set output mode where MODE is on of:
+csv Comma-separated values
+column Left-aligned columns. (See .width)
+html HTML <table> code
+insert SQL insert statements for TABLE
+line One value per line
+list Values delimited by .separator string
+tabs Tab-separated values
+tcl TCL list elements
+.nullvalue STRING Print STRING in place of NULL values
+.output FILENAME Send output to FILENAME
+.output stdout Send output to the screen
+.prompt MAIN CONTINUE Replace the standard prompts
+.quit Exit this program
+.read FILENAME Execute SQL in FILENAME
+.schema ?TABLE? Show the CREATE statements
+.separator STRING Change separator used by output mode and .import
+.show Show the current values for various settings
+.tables ?PATTERN? List names of tables matching a LIKE pattern
+.timeout MS Try opening locked tables for MS milliseconds
+.width NUM NUM ... Set column widths for "column" mode
+sqlite>
+
+这里看到的命令都带有“.”开头，或者说sqlite下，只有这些命令是需要带“.”的。我们会经常用到的命令有：
+
+.output FILENAME
+.output stdout
+.quit
+.read FILENAME
+.schema ?TABLE?
+.dump ?TABLE? ...
+.echo ON|OFF
+.exit
+在下面会涉及到这些具体内容的。我们慢慢来。
+
+
+2.4 查看当前数据库下的所有表
+当数据库越来越大时，我们也许并不太记得数据库中有多少个表了，这时就需要查看当前数据库下的有些什么表。
+我们可以用 .tables 命令 。
+
+sqlite> .tables
+SensorData
+sqlite>
+2.5 退出sqlite3
+对于初学者，也许不知道怎么安全退出，不过如果是从头看到此处的读者也许已经知道了，
+因为刚才 .help 命令已经告诉我们答案了。安全退出有两个命令：.exit 和 .quit
+好了，我们已经新建一个名为zieckey.db的数据库，并在其中新建一个名为 SensorData 的表.
+现在我们想退出，那么可以用到刚刚提到的 .exit 和 .quit 命令。
+例如我们可以这样退出：
+sqlite> .exit
+这里需要说明一下，如果不是用 .exit 和 .quit 这两个命令退出，我们对数据库的修改有可能丢失。
+
+
+三、在Linux下用C/C++语言操纵SQLite数据库
+
+
+1. 说明
+
+这里我们假设你已经编译好了sqlite的库文件 :
+libsqlite3.a  libsqlite3.la  libsqlite3.so  libsqlite3.so.0  libsqlite3.so.0.8.6  pkgconfig
+和可执行文件 : sqlite3
+
+我们再假设你的sqlite3的安装目录在 /usr/local/sqlite3 目录下。
+如果不是，我们可以这样做，将你的安装文件复制到 /usr/local/sqlite3 这个目录，
+这样我们好在下面的操作中更加统一，从而减少出错的概率
+
+例如：[root@localhost home]# cp -rf sqlite-3.3.8-ix86/ /usr/local/sqlite3
+这里假设 /home/sqlite-3.3.8-ix86/ 是你的安装目录，也就是说你的sqlite原来就是安装在这里
+
+这样之后，我们的sqlite3的库文件目录是：/usr/local/sqlite3/lib
+可执行文件 sqlite3 的目录是： /usr/local/sqlite3/bin
+头文件 sqlite3.h 的目录是： /usr/local/sqlite3/include
+
+可以用ls命令查看下：
+[root@localhost sqlite]# ls /usr/local/sqlite3/lib
+libsqlite3.a  libsqlite3.la  libsqlite3.so  libsqlite3.so.0  libsqlite3.so.0.8.6  pkgconfig
+
+         
+好拉，现在开始我们的Linux下sqlite3编程之旅。
+
+2. 开始
+
+这里我们现在进行一个测试。
+现在我们来写个C/C++程序，调用 sqlite 的 API 接口函数。
+下面是一个C程序的例子，显示怎么使用 sqlite 的 C/C++ 接口. 数据库的名字由第一个参数取得且第二个参数或更多的参数是 SQL 执行语句. 这个函数调用sqlite3_open() 在 16 行打开数据库,并且sqlite3_close() 在 25 行关闭数据库连接。
+
+[root@localhost temp]# vi opendbsqlite.c
+按下 i 键切换到输入模式，输入下列代码:
+
+// name： opendbsqlite.c
+// This prog is used to test C/C++ API for sqlite3.It is very simple,ha!
+// Author : zieckey      All rights reserved.
+// date : 2006/11/13
+
+#include <stdio.h>
+#include <sqlite3.h>
+
+int main( void )
+{
+ sqlite3 *db=NULL;
+ char *zErrMsg = 0;
+ int rc;
+ 
+ //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+ rc = sqlite3_open("zieckey.db", &db); 
+ if( rc )
+ {
+  fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+  sqlite3_close(db);
+  return 0;
+ }
+ else printf("You have opened a sqlite3 database named zieckey.db successfully!\nCongratulations! Have fun !  ^-^ \n");
+ 
+ sqlite3_close(db); //关闭数据库
+ return 0;
+}
+
+
+退出，保存。(代码输入完成后，按下 Esc 键，然后输入：   :wq   ,回车就好拉)
+
+好拉，现在编译：[root@localhost temp]# gcc opendbsqlite.c -o db.out
+或者遇到这样的问题：
+[root@localhost temp]# gcc opendbsqlite.c -o db.out
+opendbsqlite.c:11:21: sqlite3.h: 没有那个文件或目录
+opendbsqlite.c: In function `main':
+opendbsqlite.c:19: `sqlite3' undeclared (first use in this function)
+opendbsqlite.c:19: (Each undeclared identifier is reported only once
+opendbsqlite.c:19: for each function it appears in.)
+opendbsqlite.c:19: `db' undeclared (first use in this function)
+
+这是由于没有找到头文件的原因。
+
+也许会碰到类似这样的问题：
+[root@localhost temp]# gcc opendbsqlite.c -o db.out
+/tmp/ccTkItnN.o(.text+0x2b): In function `main':
+: undefined reference to `sqlite3_open'
+/tmp/ccTkItnN.o(.text+0x45): In function `main':
+: undefined reference to `sqlite3_errmsg'
+/tmp/ccTkItnN.o(.text+0x67): In function `main':
+: undefined reference to `sqlite3_close'
+/tmp/ccTkItnN.o(.text+0x8f): In function `main':
+: undefined reference to `sqlite3_close'
+collect2: ld returned 1 exit status
+
+这是个没有找到库文件的问题。
+
+ 
+
+下面我们着手解决这些问题。
+
+由于用到了用户自己的库文件,所用应该指明所用到的库，我们可以这样编译：
+
+[root@localhost temp]# gcc opendbsqlite.c -o db.out -lsqlite3
+
+我用用 -lsqlite3 选项就可以了(前面我们生成的库文件是 libsqlite3.so.0.8.6 等,
+去掉前面的lib和后面的版本标志,就剩下 sqlite3 了所以是 -lsqlite3 )。
+如果我们在编译安装的时候，选择了安装路径，例如这样的话：
+
+.......
+# ../sqlite/configure --prefix=/usr/local/sqlite3
+# make
+.......
+
+这样编译安装时，sqlite的库文件将会生成在 /usr/local/sqlite3/lib 目录下
+sqlite的头文件将会生成在 /usr/local/sqlite3/include 目录下
+这时编译还要指定库文件路径，因为系统默认的路径没有包含 /usr/local/sqlite3/lib
+
+[root@localhost temp]# gcc opendbsqlite.c -o db.out  -lsqlite3 -L/usr/local/sqlite3/lib
+
+如果还不行的话，可能还需要指定头文件 sqlite3.h 的路径，如下：
+
+[root@localhost temp]# gcc opendbsqlite.c -o db.out -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include
+
+这样编译应该就可以了 ，运行：
+[root@localhost temp]# ./db.out
+./db.out: error while loading shared libraries: libsqlite3.so.0: cannot open shared object file: No such file or directory
+
+运行是也许会出现类似上面的错误。
+这个问题因为刚刚编译的时候没有选择静态编译，那么按照默认的编译就动态编译的。
+动态编译后，由于可执行文件在运行时要调用系统库文件，
+那么沿着系统默认的库文件搜索路径搜索，就可能找不到我们现在所需的库文件。
+致使出现 "error while loading shared libraries" 等错误。
+
+我们可以这样解决：
+方法一：静态编译
+在编译时加上 -static 参数，例如
+[root@localhost temp]# gcc opendbsqlite.c -o db.out -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include -static
+[root@localhost temp]# ll
+总用量 1584
+-rwxr-xr-x    1 root     root      1596988 11月 13 10:50 db.out
+-rw-r--r--    1 root     root          614 11月 13 10:31 opendbsqlite.c
+可以看到输出文件 db.out ,其大小为： 1596988k
+运行，好了，没有出现错误
+[root@localhost temp]# ./db.out
+You have opened a sqlite3 database named zieckey.db successfully!
+Congratulations! Have fun !  ^-^
+
+方法二：重新配置系统环境变量 LD_LIBRARY_PATH 
+这时需要指定 libsqlite3.so.0 库文件的路径,也就是配置系统环境变量 LD_LIBRARY_PATH ，
+使系统能够找到 libsqlite3.so.0 。
+去掉 -static ,再编译：
+[root@localhost temp]# gcc opendbsqlite.c -o db.out -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include
+[root@localhost temp]# ll
+总用量 36
+-rwxr-xr-x    1 root     root        12716 11月 13 10:56 db.out
+-rw-r--r--    1 root     root          614 11月 13 10:31 opendbsqlite.c
+[root@localhost temp]#
+可以看到输出文件 db.out ,其大小为： 12716k,比刚才的静态编译要小得多。
+所以我们推荐使用动态编译的方法。
+好了，现在我们来指定系统环境变量 LD_LIBRARY_PATH 的值
+在shell下输入：
+[root@localhost temp]# export LD_LIBRARY_PATH=/usr/local/sqlite3/lib:$LD_LIBRARY_PATH
+看看现在系统环境设置：
+[root@localhost temp]#env
+SSH_AGENT_PID=3511
+HOSTNAME=localhost.localdomain
+DESKTOP_STARTUP_ID=
+SHELL=/bin/bash
+TERM=xterm
+HISTSIZE=1000
+GTK_RC_FILES=/etc/gtk/gtkrc:/root/.gtkrc-1.2-gnome2
+WINDOWID=29388238
+OLDPWD=/mnt/usb/wuruan/sqlite
+QTDIR=/usr/lib/qt-3.1
+USER=root
+LD_LIBRARY_PATH=/usr/local/sqlite3/lib:
+LS_COLORS=no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:
+SSH_AUTH_SOCK=/tmp/ssh-XXt14q3a/agent.3456
+SESSION_MANAGER=local/localhost.localdomain:/tmp/.ICE-unix/3456
+USERNAME=root
+MAIL=/var/spool/mail/root
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/X11R6/bin:/root/bin
+INPUTRC=/etc/inputrc
+PWD=/mnt/usb/wuruan
+XMODIFIERS=@im=fcitx
+LANG=zh_CN.GB18030
+GDMSESSION=Default
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+HOME=/root
+SHLVL=2
+LANGUAGE=zh_CN.GB18030:zh_CN.GB2312:zh_CN
+GNOME_DESKTOP_SESSION_ID=Default
+BASH_ENV=/root/.bashrc
+LOGNAME=root
+LESSOPEN=|/usr/bin/lesspipe.sh %s
+DISPLAY=:0.0
+G_BROKEN_FILENAMES=1
+COLORTERM=gnome-terminal
+XAUTHORITY=/root/.Xauthority
+_=/bin/env
+
+看到了吧，LD_LIBRARY_PATH这一行开始就是sqlite3的库文件路径：
+LD_LIBRARY_PATH=/usr/local/sqlite3/lib: ............
+
+好拉，现在再运行
+[root@localhost temp]# ./db.out
+You have opened a sqlite3 database named zieckey.db successfully!
+Congratulations! Have fun !  ^-^
+
+是不是很有成就感阿 ，呵呵，这个上手还是很快的。
+
+
+3. 插入：insert    
+
+ 刚刚我们知道了怎么调用 sqlite3 的C/C++的API函数接口，下面我们看看怎么在C语言中向数据库插入数据。
+ 
+好的，我们现编辑一段c代码，取名为 insert.c
+
+ 
+
+// name： insert.c
+// This prog is used to test C/C++ API for sqlite3 .It is very simple,ha !
+// Author : zieckey      All rights reserved.
+// date : 2006/11/18
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sqlite3.h" 
+#define _DEBUG_
+
+int main( void )
+{
+ sqlite3 *db=NULL;
+ char *zErrMsg = 0;
+ int rc;
+ 
+ rc = sqlite3_open("zieckey.db", &db); //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+ if( rc )
+ {
+  fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+  sqlite3_close(db);
+  return 0;
+ }
+ else printf("You have opened a sqlite3 database named zieckey.db successfully!\nCongratulations! Have fun !  ^-^ \n");
+ 
+
+ //创建一个表,如果该表存在，则不创建，并给出提示信息，存储在 zErrMsg 中
+ char *sql = " CREATE TABLE SensorData(
+      ID INTEGER PRIMARY KEY,
+     SensorID INTEGER,
+      SiteNum INTEGER,
+      Time VARCHAR(12),
+      SensorParameter REAL
+      );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+
+ #ifdef _DEBUG_
+        printf("%s\n",zErrMsg);
+    #endif
+ 
+ //插入数据 
+ sql = "INSERT INTO \"SensorData\" VALUES( NULL , 1 , 1 , '200605011206', 18.9 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+
+ sql = "INSERT INTO \"SensorData\" VALUES( NULL , 1 , 1 , '200605011306', 16.4 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+
+ 
+ sqlite3_close(db); //关闭数据库
+ return 0;
+}
+
+
+好的，将上述代码写入一个文件，并将其命名为 insert.c 。
+解释：
+
+sqlite3_exec的函数原型说明如下：
+int sqlite3_exec(
+  sqlite3*,                     /* An open database */
+  const char *sql,              /* SQL to be executed */
+  sqlite_callback,              /* Callback function */
+  void *,                       /* 1st argument to callback function */
+  char **errmsg                 /* Error msg written here */
+);
+
+
+编译：
+[root@localhost temp]# gcc  insert.c -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include
+insert.c:28:21: warning: multi-line string literals are deprecated
+[root@localhost temp]#
+执行
+[root@localhost temp]# ./a.out
+./a.out: error while loading shared libraries: libsqlite3.so.0: cannot open shared object file: No such file or directory
+[root@localhost temp]#
+同样的情况，如上文处理方法：
+[root@localhost temp]# export LD_LIBRARY_PATH=/usr/local/sqlite3/lib:$LD_LIBRARY_PATH
+[root@localhost temp]# ./a.out
+You have opened a sqlite3 database named zieckey.db successfully!
+Congratulations! Have fun !  ^-^
+(null)
+(null)
+(null)
+[root@localhost temp]#
+运行成功了，好了，现在我们来看看是否插入了数据
+[root@localhost temp]# /usr/local/sqlite3/bin/sqlite3 zieckey.db
+SQLite version 3.3.8
+Enter ".help" for instructions
+sqlite> select * from SensorData;
+1|1|1|200605011206|18.9
+2|1|1|200605011306|16.4
+sqlite>
+
+哈哈，已经插入进去了，不是吗？
+很简单是不？
+
+4. 查询: SELETE
+
+ 好了，我们知道了怎么调用 sqlite3 的C/C++的API函数接口去创建数据库、创建表格、并插入数据，
+下面我们看看怎么在C语言中查询数据库中的数据。
+ 
+好的，我们现编辑一段c代码，取名为 query.c
+
+// name： query.c
+// This prog is used to test C/C++ API for sqlite3 .It is very simple,ha !
+// Author : zieckey      All rights reserved.
+// date : 2006/11/18
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sqlite3.h" 
+#define _DEBUG_
+
+int main( void )
+{
+ sqlite3 *db=NULL;
+ char *zErrMsg = 0;
+
+ int rc;
+ 
+ rc = sqlite3_open("zieckey.db", &db); //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+ if( rc )
+ {
+  fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+  sqlite3_close(db);
+  return 0;
+ }
+ else printf("You have opened a sqlite3 database named zieckey.db successfully!\nCongratulations! Have fun !  ^-^ \n");
+ 
+
+ //创建一个表,如果该表存在，则不创建，并给出提示信息，存储在 zErrMsg 中
+ char *sql = " CREATE TABLE SensorData(
+      ID INTEGER PRIMARY KEY,
+     SensorID INTEGER,
+      SiteNum INTEGER,
+      Time VARCHAR(12),
+      SensorParameter REAL
+      );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+
+ #ifdef _DEBUG_
+        printf("zErrMsg = %s \n", zErrMsg);
+    #endif
+ 
+ //插入数据 
+ sql = "INSERT INTO \"SensorData\" VALUES(NULL , 1 , 1 , '200605011206', 18.9 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ 
+ sql = "INSERT INTO \"SensorData\" VALUES(NULL , 1 , 1 , '200605011306', 16.4 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ 
+ 
+  
+ int nrow = 0, ncolumn = 0;
+ char **azResult; //二维数组存放结果
+
+ //查询数据
+ /*
+ int sqlite3_get_table(sqlite3*, const char *sql,char***result , int *nrow , int *ncolumn ,char **errmsg );
+ result中是以数组的形式存放你所查询的数据，首先是表名，再是数据。
+ nrow ,ncolumn分别为查询语句返回的结果集的行数，列数，没有查到结果时返回0
+ */
+ sql = "SELECT * FROM SensorData ";
+ sqlite3_get_table( db , sql , &azResult , &nrow , &ncolumn , &zErrMsg );
+
+ int i = 0 ;
+ printf( "row:%d column=%d \n" , nrow , ncolumn );
+ printf( "\nThe result of querying is : \n" );
+ 
+ for( i=0 ; i<( nrow + 1 ) * ncolumn ; i++ )
+  printf( "azResult[%d] = %s\n", i , azResult[i] );
+
+ //释放掉  azResult 的内存空间
+ sqlite3_free_table( azResult );
+  
+ #ifdef _DEBUG_
+        printf("zErrMsg = %s \n", zErrMsg);
+    #endif
+
+ sqlite3_close(db); //关闭数据库
+ return 0;
+ 
+}
+
+
+我们这里用到了一个查询的语句是 "SELECT * FROM SensorData " ,
+在C语言中对应的函数接口是  sqlite3_get_table( db , sql , &azResult , &nrow , &ncolumn , &zErrMsg ); 
+这个函数接口的解释在程序中已经注释。
+下面我们编译运行下看看，
+
+[root@localhost temp]# export LD_LIBRARY_PATH=/usr/local/sqlite3/lib:$LD_LIBRARY_PATH
+[root@localhost temp]# gcc query.c -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include
+query.c:29:21: warning: multi-line string literals are deprecated
+[root@localhost temp]# ./a.out
+You have opened a sqlite3 database named zieckey.db successfully!
+Congratulations! Have fun !  ^-^
+zErrMsg = (null)
+row:2 column=5
+ 
+The result of querying is :
+azResult[0] = ID
+azResult[1] = SensorID
+azResult[2] = SiteNum
+azResult[3] = Time
+azResult[4] = SensorParameter
+azResult[5] = 1
+azResult[6] = 1
+azResult[7] = 1
+azResult[8] = 200605011206
+azResult[9] = 18.9
+azResult[10] = 2
+azResult[11] = 1
+azResult[12] = 1
+azResult[13] = 200605011306
+azResult[14] = 16.4
+zErrMsg = (null)
+
+这里我们可以看到，azResult 的前面 5 个数据正好是我们的表 SensorData 的列属性，
+之后才是我们要查询的数据。所以我们的程序中才有 i<( nrow + 1 ) * ncolumn  的判断条件：
+for( i=0 ; i<( nrow + 1 ) * ncolumn ; i++ )
+  printf( "azResult[%d] = %s\n", i , azResult[i] );
+
+输出中有 zErrMsg = (null) 这样的字句，这是 zErrMsg 保留的错误信息，
+正如你所看到的，zErrMsg 为空，表明在执行过程中没有错误信息。
+
+5. 删除：delete
+
+ 下面我们看看怎么在C语言中删除数据库中的特定的数据。
+ 
+好的，我们现编辑一段c代码，取名为 delete.c
+
+
+// name： delete.c
+// This prog is used to test C/C++ API for sqlite3 .It is very simple,ha !
+// Author : zieckey      All rights reserved.
+// date : 2006/11/18
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sqlite3.h" 
+#define _DEBUG_
+
+int main( void )
+{
+ sqlite3 *db=NULL;
+ char *zErrMsg = 0;
+
+ int rc;
+ 
+ rc = sqlite3_open("zieckey.db", &db); //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+ if( rc )
+ {
+  fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+  sqlite3_close(db);
+  return 0;
+ }
+ else printf("You have opened a sqlite3 database named zieckey.db successfully!\nCongratulations! Have fun !  ^-^ \n");
+ 
+
+ //创建一个表,如果该表存在，则不创建，并给出提示信息，存储在 zErrMsg 中
+ char *sql = " CREATE TABLE SensorData(
+      ID INTEGER PRIMARY KEY,
+     SensorID INTEGER,
+      SiteNum INTEGER,
+      Time VARCHAR(12),
+      SensorParameter REAL
+      );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+
+ #ifdef _DEBUG_
+        printf("zErrMsg = %s \n", zErrMsg);
+    #endif
+ 
+ //插入数据 
+ sql = "INSERT INTO \"SensorData\" VALUES(NULL , 1 , 1 , '200605011206', 18.9 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ 
+ sql = "INSERT INTO \"SensorData\" VALUES(NULL , 23 , 45 , '200605011306', 16.4 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ 
+ sql = "INSERT INTO \"SensorData\" VALUES(NULL , 34 , 45 , '200605011306', 15.4 );" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ 
+  
+ int nrow = 0, ncolumn = 0;
+ char **azResult; //二维数组存放结果
+
+ //查询数据
+ sql = "SELECT * FROM SensorData ";
+ sqlite3_get_table( db , sql , &azResult , &nrow , &ncolumn , &zErrMsg );
+ int i = 0 ;
+ printf( "row:%d column=%d \n" , nrow , ncolumn );
+ printf( "\nThe result of querying is : \n" );
+ for( i=0 ; i<( nrow + 1 ) * ncolumn ; i++ )
+  printf( "azResult[%d] = %s\n", i , azResult[i] );
+
+ //删除数据
+ sql = "DELETE FROM SensorData WHERE SensorID = 1 ;" ;
+ sqlite3_exec( db , sql , 0 , 0 , &zErrMsg );
+ #ifdef _DEBUG_
+        printf("zErrMsg = %s \n", zErrMsg);
+    #endif
+ sql = "SELECT * FROM SensorData ";
+ sqlite3_get_table( db , sql , &azResult , &nrow , &ncolumn , &zErrMsg );
+ printf( "\n\n\n\nrow:%d column=%d " , nrow , ncolumn );
+ printf( "\nAfter deleting , the result of querying is : \n" );
+ for( i=0 ; i<( nrow + 1 ) * ncolumn ; i++ )
+  printf( "azResult[%d] = %s\n", i , azResult[i] );
+
+
+ //释放掉  azResult 的内存空间
+ sqlite3_free_table( azResult );
+  
+ #ifdef _DEBUG_
+        printf("zErrMsg = %s \n", zErrMsg);
+    #endif
+
+ sqlite3_close(db); //关闭数据库
+ return 0;
+ 
+}
+
+下面我们编译运行看看，效果如何
+
+[root@localhost temp]# export LD_LIBRARY_PATH=/usr/local/sqlite3/lib:$LD_LIBRARY_PATH
+[root@localhost temp]# gcc delete.c -lsqlite3 -L/usr/local/sqlite3/lib -I/usr/local/sqlite3/include
+delete.c:29:21: warning: multi-line string literals are deprecated
+[root@localhost temp]# ./a.out
+You have opened a sqlite3 database named zieckey.db successfully!
+Congratulations! Have fun !  ^-^
+zErrMsg = (null)
+row:3 column=5
+ 
+The result of querying is :
+azResult[0] = ID
+azResult[1] = SensorID
+azResult[2] = SiteNum
+azResult[3] = Time
+azResult[4] = SensorParameter
+azResult[5] = 1
+azResult[6] = 1
+azResult[7] = 1
+azResult[8] = 200605011206
+azResult[9] = 18.9
+azResult[10] = 2
+azResult[11] = 23
+azResult[12] = 45
+azResult[13] = 200605011306
+azResult[14] = 16.4
+azResult[15] = 3
+azResult[16] = 34
+azResult[17] = 45
+azResult[18] = 200605011306
+azResult[19] = 15.4
+zErrMsg = (null)
+ 
+ 
+ 
+ 
+row:2 column=5
+After deleting , the result of querying is :
+azResult[0] = ID
+azResult[1] = SensorID
+azResult[2] = SiteNum
+azResult[3] = Time
+azResult[4] = SensorParameter
+azResult[5] = 2
+azResult[6] = 23
+azResult[7] = 45
+azResult[8] = 200605011306
+azResult[9] = 16.4
+azResult[10] = 3
+azResult[11] = 34
+azResult[12] = 45
+azResult[13] = 200605011306
+azResult[14] = 15.4
+zErrMsg = (null)
+
+
+从程序输出结果就可以看出，在删除数据前，我们有三条记录，
+删除数据后我们发现，数据库内记录少了。从而实现了我们的删除数据目的。
+
+
+总结：
+在这篇文章里，我们主要了解了SQLite数据库的一些特性，并且在Linux下的编译安装方法，
+同时我们还了解了如何使用SQLite数据库，包括通过SQL语句和编程来实现对数据库的数据管理。
+
+在程序中对数据库管理的是在C/C++语言中调用 sqlite 的函数接口来实现对数据库的管理，
+包括创建数据库、创建表格、插入数据、查询数据、删除数据等。而这些操作似乎都很简单不是吗？
+

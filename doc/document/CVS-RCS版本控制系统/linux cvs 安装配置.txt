@@ -1,0 +1,88 @@
+
+linux cvs 安装配置
+一、以root用户登录，安装cvs，此处可参考安装文档
+# ./configure --prefix=/opt/cvs --enable-rootcommit
+注释：
+这里如果不添加“--enable-rootcommit”选项，那么用root用户登录时，使用cvs就会遇到下面的问题：
+'root' is not allowed to commit files
+    当提交一个永久性的更改，cvs 会为提交修改的人建立一个日志条目。如果你的提交被当作 "root" (不是使用 "su" 或者其他具有 root 授权的程序) 记录，cvs 将无法判断是谁做了真正的修改。正因为此，CVS 默认不允许登录为 "root" 来提交。(你可以在 configure 里面加上 --enable-rootcommit 选项并重新编译来禁止此选项。在有些系统上面需要在编译 cvs 前修改对应的 config.h 文件)。 
+# make
+# make install
+
+二、创建cvs组：
+  # groupadd cvs
+  
+  四、创建cvs的主目录：
+  mkdir /home/cvsroot
+  
+三、创建cvs主用户：
+  # useradd –g cvs cvsroot -d /home/cvsroot
+  # passwd cvsroot
+
+六、6.初始化cvs源代码库,此操作生成目录/home/cvsroot/CVSROOT,其下为一些初始化文件
+	#su cvsroot
+   $ cvs -d /home/cvsroot init
+七、加入cvs服务，修改/etc/services，如果没有如下两行，则添加
+  cvspserver      2401/tcp                        # CVS client/server operations
+  cvspserver      2401/udp                        # CVS client/server operations
+八、如果使用的是xinetd方式,所以在xinetd.d目录下添加需要启动的服务，则在该目录添加文件cvspserver，此名字必须与services
+ 文件中一致
+
+service   cvspserver  
+{  
+	disable   =   no  
+	flags   =   REUSE  
+	socket_type   =   stream  
+	wait   =   no  
+	user   =   root  
+	server   =   /opt/cvs/bin/cvs  
+	server_args   =   -f   --allow-root=/mnt/study/Coding/linux_cvs   pserver  
+	log_on_failure   +=   USERID  
+}   
+   其中/usr/local/cvs/bin/cvs为cvs命令的执行路径
+   这个文件注意格式，特别是Tab跳格
+   
+九、重新启动xinetd:
+  /etc/rc.d/init.d/xinetd restart
+  FC7默认是没有安装上xinetd服务，所以先安装xinetd服务，这里简单通过yum安装：
+#yum install xinetd
+
+十、检查cvspserver服务是否已经启动
+  netstat -l |grep cvspserver
+  应该有如下结果：
+  tcp 0 0 *:cvspserver  *:* LISTEN
+十一、试用:
+    cvs -d :pserver:用户名@localhost:/home/cvsroot login
+    cvs -d :pserver:cvsroot@localhost:/home/cvsroot login
+    敲入命令回车后提示输入用户名的密码,你按照自己设置的密码输入,如果没有什么错误信息出现就是成功了
+    
+十二、添加cvs用户:
+  创建可以登陆cvs服务的用户及密码,需要创建文件passwd
+   vi /home/cvsroot/CVSROOT/passwd
+   文件内容如下:
+   test1:xxxxxx:cvsroot
+   test2:xxxxxx:cvsroot
+   此文件的意思是test1和test2两个用户可以登陆cvs服务器,登陆后其权限为用户cvsroot的权限
+   注意:cvs用户和服务器用户是可以不一样的
+    xxxxxx为密码,由以下文件生成:
+    vi /home/cvsroot/passwdgen.pl
+    文件内容: 
+    #!/usr/bin/perl
+    srand (time());
+    my $randletter = "(int (rand (26)) + (int (rand (1) + .5) % 2 ? 65 : 97))";
+    my $salt = sprintf ("%c%c", eval $randletter, eval $randletter);
+    my $plaintext = shift;
+    my $crypttext = crypt ($plaintext, $salt);
+    print "${crypttext}\n";
+  
+  +++++ 可以使用/apache/bin/htpasswd 生成 +++++++
+十三、系统其它用户如果应用cvs，则将用户的主属组设为cvs即可
+   修改/etc/passwd文件
+十四、添加cvs路径:
+  PATH=$PATH:/usr/local/cvs/bin
+  export PATH
+  CVSROOT=/home/cvsroot
+  export CVSROOT
+  其中/usr/local/cvs/bin为cvs的命令路径
+至此，cvs配置已全部完成，系统其它用户以可应用cvs命令，如果应用命令cvs ci等有目录不可写等错误，
+则修改/home/cvsroot目录下对应的目录权限即可

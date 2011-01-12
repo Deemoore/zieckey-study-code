@@ -1,0 +1,85 @@
+﻿
+如果你程序是多线程的话，你可以定义你的断点是否在所有的线程上
+，或是在某个特定的线程。GDB很容易帮你完成这一工作。
+
+下面是常用的几个命令：
+info threads
+显示当前可调试的所有线程，前面有*的是当前调试的线程。
+
+thread 16
+切换到16号线程
+
+bt
+查看调用堆栈
+
+一般来讲，在使用gdb调试的时候，只有一个线程为活动线程，如果希望得到其他的线程的输出结果，必须使用thread命令切换至指定的线程，才能对该线程进行调试或观察输出结果。
+
+break <linespec> thread <threadno>
+break <linespec> thread <threadno> if ...
+linespec 指定了断点设置在的源程序的行号。threadno指定了线程
+的ID，注意，这个ID是GDB分配的，你可以通过“info threads”命
+令来查看正在运行程序中的线程信息。如果你不指定thread
+<threadno>则表示你的断点设在所有线程上面。你还可以为某线程指
+定断点条件。如：
+
+
+(gdb) info threads
+  16 Thread 0x491ca940 (LWP 11597)  0x0000003f984cc4c2 in select () from /lib64/libc.so.6
+  15 Thread 0x487c9940 (LWP 11596)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  14 Thread 0x47dc8940 (LWP 11595)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  13 Thread 0x473c7940 (LWP 11594)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  12 Thread 0x469c6940 (LWP 11593)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  11 Thread 0x45fc5940 (LWP 11592)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  10 Thread 0x455c4940 (LWP 11591)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  9 Thread 0x44bc3940 (LWP 11590)  0x0000003f984d3368 in epoll_wait () from /lib64/libc.so.6
+  8 Thread 0x40a5a940 (LWP 11589)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  7 Thread 0x441c2940 (LWP 11588)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  6 Thread 0x437c1940 (LWP 11587)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  5 Thread 0x42dc0940 (LWP 11586)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  4 Thread 0x423bf940 (LWP 11585)  0x0000003f984d3368 in epoll_wait () from /lib64/libc.so.6
+  3 Thread 0x4149a940 (LWP 11584)  0x0000003f98499761 in nanosleep () from /lib64/libc.so.6
+* 1 Thread 0x2b57256e92a0 (LWP 11580)  0x0000003f984c552b in read () from /lib64/libc.so.6
+
+(gdb) break /home/zieckey/workspace/v2/server/trunk/src/hnetworklib/src/HUdpReceiverThread.h:35 thread 16
+No source file named /home/zieckey/workspace/v2/server/trunk/src/hnetworklib/src/HUdpReceiverThread.h.
+Make breakpoint pending on future shared library load? (y or [n]) y
+Breakpoint 4 (/home/zieckey/workspace/v2/server/trunk/src/hnetworklib/src/HUdpReceiverThread.h:35 thread 16) pending.
+
+
+注释：---------->这里使用绝对路径却打不上断点，，，奇怪
+
+
+
+(gdb) thread 16
+[Switching to thread 16 (Thread 0x491ca940 (LWP 11597))]#0  0x0000003f984cc4c2 in select () from /lib64/libc.so.6
+(gdb) info threads
+* 16 Thread 0x491ca940 (LWP 11597)  0x0000003f984cc4c2 in select () from /lib64/libc.so.6
+  15 Thread 0x487c9940 (LWP 11596)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  14 Thread 0x47dc8940 (LWP 11595)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  13 Thread 0x473c7940 (LWP 11594)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  12 Thread 0x469c6940 (LWP 11593)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  11 Thread 0x45fc5940 (LWP 11592)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  10 Thread 0x455c4940 (LWP 11591)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  9 Thread 0x44bc3940 (LWP 11590)  0x0000003f984d3368 in epoll_wait () from /lib64/libc.so.6
+  8 Thread 0x40a5a940 (LWP 11589)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  7 Thread 0x441c2940 (LWP 11588)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  6 Thread 0x437c1940 (LWP 11587)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  5 Thread 0x42dc0940 (LWP 11586)  0x0000003f9900ab00 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+  4 Thread 0x423bf940 (LWP 11585)  0x0000003f984d3368 in epoll_wait () from /lib64/libc.so.6
+  3 Thread 0x4149a940 (LWP 11584)  0x0000003f98499761 in nanosleep () from /lib64/libc.so.6
+  1 Thread 0x2b57256e92a0 (LWP 11580)  0x0000003f984c552b in read () from /lib64/libc.so.6
+(gdb) bt
+#0  0x0000003f984cc4c2 in select () from /lib64/libc.so.6
+#1  0x00002b5723db0782 in Net::UdpReceiverThread::run (this=0x2aaaab761c9c) at ./HUdpReceiverThread.h:42
+#2  0x00002b57240ee420 in OSLib::Thread::doWork (this=0x2aaaab761c9c) at HThread.cpp:374
+#3  0x00002b57240ee62b in OSLib::Thread::ThreadProc (pvArg=0x2aaaab761c9c) at HThread.cpp:337
+#4  0x0000003f99006367 in start_thread () from /lib64/libpthread.so.0
+#5  0x0000003f984d2f7d in clone () from /lib64/libc.so.6
+(gdb) b ./HUdpReceiverThread.h:42
+Breakpoint 5 at 0x2b5723db0752: file ./HUdpReceiverThread.h, line 42.
+(gdb) r
+The program being debugged has been started already.
+Start it from the beginning? (y or n) n
+Program not restarted.
+(gdb) c
+Continuing.

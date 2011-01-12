@@ -1,0 +1,79 @@
+trunk <--> branch Ïà»¥merge
+
+
+
+svn merge
+Prev 	svn Subcommands	 Next
+Name
+
+svn merge ¡ª Apply the differences between two sources to a working copy path.
+Synopsis
+
+svn merge sourceURL1[@N] sourceURL2[@M] [WCPATH]
+
+svn merge -r N:M SOURCE [PATH]
+
+Description
+
+In the first form, the source URLs are specified at revisions N and M. These are the two sources to be compared. The revisions default to HEAD if omitted.
+
+In the second form, SOURCE can be a URL or working copy item, in which case the corresponding URL is used. This URL, at revisions N and M, defines the two sources to be compared.
+
+WCPATH is the working copy path that will receive the changes. If WCPATH is omitted, a default value of ¡°.¡± is assumed, unless the sources have identical basenames that match a file within ¡°.¡±: in which case, the differences will be applied to that file.
+
+Unlike svn diff, the merge command takes the ancestry of a file into consideration when performing a merge operation. This is very important when you're merging changes from one branch into another and you've renamed a file on one branch but not the other.
+Alternate Names
+
+None
+Changes
+
+Working copy
+Accesses Repository
+
+Only if working with URLs
+Switches
+
+--revision (-r) REV
+--non-recursive (-N)
+--quiet (-q)
+--force
+--dry-run
+--diff3-cmd CMD
+--ignore-ancestry
+--username USER
+--password PASS
+--no-auth-cache
+--non-interactive
+--config-dir DIR
+
+Examples
+
+Merge a branch back into the trunk (assuming that you have a working copy of the trunk, and that the branch was created in revision 250):
+
+$ svn merge -r 250:HEAD http://svn.red-bean.com/repos/branches/my-branch
+U  myproj/tiny.txt
+U  myproj/thhgttg.txt
+U  myproj/win.txt
+U  myproj/flo.txt
+
+If you branched at revision 23, and you want to merge changes on trunk into your branch, you could do this from inside the working copy of your branch:
+
+$ svn merge -r 23:30 file:///tmp/repos/trunk/vendors
+U  myproj/thhgttg.txt
+¡­
+
+To merge changes to a single file:
+
+$ cd myproj
+$ svn merge -r 30:31 thhgttg.txt 
+U  thhgttg.txt
+
+
+
+
+
+
+
+
+
+²é¿´svn log | head

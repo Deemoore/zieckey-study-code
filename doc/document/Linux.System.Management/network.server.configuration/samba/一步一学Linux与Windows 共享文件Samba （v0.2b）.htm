@@ -1,0 +1,961 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-hans" xml:lang="zh-hans">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="/main/misc/favicon.ico" type="image/x-icon" />
+ <title>一步一学Linux与Windows 共享文件Samba （v0.2b） | LinuxSir.Org</title>
+<style type="text/css" media="all">@import "/main/modules/aggregator/aggregator.css";</style>
+<style type="text/css" media="all">@import "/main/modules/book/book.css";</style>
+<style type="text/css" media="all">@import "/main/modules/codefilter/codefilter.css";</style>
+<style type="text/css" media="all">@import "/main/modules/node/node.css";</style>
+<style type="text/css" media="all">@import "/main/modules/system/defaults.css";</style>
+<style type="text/css" media="all">@import "/main/modules/system/system.css";</style>
+<style type="text/css" media="all">@import "/main/modules/user/user.css";</style>
+<style type="text/css" media="all">@import "/main/modules/comment/comment.css";</style>
+<style type="text/css" media="all">@import "/main/themes/chameleon/marvin/style.css";</style>
+<style type="text/css" media="all">@import "/main/themes/chameleon/common.css";</style>
+</head><body>
+ <div id="header">  <a href="/main/" title="主页"><img src="/main/logo.jpg" alt="主页" /></a></div>
+ <div class="navlinks"><ul class="links" id="navlist"><li class="first menu-1-1-116"><a href="/main/" title="首页" class="menu-1-1-116">首页</a></li>
+<li class="menu-1-2-116"><a href="/main/taxonomy/term/34" class="menu-1-2-116">事件</a></li>
+<li class="menu-1-3-116"><a href="/main/taxonomy/term/1/25/" title="文档" class="menu-1-3-116">文档</a></li>
+<li class="menu-1-4-116"><a href="/main/taxonomy/term/35/48/" title="资源" class="menu-1-4-116">资源</a></li>
+<li class="menu-1-5-116"><a href="http://www.linuxsir.org/bbs" title="论坛" class="menu-1-5-116">论坛</a></li>
+<li class="menu-1-6-116"><a href="/main/taxonomy/term/38" title="贡献者" class="menu-1-6-116">贡献者</a></li>
+<li class="menu-1-7-116"><a href="/main/irc.html" title="IRC" class="menu-1-7-116">IRC</a></li>
+<li class="menu-1-8-116"><a href="/main/about.html" title="关于" class="menu-1-8-116">关于</a></li>
+<li class="last menu-1-9-116"><a href="/main/search.html" title="搜索" class="menu-1-9-116">搜索</a></li>
+</ul> </div>
+ <table id="content">
+  <tr>
+   <td id="sidebar-left"><div class="block block-block" id="block-block-3">
+ <h2 class="title">重要资讯</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/36">本站公告</a>
+<li><a href="?q=taxonomy/term/34">新闻事件</a>
+<li><a href="http://www.linuxsir.org/bbs" target="_blank">本站论坛</a>
+<li><a href="?q=taxonomy/term/38">贡 献 者</a>
+</ul></div>
+</div>
+<div class="block block-block" id="block-block-1">
+ <h2 class="title">子站索引</h2>
+ <div class="content"><ul>
+<li><a href="http://fedora.linuxsir.org" target"_blank">Fedora中文</a>
+<li><a href="http://debian.linuxsir.org" target"_blank">Debian中文</a>
+<li><a href="http://lfs.linuxsir.org" target"_blank">LFS   中文</a>
+<li><a href="http://slack.linuxsir.org">Slackware</a>
+<li><a href="http://gentoo.linuxsir.org">Gentoo中文</a>
+<li><a href="http://arch.linuxsir.org">Arch 中文</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-7">
+ <h2 class="title">项目索引</h2>
+ <div class="content"><ul>
+<li><a href="http://www.fcitx.org" target="_blank">小企鹅输入法</a>
+<li><a href="http://lumaqq.linuxsir.org" target="_blank">LumaQQ</a>
+<li><a href="http://openq.linuxsir.org" target="_blank">OpenQ</a>
+<li><a href="http://www.relaxbsd.org" target="_blank">RelaxBSD</a>
+</ul>
+</div>
+</div>
+<div class="block block-user" id="block-user-1">
+ <h2 class="title">导航</h2>
+ <div class="content">
+<ul class="menu">
+<li class="leaf"><a href="/main/blog" title="我的博客">我的博客</a></li>
+<li class="leaf"><a href="/main/user" title="注册/登录">注册/登录</a></li>
+
+</ul>
+</div>
+</div>
+<div class="block block-aggregator" id="block-aggregator-feed-2">
+ <h2 class="title">论坛快讯</h2>
+ <div class="content"><div class="item-list"><ul><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=335274&amp;goto=newpost">中文文件夹显示的问题</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=335273&amp;goto=newpost">网络管理软件</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=335272&amp;goto=newpost">[help]amule搜索出来的结果是乱码？</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=335271&amp;goto=newpost">各位大虾你们的use值是怎么设置的呀。</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=335270&amp;goto=newpost">請教etch 下mips的交叉編譯環境！！！！</a>
+</li></ul></div><div class="more-link"><a href="/main/aggregator/sources/2" title="查看此feed的最新新闻。">更多</a></div></div>
+</div>
+<div class="block block-user" id="block-user-2">
+ <h2 class="title">新进会员</h2>
+ <div class="content"><div class="item-list"><ul><li>kobbydf</li><li>嫦娥</li><li>hwzhou</li><li>zuoyan</li><li>poorunix</li></ul></div></div>
+</div>
+<div class="block block-user" id="block-user-3">
+ <h2 class="title">在线用户</h2>
+ <div class="content">目前共有 <em>1 位用户</em>和 <em>35 位游客</em>在线。<div class="item-list"><h3>在线用户</h3><ul><li>gonton1314</li></ul></div></div>
+</div>
+</td>
+   <td id="main">
+<div class="breadcrumb"><a href="/main/">主页</a></div><h2>一步一学Linux与Windows 共享文件Samba （v0.2b）</h2>
+<!-- begin content -->
+<div class="node">
+ <div class="content">
+<p><b>作者：</b>北南南北，正在增加中... ... 需要您的参与；<br />
+<b>来自：</b>LinuxSir.Org<br />
+<b>简介：</b>本文只是讲一讲我们最常用的Linux与Windows共享文件，主要是为新手指一指路。如何建立最简单的Samba服务器，并讲述遇到问题应该从何处寻找解决方案；正在更新之中，希望您的参加 ... ...  谢谢；</p>
+<p><font size=4><b>目录</b></font></p>
+<ul>
+<a href="?q=node/158#0"><b>0、架设Samba 服务器的前提；</b></a></p>
+<ul>
+<a href="?q=node/158#0.1">0.1  查看文件内容和编辑文件的工具；</a><br />
+<a href="?q=node/158#0.2">0.2 关于文件和目录相关；</a><br />
+<a href="?q=node/158#0.3">03 用户和用户组相关；</a><br />
+<a href="?q=node/158#0.4">04 进程管理；</a>
+</ul>
+</ul>
+<ul>
+<a href="?q=node/158#1"><b>1 Samba 简介</b></a><br />
+<a href="?q=node/158#2"><b>2 Samba 功能和应用范围</b></a><br />
+<a href="?q=node/158#3"><b>3 Samba 两个服务器相关启动程序、客户端及服务器配置文件等；</b></a></p>
+<ul>
+<a href="?q=node/158#3.1">3.1 Samba 有两个服务器，一个是smbd，另一个是nmbd；</a><br />
+<a href="?q=node/158#3.2">3.2 查看Samba 服务器的端口及防火墙；</a><br />
+<a href="?q=node/158#3.3">3.3 查看Samba 服务器的配置文件；</a><br />
+<a href="?q=node/158#3.4">3.4 Samba 在Linux 中的一些工具（服务器端和客户端）；</a><br />
+<a href="?q=node/158#3.5">3.5 在Linux 中的常用工具，Windows查看Linux共享的方法 ；</a></p>
+<ul>
+<a href="?q=node/158#3.5.1">3.5.1  在Linux系统中查看网络中Windows共享文件及Linux中的Samba共享文件；</a><br />
+<a href="?q=node/158#3.5.2">3.5.2  在Windows中访问Linux Samba服务器共享文件的办法；</a><br />
+<a href="?q=node/158#3.5.3">3.5.3  smbfs文件系统的挂载；</a>
+</ul>
+</ul>
+<p><a href="?q=node/158#4"><b>4 由最简单的一个例子说起，匿名用户可读可写的实现；</b></a></p>
+<ul>
+<a href="?q=node/158#4.1">第一步： 更改smb.conf</a><br />
+<a href="?q=node/158#4.2">第二步：建立相应目录并授权；</a><br />
+<a href="?q=node/158#4.3">第三步：启动smbd和nmbd服务器；</a><br />
+<a href="?q=node/158#4.4">第四步：查看smbd进程，确认Samba 服务器是否运行起来了；</a><br />
+<a href="?q=node/158#4.5">第五步：访问Samba 服务器的共享；</a>
+</ul>
+<p><a href="?q=node/158#5"><b>5、复杂一点的用户共享模型（适合10人左右的小型企业）；</b></a></p>
+<ul>
+<a href="?q=node/158#5.1">5.1  共享权限设计实现的功能；</a><br />
+<a href="?q=node/158#5.2">5.2  在服务器上创建相应的目录；</a><br />
+<a href="?q=node/158#5.3">5.3  添加用户用户组，设置相应目录家目录的权限；</a></p>
+<ul>
+<a href="?q=node/158#5.3.1">5.3.1 添加用户组；</a><br />
+<a href="?q=node/158#5.3.2">5.3.2 添加用户；</a><br />
+<a href="?q=node/158#5.3.3">5.3.3 添加samba用户，并设置密码；</a><br />
+<a href="?q=node/158#5.3.4">5.3.4  配置相关目录的权限和归属；</a>
+</ul>
+<p><a href="?q=node/158#5.4">5.4  修改Samba配置文件；</a><br />
+<a href="?q=node/158#5.5">5.5   关于客户端访问；</a><br />
+<a href="?q=node/158#5.5.1">5.5.1  Windows客户端访问；</a>
+</ul>
+</ul>
+<p><br><br />
+<font color=blue><b><br />
+++++++++++++++++++++++++++++++++++++++++++++++++<br />
+正文<br />
+++++++++++++++++++++++++++++++++++++++++++++++++<br />
+</b></font><br />
+<br></p>
+<p><font size=4 id="0"><b>0、架设Samba 服务器的前提；</b></font></p>
+<p>Linux是一个多用户的操作系统，对任何服务器的架设与都用户、用户组及权限相关，这是操作的基础。Samba服务器也不例外，对这些知识的掌握也是极为重要的。在Windows系统上虽然也能架共享文件服务器，但它的权限控制实在令人不敢恭维。如果我们用Windows系统来架网络共享文件系统，就是点鼠标也能把我们点迷糊了。但在Linux中，我们可以轻松的改一改配置文件，不到几分钟就能建好自己的Samba服务器。哪个更容易，只有你知道；</p>
+<p>对于Samba服务器的架设，有的弟兄简单的认为，只要把改一下配置文件，创建好相应的目录就行了。其实并不是这样的，还要深入的工作，比如目录的权限和归属，也就是说能让哪个用户和用户组有读写权。只有把配置文件和共享目录的权限结合起来，才能架好Samba服务器；</p>
+<p><b>下面是常用的基础知识，我们在本文中所涉及的内容都可以在下面的列表中找到相应的解释；</b></p>
+<p><font size=3 id="0.1"><b><br />
+0.1  查看文件内容和编辑文件的工具；<br />
+</b></font></p>
+<p><a href="http://www.linuxsir.org/main/?q=node/198">《Linux 文件内容查看工具介绍》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/206">《文件编辑器 vi》</a></p>
+<p><font size=3 id="0.2"><b><br />
+0.2 关于文件和目录相关；<br />
+</b></font><br />
+<a href="http://www.linuxsir.org/main/?q=node/191">《Linux 文件类型 及文件的扩展名》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/192">《Linux 文件和目录管理之列出、删除、复制、移动及改名》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/196">《Linux 文件和目录的属性》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/208">《简述Linux文件搜索》</a></p>
+<p><font size=3 id="0.3"><b><br />
+03 用户和用户组相关；<br />
+</b></font></p>
+<p><a href="http://www.linuxsir.org/main/?q=node/91">《Linux 用户（user）和用户组（group）管理概述》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/98">《用户（User）和用户组（Group）配置文件详解》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/106">《Linux 用户管理工具介绍》</a><br />
+<a href="http://www.linuxsir.org/main/?q=node/105">《Linux 用户（User）查询篇》</a></p>
+<p><font size=3 id="0.4"><b><br />
+04 进程管理；<br />
+</b></font></p>
+<p><a href="http://www.linuxsir.org/main/?q=node/210">《Linux 进程管理》</a></p>
+<p><font size=4 id="1"><b>1 Samba 简介</b></font></p>
+<p>Samba（SMB是其缩写） 是一个网络服务器，用于Linux和Windows共享文件之用；Samba 即可以用于Windows和Linux之间的共享文件，也一样用于Linux和Linux之间的共享文件；不过对于Linux和Linux之间共享文件有更好的网络文件系统NFS，NFS也是需要架设服务器的；</p>
+<p>大家知道在Windows 网络中的每台机器即可以是文件共享的服务器，也可以同是客户机；Samba 也一样能行，比如一台Linux的机器，如果架了Samba Server 后，它能充当共享服务器，同时也能做为客户机来访问其它网络中的Windows共享文件系统，或其它Linux的Sabmba 服务器；</p>
+<p>我们在Windows网络中，看到共享文件功能知道，我们直接就可以把共享文件夹当做本地硬盘来使用。在Linux的中，就是通过Samba的向网络中的机器提供共享文件系统，也可以把网络中其它机器的共享挂载在本地机上使用；这在一定意义上说和FTP是不一样的。</p>
+<p>Samba 用的netbios协议，如果您用Samba 不成功，</p>
+<p>Linux与Windows 、Linux 和 Linux </p>
+<p><font size=4 id="2"><b>2 Samba 功能和应用范围</b></font></p>
+<p>Samba 应该范围主要是Windows和Linux 系统共存的网络中使用；如果一个网络环境都是Linux或Unix类的系统，没有必要用Samba，应该用NFS更好一点；</p>
+<p>那Samba 能为我们提供点什么服务呢？主要是共享文件和共享打印机；</p>
+<p><font size=4 id="3"><b>3 Samba 两个服务器相关启动程序、客户端及服务器配置文件等；</b></font></p>
+<p><font size=3 id="3.1"><b>3.1 Samba 有两个服务器，一个是smb，另一个是nmb；</b></font></p>
+<p>smb 是Samba 的主要启动服务器，让其它机器能知道此机器共享了什么；如果不打开nmb服务器的话，只能通过IP来访问，比如在Windows的IE浏览器上打入下面的一条来访问；<br />
+<br><br />
+<div class="codeblock"><code>\\192.168.1.5\共享目录<br />\\192.168.1.5\opt</code></div><br />
+<br><br />
+而nmb是解析用的，解析了什么呢？就是把这台Linux机器所共享的<b>工作组</b>及在此工作组下的<b>netbios name</b>解析出来；</p>
+<p>一般的情况下，在RPM包的系统，如果是用RPM包安装的Samba ，一般可以通过如下的方式来启动Samba服务器；<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost ~]# /etc/init.d/smb start<br />启动 SMB 服务：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp; 确定&nbsp; ]<br />启动 NMB 服务：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [&nbsp; 确定&nbsp; ]</code></div><br />
+<br><br />
+如果停止呢？就在smb后面加stop ；重启就是restart<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost ~]# /etc/init.d/smb stop<br />[root@localhost ~]# /etc/init.d/smb restart</code></div><br />
+<br></p>
+<p>对于所有系统来说，通用的办法就是直接运行smb 和nmb；当然您要知道smb和nmb所在的目录才行；如果是自己编译的Samba ，您应该知道您把Samba放在哪里了；<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost ~]# /usr/sbin/smbd<br />[root@localhost ~]# /usr/sbin/nmbd</code></div><br />
+<br><br />
+查看服务器是否运行起来了，则用下面的命令；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# pgrep smbd<br />[root@localhost ~]# pgrep nmbd</code></div><br />
+<br></p>
+<p>关掉Samba服务器，也可以用下面的办法，大多是通用的；要root权限来执行；<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost ~]# pkill smbd<br />[root@localhost ~]# pkill nmbd</code></div><br />
+<br></p>
+<p><font size=3 id="3.2"><b>3.2 查看Samba 服务器的端口及防火墙；</b></font></p>
+<p>查看这个有何用呢？有时你的防火墙可能会把smbd服务器的端口封掉，所以我们应该smbd服务器所占用的端口；下面查看中，我们知道smbd所占用的端口是139和445 ；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# netstat -tlnp |grep smb<br />tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0.0.0.0:139&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0.0.0:*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LISTEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10639/smbd<br />tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0.0.0.0:445&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0.0.0:*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LISTEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10639/smbd</code></div></p>
+<p>如果您有防火墙，一定要把这两个端口打开。如果不知道怎么打开。可能你和我一样是新手，还是把防火墙规则清掉也行；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# iptables -F <br />或<br />[root@localhost ~]# /sbin/iptables -F</code></div></p>
+<p><font size=3 id="3.3"><b>3.3、查看Samba 服务器的配置文件；</b></font></p>
+<p>如果我们是用Linux发行版自带的Samba软件包，一般情况下Samba服务器的配置文件都位于/etc/samba目录中，服务器的主配置文件是smb.conf；也有有户配置文件 smbpasswd、smbusers和lmhosts等（最好您查看一下这些文件的内容）；还有一个文件是secrets.tdb，这个文件是Samba 服务器启动手自动生成的；我们慢慢根据教程的进度来适当地增加这些文件的说明吧；一下子都说出来，感觉内容太多；所以只能一点一点的来了；</p>
+<p><font size=3 id="3.4"><b>3.4、Samba 在Linux 中的一些工具（服务器端和客户端）；</b></font></p>
+<p><div class="codeblock"><code>smbcacls&nbsp;&nbsp;&nbsp; smbcontrol&nbsp; smbencrypt&nbsp; smbmount&nbsp;&nbsp;&nbsp; smbprint&nbsp;&nbsp;&nbsp; smbstatus&nbsp;&nbsp; smbtree<br />smbclient&nbsp;&nbsp; smbcquotas&nbsp; smbmnt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; smbpasswd&nbsp;&nbsp; smbspool&nbsp;&nbsp;&nbsp; smbtar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; smbumount<br />smbd nmbd&nbsp;&nbsp;&nbsp; mount </code></div><br />
+<br><br />
+其中服务器端的是smbd、nmbd、smbpasswd ；其它的大多是客户端；这些并不是都需要一定要精通的，但至少得会用几个；比如smbmount（也就是mount 加参数的用法），还用smbclient等；<br />
+<br></p>
+<p><font size=3 id="3.5"><b>3.5 在Linux 中的常用工具mount（smbmount）和smbclient；Windows查看Linux共享的方法 ；</b></font></p>
+<p><font size=2 id="3.5.1"><b>3.5.1  在Linux系统中查看网络中Windows共享文件及Linux中的Samba共享文件；</b></font></p>
+<p>一般的情况下，我们要用到smbclient；常用的用法也无非是下面的；<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost ~]# smbclient&nbsp; -L&nbsp; //ip地址或计算机名</code></div></p>
+<p>smbclient 是Samba 的Linux 客户端，在Linux机器上用来查看服务器上的共享资源，也可以象FTP一样，用户可以登录Samba服务器，也可以上传put和下载get文件，遗憾的是对中文支持并不友好；</p>
+<p><b>查看服务器上的资源；</b></p>
+<p><div class="codeblock"><code>smbclient -L //IP&nbsp; [-U 用户名]</code></div></p>
+<p>如果您的Samba服务器配置为user模式，就要加  “-U 用户名“，如果是share模式，省略也可；</p>
+<p>比如：</p>
+<p><div class="codeblock"><code>[root@localhost ~]# smbclient -L&nbsp;&nbsp; //192.168.1.3&nbsp; -U sir01<br />Password: 请输入用户sir01的密码</code></div></p>
+<p>如果您是用share模式，就可以不必理会用户和密码，直接用；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# smbclient -L&nbsp; //192.168.1.3 <br />Password: 直接按回车</code></div></p>
+<p><b>登录用户身份Samba服务器共享</b></p>
+<p>以用户身份登录共享后，能象FTP用户一样，下传和下载文件；用put表示上传，用get表示下载；</p>
+<p><div class="codeblock"><code>smbclient&nbsp; //IP地址/共享文件夹&nbsp;&nbsp;&nbsp; -U 用户 </code></div></p>
+<p>说明：IP地址大家都知道，你不知道自己的IP地址，可以用/sbin/ifconfig 来查看；  共享文件夹是我们在smb.conf中定义的[共享文件夹]，比如[sir01]。-U 用户名表示Samba 的用户；</p>
+<p>比如：</p>
+<p><div class="codeblock"><code>[root@localhost ~]# smbclient //192.168.1.3/sir01 -U sir01<br />Password:<br />Domain=[LINUXSIR] OS=[Unix] Server=[Samba 3.0.21b-2]<br />smb: \&gt; ls</code></div></p>
+<p><b>说明：</b>登录到Samba服务器上，就可以用smbclient的一些指令，可以象用FTP指令一样上传和下载文件；</p>
+<p><b>smbclient 命令说明</b></p>
+<pre>
+命令									说明
+
+?或help [command]			提供关于帮助或某个命令的帮助
+![shell command]			执行所用的SHELL命令，或让用户进入 SHELL提示符
+cd [目录]						切换到服务器端的指定目录，如未指定，则 smbclient 返回当前本地目录
+lcd [目录]					切换到客户端指定的目录；
+dir 或ls  					列出当前目录下的文件；
+exit 或quit 					退出smbclient	
+get file1  file2  		从服务器上下载file1，并以文件名file2存在本地机上；如果不想改名，可以把file2省略
+mget file1 file2 file3  filen 	从服务器上下载多个文件；
+md或mkdir 目录				在服务器上创建目录
+rd或rmdir	目录				删除服务器上的目录
+put file1 [file2]			向服务器上传一个文件file1,传到服务器上改名为file2；
+mput file1 file2 filen  向服务器上传多个文件
+</pre><p>
+<font size=3 id="3.5.2"><b>3.5.2 在Windows中访问Linux Samba服务器共享文件的办法；</b></font></p>
+<p>这个简单吧，在网上领居，查看工作组就能看得到，或者在浏览器上输入如下的<br />
+<br><br />
+<div class="codeblock"><code>\\ip地址或计算机名</code></div></p>
+<p>这样就能看到这个机器上有什么共享的了，点鼠标操作完成；如果访问不了，不要忘记把Linux的防火墙规划清掉，或让相应的端口通过；</p>
+<p><font size=2 id="3.5.3"><b>3.5.3  在Linux中smbfs文件系统的挂载；</b></font></p>
+<p>mount 的用法，加载网络中的共享文件夹到本地机；mount就是用于挂载文件系统的，SMB做为网络文件系统的一种，也能用mount挂载；smbmount说到底也是用mount的一个变种；</p>
+<p><b>mount 挂载smbfs的用法；</b><br />
+<br><div class="codeblock"><code>mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l&nbsp;&nbsp; //ip地址/共享文件夹名&nbsp;&nbsp; 挂载点<br />或<br />mount -t smbfs -o codepage=cp936,username=用户名,password=密码 , -l&nbsp;&nbsp; //计算机名/共享文件夹名&nbsp;&nbsp; 挂载点<br />或<br />mount -t smbfs&nbsp; -o codepage=cp936&nbsp; //ip地址或计算机名/共享文件夹名&nbsp;&nbsp; 挂载点</code></div><br />
+<br><br />
+<b>smbmount的用法：</b><br />
+<div class="codeblock"><code>smbmount -o username=用户名,password=密码 , -l&nbsp;&nbsp; //ip地址或计算机名/共享文件夹名&nbsp;&nbsp; 挂载点<br />smbmount&nbsp; //ip地址或计算机名/共享文件夹名&nbsp;&nbsp;&nbsp; 挂载点</code></div><br />
+<br><br />
+<b>说明：</b></p>
+<p>如果您的服务器是以share共享的，则无需用户名和密码就能挂载，如果出现要密码的提示，直接回车就行；您也可以用smbmount 来挂载，这样就无需用mount -t smbfs来指定文件系统的类型了；</p>
+<p>对于挂载点，我们要自己建立一个文件夹，比如我们可以建在/opt/smbhd，这由您说的算吧；</p>
+<p>在mount的命令中，我们发现有这样的一个参数codepage=cp936，这是服务器端文件系统的编码的指定，cp936 就是简体中文，当然您可以用utf8等，尝试一下吧。</p>
+<p>如果您挂载了远程的smbfs文件系统出现的是简体中文乱码，就要考虑挂载时要指定编码了；</p>
+<p><font size=4 id="4"><b>4、由最简单的一个例子说起，匿名用户可读可写的实现；</b></font> </p>
+<p><font sizie=3 id="4.1"><b>第一步： 更改smb.conf</b></font></p>
+<p>我们来实现一个最简单的功能，让所有用户可以读写一个Samba 服务器共享的一个文件夹；我们要改动一下smb.conf ；首先您要备份一下smb.conf文件；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# cd /etc/samba<br />[root@localhost samba]# mv smb.conf smb.confBAK</code></div></p>
+<p>然后我们来重新创建一个smb.conf文件；<br />
+<br><br />
+<div class="codeblock"><code>[root@localhost samba]#touch smb.conf </code></div><br />
+<br></p>
+<p>然后我们把下面这段写入smb.conf中；</p>
+<p><div class="codeblock"><code>[global]<br />workgroup = LinuxSir<br />netbios name = LinuxSir05<br />server string = Linux Samba Server TestServer<br />security = share<br /><br />[linuxsir]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; guest ok = yes</code></div><br />
+<br><br />
+<b>注解：</b></p>
+<p>[global]这段是全局配置，是必段写的。其中有如下的几行；</p>
+<p>workgroup 就是Windows中显示的工作组；在这里我设置的是LINUXSIR （用大写）；<br />
+netbios name 就是在Windows中显示出来的计算机名；<br />
+server string 就是Samba服务器说明，可以自己来定义；这个不是什么重要的；<br />
+security  这是验证和登录方式，这里我们用了share ；验证方式有好多种，这是其中一种；另外一种常用的是user的验证方式；如果用share呢，就是不用设置用户和密码了；</p>
+<p>[linuxsir] 这个在Windows中显示出来是共享的目录；<br />
+path = 可以设置要共享的目录放在哪里；<br />
+writeable 是否可写，这里我设置为可写；<br />
+browseable 是否可以浏览，可以；可以浏览意味着，我们在工作组下能看到共享文件夹。如果您不想显示出来，那就设置为 browseable=no </p>
+<p>guest ok 匿名用户以guest身份是登录；</p>
+<p><font sizie=3 id="4.2">第二步：建立相应目录并授权；</b></font><br />
+<br><div class="codeblock"><code>[root@localhost ~]# mkdir -p /opt/linuxsir<br />[root@localhost ~]# id nobody<br />uid=99(nobody) gid=99(nobody) groups=99(nobody)<br /><br />[root@localhost ~]# chown -R nobody:nobody /opt/linuxsir</code></div><br />
+<br><br />
+<b>注释：</b>关于授权nobody，我们先用id命令查看了nobody用户的信息，发现他的用户组也是nobody，我们要以这个为准。有些系统nobody用户组并非是nobody ；</p>
+<p><font sizie=3 id="4.3"><b>第三步：启动smbd和nmbd服务器；</b></font><br />
+<br><div class="codeblock"><code>[root@localhost ~]# smbd<br />[root@localhost ~]# nmbd</code></div></p>
+<p><font sizie=3 id="4.4"><b>第四步：查看smbd进程，确认Samba 服务器是否运行起来了；</b></font></p>
+<p><br><br />
+<div class="codeblock"><code>[root@localhost ~]# pgrep smbd<br />13564<br />13568</code></div><br />
+<br><br />
+<font sizie=3 id="4.5"><b>第五步：访问Samba 服务器的共享；</b></font><br />
+<br><br />
+<b>在Linux 中您可以用下面的命令来访问；</b><br />
+<div class="codeblock"><code>[root@localhost ~]# smbclient -L //LinuxSir05<br />Password: 注：直接按回车</code></div><br />
+<br><br />
+<b>在Windows中，您可以用下面的办法来访问；</b><br />
+<br><br />
+<div class="codeblock"><code>\\LinuxSir05\</code></div></p>
+<p><font size=4 id="5"><b><br />
+5、复杂一点的用户共享模型（适合10人左右的小型企业）；<br />
+</b></font></p>
+<p>比如一个公司有五个部门，分别是linuxsir，sir01，sir02,sir03，sir04。我们想为这家公司设计一个比较安全的共享文件模型。每个用户都有自己的网络磁盘，sir01到sir04还有共用的网络硬盘；所有用户（包括匿名用户）有一个共享资料库，此库为了安全是只读的；所有的用户（包括匿名用户）要有一个临时文件终转的文件夹... .... </p>
+<p><font size=3 id="5.1"><b><br />
+5.1  共享权限设计实现的功能；<br />
+</b></font></p>
+<p>1)linuxsir部门具有管理所有SMB空间的权限；<br />
+2)sir01到sir04拥有自己的空间，并且除了自身及linuxsir有权限以外，对其它用户具有绝对隐私性；<br />
+3)linuxsir01到linuxsir04拥有一个共同的读写权限的空间；<br />
+4) 所有用户（包括匿名用户）有一个有读权限的空间，用于资料库，所以不要求写入数据。<br />
+5)sir01到sir04还有一个共同的空间，对sir01到sir04的用户来说是隐私的，不能让其它用户来访问。<br />
+6) 还要有一个空间，让所有用户可以写入，能删除等功能，在权限上无限制 ，用于公司所有用户的临时文档终转等；</p>
+<p><font size=3 id="5.2"><b><br />
+5.2  在服务器上创建相应的目录；<br />
+</b></font></p>
+<p><div class="codeblock"><code>[root@localhost ~]# mkdir -p /opt/linuxsir<br />[root@localhost ~]# cd /opt/linuxsir<br />[root@localhost linuxsir]# mkdir sir01 sir02 sir03 sir04 sirshare sir0104rw sirallrw<br />[root@localhost linuxsir]# ls<br /><br />sir01&nbsp; sir0104rw&nbsp; sir02&nbsp; sir03&nbsp; sir04&nbsp; sirallrw&nbsp; sirshare</code></div></p>
+<p>注：功用如下：</p>
+<p><div class="codeblock"><code>/opt/linuxsir&nbsp; 这是管理员目录，负责管理其下所有目录；<br />/opt/linuxsir/sir01&nbsp; 是sir01的家目录，用于私用，除了用户本身和linuxsir以外其它用户都是不可读不可写；<br />/opt/linuxsir/sir02&nbsp; 是sir02的家目录，用于私用，除了用户本身和linuxsir以外其它用户都是不可读不可写；<br />/opt/linuxsir/sir03&nbsp; 是sir03的家目录，用于私用，除了用户本身和linuxsir以外其它用户都是不可读不可写；<br />/opt/linuxsir/sir04&nbsp; 是sir04的家目录，用于私用，除了用户本身和linuxsir以外其它用户都是不可读不可写；<br />/opt/linuxsir/sirshare 所用用户（除了linuxsir有权限写入外）只读目录<br />/opt/linuxsir/sir0104rw 是用于sir01到sir04用户可读可写共用目录，但匿名用户不能读写；<br />/opt/linuxsir/sirallrw 用于所有用户（包括匿名用户）的可读可写；</code></div></p>
+<p><font size=3 id="5.3"><b><br />
+5.3  添加用户用户组，设置相应目录家目录的权限；<br />
+</b></font></p>
+<p><font size=2 id="5.3.1"><b><br />
+5.3.1 添加用户组；<br />
+</b></font></p>
+<p><div class="codeblock"><code>[root@localhost ~]# /usr/sbin/groupadd linuxsir<br />[root@localhost ~]# /usr/sbin/groupadd sir01<br />[root@localhost ~]# /usr/sbin/groupadd sir02<br />[root@localhost ~]# /usr/sbin/groupadd sir03<br />[root@localhost ~]# /usr/sbin/groupadd sir04<br />[root@localhost ~]# /usr/sbin/groupadd sir0104</code></div></p>
+<p><font size=2 id="5.3.2"><b><br />
+5.3.2 添加用户；<br />
+</b></font></p>
+<p><div class="codeblock"><code>[root@cuc03 ~]# adduser -g sir01 -G sir0104&nbsp; -d /opt/linuxsir/sir01 -s&nbsp; /sbin/nologin sir01<br />[root@cuc03 ~]# adduser -g sir02 -G sir0104&nbsp; -d /opt/linuxsir/sir02 -s&nbsp; /sbin/nologin sir02<br />[root@cuc03 ~]# adduser -g sir03 -G sir0104&nbsp; -d /opt/linuxsir/sir03 -s&nbsp; /sbin/nologin sir03<br />[root@cuc03 ~]# adduser -g sir04 -G sir0104&nbsp; -d /opt/linuxsir/sir04 -s&nbsp; /sbin/nologin sir04<br />[root@cuc03 ~]# adduser -g linuxsir -d /opt/linuxsir -G linuxsir,sir01,sir02,sir03,sir04,sir0104 -d /opt/linuxsir -s&nbsp; /sbin/nologin linuxsir</code></div></p>
+<p>为什么这样添加用户？请参考：</p>
+<p><a href="http://www.linuxsir.org/main/?q=node/196"><b>《Linux 文件和目录的属性》</b></a><br />
+<a href="http://www.linuxsir.org/main/?q=node/106">《Linux 用户管理工具介绍》</a></p>
+<p>当然我们还得学会查看用户信息的工具用法，比如 用finger和id来查看用户信息，主要是看用户是否添加正确；比如；<b>请参考</b><a href="http://www.linuxsir.org/main/?q=node/105"><b>《Linux 用户（User）查询篇》</b></a></p>
+<p><div class="codeblock"><code>[root@localhost ~]# id linuxsir<br />[root@localhost ~]# finger linuxsir</code></div></p>
+<p><font size=2 id="5.3.3"><b><br />
+5.3.3 添加samba用户，并设置密码；<br />
+</b></font></p>
+<p>我们用的方法是先添加用户，但添加的这些用户都是虚拟用户，因为这些用户是不能通过SHELL登录系统的；另外值得注意的是系统用户密码和Samba用户的密码是不同的。如果您设置了系统用户能登入SHELL，可以设置用户的Samba密码和系统用户通过SHELL登录的密码不同。</p>
+<p>我们通过smbpasswd 来添加Samba用户，并设置密码。原理是通过读取/etc/passwd文件中存在的用户名。</p>
+<p><div class="codeblock"><code>[root@localhost sir01]# smbpasswd -a linuxsir<br />New SMB password: 注：在这里添加Samba用户linuxsir的密码；<br />Retype new SMB password: 注：再输入一次；</code></div></p>
+<p>用同样的方法来添加 sir01、sir02、sir03、sir04的密码；</p>
+<p><font size=2 id="5.3.4"><b><br />
+5.3.4  配置相关目录的权限和归属；<br />
+</b></font></p>
+<p><div class="codeblock"><code>[root@cuc03 ~]# chmod 755 /opt/linux<br />[root@cuc03 ~]# chown&nbsp; linuxsir:linuxsir /opt/linuxsir<br /><br />[root@cuc03 ~]# cd /opt/linuxsir<br />[root@cuc03 ~]# chmod 2770 sir0＊<br /><br />[root@cuc03 ~]# chown sir01.linuxsir sir01<br /><br />[root@cuc03 ~]# chown sir02.linuxsir sir02<br /><br />[root@cuc03 ~]# chown sir03.linuxsir sir03<br /><br />[root@cuc03 ~]# chown sir04.linuxsir sir04<br /><br />[root@cuc03 ~]# chown linuxsir.sir0104 sir0104rw<br /><br />[root@cuc03 ~]# chown linuxsir.linuxsir sirshare<br />[root@cuc03 ~]# chmod 755 sirshare<br /><br />[root@cuc03 ~]# chown linuxsir:linuxsir sirallrw<br />[root@cuc03 ~]# chmod 3777 sirallrw</code></div></p>
+<p><font size=3  id="5.4"><b><br />
+5.4   修改Samba配置文件 smb.conf；<br />
+</b></font></p>
+<p>配置文件如下，修改/etc/samba/smb.conf后，不要忘记重启smbd和nmbd服务器；</p>
+<p><div class="codeblock"><code>[global]<br />workgroup = LINUXSIR<br />netbios name = LinuxSir<br />server string = Linux Samba&nbsp;&nbsp; Test Server<br />security = share<br /><br /><br />[linuxsir]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = linuxsiradmin<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />#create mask是用户创建文件时的权限掩码；对用户来可读可写，对用户组可读可写，对其它用户可读；<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />#directory mask 是用来设置用户创建目录时的权限掩码，意思是对于用户和用户组可读可写，对其它用户可读可执行;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br /><br />[sirshare]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sirshare<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; guest ok = yes<br /><br />[sirallrw]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sirallrw<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; guest ok = yes<br /><br />[sir0104rw]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = sir0104rw<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sir0104rw<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = linuxsir,@sir0104 <br />#@sir0104是用户组；<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br /><br />[sir01]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = sir01<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sir01<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = sir01,@linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br /><br /><br />[sir02]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = sir02<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sir02<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = sir02,@linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br /><br />[sir03]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = sir03<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sir03<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = sir03,@linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes<br /><br />[sir04]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; comment = sir04<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; path = /opt/linuxsir/sir04<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; create mask =&nbsp; 0664<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory mask = 0775<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; writeable = yes<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; valid users = sir04,@linuxsir<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; browseable = yes</code></div></p>
+<p><font size=3  id="5.5"><b><br />
+5.5   关于客户端访问；<br />
+</b></font></p>
+<p><font size=2  id="5.5.1"><b><br />
+5.5.1       Windows 访问；<br />
+</b></font></p>
+<p>我们打开Windows的IE浏览器，用IP地址的访问方式就能访问了，格式为 \\192.168.1.3 类似的。当然也可以把共享文件夹挂在本地使用。比如我们把sir01文件夹挂在本地中，应该以sir01用户来挂载，挂载流程图如下；</p>
+<p><a href="http://www.linuxsir.org/main/files/linuxsir001smb001.jpg" target="_blank"><img src="http://www.linuxsir.org/main/files/linuxsir001smb001.jpg" weight=100 height=100></a>  <a href="http://www.linuxsir.org/main/files/linuxsir002smb002.jpg" target="_blank"><img src="http://www.linuxsir.org/main/files/linuxsir002smb002.jpg" weight=100 height=100></a>  <a href="http://www.linuxsir.org/main/files/linuxsir003smb003.jpg" target="_blank"><img src="http://www.linuxsir.org/main/files/linuxsir003smb003.jpg" weight=100 height=100></a>  <a href="http://www.linuxsir.org/main/files/linuxsir004smb004.jpg" target="_blank"><img src="http://www.linuxsir.org/main/files/linuxsir004smb004.jpg" weight=100 height=100></a>  <a href="http://www.linuxsir.org/main/files/linuxsir005smb005.jpg" target="_blank"><img src="http://www.linuxsir.org/main/files/linuxsir005smb005.jpg" weight=100 height=100></a> </p>
+<p><br></p>
+<p><font size=6 id="6"><b>6、更新日志；</b></font></p>
+<p>2006/01/23 v0.1b<br />
+2006/01/24 v0.2b</p>
+<p><font size=4 id="7"><b>7、参考文档；</b></font></p>
+<p><a href="http://us4.samba.org/samba/docs/man/Samba-HOWTO-Collection" target="_blank">《Samba-HOWTO》</a></p>
+<p><font size=4 id="8"><b>7、相关文档；</b></font></p>
+<p><a href="?q=node/278" target="_blank">《Samba 文件服务器用户复杂权限模型设计和实现 》</a></p>
+ </div>
+<div class="links"><ul class="links inline"><li class="first node_submitted"><span class="node_submitted">由 北南南北 在 2006/05/27 - 20:54 发表</span></li>
+<li class="taxonomy_term_1"><a href="/main/taxonomy/term/1" rel="tag" title="Linux 学习研究" class="taxonomy_term_1">Linux</a></li>
+<li class="taxonomy_term_27"><a href="/main/taxonomy/term/27" rel="tag" title="ftp samba cvs resync" class="taxonomy_term_27">文件服务器</a></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div id="comments"><a id="comment-1468"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-1468" class="active">如何换用户访问</a></h3>
+ <div class="content"><p>我刚开始访问Samba服务器时，成功，再次访问时，直接用原来用户登陆了，怎么样换其它用户？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2007/08/24 - 15:44 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-934"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-934" class="active">似乎还要加上自动启动SAMBA!</a></h3>
+ <div class="content"><p>似乎还要加上自动启动SAMBA!<br />
+同时非常敬佩北南南北大哥的无私,以及您的这种精神!<br />
+谢谢!<br />
+不好意思,不弟我刚学习LINUX,只是看到有人这样做!</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2007/01/03 - 17:27 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-921"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-921" class="active">文章非常好，就是</a></h3>
+ <div class="content"><p>文章非常好，就是 writeable 应该是writable </p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/12/22 - 14:06 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-626"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-626" class="active">有个重要的问题,在windows里面进入的时候,</a></h3>
+ <div class="content"><p>有个重要的问题,在windows里面进入的时候,根本不用输入用名称,只有输入正确的密码就可以了.用户名是灰色的,不能输入,而且里面显示的是guest,这样一来,所有的文件加,只要密码正确都可以进去.好像和设置的不符合啊.?<br />
+who can help me to slove/answer the problem?</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/08/07 - 18:27 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-880"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-880" class="active">你应该用的是XP,再控制面板里执行网络安装向导</a></h3>
+ <div class="content"><p>你应该用的是XP,再控制面板里执行网络安装向导</p>
+<p>就能输入用户名了,你说的输入密码可以进入,应该是你把共享的文件夹权限设置为guest ok了</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/11/15 - 11:44 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-680"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-680" class="active">共享</a></h3>
+ <div class="content"><p>我也是同样的现象，用户名是灰色的，输入密码没有反应，而且我用netstat,显示结果为，请求高手指点netstat -tlnp |grep smb<br />
+tcp 0 0 0.0.0.0:139 0.0.0.0:* LISTEN 10639/smbd<br />
+没有显示出445端口，</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/08/16 - 20:30 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div><a id="comment-578"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-578" class="active">拜读后，sgid得设置不明白</a></h3>
+ <div class="content"><p>我刚拜读完您的文档以下两句，看了《Linux 文件和目录的属性》后还是不明白，还请赐叫<br />
+chmod 2770 sir0＊<br />
+chmod 3777 sirallrw</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/07/20 - 13:50 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-527"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-527" class="active">老兄 帮帮忙 为什么我的windows能找到linux工作组</a></h3>
+ <div class="content"><p>老兄 帮帮忙 为什么我的windows能找到linux工作组，却找不到主机呢？我认为是 netbios问题，可是解决不了！</p>
+<p>另外，dns和域怎么设？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/06/29 - 10:52 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-990"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-990" class="active">1你添加一個NET客戶端就可以了1</a></h3>
+ <div class="content"><p>你添加一個NET客戶端就可以了</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2007/02/13 - 11:07 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-528"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-528" class="active">通过添加网络映射能行吗？</a></h3>
+ <div class="content"><p>可能存在两方面的原因。一是主机名有相同的。这会造成冲突。<br />
+是不是把NMB服务器启动了呢？？？</p>
+<p>另外防火墙，是不是关了呢？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 北南南北 在 2006/06/29 - 23:30 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div><a id="comment-526"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-526" class="active">老兄 帮帮忙 为什么我的windows能找到linux工作组</a></h3>
+ <div class="content"><p>老兄 帮帮忙 为什么我的windows能找到linux工作组，却找不到主机呢？我认为是 netbios问题，可是解决不了！</p>
+<p>另外，dns和域怎么设？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/06/29 - 10:52 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-499"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-499" class="active">Samba 用的netbios协议，如果您用Samba 不成功</a></h3>
+ <div class="content"><p>Samba 用的netbios协议，如果您用Samba 不成功，</p>
+<p>Linux与Windows 、Linux 和 Linux </p>
+<p>请问文章第1节里面的以上两句是什么意思？<br />
+好像没说完啊？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/06/14 - 14:33 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-467"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-467" class="active">北南南北，辛苦了，大家感谢你！</a></h3>
+ <div class="content"><p>看了北南兄写的这一系列文章，感慨万千，这些文章实用价值很高，<br />
+对我们的帮助很大，希望继续坚持，也希望大家都能够支持！谢了！</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/05/29 - 13:54 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-466"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-466" class="active">北南南北，辛苦了，大家感谢你！</a></h3>
+ <div class="content"><p>看了北南兄写的这一系列文章，感慨万千，这些文章实用价值很高，<br />
+对我们的帮助很大，希望继续坚持，也希望大家都能够支持！谢了！</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/05/29 - 13:53 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-383"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-383" class="active">文件的2次共享问题</a></h3>
+ <div class="content"><p>有一关于samba共享的问题请教；<br />
+网中有A(Windows),B(Linux FC3),C3(Windows XP)台主机，A-B间可以互访，B-C间可以互访；<br />
+目的：通过B的共享实现A-C间的文件共享，即C可以读写A共享的文件夹share</p>
+<p>方法：</p>
+<p>1.将A的share挂载到B的/mnt/share目录，此时测试，可以对/mnt/share进行读写，并创建新文件（夹）操作（证明A对B的共享设置没有问题）</p>
+<p>2.将B的/mnt/share目录通过samba设置为share2共享，在C中访问B的共享share2，</p>
+<p>说明：若不进行操作1，直接进行操作2，则C机可以对B的共享share2进行读写，并创建新文件（夹）操作（证明B对C的共享设置没有问题）<br />
+若进行了操作1，然后再进行操作2，则C机可以对B的共享share2进行读写修改，但并不能再创建新文件（夹）操作<br />
+问题：为什么依次经过1，2操作后，共享的的权限削弱了，即C不能在A共享的文件夹中创建新文件（夹）？该如何避免此种问题？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 bingel 在 2006/04/22 - 14:45 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-455"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-455" class="active">很好</a></h3>
+ <div class="content"><p>能不能把共享文件 挂载到 本地？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/05/23 - 10:54 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div><a id="comment-331"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-331" class="active">FC5 中似乎 smbfs 被 cifs 取代了</a></h3>
+ <div class="content"><p>rpm -ql samba-client 只有 cifs 了。</p>
+<p>mount -t smbfs 会返回 "不支持的文件系统"，必须改为 mount -t cifs。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/04/01 - 18:26 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-320"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-320" class="active">请问，samba可不可以单独设置某个目录为匿名用</a></h3>
+ <div class="content"><p>请问，samba可不可以单独设置某个目录为匿名用户访问，其他的目录为用户级访问？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/03/27 - 11:21 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-323"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-323" class="active">可以，在论坛中的网络版中有关于这访问的</a></h3>
+ <div class="content"><p>可以，在论坛中的网络版中有关于这访问的，在置顶帖中。。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 北南南北 在 2006/03/29 - 23:07 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div><a id="comment-317"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-317" class="active">大侠帮我看看是什么原因？谢谢了</a></h3>
+ <div class="content"><p>１．我按这种方式启动的时候ＳＭＢ启动失败<br />
+[root@localhost ~]# /etc/init.d/smb start<br />
+启动 SMB 服务： [ 失败 ]<br />
+启动 NMB 服务： [ 确定 ]<br />
+２．我按以下的方式启动的时候，没任何反映，而且硬盘狂转，这是什么原因啊<br />
+[root@localhost ~]# smbd<br />
+[root@localhost ~]# nmbd</p>
+<p>第四步：查看smbd进程，确认Samba 服务器是否运行起来了；<br />
+[root@localhost ~]# pgrep smbd－－－－－－－＞此处没任何显示</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 mycol 在 2006/03/26 - 13:33 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-679"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-679" class="active">我也一样，我查了一下/var/log/samba下的smbd.log文件</a></h3>
+ <div class="content"><p>[2006/08/16 18:23:35, 0] smbd/server.c:main(847)<br />
+  smbd version 3.0.23a-1.fc5.1 started.<br />
+  Copyright Andrew Tridgell and the Samba Team 1992-2006<br />
+smbd: symbol lookup error: smbd: undefined symbol: cupsLangDefault</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 ewile 在 2006/08/16 - 18:39 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-719"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-719" class="active">To solve the issue:yum</a></h3>
+ <div class="content"><p>To solve the issue:yum update cups<br />
+http://groups.google.com.tw/group/redhat-linux-fedora/browse_thread/thread/fc38a525a7bba165/4fabd3d3a4027fa9?hl=zh-TW</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/09/12 - 06:51 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-911"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-911" class="active">应该是配置文件中有非法选项！</a></h3>
+ <div class="content"><p>应该是配置文件中有非法选项！</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/12/07 - 16:35 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div></div></div><a id="comment-316"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-316" class="active">感谢楼主为我这些菜鸟提笔！！！！！！！</a></h3>
+ <div class="content"><p>感谢，支持，期望</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/26 - 10:00 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-298"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-298" class="active">不知道对windows的域支持的怎么样啊？</a></h3>
+ <div class="content"><p>不知道对windows的域支持的怎么样啊？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/03/17 - 13:47 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-297"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-297" class="active">非常感谢，找了很多资料，这里说得比较明白。</a></h3>
+ <div class="content"><p>非常感谢，找了很多资料，这里说得比较明白。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/03/17 - 01:32 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-293"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-293" class="active">请教北南兄！</a></h3>
+ <div class="content"><p>小弟已按照你的做法一步步做了，但有一处不同的是：<br />
+    # pgrep smbd<br />
+20274<br />
+20275<br />
+这是什么问题啊？到最后，我在局域网中其它机子访问Linux共享时，机子可以进入，但要打开共享文件夹时提示“无法访问...找不到网络名。”这是什么原因呢？<br />
+补充：<br />
+# smbclient -L //...<br />
+是可以见到我的共享的。<br />
+请北南兄赐教！~</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/14 - 17:00 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-288"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-288" class="active">谢谢！</a></h3>
+ <div class="content"><p>我昨天才安装了 red hat linux 9.03 没找到现成的安装教程，就参照咱们站找到的其它教程装啦！以前根本没接触过，看了几个站，觉得还是这好，通俗比较易懂（哈！偶英文太差啦）以后多发点这样的贴子！偶支持！帮助别人快乐自己！</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/11 - 15:09 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-261"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-261" class="active">nice！</a></h3>
+ <div class="content"><p>清晰、明了</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/02/17 - 04:16 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-230"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-230" class="active">增加两个选项</a></h3>
+ <div class="content"><p>呵呵，不知道大家知道不知道这个<br />
+dos charset = gbk<br />
+unix charset = gbk</p>
+<p>可以是utf-8,gbk,gb2312,gb18030<br />
+dos charset 用来设置linux访问windows 共享时的字符集<br />
+unix charset 用来设置windows客户机访问samb服务器的字符集<br />
+samba 共享码码问题一直存在，上面两个选项能解决大多数问题，不过除非你全部用utf-8编码，否则不是100%都行的。</p>
+<p>另外还可以在编译内核的时候可以设置<br />
+CONFIG_SMB_NLS_REMOTE="cp936" 来定义远程主机使用的字符集</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/01/24 - 17:04 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-223"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-223" class="active">给你一个好建议</a></h3>
+ <div class="content"><p>北南兄,你的做法令人钦佩.<br />
+不过,建议你下次再写,一定先去网上看看有没有人做过同样的工作.<br />
+关于samba的设置,有一位鸟兄写得不错.此人写了一系列的文章.<br />
+关于samba的文章也非常详细.不知道你是否看过?<br />
+http://linux.vbird.org/linux_server/0370samba.php</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/01/21 - 12:47 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-733"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-733" class="active">文章多了，但对初学者来说有好坏之分</a></h3>
+ <div class="content"><p>看了一位仁兄的回复，想说两句<br />
+>给你一个好建议<br />
+>北南兄,你的做法令人钦佩.<br />
+>不过,建议你下次再写,一定先去网上看看有没有人做过同样的工作.<br />
+>关于samba的设置,有一位鸟兄写得不错.此人写了一系列的文章.<br />
+>关于samba的文章也非常详细.不知道你是否看过?<br />
+>http://linux.vbird.org/linux_server/0370samba.php</p>
+<p>北南这篇感觉对我这种新手来说就非常易于理解，而且都在一个页面里面可以看完。<br />
+你发那个首先是台湾网站，繁体字看起来就比较费劲，而且还有很多的页面跳转，其实一样是简单的指导性的文档，但是看这篇你不觉得会比你说的那个网站，可以更省时间么？<br />
+做同样的事情，我觉得怎么样能用最短的时间，达到同样的目的是最重要的。所以有人在这里为大家提供这样好的学习资料，我觉得大家应该多多支持！！</p>
+<p>不是人家做了你没有做的事情，还要被说风凉话~~~</p>
+<p>大家能把自己的学习经验，自己的知识拿出来与大家共享，我觉得是非常好的事情，而且对技术的发展也会起到很大的推进作用。</p>
+<p>按北南的配置说明，刚刚试验了一下，的确是很方便。不过139端口和445端口在Windows上常常是被攻击的目标，象以前一些冲击波之类的病毒，好象就是借助这些端口，不知道在Linux下，会不会也有同样的安全隐患？</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 fangh 在 2006/09/21 - 11:29 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-224"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-224" class="active">谢谢台兄建议；</a></h3>
+ <div class="content"><p>我没有看过；</p>
+<p>网上的SMB文档一大堆；我看smb的说明文档及为全面。只要对英文稍有认识的就可以完全读懂。就是读不懂，按上面的给的配置代码来操作也能行；</p>
+<p>本不想写这样的教程。但基于我以前写了一些基础文档，我想我不会少这一篇两篇的。记得ROSE兄说过，别人写是别人的风格，你写是你的风格。</p>
+<p>本来也想从网上抄几篇过来。。但这并不符合我的作事风格，当然也不符合SIR的风格。如果一个站整天抄来抄去的。中文所有的站都转这几篇文档。我不知道这是悲哀还是什么的。如果能写的人都不写了。我看大家到时去哪转？？</p>
+<p>我写SMB的意义，并不是别人说做过了，我还要去做，也就是大家常说的“本来都有轮子了，你还要再去发明轮子有必要吗？”。</p>
+<p>现在我声明一下，对于开源文档，重新“发明轮子”，这是极有必要的。特别是中文的DOC。是极有必要重新发明“轮子”。<font color=red>我的目的是引导大家参与写文档。而非中文Linux DOC真的少我北南这一篇SMB文档。</font></p>
+<p><b><br />
+可能有的弟兄已经看到了在文档提要部份中的“作者：北南南北，正在增加中... ... 需要您的参与；<br />
+来自：LinuxSir.Org<br />
+简介：本文只是讲一讲我们最常用的Linux与Windows共享文件，主要是为新手指一指路。如何建立最简单的Samba服务器，并讲述遇到问题应该从何处寻找解决方案；正在更新之中，希望您的参加 ... ... 谢谢；<br />
+</b></p>
+<p>我真正的意图并非要SMB文档，而是让会SMB的弟兄参与进来，让大家有这种”人人为我，我为人人“的心胸。中文项目为什么总是失败？问题出在几乎很少人参与。所以这就有lumaqq 、fcitx ...... 总是一个开发者在挺着的原因。</p>
+<p>我想把SIR的首页做成引导大家理解”互助共享“这一理念的实验室；这也是我一直在写文档的真正原因。。。。。。。</p>
+<p>谢谢建议。。。。</p>
+<p>北南  呈上</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 北南南北 在 2006/01/21 - 15:17 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-225"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-225" class="active">如果一个站整天抄来抄去的。。。。</a></h3>
+ <div class="content"><p>如果一个站整天抄来抄去的。中文所有的站都转这几篇文档。我不知道这是悲哀还是什么的。如果能写的人都不写了。我看大家到时去哪转？？</p>
+<p>强烈支持南北大侠的观点，LINUX之福，菜鸟之福。祝南北大虾新年快乐，也祝SIR里的各位兄弟姐妹们新年快乐</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/01/22 - 15:54 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div></div><a id="comment-218"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-218" class="active">光GUEST用户没什么用啊</a></h3>
+ <div class="content"><p>光GUEST用户没什么用啊,要像WIN系统那样能自由控制目录等权限才好啊</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/01/19 - 17:43 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-219"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-219" class="active">呵。兄弟，这不是从最简单的开始写起吗？</a></h3>
+ <div class="content"><p>smb在我认为他的功能太强大了，并不是我一下就能说的清楚的。。</p>
+<p>所以只能从最简单的功能写起。主要是给初学者在学习时，用这个最小的例子来获得一点信心。。</p>
+<p>我看兄弟有能力写SMB DOC，为何不出出手呢？？？我是表示欢迎的。。</p>
+<p>任何一个文档都是从最简单的开始写起。。主要是把一些基础的东西给初学者。并不是我不想写USER验证模式。主要是为了让新手一步一步的学会基本的操作。。。</p>
+<p>授之与鱼不如授之与渔。。。。所以我才写SMB。。。。想把最基本的操作告诉新手。。</p>
+<p>欢迎大家补充。。。。因为我在标题和提要上写着，欢迎参与。。。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 北南南北 在 2006/01/19 - 20:14 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-221"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-221" class="active">写文档，越深入，需要科普的知识越多</a></h3>
+ <div class="content"><p>SP。写文档，越深入，需要科普的知识越多。</p>
+<p>所以只能 暂时按照用户接收程度分类总结；P</p>
+<p>这个权且当做初级篇；P，期望中级应用＋高级配置篇的早日归纳完成。辛苦您了</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 Anonymous (未验证) 在 2006/01/20 - 00:02 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-269"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-269" class="active">很不幸，我smbclient 没有成功</a></h3>
+ <div class="content"><p>很不幸，我smbclient -L //redhat 后得到消息说<br />
+Connection redhat failed.</p>
+<p>我的配置同第四部分，只是workgroup = mygroup<br />
+netbios name = redhat<br />
+id nobody显示 groups也是nobody</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/02/25 - 22:05 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-283"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-283" class="active">楼主，请留E-mail地址</a></h3>
+ <div class="content"><p>楼主，请留一个E－mail地址，有点东西要发给你！</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/09 - 14:14 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-290"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-290" class="active">谢谢楼主，发一份给我行吗。。我也在学</a></h3>
+ <div class="content"><p>xuexuejiang88@163.com</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/12 - 16:04 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<a id="comment-289"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-289" class="active">楼主能不能发一份给我呢。。我也在学SAMBA</a></h3>
+ <div class="content"><p>楼主能不能发一份给我呢。。我也在学SAMBA</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/03/12 - 16:02 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-470"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-470" class="active">看了后有一点不明白。</a></h3>
+ <div class="content"><p>create mask = 775<br />
+#create mask是用户创建文件时的权限掩码；<br />
+---到底是什么权限？这是个mask是umask吗？<br />
+解释一下，小弟确实不太明白，如果是umask的话，<br />
+用户创建文件的权限应该是 666-775，总感觉别扭。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/05/30 - 17:06 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-471"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-471" class="active">就是mask，不是umask；</a></h3>
+ <div class="content"><p>是我大意了，我在最近再更新一下文档。我们可以设置文件的权限代码是664，目录的权限是775。</p>
+<p>此文档的第二个例子，我的本意是让大家明白权限继承，比如sgid 的设置。这样用户创建目录时，就继承父目录的用户组。</p>
+<p>还有一点没有说明，就是用户家目录的其它用户的权限是关掉的。所在在用户的家目录下设置多大的权限，也没有关系。因为其它用户是进不来的。家目录都被设置为770，也就是drwxrwx---。。相对来说还是比较安全的。。不过如果再向将一个用户添加到linuxsir用户组，这种安全性就不敢说了。因为凡是linuxsir用户组的用户都有管理权限。</p>
+<p>谢谢。。。有些地方我还在学习中，可能在近期把SMB的文档，关于公共部份和特殊部份的定义会说一下。</p>
+<p>在这个例子中，我主要的目的是让大家从一个小小的例子体验SMB的易用性。用最少的几个参数就能完成WINDOWS中比较难完成的权限级别。。。。。。</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 北南南北 在 2006/05/30 - 23:24 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-473"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-473" class="active">慢慢学习和整理中……</a></h3>
+ <div class="content"><p>跟南北兄的感触一样，网上的东西老是抄来抄去，难免误传滥传。最近我也在整理linux学习笔记，从卸载老版本程序，安装新版本过程以及过程中遇到的问题和解决办法都记录下来了。我发现很多文章只写安装和配置，却很少提到卸载--卸载时候也会遇到n多问题如，mysql与perl之间的bt依赖关系。安装php5需要的前提等很多问题在官方文档有时候更本就没有提到。由于本人英文水平（对专业术语理解不透等）和深入程度，写出来的东西可能有很多理解上等诸多错误，欢迎大家来指正。本人的linux学习笔记整理的只有那么几篇，还有很多在慢慢学习和整理中…………欢迎有兴趣的朋友一起交流。</p>
+<p>本人目前整理请查看：(blog上记录的都跟linux有关)<br />
+http://xiutuo.vxv.cn/blog/</p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2006/05/31 - 10:12 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+<div class="indented"><a id="comment-1470"></a>
+<div class="comment">
+ <h3 class="title"><a href="/main/node/158#comment-1470" class="active">zenyang gaibian shuru fa a   wo zai tongku zhong</a></h3>
+ <div class="content"><p>zenmo gaibian ziti a </p>
+</div>
+ <div class="links"><ul class="links"><li class="first comment_submitted"><span class="comment_submitted">由 LinuxSir 在 2007/08/28 - 09:00 发表</span></li>
+<li class="last comment_forbidden"><span class="comment_forbidden">要发表评论，请先<a href="/main/user/login?destination=comment/reply/158%2523comment-form">登录</a> 或 <a href="/main/user/register?destination=comment/reply/158%2523comment-form">注册</a></span></li>
+</ul></div>
+</div>
+</div></div></div></div></div></div></div></div></div></div>
+<!-- end content -->
+ <div id="footer"><center>
+<a href="http://www.linuxsir.org"><img src="http://www.linuxsir.org/main/logo.jpg"></a> <br>
+
+<a href="http://www.miibeian.gov.cn" target="_blank"><font size=3 color=blue><b> 闽ICP备06025536号</b></font></a><br>
+
+<br>
+<a href="?q=node/78"><font size=3 color=blue><b> © 2002-2007 LinuxSir.Org</b></font></a><br>
+</center></div>
+   </td>
+   <td id="sidebar-right"><div class="block block-block" id="block-block-2">
+ <h2 class="title">基础知识</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/23">安装配置</a>
+<li><a href="?q=taxonomy/term/1/25/">基础入门</a>
+<li><a href="?q=taxonomy/term/22/">硬件解决</a>
+<li><a href="?q=taxonomy/term/21">软件管理</a>
+<li><a href="?q=taxonomy/term/35/48/">重要资源</a>
+</ul></div>
+</div>
+<div class="block block-block" id="block-block-4">
+ <h2 class="title">软件应用</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/30">网络工具</a>
+<li><a href="?q=taxonomy/term/32">图形图像</a>
+<li><a href="?q=taxonomy/term/31">音乐视频</a>
+<li><a href="?q=taxonomy/term/49">字体中文</a>
+<li><a href="?q=taxonomy/term/33">软件其它</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-5">
+ <h2 class="title">网络服务器</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/27">文件服务器<a>
+<li><a href="?q=taxonomy/term/28">Web服务器</a>
+<li><a href="?q=taxonomy/term/29">邮件服务器</a>
+<li><a href="?q=taxonomy/term/37">数据库应用</a>
+<li><a href="?q=taxonomy/term/50">服务器其它</a>
+</ul>
+</div>
+</div>
+<div class="block block-comment" id="block-comment-0">
+ <h2 class="title">最新评论</h2>
+ <div class="content"><div class="item-list"><ul><li><a href="/main/node/295#comment-1969">回来真好</a><br />4 天 4 小时 前</li><li><a href="/main/node/278#comment-1968">请教</a><br />5 天 13 小时 前</li><li><a href="/main/node/287#comment-1967">速度</a><br />1 周 1 天 前</li><li><a href="/main/node/295#comment-1966">终于回来了</a><br />1 周 1 天 前</li><li><a href="/main/node/295#comment-1965">感动</a><br />1 周 6 天 前</li><li><a href="/main/node/177#comment-1964">安装</a><br />2 周 12 小时 前</li><li><a href="/main/node/295#comment-1963">终于平安度过，Welcome</a><br />2 周 1 天 前</li><li><a href="/main/node/282#comment-1962">re：re：用 esmtp 通过 Gmail 邮局进行转发系统邮件------RHEL下安装遇到的问题</a><br />2 周 1 天 前</li><li><a href="/main/node/295#comment-1961">不管怎样，回来就好</a><br />2 周 5 天 前</li><li><a href="/main/node/177#comment-1960">关于Fedora 8.0安装中指定安装源的问题</a><br />2 周 6 天 前</li></ul></div></div>
+</div>
+</td>
+  </tr>
+ </table>
+ </body>
+</html>

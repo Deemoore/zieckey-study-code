@@ -1,0 +1,562 @@
+C++ STL 学习 ：for_each与仿函数(functor)（一）
+
+先看wikipedia定义：
+A function object, also called a functor, functional, or functionoid,[1]  is a computer programming construct allowing an object to be invoked or called like it was an ordinary function, usually with the same syntax.
+简单来将，仿函数（functor）就是一个重载了"()"运算符的struct或class，利用对象支持operator()的特性，来达到模拟函数调用效果的技术。
+
+我们平时对一个集合类遍历的时候，例如vector，是这样做的：
+for(vector<int>::const_iterator iter = ivec.begin(); iter != ivec.end(); ++iter)
+{
+    //do your whatever you want here
+}
+
+例如下面的代码：
+
+#include <vector>
+#include <iostream>
+
+struct State
+{
+    State( int state ) : m_state( state ){}
+    ~State() { std::cout << "~State(), m_state=" << m_state << std::endl; }
+
+    void setState( int state ){ m_state = state; }
+    int getState() const{ return m_state; }
+
+    void print() const { std::cout << "State::print: " << m_state << std::endl; }
+
+private:
+    int m_state;
+};
+
+int main()
+{
+    std::vector<State*> vect;
+
+    vect.push_back( new State(0) );
+    vect.push_back( new State(1) );
+    vect.push_back( new State(2) );
+    vect.push_back( new State(3) );
+
+   	std::vector<State*>::iterator it( vect.begin() );
+    std::vector<State*>::iterator ite( vect.end() );
+    for ( ; it != ite; ++it )
+    {
+        (*it)->print();
+    }
+    
+    
+    system( "pause" );
+    return 0;
+}
+
+这里的for循环语句有点冗余，想到了std::for_each ，为了使用for_each，我们需要定义一个函数，如下：
+
+void print( State* pstate )
+{
+    pstate->print();
+}
+
+于是就可以简化为下面代码：
+std::for_each( vect.begin(), vect.end(), &print );
+
+上面这段代码有点丑陋，看起来不太爽，主要是函数指针的原因。
+在这种应用环境下，C++有仿函数来替代，我们定义一个仿函数，如下：
+
+struct Printer
+{
+    template<typename T> void operator()( T* t ) { t->print(); }
+};
+
+于是就可以简化为下面代码：
+std::for_each( vect.begin(), vect.end(), Printer() );
+
+下面，我们初步看下 for_each 的STL源码实现：
+
+		// TEMPLATE FUNCTION for_each
+template<class _InIt,
+	class _Fn1> inline
+	_Fn1 for_each(_InIt _First, _InIt _Last, _Fn1 _Func)
+	{	// perform function for each element
+	_DEBUG_RANGE(_First, _Last);
+	_DEBUG_POINTER(_Func);
+	_CHECKED_BASE_TYPE(_InIt) _ChkFirst(_CHECKED_BASE(_First));
+	_CHECKED_BASE_TYPE(_InIt) _ChkLast(_CHECKED_BASE(_Last));
+	for (; _ChkFirst != _ChkLast; ++_ChkFirst)
+		_Func(*_ChkFirst);
+	return (_Func);
+	}
+	
+上面的代码看起来挺晕菜的，这里给出 effective STL 里面的一个实现，简单明了：
+
+template< typename InputIterator, typename Function >
+Function for_each( InputIterator beg, InputIterator end, Function f ) {
+    while ( beg != end )
+        f( *beg++ );
+}
+
+其实for_each就是一个模板函数，将for循环语句封装起来，前面两个参数都是迭代器，第三个参数是使用一个函数指针（或仿函数），
+其功能是对每一个迭代器所指向的值调用仿函数。之前觉得for_each挺神秘的，其实看看源码也挺简单的。呵呵。
+
+
+上面代码还是有点冗余，因为为了使用for_each还要单独定义一个函数（或仿函数），不太清爽，
+呵呵，stl早为我们准备好了 mem_fun 模板函数来解决这个一个问题，于是代码再次简化为：
+
+std::for_each( vect.begin(), vect.end(), std::mem_fun( &State::print ) );
+
+我们一起看看 mem_fun 的STL源码实现：
+
+		// TEMPLATE FUNCTION mem_fun
+template<class _Result,
+	class _Ty> inline
+	mem_fun_t<_Result, _Ty> mem_fun(_Result (_Ty::*_Pm)())
+	{	// return a mem_fun_t functor adapter
+	return (std::mem_fun_t<_Result, _Ty>(_Pm));
+	}
+
+mem_fun 函数实际上是调用 mem_fun_t 函数，我们接着深入看看 mem_fun_t，
+
+
+		// TEMPLATE CLASS mem_fun_t
+template<class _Result,
+	class _Ty>
+	class mem_fun_t
+		: public unary_function<_Ty *, _Result>
+	{	// functor adapter (*p->*pfunc)(), non-const *pfunc
+public:
+	explicit mem_fun_t(_Result (_Ty::*_Pm)())
+		: _Pmemfun(_Pm)
+		{	// construct from pointer
+		}
+
+	_Result operator()(_Ty *_Pleft) const
+		{	// call function
+		return ((_Pleft->*_Pmemfun)());
+		}
+
+private:
+	_Result (_Ty::*_Pmemfun)();	// the member function pointer
+	};
+
+将上面这段代码定义的写的我们好看懂一点，如下：
+
+        // TEMPLATE CLASS mem_fun_t
+template< typename _Result, typename _Ty >
+class mem_fun_t : public unary_function<_Ty *, _Result>
+{	
+    typedef _Result (_Ty::*_Pmemfun)();
+public:
+    explicit mem_fun_t( _Pmemfun& pfunc )
+        : m_pfun( pfunc )
+    {	// construct from pointer
+    }
+
+    _Result operator()(_Ty *_Pleft) const
+    {	// call function
+        return ( (_Pleft->*m_pfun)() );
+    }
+
+private:
+    _Pmemfun m_pfun; // the member function pointer
+};
+
+这样就比较清晰了，定义了仿函数mem_fun_t内部定义了一个类成员函数指针，
+仿函数构造的时候将函数指针保存起来，当仿函数operator()被调用的时候，
+就通过与一个类的实例关联起来从而实现了类成员函数的调用。
+
+其调用流程是这样的，for_each把vector中的元素传送给mem_fun，
+mem_fun自己产生一个仿函数mem_fun_t，然后仿函数调用其重载的()。
+
+上述源码还有最后一个没有说明，就是unary_function，直接上源码：
+
+		// TEMPLATE STRUCT unary_function
+template<class _Arg,
+	class _Result>
+	struct unary_function
+	{	// base class for unary functions
+	typedef _Arg argument_type;
+	typedef _Result result_type;
+	};
+就一个模板结构体。没有数据成员，非常简单。
+
+
+最后，定义一个删除指针的仿函数：
+struct DeletePointer
+{
+    template<typename T> void operator()( T* ptr ) const { delete ptr; }
+};
+然后调用，就一个逐一删除vector里面的所有元素了。
+std::for_each( vect.begin(), vect.end(), DeletePointer() );
+
+
+
+源码：
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+
+struct State
+{
+    State( int state ) : m_state( state ){}
+    ~State() { std::cout << "~State(), m_state=" << m_state << std::endl; }
+    void setState( int state ){ m_state = state; }
+    int getState() const{ return m_state; }
+    void print() const { std::cout << "State::print: " << m_state << std::endl; }
+private:
+    int m_state;
+};
+
+void print( State* pstate )
+{
+    pstate->print();
+}
+
+struct Printer
+{
+    template<typename T> void operator()( T* t ) { t->print(); }
+};
+
+struct DeletePointer
+{
+    template<typename T> void operator()( T* ptr ) const { delete ptr; }
+};
+
+int main()
+{
+    std::vector<State*> vect;
+
+    vect.push_back( new State(0) );
+    vect.push_back( new State(1) );
+    vect.push_back( new State(2) );
+    vect.push_back( new State(3) );
+
+    std::vector<State*>::iterator it( vect.begin() );
+    std::vector<State*>::iterator ite( vect.end() );
+    for ( ; it != ite; ++it )
+    {
+        (*it)->print();
+    }
+
+    std::for_each( vect.begin(), vect.end(), &print );
+    std::for_each( vect.begin(), vect.end(), Printer() );
+    std::for_each( vect.begin(), vect.end(), std::mem_fun( &State::print ) );
+    std::for_each( vect.begin(), vect.end(), DeletePointer() );
+    vect.clear();
+
+    system( "pause" );
+    return 0;
+}
+
+
+参考链接：
+1、http://en.wikipedia.org/wiki/Function_object
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C++ STL 学习 ：更多仿函数(functor)（二）
+
+本文介绍了C++ STL标准程序库中的一些有用的仿函数，如 transform,remove_if,bind2nd,find_if,replace_if,binder2nd等，从STL源码级详细说明了这几个仿函数的实现与用法。
+
+C++标准程序库中提供了许多非常有用的预先定义好的的仿函数，了解这些将为我们的开发工作带来便利性和稳健性。
+
+求反值：
+[cpp]
+		// TEMPLATE STRUCT negate
+template<class _Ty>
+	struct negate
+		: public unary_function<_Ty, _Ty>
+	{	// functor for unary operator-
+	_Ty operator()(const _Ty& _Left) const
+		{	// apply operator- to operand
+		return (-_Left);
+		}
+	};
+[/cpp]
+
+例如我们对一个vector中所有元素求反：
+
+[cpp]
+transform( vect.begin(), vect.end(), vect.begin(), std::negate<int>() );	
+[/cpp]
+
+transform参数1：第一个集合的开始（包含）
+transform参数2：第一个集合的结束（不包含）
+transform参数3：第二个集合的开始（包含）
+transform参数4：对第一个集合中的每一个元素应用这个仿函数，仿函数的返回值放到第二个集合中
+经过上面解释，那么 transform 算法就是使用 negate 仿函数，将第一个集合中的所有元素求反值之后转移到第二个集合中。这里第二个集合就是自己，那么这段程序就是对“集合中每个元素求反值”
+
+
+下面看一些更为复杂的仿函数。下面一条语句操作结果是：将容器中所有小于5的元素删除。
+[cpp]
+std::remove_if( ivec.begin(), ivec.end(), std::bind2nd( std::less<int>(), 5 ) );
+[/cpp]
+
+有点头大了，好长，好多陌生的语法。这里我们一点点解释。
+std::less是一个仿函数结构体，不用多说，直接上源码，非常好懂（其实只要理解了operator()就非常好懂这些仿函数）。
+[cpp]
+		// TEMPLATE STRUCT less
+template<class _Ty>
+	struct less
+		: public binary_function<_Ty, _Ty, bool>
+	{	// functor for operator<
+	bool operator()(const _Ty& _Left, const _Ty& _Right) const
+		{	// apply operator< to operands
+		return (_Left < _Right);
+		}
+	};
+
+[/cpp]
+
+再看std::bind2nd是一个函数，返回一个 std::binder2nd 的仿函数结构体，两个的源码一并放上：
+[cpp]
+		// TEMPLATE FUNCTION bind2nd
+template<class _Fn2,
+	class _Ty> inline
+	binder2nd<_Fn2> bind2nd(const _Fn2& _Func, const _Ty& _Right)
+	{	// return a binder2nd functor adapter
+	typename _Fn2::second_argument_type _Val(_Right);
+	return (std::binder2nd<_Fn2>(_Func, _Val));
+	}
+
+
+		// TEMPLATE CLASS binder2nd
+template<class _Fn2>
+	class binder2nd
+		: public unary_function<typename _Fn2::first_argument_type,
+			typename _Fn2::result_type>
+	{	// functor adapter _Func(left, stored)
+public:
+	typedef unary_function<typename _Fn2::first_argument_type,
+		typename _Fn2::result_type> _Base;
+	typedef typename _Base::argument_type argument_type;
+	typedef typename _Base::result_type result_type;
+
+	binder2nd(const _Fn2& _Func,
+		const typename _Fn2::second_argument_type& _Right)
+		: op(_Func), value(_Right)
+		{	// construct from functor and right operand
+		}
+
+	result_type operator()(const argument_type& _Left) const
+		{	// apply functor to operands
+		return (op(_Left, value));
+		}
+
+	result_type operator()(argument_type& _Left) const
+		{	// apply functor to operands
+		return (op(_Left, value));
+		}
+
+protected:
+	_Fn2 op;	// the functor to apply
+	typename _Fn2::second_argument_type value;	// the right operand
+	};
+[/cpp]
+
+
+bind2nd有两个参数：
+第一个参数param1是一个仿函数（这里是std::less），该仿函数必须是带有两个参数的函数。
+第二个参数param2一个普通参数，当binder2nd起作用的时候，param2会作为param1这个仿函数的第二个参数（bind2nd，如果是bind1st就是第一个参数）传给param1这个仿函数。
+
+看binder2nd中的operator()重载函数：
+[cpp]
+result_type operator()(const argument_type& _Left) const
+		{	// apply functor to operands
+		return (op(_Left, value));
+		}
+[/cpp]
+这里的op就是bind2nd的第一个参数（是一个仿函数，这里是std::less），_Left就是这个仿函数被调用的时候由调用这传入（这里是remove_if)，value就是bind2nd的第二个参数（这里是数值 5 ）。
+OK到这里remove_if中最后一个仿函数参数应该就比较清楚了。
+
+
+下面说remove_if。说remove_if之前先说find_if。因为remove_if中调用了find_if。
+[cpp]
+		// TEMPLATE FUNCTION remove_if
+template<class _FwdIt,
+	class _Pr> inline
+	_FwdIt remove_if(_FwdIt _First, _FwdIt _Last, _Pr _Pred)
+	{	// remove each satisfying _Pred
+	_First = std::find_if(_First, _Last, _Pred);
+	if (_First == _Last)
+		return (_First);	// empty sequence, all done
+	else
+		{	// nonempty sequence, worth doing
+		_FwdIt _First1 = _First;
+		return (_STDEXT unchecked_remove_copy_if(++_First1, _Last, _First, _Pred));
+		}
+	}
+	
+template<class _InIt,
+	class _Pr> inline
+	_InIt find_if(_InIt _First, _InIt _Last, _Pr _Pred)
+	{	// find first satisfying _Pred
+	_ASSIGN_FROM_BASE(_First,
+		_Find_if(_CHECKED_BASE(_First), _CHECKED_BASE(_Last), _Pred));
+	return (_First);
+	}
+
+
+		// TEMPLATE FUNCTION find_if
+template<class _InIt,
+	class _Pr> inline
+	_InIt _Find_if(_InIt _First, _InIt _Last, _Pr _Pred)
+	{	// find first satisfying _Pred
+	_DEBUG_RANGE(_First, _Last);
+	_DEBUG_POINTER(_Pred);
+	for (; _First != _Last; ++_First)
+		if (_Pred(*_First))
+			break;
+	return (_First);
+	}
+[/cpp]
+从集合_First到_Last中找到第一个符合_Pred条件的值。这里的_Pred是一个仿函数，就是上面提到的std::bind2nd( std::less<int>(), 5 )返回的那个仿函数结构体 std::binder2nd。那么很清楚，就是找到集合中第一个小与5的元素。
+
+找到之后，就最终会调用 _Remove_copy_if，看下面代码：
+
+[cpp]
+		// TEMPLATE FUNCTION remove_if
+template<class _FwdIt,
+	class _Pr> inline
+	_FwdIt remove_if(_FwdIt _First, _FwdIt _Last, _Pr _Pred)
+	{	// remove each satisfying _Pred
+	_First = std::find_if(_First, _Last, _Pred);
+	if (_First == _Last)
+		return (_First);	// empty sequence, all done
+	else
+		{	// nonempty sequence, worth doing
+		_FwdIt _First1 = _First;
+		return (_STDEXT unchecked_remove_copy_if(++_First1, _Last, _First, _Pred));
+		}
+	}
+	
+	
+	
+	template<class _InIt,
+	class _OutIt,
+	class _Pr> inline
+	_OutIt unchecked_remove_copy_if(_InIt _First, _InIt _Last, _OutIt _Dest, _Pr _Pred)
+	{	// copy omitting each element satisfying _Pred
+		return _STD _Remove_copy_if(_CHECKED_BASE(_First), _CHECKED_BASE(_Last), _Dest, _Pred,
+			_STD _Range_checked_iterator_tag());
+	}
+	
+	
+	
+	
+		// TEMPLATE FUNCTION remove_copy_if
+template<class _InIt,
+	class _OutIt,
+	class _Pr> inline
+	_OutIt _Remove_copy_if(_InIt _First, _InIt _Last, _OutIt _Dest, _Pr _Pred, _Range_checked_iterator_tag)
+	{	// copy omitting each element satisfying _Pred
+	_DEBUG_RANGE(_First, _Last);
+	_DEBUG_POINTER(_Dest);
+	_DEBUG_POINTER(_Pred);
+	for (; _First != _Last; ++_First)
+		if (!_Pred(*_First))
+			*_Dest++ = *_First;
+	return (_Dest);
+	}
+
+[/cpp]
+
+_Remove_copy_if就很简单的一个函数了，就是每找到一个符合要求的元素就将后面所有元素前移动一位，从而实现删除这个元素的操作。
+
+OK。至此remove_if这条语句解释清楚了。
+
+
+
+跟remove_if类似的情况还有很多，例如：replace_if 。
+看下面一条语句，就是将集合中等于
+
+
+
+
+
+看整体程序：
+[cpp]
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+
+struct Printer
+{
+    template< typename T >
+    void operator()( T& _val )
+    {
+        std::cout << _val << ", ";
+    }
+};
+
+int main()
+{
+    std::vector<int> ivec;
+    const int MAX_COUNT = 10;
+    for ( int i = 1; i < MAX_COUNT; ++i )
+    {
+        ivec.push_back( i );
+        ivec.push_back( MAX_COUNT - i );
+    }
+
+    std::cout << "initialize :   ";
+    for_each( ivec.begin(), ivec.end(), Printer() );
+    transform( ivec.begin(), ivec.end(), ivec.begin(), std::negate<int>() );//将所有元素求反值
+    std::cout << "\nafter negate :   ";
+    for_each( ivec.begin(), ivec.end(), Printer() );
+    transform( ivec.begin(), ivec.end(), ivec.begin(), std::negate<int>() );//将所有元素求反值
+    std::cout << "\nafter negate twice :   ";
+    for_each( ivec.begin(), ivec.end(), Printer() );
+
+    //删除掉vector中小于5的所有元素，注意remove_if并不改变容器的大小，所以还需要调用erase来删除
+    std::vector<int>::iterator iter = std::remove_if( ivec.begin(), ivec.end(), std::bind2nd( std::less<int>(), 5 ) );
+    ivec.erase( iter, ivec.end() );
+    std::cout << "\nafter remove_if[ < 5 ] :   ";
+    for_each( ivec.begin(), ivec.end(), Printer() );
+
+
+    //将集合中所有等于6的元素值改为60.
+    std::replace_if( ivec.begin(), ivec.end(), std::bind2nd( std::equal_to<int>(), 6 ), 60 );
+    std::cout << "\nafter replace_if[ 6 --> 60 ] :   ";
+    for_each( ivec.begin(), ivec.end(), Printer() );
+
+    std::cout << std::endl;
+    system( "pause" );
+    return 0;
+}
+[/cpp]
+输出：
+<blockquote>
+initialize :   1, 9, 2, 8, 3, 7, 4, 6, 5, 5, 6, 4, 7, 3, 8, 2, 9, 1,
+after negate :   -1, -9, -2, -8, -3, -7, -4, -6, -5, -5, -6, -4, -7, -3, -8, -2, -9, -1,
+after negate twice :   1, 9, 2, 8, 3, 7, 4, 6, 5, 5, 6, 4, 7, 3, 8, 2, 9, 1,
+after remove_if[ < 5 ] :   9, 8, 7, 6, 5, 5, 6, 7, 8, 9,
+after replace_if[ 6 --> 60 ] :   9, 8, 7, 60, 5, 5, 60, 7, 8, 9,
+请按任意键继续. . .
+</blockquote>

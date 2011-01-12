@@ -1,0 +1,186 @@
+php连接mysql
+来源:www.cncfan.com (有1221人读过)
+
+第一节 综述
+1.1 这个教程所要描述的
+这个教程将会教会你如何使用PHP来连接到MYSQL数据库并进行相关数据操作.
+1.2 在进行课程之前你应该知道的
+这个教程并不是教你学SQL语句的,所以你应该具有使用SQL语句的基本常识, PHP是很容
+易学的,所以初学者即可.
+1.3 其他有用的教程
+在下面的地址中你可以找到关于SQL的一个基本教程: http://w3.one.net/~jhoffman/s
+qltut.htm
+我们也需要一个好的关于PHP的教程,下面就是一个: PHP home pages .
+1.4 为什么使用PHP来代替使用PERL 与 DBI
+PHP 是一种极好的写作HTML文档的脚本语言. 动态的信息能从许多数据源中被取出,经过
+处理后再返回用户.它易于学习,能够胜任大多数控制HTML文档的任务.
+Perl 也是一种强大的脚本语言,它几乎能写出任何程序,再与dbi相结合, 就成为了强有
+力的系统开发工具.但是,它比较复杂,不易使用.
+同时,PHP类似asp的使用方法,及在用户增多的情况下的优良表现,使得我们选择了它,但
+当它不能完成我们的需要时,我们会再次转向使用perl,但这会使程序更加复杂化.
+
+第二节 开始
+首先应保证php3与mysql这两个部件都已经配置好并能正常运行,否则将会使调试程序工
+作难以进行.
+2.1 "Hello World" in PHP
+"Hello World" 是最简单的程序,下面我们就以此为例说一说php3程序的建立.
+建立一个名叫 hello.php3 的文件并键入如下内容:
+
+
+echo("Hello Worldn");
+?>
+
+
+将其放入有执行权限的CGI目录中,在你的浏览器上指向该php3,你应能看到一行文字: H
+ello World. 如果看不到的话,说明php3未能正常运行.
+2.2 在MySQL中建立一个测试表格
+首先你应能TELNET上MySQL服务器,或用其他方式来操作MySQL数据库.
+连接到你的MySQL数据库服务器并建立一个测试库与测试表供此教程使用:
+%> mysql -uUSERNAME -pPASSWORD
+mysql> create database phptest;
+Query OK, 1 row affected (0.13 sec)
+mysql> create table TEST
+-> (
+-> ID int auto_increment primary key,
+-> Name varchar(32),
+-> Age int,
+-> Salary int
+-> );
+Query OK, 0 rows affected (0.11 sec)
+建议: 使用 varchar 来代替 char , 除非你想限制用户从HTML输入的字符串的长度.
+2.3 向测试表格中添加记录
+现在我们要向表格中添加几条记录供我们以后使用.
+mysql> insert into TEST values (0,'Billy Bob Barker','87','93000');
+Query OK, 1 row affected (0.09 sec)
+mysql> insert into TEST values (0,'Sniffling Sam Sloth','23','12000');
+Query OK, 1 row affected (0.01 sec)
+mysql> insert into TEST values (0,'Roy Bartley','31','87000');
+Query OK, 1 row affected (0.01 sec)
+mysql> insert into TEST values (0,'Leroy Longrad','45','63000');
+Query OK, 1 row affected (0.01 sec)
+mysql> insert into TEST values (0,'Amy Antwerp','37','34000');
+Query OK, 1 row affected (0.01 sec)
+mysql> insert into TEST values (0,'Kim Kruger','57','76000');
+Query OK, 1 row affected (0.01 sec)
+结果如下:
+mysql> select * from TEST;
++----+---------------------+------+--------+
+| ID | Name | Age | Salary |
++----+---------------------+------+--------+
+| 1 | Billy Bob Barker | 87 | 93000 |
+| 2 | Sniffling Sam Sloth | 23 | 12000 |
+| 3 | Roy Bartley | 31 | 87000 |
+| 4 | Leroy Longrad | 45 | 63000 |
+| 5 | Amy Antwerp | 37 | 34000 |
+| 6 | Kim Kruger | 57 | 76000 |
++----+---------------------+------+--------+
+6 rows in set (0.16 sec)
+2.4 使用php连接到数据库
+这里需要用到PHP与MySQL连接的许多函数,我们已经将这些常用函数集合到一个文件中,
+其中包括了很多基本功能.将 PHP class code 存到一个名叫"util.php3" 的文件中,和
+要执行的php文件放到同一个目录中,编辑这个文件并将其中的username和password改为
+你自己连接MySQL 的用户名与口令.
+建立一个名叫 "testdb.php3" 的文件并键入如下内容:
+
+
+require("util.php3");
+$sql = new MySQL_class;
+$sql->Create("phptest");
+echo("Database connection successful.n");
+?>
+
+
+在浏览其中加载此文件,应能看到 Database connection successful. 如果看到的话,表
+明你已正确连入数据库.
+
+
+第三节 基本选择(Select)
+大多数数据库应用程序的时间花费在从数据库中获取信息.根据你想从数据库中取得的数
+据的多少,将会有如下几种选择:
+3.1 返回的是一条记录的一项
+多数情况下,用户可能只需要从数据库中提取一条记录的一项,例如:知道某个产品的 ID
+号,需要查询它的产品名称.
+下面就使用刚刚建好的数据库,你可以从中选出任何一个已知ID号的产品的产品名称.使
+用到的函数叫做 QueryItem 它只返回一个单一结果.
+$name = $sql->QueryItem("select Name from TEST where ID = 4");
+变量 $name 现在会变为 "Leroy Longrad".
+注意: 如果 SQL 语句返回了多条记录,只有第一条记录的相应项被返回.
+3.2 返回的是一条记录
+类似的,多数情况下用户可能需要从数据库中中提取一条记录. 使用到的函数叫做 Quer
+yRow 它返回一条记录.
+$sql->QueryRow("select * from TEST where ID = 4");
+$row = $sql->data;
+在这里,记录 $row 的各个项的值分别为:
+$row[0] = 4;
+$row[1] = "Leroy Longrad"
+$row[2] = 45;
+$row[3] = 63000;
+另一种方法是,你可以指出字段名来引用记录的各个项:
+$row[ID] = 4;
+$row[Name] = "Leroy Longrad"
+$row[Age] = 45;
+$row[Salary] = 63000;
+3.3 返回的是多条记录
+最后,用户有可能需要返回多条记录,对多个记录进行列印,并组织成表格,或者将各个记
+录填入一个下拉菜单中.
+这个例子中你需要返回多个记录,并使用循环对各个记录进行处理,下面就是把返回的记
+录在HTML中作成一个表格的例子:
+echo("NameAgen");
+$sql->Query("Select Name, Age from TEST order by Age");
+for ($i = 0; $i < $sql->rows; $i++) {
+$sql->Fetch($i);
+$name = $sql->data[0];
+$age = $sql->data[1];
+echo("$name$agen");
+}
+echo("n");
+3.4 例子源程序
+所有例子的源程序都在: select.php3可以找到.
+
+Insert, Update and Delete
+现在你已经知道了怎样从数据库中提取数据,也知道了怎样将得到的数据返回到用户浏览
+器中.当你为用户编制数据库应用程序时,大多数用户并不知道怎样运用 SQL将记录添加
+进数据库.
+最简单的解决这个问题的方法是建立一个HTML表单,在其中放入供用户填写数据的TEXT域
+,当表单被提交的时候,PHP脚本会读入用户填写的内容并将其填入数据库中.当PHP作为表
+单的ACTION时,所有表单中的变量都会在PHP中有相应的变量与之对应,例如:表单中有te
+xt域,name为username
+
+PHP 脚本中可以找到相对应的变量 $username.
+echo("The name you entered was: $usernamen");
+事实上,三种SQL操作INSERT.UPDATE.DELETE,在Perl DBI 的接口中将它们揉合到了一条
+"do" 命令中. 在PHP中也可以做相同的事情, 我们把它分成了三条指令,以便于程序的
+阅读,下面就是例程:
+4.1 Insert
+$sql->Insert("insert into TEST values (0,'J.D.','18','23000')");
+$affected_rows = $sql->a_rows;
+4.2 Update
+$sql->Update("update TEST set Name = 'Jane Doe' where ID = 6");
+$affected_rows = $sql->a_rows;
+4.3 Delete
+$sql->Delete("delete from TEST where ID = 4");
+$affected_rows = $sql->a_rows;
+
+
+第四节 其他杂项
+5.1 对时间字段的处理
+MySQL 中有一个14字节的 datetime 数据类型,是非常有用的. 格式为 yyyyMMddhhmmss
+:
+y = year
+M = month
+d = day
+h = hours
+m = minutes
+s = seconds
+例如 19990317182330 表示 6:23:30pm on March 17th, 1999 (1999年3月17日下午6点
+23分30秒).
+这种长数字的表示格式对比较记录之间的时间关系十分有好处,每一位都有确切的含义,
+这意味着你可以快速地建立日期与时间.
+如果你想从用户那里得到时间字段,我们强烈建议设置下拉式菜单来设置时间, 由用户自
+己选择,一个用来选择年,一个用来选择月,一个用来选择日,一个用来选择时,等等.许多
+HTML表单中都用到了这种方法.把所有的输入组合到一起就成为了时间字段.下面就是组
+合的例子:
+$datetime = $year.$month.$day.$hour.$min.$sec;
+注意: 这里并未考虑到时差,你必须自己来解决这个问题.在许多WEB应用程序中这是个很
+棘手的问题,因为在http header中并未包括用户所在时区的信息.我们无法判断用户所在
+时区.

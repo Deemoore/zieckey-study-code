@@ -1,0 +1,250 @@
+ubuntu 7.04 (Feisty Fawn)2007，4，19 release。一下班就赶紧跑回来download，在windows下用迅雷下载速度很快，2M左右，先是下载了一个desktop，6.10有个可以从硬盘引导desktop的方法，就跟光盘启动一样，安装时速度还要比光盘快，并且只要把.fs文件放到指定位置，还可以保存系统的设置。尝试了一下用6.10的引导文件来启动7.04的desktop，可以跑起来，但鼠标却动不了，并且选择安装时到磁盘分区时选择创建分区时安装程序就没响应了。无奈，只好重新下载个alternate来老老实实安装一回。
+到http://cn.archive.ubuntu.com/ubuntu/dists/feisty/main/installer-i386/current/images/hd-media/
+下载硬盘安装所需文件，将iso放到fat分区的根目录下，重启安装。不过安装过程也并不顺利，安装到85％时就卡住了，等了好长时间也没动一点，于是放弃了，关机重启。由于原来的linux分区已经格掉了，grub无法正常引导系统了error 27，windows也起不来了。又找来修复盘，进dos，用fdisk /mbr修复mbr，windows算是能正常启动了。
+然后到论坛上看到有人遇到了同样的问题，原因是要到官方的源去更新下载一些包，如果速度很慢，就需要等很久很久很久～～～，不过在安装开始时将网线拔掉就可以了。于是回来拔掉网线，再次安装，果然问题解决了，安装过程很顺利。有点不解的地方就是在安装的时候为什么不给个选择是否要下载这些包，并且给个提示如果网络较慢的话这个过程可能会需要很长时间，最起码也要给个提示说正在更新下载一些软件包，要不然谁到这都会以为死掉了呢？
+重启后配置好网络，添加源，我用的是CN99的源，速度基本上200k以上。
+deb http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-security main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-updates main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-proposed main restricted universe multiverse
+deb-src http://ubuntu.cn99.com/ubuntu/ feisty-backports main restricted universe multiverse 
+sudo gedit /etc/apt/sources.list 
+sudo apt-get update
+sudo apt-get dist-upgrade
+
+配置系统：
+将语言中的中文支持勾上，这样系统就会自动下载更新中文支持的语言包。
+如果想使用英文环境，需要配置一下输入法
+sudo gedit /etc/X11/xinit/xinput.d/all_ALL
+XIM=SCIM
+XIM_PROGRAM=/usr/bin/scim
+XIM_ARGS="-d"
+XIM_PROGRAM_XTRA=
+GTK_IM_MODULE=scim
+QT_IM_MODULE=scim
+DEPENDS="scim,scim-gtk2-immodule | scim-qtimm"
+
+sudo gedit /etc/environment
+
+LC_CTYPE="zh_CN.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=
+LANGUAGE="en_US:en"
+GST_ID3_TAG_ENCODING=GBK
+LANG=en_US.UTF-8
+
+纠正屏幕偏移
+选择desktop effect，启用，将会自动安装显卡驱动，安装完驱动后，重启，屏幕偏移的问题就没有了。如果不想要3d桌面，再将其禁用就OK了。同时发现了一个小bug，在Enable Desktop Effects之后，那个button还是Enable Desktop Effects,感觉应该变成Disable Desktop Effects才对。
+安装mplayer，解码器
+sudo apt-get install mplayer mozilla-mplayer totem-xine libxine-extracodecs
+sudo apt-get install gstreamer0.10-*
+wget -c http://www.debian-multimedia.org/pool/main/w/w32codecs/w32codecs_20061022-0.0_i386.deb
+sudo dpkg -i w32codecs_20061022-0.0_i386.deb
+安装编译环境
+sudo apt-get install build-essential 
+安装adobe reader
+看pdf还是比较喜欢adobe reader，不过安装过程还颇费了一番周折
+7.04的源里面没有，只好自己去下载。
+先是下了一个rpm的，alien 成dep安装，可能是由于alien过程没成功，安装失败，并且新立德也打不开了，提示有更新，但找不到acroread软件包，后来尝试着重新alien了一次，然后安装上，问题解决了，但acroread还是用不了，干脆又卸掉了。再去下载一个tar包，解开，sudo ./INSTALL，安装完还是不能用，在论坛上找到一个方法，打开acroread文件
+sudo gedit /usr/local/Adobe/Acrobat7.0/bin/acroread
+找到
+echo $mfile| sed 's/libgtk-x11-\([0-9]*\).0.so.0.\([0-9]\)00.\([0-9]*\)\|\(.*\)/\1\2\3/g'
+改为
+echo $mfile| sed 's/libgtk-x11-\([0-9]*\).0.so.0.\([0-9]\)00*.\([0-9]*\)\|\(.*\)/\1\2\3/g'
+但还是不能用，郁闷了～～～
+google了一下，有一个acroread 和scim 冲突的问题。
+sudo gedit /usr/local/Adobe/Acrobat7.0/bin/acroread
+在文件的开始处加上
+#!/bin/sh
+#
+GTK_IM_MODULE=xim
+一切OK，终于搞定了。
+
+配置vim
+在新立德里安装vim full
+在用户目录下建立.vimrc文件，这个配置是在网上直接cp过来的，不错。
+set nocompatible
+set hlsearch
+
+if !exists("syntax_on")
+syntax on
+endif
+
+"设置tab字符个数
+set tabstop=4
+set shiftwidth=4
+"自动缩进
+set autoindent
+"更方便的退格键
+set backspace=2
+
+"自动检测文件类型
+filetype on
+
+"配色文件
+colorscheme desert
+
+"字体
+if (has("gui_running"))
+set guifont=Bitstream\ Vera\ Sans\ Mono\ 10
+endif
+
+"----------------below for txt file
+"让文本文件也有高亮，thanks to xbeta@smth
+augroup filetypedetect
+au BufNewFile,BufRead *.* setf ztxt
+augroup END
+
+"缓冲区写入文件的时候自动检查文件类型
+au BufWritePost * filet detect
+
+"设定文件编码类型，彻底解决中文编码问题
+let &termencoding=&encoding
+set fileencodings=utf-8,gbk,ucs-bom,cp936
+
+安装词典
+sudo apt-get install stardict
+到http://stardict.sourceforge.net/Dictionaries.php下载词典，解压后放到/usr/share/star
+简明英汉词典，牛津现代英汉双解词典 
+
+简单正确的英文locale中文美化方式 
+ubuntu预装的,AR PL ShanHeiSun Uni是一个很好的字体 
+/etc/fonts/fonts.conf不宜修改. 
+
+在一个英文系统下，如果任何user希望有一个中文环境，只须建立~/.fonts.conf文件(就是你的当前用户的根目录，在/home/用户名/.fonts.conf ,注意是fonts前面有个".")即可，代码如下 
+
+代码: 
+<fontconfig> 
+
+<!--Fonts rendering sequence--> 
+    <alias> 
+        <family>serif</family> 
+            <prefer> 
+                <family>Bitstream Vera Serif</family> 
+                <family>DejaVu Serif</family> 
+                <family>AR PL ShanHeiSun Uni</family> 
+                <family>AR PL ZenKai Uni</family> 
+            </prefer> 
+    </alias> 
+    <alias> 
+        <family>sans-serif</family> 
+            <prefer> 
+                <family>Bitstream Vera Sans</family> 
+                <family>DejaVu Sans</family> 
+                <family>AR PL ShanHeiSun Uni</family> 
+                <family>AR PL ZenKai Uni</family> 
+            </prefer> 
+    </alias> 
+    <alias> 
+        <family>monospace</family> 
+            <prefer> 
+                <family>Bitstream Vera Sans Mono</family> 
+                <family>DejaVu Sans Mono</family> 
+                <family>AR PL ShanHeiSun Uni</family> 
+                <family>AR PL ZenKai Uni</family> 
+            </prefer> 
+    </alias> 
+
+<!--Global settings for improving fonts rendering--> 
+    <match target="font"> 
+        <edit name="autohint"> 
+            <bool>false</bool> 
+        </edit> 
+        <edit name="hinting"> 
+            <bool>true</bool> 
+        </edit> 
+        <edit name="hintstyle"> 
+            <const>hintslight</const> 
+        </edit> 
+        <edit name="antialias"> 
+            <bool>true</bool> 
+        </edit> 
+    </match> 
+  
+<!--Make Chinese fonts bigger if it's smaller than 12 pixel--> 
+    <match target="font" > 
+        <test name="family" compare="contains" > 
+                        <string>SimSun</string> 
+                        <string>AR PL</string> 
+        </test> 
+        <test compare="less_eq" name="pixelsize"> 
+            <int>12</int> 
+        </test> 
+        <edit mode="assign" name="pixelsize"> 
+            <int>12</int> 
+        </edit> 
+    </match> 
+
+<!--Rendering settings for Chinese fonts--> 
+    <match target="font" > 
+        <test name="family" compare="contains" > 
+            <string>SimSun</string> 
+            <string>AR PL</string> 
+        </test> 
+        <edit name="globaladvance"> 
+            <bool>false</bool> 
+        </edit> 
+        <edit name="spacing"> 
+            <int>0</int> 
+        </edit> 
+        <test name="pixelsize" compare="less_eq"> 
+            <int>18</int> 
+        </test> 
+        <edit name="antialias" mode="assign" > 
+            <bool>false</bool> 
+        </edit> 
+        </match> 
+  
+</fontconfig>  
+
+做这样的设定，你无须拥有管理员的权限，这个更改也不会影响你系统上其他英文用户的环境。 
+当系统升级(可能改变/etc/fonts/fonts.conf)，你的中文环境也不会受到影响。 
+这个文件建立之后，重新登录即可，无须重新启动系统，或者x
+
+我装的wqy的字体，这样作了后，用的是什么字体？
+你可以把<family>Wenquanyi Bitmap Song</family>置于<family>AR PL ShanHeiSun Uni</family> 之上， 
+那么就会优先使用WQy自题了
+
+
+在Ubuntu中用root帐号登录
+
+
+
+　　其实我个人认为这没有多大必要，因为当你需要 root 的权限时，使用 sudo 便可以了。如果你实在需要在 Ubuntu 中启用 root 帐号的话，那么不妨执行下面的操作：
+
+　　1.重新设置 root 的密码：
+
+　　$sudo passwd root  #按照提示输入两次新的密码，并加以确认。
+
+　　2.启用root用户登录：
+
+　　$sudo vi /etc/X11/gdm/gdm.conf #打开gnome的配置文件,在末行模式中输入：AllowRoot回车，找到AllowRoot＝false ,把false改为true，保存后退出。
+
+　　之后，重启系统时，就可以用 root 登录了。如果你想要禁用 root 帐号，则执行下列命令：
+
+　　$sudo passwd -l root
+Ubuntu 中的 root 帐号默认是被禁用了的。在这种情况之下，如果你想要使用 root 的权限来干些事情，就需要 sudo 指令。对某些朋友来说，他们可能需要激活 Ubuntu 中的 root 帐号。
+
+在 Ubuntu 中激活 root 帐号的过程如下：
+
+  1. 在终端执行 sudo passwd root 指令后，系统将会提示你设置一个新的 root 帐号密码。
+  2. 点击 System -> Preferences -> Login Window 菜单，并切换到 Security 选项页，然后选中其下的“Allow local system administrator login”选项。
+
+执行上述两步后，你便可以使用 root 帐号登录 Ubuntu 系统了。
+
+如果要再次禁用 root 帐号，那么可以执行 sudo passwd -l root。

@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- /home/reggie/tmp/qt-3.0-reggie-5401/qt-win-commercial-3.0.5/doc/signalsandslots.doc:36 -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="Translator" content="Cavendish">
+<meta name="Qt zh_CN Documents Website" content="http://www.qiliang.net/qt">
+<title>信号和槽</title>
+<style type="text/css"><!--
+h3.fn,span.fn { margin-left: 1cm; text-indent: -1cm; }
+a:link { color: #004faf; text-decoration: none }
+a:visited { color: #672967; text-decoration: none }
+body { background: #ffffff; color: black; font-family: "Times New Roman" }
+--></style>
+</head>
+<body>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr bgcolor="#E5E5E5">
+<td valign=center>
+ <a href="index.html">
+<font color="#004faf">主页</font></a>
+ | <a href="classes.html">
+<font color="#004faf">所有的类</font></a>
+ | <a href="mainclasses.html">
+<font color="#004faf">主要的类</font></a>
+ | <a href="annotated.html">
+<font color="#004faf">注释的类</font></a>
+ | <a href="groups.html">
+<font color="#004faf">分组的类</font></a>
+ | <a href="functions.html">
+<font color="#004faf">函数</font></a>
+</td>
+<td align="right" valign="center"><img src="logo32.png" align="right" width="64" height="32" border="0"></td></tr></table>
+<h1 align=center>信号和槽</h1>
+
+ 
+<p> 信号和槽用于对象间的通讯。信号/槽机制是Qt的一个中心特征并且也许是Qt与
+其它工具包的最不相同的部分。
+<p> 在图形用户界面编程中，我们经常希望一个窗口部件的一个变化被通知给另一个
+窗口部件。更一般地，我们希望任何一类的对象可以和其它对象进行通讯。例如，如
+果我们正在解析一个XML文件，当我们遇到一个新的标签时，我们也许希望通知列表
+视图我们正在用来表达XML文件的结构。
+<p> 较老的工具包使用一种被称作回调的通讯方式来实现同一目的。回调是指一个函
+数的指针，所以如果你希望一个处理函数通知你一些事件，你可以把另一个函数（回
+调）的指针传递给处理函数。处理函数在适当的时候调用回调。回调有两个主要缺
+点。首先他们不是类型安全的。我们从来都不能确定处理函数使用了正确的参数来调
+用回调。其次回调和处理函数是非常强有力地联系在一起的，因为处理函数必须知道
+要调用哪个回调。
+<p> <center><img src="abstract-connections.png"></center> <blockquote><p align="center"><em> 一个关于一些信号和槽连接的摘要图
+</em></p>
+</blockquote><p> 在Qt中我们有一种可以替代回调的技术。我们使用信号和槽。当
+一个特定事件发生的时候，一个信号被发射。Qt的窗口部件有很多预定义的信号，
+但是我们总是可以通过继承来加入我们自己的信号。槽就是一个可以被调用处理特定
+信号的函数。Qt的窗口部件又很多预定义的槽，但是通常的习惯是你可以加入自己的
+槽，这样你就可以处理你所感兴趣的信号。
+<p> 信号和槽的机制是类型安全的：一个信号的签名必须与它的接收槽的签名相匹
+配。（实际上一个槽的签名可以比它接收的信号的签名少，因为它可以忽略额外的
+签名。）因为签名是一致的，编译器就可以帮助我们检测类型不匹配。信号和槽是
+宽松地联系在一起的：一个发射信号的类不用知道也不用注意哪个槽要接收这个信
+号。Qt的信号和槽的机制可以保证如果你把一个信号和一个槽连接起来，槽会在正
+确的时间使用信号的参数而被调用。信号和槽可以使用任何数量、任何类型的参
+数。它们是完全类型安全的：不会再有回调核心转储(core dump)。
+<p> 从<a href="qobject.html">QObject</a>类或者它的一个子类
+（比如<a href="qwidget.html">QWidget</a>类）继承的所有类可以包含信号和槽。
+当对象改变它们的状态的时候，信号被发送，从某种意义上讲，它们也许对外面的
+世界感兴趣。这就是所有的对象通讯时所做的一切。它不知道也不注意无论有没有
+东西接收它所发射的信号。这就是真正的信息封装，并且确保对象可以用作一个软
+件组件。
+<p> <center><img src="concrete-connections.png"></center> <blockquote><p align="center"><em> 一个信号和槽连接的例子
+</em></p>
+</blockquote><p> 槽可以用来接收信号，但它们是正常的成员函数。一个槽不知道
+它是否被任意信号连接。此外，对象不知道关于这种通讯机制和能够被用作一个真正
+的软件组件。
+<p> 你可以把许多信号和你所希望的单一槽相连，并且一个信号也可以和你所期望的
+许多槽相连。把一个信号和另一个信号直接相连也是可以的。（这时，只要第一个信
+号被发射时，第二个信号立刻就被发射。）
+<p> 总体来看，信号和槽构成了一个强有力的组件编程机制。
+<p> <h2> 一个小例子
+</h2>
+<a name="1"></a><p> 一个最小的C++类声明如下：
+<p> <pre>
+    class Foo
+    {
+    public:
+        Foo();
+        int value() const { return val; }
+        void setValue( int );
+    private:
+        int val;
+    };
+</pre>
+ 
+<p> 一个小的Qt类如下：
+<p> <pre>
+    class Foo : public <a href="qobject.html">QObject</a>
+    {
+        <a href="metaobjects.html#Q_OBJECT">Q_OBJECT</a>
+    public:
+        Foo();
+        int value() const { return val; }
+    public slots:
+        void setValue( int );
+    signals:
+        void valueChanged( int );
+    private:
+        int val;
+    };
+</pre>
+ 
+<p> 这个类有同样的内部状态，和公有方法来访问状态，但是另外它也支持使用信号
+和槽的组件编程：这个类可以通过发射一个信号，<tt>valueChanged()</tt>，来告
+诉外面的世界它的状态发生了变化，并且它有一个槽，其它对象可以发送信号给这个
+槽。
+<p> 所有包含信号和/或者槽的类必须在它们的声明中提到Q_OBJECT。
+<p> 槽可以由应用程序的编写者来实现。这里是Foo::setValue()的一个可能的实现：
+<p> <pre>
+    void Foo::setValue( int v )
+    {
+        if ( v != val ) {
+            val = v;
+            emit valueChanged(v);
+        }
+    }
+</pre>
+ 
+<p> <tt>emit valueChanged(v)</tt>这一行从对象中发射<tt>valueChanged</tt>信
+号。正如你所能看到的，你通过使用<tt>emit signal(arguments)</tt>来发射信号。
+<p> 下面是把两个对象连接在一起的一种方法：
+<p> <pre>
+    Foo a, b;
+    connect(&amp;a, SIGNAL(valueChanged(int)), &amp;b, SLOT(setValue(int)));
+    b.setValue( 11 ); // a == undefined  b == 11
+    a.setValue( 79 ); // a == 79         b == 79
+    b.value();        
+</pre>
+ 
+<p> 调用<tt>a.setValue(79)</tt>会使<tt>a</tt>发射一个<tt>valueChanged()</tt>
+信号，<tt>b</tt>将会在它的<tt>setValue()</tt>槽中接收这个信号，也就是<tt>b.setValue(79)</tt>
+被调用。接下来<tt>b</tt>会发射同样的<tt>valueChanged()</tt>信号，但是因为
+没有槽被连接到<tt>b</tt>的<tt>valueChanged()</tt>信号，所以没有发生任何事
+（信号消失了）。
+<p> 注意只有当<tt>v != val</tt>的时候<tt>setValue()</tt>函数才会设置这个值
+并且发射信号。这样就避免了在循环连接的情况下（比如<tt>b.valueChanged()</tt>
+和<tt>a.setValue()</tt>连接在一起）出现无休止的循环的情况。
+<p> 这个例子说明了对象之间可以在互相不知道的情况下一起工作，只要在最初的时在
+它们中间建立连接。
+<p> 预处理程序改变或者移除了<tt>signals</tt>、<tt>slots</tt>和<tt>emit</tt>
+这些关键字，这样就可以使用标准的C++编译器。
+<p> 在一个定义有信号和槽的类上运行<a href="moc.html">moc</a>。这样就会生成
+一个可以和其它对象文件编译和连接成引用程序的C++源文件。
+<p> <h2> 信号
+</h2>
+<a name="2"></a><p> 当对象的内部状态发生改变，信号就被发射，在某些方面对于
+对象代理或者所有者也许是很有趣的。只有定义了一个信号的类和它的子类才能发射
+这个信号。
+<p> 例如，一个列表框同时发射<tt>highlighted()</tt>和<tt>activated()</tt>这
+两个信号。绝大多数对象也许只对<tt>activated()</tt>这个信号感兴趣，但是有时
+想知道列表框中的哪个条目在当前是高亮的。如果两个不同的类对同一个信号感兴趣，
+你可以把这个信号和这两个对象连接起来。
+<p> 当一个信号被发射，它所连接的槽会被立即执行，就像一个普通函数调用一样。
+信号/槽机制完全不依赖于任何一种图形用户界面的事件回路。当所有的槽都返回后
+<tt>emit</tt>也将返回。
+<p> 如果几个槽被连接到一个信号，当信号被发射时，这些槽就会被按任意顺序一个
+接一个地执行。
+<p> 信号会由<a href="moc.html#moc">moc</a>自动生成并且一定不要在.cpp文件中
+实现。它们也不能有任何返回类型（比如使用<tt>void</tt>）。
+<p> 关于参数需要注意。我们的经验显示如果信号和槽<em>不</em>使用特殊的类型，
+它们都可以多次使用。如果<a href="qscrollbar.html#valueChanged">QScrollBar::valueChanged</a>()
+使用了一个特殊的类型，比如hypothetical QRangeControl::Range，它就只能被连
+接到被设计成可以处理<a href="qrangecontrol.html">QRangeControl</a>的槽。简
+单的和<a href="tutorial1-05.html">教程1的第5部分</a>一样的程序将是不可
+能的。
+<p> <h2> 槽
+</h2>
+<a name="3"></a><p> 当一个和槽连接的信号被发射的时候，这个操被调用。槽也是
+普通的C++函数并且可以像它们一样被调用；它们唯一的特点就是它们可以被信号连
+接。槽的参数不能含有默认值，并且和信号一样，为了槽的参数而使用自己特定的类
+型是很不明智的。
+<p> 因为槽就是普通成员函数，但却有一点非常有意思的东西，它们也和普通成员函
+数一样有访问权限。一个槽的访问权限决定了谁可以和它相连：
+<p> 一个<tt>public slots:</tt>区包含了任何信号都可以相连的槽。这对于组件编
+程来说非常有用：你生成了许多对象，它们互相并不知道，把它们的信号和槽连接起
+来，这样信息就可以正确地传递，并且就像一个铁路模型，把它打开然后让它跑起来。
+<p> 一个<tt>protected slots:</tt>区包含了之后这个类和它的子类的信号才能连接
+的槽。这就是说这些槽只是类的实现的一部分，而不是它和外界的接口。
+<p> 一个<tt>private slots:</tt>区包含了之后这个类本身的信号可以连接的槽。这
+就是说它和这个类是非常紧密的，甚至它的子类都没有获得连接权利这样的信任。
+<p> 你也可以把槽定义为虚的，这在实践中被发现也是非常有用的。
+<p> 信号和槽的机制是非常有效的，但是它不像“真正的”回调那样快。信号和槽稍
+微有些慢，这是因为它们所提供的灵活性，尽管在实际应用中这些不同可以被忽略。
+通常，发射一个和槽相连的信号，大约只比直接调用那些非虚函数调用的接收器慢
+十倍。这是定位连接对象所需的开销，可以安全地重复所有地连接（例如在发射期
+间检查并发接收器是否被破坏）并且可以按一般的方式安排任何参数。当十个非虚
+函数调用听起来很多时，举个例子来说，时间开销只不过比任何一个“new”或者
+“delete”操作要少些。当你执行一个字符串、矢量或者列表操作时，需要“new”或者
+“delete”，信号和槽仅仅对一个完整函数调用地时间开销中的一个非常小的部分负
+责。无论何时你在一个槽中使用一个系统调用和间接地调用超过十个函数的时间是
+相同的。在一台i585-500机器上，你每秒钟可以发射2，000，000个左右连接到一个
+接收器上的信号，或者发射1，200，000个左右连接到两个接收器的信号。信号和槽
+机制的简单性和灵活性对于时间的开销来说是非常值得的，你的用户甚至察觉不出来。
+<p> <h2> 元对象信息
+</h2>
+<a name="4"></a><p> <a href="metaobjects.html#meta-object">元对象</a>编译器（moc）
+解析一个C++文件中的类声明并且生成初始化元对象的C++代码。元对象包括所有信号
+和槽函数的名称，还有这些函数的指针。（要获得更多的信息，请看<a href="templates.html">为什么Qt不用模板来实现信号和槽？</a>）
+<p> 元对象包括一些额外的信息，比如对象的<a href="qobject.html#className">类名称</a>。
+你也可以检查一个对象是否<a href="qobject.html#inherits">继承</a>了一个特定的类，
+比如：
+<p> <pre>
+  if ( widget-&gt;inherits("QButton") ) {
+        // 是的，它是一个Push Button、Radio Button或者其它按钮。
+  }
+</pre>
+ 
+<p> <h2> 一个真实的例子
+</h2>
+<a name="5"></a><p> 这是一个注释过的简单的例子（代码片断选自<a href="qlcdnumber-h.html">qlcdnumber.h</a>）。
+<p> <pre>
+    #include "qframe.h"
+    #include "qbitarray.h"
+
+    class QLCDNumber : public <a href="qframe.html">QFrame</a>
+</pre>
+ 
+<p> <a href="qlcdnumber.html">QLCDNumber</a>通过<a href="qframe.html">QFrame</a>和<a href="qwidget.html">QWidget</a>，还有#include这样的相关声明继承了含有绝大
+多数信号/槽知识的<a href="qobject.html">QObject</a>。
+<p> <pre>
+    {
+        Q_OBJECT
+</pre>
+ 
+<p> Q_OBJECT是由预处理器展开声明几个由moc来实现的成员函数，如果你得到了几行
+“virtual function QButton::className not defined”这样的编译器错误信息，你也
+许忘记<a href="moc.html">运行moc</a>或者忘记在连接命令中包含moc输出。
+<p> <pre>
+    public:
+        <a href="qlcdnumber.html">QLCDNumber</a>( <a href="qwidget.html">QWidget</a> *parent=0, const char *name=0 );
+        QLCDNumber( uint numDigits, QWidget *parent=0, const char *name=0 );
+</pre>
+ 
+<p> 它并不和moc直接相关，但是如果你继承了QWidget，你当然想在你的构造器中获
+得<em>parent</em>和<em>name</em>这两个参数，而且把它们传递到父类的构造器中。
+<p> 一些解析器和成员函数在这里省略掉了，moc忽略了这些成员函数。
+<p> <pre>
+    signals:
+        void    overflow();
+</pre>
+ 
+<p> 当<a href="qlcdnumber.html">QLCDNumber</a>被请求显示一个不可能值时，它
+发射一个信号。
+<p> 如果你没有留意溢出，或者你认为溢出不会发生，你可以忽略overflow()信号，
+也就是说你可以不把它连接到任何一个槽上。
+<p> 另一方面如果当数字溢出时，你想调用两个不同的错误函数，很简单地你可
+以把这个信号和两个不同的槽连接起来。Qt将会两个都调用（按任意顺序）。
+<p> <pre>
+    public slots:
+        void    display( int num );
+        void    display( double num );
+        void    display( const char *str );
+        void    setHexMode();
+        void    setDecMode();
+        void    setOctMode();
+        void    setBinMode();
+        void    smallDecimalPoint( bool );
+</pre>
+ 
+<p> 一个槽就是一个接收函数，用来获得其它窗口部件状态变或的信息。QLCDNumber
+使用它，就像上面的代码一样，来设置显示的数字。因为<tt>display()</tt>是这个
+类和程序的其它的部分的一个接口，所以这个槽是公有的。
+<p> 几个例程把<a href="qscrollbar.html">QScrollBar</a>的newValue信号连接到display槽，所以LCD数字可以继续显示滚动条的值。
+<p> 请注意display()被重载了，当你把一个信号和这个槽相连的时候，Qt将会选择适
+当的版本。如果使用回调，你会发现五个不同的名字并且自己来跟踪类型。
+<p> 一些不相关的成员函数已经从例子中省略了。
+<p> <pre>
+    };
+</pre>
+ 
+<p> 
+<!-- eof -->
+<p><address><hr><div align=center>
+<table width=100% cellspacing=0 border=0><tr>
+<td>Copyright &copy; 2002 
+<a href="http://www.trolltech.com">Trolltech</a>
+<td><a href="http://www.trolltech.com/trademarks.html">Trademarks</a>
+<td><a href="zh_CN.html">译者:Cavendish</a>
+<td align=right><div align=right>Qt 3.0.5版</div>
+</table></div></address></body>
+</html>

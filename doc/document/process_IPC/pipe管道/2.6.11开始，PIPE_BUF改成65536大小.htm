@@ -1,0 +1,1928 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="zh" xml:lang="zh">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="vBulletin 3.6.8" />
+
+<meta name="keywords" content="2.6.11开始，PIPE_BUF改成65536大小了？, LinuxSir,linux,redhat,suse,debian,gentoo,Mandriva,slack,redflag,kde,gnome,fedora" />
+<meta name="description" content="2.6.11开始，PIPE_BUF改成65536大小了？ Linux 程序设计专题讨论" />
+
+
+<!-- CSS Stylesheet -->
+<style type="text/css" id="vbulletin_css">
+<!--
+/* vBulletin 3 CSS For Style 'LinuxSir_Light' (styleid: 4) */
+body
+{
+	background: #FFFFFF;
+	color: #000000;
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+	margin: 5px 10px 10px 10px;
+	padding: 0px;
+}
+a:link, body_alink
+{
+	color: #000000;
+	text-decoration: none;
+}
+a:visited, body_avisited
+{
+	color: #000000;
+	text-decoration: none;
+}
+a:hover, a:active, body_ahover
+{
+	color: #FF4400;
+	text-decoration: underline;
+}
+.page
+{
+	background: #FFFFFF;
+	color: #000000;
+}
+td, th, p, li
+{
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.tborder
+{
+	background: #c6dbff;
+	MARGIN: 0px,auto;
+}
+.tcat
+{
+	background: #0071BC;
+	color: #FFFFFF;
+	font: bold 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.tcat a:link, .tcat_alink
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.tcat a:visited, .tcat_avisited
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.tcat a:hover, .tcat a:active, .tcat_ahover
+{
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+.thead
+{
+	background: #448CCB;
+	color: #FFFFFF;
+	font: bold 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.thead a:link, .thead_alink
+{
+	color: #FFFFFF;
+}
+.thead a:visited, .thead_avisited
+{
+	color: #FFFFFF;
+}
+.thead a:hover, .thead a:active, .thead_ahover
+{
+	color: #FFFFFF;
+}
+.tfoot
+{
+	background: #0071BC;
+	color: #FFFFFF;
+}
+.tfoot a:link, .tfoot_alink
+{
+	color: #FFFFFF;
+}
+.tfoot a:visited, .tfoot_avisited
+{
+	color: #FFFFFF;
+}
+.tfoot a:hover, .tfoot a:active, .tfoot_ahover
+{
+	color: #FFFFFF;
+}
+.alt1, .alt1Active
+{
+	background: #f7fbff;
+	color: #000000;
+}
+.alt2, .alt2Active
+{
+	background: #deebff;
+	color: #000000;
+}
+td.inlinemod
+{
+	background: #FFFFCC;
+	color: #000000;
+	font-family: verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.wysiwyg
+{
+	background: #EAEAEA;
+	color: #000000;
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+textarea, .bginput
+{
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.button
+{
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+select
+{
+	font: 12px verdana, geneva, lucida, arial, helvetica, sans-serif;
+}
+option, optgroup
+{
+	font-size: 12px;
+	font-family: verdana, geneva, lucida, arial, helvetica, sans-serif;
+}
+.smallfont
+{
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.time
+{
+	color: #000000;
+}
+.navbar
+{
+	font: 12px verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+}
+.highlight
+{
+	color: #FF0000;
+	font-family: verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif,simsun,宋体,bitstream,Nimbus;
+	font-weight: bold;
+}
+.fjsel
+{
+	background: #3E5C92;
+	color: #E0E0F6;
+}
+.fjdpth0
+{
+	background: #F7F7F7;
+	color: #000000;
+}
+.panel
+{
+	background: #F2F2F2;
+	color: #000000;
+	padding: 10px;
+	border: 2px outset;
+}
+.panelsurround
+{
+	background: #F2F2F2;
+	color: #000000;
+}
+legend
+{
+	color: #000000;
+	font: 12px verdana, geneva, lucida, arial, helvetica, sans-serif;
+}
+.vbmenu_control
+{
+	background: #0071BC;
+	color: #FFFFFF;
+	font: bold 12px verdana, geneva, lucida, arial, helvetica, sans-serif;
+	padding: 3px 6px 3px 6px;
+	white-space: nowrap;
+}
+.vbmenu_control a:link, .vbmenu_control_alink
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.vbmenu_control a:visited, .vbmenu_control_avisited
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.vbmenu_control a:hover, .vbmenu_control a:active, .vbmenu_control_ahover
+{
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+.vbmenu_popup
+{
+	background: #FFFFFF;
+	color: #000000;
+	border: 1px solid #0B198C;
+}
+.vbmenu_option
+{
+	background: #F2F2F2;
+	color: #000000;
+	font: 12px verdana, geneva, lucida, arial, helvetica, sans-serif;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.vbmenu_option a:link, .vbmenu_option_alink
+{
+	color: #444444;
+	text-decoration: none;
+}
+.vbmenu_option a:visited, .vbmenu_option_avisited
+{
+	color: #444444;
+	text-decoration: none;
+}
+.vbmenu_option a:hover, .vbmenu_option a:active, .vbmenu_option_ahover
+{
+	color: #444444;
+	text-decoration: none;
+}
+.vbmenu_hilite
+{
+	background: #8A949E;
+	color: #FFFFFF;
+	font: 12px verdana, geneva, lucida, arial, helvetica, sans-serif;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.vbmenu_hilite a:link, .vbmenu_hilite_alink
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.vbmenu_hilite a:visited, .vbmenu_hilite_avisited
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.vbmenu_hilite a:hover, .vbmenu_hilite a:active, .vbmenu_hilite_ahover
+{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+/* ***** styling for 'big' usernames on postbit etc. ***** */
+.bigusername { font-size: 14pt; }
+
+/* ***** small padding on 'thead' elements ***** */
+td.thead, th.thead, div.thead { padding: 4px; }
+
+/* ***** basic styles for multi-page nav elements */
+.pagenav a { text-decoration: none; }
+.pagenav td { padding: 2px 4px 2px 4px; }
+
+/* ***** de-emphasized text */
+.shade, a.shade:link, a.shade:visited { color: #777777; text-decoration: none; }
+a.shade:active, a.shade:hover { color: #FF4400; text-decoration: underline; }
+.tcat .shade, .thead .shade, .tfoot .shade { color: #DDDDDD; }
+
+/* ***** define margin and font-size for elements inside panels ***** */
+.fieldset { margin-bottom: 6px; }
+.fieldset, .fieldset td, .fieldset p, .fieldset li { font-size: 12px; }
+
+/* ***** don't change the following ***** */
+form { display: inline; }
+label { cursor: default; }
+.normal { font-weight: normal; }
+.inlineimg { vertical-align: middle; }
+.underline { text-decoration: underline; }
+.bword{word-break: normal; word-wrap:break-word;}
+.tb {table-layout:fixed}
+.columncell {background: #E1E4F2; color: #000000; border: 1px solid #0B198C;}
+-->
+</style>
+
+<!-- / CSS Stylesheet -->
+
+<script type="text/javascript">
+<!--
+var SESSIONURL = "";
+var IMGDIR_MISC = "images/misc";
+var vb_disable_ajax = parseInt("0", 10);
+
+function whodownloaded(attachmentid)
+{
+    window.open("whodownloaded.php?s=&attachmentid=" + attachmentid, "whodownloaded", "toolbar=no, scrollbars=yes, resizable=yes, width=240, height=300, top=50, left=50");
+}
+// -->
+</script>
+
+<script type="text/javascript" src="clientscript/vbulletin_global.js?v=368"></script>
+<script type="text/javascript" src="clientscript/vbulletin_menu.js?v=368"></script>
+
+<link rel="alternate" type="application/rss+xml" title="LinuxSir.Org RSS Feed" href="external.php?type=RSS2" />
+
+<link rel="alternate" type="application/rss+xml" title="LinuxSir.Org - Linux 程序设计专题讨论 - RSS Feed" href="external.php?type=RSS2&amp;forumids=76" />
+
+
+	<title>2.6.11开始，PIPE_BUF改成65536大小了？ - LinuxSir.Org</title>
+	<script type="text/javascript" src="clientscript/vbulletin_post_loader.js?v=368"></script>
+</head>
+<body onload="">
+<!-- content table -->
+<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+
+
+
+<!-- logo -->
+<a name="top"></a>
+<table border="0" width="100%" cellpadding="0" cellspacing="0" align="center">
+<tr>
+	<td align="left"><a href="index.php"><img src="images/misc/logo.gif" border="0" alt="LinuxSir.Org" /></a></td>
+	<td align="left">
+		&nbsp;
+	</td>
+	
+
+		<td align="right" valign="bottom" nowrap="nowrap">
+		<div class="smallfont">
+			欢迎回来，zieckey。
+            <br />
+			您上次访问的时间是: 08-12-31，<span class="time">14:22</span>
+            <br />
+            <a href="search.php?do=getnew" accesskey="2">查看新帖</a> |
+			<a href="forumdisplay.php?do=markread" rel="nofollow">标记讨论区已读</a> |            
+			<a href="private.php">悄悄话</a>: 未读 0 条，总共 0 条。
+		</div>
+		</td>
+
+	
+</tr>
+</table>
+<!-- /logo -->
+<script type="text/javascript">
+<!--
+function log_out()
+{
+	ht = document.getElementsByTagName("html");
+	ht[0].style.filter = "progid:DXImageTransform.Microsoft.BasicImage(grayscale=1)";
+	if (confirm('您确定要退出论坛？'))
+	{
+		return true;
+	}
+	else
+	{
+		ht[0].style.filter = "";
+		return false;
+	}
+}
+//-->
+</script>
+
+<!-- nav buttons bar -->
+<div align="center">
+	<table class="tborder" cellpadding="4" cellspacing="1" border="0" width="100%" align="center">
+	<tr>
+		<td class="tcat" align="right">
+			|
+			<a href="http://www.linuxsir.org/">网站首页</a> |
+			
+					<a href="usercp.php">控制面板</a> |
+					
+						<a href="search.php" accesskey="4">搜索论坛</a> |
+					
+					<a href="memberlist.php">会员列表</a> |
+					
+						<a href="showgroups.php" rel="nofollow">管理团队</a> |
+					
+					<!-- <a href="calendar.php">日历事件</a> | -->
+    	
+			
+			<!-- vB 中文修改开始: 银行 -->
+			
+			<!-- vB 中文修改结束 -->
+			<a href="faq.php" accesskey="5">论坛帮助</a> |
+			
+					<a href="login.php?do=logout&amp;logouthash=28309a12368583543f1d324ea04e5047" onclick="return log_out()">退出论坛</a> |
+			
+		</td>
+	</tr>
+
+	<!-- vB 中文修改开始: 滚动公告 -->
+	
+	<!-- vB 中文修改结束 -->
+	
+	</table>
+</div>
+<!-- / nav buttons bar -->
+
+<br />
+
+<!-- main -->
+
+
+<!-- breadcrumb -->
+<table class="tborder" cellpadding="0" cellspacing="1" border="0" width="100%" align="center">
+<tr>
+	<td class="alt2">
+		
+			<table cellpadding="0" cellspacing="0" border="0">
+    			<tr>
+    				<td class="navbar">
+								<a href="#" onclick="history.back(1); return false;"><img class="inlineimg" src="images/misc/navbits_start.gif" alt="返回" border="0" /></a>
+    				    &nbsp;
+    				    <span class="navbar"><a href="index.php" accesskey="1">LinuxSir.Org</a></span> 
+	<span class="navbar">&gt; <a href="forum75.html">编程开发讨论区 —— LinuxSir.Org</a></span>
+
+
+	<span class="navbar">&gt; <a href="forum76.html">Linux 程序设计专题讨论</a></span>
+
+
+    				    <span class="navbar">&gt; 
+	2.6.11开始，PIPE_BUF改成65536大小了？
+
+</span>
+						</td>
+    			</tr>
+			</table>
+		
+	</td>
+</tr>
+</table>
+<!-- / breadcrumb -->
+
+<br />
+
+
+
+<!-- PAGENAV POPUP -->
+
+	<div class="vbmenu_popup" id="pagenav_menu" style="display:none">
+		<table cellpadding="4" cellspacing="1" border="0">
+		<tr>
+			<td class="thead" nowrap="nowrap">转到页面...</td>
+		</tr>
+		<tr>
+			<td class="vbmenu_option" title="nohilite">
+			<form action="index.php" method="get" onsubmit="return this.gotopage()" id="pagenav_form">
+				<input type="text" class="bginput" id="pagenav_itxt" style="font-size:12px" size="4" />
+				<input type="button" class="button" id="pagenav_ibtn" value="执行" />
+			</form>
+			</td>
+		</tr>
+		</table>
+	</div>
+
+<!-- / PAGENAV POPUP -->
+</if>
+
+
+
+
+
+<a name="poststop" id="poststop"></a>
+
+<!-- controls above postbits -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:3px">
+<tr valign="bottom">
+	
+		<td class="smallfont">
+<!-- PHPForce - Joey修改新贴按钮  -->
+	<a href="newthread.php?do=newthread&amp;f=76" rel="nofollow"><img src="images/buttons/newthread.gif" alt="发表新主题" border="0" /></a>
+<!-- /PHPForce - Joey修改新贴按钮 -->
+<a href="newreply.php?do=newreply&amp;noquote=1&amp;p=1440763" rel="nofollow"><img src="images/buttons/reply.gif" alt="回复" border="0" /></a></td>
+	
+	
+</tr>
+</table>
+<!-- / controls above postbits -->
+
+<!-- toolbar -->
+<table class="tborder" cellpadding="4" cellspacing="1" border="0" width="100%" align="center" style="border-bottom-width:0px">
+<tr>
+	<td class="tcat" width="100%">
+		<div class="smallfont">
+<!-- PHPForce - Joey修改精华/置顶/总顶/区顶 -->
+
+
+
+
+ 				
+<!-- /PHPForce - Joey修改精华 -->
+
+		
+		&nbsp;
+		</div>
+	</td>
+	<td class="vbmenu_control" id="threadtools" nowrap="nowrap">
+		<a href="/bbs/thread253259.html?nojs=1#goto_threadtools">主题工具</a>
+		<script type="text/javascript"> vbmenu_register("threadtools"); </script>
+	</td>
+	
+		<td class="vbmenu_control" id="threadsearch" nowrap="nowrap">
+			<a href="/bbs/thread253259.html?nojs=1#goto_threadsearch">搜索本主题</a>
+			<script type="text/javascript"> vbmenu_register("threadsearch"); </script>
+		</td>
+	
+	
+		<td class="vbmenu_control" id="threadrating" nowrap="nowrap">
+			<a href="/bbs/thread253259.html?nojs=1#goto_threadrating"><span id="threadrating_current">主题评分</span></a>
+			<script type="text/javascript"> vbmenu_register("threadrating"); </script>
+		</td>
+	
+	
+	
+	
+	
+</tr>
+</table>
+<!-- / toolbar -->
+
+
+
+<!-- end content table -->
+
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+<!-- / end content table -->
+
+
+
+
+
+<div id="posts"><!-- post #1440763 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1440763" style="padding:0px 0px 4px 0px">
+	<!-- this is not the last post shown on the page -->	
+
+
+<!-- post #1440763 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1440763" style="padding:0px 0px 4px 0px">
+	<!-- this is not the last post shown on the page -->	
+
+
+<table id="post1440763" class="tborder" cellpadding="4" cellspacing="0" border="0" width="100%" align="center" style="table-layout:fixed;word-break:break-all">
+<tr>
+	
+		<td class="thead" style="font-weight:normal" width="180" >		
+			<!-- status icon and date -->
+			<a name="post1440763"><img class="inlineimg" src="images/statusicon/post_old.gif" alt="旧" border="0" /></a> 
+			06-04-18, 20:33
+			
+			<!-- / status icon and date -->				
+		</td>
+		<td class="thead" colspan="2" style="font-weight:normal" align="right">
+			<a href="post1440763-1.html" target="new" rel="nofollow" id="postcount1440763" name="1"><strong>第 1 帖</strong></a>
+			
+		</td>
+	
+</tr>
+<tr valign="top">
+	<td  class="alt2">
+			
+			<div id="postmenu_1440763">
+				
+				<a class="bigusername" href="member.php?u=14078"><strong>samwang</strong></a>
+				<!-- vB 中文修改开始: 性别 -->
+				
+				
+				
+				<!-- vB 中文修改结束 -->
+				<script type="text/javascript"> vbmenu_register("postmenu_1440763", true); </script>
+				
+				<div class="smallfont"><img src="images/ranks/level2.gif" alt="" border="" /></div>
+			</div>
+			
+			&nbsp;<br />
+			
+
+			&nbsp;<br />&nbsp;<br />
+			<div class="smallfont" align="left">
+			<fieldset style="border:#C6C6C6 1px solid;">
+				<legend class="smallfont" style="color:#000000">注册会员</legend>
+				&nbsp;<br />
+				<div class="smallfont">&nbsp;&nbsp;注册日期: Apr 2003</div>
+				
+				
+				<div class="smallfont">
+					&nbsp;&nbsp;帖子: 113
+				</div>
+				<!-- vB 中文修改开始: 精华 -->
+						
+						<div class="smallfont">&nbsp;&nbsp;精华: 0</div>
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 银行 -->
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 显示声望 -->
+				
+				<!-- vB 中文修改结束 -->
+				&nbsp;<br />
+			</fieldset>
+			</div>
+
+	</td>
+	
+	<td class="alt1" colspan="2" id="td_post_1440763">
+	
+		
+		
+			<!-- icon and title -->
+			<div class="smallfont">
+				
+<br />
+				<strong>标题: 2.6.11开始，PIPE_BUF改成65536大小了？</strong>
+				<!-- vB 中文修改开始: 显示声望 -->
+				
+				<!-- vB 中文修改结束 -->
+			</div>
+			<!-- / icon and title -->
+			<hr size="1" style="color:#c6dbff" />
+		
+<br />
+		<!-- message -->
+		<div id="post_message_1440763" style="overflow-x: hidden;">最近看本书，书上说PIPE_BUF是4096, 我按着书的例子调试name pipe，写PIPE_BUF的时候，怎么都不对，搞了一下午，硬是把PIPE_BUF的大小摸索出来了，是65536，现在上网一查，果然从2.6.11开始，改成65536了，真是晕死啊。。。<br />
+<br />
+In Linux versions before 2.6.11, the capacity of a pipe was the same as the system page size (e.g., 4096 bytes on x86). Since Linux 2.6.11, the pipe capacity is 65536 bytes.  <br />
+<br />
+但还是有问题：资料上说：<br />
+O_NONBLOCK enabled, n &lt;= PIPE_BUF<br />
+If there is room to write n bytes to the pipe, then write(2) succeeds immediately, writing all n bytes; otherwise write(2) fails, with errno set to EAGAIN<br />
+<br />
+<br />
+/* 这是写程序，第一次写入32768,第二次写入42769 */<br />
+write.c<br />
+...<br />
+char w_buf[65536*2];<br />
+...<br />
+fd=open(pipe,O_CREAT|O_TUNC|O_NONBLOCK,0);<br />
+...<br />
+ret=write(fd,w_buf,32768);<br />
+...<br />
+if((ret=write(fd,w_buf,42769))==-1);<br />
+if (errno==EAGAI)<br />
+print (&quot;write error&quot;);<br />
+....<br />
+<br />
+/* 这是读程序，一次读10000 */<br />
+...<br />
+char r_buf[65536*2];<br />
+...<br />
+fd=open(pipe,O_CREAT|O_TUNC|O_NONBLOCK,0);<br />
+while(1)<br />
+{<br />
+  fd=read(fd,r_buf,10000);<br />
+...<br />
+}<br />
+按着资料上书上说的，我第一次往PIPE里写入32768后，pipe空闲是32768,于是我第二次再次写入42769时，由于42769&lt;PIPE_BUF(65536)，并且写入数据超过了空闲PIPE缓冲区，此时，write应该返回EAGAIN错误，但是，我的运行结果不是这样的！！！<br />
+我运行的结果是，第二次写操作成功返回，写入了32768字节。不知道是什么原因，各位也可在2.6.11以上的机器上调试一下，看结果是什么？？<br />
+<br />
+经过我继续摸索，发现当第一次写操作结束使得空闲的PIPE缓冲区&lt;4096，并且第二次写操作写&gt;=4096的时候，第二次写操作便会返回EAGAIN错误。<br />
+如果第一次写操作结束使得空闲的PIPE缓冲区&gt;=4096，则会发生上面所述的问题。</div>
+		<!-- / message -->
+	
+		
+		
+		
+		
+		
+	
+	</td>
+</tr>
+<tr>
+	<td class="alt2">
+		&nbsp;
+	</td>
+	<td class="alt2" align="left">
+		<!-- vB 中文修改开始: QQ 插件 -->
+		    <a href="#" onclick="imwindow('qq', '14078',  500, 450); return false;"><img src="images/misc/im_qq.gif" alt="发 QQ 消息给 samwang" border="0" /></a> 
+		<!-- vB 中文修改结束 -->
+		<img class="inlineimg" src="images/statusicon/user_offline.gif" alt="samwang 当前离线" border="0" />
+
+
+		
+		<a href="report.php?p=1440763" rel="nofollow"><img class="inlineimg" src="images/buttons/report.gif" alt="反映此帖" border="0" /></a>
+		
+		&nbsp;
+	</td>
+	
+	<td class="alt2" align="right">
+	
+		<!-- controls -->
+		<!-- vB 中文修改开始: 银行 -->
+		
+		
+		
+		<!-- vB 中文修改结束 -->
+		
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1440763" rel="nofollow"><img src="images/buttons/quote.gif" alt="回复时引用此帖" border="0" /></a>
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1440763" rel="nofollow" id="qr_1440763" onclick="return false"><img src="images/buttons/quickreply.gif" alt="快速回复此帖" border="0" /></a>
+		
+		
+		<!-- / controls -->
+	</td>
+</tr>
+</table>
+
+<!-- post 1440763 popup menu -->
+<div class="vbmenu_popup" id="postmenu_1440763_menu" style="display:none">
+	<table cellpadding="4" cellspacing="1" border="0">
+	<tr>
+		<td class="thead">samwang</td>
+	</tr>
+	
+		<tr><td class="vbmenu_option"><a href="member.php?u=14078">查看公开信息</a></td></tr>
+	
+	
+		<tr><td class="vbmenu_option"><a href="private.php?do=newpm&amp;u=14078" rel="nofollow">发送悄悄话给 samwang</a></td></tr>
+	
+	
+	
+	
+		<tr><td class="vbmenu_option"><a href="search.php?do=finduser&amp;u=14078" rel="nofollow">查找 samwang 发表的更多帖子</a></td></tr>
+	
+	
+	<tr><td class="vbmenu_option"><a href="profile.php?do=addlist&amp;userlist=buddy&amp;u=14078">添加 samwang 到好友列表</a></td></tr>
+	
+	</table>
+</div>
+<!-- / post 1440763 popup menu -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1440763 -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1440763 --><!-- post #1441272 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1441272" style="padding:0px 0px 4px 0px">
+	<!-- this is not the last post shown on the page -->	
+
+
+<!-- post #1441272 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1441272" style="padding:0px 0px 4px 0px">
+	<!-- this is not the last post shown on the page -->	
+
+
+<table id="post1441272" class="tborder" cellpadding="4" cellspacing="0" border="0" width="100%" align="center" style="table-layout:fixed;word-break:break-all">
+<tr>
+	
+		<td class="thead" style="font-weight:normal" width="180" >		
+			<!-- status icon and date -->
+			<a name="post1441272"><img class="inlineimg" src="images/statusicon/post_old.gif" alt="旧" border="0" /></a> 
+			06-04-19, 12:31
+			
+			<!-- / status icon and date -->				
+		</td>
+		<td class="thead" colspan="2" style="font-weight:normal" align="right">
+			<a href="post1441272-2.html" target="new" rel="nofollow" id="postcount1441272" name="2"><strong>第 2 帖</strong></a>
+			
+		</td>
+	
+</tr>
+<tr valign="top">
+	<td  class="alt2">
+			
+			<div id="postmenu_1441272">
+				
+				<a class="bigusername" href="member.php?u=14078"><strong>samwang</strong></a>
+				<!-- vB 中文修改开始: 性别 -->
+				
+				
+				
+				<!-- vB 中文修改结束 -->
+				<script type="text/javascript"> vbmenu_register("postmenu_1441272", true); </script>
+				
+				<div class="smallfont"><img src="images/ranks/level2.gif" alt="" border="" /></div>
+			</div>
+			
+			&nbsp;<br />
+			
+
+			&nbsp;<br />&nbsp;<br />
+			<div class="smallfont" align="left">
+			<fieldset style="border:#C6C6C6 1px solid;">
+				<legend class="smallfont" style="color:#000000">注册会员</legend>
+				&nbsp;<br />
+				<div class="smallfont">&nbsp;&nbsp;注册日期: Apr 2003</div>
+				
+				
+				<div class="smallfont">
+					&nbsp;&nbsp;帖子: 113
+				</div>
+				<!-- vB 中文修改开始: 精华 -->
+						
+						<div class="smallfont">&nbsp;&nbsp;精华: 0</div>
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 银行 -->
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 显示声望 -->
+				
+				<!-- vB 中文修改结束 -->
+				&nbsp;<br />
+			</fieldset>
+			</div>
+
+	</td>
+	
+	<td class="alt1" colspan="2" id="td_post_1441272">
+	
+		
+		
+<br />
+		<!-- message -->
+		<div id="post_message_1441272" style="overflow-x: hidden;">怎么没有人响应啊。</div>
+		<!-- / message -->
+	
+		
+		
+		
+		
+		
+	
+	</td>
+</tr>
+<tr>
+	<td class="alt2">
+		&nbsp;
+	</td>
+	<td class="alt2" align="left">
+		<!-- vB 中文修改开始: QQ 插件 -->
+		    <a href="#" onclick="imwindow('qq', '14078',  500, 450); return false;"><img src="images/misc/im_qq.gif" alt="发 QQ 消息给 samwang" border="0" /></a> 
+		<!-- vB 中文修改结束 -->
+		<img class="inlineimg" src="images/statusicon/user_offline.gif" alt="samwang 当前离线" border="0" />
+
+
+		
+		<a href="report.php?p=1441272" rel="nofollow"><img class="inlineimg" src="images/buttons/report.gif" alt="反映此帖" border="0" /></a>
+		
+		&nbsp;
+	</td>
+	
+	<td class="alt2" align="right">
+	
+		<!-- controls -->
+		<!-- vB 中文修改开始: 银行 -->
+		
+		
+		
+		<!-- vB 中文修改结束 -->
+		
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1441272" rel="nofollow"><img src="images/buttons/quote.gif" alt="回复时引用此帖" border="0" /></a>
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1441272" rel="nofollow" id="qr_1441272" onclick="return false"><img src="images/buttons/quickreply.gif" alt="快速回复此帖" border="0" /></a>
+		
+		
+		<!-- / controls -->
+	</td>
+</tr>
+</table>
+
+<!-- post 1441272 popup menu -->
+<div class="vbmenu_popup" id="postmenu_1441272_menu" style="display:none">
+	<table cellpadding="4" cellspacing="1" border="0">
+	<tr>
+		<td class="thead">samwang</td>
+	</tr>
+	
+		<tr><td class="vbmenu_option"><a href="member.php?u=14078">查看公开信息</a></td></tr>
+	
+	
+		<tr><td class="vbmenu_option"><a href="private.php?do=newpm&amp;u=14078" rel="nofollow">发送悄悄话给 samwang</a></td></tr>
+	
+	
+	
+	
+		<tr><td class="vbmenu_option"><a href="search.php?do=finduser&amp;u=14078" rel="nofollow">查找 samwang 发表的更多帖子</a></td></tr>
+	
+	
+	<tr><td class="vbmenu_option"><a href="profile.php?do=addlist&amp;userlist=buddy&amp;u=14078">添加 samwang 到好友列表</a></td></tr>
+	
+	</table>
+</div>
+<!-- / post 1441272 popup menu -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1441272 -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1441272 --><!-- post #1442088 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1442088" style="padding:0px 0px 4px 0px">
+		
+
+
+<!-- post #1442088 -->
+
+	<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+	<div id="edit1442088" style="padding:0px 0px 4px 0px">
+		
+
+
+<table id="post1442088" class="tborder" cellpadding="4" cellspacing="0" border="0" width="100%" align="center" style="table-layout:fixed;word-break:break-all">
+<tr>
+	
+		<td class="thead" style="font-weight:normal" width="180" >		
+			<!-- status icon and date -->
+			<a name="post1442088"><img class="inlineimg" src="images/statusicon/post_old.gif" alt="旧" border="0" /></a> 
+			06-04-20, 14:51
+			
+			<!-- / status icon and date -->				
+		</td>
+		<td class="thead" colspan="2" style="font-weight:normal" align="right">
+			<a href="post1442088-3.html" target="new" rel="nofollow" id="postcount1442088" name="3"><strong>第 3 帖</strong></a>
+			
+		</td>
+	
+</tr>
+<tr valign="top">
+	<td  class="alt2">
+			
+			<div id="postmenu_1442088">
+				
+				<a class="bigusername" href="member.php?u=14078"><strong>samwang</strong></a>
+				<!-- vB 中文修改开始: 性别 -->
+				
+				
+				
+				<!-- vB 中文修改结束 -->
+				<script type="text/javascript"> vbmenu_register("postmenu_1442088", true); </script>
+				
+				<div class="smallfont"><img src="images/ranks/level2.gif" alt="" border="" /></div>
+			</div>
+			
+			&nbsp;<br />
+			
+
+			&nbsp;<br />&nbsp;<br />
+			<div class="smallfont" align="left">
+			<fieldset style="border:#C6C6C6 1px solid;">
+				<legend class="smallfont" style="color:#000000">注册会员</legend>
+				&nbsp;<br />
+				<div class="smallfont">&nbsp;&nbsp;注册日期: Apr 2003</div>
+				
+				
+				<div class="smallfont">
+					&nbsp;&nbsp;帖子: 113
+				</div>
+				<!-- vB 中文修改开始: 精华 -->
+						
+						<div class="smallfont">&nbsp;&nbsp;精华: 0</div>
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 银行 -->
+				
+				<!-- vB 中文修改结束 -->
+				<!-- vB 中文修改开始: 显示声望 -->
+				
+				<!-- vB 中文修改结束 -->
+				&nbsp;<br />
+			</fieldset>
+			</div>
+
+	</td>
+	
+	<td class="alt1" colspan="2" id="td_post_1442088">
+	
+		
+		
+<br />
+		<!-- message -->
+		<div id="post_message_1442088" style="overflow-x: hidden;">顶！希望大家能够在自己机器上跑一下。验证一下。<br />
+-------------------------------------<br />
+以下是读pipe程序：<br />
+-------------------------------------<br />
+/* linux pipe_buf大小为65536,read一次读取16384大小的内容<br />
+ */<br />
+#include &lt;sys/types.h&gt;<br />
+<br />
+#include &lt;sys/stat.h&gt;<br />
+<br />
+#include &lt;errno.h&gt;<br />
+<br />
+#include &lt;fcntl.h&gt;<br />
+#include &lt;stdio.h&gt;<br />
+#include &lt;stdlib.h&gt;<br />
+#include &lt;string.h&gt;<br />
+#include &lt;string.h&gt;<br />
+<br />
+#define FIFO_SERVER &quot;/tmp/fifo&quot;<br />
+<br />
+<br />
+<br />
+main(int argc,char** argv)<br />
+<br />
+{<br />
+<br />
+	char r_buf[65536*2];<br />
+<br />
+	int  fd;<br />
+<br />
+	int  r_size;<br />
+<br />
+	int  ret_size;<br />
+<br />
+	int  i=0;<br />
+	if (argc!=2) {<br />
+		printf(&quot;Usage : %s number\n&quot;,argv[0]);<br />
+		exit(1);<br />
+	}<br />
+	r_size=atoi(argv[1]);<br />
+<br />
+	printf(&quot;requred real read bytes %d\n&quot;,r_size);<br />
+<br />
+	memset(r_buf,0,sizeof(r_buf));<br />
+<br />
+	fd=open(FIFO_SERVER,O_RDONLY|O_NONBLOCK,0);	<br />
+//非阻塞,当无写操作打开，或有写操作打开，但没写数据进去，则此读操作返回-1,当前的errno值为EAGAIN<br />
+<br />
+//	fd=open(FIFO_SERVER,O_RDONLY,0);		<br />
+//阻塞,当无写操作打开，或有写操作打开，但没写数据进去，则此读操作阻塞；<br />
+//除此之外，造成阻塞的另外一种原因是，FIFO里有数据，但有另外的进程在读；<br />
+//阻塞只对本进程的第一个读操作有效，当读操作解除阻塞后，即使FIFO里无数据，余下的读操作均不会阻塞；<br />
+<br />
+	if(fd==-1)<br />
+<br />
+	{<br />
+<br />
+		printf(&quot;open %s for read error\n&quot;);<br />
+<br />
+		exit(1);	<br />
+<br />
+	}<br />
+<br />
+	while(1)<br />
+<br />
+	{<br />
+<br />
+		ret_size=read(fd,r_buf,r_size);<br />
+<br />
+		if(ret_size==-1)<br />
+<br />
+			if(errno==EAGAIN)<br />
+<br />
+				printf(&quot;no data avlaible\n&quot;);<br />
+<br />
+		printf(&quot;%d : real read bytes %d\n&quot;,i,ret_size);<br />
+<br />
+		sleep(1);<br />
+<br />
+		i++;<br />
+	}	<br />
+<br />
+	pause();<br />
+<br />
+	unlink(FIFO_SERVER);<br />
+<br />
+}<br />
+<br />
+---------------------------------------------<br />
+以下是写pipe程序：<br />
+---------------------------------------------<br />
+#include &lt;sys/types.h&gt;<br />
+<br />
+#include &lt;sys/stat.h&gt;<br />
+<br />
+#include &lt;errno.h&gt;<br />
+<br />
+#include &lt;fcntl.h&gt;<br />
+#include &lt;stdio.h&gt;<br />
+#include &lt;stdlib.h&gt;<br />
+#include &lt;unistd.h&gt;<br />
+#include &lt;string.h&gt;<br />
+<br />
+#define FIFO_SERVER &quot;/tmp/fifo&quot;<br />
+<br />
+main(int argc,char** argv)<br />
+<br />
+{<br />
+<br />
+	int fd;<br />
+<br />
+	char w_buf[65536*2];<br />
+<br />
+	int real_wnum;<br />
+<br />
+	memset(w_buf,0,sizeof(w_buf));<br />
+<br />
+	if((mkfifo(FIFO_SERVER,O_CREAT|O_EXCL)&lt;0)&amp;&amp;(errno!=EEXIST))<br />
+<br />
+		printf(&quot;cannot create fifoserver\n&quot;);<br />
+<br />
+		<br />
+<br />
+   	fd=open(FIFO_SERVER,O_WRONLY|O_NONBLOCK,0); 	//设置非阻塞标志<br />
+<br />
+//	fd=open(FIFO_SERVER,O_WRONLY,0);		//设置阻塞标志<br />
+<br />
+	if(fd==-1)<br />
+<br />
+		if(errno==ENXIO)<br />
+<br />
+			printf(&quot;open error; no reading process\n&quot;);<br />
+	sleep(10);//用于测试读操作<br />
+<br />
+	real_wnum=write(fd,w_buf,32768);<br />
+<br />
+	if(real_wnum==-1)<br />
+<br />
+	{<br />
+		if(errno==EAGAIN)<br />
+<br />
+			printf(&quot;write to fifo error; try later\n&quot;);<br />
+<br />
+	}<br />
+<br />
+	else <br />
+<br />
+		printf(&quot;real write num is %d\n&quot;,real_wnum);<br />
+<br />
+	real_wnum=write(fd,w_buf,65535);	<br />
+/*PIPE_BUF为65536<br />
+ *第一次写32768,空闲区为32768<br />
+ *写操作非阻塞<br />
+ *  当第二次写65537(大于PIPE_BUF)时，写入32768(尽量写满空闲区)后返回,有数据没写完<br />
+ *  当第二次写65535(小于PIPE_BUF,但大于空闲缓冲区)时，写入32768(尽量写满空闲区)后返回,有数据没写完<br />
+    这里有个临界点，当空闲区&lt;4096时，第二次写入&gt;=4096的数据时，返回EAGAIN错误<br />
+ *  当第二次写32767(小于PIPE_BUF,也小于空闲缓冲区)时，可写完所有数据<br />
+ *写操作阻塞<br />
+ *  当第二次写65537(大于PIPE_BUF)时，先写一部分，一旦有空闲空间，便接着写，直到写完，成功返回(无原子性）<br />
+ *  当第二次写65535(小于PIPE_BUF,但大于空闲缓冲区)时，写操作阻塞，直到空闲空间达到写入数据的要求后，一次性写完，返回(原子)<br />
+ *  当第二次写32767(小于PIPE_BUF,也小于空闲缓冲区)时，可写完所有数据<br />
+*/<br />
+	if(real_wnum==-1) {<br />
+<br />
+		if(errno==EAGAIN)<br />
+<br />
+			printf(&quot;try later\n&quot;);<br />
+<br />
+	} else printf(&quot;real write num is %d\n&quot;,real_wnum);<br />
+}<br />
+<br />
+-------------------------------------------------------------</div>
+		<!-- / message -->
+	
+		
+		
+		
+		
+		
+	
+	</td>
+</tr>
+<tr>
+	<td class="alt2">
+		&nbsp;
+	</td>
+	<td class="alt2" align="left">
+		<!-- vB 中文修改开始: QQ 插件 -->
+		    <a href="#" onclick="imwindow('qq', '14078',  500, 450); return false;"><img src="images/misc/im_qq.gif" alt="发 QQ 消息给 samwang" border="0" /></a> 
+		<!-- vB 中文修改结束 -->
+		<img class="inlineimg" src="images/statusicon/user_offline.gif" alt="samwang 当前离线" border="0" />
+
+
+		
+		<a href="report.php?p=1442088" rel="nofollow"><img class="inlineimg" src="images/buttons/report.gif" alt="反映此帖" border="0" /></a>
+		
+		&nbsp;
+	</td>
+	
+	<td class="alt2" align="right">
+	
+		<!-- controls -->
+		<!-- vB 中文修改开始: 银行 -->
+		
+		
+		
+		<!-- vB 中文修改结束 -->
+		
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1442088" rel="nofollow"><img src="images/buttons/quote.gif" alt="回复时引用此帖" border="0" /></a>
+		
+		
+			<a href="newreply.php?do=newreply&amp;p=1442088" rel="nofollow" id="qr_1442088" onclick="return false"><img src="images/buttons/quickreply.gif" alt="快速回复此帖" border="0" /></a>
+		
+		
+		<!-- / controls -->
+	</td>
+</tr>
+</table>
+
+<!-- post 1442088 popup menu -->
+<div class="vbmenu_popup" id="postmenu_1442088_menu" style="display:none">
+	<table cellpadding="4" cellspacing="1" border="0">
+	<tr>
+		<td class="thead">samwang</td>
+	</tr>
+	
+		<tr><td class="vbmenu_option"><a href="member.php?u=14078">查看公开信息</a></td></tr>
+	
+	
+		<tr><td class="vbmenu_option"><a href="private.php?do=newpm&amp;u=14078" rel="nofollow">发送悄悄话给 samwang</a></td></tr>
+	
+	
+	
+	
+		<tr><td class="vbmenu_option"><a href="search.php?do=finduser&amp;u=14078" rel="nofollow">查找 samwang 发表的更多帖子</a></td></tr>
+	
+	
+	<tr><td class="vbmenu_option"><a href="profile.php?do=addlist&amp;userlist=buddy&amp;u=14078">添加 samwang 到好友列表</a></td></tr>
+	
+	</table>
+</div>
+<!-- / post 1442088 popup menu -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1442088 -->
+
+
+	</div>
+	
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- / post #1442088 --><div id="lastpost"></div></div>
+
+<!-- start content table -->
+<!-- open content container -->
+
+<div align="center">
+	<div class="page" style="width:100%; text-align:left">
+		<div style="padding:0px 0px 0px 0px">
+
+<!-- / start content table -->
+
+<!-- controls below postbits -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr valign="top">
+	
+		<td class="smallfont">
+<!-- PHPForce - Joey修改新贴按钮  -->
+	<a href="newthread.php?do=newthread&amp;f=76" rel="nofollow"><img src="images/buttons/newthread.gif" alt="发表新主题" border="0" /></a>
+<!-- /PHPForce - Joey修改新贴按钮 -->
+<a href="newreply.php?do=newreply&amp;noquote=1&amp;p=1442088" rel="nofollow"><img src="images/buttons/reply.gif" alt="回复" border="0" /></a></td>
+		
+	
+</tr>
+</table>
+<!-- / controls below postbits -->
+
+
+
+
+<br />
+
+<div class="smallfont" align="center">
+	<strong>&laquo;</strong>
+		<a href="nextoldesttothread253259.html" rel="nofollow">上一主题</a>
+		|
+		<a href="nextnewesttothread253259.html" rel="nofollow">下一主题</a>
+	<strong>&raquo;</strong>
+</div>
+
+
+<br />
+
+
+<script type="text/javascript" src="clientscript/vbulletin_multi_quote.js?v=368"></script>
+<script type="text/javascript">
+var mqlimit = 0;
+</script>
+
+
+
+<!-- ajax errors table -->
+<table class="tborder" cellpadding="4" cellspacing="1" border="0" style="display:none; position:absolute" id="ajax_post_errors">
+<tr>
+	<td class="thead">
+		<span style="float:right"><input type="button" class="button" value=" X " onclick="vB_QuickEditor.hide_errors()" unselectable="true" /></span>
+		vBulletin 信息
+	</td>
+</tr>
+<tr>
+	<td class="alt2" colspan="2" id="ajax_post_errors_message">&nbsp;</td>
+</tr>
+<tr>
+	<td class="tfoot" colspan="2" align="center"><a href="#" onclick="vB_QuickEditor.abort(); return false;">取消更改</a></td>
+</tr>
+</table>
+<!-- / ajax errors table -->
+
+<!-- scripts for quick reply and quick edit -->
+<!-- EDITOR SCRIPTS -->
+<script type="text/javascript" src="clientscript/vbulletin_textedit.js?v=368"></script>
+<script type="text/javascript">
+<!--
+var fontoptions = new Array();
+var sizeoptions = new Array();
+var smilieoptions = new Array(); smilieoptions = {  };
+
+var istyles = new Array(); istyles = {  };
+
+var smiliewindow_x = 240;
+var smiliewindow_y = 280;
+
+var ignorequotechars = 1;
+
+// vB Phrases
+vbphrase["wysiwyg_please_wait"]          = "请等待所见即所得编辑器读取完成...";
+vbphrase["wysiwyg_initialized"]          = "所见即所得编辑器初始化 %1$s 需要 %2$s 秒钟。";
+vbphrase["wysiwyg_command_invalid"]      = "此命令无效或者没有被执行。";
+vbphrase["moz_must_select_text"]         = "Mozilla 需要您首先选择一些文字来使用此功能。";
+vbphrase["moz_edit_config_file"]         = "您需要编辑您的 Mozilla 配置文件以允许此操作。";
+vbphrase["enter_tag_option"]             = "请输入 %1$s 标签的选项:";
+vbphrase["must_select_text_to_use"]      = "您在使用该功能前必须选择一些文本。";
+vbphrase["browser_is_safari_no_wysiwyg"] = "Safari 浏览器不支持即见即所得模式。";
+vbphrase["enter_option_x_tag"]           = "请输入标签 [%1$s] 的选项:";
+vbphrase["enter_text_to_be_formatted"]   = "输入格式化的字符";
+vbphrase["enter_link_text"]              = "输入此链接显示的文字(可不填):";
+vbphrase["enter_list_type"]              = "您想要什么类型的列表？ 输入“1”为数字列表，输入“a”为字母列表，或者留空为大圆点列表:";
+vbphrase["enter_list_item"]              = "输入一个列表项目。\r\n留空或者点击“取消”完成此列表。";
+vbphrase["must_enter_subject"]           = "您必须输入一个主题/标题！";
+vbphrase["message_too_short"]            = "您输入的信息太短。至少要有 %1$s 个英文字符或汉字。";
+vbphrase["enter_link_url"]               = "请输入链接的地址:";
+vbphrase["enter_image_url"]              = "请输入图片链接地址:";
+vbphrase["enter_email_link"]             = "请为该链接输入 Email 地址:";
+vbphrase["complete_image_verification"]  = "您没有完成图像验证";
+vbphrase["iespell_not_installed"]        = "ieSpell 是 Internet Explorer 的拼写检查工具。\r\n\r\n如果您想下载 ieSpell，请点击“确定”，否则点击“取消”。\r\n\r\nieSpell 可以从 http://www.iespell.com 下载。";
+vbphrase["click_quick_reply_icon"]       = "请点击您想回复的帖子右下角的回复按钮来激活快速回复功能。";
+vbphrase["insert_all"]                   = "插入全部";
+
+//-->
+</script>
+<!-- END EDITOR SCRIPTS -->
+
+<!-- EDITOR STYLES -->
+<link rel="stylesheet" type="text/css" href="clientscript/vbulletin_editor.css" />
+<style type="text/css">
+<!--
+.vBulletin_editor {
+	background: #E1E1E2;
+	padding: 4px;
+}
+.imagebutton {
+	background: #E1E1E2;
+	color: #000000;
+	padding: 1px;
+	border: none;
+}
+.ocolor, .ofont, .osize, .osmilie, .osyscoloar, .smilietitle {
+	background: #FFFFFF;
+	color: #000000;
+	border: 1px solid #FFFFFF;
+}
+.popup_pickbutton {
+	border: 1px solid #FFFFFF;
+}
+.popup_feedback {
+	background: #FFFFFF;
+	color: #000000;
+	border-right: 1px solid #FFFFFF;
+}
+.popupwindow {
+	background: #FFFFFF;
+}
+#fontOut, #sizeOut, .popup_feedback div {
+	background: #FFFFFF;
+	color: #000000;
+}
+.alt_pickbutton {
+	border-left: 1px solid #E1E1E2;
+}
+.popup_feedback input, .popup_feedback div
+{
+	border: 0px solid;
+	padding: 0px 2px 0px 2px;
+	cursor: default;
+	font: 11px tahoma;
+	overflow: hidden;
+}
+-->
+</style>
+<!-- END EDITOR STYLES -->
+
+<script type="text/javascript" src="clientscript/vbulletin_quick_edit.js?v=368"></script>
+<script type="text/javascript">
+<!--
+vB_AJAX_QuickEdit_Init('posts');
+//-->
+</script>
+
+<!-- / scripts for quick reply and quick edit -->
+
+
+
+
+<!-- quick reply -->
+<script type="text/javascript" src="clientscript/vbulletin_quick_reply.js?v=368"></script>
+<form action="newreply.php?do=postreply&amp;t=253259" method="post" name="vbform" onsubmit="return qr_prepare_submit(this, 6);" id="qrform">
+<table class="tborder" cellpadding="4" cellspacing="1" border="0" width="100%" align="center">
+<thead>
+	<tr>
+		<td class="tcat" colspan="2">
+			<a style="float:right" href="#top" onclick="return toggle_collapse('quickreply');"><img id="collapseimg_quickreply" src="images/buttons/collapse_tcat.gif" alt="" border="0" /></a>
+			快速回复
+		</td>
+	</tr>
+</thead>
+<tbody id="qr_error_tbody" style="display:none">
+<tr>
+	<td class="thead">信息提交时发生如下错误</td>
+</tr>
+<tr>
+	<td class="alt1" id="qr_error_td"></td>
+</tr>
+<tr>
+	<td class="tfoot" align="center"><span class="smallfont"><a href="#" onclick="return qr_hide_errors()">确定</a></span></td>
+</tr>
+</tbody>
+<tbody id="collapseobj_quickreply" style="">
+<tr>
+	<td class="panelsurround" align="center">
+		<div class="panel">
+			<div align="left" style="max-width:640px; width:auto !important; width:640px">
+				<div class="smallfont">信息:</div>
+				<div id="vB_Editor_QR" class="vBulletin_editor">
+		<script type="text/javascript">
+		<!--
+			var threaded_mode = 0;
+			var require_click = 0;
+			var is_last_page = 1; // leave for people with cached JS files
+			var allow_ajax_qr = 1;
+			var ajax_last_post = 1145515888;
+		// -->
+		</script>
+		
+<div class="controlbar">
+	
+	<textarea name="message" id="vB_Editor_QR_textarea" rows="10" cols="60" style="width:520px; height:100px" tabindex="1" dir="ltr"></textarea>
+	
+</div>
+
+<input type="hidden" name="wysiwyg" id="vB_Editor_QR_mode" value="0" />
+
+<script type="text/javascript">
+<!--
+vB_Editor['vB_Editor_QR'] = new vB_Text_Editor('vB_Editor_QR', 0, '76', '1');
+var QR_EditorID = 'vB_Editor_QR';
+//-->
+</script>
+	</div>
+					
+				<fieldset class="fieldset" style="margin:1px 0px 0px 0px">
+					<legend>选项</legend>
+					<div style="padding:1px">
+						
+						<label for="qr_quickreply"><input type="checkbox" name="quickreply" value="1" id="qr_quickreply" accesskey="w" tabindex="4" />回复中引用原信息?</label>
+					</div>
+				</fieldset>
+			</div>
+		</div>	
+
+		<div style="margin-top:4px">
+			<input type="hidden" name="fromquickreply" value="1" />
+			<input type="hidden" name="s" value="" />
+			<input type="hidden" name="do" value="postreply" />
+			<input type="hidden" name="t" value="253259" id="qr_threadid" />
+			<input type="hidden" name="p" value="who cares" id="qr_postid" />
+			<input type="hidden" name="parseurl" value="1" />
+			<input type="hidden" name="loggedinuser" value="118757" />
+			<input type="submit" class="button" value="帖子快速回复" accesskey="s" title="(Alt + S)" name="sbutton" tabindex="2" id="qr_submit" onclick="clickedelm = this.value" />
+			<input type="submit" class="button" value="进入高级模式" accesskey="x" title="(Alt + X)" name="preview" tabindex="3" id="qr_preview" onclick="clickedelm = this.value" />
+		</div>
+
+		<div align="center" id="qr_posting_msg" style="display:none; margin-top:6px">
+			<img style="vertical-align: middle;" src="images/misc/progress.gif" alt="正在发表快速回复 - 请等待" />&nbsp;<strong>正在发表快速回复 - 请等待</strong>
+		</div>	
+	</td>
+</tr>
+</tbody>
+</table>
+</form>
+
+
+
+<br />
+
+<script type="text/javascript">
+<!--
+	// initialize quick reply
+	qr_init();
+//-->
+</script>
+
+<!-- end quick reply -->
+
+
+<!-- currently active users -->
+
+<!-- end currently active users -->
+
+
+<!-- popup menu contents -->
+<br />
+
+<!-- thread tools menu -->
+<div class="vbmenu_popup" id="threadtools_menu" style="display:none">
+<form action="postings.php?t=253259&amp;pollid=" method="post" name="threadadminform">
+	<table cellpadding="4" cellspacing="1" border="0">
+	<tr>
+		<td class="thead">主题工具<a name="goto_threadtools"></a></td>
+	</tr>
+	<tr>
+		<td class="vbmenu_option"><img class="inlineimg" src="images/buttons/printer.gif" alt="显示可打印版本" /> <a href="printthread253259.html" accesskey="3" rel="nofollow">显示可打印版本</a></td>
+	</tr>
+	<tr>
+		<td class="vbmenu_option"><img class="inlineimg" src="images/buttons/sendtofriend.gif" alt="邮寄本页给好友" /> <a href="sendthread253259.html" rel="nofollow">邮寄本页给好友</a></td>
+	</tr>
+	
+	<tr>
+		<td class="vbmenu_option"><img class="inlineimg" src="images/buttons/subscribe.gif" alt="订阅" />
+		
+			<a href="subscription.php?do=addsubscription&amp;t=253259" rel="nofollow">收藏主题</a>
+		
+		</td>
+	</tr>
+	
+	
+	
+	</table>
+</form>
+</div>
+<!-- / thread tools menu -->
+
+<!-- **************************************************** -->
+
+
+<!-- thread search menu -->
+<div class="vbmenu_popup" id="threadsearch_menu" style="display:none">
+<form action="search.php?do=process&amp;searchthreadid=253259" method="post">
+	<table cellpadding="4" cellspacing="1" border="0">
+	<tr>
+		<td class="thead">搜索本主题<a name="goto_threadsearch"></a></td>
+	</tr>
+	<tr>
+		<td class="vbmenu_option" title="nohilite">
+			<input type="hidden" name="s" value="" />
+			<input type="hidden" name="do" value="process" />
+			<input type="hidden" name="searchthreadid" value="253259" />
+			<input type="text" class="bginput" name="query" size="25" /><input type="submit" class="button" value="执行"  /><br />
+		</td>
+	</tr>
+	<tr>
+		<td class="vbmenu_option"><a href="search.php?searchthreadid=253259">高级搜索</a></td>
+	</tr>
+	</table>
+</form>
+</div>
+<!-- / thread search menu -->
+
+
+<!-- **************************************************** -->
+
+
+	<!-- thread rating menu -->
+	<div class="vbmenu_popup" id="threadrating_menu" style="display:none">
+	<form action="threadrate.php?t=253259" method="post" id="showthread_threadrate_form">
+		<table cellpadding="4" cellspacing="1" border="0">
+		<tr>
+			<td class="thead">对此主题评分<a name="goto_threadrating"></a></td>
+		</tr>
+		
+		<tr>
+			<td class="vbmenu_option" title="nohilite" id="threadrating_options">
+			<div><img class="inlineimg" src="images/rating/rating_5.gif" alt="精彩" /><label for="vote5"><input type="radio" name="vote" id="vote5" value="5"  />精彩</label></div>
+			<div><img class="inlineimg" src="images/rating/rating_4.gif" alt="好帖" /><label for="vote4"><input type="radio" name="vote" id="vote4" value="4"  />好帖</label></div>
+			<div><img class="inlineimg" src="images/rating/rating_3.gif" alt="一般" /><label for="vote3"><input type="radio" name="vote" id="vote3" value="3"  />一般</label></div>
+			<div><img class="inlineimg" src="images/rating/rating_2.gif" alt="不好" /><label for="vote2"><input type="radio" name="vote" id="vote2" value="2"  />不好</label></div>
+			<div><img class="inlineimg" src="images/rating/rating_1.gif" alt="极差" /><label for="vote1"><input type="radio" name="vote" id="vote1" value="1"  />极差</label></div>
+			</td>
+		</tr>
+		<tr id="threadrating_submit">
+			<td class="vbmenu_option" title="nohilite" align="center">
+				<input type="hidden" name="s" value="ae490e6521ce79bfaab80d31d54c44dc" />
+				<input type="hidden" name="t" value="253259" />
+				<input type="hidden" name="pp" value="15" />
+				<input type="hidden" name="page" value="1" />
+				<input type="submit" class="button" value="现在投票" />
+			</td>
+		</tr>
+		
+		</table>
+	</form>
+	</div>
+	<!-- / thread rating menu -->
+
+	<script type="text/javascript" src="clientscript/vbulletin_ajax_threadrate.js?v=368"></script>
+	<script type="text/javascript">
+	<!--
+	vB_AJAX_ThreadRate_Init('showthread_threadrate_form');
+	var threadid = 253259;
+	//-->
+	</script>
+
+
+<!-- / popup menu contents -->
+
+
+<!-- forum rules and admin links -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
+<tr valign="bottom">
+	<td class="smallfont" align="left">
+		<table class="tborder" cellpadding="4" cellspacing="1" border="0" width="180">
+<thead>
+<tr>
+	<td class="thead">
+		<a style="float:right" href="#top" onclick="return toggle_collapse('forumrules')"><img id="collapseimg_forumrules" src="images/buttons/collapse_thead.gif" alt="" border="0" /></a>
+		发帖规则
+	</td>
+</tr>
+</thead>
+<tbody id="collapseobj_forumrules" style="">
+<tr>
+	<td class="alt2" nowrap="nowrap"><div class="smallfont">
+		
+		<div>您 [可以] 发表新主题</div>
+		<div>您 [可以] 回复主题</div>
+		<div>您 [可以] 上传附件</div>
+		<div>您 [可以] 编辑您的帖子</div>
+    	<hr size="1" style="color:#c6dbff" />
+		
+		<div>已 [启用] <a href="misc.php?do=bbcode" target="_blank">BB 代码</a></div>
+		<div>已 [启用] <a href="misc.php?do=showsmilies" target="_blank">表情符号</a></div>
+		<div>已 [启用] <a href="misc.php?do=bbcode#imgcode" target="_blank">IMG 代码</a></div>
+		<div>已 [禁用] HTML 代码</div>
+	</div></td>
+</tr>
+</tbody>
+</table>
+	</td>
+	<td class="smallfont" align="right">
+		<table cellpadding="0" cellspacing="0" border="0">
+		
+		<tr>
+			<td>
+			<div class="smallfont" style="text-align:left; white-space:nowrap">
+	<form action="forumdisplay.php" method="get">
+	<input type="hidden" name="s" value="" />
+	<input type="hidden" name="daysprune" value="" />
+	[论坛跳转&hellip;]<br />
+	<select name="f" onchange="this.form.submit();">
+		<optgroup label="论坛功能">
+			<option value="cp" >用户控制面板</option>
+			<option value="pm" >悄悄话</option>
+			<option value="subs" >收藏夹</option>
+			<option value="wol" >会员在线状态</option>
+			<option value="search" >搜索论坛</option>
+			<option value="home" >论坛首页</option>
+		</optgroup>
+		<optgroup label="讨论区">
+		<option value="30" class="fjdpth0" > Linux 综合讨论区 —— LinuxSir.Org</option>
+<option value="31" class="fjdpth1" >&nbsp; &nbsp;  Linux 基础建设讨论专版</option>
+<option value="60" class="fjdpth1" >&nbsp; &nbsp;  Linux shell进阶应用与shell编程</option>
+<option value="67" class="fjdpth1" >&nbsp; &nbsp;  Linux 专业英文精品技术文档专题</option>
+<option value="97" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  Gas中文小组讨论区</option>
+<option value="45" class="fjdpth1" >&nbsp; &nbsp;  Linux 硬件及周边设备</option>
+<option value="32" class="fjdpth1" >&nbsp; &nbsp;  Linux 网络与服务器架设</option>
+<option value="63" class="fjdpth1" >&nbsp; &nbsp;  Linux 系统及网络安全讨论专版</option>
+<option value="101" class="fjdpth1" >&nbsp; &nbsp;  Linux及计算机学科基础理论版</option>
+<option value="39" class="fjdpth0" > Linux 发行版讨论区 —— LinuxSir.Org</option>
+<option value="41" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版SuSE专题</option>
+<option value="96" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Archlinux讨论区</option>
+<option value="49" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Debian专题</option>
+<option value="100" class="fjdpth1" >&nbsp; &nbsp;  Ubuntu Linux 专题讨论</option>
+<option value="73" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Slackware专题</option>
+<option value="58" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版 LFS 讨论区</option>
+<option value="103" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  Olive讨论区 （实验版）</option>
+<option value="44" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Mandriva专题</option>
+<option value="40" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Redhat/Fedora/CentOS专题</option>
+<option value="59" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版Gentoo讨论区</option>
+<option value="93" class="fjdpth1" >&nbsp; &nbsp;  Mini Linux 及准系统研究</option>
+<option value="79" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版红旗专题</option>
+<option value="109" class="fjdpth1" >&nbsp; &nbsp;  LoongSon-龙芯讨论区</option>
+<option value="50" class="fjdpth1" >&nbsp; &nbsp;  Linux 发行版其他专题</option>
+<option value="82" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  Linux发行版 Turbolinux专题</option>
+<option value="92" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  PowerPC Linux 讨论区</option>
+<option value="26" class="fjdpth0" > Linux 软件应用讨论区 —— LinuxSir.Org</option>
+<option value="42" class="fjdpth1" >&nbsp; &nbsp;  Linux 输入开发与研究</option>
+<option value="28" class="fjdpth1" >&nbsp; &nbsp;  Linux 软件专题讨论</option>
+<option value="86" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  软件下载讨论区</option>
+<option value="99" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  即时通讯</option>
+<option value="33" class="fjdpth0" > Linux 高级应用讨论区 —— LinuxSir.Org</option>
+<option value="36" class="fjdpth1" >&nbsp; &nbsp;  Linux 数据库专题讨论</option>
+<option value="61" class="fjdpth1" >&nbsp; &nbsp;  Linux 认证考试学习与经验交流</option>
+<option value="62" class="fjdpth1" >&nbsp; &nbsp;  Linux 内核研究小组</option>
+<option value="51" class="fjdpth1" >&nbsp; &nbsp;  Linux 企业级应用专题讨论</option>
+<option value="75" class="fjdpth0" > 编程开发讨论区 —— LinuxSir.Org</option>
+<option value="76" class="fjsel" selected="selected">&nbsp; &nbsp;  Linux 程序设计专题讨论</option>
+<option value="88" class="fjdpth1" >&nbsp; &nbsp;  Java 程序设计开发讨论</option>
+<option value="77" class="fjdpth1" >&nbsp; &nbsp;  Perl | PHP |  Python 脚本程序开发</option>
+<option value="85" class="fjdpth1" >&nbsp; &nbsp;  嵌入式Linux讨论区──实验田版</option>
+<option value="68" class="fjdpth0" > Unix 技术讨论区 —— LinuxSir.Org</option>
+<option value="69" class="fjdpth1" >&nbsp; &nbsp;  BSD 讨论专题</option>
+<option value="83" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  BSD 新闻安全观察</option>
+<option value="98" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  RelaxBSD 讨论区</option>
+<option value="74" class="fjdpth1" >&nbsp; &nbsp;  Solaris 讨论专题</option>
+<option value="108" class="fjdpth1" >&nbsp; &nbsp;  MacOSX &amp; Darwin 讨论专题</option>
+<option value="24" class="fjdpth0" > 社区中心 —— LinuxSir.Org</option>
+<option value="25" class="fjdpth1" >&nbsp; &nbsp;  LinuxSir 论坛管理</option>
+<option value="70" class="fjdpth2" >&nbsp; &nbsp; &nbsp; &nbsp;  LinuxSir 论坛临时存放区</option>
+<option value="84" class="fjdpth1" >&nbsp; &nbsp;  LinuxSir 文章管理系统和BBS程序研究小组</option>
+<option value="37" class="fjdpth1" >&nbsp; &nbsp;  小企鹅新闻图书馆</option>
+<option value="102" class="fjdpth1" >&nbsp; &nbsp;  LinuxSir.Org 同城行 ── 我的城市</option>
+
+		</optgroup>
+	</select><input type="submit" class="button" value="执行"  />
+	</form>
+</div>
+			</td>
+		</tr>		
+		</table>
+	</td>
+</tr>
+</table>
+<!-- /forum rules and admin links -->
+
+<br />
+
+
+
+<br />
+<div class="smallfont" align="center">所有时间均为[北京时间]。现在的时间是 <span class="time">00:54</span>。</div>
+<br />
+
+<!-- /content area table -->
+
+<form action="index.php" method="get">
+
+<table class="tborder" cellpadding="4" cellspacing=""1"" border="0" width="100%" align="center">
+<tr>
+	
+	
+	<td class="tfoot" align="right" width="100%">
+		<div><strong>
+		<a href="http://www.linuxsir.org/">网站首页</a> -
+		<a href="mailto:admin@linuxsir.org" rel="nofollow">联系我们</a> -
+		
+		<a href="login.php?do=logout&amp;logouthash=28309a12368583543f1d324ea04e5047"  onclick="return log_out()">退出论坛</a> -
+		<a href="#top" onclick="self.scrollTo(0, 0); return false;">返回顶端</a>
+	</strong><div>
+	</td>
+</tr>
+</table>
+
+<br />
+
+<div align="center">
+	<div class="smallfont" align="right">
+	<!-- Do not remove this copyright notice -->
+	Powered by vBulletin 版本 3.6.8<br />版权所有 &copy;2000 - 2009, Jelsoft Enterprises Ltd.<br />官方中文技术支持: <a href="http://www.vbulletin-china.cn/" target="_blank">vBulletin 中文</a>
+	<!-- Do not remove this copyright notice -->
+	</div>
+
+	<div class="smallfont" align="right">
+	<!-- Do not remove  or your scheduled tasks will cease to function -->
+	
+	<!-- Do not remove  or your scheduled tasks will cease to function -->
+
+	版权所有 &copy;2002 - 2007, LinuxSir.Org
+	</div>
+</div>
+
+</form>
+
+
+<!-- auto DST correction code -->
+<form action="profile.php" method="post" name="dstform">
+	<input type="hidden" name="s" value="" />
+	<input type="hidden" name="do" value="dst" />
+</form>
+<script type="text/javascript">
+<!--
+	var tzOffset = 8 + 0;
+	var utcOffset = new Date().getTimezoneOffset() / 60;
+	if (Math.abs(tzOffset + utcOffset) == 1)
+	{	// Dst offset is 1 so its changed
+		document.forms.dstform.submit();
+	}
+//-->
+</script>
+<!-- / auto DST correction code -->
+
+
+<script type="text/javascript">
+<!--
+	// Main vBulletin Javascript Initialization
+	vBulletin_init();
+//-->
+</script>
+
+
+		</div>	
+	</div>
+</div>
+
+<!-- / close content container -->
+
+<!-- temp -->
+<div style="display:none">
+	<!-- thread rate -->
+	
+		<!-- thread ratings form here -->
+	
+	<!-- / thread rate -->
+</div>
+
+</body>
+</html>

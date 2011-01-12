@@ -1,0 +1,275 @@
+Tmake使用指南
+
+
+译者：一风（兰州大学高性能计算机试验室 net">cnyifeng@263.net）
+    tmake是一个很好用的生成和管理makefile的工具，他是由Trolltech这家公司开发的，用perl写成。Trolltech这家公司的主打产品大家都知道是Qt。
+
+如果不是用tmake来管理makefile的话，那将会是一件痛苦的事情，虽然有autoconf等工具，但毕竟还是十分繁杂的，
+现在tmake将我们完全从繁琐的生成makefile的过程中解脱出来，只要很简单的步骤就可以生成makefile了。
+其实tmake原本写了使用在Qt上的，只不过不用Qt,我们也可以享受到他的好处，perl在这里面充分体现了他的强大，
+我一直以为，perl是一个很好的用于系统管理的语言。如果你会perl的话，你可以自己试着修改tmake。
+    由于tmake是基于perl的，所以请你确认你的机子上安装了perl。
+    tmake在windows和unix上都有支持。而且它是免费的。本文以linux为平台讲述。
+    好了，下面我开始介绍tmake的安装
+1。确认你有perl 5以后的版本并安装了（windows用户可选）
+2。在linux上解压tmake tar.gz，在windows上解压.zip文件。
+3。设置好tmake路径参数（参见下文）
+4。加入tmake/bin去你的执行路径。
+
+下面是一些例子：
+Unix Bourne shell:
+
+    TMAKEPATH=/local/tmake/lib/linux-g++
+    PATH=$PATH:/local/tmake/bin
+    export TMAKEPATH PATH
+
+Unix C shell:
+    setenv TMAKEPATH /local/tmake/lib/linux-g++
+    setenv PATH $PATH:/local/tmake/bin
+
+Microsoft Windows:
+    set TMAKEPATH=c:\tmake\lib\win32-msvc
+    set PATH=%PATH%;c:\tmake\bin
+在上面设置的路径里面有各种平台支持文件和tmake执行文件。
+tmake支持的平台有：
+   AIX, Data General, FreeBSD, HPUX, SGI Irix, Linux, NetBSD, OpenBSD, OSF1/DEC, SCO, Solaris,
+    SunOS, Ultrix, Unixware and Win32
+
+ UNIX用户请注意：tmake默认的是perl安装在/usr/bin下面，如果你的不是的话，请修改tmake文件第一行的参数。
+
+下面我们开始学习tmake的使用：
+我假设你有一个小的qt程序，他由一个C++ header和两个source file组成。首先，你要创建一个tmake工程文件，如：hello.pro
+HEADERS   =  hello.h
+SOURCES   =  hello.cpp main.cpp
+TARGET    =  hello
+下面我们来产生makefile
+tmake hello.pro -o Makefile
+最后我们执行make命令编译hello这个程序。
+
+Makefile模板
+Tmake发行版本中有以下三个模板
+App.t 用来创建生成发布使用程序的makefile
+Lib.t 用来创建生成libraries的makefile
+Subdirs.t 用来创建目标文档在目录中的makefile
+Tmake.conf 这个configuration文件包含了编译选项和各种资源库
+我们上面创建的hello.pro工程文件并没有包含进模板或者配置选项。默认的模板是app.t，默认的配置是“qt warn_on release“。 下面这个配置文件和上面的功能上是一样的
+TEMPLATE =  app  
+CONFIG   =  qt warn_on release
+HEADERS  =  hello.h
+SOURCES  =  hello.cpp main.cpp					
+TARGET   =  hello
+Makefile配置选项
+
+TEMPLATE =  app   这一行好像只能是这样的
+TARGET   =  hello 这一行中 hello 可以是任意名称
+
+配置选项可以用在app.t和lib.t中，他们用来指示使用什么编译选项和连接什么库文件。他们有以下几个：
+1．控制编译选项的
+release 用来生成最优化编译（用于发布的软件），如果选了”debug”，此选项忽略
+debug 调试时使用该选项，打开debug功能
+warn_on 打开警告选项，产生比正常情况下多的警告。如果选了”warn_off”，此选项忽略
+warn_off 关闭警告选项
+2．控制程序/库文件类型的
+qt 如果是生成qt程序，打开他（改选项是默认支持的）
+opengl 不说也知道是编OPENGL时用的
+thread 用来支持线程
+X11 用来支持X11
+windows 支持WINDOWS
+console 同样是WINDOWS下的控制台程序
+dll 生成动态连接库时使用
+staticlib 生成静态连接库时使用
+举个例子：假如我们的hello程序需要qt和opengl支持，并且还要打开debug，那么我们的配置就该是这样的
+TEMPLATE =  app
+CONFIG   =  qt opengl debug（注意本行的改变）
+HEADERS  =  hello.h
+SOURCES  =  hello.cpp main.cpp
+TARGET   =  hello
+应用程序模板（app.t）
+此模板支持以下选项
+HEADERS 头文件
+SOURCES 原程序文件
+TARGET 目标文件
+DESTDIR 放置目标文件的目录
+DEFINES 告知C预处理编译器打开“-D“选项
+INCLUDEPATH 设置库文件路径（-I选项）
+DEPENDPATH 设置相关搜索路径
+DEF_FILE WINDOWS专用：连接一个.def文件
+RC_FILE  WINDOWS专用：使用.rc文件（编译为.res）
+RES_FILE WINDOWS专用：连接.res文件
+库模板（lib.t）
+该模板让你编译创建一个动态或静态库。
+Lib.t支持和app.t相同的选项，同时还支持一个app.t不支持的选项：VERSION。VERSION 是一个版本号。例如：1.40，版本号对于动态库是十分重要的。
+Subdirs模板（subdirs.t）
+当你的程序文件太多时，你可以使用它。他将你所列出的文件夹全部包括进去，并进行编译。
+工程文件的语法
+工程文件十分好写，你可以随意添加或删减各个选项。设置一个选项如下：
+HEADERS = gui.h xml.h url.h
+如果你的选项不能再一行内写完的话，你可以使用’\’来分割他
+例如：
+HEADERS = gui.h \
+       xml.h \
+       url.h
+工程文件使用空白来分割各个元素，这也就表明你不能将带有空格的元素用在工程文件中（除了INCLUDEPATH选项，他使用“；”来分割元素）。
+例如：
+INCLUDEPATH = C:\Program Files\DBLib\Include;C:\qt\include
+Tmake支持变量扩展，使用”$$”来扩展工程变量
+ALLFILES = $$HEADERS $$SOURCES
+你可以赋值给工程变量，也可以添加变量
+例如：
+A   = abc
+X   = xyz
+A  += def   # A = abc def
+X  *= xyz   # X = xyz
+B   = $$A   # B = abc def
+B  -= abc   # B = def
+X  /= s/y/Y/  # X = xYz
+*=操作符添加值给变量（如果变量没有该值的话）。/= 执行规则表达式。
+当然了，你还可以在命令行下赋值（运行tmake时）。例如，如果你想要打开debug选项的话，可以这样
+tmake "CONFIG+=debug" hello.pro
+当你想对不同平台进行编译时使用unix:或者win32:标志符
+SOURCES    =   common.cpp   # common for all platforms
+unix:SOURCES   +=  unix.cpp     # additional sources for Unix
+win32:SOURCES  +=  win32.cpp    # additional sources for Windows
+unix:LIBS    +=  -lm     # on Unix we need the math lib
+而且，你可以设置平台编译器相关选项，方法如下
+linux-g++:TMAKE_CFLAGS = -fno-rtti
+同时你还可以自定义模板，不过那要你对tmake比较了解才行。
+运行tmake
+
+
+
+写了那么多的如何创建工程文件的东东，下面到了如何运行tmake的时候了。Tmake的使用方法如下：
+tmake [选项] project files or project settings
+选项:
+-e expr 执行perl表达式，忽略模板文件
+-nodepend 不产生关联信息
+-o file 指定输出文件（常用）
+-t file 制定模板文件（覆盖工程文件中的模板变量）
+-unix 强制使用unix模式
+-v 打开debug和warn_on选项
+-win32 强制使用win32模式
+默认的工程文件后缀名为”.pro”,默认的模板文件后缀为”.t”.如果你不指定他们的话，tmake会自动为你加上
+这是一个基本的使用方式：(工程文件是hello)
+tmake hello –o Makefile
+下面是打开debug的使用方式：
+tmake hello “CONFIG+=debug” –o Makefile
+这是指定TMAKEPATH地用法：
+tmake "TMAKEPATH=/local/tmake/lib/hpux-g++" hello.pro -o Makefile
+这是执行PERL表达式的用法（打印头文件和源文件名）
+tmake hello –e ‘Expand(“HEADERS”,”SOURCES”)’
+请注意：所有的命令行变量设置请放到工程文件后面，否则工程文件将会覆盖他们。
+其他小工具
+progen
+progen为你创建工程文件，使用方法如下：
+progen –n hello –o hello.pro
+如果没有指定.cpp或.h文件的话，progen或搜索所有在当前目录和他的子目录的所有文件（除了moc_*.cpp）
+用法：
+progen [可选项] [C/C++ 头文件和源文件]
+可选项：
+-lower 将文件名小写（在windows下比较有用）
+-n name 定义工程名（即目标名）
+-o file 定义输出文件
+-t file 制定模板文件
+
+高级话题
+如果你还想要制定特殊的选项或者想添加makefile规则的话，那么就请继续往下看罢
+如果你想要平台关联的设置的话，你可以在工程文件中这样写
+solaris-cc:TMAKE_CC     = /opt/bin/CC_5.0
+solaris-cc:TMAKE_CFLAGS = -pts
+unix:TMAKE_LIBS         = -lXext
+win32:INCLUDEPATH       = c:\myinclude
+win32-borland:DEFINES   = NO_BOOL
+创建自己的模板
+如果你懂perl的话，那么对你来说tmake就没有什么限制了。不过首先你要了解一下tmake是如何工作的。
+模板处理
+当你运行tmake时，他首先读取tmake.conf文件，这个配置文件和工程文件的语法是一样的。然后tmake读取工程文件并且设置从工程文件中读取的变量。例如：HEADERS,SOURCES等等。所有的变量都存储在一个名叫project的全局散列数组中。例如，在处理完tmake.pro后$project{“SOURCES”}包含了”hello.cpp main.cpp”。当tmake.conf和工程文件都读完了后，tmake开始一行一行的读取模板文件并执行任何他发现的perl脚本
+? 在”#$”后该行的所有字符都被认为时perl脚本
+? 从”#${”到”#$}”的所有字符也被认为是perl脚本
+? “#!”后的该行全部是注释
+? 其他的直接被输出
+例子：
+#! This is a comment which will be removed.
+This text will appear in the output.
+#$ $text = "The header file(s) are: " . $project{"HEADERS"};
+# This text also appears in the output.
+#${
+   $a = 12;
+   $b = 13;
+   $text = $a * $b;
+#$}
+That's all.
+输出语句：
+    This text will appear in the output.
+    The header file(s) are: hello.h
+    # This text also appears in the output.
+    156
+That's all.
+将tmake与Lex和yacc联合使用
+标准的tmake模板知道如何处理C和C++文件，但也许你还要处理其他的文件并要将它们连接进入你的工程中。一个典型的例子是当你建造一个分析器时你要处理lex和yacc文件。
+分析模板：
+  #!
+  #! parser.t: This is a custom template for building a parser
+  #!
+  #$ IncludeTemplate("app.t");
+
+  ####### Lex/yacc programs and options
+
+  LEX     = flex
+  YACC    = #$ $text = ($is_unix ? "yacc -d" : "byacc -d");
+
+  ####### Lex/yacc files
+
+  LEXIN   = #$ Expand("LEXINPUT");
+  LEXOUT  = lex.yy.c
+  YACCIN  = #$ Expand("YACCINPUT");
+  YACCOUT = y.tab.c
+  YACCHDR = y.tab.h
+  PARSER  = #$ Expand("PARSER");
+
+  ####### Process lex/yacc files
+
+  $(LEXOUT): $(LEXIN)
+          $(LEX) $(LEXIN)
+
+  $(PARSER): $(YACCIN) $(LEXOUT)
+          $(YACC) $(YACCIN)
+          #$ $text = ($is_unix ? "-rm -f " : "-del ") . '$(PARSER)';
+          #$ $text = ($is_unix ? "-mv " : "-ren ") . '$(YACCOUT) $(PARSER)'; 
+分析模板加入一些用于建造lex和yacc部分的规则。这个模板可用于unix或windows中，应为他依据$is_unix变量产生不同规则。
+想要学习更多的请参考reference manual（未翻译）
+Example project file:
+  TEMPLATE  = parser.t
+  CONFIG    = console release
+  LEXINPUT  = lexer.l
+  YACCINPUT = grammar.y
+  PARSER    = parser.cpp
+  SOURCES   = $$PARSER    \
+              node.cpp    \
+              asmgen.cpp
+  TARGET    = parser
+
+这里我们使用宏变量以避免写parser.cpp两次。
+计算代码行数
+由于tmake是基于perl的，所以它允许你创建自己的用于其他用途的模板（即不用于产生makefile的模板）
+模板wc.t(一个用于计算代码行数的模板)
+  #! Template that count number of C++ lines.
+  The number of C++ code lines for #$ $text=$project_name;
+  #${
+    $files = $project{"HEADERS"} . " " . $project{"SOURCES"};
+    $text = `wc -l $files`;
+  #$}
+这样运行：
+tmake –t wc hello
+输出为：
+  The number of C++ code lines for hello.pro
+       25    hello.h
+       98    hello.cpp
+       38    main.cpp
+      161    total
+只有当你安装了wc.t后你才可以这样做。
+
+译后感：
+这是我第一次这样用心的去翻译一篇文章，因为我认为这篇文章实在是太好了，对于我们这些linux/unix fans们来说是一个福音，我也是望着篇文章能带给你帮助。如果这样的话，那我的努力就没有白费。
+本文你可以自由转载，但请不要去掉版权信息，也不要用于商业用途
+译者：一风（兰州大学高性能计算机试验室cnyifeng@vip.163.com）
+如果你有什么提议或发现错误的话，请告诉我，如果你认为本文对你有用的话，也请你告诉我，让我知道我还做了点有用的东西。

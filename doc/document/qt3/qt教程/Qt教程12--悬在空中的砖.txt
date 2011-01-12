@@ -1,0 +1,763 @@
+Qt教程一 —— 第十二章：悬在空中的砖
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+在这个例子中，我们扩展我们的LCDRange类来包含一个文本标签。我们也会给射击提供一个目标。
+
+    * t12/lcdrange.h包含LCDRange类定义。
+    * t12/lcdrange.cpp包含LCDRange类实现。
+    * t12/cannon.h包含CannonField类定义。
+    * t12/cannon.cpp包含CannonField类实现。
+    * t12/main.cpp包含MyWidget和main。 
+
+
+
+    * t12/lcdrange.h包含LCDRange类定义。
+/****************************************************************
+**
+** Definition of LCDRange class, Qt tutorial 12
+**
+****************************************************************/
+
+#ifndef LCDRANGE_H
+#define LCDRANGE_H
+
+#include <qvbox.h>
+
+class QSlider;
+class QLabel;
+
+
+class LCDRange : public QVBox
+{
+    Q_OBJECT
+public:
+    LCDRange( QWidget *parent=0, const char *name=0 );
+    LCDRange( const char *s, QWidget *parent=0,
+	      const char *name=0 );
+
+    int         value() const;
+    const char *text()  const;
+
+public slots:
+    void setValue( int );
+    void setRange( int minVal, int maxVal );
+    void setText( const char * );
+
+signals:
+    void valueChanged( int );
+
+private:
+    void init();
+
+    QSlider     *slider;
+    QLabel      *label;
+};
+
+
+#endif // LCDRANGE_H
+    
+    
+    
+    * t12/lcdrange.cpp包含LCDRange类实现。
+/****************************************************************
+**
+** Implementation of LCDRange class, Qt tutorial 12
+**
+****************************************************************/
+
+#include "lcdrange.h"
+
+#include <qslider.h>
+#include <qlcdnumber.h>
+#include <qlabel.h>
+
+
+LCDRange::LCDRange( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    init();
+}
+
+
+LCDRange::LCDRange( const char *s, QWidget *parent,
+		    const char *name )
+        : QVBox( parent, name )
+{
+    init();
+    setText( s );
+}
+
+
+void LCDRange::init()
+{
+    QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+    slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+
+    label = new QLabel( " ", this, "label"  );
+    label->setAlignment( AlignCenter );
+
+    connect( slider, SIGNAL(valueChanged(int)),
+	     lcd, SLOT(display(int)) );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     SIGNAL(valueChanged(int)) );
+
+    setFocusProxy( slider );
+}
+
+
+int LCDRange::value() const
+{
+    return slider->value();
+}
+
+
+const char *LCDRange::text() const
+{
+    return label->text();
+}
+
+
+void LCDRange::setValue( int value )
+{
+    slider->setValue( value );
+}
+
+
+void LCDRange::setRange( int minVal, int maxVal )
+{
+    if ( minVal < 0 || maxVal > 99 || minVal > maxVal ) {
+	qWarning( "LCDRange::setRange(%d,%d)\n"
+		  "\tRange must be 0..99\n"
+		  "\tand minVal must not be greater than maxVal",
+		  minVal, maxVal );
+	return;
+    }
+    slider->setRange( minVal, maxVal );
+}
+
+
+void LCDRange::setText( const char *s )
+{
+    label->setText( s );
+}
+    
+    
+    
+    * t12/cannon.h包含CannonField类定义。
+/****************************************************************
+**
+** Definition of CannonField class, Qt tutorial 12
+**
+****************************************************************/
+
+#ifndef CANNON_H
+#define CANNON_H
+
+class QTimer;
+
+
+#include <qwidget.h>
+
+
+class CannonField : public QWidget
+{
+    Q_OBJECT
+public:
+    CannonField( QWidget *parent=0, const char *name=0 );
+
+    int   angle() const { return ang; }
+    int   force() const { return f; }
+    QSizePolicy sizePolicy() const;
+
+public slots:
+    void  setAngle( int degrees );
+    void  setForce( int newton );
+    void  shoot();
+    void  newTarget();
+
+private slots:
+    void  moveShot();
+
+signals:
+    void  hit();
+    void  missed();
+    void  angleChanged( int );
+    void  forceChanged( int );
+
+protected:
+    void  paintEvent( QPaintEvent * );
+
+private:
+    void  paintShot( QPainter * );
+    void  paintTarget( QPainter * );
+    void  paintCannon( QPainter * );
+    QRect cannonRect() const;
+    QRect shotRect() const;
+    QRect targetRect() const;
+
+    int ang;
+    int f;
+
+    int timerCount;
+    QTimer * autoShootTimer;
+    float shoot_ang;
+    float shoot_f;
+
+    QPoint target;
+};
+
+
+#endif // CANNON_H
+    
+    
+    
+    * t12/cannon.cpp包含CannonField类实现。
+/****************************************************************
+**
+** Implementation CannonField class, Qt tutorial 12
+**
+****************************************************************/
+
+#include "cannon.h"
+#include <qtimer.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qdatetime.h>
+
+#include <math.h>
+#include <stdlib.h>
+
+
+CannonField::CannonField( QWidget *parent, const char *name )
+        : QWidget( parent, name )
+{
+    ang = 45;
+    f = 0;
+    timerCount = 0;
+    autoShootTimer = new QTimer( this, "movement handler" );
+    connect( autoShootTimer, SIGNAL(timeout()),
+	     this, SLOT(moveShot()) );
+    shoot_ang = 0;
+    shoot_f = 0;
+    target = QPoint( 0, 0 );
+    setPalette( QPalette( QColor( 250, 250, 200) ) );
+    newTarget();
+}
+
+
+void CannonField::setAngle( int degrees )
+{
+    if ( degrees < 5 )
+	degrees = 5;
+    if ( degrees > 70 )
+	degrees = 70;
+    if ( ang == degrees )
+	return;
+    ang = degrees;
+    repaint( cannonRect(), FALSE );
+    emit angleChanged( ang );
+}
+
+
+void CannonField::setForce( int newton )
+{
+    if ( newton < 0 )
+	newton = 0;
+    if ( f == newton )
+	return;
+    f = newton;
+    emit forceChanged( f );
+}
+
+
+void CannonField::shoot()
+{
+    if ( autoShootTimer->isActive() )
+	return;
+    timerCount = 0;
+    shoot_ang = ang;
+    shoot_f = f;
+    autoShootTimer->start( 50 );
+}
+
+
+void  CannonField::newTarget()
+{
+    static bool first_time = TRUE;
+    if ( first_time ) {
+	first_time = FALSE;
+	QTime midnight( 0, 0, 0 );
+	srand( midnight.secsTo(QTime::currentTime()) );
+    }
+    QRegion r( targetRect() );
+    target = QPoint( 200 + rand() % 190,
+		     10  + rand() % 255 );
+    repaint( r.unite( targetRect() ) );
+}
+
+
+void CannonField::moveShot()
+{
+    QRegion r( shotRect() );
+    timerCount++;
+
+    QRect shotR = shotRect();
+
+    if ( shotR.intersects( targetRect() ) ) {
+	autoShootTimer->stop();
+	emit hit();
+    } else if ( shotR.x() > width() || shotR.y() > height() ) {
+	autoShootTimer->stop();
+	emit missed();
+    } else {
+	r = r.unite( QRegion( shotR ) );
+    }
+
+    repaint( r );
+}
+
+
+void CannonField::paintEvent( QPaintEvent *e )
+{
+    QRect updateR = e->rect();
+    QPainter p( this );
+
+    if ( updateR.intersects( cannonRect() ) )
+	paintCannon( &p );
+    if ( autoShootTimer->isActive() &&
+	 updateR.intersects( shotRect() ) )
+	paintShot( &p );
+    if ( updateR.intersects( targetRect() ) )
+	paintTarget( &p );
+}
+
+
+void CannonField::paintShot( QPainter *p )
+{
+    p->setBrush( black );
+    p->setPen( NoPen );
+    p->drawRect( shotRect() );
+}
+
+
+void CannonField::paintTarget( QPainter *p )
+{
+    p->setBrush( red );
+    p->setPen( black );
+    p->drawRect( targetRect() );
+}
+
+
+const QRect barrelRect(33, -4, 15, 8);
+
+void CannonField::paintCannon( QPainter *p )
+{
+    QRect cr = cannonRect();
+    QPixmap pix( cr.size() );
+    pix.fill( this, cr.topLeft() );
+
+    QPainter tmp( &pix );
+    tmp.setBrush( blue );
+    tmp.setPen( NoPen );
+
+    tmp.translate( 0, pix.height() - 1 );
+    tmp.drawPie( QRect( -35,-35, 70, 70 ), 0, 90*16 );
+    tmp.rotate( -ang );
+    tmp.drawRect( barrelRect );
+    tmp.end();
+
+    p->drawPixmap( cr.topLeft(), pix );
+}
+
+
+QRect CannonField::cannonRect() const
+{
+    QRect r( 0, 0, 50, 50 );
+    r.moveBottomLeft( rect().bottomLeft() );
+    return r;
+}
+
+
+QRect CannonField::shotRect() const
+{
+    const double gravity = 4;
+
+    double time      = timerCount / 4.0;
+    double velocity  = shoot_f;
+    double radians   = shoot_ang*3.14159265/180;
+
+    double velx      = velocity*cos( radians );
+    double vely      = velocity*sin( radians );
+    double x0        = ( barrelRect.right()  + 5 )*cos(radians);
+    double y0        = ( barrelRect.right()  + 5 )*sin(radians);
+    double x         = x0 + velx*time;
+    double y         = y0 + vely*time - 0.5*gravity*time*time;
+
+    QRect r = QRect( 0, 0, 6, 6 );
+    r.moveCenter( QPoint( qRound(x), height() - 1 - qRound(y) ) );
+    return r;
+}
+
+
+QRect CannonField::targetRect() const
+{
+    QRect r( 0, 0, 20, 10 );
+    r.moveCenter( QPoint(target.x(),height() - 1 - target.y()) );
+    return r;
+}
+
+
+QSizePolicy CannonField::sizePolicy() const
+{
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+}
+    
+    
+    
+    * t12/main.cpp包含MyWidget和main。     
+/****************************************************************
+**
+** Qt tutorial 12
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qlcdnumber.h>
+#include <qfont.h>
+#include <qlayout.h>
+
+#include "lcdrange.h"
+#include "cannon.h"
+
+
+class MyWidget: public QWidget
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QWidget( parent, name )
+{
+    QPushButton *quit = new QPushButton( "&Quit", this, "quit" );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    LCDRange *angle  = new LCDRange( "ANGLE", this, "angle" );
+    angle->setRange( 5, 70 );
+
+    LCDRange *force  = new LCDRange( "FORCE", this, "force" );
+    force->setRange( 10, 50 );
+
+    CannonField *cannonField = new CannonField( this, "cannonField" );
+
+    connect( angle, SIGNAL(valueChanged(int)),
+	     cannonField, SLOT(setAngle(int)) );
+    connect( cannonField, SIGNAL(angleChanged(int)),
+	     angle, SLOT(setValue(int)) );
+
+    connect( force, SIGNAL(valueChanged(int)),
+	     cannonField, SLOT(setForce(int)) );
+    connect( cannonField, SIGNAL(forceChanged(int)),
+	     force, SLOT(setValue(int)) );
+
+    QPushButton *shoot = new QPushButton( "&Shoot", this, "shoot" );
+    shoot->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( shoot, SIGNAL(clicked()), cannonField, SLOT(shoot()) );
+
+    QGridLayout *grid = new QGridLayout( this, 2, 2, 10 );
+    grid->addWidget( quit, 0, 0 );
+    grid->addWidget( cannonField, 1, 1 );
+    grid->setColStretch( 1, 10 );
+
+    QVBoxLayout *leftBox = new QVBoxLayout;
+    grid->addLayout( leftBox, 1, 0 );
+    leftBox->addWidget( angle );
+    leftBox->addWidget( force );
+
+    QHBoxLayout *topBox = new QHBoxLayout;
+    grid->addLayout( topBox, 0, 1 );
+    topBox->addWidget( shoot );
+    topBox->addStretch( 1 );
+
+    angle->setValue( 60 );
+    force->setValue( 25 );
+    angle->setFocus();
+}
+
+int main( int argc, char **argv )
+{
+    QApplication::setColorSpec( QApplication::CustomColor );
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    w.setGeometry( 100, 100, 500, 355 );
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+    
+
+一行一行地解说
+
+t12/lcdrange.h
+
+LCDRange现在有了一个文本标签。
+
+    class QLabel;
+
+我们名称声明QLabel，因为我们将在这个类声明中使用一个QLabel的指针。
+
+    class LCDRange : public QVBox
+    {
+        Q_OBJECT
+    public:
+        LCDRange( QWidget *parent=0, const char *name=0 );
+        LCDRange( const char *s, QWidget *parent=0,
+                  const char *name=0 );
+
+我们添加了一个新的构造函数，这个构造函数在父对象和名称之外还设置了标签文本。
+
+        const char *text()  const;
+
+这个函数返回标签文本。
+
+        void setText( const char * );
+
+这个槽设置标签文本。
+
+    private:
+        void init();
+
+因为我们现在有了两个构造函数，我们选择把通常的初始化放在一个私有的init()函数。
+
+        QLabel      *label;
+
+我们还有一个新的私有变量：一个QLabel。QLabel是一个Qt标准窗口部件并且可以显示一个有或者没有框架的文本或者pixmap。
+
+t12/lcdrange.cpp
+
+    #include <qlabel.h>
+
+这里我们包含了QLabel类定义。
+
+    LCDRange::LCDRange( QWidget *parent, const char *name )
+            : QVBox( parent, name )
+    {
+        init();
+    }
+
+这个构造函数调用了init()函数，它包括了通常的初始化代码。
+
+    LCDRange::LCDRange( const char *s, QWidget *parent,
+                        const char *name )
+            : QVBox( parent, name )
+    {
+        init();
+        setText( s );
+    }
+
+这个构造函数首先调用了init()然后设置标签文本。
+
+    void LCDRange::init()
+    {
+        QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+        slider = new QSlider( Horizontal, this, "slider" );
+        slider->setRange( 0, 99 );
+        slider->setValue( 0 );
+
+        label = new QLabel( " ", this, "label"  );
+        label->setAlignment( AlignCenter );
+
+        connect( slider, SIGNAL(valueChanged(int)),
+                 lcd, SLOT(display(int)) );
+        connect( slider, SIGNAL(valueChanged(int)),
+                 SIGNAL(valueChanged(int)) );
+
+        setFocusProxy( slider );
+    }
+
+lcd和slider的设置和上一章一样。接下来我们创建一个QLabel并且让它的内容中间对齐（垂直方向和水平方向都是）。connect()语句也来自于上一章。
+
+    const char *LCDRange::text() const
+    {
+        return label->text();
+    }
+
+这个函数返回标签文本。
+
+    void LCDRange::setText( const char *s )
+    {
+        label->setText( s );
+    }
+
+这个函数设置标签文本。
+
+t12/cannon.h
+
+CannonField现在有两个新的信号：hit()和missed()。另外它还包含一个目标。
+
+        void  newTarget();
+
+这个槽在新的位置生成一个新的目标。
+
+    signals:
+        void  hit();
+        void  missed();
+
+hit()信号是当炮弹击中目标的时候被发射的。missed()信号是当炮弹移动超出了窗口部件的右面或者下面的边界时被发射的（例如，当然这种情况下它将不会击中目标）。
+
+        void  paintTarget( QPainter * );
+
+这个私有函数绘制目标。
+
+        QRect targetRect() const;
+
+这个私有函数返回一个封装了目标的矩形。
+
+        QPoint target;
+
+这个私有变量包含目标的中心点。
+
+t12/cannon.cpp
+
+    #include <qdatetime.h>
+
+我们包含了QDate、QTime和QDateTime类定义。
+
+    #include <stdlib.h>
+
+我们包含了stdlib库，因为我们需要rand()函数。
+
+        newTarget();
+
+这一行已经被添加到了构造函数中。它为目标创建一个“随机的”位置。实际上，newTarget()函数还试图绘制目标。因为我们在一个构造函数中，CannonField窗口部件还是不可以见的。Qt保证在一个隐藏的窗口部件中调用repaint()是没有害处的。
+
+    void  CannonField::newTarget()
+    {
+        static bool first_time = TRUE;
+        if ( first_time ) {
+            first_time = FALSE;
+            QTime midnight( 0, 0, 0 );
+            srand( midnight.secsTo(QTime::currentTime()) );
+        }
+        QRegion r( targetRect() );
+        target = QPoint( 200 + rand() % 190,
+                         10  + rand() % 255 );
+        repaint( r.unite( targetRect() ) );
+    }
+
+这个私有函数创建了一个在新的“随机的”位置的目标中心点。
+
+我们使用rand()函数来获得随机整数。rand()函数通常会在你每次运行这个程序的时候返回同样一组值。这就会使每次运行的时候目标都出现在同样的位置。为了避免这些，我们必须在这个函数第一次被调用的时候设置一个随机种子。为了避免同样一组数据，随机种子也必须是随机的。解决方法就是使用从午夜到现在的秒数作为一个假的随机值。
+
+首先我们创建一个静态布尔型局域变量。静态变量就是在调用函数前后都保证它的值不变。
+
+if测试会成功，因为只有当这个函数第一次被调用的时候，我们在if块中把first_time设置为FALSE。
+
+然后我们创建一个QTime对象midnight，它将会提供时间00:00:00。接下来我们获得从午夜到现在所过的秒数并且使用它作为一个随机种子。请看QDate、QTime和QDateTime文档来获得更多的信息。
+
+最后我们计算目标的中心点。我们把它放在一个矩形中（x=200，y=35，width=190，height=255），（例如，可能的x和y值是x=200~389和y=35~289）在一个我们把窗口边界的下边界作为y的零点，并且y向上增加，X轴向通常一样，左边界为零点，并且x向右增加的坐标系统中。
+
+通过经验，我们发现这都在炮弹的射程之内。
+
+注意rand()返回一个>=0的随机整数。
+
+    void CannonField::moveShot()
+    {
+        QRegion r( shotRect() );
+        timerCount++;
+
+        QRect shotR = shotRect();
+
+定时器时间这部分和上一章一样。
+
+        if ( shotR.intersects( targetRect() ) ) {
+            autoShootTimer->stop();
+            emit hit();
+
+if语句检查炮弹矩形和目标矩形是否相交。如果是的，炮弹击中了目标（哎哟！）。我们停止射击定时器并且发射hit()信号来告诉外界目标已经被破坏，并返回。
+
+注意，我们可以在这个点上创建一个新的目标，但是因为CannonField是一个组件，所以我们要把这样的决定留给组件的使用者。
+
+        } else if ( shotR.x() > width() || shotR.y() > height() ) {
+            autoShootTimer->stop();
+            emit missed();
+
+这个if语句和上一章一样，除了现在它发射missed()信号告诉外界这次失败。
+
+        } else {
+
+函数的其余部分和以前一样。
+
+CannonField::paintEvent() is as before, except that this has been added:
+
+        if ( updateR.intersects( targetRect() ) )
+            paintTarget( &p );
+
+这两行确认在需要的时候目标也被绘制。
+
+    void CannonField::paintTarget( QPainter *p )
+    {
+        p->setBrush( red );
+        p->setPen( black );
+        p->drawRect( targetRect() );
+    }
+
+这个私有函数绘制目标，一个由红色填充，有黑色边框的矩形。
+
+    QRect CannonField::targetRect() const
+    {
+        QRect r( 0, 0, 20, 10 );
+        r.moveCenter( QPoint(target.x(),height() - 1 - target.y()) );
+        return r;
+    }
+
+这个私有函数返回封装目标的矩形。从newTarget()中所得的target点使用0点在窗口部件的下边界的y。我们在调用QRect::moveCenter()之前在窗口坐标中计算这个点。
+
+我们选择这个坐标映射的原因是在目标和窗口部件的下边界之间垂直距离。记住这些可以让用户或者程序在任何时候都可以重新定义窗口部件的大小。
+
+t12/main.cpp
+
+在MyWidget类中没有新的成员了，但是我们稍微改变了一下构造函数来设置新的LCDRange的文本标签。
+
+        LCDRange *angle  = new LCDRange( "ANGLE", this, "angle" );
+
+我们设置角度的文本标签为“ANGLE”。
+
+        LCDRange *force  = new LCDRange( "FORCE", this, "force" );
+
+我们设置力量的文本标签为“FORCE”。
+
+行为
+
+加农炮会向目标射击，当它射中目标的时候，一个新的目标会自动被创建。
+
+LCDRange窗口部件看起来有一点奇怪——QVBox中内置的管理给了标签太多的空间而其它的却不够。我们将会在下一章修正这一点。
+
+（请看编译来学习如何创建一个makefile和连编应用程序。）
+
+练习
+
+创建一个作弊的按钮，当按下它的时候，让CannonField画出炮弹在五秒中的轨迹。
+
+如果你在上一章做了“圆形炮弹”的练习，试着改变shotRect()为可以返回一个QRegion的shotRegion()，这样你就可以真正的做到准确碰撞检测。
+
+做一个移动目标。
+
+确认目标被完全创建在屏幕上。
+
+确认加农炮窗口部件不能被重新定义大小，这样目标不是可见的。提示：QWidget::setMinimumSize()是你的朋友。
+
+不容易的是在同一时刻让几个炮弹在空中成为可能。提示：建立一个炮弹对象。
+
+现在你可以进行第十三章了。 

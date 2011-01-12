@@ -1,0 +1,132 @@
+﻿Qt教程一 —— 第一章：Hello, World!
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+第一个程序是一个简单的Hello World例子。它只包含我们建立和运行Qt应用程序所需要的最少的代码。
+下面是它的源代码：
+
+
+/****************************************************************
+**
+** Qt教程一 - 1
+** main.cpp
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    QPushButton hello( "Hello world!", 0 );
+    hello.resize( 100, 30 );
+
+    a.setMainWidget( &hello );
+    hello.show();
+    return a.exec();
+}
+
+用 vi 和 gedit 等编辑工具编辑这个 main.cpp 文件，
+保存到一个单独的目录，比如说 /root/helloworld
+那么 /root/helloworld 目录下就有了刚刚编辑的 main.cpp 文件
+
+好拉，现在我们尝试着编译它，下面吧详细的步骤记录如下：
+[root@localhost root]# mkdir /root/helloworld
+[root@localhost root]# cd /root/helloworld/
+[root@localhost helloworld]# vi main.cpp
+[root@localhost helloworld]# qmake -project
+[root@localhost helloworld]# qmake
+[root@localhost helloworld]# make
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I. -I/usr/lib/qt-3.1/include -o main.o main.cpp
+g++  -o helloworld main.o   -L/usr/lib/qt-3.1/lib -L/usr/X11R6/lib -lqt-mt -lXext -lX11 -lm
+[root@localhost helloworld]# ls
+helloworld  helloworld.pro  main.cpp  main.o  Makefile
+[root@localhost helloworld]# ./helloworld &
+
+
+上面我们看到了程序运行效果，下面我们来一行一行地解说源程序：
+
+    #include <qapplication.h>
+
+这一行包含了QApplication类的定义。在每一个使用Qt的应用程序中都必须使用一个QApplication对象。QApplication管理了各种各样的应用程序的广泛资源，比如默认的字体和光标。
+
+    #include <qpushbutton.h>
+
+这一行包含了QPushButton类的定义。参考文档的文件的最上部分提到了使用哪个类就必须包含哪个头文件的说明。
+
+QPushButton是一个经典的图形用户界面按钮，用户可以按下去，也可以放开。它管理自己的观感，就像其它每一个QWidget。一个窗口部件就是一个可以处理用户输入和绘制图形的用户界面对象。程序员可以改变它的全部观感和它的许多主要的属性（比如颜色），还有这个窗口部件的内容。一个QPushButton可以显示一段文本或者一个QPixmap。
+
+    int main( int argc, char **argv )
+    {
+
+main()函数是程序的入口。几乎在使用Qt的所有情况下，main()只需要在把控制转交给Qt库之前执行一些初始化，然后Qt库通过事件来向程序告知用户的行为。
+
+argc是命令行变量的数量，argv是命令行变量的数组。这是一个C/C++特征。它不是Qt专有的，无论如何Qt需要处理这些变量（请看下面）。
+
+        QApplication a( argc, argv );
+
+a是这个程序的QApplication。它在这里被创建并且处理这些命令行变量（比如在X窗口下的-display）。请注意，所有被Qt识别的命令行参数都会从argv中被移除（并且argc也因此而减少）。关于细节请看QApplication::argv()文档。
+
+注意：在任何Qt的窗口系统部件被使用之前创建QApplication对象是必须的。
+
+        QPushButton hello( "Hello world!", 0 );
+
+这里，在QApplication之后，接着的是第一个窗口系统代码：一个按钮被创建了。
+
+这个按钮被设置成显示“Hello world!”并且它自己构成了一个窗口（因为在构造函数指定0为它的父窗口，在这个父窗口中按钮被定位）。
+
+        hello.resize( 100, 30 );
+
+这个按扭被设置成100像素宽，30像素高（加上窗口系统边框）。在这种情况下，我们不用考虑按钮的位置，并且我们接受默认值。
+
+        a.setMainWidget( &hello );
+
+这个按钮被选为这个应用程序的主窗口部件。如果用户关闭了主窗口部件，应用程序就退出了。
+
+我们不用必须设置一个主窗口部件，但绝大多数程序都有一个。
+
+因为，如果没有主窗口，程序将在后台运行，即使程序
+
+
+        hello.show();
+
+当我们创建一个窗口部件的时候，它是不可见的。我们必须调用show()来使它变为可见的。
+
+        return a.exec();
+
+这里就是main()把控制转交给Qt，并且当应用程序退出的时候exec()就会返回。
+
+在exec()中，Qt接受并处理用户和系统的事件并且把它们传递给适当的窗口部件。
+
+    }
+
+我们现在可以试着编译和运行这个程序了。
+
+编译
+
+编译一个C++应用程序，我们需要创建一个makefile。创建一个Qt的makefile的最容易的方法是使用Qt提供的连编工具qmake。如果我们已经把main.cpp保存到它自己的目录了，我们所要做的就是这些：
+
+qmake -project
+qmake
+
+第一个命令调用qmake来生成一个.pro（项目）文件。第二个命令根据这个项目文件来生成一个（系统相关的）makefile。我们现在可以输入make（或者nmake，如果我们使用Visual Studio），然后运行我们的第一个Qt应用程序！
+
+make
+
+行为
+
+当我们运行它的时候，我们就会看到一个被单一按钮充满的小窗口，在它上面我们可以读到著名的词：
+Hello w World!
+
+练习
+
+试着改变窗口的大小。按下按钮。如果我们在X窗口下运行，使用-geometry选项
+（比如，-geometry 100x200+10+20   
+[root@localhost helloworld]# ./helloworld -geometry 100x200+100+200
+）
+来运行这个程序。
+

@@ -1,0 +1,38 @@
+body { margin:0; padding:0; background-color: #FFFFFF}
+
+/*Pop-up menu*/
+.popupmenuact {padding:2px; padding-left:5px; padding-right:10px; background-color:#C7CFE0; border-color: #FFFFFF; border-bottom: 1px solid #FFFFFF }
+.popupmenu {padding:2px; padding-left:5px; background-color:#DEE4ED; padding-right:10px; border-color: #FFFFFF;  border-bottom: 1px solid #FFFFFF }
+.popupmenutext, .popupmenuclosed { font-family: Arial, Helvetica, sans-serif; font-size: 11px;}
+.popupmenutext {color: #356FA2;}
+.popupmenuclosed {color: #808080;}
+
+
+/*Left menu*/
+.leftmenu, .leftmenuact {font-family: Verdana, Arial, Helvetica, sans-serif; font-size:11px; font-weight:bold; color: #619DCD; text-decoration:none;}
+.leftmenuact {color:#355B7C;}
+
+/*Top menu*/
+.topmenu, .topmenuact {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px; font-weight:normal; color: #FFFFFF; text-decoration:none;}
+.topmenuact {color: #FED738;}
+
+/*Site menu*/
+.lang, .langact {font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:normal; color: #9E9E9E; text-decoration:underline;}
+.langact {text-decoration:none;}
+
+/*Style for basket panel text*/
+.baskettext {color: #FFFFFF;}
+.baskettext {font-family: Arial, Helvetica, sans-serif; font-size:11px; font-weight:normal;}
+
+.chain {font-family: Verdana, Arial, Helvetica, sans-serif; font-size:10px; font-weight:normal; color: #60739A;}
+
+.errortext, .oktext, .notetext {font-family:Arial; font-size:13px; font-weight:bold;}
+.errortext {color:red;}
+.oktext {color:#005000;}
+.notetext {color:green;}
+
+/* Onscreen messages */
+.errormessage{font-family: Arial, Helvetica, sans-serif; font-size:13px; color:red; font-weight:bold;}
+
+/* Required sign */
+.starrequired, .required{font-family: Verdana, Arial, Helvetica, sans-serif; color:red; font-size:12px; }

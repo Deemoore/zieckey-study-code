@@ -1,0 +1,59 @@
+apache+php+mysql源码安装
+--------------------------------------------------------------------------------
+
+安装apache(httpd-2.0.59)
+tar xvf apache-version
+cd apache-version make
+make install
+安装完成后，运行/usr/locale/apache2/bin下的apachectl
+然后打开http://localhost检查有服务器有没有安装成功
+
+
+
+安装mysql
+groupadd mysql
+useradd -g mysql mysql
+tar xvf mysql-5.0.x
+cd mysql-5.0.x
+./configure --prefix=/usr/local/mysql5
+make
+make install
+cp support-files/my-medium.cnf /etc/my.cnf
+cd /usr/local/mysql
+bin/mysql_install_db --user=mysql
+chown -R root .
+chown -R mysql var
+chgrp -R mysql .
+bin/mysqld_safe --user=mysql &
+bin/mysql /* 匿名登录 */
+
+安装mysql的时候先要建立一个mysql用户和组，./configure要检查这一项的。 make install结束后，新安装的需要执行bin/mysql_install_db文件来安装授权表，然后运行bin/mysqld_safe启动 mysql服务。用mysql命令看是否则连接到服务器。在./configure的时候通常都会出现 checking for termcap functions library... configure: error: No curses/termcap library found这个错误！安装上libncurses5-dev (不同的系统可能名字也有所差异)这个包就好了
+
+
+
+安装php4
+tar xvf php-4.x
+cd php-4.x
+./configure --prefix=/usr/local/php4 \
+--with-apxs2=/usr/local/apache2/bin/apxs \
+--with-mysql=/usr/local/mysql
+make
+make install
+cp php.ini-dist /usr/local/lib/php.ini
+
+现在还需要做最后的配置：
+
+修改apache的配置文件/usr/locale/apache/conf/httpd.conf
+在文件里加入:LoadModule php4_module modules/libphp4.so
+在安装php的时候其实已经加入了这一行的。不过我们还是应该检查一下比较好
+然后添加:
+AddType application/x-httpd-php .php .phtml
+AddType application/x-httpd-php-source .phps
+告诉apache将.php .phtml用php语法解析
+将.phps扩展名设置成显示高亮的php源文件
+
+
+
+copyright:2007-01 ffhome.lilo.org
+
+mail:su.room@yahoo.com

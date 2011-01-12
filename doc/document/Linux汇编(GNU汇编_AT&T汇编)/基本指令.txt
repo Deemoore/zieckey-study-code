@@ -1,0 +1,3 @@
+movb - byte move
+movw - word move
+movl - long word move

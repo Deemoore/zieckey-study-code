@@ -1,0 +1,1024 @@
+
+Makefile:
+objects = foo.o bar.o
+all: $(objects)
+	$(objects): %.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+上面的例子中，指明了我们的目标从$object中获取，“%.o”表明要所有以“.o”结尾的目标，也就是“foo.o bar.o”，也就是变量$object集合的模式，而依赖模式“%.c”则取模式“%.o”的“%”，也就是“foo bar”，并为其加下“.c”的后缀，于是，我们的依赖目标就是“foo.c bar.c”。而命令中的“$<”和“$@”则是自动化变量，“$<”表示第一个依赖目标集（也就是“foo.c bar.c”），“$@”表示目标集（也就是“foo.o bar.o”）。于是，上面的规则展开后等价于下面的规则：
+foo.o : foo.c
+$(CC) -c $(CFLAGS) foo.c -o foo.o
+bar.o : bar.c
+$(CC) -c $(CFLAGS) bar.c -o bar.o
+
+$@ 目标文件,$^	所有的依赖文件,$< 第一个依赖文件.
+
+
+
+查看文章
+mount: unknown filesystem type "smbfs"
+2008-11-05 19:03
+mount: unknown filesystem type "smbfs’
+
+今天在使用FC6时，发现mount不了windows的共享盘
+
+mount -t smbfs -o username=xxx,password=xxx //hostname/dir /mnt/tmp
+
+mount: unknown filesystem type ’smbfs’
+
+系统已经不能识别smbfs文件系统了
+
+查资料说RHE5的kernel已经不再支持smbfs，而改用Common Internet File Systemcifs(cifs)取代了原有的smbfs，猜想fc6也做了这个改动，所以命令就改为:
+
+# mount -t cifs -o username=xxx,password=xxx //hostname/dir /mnt/tmp
+
+很顺利地mount上了
+
+
+
+
+
+
+
+比如我用root用户，mount /dev/hda1 /mnt上，我想让guest用户也可以在/mnt下创建，删除文件等操作。是否要在mount后面加什么参数？或者什么其他的方法。
+将权限开放：
+#mount /dev/hda1 /mnt -o umask=0000
+
+
+mount -t cifs //192.168.11.89/workspace /data/windoc/ -o username=Administrator% -o umask=0000
+
+
+
+
+
+
+locale
+WindowsXP下使用SecureCRT SSH到Linux服务器上使用 gcc 编译程序发现里面带乱码，且多到几乎看不清意思的程度。
+原来我们的Linux服务器是中文环境，于是改为英文环境，设置方法如下：
+系统语言设置：
+[root@localhost pro2]# vi /etc/sysconfig/i18n
+LANG="en_US.UTF-8"
+
+现在问题好多了，不过还没有完全解决。如果编译错误，gcc的输出信息中也有少量乱码，
+在网上搜索了好久都没有找到有效的解决办法，在一高人的提示下，搞定了。跟大家分享下：
+解决办法，在用户的配置的文件中加入下面的一句话：
+export LANG=C
+
+
+
+
+
+
+
+为什么没有core文件生成呢?
+有时候程序down了, 但是core文件却没有生成. core文件的生成跟你当前系统的环境设置有关系, 可以用下面的语句设置一下, 然后再运行程序便成生成core文件.
+ulimit -c unlimited
+core文件生成的位置一般于运行程序的路径相同, 文件名一般为core.进程号
+
+
+
+
+
+
+
+////=================================================================================================
+////=================================================================================================
+////=================================================================================================
+////=================================================================================================
+2009.1.9
+iksemel使用详解 （Linux开发环境）
+
+iksemel是一个XML文件的解析器，最初是设计出来为Jabber应用服务的。
+iksemel是用ANSI C语言实现的，任何 POSIX 兼容的系统上都能用，具有很高的可移植性。
+它的使用是基于GPL协议的。
+
+	本文档是笔者在使用iksemel的过程中笔记整理出来的，希望对您在使用iksemel的过程中有所帮助。
+
+1、下载
+http://code.google.com/p/iksemel/downloads/list
+这里我们选择的是 iksemel-1.3.tar.gz
+
+2、编译安装（本文的环境是 Linux CentOS5系统， gcc version 4.1.1 20070105 ）
+预编译->编译->检查->安装，这个里不再多说。
+
+    ./configure --prefix=/data/soft/iksemel-1.3
+    make
+    make test
+	make install
+
+唯一需要的注意的是，如果我们选择安装到特定的路径，比如本文提到的“./configure --prefix=/data/soft/iksemel-1.3”，
+那么在使用的时候会可能会多些麻烦，不过这样可以让我们学到更多的知识。
+所以本文选择指定安装路径，不用系统默认的安装路径。
+
+3、读取XML文档的方式介绍
+
+这里主要介绍两种：DOM、SAX
+
+   1）DOM（JAXP Crimson解析器）
+    DOM是用与平台和语言无关的方式表示XML文档的官方W3C标准。DOM是以层次结构组织的节点或信息片断的集合。这个层次结构允许开发人员在树中寻找特定信息。分析该结构通常需要加载整个文档和构造层次结构，然后才能做任何工作。由于它是基于信息层次的，因而DOM被认为是基于树或基于对象的。DOM以及广义的基于树的处理具有几个优点。首先，由于树在内存中是持久的，因此可以修改它以便应用程序能对数据和结构作出更改。它还可以在任何时候在树中上下导航，而不是像SAX那样是一次性的处理。DOM使用起来也要简单得多。
+
+    2）SAX
+
+    SAX处理的优点非常类似于流媒体的优点。分析能够立即开始，而不是等待所有的数据被处理。而且，由于应用程序只是在读取数据时检查数据，因此不需要将数据存储在内存中。这对于大型文档来说是个巨大的优点。事实上，应用程序甚至不必解析整个文档；它可以在某个条件得到满足时停止解析。一般来说，SAX还比它的替代者DOM快许多。
+
+    选择DOM还是选择SAX？ 对于需要自己编写代码来处理XML文档的开发人员来说， 选择DOM还是SAX解析模型是一个非常重要的设计决策。 DOM采用建立树形结构的方式访问XML文档，而SAX采用的事件模型。
+
+    DOM解析器把XML文档转化为一个包含其内容的树，并可以对树进行遍历。用DOM解析模型的优点是编程容易，开发人员只需要调用建树的指令，然后利用navigation APIs访问所需的树节点来完成任务。可以很容易的添加和修改树中的元素。然而由于使用DOM解析器的时候需要处理整个XML文档，所以对性能和内存的要求比较高，尤其是遇到很大的XML文件的时候。由于它的遍历能力，DOM解析器常用于XML文档需要频繁的改变的服务中。
+
+    SAX解析器采用了基于事件的模型，它在解析XML文档的时候可以触发一系列的事件，当发现给定的tag的时候，它可以激活一个回调方法，告诉该方法制定的标签已经找到。SAX对内存的要求通常会比较低，因为它让开发人员自己来决定所要处理的tag.特别是当开发人员只需要处理文档中所包含的部分数据时，SAX这种扩展能力得到了更好的体现。但用SAX解析器的时候编码工作会比较困难，而且很难同时访问同一个文档中的多处不同数据。
+
+4、SAX方式使用iksemel
+
+	笔者的习惯，先上例子程序（直接来自iksemel的doc）：
+
+//test.c
+	#include <stdio.h>
+     #include <iksemel.h>
+
+     int pr_tag (void *udata, char *name, char **atts, int type)
+     {
+         switch (type) {
+             case IKS_OPEN:
+                 printf ("TAG <%s>\n", name);
+                 break;
+             case IKS_CLOSE:
+                 printf ("TAG </%s>\n", name);
+                 break;
+             case IKS_SINGLE:
+                 printf ("TAG <%s/>\n", name);
+                 break;
+         }
+         if (atts) {
+             int i = 0;
+             while (atts[i]) {
+                 printf ("  ATTRIB %s='%s'\n", atts[i], atts[i+1]);
+                 i += 2;
+             }
+         }
+         return IKS_OK;
+     }
+
+     enum ikserror pr_cdata (void *udata, char *data, size_t len)
+     {
+         int i;
+         printf ("CDATA [");
+         for (i = 0; i < len; i++)
+             putchar (data[i]);
+         printf ("]\n");
+         return IKS_OK;
+     }
+
+     int main (int argc, char *argv[])
+     {
+         iksparser *p;
+         p = iks_sax_new (NULL, pr_tag, pr_cdata);
+         switch (iks_parse (p, argv[1], 0, 1)) {
+             case IKS_OK:
+                 puts ("OK");
+                 break;
+             case IKS_NOMEM:
+                 puts ("Not enough memory");
+                 exit (1);
+             case IKS_BADXML:
+                 puts ("XML document is not well-formed");
+                 exit (2);
+             case IKS_HOOK:
+                 puts ("Our hooks didn't like something");
+                 exit (2);
+         }
+         iks_parser_delete (p);
+         return 0;
+     }
+
+   编译：
+     gcc -o test test.c -liksemel
+这个可能会出现错误，因为我们前面安装 iksemel 的时候选择的自己设定的路径，不是系统默认路径。
+可以通过下面方法解决：
+	gcc -o test test.c -liksemel -I/data/soft/iksemel-1.3/include -L/data/soft/iksemel-1.3/lib
+通过"-I"添加头文件的搜索路径，通过"-L"添加库文件的搜索路径，通过"-l"添加动态链接库的文件名。
+	下面运行：
+     ./test "<test>Hello<br/>World</test>"
+     ./test "<lala a='12' b='42'/>"
+可能会出现下面的情况:
+./test: error while loading shared libraries: libiksemel.so.3: cannot open shared object file: No such file or directory
+这个问题因为刚刚编译的时候没有选择静态编译，那么按照默认的编译就动态编译的。
+动态编译后，由于可执行文件在运行时要调用系统库文件，
+那么沿着系统默认的库文件搜索路径搜索，就可能找不到我们现在所需的库文件。
+致使出现 "error while loading shared libraries" 等错误。
+
+我们可以这样解决：
+方法一：静态编译
+在编译时加上 -static 参数
+方法二：重新配置系统环境变量 LD_LIBRARY_PATH
+这时需要指定 libiksemel.so.0 库文件的路径,也就是配置系统环境变量 LD_LIBRARY_PATH ，
+使系统能够找到 libiksemel.so.0 。
+例如：export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/data/soft/iksemel-1.3/lib
+这样就应该不会又问题。
+[root@localhost xmltest]# ./test "<test>Hello<br/>World</test>"
+TAG <test>
+CDATA [Hello]
+TAG <br/>
+CDATA [World]
+TAG </test>
+OK
+
+[root@localhost xmltest]# ./test "<lala a='12' b='42'/>"
+TAG <lala/>
+  ATTRIB a='12'
+  ATTRIB b='42'
+OK
+
+
+主要用到的函数的介绍：
+iksparser* iks_sax_new (void* USER_DATA, iksTagHook*
+          TAGHOOK, iksCDataHook* CDATAHOOK);
+     该函数分配内存和初始化一个 SAX 解析器。如果分配内存失败，返回NULL。
+
+int iks_parse (iksparser* PRS, char *DATA, size_t LEN, int
+          FiNiSH);
+     这个函数处理XML文本数据。
+    iksparser* PRS：上一个函数的返回指针。
+    char *DATA：XML文本数据
+    size_t LEN：数据长度。如果等于0，那么DATA必须为一个空字符串
+	int FiNiSH：如果为0，那么这个函数等待更多的数据输入。如果想处理一次就退出，那么可以这样调用：
+          iks_parse (my_parser, NULL, 0, 1);
+
+    返回值：
+    `IKS_OK'
+          OK，没有任何问题
+
+    `IKS_NOMEM'
+          内存不足
+
+    `IKS_BADXML'
+          XML文件数据格式不对
+
+    `IKS_HOOK'
+          自定义的hook函数决定的错误。
+
+
+void iks_parser_delete (iksparser* PRS);
+     释放相关的内存。
+
+iksTagHook
+     int iksTagHook (void* USER_DATA, char* NAME, char** ATTS, int TYPE);
+这个函数是标记（ Tag ）分析器。 NAME 是标记的名字。如果没有属性，ATTS = NULL，
+否则ATTS是一个二维数组指针，指向属性（char*）数组。
+     TYPE 值：
+    `IKS_OPEN'
+          开始标记tag, i.e. <tag attr='value'>
+
+    `IKS_CLOSE'
+          结束标记tag, i.e. </tag>
+
+    `IKS_SINGLE'
+          独立标记 tag, i.e. <tag attr='value'/>
+
+iksCDataHook
+     int iksCDataHook (void* USER_DATA, char* DATA, size_t LEN);
+该函数用来处理数据的。
+     DATA is a pointer to the character data. Encoding is UTF-8 and it
+     isn't terminated with a null character. Size of the data is given
+     with LEN in bytes. This function can be called several times with
+     smaller sized data for a single string. If return value isn't
+     `IKS_OK', it is passed immediately to the caller of the
+     `iks_parse'.
+
+
+
+5、DOM方式使用iksemel
+
+5.1 创建XML
+
+看下面程序，该程序在内存中创建了一个XML文档。
+
+#include <stdio.h>
+#include <iksemel.h>
+
+/**
+This program is using to create a XML document in the memory, like:
+
+	<message type='chat' from='bob@bd.com'>
+     <subject>song lyric</subject><priority>high</priority>
+     <body>
+     <em style='underline'>here is the correct version:</em>
+     i just don't see why i should even care
+     it's not dark yet, but it's getting there
+     </body>
+     </message>
+
+**/
+int main (int argc, char *argv[])
+{
+     iks *x = 0, *y = 0, *z = 0;
+
+     x = iks_new ("message");
+     iks_insert_attrib (x, "type", "chat");
+     iks_insert_attrib (x, "from", "bob@bd.com");
+     iks_insert_cdata (x, "\n", 1);
+     iks_insert_cdata (iks_insert (x, "subject"), "song lyric", 10);
+     iks_insert_cdata (iks_insert (x, "priority"), "high", 4);
+     iks_insert_cdata (x, "\n", 1);
+     y = iks_insert (x, "body");
+     iks_insert_cdata (y, "\n", 1);
+     z = iks_insert (y, "em");
+     iks_insert_attrib (z, "style", "underline");
+     iks_insert_cdata (z, "here is the correct version", 0);
+     iks_insert_cdata (y, "\n", 1);
+     iks_insert_cdata (y, "i just don't see why", 0);
+     iks_insert_cdata (y, "i should even care\n", 0);
+     iks_insert_cdata (y, "it's not dark yet,", 0);
+     iks_insert_cdata (y, "but it's getting there\n", 0);
+     iks_insert_cdata (x, "\n", 1);
+
+	iks_delete (x);
+ 	return 0;
+}
+
+该程序没有输出，但是可以很清晰的给出DOM方式的创建XML文件的方式。
+
+不好意思，直接上英文的，以后有时间再翻译吧。
+
+-- Typedef: iks
+     This is a structure defining a XML node. Its fields are private
+     and only accessed by following functions.
+
+ -- ??lev: iks* iks_new (const char *NAME);
+     Creates an object stack and creates a IKS_TAG type of node with
+     given tag name inside the stack. Tag name is also copied into the
+     stack.  Returns the node pointer, or NULL if there isn't enough
+     memory.
+
+ -- ??lev: iks* iks_new_within (const char *NAME, ikstack* STACK);
+     Creates a IKS_TAG type of node with the given tag name. Node and
+     tag name is allocated inside the given object stack. Returns the
+     node pointer, or NULL if there isn't enough memory.
+
+ -- ??lev: iks* iks_insert (iks *X, const char *NAME);
+     Creates a IKS_TAG type of node with the given tag name. Node and
+     tag name is allocated inside the X node's object stack and linked
+     to X as a child node. Returns the node pointer, or NULL if there
+     isn't enough memory.
+
+ -- ??lev: iks* iks_insert_cdata (iks* X, const char* DATA, size_t
+          LEN);
+     Creates a IKS_CDATA type of node with given character data. Node is
+     allocated inside the X node's object stack and linked to X as a
+     child node. Data is copied as well. If LEN is zero data must be a
+     null terminated string. Returns the node pointer, or NULL if there
+     isn't enough memory.
+
+ -- ??lev: iks* iks_insert_attrib (iks* X, const char* NAME, const
+          char* VALUE);
+     Creates a IKS_ATTRIBUTE type of node with given attribute name and
+     the value. Node is allocated inside the X node's object stack and
+     linked to X as an attribute node. Attribute name and value is
+     copied as well. Returns the node pointer, or NULL if there isn't
+     enough memory.
+
+     Reinserting another value with same attribute name changes an
+     attribute's value. If VALUE is NULL, attribute is removed from the
+     tag.
+
+ -- ??lev: iks* iks_insert_node (iks* X, iks* Y);
+     Links node Y to node X as a child node. Nodes are not copied
+     between object stacks, be careful.
+
+ -- ??lev: void iks_hide (iks *X);
+     Changes the links of the other nodes so that X becomes invisible.
+     It stays in the same object stack with neighbour nodes, be careful.
+
+ -- ??lev: void iks_delete (iks *X);
+     Frees the object stack of the node X.
+
+5.2 读取XML
+下面是一个简单的XML文件“playlist.xml”
+
+     <playlist>
+         <item type='mpg'>
+             <name>/home/madcat/download/matrix_rev_trailer.mpg</name>
+             <duration>1:17</duration>
+         </item>
+         <item type='rm'>
+             <name>/home/madcat/anim/clementine_ep1.rm</name>
+             <duration>22:00</duration>
+         </item>
+         <item type='avi'>
+             <name>/home/madcat/anim/futurama/ep101.avi</name>
+             <subtitle>/home/madcat/subs/futurama/ep101.txt</subtitle>
+             <duration>30:00</duration>
+         </item>
+         <repeat/>
+         <fullscreen/>
+         <noui/>
+     </playlist>
+
+对该文件分析，读取特定的字段信息的程序如下：
+
+#include <stdio.h>
+#include <iksemel.h>
+
+int main (int argc, char *argv[])
+{
+	iks *x, *y;
+	int e;
+
+	if (argc < 2) {
+	 printf ("usage: %s <playlistfile>", argv[0]);
+	 return 0;
+	}
+	e = iks_load (argv[1], &x); //加载xml文件到x中，x是一个树形的数据结构
+	if (e != IKS_OK) {
+	printf ("parse error %d\n", e);
+	 return 1;
+	}
+	if (iks_find (x, "repeat")) puts ("repeat mode enabled");
+	y = iks_child (x);	//得到x的子节点
+	while (y) {
+	 if (iks_type (y) == IKS_TAG
+	     && strcmp (iks_name (y), "item") == 0) {  //读取XML文档中节点名为“item”的信息
+	    printf ("Filename: [%s]\n", iks_find_cdata (y, "name"));
+	 }
+	 y = iks_next (y);
+	}
+	iks_delete (x);
+	return 0;
+}
+
+[root@localhost xmltest]# gcc -o test2 test2.c -liksemel -I/data/soft/iksemel-1.3/include -L/data/soft/iksemel-1.3/lib
+[root@localhost xmltest]# ./test2 playlist.xml
+repeat mode enabled
+Filename: [/home/madcat/download/matrix_rev_trailer.mpg]
+Filename: [/home/madcat/anim/clementine_ep1.rm]
+Filename: [/home/madcat/anim/futurama/ep101.avi]
+
+
+5.3 将内存中数据写到一个XML文件中
+
+char * iks_string (ikstack* STACK, iks* X);
+     Converts given tree into a string. String is created inside the
+     given object stack. Returns a pointer to the string, or NULL if
+     there isn't enough memory available.
+
+     If STACK is NULL, string is created inside an `iks_malloc'ed
+     buffer.  You can free it later with `iks_free' function.
+
+   下面是一个简单的例子：
+
+#include <stdio.h>
+#include <iksemel.h>
+
+/**
+This program is using to create a XML document in the memory, like:
+
+<test><a>1234</a><br/>1234</test>
+
+and then print it.
+
+**/
+int main (int argc, char *argv[])
+{
+     iks *x;
+     char *t;
+
+     x = iks_new ("test");
+     iks_insert_cdata (iks_insert (x, "a"), "1234", 4);
+     iks_insert (x, "br");
+     iks_insert_cdata (x, "1234", 4);
+     t = iks_string (iks_stack (x), x);
+     puts (t);
+     iks_delete (x);
+ 	return 0;
+}
+
+
+
+
+
+
+5.4 解析XML文件
+如果想自动的将一个XML文件转换为一个树，你可以用iksemel的DOM解析器。
+它是通过下面的函数创建：
+iksparser* iks_dom_new (iks **iKSPTR);
+	创建一个DOM解析器。
+
+例子如下：
+
+     iks *x;
+     iksparser *p;
+
+     p = iks_dom_new (&x);
+     if (IKS_OK != iks_parse (p, "<a>bcd</a>", 9, 1)) {
+         puts ("parse error");
+     }
+     /* x is useable after that point */
+
+     /* this will print 'bcd' */
+     printf ("%s\n", iks_cdata (iks_child (x)));
+
+   If you know the size of the file ahead, or you have an approximate
+idea, you can tell this to the dom parser for choosing a better memory
+allocation strategy. Here is the function for this.
+
+ -- ??lev: void iks_set_size_hint (iksparser *PRS, size_t
+          APPROX_SiZE);
+     Parser PRS must be a dom type parser. APPROX_SiZE is the expected
+     size of the xml document. Parser chooses its chunk size based on
+     this information. Helps performance while processing big files.
+
+   If you already have your XML document in memory, you can simply parse
+it with:
+
+ -- ??lev: iks * iks_tree (const char *XML_STR, size_t LEN, int *ERR);
+     This function parses the buffer pointed by XML_STR. If LEN is zero
+     buffer is considered as a null terminated utf8 string. Returns the
+     parsed tree, or NULL if there is an error. If ERR is not NULL,
+     actual error code (returned by iks_parse) is put there.
+
+很多时候，你需要更简单的方式读写XML文件，这里提供了两个便利的函数：
+    int iks_load (const char *FNAME, iks **XPTR);
+    加载一个XML文件。
+     Loads the XML file. Tree is placed into the variable pointed by
+     XPTR.
+
+	int iks_save (const char *FNAME, iks *X);
+	保存为一个XML文件
+     Converts tree X into a string and saves to the file.
+
+   Both functions return same error codes as `iks_parse'. Some
+additional error codes are defined for indicating file problems. They
+are:
+
+`IKS_FILE_NOFILE'
+     A file with the given name doesn't exist.
+
+`IKS_FILE_NOACCESS'
+     Cannot open file. Possibly a permission problem.
+
+`IKS_FILE_RWERR'
+     Read or write operation failed.
+
+   这是一个简单的例子，实现将一个XML文件读取到内存，然后保存到另一个XML文件中。
+
+     iks *x;
+
+     if (IKS_OK != iks_load ("file1.xml", &x)) {
+         puts ("loading error");
+     }
+     if (IKS_OK != iks_save ("file2.xml", x)) {
+         puts ("saving error");
+     }
+
+还有更多内容，请见帮助文档吧。。。
+
+呵呵
+
+////=================================================================================================
+////=================================================================================================
+////=================================================================================================
+////=================================================================================================
+
+
+
+
+定义了这么个结构体，
+typedef struct
+{
+	uint32 typeid;	 //消息类型
+	uint32 restrictlen;	 //消息ID
+	char typename[12];
+}MsgTypeCfg;
+编译的时候出现了很多问题:
+common.h:46: error: expected unqualified-id before 'typeid'
+common.h:48: error: using 'typename' outside of template
+common.h:48: error: expected nested-name-specifier before '[' token
+common.h:48: error: expected unqualified-id before '[' token
+
+找了很久的原因，后来发现C++中新增加的几个关键字：typeid、typename
+我定义的这个结构体正好用了C++的关键字，所以出错郁闷~~~
+
+
+
+
+
+
+
+动态链接库的生成和使用
+
+gcc -c -fPIC test.c
+gcc -o libtest.so -shared test.o
+
+假设libtest.so在/home/yours里
+gcc -o program program.c -ltest -L/home/yours
+
+LD_LIBRARY_PATH=/home/yours ./program
+
+或者
+gcc -o program program.c -ltest -L. -Wl,-rpath /home/yours
+这样就不用加环境变量，不管当前目录在哪里都可以执行
+./program
+
+
+
+
+
+
+
+
+
+g++ testlocker.cpp -I./include -lmsg -L/data/windoc/pro2/lib -lpthread
+
+
+
+
+
+
+
+
+
+
+哈 刚没看题
+预设有 -i 选项。/bin/cp 才需要加 -i
+[root@seker 3006854]# which cp
+alias cp='cp -i'
+        /bin/cp
+[root@seker 3006854]#
+
+[root@seker 3006854]#for i in `find .` ;do  echo "n"| cp -R "$i" ../3006854.bak/ &>/dev/null ;done
+
+
+man cp 原来有了/
+
+       --reply={yes,no,query}
+              specify  how  to handle the prompt about an existing destination
+              file
+
+[ 本帖最后由 Seker 于 2007-6-23 23:28 编辑 ]
+
+cp -R -f source target
+
+cp命令默认是不会提示overwrite?的，但是cp的-i选项会提示，而一般Linux的起动文件~/.bashrc中会把cp命名成
+
+alias cp='cp -i'
+
+这样在Linux下输入cp命令实际上运行的是cp -i，加上一个“\”符号就是让此次的cp命令不使用别名(cp -i)运行。
+
+就不会有overwrite?的提示了，至于保留链接，cp命令没有这样的功能，你可以写一个简单的脚本，cp之前判断一下就可以了。
+
+
+[root@devdb ~]# ls -R test/
+test/:
+1111  2222
+
+test/1111:
+aaa.txt
+
+test/2222:
+aaa.txt
+
+
+
+
+
+
+
+
+
+
+
+
+linux 文件是否存在
+[root@localhost test]# man access
+ACCESS(2)                  Linux Programmer's Manual                 ACCESS(2)
+
+NAME
+       access - check user's permissions for a file
+
+SYNOPSIS
+       #include <unistd.h>
+
+       int access(const char *pathname, int mode);
+
+
+用mkdir函数创建目录，用rmdir删除目录。
+  #include   <sys/types.h>
+  #include   <sys/stat.h>
+  int   mkdir   (const   char   *pathname,   mode_t   mode);
+                                成功：0   出错   -1；
+  #include   <unistd.h>
+  int   rmdir   (const   char   *pathname);
+                                成功：0   出错   -1；
+
+
+
+linux中date命令设置系统时间的方法 (2008-09-06 19:48:07)
+<script></script> 标签：linux date 设置系统时间 杂谈  	分类：Linux
+
+假设您要设置的时间是 2008年1月3日18时24分
+方法一：
+date 010318242008(月日时分年)（完整书写）
+方法二：
+1》先设置日期
+date -s 20080103
+2》设置时间
+date -s 18:24
++++++++++++++++++++++++++++++
+如果要同时更改BIOS时间
+在执行
+clock -w
+
+
+
+
+#include <time.h>
+void main(){
+	char *wday[]={"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+	time_t timep;
+	struct tm *p;
+	time(&timep);
+	p=gmtime(&timep);
+	printf("%d/%d/%d\n",(1900+p->tm_year),(1+p->tm_mon),p->tm_mday);
+	printf("%s %d;%d;%d\n", wday[p->tm_wday], p->tm_hour,p->tm_min,p->tm_sec);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+在linux下没有类似DOS下 del/s *.dep 的递归删除命令，不知道是不是我还没有找到合适的命令用法，为这个在DOS下非常容易的小问题我搜索了一下，发现这个问题是用find和rm命令组合实现的，因此还搜索了find的语法，因为find --help给出的说明太简单，根本无法看懂。
+
+下面是实现的方法，不过删除前最好看一下是否是想删除的东西。
+
+# 删除当前目录下所有 dep 文件
+
+find . -name ＊.dep -type f -exec rm -f {} \;
+
+# 删除当前目录下所有 linux64GccDPOpt 目录（包括里面的文件）
+
+find . -name "linux64GccDPOpt" -type d -exec rm -rf {} \;
+
+删除目录的命令提示：
+
+find: ./Make/linux64GccDPOpt: No such file or directory
+
+......
+
+但是目录删除了。
+
+[root@localhost windoc]# find ./pro2.2.2 -name CVS -exec rm -rf {} ;
+[root@localhost windoc]# find ./pro2.2.2 -name CVS -print | xargs /bin/rm -rf
+[root@localhost windoc]# find ./pro2.2.2 -name CVS -print | xargs /bin/rm -r
+
+
+
+char *p = new char[256];
+delete p;
+delete[] p;
+
+哪个对 为什么？
+----------------------------
+delete[] p; 标准做法，通常说，避免内存泄露
+
+
+必须要有‘[]’符号用以告诉编译器，指针(此处当然是你的p)所指向的是数组，因此在释放pc所指向的内存区块时必须要查询和使用该数组的维度信息，这样才能完全释放p所指的数组占用的内存资源。C++编译器出于效率上的考虑，仅在有‘[]’时，才会查询数组的维度信息。否则，编译器将认为p指向的是单个内存单元，因而delete掉p所指向的单个内存单元造成内存资源泄漏。至于有些朋友有意对数组的delete操作不用‘[]’而没有觉得程序的运行有异常，但我要告诉你们:"内存资源确时已经发生了泄漏！！！只是你的程序规模较小，且运行在一个碰巧相对安全的内存空间，以至你没有发现异常现象而以！"
+请参考《C++ Common Knowledge》-条款36－page93。
+
+　　另外，还可从另一角度说明'delete[]p'与'delete p'存在区别的重要性：
+
+我想大家一定知道，很多C＋＋大师在大谈著名的auto_ptr <typename T>好处的时候，总会明确的告誡使用者，不要把它用于数组!
+即你不能如下使用auto_ptr:
+
+char* _parray = new char[100];
+auto_ptr <char> _parray(_p);//哎呀！......
+
+为什么呢？就正是因为auto_ptr的析构函数中使用"delete _p;"而不是"delete []p;"!这样,在_parray生命终止后将造成内存泄漏!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Connection reset,Connection reset by peer,Software caused connection abort :socket write error,recv failed
+
+The Best way to China
+
+
+java.net.SocketException:Connection reset by peer: socket write error
+java.net.SocketException:Connection reset
+java.net.SocketException:Software caused connection abort :socket write error
+
+java.net.SocketException: Software caused connection abort: recv failed
+
+Please tell me when reading from a socket connection how an IOExcption with "Connection reset " message can occur.
+I am basically connecting to a Windows server program .
+Now I am using this exception for detecting invalid user login
+So i want know that what are the other ways this exception can occur ,
+
+please help me .
+thanks and regards
+haix
+
+ http://forum.java.sun.com/thread.jspa?threadID=560591&messageID=2755358
+
+http://forum.java.sun.com/thread.jspa?threadID=430179&messageID=4429682
+
+http://forum.java.sun.com/thread.jspa?threadID=609696&messageID=3341613
+
+小弟我用java实现了一个联通SGIP发送，接收短信的程序。
+不过在接收过程中，由于联通发送完deliver命令后要间隔16秒才发送unbind命令，此时作为服务器端的我的程序抛出
+java.net.socketexception connection reset错误！
+因为我在接收数据的时候inputstread.read(bytes[])是一个阻塞函数，如果没有接收到输入流就会阻塞住不动，但是错误的信息应该是socket已经断开。所以让我很奇怪，搞了一周也没有解决这个问题，请大伙帮忙啊！
+
+
+
+http://topic.csdn.net/u/20080319/10/0285f5b9-5035-4022-8c3a-5ddc18637777.html
+
+Connection reset by peer
+web 程序的服务器段，在链接数据库的时候被同一个“对等点”重置了。对等点重置的意思其实就是被同一个权限相同的管理员或者是程序给强制占用了权限，好像目前连接被断了一样，实际上这个时候连接并没有断开，是被“重置”了。就是能找到连接，但程序之间比较笨，自己找不到失去的那个连接了。
+“连接被对等点（peer）重置”，这时，只要把防火墙关闭就好了。就是说暂时找不到那个以前的连接了，也许断了，也许没有断，但就是找不到。
+
+
+
+10053 您的主机中的软件放弃了一个已建立的连接。
+//////////////////////////////////////////////
+一个以建立的连接被用户的主机上的软件终止，可能是因为一次数据
+  传输超时或者是协议错误。还有就是不要再连接事件中发送消息
+
+
+
+总结一下：
+1.你的socket队列中没有空间了
+2.receiver never acknowledges data sent on a datastream socket(接受者不承认在数据流接口上发送的数据)
+3.A connection will timeout if the local system doesn't receive an (ACK)nowledgement for data sent
+
+Connection reset by peer
+抛出的异常也有可能是客户端中断连接。 当客户端中断连接的时候服务器也会抛出这个异常出来。
+
+就是说客户端正在连接的时候 突然终止 了连接，这样，服务器端会抛出Connection reset by peer 异常出来
+
+http://topic.csdn.net/u/20080402/16/7fe0a9c2-cef5-4756-8c45-157555cd0097.html
+
+第4 个异常是java.net.SocketException: （Connection reset或者 Connect reset by peer:Socket write error）。该异常在客户端和服务器端均有可能发生，引起该异常的原因有两个，第一个就是如果一端的Socket被关闭（或主动关闭或者因为异常退出而引起的关闭），另一端仍发送数据，发送的第一个数据包引发该异常 (Connect reset by peer)。另一个是一端退出，但退出时并未关闭该连接，另一端如果在从连接中读数据则抛出该异常（Connection reset）。简单的说就是在连接断开后的读和写操作引起的。
+
+
+
+http://topic.csdn.net/u/20080328/10/e08d894a-319a-4985-8407-50e103305e6c.html
+
+
+
+我这里有关于网络异常方面的建议，发上去大家学习：
+第1 个异常是java.net.BindException:Address already in use: JVM_Bind。该异常发生在服务器端进行new ServerSocket(port)（port是一个0，65536的整型值）操作时。异常的原因是以为与port一样的一个端口已经被启动，并进行监听。此时用netstat –an命令，可以看到一个Listending状态的端口。只需要找一个没有被占用的端口就能解决这个问题。
+
+
+第2 个异常是java.net.ConnectException: Connection refused: connect。该异常发生在客户端进行 new Socket(ip, port)操作时，该异常发生的原因是或者具有ip地址的机器不能找到（也就是说从当前机器不存在到指定ip路由），或者是该ip存在，但找不到指定的端口进行监听。出现该问题，首先检查客户端的ip和port是否写错了，如果正确则从客户端ping一下服务器看是否能 ping通，如果能ping通（服务服务器端把ping禁掉则需要另外的办法），则看在服务器端的监听指定端口的程序是否启动，这个肯定能解决这个问题。
+
+
+第3个异常是java.net.SocketException: Socket is closed，该异常在客户端和服务器均可能发生。异常的原因是己方主动关闭了连接后（调用了Socket的close方法）再对网络连接进行读写操作。
+
+
+第4 个异常是java.net.SocketException: （Connection reset或者 Connect reset by peer:Socket write error）。该异常在客户端和服务器端均有可能发生，引起该异常的原因有两个，第一个就是如果一端的Socket被关闭（或主动关闭或者因为异常退出而引起的关闭），另一端仍发送数据，发送的第一个数据包引发该异常 (Connect reset by peer)。另一个是一端退出，但退出时并未关闭该连接，另一端如果在从连接中读数据则抛出该异常（Connection reset）。简单的说就是在连接断开后的读和写操作引起的。
+
+
+第5个异常是 java.net.SocketException: Broken pipe。该异常在客户端和服务器均有可能发生。在第4个异常的第一种情况中（也就是抛出SocketExcepton:Connect reset by peer:Socket write error后），如果再继续写数据则抛出该异常。前两个异常的解决方法是首先确保程序退出前关闭所有的网络连接，其次是要检测对方的关闭连接操作，发现对方关闭连接后自己也要关闭该连接。
+
+  客户端错误代码10053 Software caused connection abort（软件原因导致连接中断）
+
+
+
+又涉及到一个问题就是阻塞函数和非阻塞函数，阻塞Socket和非阻塞Socket
+
+一是阻塞函数，一是非阻塞函数。所谓阻塞函数，是指其完成指定的任务之前不允许程序调用另一个函数，在Windows下还会阻塞本线程消息的发送。所谓非阻塞函数，是指操作启动之后，如果可以立即得到结果就返回结果，否则返回表示结果需要等待的错误信息，不等待任务完成函数就返回
+
+http://www.aka.org.cn/Lectures/002/Lecture-2.1.8/Lecture-2.1.8/new_page_15.htm
+
+http://www.cppblog.com/kenlistian/archive/2007/12/27/39746.html
+
+http://hi.baidu.com/evenque/blog/item/1ccfc63ffc3527c17d1e7188.html
+
+http://www.cic.tsinghua.edu.cn/jdx/lunwen/WinSockx.htm
+
+
+
+Connection reset by peer的原因：
+经常出现的Connection reset by peer: 原因可能是多方面的，不过更常见的原因是：
+①：服务器的并发连接数超过了其承载量，服务器会将其中一些连接Down掉；
+②：客户关掉了浏览器，而服务器还在给客户端发送数据；
+③：浏览器端按了Stop
+很多人都说是客户端造成的，没有办法控制，是个比较郁闷的问题。
+
+
+
+引起该问题的原因是由于此时Server端连接已经被复位，而Client依然通过该连接在接收和发送数据，在网上搜索了一下该错误，发现该错误引起的原因大都是防火墙的原因，嘿嘿，又学了一招。
+
+
+
+socket, nio socket 及nio socket框架MINA总结
+
+Windows Sockets Error Codes
+
+http://msdn2.microsoft.com/en-us/library/ms740668.aspx
+
+
+socket 通信有通信的规则,   如果你希望保持长连接,   就应该有个通信协议,   包括写入\0也是规则的一部分,   传完一个文件等待下一个.   要可不保持长连接,   可使用webservice,   这样你的协议变的更为可读,   更容易包装成产品.
+
+  看你的程序希望read结束,   不象是希望保持长连接的样子,   晕ing
+
+
+
+经常出现的Connection reset by peer: 原因可能是多方面的，不过更常见的原因是：
+①：服务器的并发连接数超过了其承载量，服务器会将其中一些连接Down掉；
+②：客户关掉了浏览器，而服务器还在给客户端发送数据；
+③：浏览器端按了Stop
+很多人都说是客户端造成的，没有办法控制，是个比较郁闷的问题。
+
+
+这是网络连接断掉引起的，一般是由于通过了防火墙，而防火墙一般都会有超时的机制，在网络连接长时间不传输数据时，会切断这个TCP的session，这时就会导致Connection reset by peer error
+
+
+
+
+http://topic.csdn.net/t/20060915/12/5024325.html
+
+
+沟通非阻塞IO与阻塞IO - 输入流
+
+沟通非阻塞IO与阻塞IO - 输出流
+
+
+附加该问题的最近结论
+1.我使用MyEclipse单步调试，当调试到inputStream 的时候，看变量，发现一个问题,
+那就是SocketInputStream的Channel是null,为什么那，我不知道
+
+又在网络上找到几句话粘贴到这里吧！如下
+
+"No buffer space available , recv failed"
+
+谢谢sandyen(杉叶)的回答，我在网上也搜到这个，但是不是这个原因。
+  问题已解决，确实不是程序的问题。
+  netstat   -an发现有大量的端口占用，监听很多机器的139，445端口。
+  确定机器中了震荡波，下载补丁安装重启，问题解决。
+  导致这个异常的原因应该是系统的socket大量的资源被占用，
+  导致没有足够的资源接收前台上报或者回复的数据。
+
+http://topic.csdn.net/t/20060315/11/4615627.html
+
+
+
+Expo 2010 Shanghai
+
+posted on 2008-04-11 16:24 kaixin110 阅读(2537) 评论(1)  编辑 收藏 网摘 所属分类: Java
+评论
+#1楼  2008-04-16 17:28 Handan [未注册用户]
+
+Answers:
+
+
+By default, the HTTP/1.1 Connector only allows 100 keep-alive requests on a
+single Socket connection. You can set maxKeepAliveRequests="-1" to allow an
+arbitrary number of keep-alive requests, or any positive value to stop it at
+that many.
+
+Of course, for the robustness of your application, your client should be
+checking for a 'Connection: close' response header, and close it's Socket
+and re-connect on a new one when it see it. The HTTP/1.1 protocol allows
+the server to send this with any response to tell the client that it is
+going to close it's side of the connection.

@@ -1,0 +1,835 @@
+﻿Linux操作系统下的多线程编程详细解析（1）
+
+	作者：zieckey(zieckey@yahoo.com.cn)
+
+	线程（thread）技术早在60年代就被提出，但真正应用多线程到操作系统中去，
+	是在80年代中期，solaris是这方面的佼佼者。传统的Unix也支持线程的概念，但是在一个进程（process）
+中只允许有一个线程，这样多线程就意味着多进程。
+现在，多线程技术已经被许多操作系统所支持，包括Windows/NT，当然，也包括Linux。
+
+
+　　为什么有了进程的概念后，还要再引入线程呢？使用多线程到底有哪些好处？
+什么的系统应该选用多线程？我们首先必须回答这些问题。
+
+　　
+使用多线程的理由之一是和进程相比，它是一种非常"节俭"的多任务操作方式。
+我们知道，在Linux系统下，启动一个新的进程必须分配给它独立的地址空间，
+建立众多的数据表来维护它的代码段、堆栈段和数据段，这是
+一种"昂贵"的多任务工作方式。而运行于一个进程中的多个线程，
+它们彼此之间使用相同的地址空间，共享大部分数据，
+启动一个线程所花费的空间远远小于启动一个进程所花费的空间，
+而且，线程间彼此切换所需的时间也远
+远小于进程间切换所需要的时间。据统计，总的说来，
+一个进程的开销大约是一个线程开销的30倍左右，当然，
+在具体的系统上，这个数据可能会有较大的区别。
+
+　　
+使用多线程的理由之二是线程间方便的通信机制。对不同进程来说，它们具有独立的数据空间，
+要进行数据的传递只能通过进程通信的方式进行，这种方式不仅费时，而且很不方便。线程则不然，
+由于同一进程下的线程之间共享数据空间，所以一个线程的数据可以直接为其它线程所用，
+这不仅快捷，而且方便。当然，数据的共享也带来其他一些问题，有的变量不能同时被两个线程所修改，
+有的子程序中声明为static的数据更有可能给多线程程序带来灾难性的打击，这些正是编写多线程程序时最需要注意的地方。
+
+　　除了以上所说的优点外，不和进程比较，多线程程序作为一种多任务、并发的工作方式，当然有以下的优点：
+
+　　1) 提高应用程序响应。这对图形界面的程序尤其有意义，当一个操作耗时很长时，
+整个系统都会等待这个操作，此时程序不会响应键盘、鼠标、菜单的操作，而使用多线程技术，
+将耗时长的操作（time consuming）置于一个新的线程，可以避免这种尴尬的情况。
+
+　　2) 使多CPU系统更加有效。操作系统会保证当线程数不大于CPU数目时，不同的线程运行于不同的CPU上。
+
+　　3) 改善程序结构。一个既长又复杂的进程可以考虑分为多个线程，
+成为几个独立或半独立的运行部分，这样的程序会利于理解和修改。
+
+　　下面我们先来尝试编写一个简单的多线程程序。
+
+1、简单的多线程编程
+
+　　
+Linux系统下的多线程遵循POSIX线程接口，称为pthread。编写Linux下的多线程程序，
+需要使用头文件pthread.h，连接时需要使用库libpthread.a。
+顺便说一下，Linux下pthread的实现是通过系统调用clone（）来实现的。
+clone（）是Linux所特有的系统调用，它的使用方式类似fork，关于clone（）的详细情况，
+有兴趣的读者可以去查看有关文档说明。下面我们展示一个最简单的多线程程序 pthread_create.c。
+
+
+一个重要的线程创建函数原型：
+#include <pthread.h>
+int pthread_create(pthread_t *restrict tidp,
+						 const pthread_attr_t *restrict attr, 
+						 void *(*start_rtn)(void),
+						 void *restrict arg);
+
+    返回值：若是成功建立线程返回0,否则返回错误的编号
+    形式参数：
+                pthread_t *restrict tidp 要创建的线程的线程id指针
+                const pthread_attr_t *restrict attr 创建线程时的线程属性
+                void* (start_rtn)(void) 返回值是void类型的指针函数
+                void *restrict arg   start_rtn的行参
+              
+例程1：                              
+	功能：创建一个简单的线程
+	程序名称：pthread_create.c       　　
+/********************************************************************************************
+**	Name:pthread_create.c
+**	Used to study the multithread programming in Linux OS
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+
+#include <stdio.h>
+#include <pthread.h>
+
+void *myThread1(void)
+{
+	int i;
+	for (i=0; i<100; i++)
+	{
+		printf("This is the 1st pthread,created by zieckey.\n");
+		sleep(1);//Let this thread to sleep 1 second,and then continue to run
+	}
+}
+
+void *myThread2(void)
+{
+	int i;
+	for (i=0; i<100; i++)
+	{
+		printf("This is the 2st pthread,created by zieckey.\n");
+		sleep(1);
+	}
+}
+
+int main()
+{
+	int i=0, ret=0;
+	pthread_t id1,id2;
+	
+	ret = pthread_create(&id1, NULL, (void*)myThread1, NULL);
+	if (ret)
+	{
+		printf("Create pthread error!\n");
+		return 1;
+	}
+	
+	ret = pthread_create(&id2, NULL, (void*)myThread2, NULL);
+	if (ret)
+	{
+		printf("Create pthread error!\n");
+		return 1;
+	}
+	
+	pthread_join(id1, NULL);
+	pthread_join(id2, NULL);
+	
+	return 0;
+}
+
+
+　　我们编译此程序：
+# gcc pthread_create.c -lpthread
+
+因为pthread的库不是linux系统的库，所以在进行编译的时候要加上-lpthread，否则编译不过，会出现下面错误
+thread_test.c: 在函数 ‘create’ 中：
+thread_test.c:7: 警告： 在有返回值的函数中，程序流程到达函数尾
+/tmp/ccOBJmuD.o: In function `main':thread_test.c:(.text+0x4f)：对‘pthread_create’未定义的引用
+collect2: ld 返回 1
+
+　　运行，我们得到如下结果：
+# ./a.out
+This is the 1st pthread,created by zieckey.
+This is the 2st pthread,created by zieckey.
+This is the 1st pthread,created by zieckey.
+This is the 2st pthread,created by zieckey.
+This is the 2st pthread,created by zieckey.
+This is the 1st pthread,created by zieckey.
+....
+
+两个线程交替执行。
+此例子介绍了创建线程的方法。
+下面例子介绍向线程传递参数。
+
+
+例程2：
+	功能：向新的线程传递整形值
+	程序名称：pthread_int.c
+/********************************************************************************************
+**	Name:pthread_int.c
+**	Used to study the multithread programming in Linux OS
+**	Pass a parameter to the thread.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+void *create(void *arg)
+{
+	int *num;
+	num=(int *)arg;
+	printf("create parameter is %d \n",*num);
+	return (void *)0;
+}
+int main(int argc ,char *argv[])
+{
+	pthread_t tidp;
+	int error;
+	
+	int test=4;
+	int *attr=&test;
+	
+	error=pthread_create(&tidp,NULL,create,(void *)attr);
+
+	if(error)
+   	 {
+		printf("pthread_create is created is not created ... \n");
+		return -1;
+   	 }
+	sleep(1);
+	printf("pthread_create is created ...\n");
+	return 0;		
+}
+
+
+    编译方法：
+
+gcc -lpthread pthread_int.c -Wall
+
+
+    执行结果：
+
+create parameter is 4
+pthread_create is created is  created ...
+
+
+    例程总结：
+    可以看出来，我们在main函数中传递的整行指针，传递到我们新建的线程函数中。
+    在上面的例子可以看出来我们向新的线程传入了另一个线程的int数据，线程之间还可以传递字符串或是更复杂的数据结构。
+
+
+例程3：
+	程序功能：向新建的线程传递字符串
+    	程序名称：pthread_string.c
+/********************************************************************************************
+**	Name:pthread_string.c
+**	Used to study the multithread programming in Linux OS
+**	Pass a ‘char*‘ parameter to the thread.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+#include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+
+void *create(void *arg)
+{
+	char *name;
+	name=(char *)arg;
+	printf("The parameter passed from main function is %s  \n",name);
+	return (void *)0;
+}
+
+int main(int argc, char *argv[])
+{
+	char *a="zieckey";
+	int error;
+	pthread_t tidp;
+
+	error=pthread_create(&tidp, NULL, create, (void *)a);
+
+	if(error!=0)
+	{
+		printf("pthread is not created.\n");
+		return -1;
+	}
+	sleep(1);
+	printf("pthread is created... \n");
+	return 0;
+}	
+
+  编译方法：
+
+gcc -Wall pthread_string.c -lpthread
+
+
+    执行结果：
+The parameter passed from main function is zieckey
+pthread is created...
+
+
+    例程总结：
+    可以看出来main函数中的字符串传入了新建的线程中。
+
+例程4：
+	程序功能：向新建的线程传递字符串
+    	程序名称：pthread_struct.c
+/********************************************************************************************
+**	Name:pthread_struct.c
+**	Used to study the multithread programming in Linux OS
+**	Pass a ‘struct‘ parameter to the thread.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+struct menber
+{
+	int a;
+	char *s;
+};
+
+void *create(void *arg)
+{
+	struct menber *temp;
+	temp=(struct menber *)arg;
+	printf("menber->a = %d  \n",temp->a);
+	printf("menber->s = %s  \n",temp->s);
+	return (void *)0;
+}
+
+int main(int argc,char *argv[])
+{
+	pthread_t tidp;
+	int error;
+	struct menber *b;
+	b=(struct menber *)malloc( sizeof(struct menber) );
+	b->a = 4;
+	b->s = "zieckey";
+
+	error = pthread_create(&tidp, NULL, create, (void *)b);
+
+	if( error )
+	{
+		printf("phread is not created...\n");
+		return -1;
+	}
+	sleep(1);
+	printf("pthread is created...\n");
+	return 0;
+}
+
+  编译方法：
+
+gcc -Wall pthread_struct.c -lpthread
+
+
+    执行结果：
+menber->a = 4
+menber->s = zieckey
+pthread is created...
+
+    例程总结：
+    可以看出来main函数中的一个结构体传入了新建的线程中。
+    线程包含了标识进程内执行环境必须的信息。他集成了进程中的所有信息都是对线程进行共享的，
+    包括文本程序、程序的全局内存和堆内存、栈以及文件描述符。
+  
+
+例程5：
+	程序目的：验证新建立的线程可以共享进程中的数据
+	程序名称：pthread_share.c
+
+/********************************************************************************************
+**	Name:pthread_share_data.c
+**	Used to study the multithread programming in Linux OS
+**	A example showing a thread sharing data with main function.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+static int a=4;
+void *create(void *arg)
+{
+	printf("new pthread ... \n");
+	printf("a=%d  \n",a);
+	return (void *)0;
+}
+
+int main(int argc,char *argv[])
+{
+	pthread_t tidp;
+	int error;
+	
+	a=5;
+
+	error=pthread_create(&tidp, NULL, create, NULL);
+
+	if(error!=0)
+	{
+		printf("new thread is not create ... \n");
+		return -1;
+	}
+	
+	sleep(1);
+	
+	printf("new thread is created ... \n");
+	return 0;
+}
+  
+  编译方法：
+
+gcc -Wall pthread_share_data.c -lpthread
+
+
+    执行结果：
+new pthread ...
+a=5
+new thread is created ...
+
+
+    例程总结：
+可以看出来，我们在主线程更改了我们的全局变量a的值的时候，我们新建立的线程则打印出来了改变的值，
+可以看出可以访问线程所在进程中的数据信息。
+
+
+2、线程的终止
+
+    如果进程中任何一个线程中调用exit，_Exit,或者是_exit，那么整个进程就会终止，
+    与此类似，如果信号的默认的动作是终止进程，那么，把该信号发送到线程会终止进程。
+    线程的正常退出的方式：
+       (1) 线程只是从启动例程中返回，返回值是线程中的退出码
+       (2) 线程可以被另一个进程进行终止
+       (3) 线程自己调用pthread_exit函数
+    两个重要的函数原型：
+
+#include <pthread.h>
+void pthread_exit(void *rval_ptr);
+/*rval_ptr 线程退出返回的指针*/
+
+
+    例程6
+    程序目的：线程正常退出，接受线程退出的返回码
+    程序名称：pthread_exit.c
+
+/********************************************************************************************
+**	Name:pthread_exit.c
+**	Used to study the multithread programming in Linux OS
+**	A example showing a thread to exit and with a return code.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+void *create(void *arg)
+{
+	printf("new thread is created ... \n");
+	return (void *)8;
+}
+
+int main(int argc,char *argv[])
+{
+	pthread_t tid;
+	int error;
+	void *temp;
+
+	error = pthread_create(&tid, NULL, create, NULL);
+
+	if( error )
+	{
+		printf("thread is not created ... \n");
+		return -1;
+	}
+	error = pthread_join(tid, &temp);
+
+	if( error )
+	{
+		printf("thread is not exit ... \n");
+		return -2;
+	}
+	
+	printf("thread is exit code %d \n", (int )temp);
+	return 0;
+}
+
+  编译方法：
+
+gcc -Wall pthread_exit.c -lpthread
+
+
+    执行结果：
+new thread is created ...
+thread is exit code 8
+
+    例程总结：
+可以看出来，线程退出可以返回线程的int数值。线程退出不仅仅可以返回线程的int数值，还可以返回一个复杂的数据结构。
+
+    例程7
+    程序目的：线程结束返回一个复杂的数据结构
+    程序名称：pthread_return_struct.c
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+struct menber
+{
+	int a;
+	char *b;
+}temp={8,"zieckey"};
+void *create(void *arg)
+{
+	printf("new thread ... \n");
+	return (void *)&temp;
+}
+
+int main(int argc,char *argv[])
+{
+	int error;
+	pthread_t tid;
+	struct menber *c;
+
+	error = pthread_create(&tid, NULL, create, NULL);
+	
+	if( error )
+	{
+		printf("new thread is not created ... \n");
+		return -1;
+	}
+	printf("main ... \n");
+
+	error = pthread_join(tid,(void *)&c);
+
+	if( error )
+	{
+		printf("new thread is not exit ... \n");
+		return -2;
+	}
+	printf("c->a = %d  \n",c->a);
+	printf("c->b = %s  \n",c->b);
+	sleep(1);
+	return 0;
+}
+
+
+  编译方法：
+
+gcc -Wall pthread_return_struct.c -lpthread
+
+
+    执行结果：
+
+main ...
+new thread ...
+c->a = 8
+c->b = zieckey
+
+
+例程总结：
+一定要记得返回的数据结构要是在这个数据要返回的结构没有释放的时候应用，
+如果数据结构已经发生变化，那返回的就不会是我们所需要的，而是脏数据
+
+
+
+
+3、线程标识
+
+    函数原型：
+   
+#include <pthread.h>
+pthread_t pthread_self(void);
+
+pid_t getpid(void);
+    getpid()用来取得目前进程的进程识别码,函数说明
+
+    例程8
+    程序目的：实现在新建立的线程中打印该线程的id和进程id
+    程序名称：pthread_id.c
+   
+/********************************************************************************************
+**	Name:pthread_id.c
+**	Used to study the multithread programming in Linux OS.
+**	Showing how to get the thread's tid and the process's pid.
+**	Author:zeickey
+**	Date:2006/9/16		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h> /*getpid()*/
+
+void *create(void *arg)
+{
+	printf("New thread .... \n");
+	printf("This thread's id is %u  \n", (unsigned int)pthread_self());
+	printf("The process pid is %d  \n",getpid());
+	return (void *)0;
+} 
+
+int main(int argc,char *argv[])
+{
+	pthread_t tid;
+	int error;
+
+	printf("Main thread is starting ... \n");
+
+	error = pthread_create(&tid, NULL, create, NULL);
+
+	if(error)
+	{
+		printf("thread is not created ... \n");
+		return -1;
+	}
+	printf("The main process's pid is %d  \n",getpid());
+	sleep(1);
+	return 0;
+}
+
+
+    编译方法：
+
+   
+gcc -Wall -lpthread pthread_id.c
+
+    执行结果：
+
+Main thread is starting ... 
+The main process's pid is 3307  
+New thread .... 
+This thread's id is 3086347152  
+The process pid is 3307  
+
+
+      4、 线程的处理程序
+
+    函数原型：
+
+   
+#include <pthread.h>
+void pthread_cleanup_push(void (*rtn)(void *),void *arg);
+    函数rtn是清理函数，arg是调用参数
+
+void pthread_cleanup_pop(int execute);
+  
+
+ 
+
+    在前面讲过线程的终止方式，是正常终止还是非正常终止，都会存在一个资源释放的问题，在posix中提供了一组，就是我们上面看的函数进行线程退出的处理函数，有些像在进程中的atexit函数。释放的方式是指pthread_cleanup_push的调用点到pthread_cleanup_pop之间程序段进行终止。
+
+    pthread_cleanup_push()/pthread_cleanup_pop采用先入后出的方式的栈的管理方式，void *rtn(void *),在执行pthread_cleanup_push()时压入函数栈，多次执行pthread_cleanup_push()形成一个函数链，在执行这个函数链的时候会以反方向弹出，即先入后出。execute参数表识，是否执行弹出清理函数，当execute=0时不进行弹出清理函数，非零的时候弹出处理函数。
+
+    例程9
+
+    程序目的：实现在正常结束线程的时候，进行函数处理
+
+    程序名称：pthread_clean.c
+
+ /********************************************************************************************
+**	Name:pthread_clean.c
+**	Used to study the multithread programming in Linux OS
+**	A example showing a thread to be cleaned.
+**	Author:zeickey
+**	Date:2008/6/28		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+void *clean(void *arg)
+{
+	printf("cleanup :%s  \n",(char *)arg);
+	return (void *)0;
+}
+void *thr_fn1(void *arg)
+{
+	printf("thread 1 start  \n");
+	pthread_cleanup_push( (void*)clean,"thread 1 first handler");
+	pthread_cleanup_push( (void*)clean,"thread 1 second hadler");
+	printf("thread 1 push complete  \n");
+	if(arg)
+	{
+		return((void *)1);
+	}
+	pthread_cleanup_pop(0);
+	pthread_cleanup_pop(0);
+	return (void *)1;
+}
+void *thr_fn2(void *arg)
+{
+	printf("thread 2 start  \n");
+	pthread_cleanup_push( (void*)clean,"thread 2 first handler");
+	pthread_cleanup_push( (void*)clean,"thread 2 second handler");
+	printf("thread 2 push complete  \n");
+	if(arg)
+	{
+		pthread_exit((void *)2);
+	}
+	pthread_cleanup_pop(0);
+	pthread_cleanup_pop(0);
+	pthread_exit((void *)2);
+}
+int main(void)
+{
+	int err;
+	pthread_t tid1,tid2;
+	void *tret;
+
+	err=pthread_create(&tid1,NULL,thr_fn1,(void *)1);
+	if(err!=0)
+	{
+		printf("error .... \n");
+		return -1;
+	}
+	err=pthread_create(&tid2,NULL,thr_fn2,(void *)1);
+
+	if(err!=0)
+	{
+		printf("error .... \n");
+		return -1;
+	}
+	err=pthread_join(tid1,&tret);
+	if(err!=0)
+	{
+		printf("error .... \n");
+		return -1;
+	}
+	printf("thread 1 exit code %d  \n",(int)tret);
+
+	err=pthread_join(tid2,&tret);
+	if(err!=0)
+	{
+		printf("error .... ");
+		return -1;
+	}
+
+	printf("thread 2 exit code %d  \n",(int)tret);
+	
+	return 1;
+}
+
+    编译方法：
+
+
+ gcc -Wall -lpthread pthread_clean.c
+
+    执行结果：
+
+thread 1 start  
+thread 1 push complete  
+thread 1 exit code 1  
+thread 2 start  
+thread 2 push complete  
+cleanup :thread 2 second handler  
+cleanup :thread 2 first handler  
+thread 2 exit code 2  
+
+
+	
+5、pthread_join函数
+
+   
+SYNOPSIS
+       #include <pthread.h>
+
+       int pthread_join(pthread_t thread, void **rval_ptr);
+
+DESCRIPTION
+       The  pthread_join()  function shall suspend execution of the calling thread until the target thread terminates, unless the target thread has already termi-nated. On return from a successful pthread_join() call with a non-NULL value_ptr argument, the value passed to pthread_exit()  by  the  terminating  thread shall  be  made  available  in the location referenced by rval_ptr. When a pthread_join() returns successfully, the target thread has been terminated. The results of multiple simultaneous calls to pthread_join() specifying the same target thread are undefined. If the thread calling pthread_join() is canceled, then the target thread shall not be detached.
+pthread_join用于挂起当前线程（调用pthread_join的线程），直到thread指定的线程终止运行为止，当前线程才继续执行。
+thread指定的线程的返回值由rval_ptr返回。一个线程所使用的资源在对该线程调用pthread_join之前不会被重新分配，
+因此对于每个切入的线程必须调用一次pthread_join函数。
+线程必须可切入的而不是处于被分离状态，并且其他线程不能对同一线程再次应用pthread_join调用。
+通过pthread_create调用中使用一个适当的attr参数或者调用pthread_detach可以让一个线程处于被分离状态。
+
+
+/********************************************************************************************
+**	Name:pthread_join.c
+**	Used to study the multithread programming in Linux OS
+**	A example showing a thread to be waited to end.
+**	Author:zeickey
+**	Date:2008/6/28		
+**	Copyright (c) 2006,All Rights Reserved!
+*********************************************************************************************/
+
+#include <pthread.h>
+#include <unistd.h>
+#include <stdio.h>
+void *thread(void *str)
+{
+	int i;
+	for (i = 0; i < 10; ++i)
+	{
+		sleep(2);
+		printf( "This in the thread : %d\n" , i );
+	}
+	return NULL;
+}
+
+int main()
+{
+	pthread_t pth;
+	int i;
+	int ret = pthread_create(&pth, NULL, thread, (void *)(i));
+	
+	pthread_join(pth, NULL);
+	for (i = 0; i < 10; ++i)
+	{
+		sleep(1);
+		printf( "This in the main : %d\n" , i );
+	}
+	
+	return 0;
+}
+
+
+"pthread_join(pth, NULL);"这一行注释掉：
+[root@localhost src]# gcc pthread_join.c -lpthread
+[root@localhost src]# ./a.out 
+This in the main : 0
+This in the thread : 0
+This in the main : 1
+This in the main : 2
+This in the thread : 1
+This in the main : 3
+This in the main : 4
+This in the thread : 2
+This in the main : 5
+This in the main : 6
+This in the thread : 3
+This in the main : 7
+This in the main : 8
+This in the thread : 4
+This in the main : 9
+
+子线程还没有执行完毕，main函数已经退出，那么子线程也就退出了。
+
+“pthread_join(pth, NULL);”起作用
+[root@localhost src]# gcc pthread_join.c -lpthread
+[root@localhost src]# ./a.out 
+This in the thread : 0
+This in the thread : 1
+This in the thread : 2
+This in the thread : 3
+This in the thread : 4
+This in the thread : 5
+This in the thread : 6
+This in the thread : 7
+This in the thread : 8
+This in the thread : 9
+This in the main : 0
+This in the main : 1
+This in the main : 2
+This in the main : 3
+This in the main : 4
+This in the main : 5
+This in the main : 6
+This in the main : 7
+This in the main : 8
+This in the main : 9
+[root@localhost src]# 
+
+这说明pthread_join函数的调用者在等待子线程退出后才继续执行

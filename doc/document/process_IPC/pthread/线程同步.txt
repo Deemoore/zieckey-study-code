@@ -1,0 +1,421 @@
+进行多线程编程，最头疼的就是那些共享的数据。因为你无法知道哪个线程会在哪个时候对它进行操作，你也无法得知那个线程会先运行，哪个线程会后运行。下面介绍一些技术，通过他们，你会合理安排你的线程之间对资源的竞争。
+
+	1 互斥体Mutex
+
+	2 信号灯Semophore
+
+	3 条件变量Conditions
+
+先说一下互斥量。
+
+1、互斥量
+
+什么时候会用上互斥量了？比如你现在有一全局链表，你有几个工作线程。每一个线程从该链表中取出头节点，然后对该头节点进行处理。比如现在线程1正在取出头节点，他的操作如下：
+
+Item * p =queue_list;
+Queue_list=queue_list->next;
+Process_job(p);
+Free(p);
+
+当线程1处理完第一步，也就是Item *p=queue_list后，这时候系统停止线程1的运行，改而运行线程2。线程2照样取出头节点，然后进行处理，最后释放了该节点。过了段时间，线程1重新得到运行。而这个时候，其实p所指向的节点已经被线程2释放掉，而线程1对此毫无知晓。他会接着运行process_job(p)。而这将导致无法预料的后果！
+
+对于这种情况，系统给我们提供了互斥量。你在取出头节点前必须要等待互斥量，如果此时有其他线程已经获得该互斥量，那么线程将会阻塞在这个地方。只有等到其他线程释放掉该互斥量后，你的线程才有可能得到该互斥量。为什么是可能了？因为可能此时有不止你一个线程在等候该互斥量，而系统无法保证你的线程将会优先运行。
+
+互斥量的类型为pthread_mutex_t。你可以声明多个互斥量。在声明该变量后，你需要调用pthread_mutex_init()来创建该变量。pthread_mutex_init的格式如下：
+
+int  pthread_mutex_init(pthread_mutex_t  *mutex,  const  pthread_mutex_attr_t *mutexattr);
+
+第一个参数，mutext，也就是你之前声明的那个互斥量，第二个参数为该互斥量的属性。这个将在后面详细讨论。
+在创建该互斥量之后，你便可以使用它了。要得到互斥量，你需要调用下面的函数：
+int pthread_mutex_lock(pthread_mutex_t *mutex);
+该函数用来给互斥量上锁，也就是我们前面所说的等待操作。互斥量一旦被上锁后，其他线程如果想给该互斥量上锁，那么就会阻塞在这个操作上。如果在此之前该互斥量已经被其他线程上锁，那么该操作将会一直阻塞在这个地方，直到获得该锁为止。
+
+在得到互斥量后，你就可以进入关键代码区了。
+
+同样，在操作完成后，你必须调用下面的函数来给互斥量解锁，也就是前面所说的释放。这样其他等待该锁的线程才有机会获得该锁，否则其他线程将会永远阻塞。
+
+int pthread_mutex_unlock(pthread_mutex_t *mutex);
+
+下面给出一个简单的例子：
+
+/********************************************************************************************
+**	Name: pthread_access_mem_no_mutex.cpp
+**		This program shows the severe segmentation fault 
+**		when the different threads access the same memmery at the same time.
+**	Author: zeickey
+**	Date:2009/1/12		
+**	Copyright (c) 2009 
+*********************************************************************************************/
+#include <pthread.h>
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+	int data;
+	struct Node* next;
+	
+	Node( int a, struct Node* prev) 
+	{ 
+		data = a; 
+		next = NULL;
+		if ( prev )
+		{
+			prev->next = this;
+		}
+	}
+};
+
+void* threadfunc1 (void* param);
+void* threadfunc2 (void* param);
+
+int main(int argc, char *argv[])
+{
+	Node* head = new Node( 100, NULL );
+	new Node( 200, head );
+	new Node( 300, head->next );
+	
+	pthread_t id1, id2;
+	
+	pthread_create( &id1, NULL, threadfunc1, (void*)head);
+	pthread_create( &id2, NULL, threadfunc2, (void*)head);
+	
+	pthread_join( id1, NULL);
+	pthread_join( id2, NULL);
+	return 0;
+}
+
+void* threadfunc1 (void* param)
+{
+	Node* p = (Node*)param;
+	while ( p )
+	{
+		if ( 200 == p->data )	
+		{
+			sleep(3);
+			cout << "3 seconds later, in thread1, it happened : " << endl;
+			cout << "p->data = " << p->data << endl;
+			p->data = p->data + 22;
+			cout << "p->data = " << p->data << endl;
+			break;	
+		}
+		p = p->next;
+	}
+}
+
+void* threadfunc2 (void* param)
+{
+	Node* p = (Node*)param;
+	Node* next = NULL;
+	while ( p )
+	{
+		next = p->next;
+		cout << "The deleted node data is : " << p->data << endl;
+		delete p;
+		p = NULL;
+		p = next;
+	}
+}
+
+程序运行出现不期望的错误：
+[root@zieckey src]# g++ pthread_access_mem_no_mutex.cpp -lpthread
+[root@zieckey src]# ./a.out 
+The deleted node data is : 100
+The deleted node data is : 200
+The deleted node data is : 300
+3 seconds later, in thread1, it happened : 
+p->data = 167047168
+p->data = 167047190
+[root@zieckey src]# 
+甚至出现段错误：
+[root@zieckey src]# g++ pthread_access_mem_no_mutex.cpp -lpthread
+[root@zieckey src]# ./a.out 
+The deleted node data is : 100
+The deleted node data is : 200
+The deleted node data is : 300
+3 seconds later, in thread1, it happened : 
+Segmentation fault
+[root@zieckey src]# 
+
+上面的程序有两个线程，都共享主进程中head数据。
+线程一的本意是找到值为200的节点，然后对其进行一定的操作。
+找到后，被人为的等待了3秒钟，就在这3秒钟里，
+另一个线程把所有的节点都delete掉了。问题就来了。
+
+我们可以通过互斥量来实现线程之间对同一块内存的操作。
+/********************************************************************************************
+**	Name: pthread_access_mem_with_mutex.cpp
+**		This program shows how to use mutex to protect memmery
+**		when the different threads access the same memmery at the same time.
+**	Author: zeickey
+**	Date:2009/1/12		
+**	Copyright (c) 2009 
+*********************************************************************************************/
+#include <pthread.h>
+#include <iostream>
+#include "locker.h"
+
+using namespace std;
+
+CLock locker;
+
+struct Node {
+	int data;
+	struct Node* next;
+	
+	Node( int a, struct Node* prev) 
+	{ 
+		data = a; 
+		next = NULL;
+		if ( prev )
+		{
+			prev->next = this;
+		}
+	}
+};
+
+void* threadfunc1 (void* param);
+void* threadfunc2 (void* param);
+
+int main(int argc, char *argv[])
+{
+	Node* head = new Node( 100, NULL );
+	new Node( 200, head );
+	new Node( 300, head->next );
+	
+	pthread_t id1, id2;
+	
+	pthread_create( &id1, NULL, threadfunc1, (void*)head);
+	pthread_create( &id2, NULL, threadfunc2, (void*)head);
+	
+	pthread_join( id1, NULL);
+	pthread_join( id2, NULL);
+	return 0;
+}
+
+
+void* threadfunc1 (void* param)
+{
+	::locker.lock();
+	Node* p = (Node*)param;
+	while ( p )
+	{
+		if ( 200 == p->data )	
+		{
+			sleep(3);
+			cout << "3 seconds later, in thread1, it happened : " << endl;
+			cout << "p->data = " << p->data << endl;
+			p->data = p->data + 22;
+			cout << "p->data = " << p->data << endl;
+			break;	
+		}
+		p = p->next;
+	}
+	::locker.unlock();
+}
+
+void* threadfunc2 (void* param)
+{
+	Node* p = (Node*)param;
+	Node* next = NULL;
+	while ( p )
+	{
+		if ( !::locker.isLocked() )
+		{
+			next = p->next;
+			cout << "The deleted node data is : " << p->data << endl;
+			delete p;
+			p = NULL;
+			p = next;
+		}	
+		else 
+		{
+			cout << "Oh, no, the memmery is locked, it can not be accessed. We will try later" << endl;	
+			sleep(1);
+		}
+	}
+}
+
+运行结果：
+[root@zieckey src]# g++ pthread_access_mem_with_mutex.cpp locker.cpp -lpthread
+[root@zieckey src]# ./a.out 
+Oh, no, the memmery is locked, it can not be accessed. We will try later
+Oh, no, the memmery is locked, it can not be accessed. We will try later
+Oh, no, the memmery is locked, it can not be accessed. We will try later
+3 seconds later, in thread1, it happened : 
+p->data = 200
+p->data = 222
+The deleted node data is : 100
+The deleted node data is : 222
+The deleted node data is : 300
+[root@zieckey src]# 
+
+下面是CLock类，封装了对mutex的操作。
+/* ----------------------------------------------
+//
+//	locker.h
+//		implement a CLock class, used for multi-thread
+//	operation
+//
+//	author: luckzj
+//	time  : 31/Dec. 2008
+//	platform: Fedora Core 7.0 
+//	compiler: g++ 4.1.2
+// 
+// ---------------------------------------------*/
+
+#ifndef LUCKZJ_LOCKER_H
+#define LUCKZJ_LOCKER_H
+
+#include "pthread.h"
+
+
+class CLock
+{
+	// mutex
+private:
+	pthread_mutex_t mutex;
+
+	// ctor & dtor
+public:
+	CLock();
+	~CLock();
+	// public interface
+public:
+	int lock ();
+	int unlock ();
+	bool isLocked ();
+	int tryLock ();
+	
+};
+
+#endif
+
+
+
+/* ----------------------------------------------
+//
+//	locker.cpp
+//		implement a CLock class, used for multi-thread
+//	operation
+//
+//	author: luckzj
+//	time  : 31/Dec. 2008
+//	platform: Fedora Core 7.0
+//	compiler: g++ 4.1.2
+//
+// ---------------------------------------------*/
+
+#include "locker.h"
+
+
+CLock::CLock()
+{
+	pthread_mutex_init( &mutex, NULL );
+}
+
+
+int CLock::lock ()
+{
+ 	return pthread_mutex_lock (&mutex);
+}
+
+int CLock::unlock ()
+{
+	return pthread_mutex_unlock (&mutex);
+}
+
+bool CLock::isLocked ()
+{
+	if ( 0 == pthread_mutex_trylock(&mutex) )
+	{
+		pthread_mutex_unlock (&mutex);
+		return false;
+	}
+	return true;
+}
+
+int CLock::tryLock()
+{
+	return pthread_mutex_trylock( &mutex );
+}
+
+CLock::~CLock()
+{
+	pthread_mutex_destroy( &mutex );
+}
+
+
+
+
+ 
+
+如果一个线程已经给一个互斥量上锁了，后来在操作的过程中又再次调用了该上锁的操作，那么该线程将会无限阻塞在这个地方，从而导致死锁。怎么变了？这就需要我们之前所提到的互斥量的属性。
+
+互斥量分为下面三种：
+
+l         快速型。这种类型也是默认的类型。该线程的行为正如上面所说的。
+
+l         递归型。如果遇到我们上面所提到的死锁情况，同一线程循环给互斥量上锁，那么系统将会知道该上锁行为来自同一线程，那么就会同意线程给该互斥量上锁。
+
+l         错误检测型。如果该互斥量已经被上锁，那么后续的上锁将会失败而不会阻塞，pthread_mutex_lock()操作将会返回EDEADLK。
+
+互斥量的属性类型为pthread_mutexattr_t。声明后调用pthread_mutexattr_init()来创建该互斥量。然后调用int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);来设置属性。int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);格式如下：
+
+int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);
+
+第一个参数，attr，就是前面声明的属性变量，第二个参数,kind，就是我们要设置的属性类型。他有下面几个选项：
+
+l         PTHREAD_MUTEX_FAST_NP
+
+l         PTHREAD_MUTEX_RECURSIVE_NP
+
+l         PTHREAD_MUTEX_ERRORCHECK_NP
+
+下面给出一个使用属性的简单过程：
+
+pthread_mutex_t mutex;
+
+pthread_mutexattr_t attr;
+
+pthread_mutexattr_init(&attr);
+
+pthread_mutexattr_settype(&attr,PTHREAD_MUTEX_RECURSIVE_NP);
+
+pthread_mutex_init(&mutex,&attr);
+
+pthread_mutex_destroy(&attr);
+
+ 
+
+前面我们提到在调用pthread_mutex_lock()的时候，如果此时mutex已经被其他线程上锁，那么该操作将会一直阻塞在这个地方。如果我们此时不想一直阻塞在这个地方，那么可以调用下面函数：
+
+pthread_mutex_trylock()
+
+如果此时互斥量没有被上锁，那么pthread_mutex_trylock()将会返回0，并会对该互斥量上锁。如果互斥量已经被上锁，那么会立刻返回EBUSY。
+
+ 
+
+上面谈到的是使用互斥量。如果碰到下面这种情况，该怎么办了？
+
+还是上面程序中提到的工作链表。此时必然有一个生产者线程，用于往链表里添加节点。如果这一段时间没有工作，那么工作线程将会不停的调用lock,unlock操作。而这样的操作毫无疑义。
+
+
+
+
+
+
+
+
+2、信号灯
+在这里系统给我们提供了另外一种同步机制，信号灯,Semaphore。
+
+信号灯其实就是一个计数器，也是一个整数。每一次调用wait操作将会使semaphore值减一，而如果semaphore值已经为0，则wait操作将会阻塞。每一次调用post操作将会使semaphore值加一。将这些操作用到上面的问题中。工作线程每一次调用wait操作，如果此时链表中没有节点，则工作线程将会阻塞，直到链表中有节点。生产者线程在每次往链表中添加节点后调用post操作，信号灯值会加一。这样阻塞的工作线程就会停止阻塞，继续往下执行。
+
+信号灯的类型为sem_t。在声明后必须调用sem_init()。需要传递两个参数，第一个参数就是你之前声明的sem_t变量，第二个必须为0。当你不再需要信号灯时，你必须调用sem_destroy()来释放资源。
+
+等待信号灯的操作为sem_wait()。投递一个信号的操作为sem_wait()。和互斥量一样，等待信号灯也有一个非阻塞的操作，sem_trywait()。该操作在没有信号灯的时候返回EAGAIN。
+
+下面是一个结合了互斥量和信号灯的例子：
+
+

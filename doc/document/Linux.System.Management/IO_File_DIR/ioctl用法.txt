@@ -1,0 +1,6 @@
+原型：int ioctl(int handle,int func[,void *argdx,intargcx])
+位于<io.h> 功能用于控制I/O设备。
+说明：func 为0或者1时，返回值表示设备信息（IOCTL调用的DX）
+func数值从2到5时，返回值为实际传递的字节数
+func数值为6或7时，返回值为设备状态
+在任何情况下如果出现错误，则返回数值-1，同时设置errno.

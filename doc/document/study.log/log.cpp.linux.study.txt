@@ -1,0 +1,1762 @@
+开始的几个命令
+
+#/bin/bash
+iptables -A INPUT -i usb0 -j ACCEPT
+iptables -A OUTPUT -o usb0 -j ACCEPT 
+ifconfig usb0 192.168.1.6
+telnet 192.168.1.2
+
+mount -t nfs -o nolock 192.168.1.6:/mnt/nfs /diska/mnt
+
+
+export QTDIR=/usr/lib/ezx
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$QTDIR/lib
+export EZX_RES_FONT_PATH=$QTDIR/lib/fonts
+    
+也许export LANG=zh_CN
+
+cvs -d :pserver:zieckey@localhost/var/home/cvs/repository login
+
+
+2008.4.13
+
+操作系统使用不同的值作为文件结束符。windows使用 ctrl－z，linux系统使用 ctrl－d，来输入文件结束符。
+
+
+CVS
+下载：
+http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.22/
+
+FC7默认是没有安装上xinetd服务，所以先安装xinetd服务，这里简单通过yum安装：
+#yum install xinetd
+
+[root@localhost xinetd.d]# cd /etc/xinetd.d
+[root@localhost xinetd.d]# vi cvspserver 
+[root@localhost xinetd.d]# chmod 644 cvspserver
+[root@localhost xinetd.d]# /etc/rc.d/init.d/xinetd restart
+[root@localhost xinetd.d]# netstat -lnp|grep 2401
+
+
+
+
+
+
+
+
+
+
+# default: off
+
+# description: The CVS service can record the history of your source \
+
+# files. CVS stores all the versions of a file in a single \
+
+# file in a clever way that only stores the differences \
+
+# between versions.
+
+service cvspserver
+
+{
+
+disable = no
+
+port = 2401
+
+socket_type = stream
+
+protocol = tcp
+
+wait = no
+
+user = root
+
+passenv = PATH
+
+# 注，/opt/cvs/bin/cvs是cvs 命令文件的位置 。
+# 注， 删除了系统自带的cvs安装包，
+# 注，则server=你的cvs安装目录/bin/cvs 
+server = /opt/cvs/bin/cvs
+
+# 注，对应初始化命令: cvs -d /cvsroot init命令
+env = HOME = /mnt/study/Coding/linux_cvs
+
+server_args = -f --allow-root=/mnt/study/Coding/linux_cvs pserver
+
+# bind = 127.0.0.1
+
+}
+
+
+
+[root@localhost ~]# groupadd   cvs
+[root@localhost ~]# useradd   -g  cvs   cvsroot -d /mnt/study/Coding/linux_cvs
+Creating mailbox file: 文件已存在
+[root@localhost ~]# passwd   cvsroot 
+Changing password for user cvsroot.
+新的 UNIX 口令：
+无效的口令： 过于简单化/系统化
+重新输入新的 UNIX 口令：
+passwd: all authentication tokens updated successfully.
+[root@localhost ~]# cvs -d /mnt/study/Coding/linux_cvs/ init
+
+
+
+
+service   cvspserver  
+{  
+	disable   =   no  
+	flags   =   REUSE  
+	socket_type   =   stream  
+	wait   =   no  
+	user   =   root  
+	server   =   /opt/cvs/bin/cvs  
+	server_args   =   -f   --allow-root=/mnt/study/Coding/linux_cvs   pserver  
+	log_on_failure   +=   USERID  
+}   
+
+'root' is not allowed to commit files
+    当提交一个永久性的更改，cvs 会为提交修改的人建立一个日志条目。如果你的提交被当作 "root" (不是使用 "su" 或者其他具有 root 授权的程序) 记录，cvs 将无法判断是谁做了真正的修改。正因为此，CVS 默认不允许登录为 "root" 来提交。(你可以在 configure 里面加上 --enable-rootcommit 选项并重新编译来禁止此选项。在有些系统上面需要在编译 cvs 前修改对应的 config.h 文件)。 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+lumaqq 2006 M2
+    最近想在ubuntu上安装一个LumaQQ，根据网上的说明，很简单就将其配置好了，可是一运行，却出了一个错误，具体内容如下：
+Exception in thread "main" java.lang.NoClassDefFoundError: org.eclipse.emf.ecore.plugin.EcorePlugin
+   at java.lang.Class.initializeClass(libgcj.so.81)
+   at org.eclipse.emf.ecore.resource.impl.URIConverterImpl.<clinit>(URIConverterImpl.java:207)
+   at java.lang.Class.initializeClass(libgcj.so.81)
+   at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getURIConverter(ResourceSetImpl.java:413)
+   at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getURIConverter(ResourceImpl.java:838)
+   at org.eclipse.emf.ecore.resource.impl.ResourceImpl.load(ResourceImpl.java:865)
+   at edu.tsinghua.lumaqq.eutil.GlobalUtil.load(GlobalUtil.java:105)
+   at edu.tsinghua.lumaqq.LumaQQ.readGlobalSettingFile(LumaQQ.java:226)
+   at edu.tsinghua.lumaqq.LumaQQ.main(LumaQQ.java:118)
+Caused by: java.lang.ClassNotFoundException: org.eclipse.core.runtime.jobs.ISchedulingRule not found in gnu.gcj.runtime.SystemClassLoader{urls=[file:./lib/xerces.jar,file:./lib/swt.jar,file:./lib/poifs.jar,file:./lib/org.eclipse.ui.workbench_3.2.0.I20051214-1200.jar,file:./lib/org.eclipse.osgi_3.2.0.v20051212a.jar,file:./lib/org.eclipse.jface_3.2.0.I20051214-0010.jar,file:./lib/org.eclipse.equinox.common_1.0.0.v20051205.jar,file:./lib/org.eclipse.emf.ecore.xmi_2.2.0.jar,file:./lib/org.eclipse.emf.ecore_2.2.0.jar,file:./lib/org.eclipse.emf.common_2.2.0.jar,file:./lib/org.eclipse.core.runtime_3.2.0.v20051208.jar,file:./lib/org.eclipse.core.resources_3.2.0.v20051208.jar,file:./lib/org.eclipse.core.commands_3.2.0.I20051212-2000.jar,file:./lib/lumaqq_xsd.jar,file:./lib/lumaqq_template.jar,file:./lib/lumaqq.jar,file:./lib/log4j-1.2.8.jar,file:./lib/jql_protocol.jar,file:./lib/jql_net.jar,file:./lib/je.jar,file:./lib/jdom.jar,file:./lib/commons-logging.jar,file:./lib/commons-codec.jar,file:./], parent=gnu.gcj.runtime.ExtensionClassLoader{urls=[], parent=null}}
+   at java.net.URLClassLoader.findClass(libgcj.so.81)
+   at gnu.gcj.runtime.SystemClassLoader.findClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.VMClassLoader.defineClass(libgcj.so.81)
+   at java.lang.ClassLoader.defineClass(libgcj.so.81)
+   at java.security.SecureClassLoader.defineClass(libgcj.so.81)
+   at java.net.URLClassLoader.findClass(libgcj.so.81)
+   at gnu.gcj.runtime.SystemClassLoader.findClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.VMClassLoader.defineClass(libgcj.so.81)
+   at java.lang.ClassLoader.defineClass(libgcj.so.81)
+   at java.security.SecureClassLoader.defineClass(libgcj.so.81)
+   at java.net.URLClassLoader.findClass(libgcj.so.81)
+   at gnu.gcj.runtime.SystemClassLoader.findClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.VMClassLoader.defineClass(libgcj.so.81)
+   at java.lang.ClassLoader.defineClass(libgcj.so.81)
+   at java.security.SecureClassLoader.defineClass(libgcj.so.81)
+   at java.net.URLClassLoader.findClass(libgcj.so.81)
+   at gnu.gcj.runtime.SystemClassLoader.findClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.ClassLoader.loadClass(libgcj.so.81)
+   at java.lang.Class.initializeClass(libgcj.so.81)
+   ...8 more
+    我倒！不是应该很容易的嘛！
+    经过N天的研究，发现了这个信息：
+Caused by: java.lang.ClassNotFoundException: org.eclipse.core.runtime.jobs.ISchedulingRule not found in gnu.gcj.runtime.SystemClassLoader
+    意思是说找不到org.eclipse.core.runtime.jobs.ISchedulingRule这个接口。赶紧到LumaQQ的lib目录里去翻一下，发现有个org.eclipse.core.runtime_3.2.0.v20051208.jar文件，用归档管理器看了下， org.eclipse.core.runtime包里没有jobs这个包，其他几个eclipse的包里也没有。难怪会找不到接口呢。不过还好，俺的机器上装有eclipse3.2，哈哈，到/usr/lib/eclipse/plugins下，找到了一个 org.eclipse.core.jobs_3.2.0.v20060603.jar文件，貌似有用，归档管理器打开， org.eclipse.core.runtime.jobs.ISchedulingRule赫然在这儿藏着！赶快把他cp到LumaQQ的lib里，启动，OK！
+
+    
+    
+    
+    
+Linux驱动
+在LINUX环境开发驱动程序，首先要探测到新硬件，接下来就是开发驱动程序。
+
+常用命令整理如下：
+
+用硬件检测程序kuduz探测新硬件：service kudzu start ( or restart)
+
+查看CPU信息：cat /proc/cpuinfo
+
+查看板卡信息：cat /proc/pci
+
+查看PCI信息：lspci (相比cat /proc/pci更直观）
+
+查看内存信息：cat /proc/meminfo
+
+查看USB设备：cat /proc/bus/usb/devices
+
+查看键盘和鼠标:cat /proc/bus/input/devices
+
+查看系统硬盘信息和使用情况：fdisk & disk - l & df
+
+查看各设备的中断请求(IRQ):cat /proc/interrupts
+
+查看系统体系结构：uname -a
+
+
+dmidecode查看硬件信息，包括bios、cpu、内存等信息
+
+dmesg | more 查看硬件信息
+
+
+对于“/proc”中文件可使用文件查看命令浏览其内容，文件中包含系统特定信息：
+Cpuinfo          主机CPU信息
+Dma             主机DMA通道信息
+Filesystems       文件系统信息
+Interrupts         主机中断信息
+Ioprots           主机I/O端口号信息
+Meninfo          主机内存信息
+Version           Linux内存版本信息
+
+Trackback: http://tb.donews.net/TrackBack.aspx?PostId=1234130
+
+
+查看系统驱动信息
+[root@localhost ~]# lsmod
+Module                  Size  Used by
+zaurus                  9409  0 
+cdc_ether              10049  1 zaurus
+usbnet                 21961  2 zaurus,cdc_ether
+mii                     9409  1 usbnet
+cdc_acm                18273  0 
+autofs4                24645  2 
+hidp                   26433  2 
+l2cap                  30145  5 hidp
+bluetooth              57125  2 hidp,l2cap
+cpufreq_ondemand       11981  1 
+acpi_cpufreq           14281  1 
+nls_cp936             131265  6 
+vfat                   16193  3 
+fat                    53213  1 vfat
+dm_mirror              24405  0 
+dm_multipath           21705  0 
+dm_mod                 57485  2 dm_mirror,dm_multipath
+video                  21065  0 
+sbs                    19173  0 
+i2c_ec                  9281  1 sbs
+button                 12113  0 
+dock                   13669  0 
+battery                14149  0 
+ac                      9413  0 
+ipv6                  276673  16 
+parport_pc             29797  0 
+lp                     15977  0 
+parport                38025  2 parport_pc,lp
+loop                   19785  0 
+arc4                    6209  2 
+ecb                     7489  2 
+blkcipher              10181  1 ecb
+rc80211_simple          8257  1 
+sky2                   45129  0 
+iwl3945               141477  0 
+tifm_7xx1              12993  0 
+snd_hda_intel          24281  1 
+mac80211              136005  2 rc80211_simple,iwl3945
+tifm_core              12993  1 tifm_7xx1
+snd_hda_codec         202689  1 snd_hda_intel
+cfg80211               12105  1 mac80211
+snd_seq_dummy           7877  0 
+snd_seq_oss            33345  0 
+snd_seq_midi_event     11073  1 snd_seq_oss
+snd_seq                50353  5 snd_seq_dummy,snd_seq_oss,snd_seq_midi_event
+serio_raw              10821  0 
+snd_seq_device         11852  3 snd_seq_dummy,snd_seq_oss,snd_seq
+i2c_i801               12241  0 
+sr_mod                 20197  0 
+snd_pcm_oss            43489  0 
+snd_mixer_oss          19393  2 snd_pcm_oss
+cdrom                  37217  1 sr_mod
+i2c_core               24641  2 i2c_ec,i2c_i801
+iTCO_wdt               14693  0 
+iTCO_vendor_support     7877  1 iTCO_wdt
+snd_pcm                74565  3 snd_hda_intel,snd_hda_codec,snd_pcm_oss
+pcspkr                  7105  0 
+snd_timer              24773  2 snd_seq,snd_pcm
+snd                    53189  9 snd_hda_intel,snd_hda_codec,snd_seq_oss,snd_seq,snd_seq_device,snd_pcm_oss,snd_mixer_oss,snd_pcm,snd_timer
+soundcore              11553  2 snd
+snd_page_alloc         13769  2 snd_hda_intel,snd_pcm
+joydev                 13441  0 
+sg                     37213  0 
+usb_storage            65665  0 
+ata_piix               18757  5 
+ata_generic            12101  0 
+libata                115417  2 ata_piix,ata_generic
+sd_mod                 23873  6 
+scsi_mod              137549  5 sr_mod,sg,usb_storage,libata,sd_mod
+ext3                  125385  1 
+jbd                    59881  1 ext3
+mbcache                12357  1 ext3
+ehci_hcd               35405  0 
+ohci_hcd               23749  0 
+uhci_hcd               26833  0 
+
+
+
+
+
+第一个Linux驱动程序：
+//hello.c
+#include <linux/init.h>
+#include <linux/module.h>
+MODULE_LICENSE("Dual BSD/GPL");
+
+static int hello_init(void)
+{
+    printk(KERN_ALERT "Hello world,  zieckey\n");
+    return 0;
+}
+
+static void hello_exit(void)
+{
+    printk(KERN_ALERT "Goodbye,  zieckey！\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+
+#Makefile
+ifneq ($(KERNELRELEASE),) 
+  obj-m := -DEXPORT_SYMTAB 
+  obj-m := hello.o 
+else 
+KERNELDIR ?= /usr/src/kernels/2.6.21-1.3194.fc7-i686
+PWD := $(shell pwd) 
+default: 
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules 
+endif 
+
+[root@localhost helloworld]# ls
+hello.c  makefile
+[root@localhost helloworld]# make
+make -C /usr/src/kernels/2.6.21-1.3194.fc7-i686 M=/home/work/device_dev/helloworld  modules 
+make[1]: Entering directory `/usr/src/kernels/2.6.21-1.3194.fc7-i686'
+scripts/Makefile.build:17: /home/work/device_dev/helloworld/Makefile: 没有那个文件或目录
+make[2]: *** 没有规则可以创建目标“/home/work/device_dev/helloworld/Makefile”。 停止。
+make[1]: *** [_module_/home/work/device_dev/helloworld] 错误 2
+make[1]: Leaving directory `/usr/src/kernels/2.6.21-1.3194.fc7-i686'
+make: *** [default] 错误 2
+[root@localhost helloworld]# ls
+hello.c  makefile
+
+似乎是makefile的文件名有问题，更改下：
+[root@localhost helloworld]# mv makefile Makefile 
+[root@localhost helloworld]# make
+make -C /usr/src/kernels/2.6.21-1.3194.fc7-i686 M=/home/work/device_dev/helloworld  modules 
+make[1]: Entering directory `/usr/src/kernels/2.6.21-1.3194.fc7-i686'
+  CC [M]  /home/work/device_dev/helloworld/hello.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/work/device_dev/helloworld/hello.mod.o
+  LD [M]  /home/work/device_dev/helloworld/hello.ko
+make[1]: Leaving directory `/usr/src/kernels/2.6.21-1.3194.fc7-i686'
+[root@localhost helloworld]# ls
+hello.c  hello.ko  hello.mod.c  hello.mod.o  hello.o  Makefile  Module.symvers
+[root@localhost helloworld]# insmod ./hello.ko 
+Hello world,  zieckey
+[root@localhost helloworld]# lsmod
+Module                  Size  Used by
+hello                   5504  0 
+zaurus                  9409  0 
+cdc_ether              10049  1 zaurus
+usbnet                 21961  2 zaurus,cdc_ether
+mii                     9409  1 usbnet
+cdc_acm                18273  0 
+autofs4                24645  2 
+hidp                   26433  2 
+l2cap                  30145  5 hidp
+bluetooth              57125  2 hidp,l2cap
+cpufreq_ondemand       11981  1 
+acpi_cpufreq           14281  1 
+nls_cp936             131265  6 
+vfat                   16193  3 
+fat                    53213  1 vfat
+dm_mirror              24405  0 
+dm_multipath           21705  0 
+dm_mod                 57485  2 dm_mirror,dm_multipath
+video                  21065  0 
+sbs                    19173  0 
+i2c_ec                  9281  1 sbs
+button                 12113  0 
+dock                   13669  0 
+battery                14149  0 
+ac                      9413  0 
+ipv6                  276673  16 
+parport_pc             29797  0 
+lp                     15977  0 
+parport                38025  2 parport_pc,lp
+loop                   19785  0 
+arc4                    6209  2 
+ecb                     7489  2 
+blkcipher              10181  1 ecb
+rc80211_simple          8257  1 
+sky2                   45129  0 
+iwl3945               141477  0 
+tifm_7xx1              12993  0 
+snd_hda_intel          24281  1 
+mac80211              136005  2 rc80211_simple,iwl3945
+tifm_core              12993  1 tifm_7xx1
+snd_hda_codec         202689  1 snd_hda_intel
+cfg80211               12105  1 mac80211
+snd_seq_dummy           7877  0 
+snd_seq_oss            33345  0 
+snd_seq_midi_event     11073  1 snd_seq_oss
+snd_seq                50353  5 snd_seq_dummy,snd_seq_oss,snd_seq_midi_event
+serio_raw              10821  0 
+snd_seq_device         11852  3 snd_seq_dummy,snd_seq_oss,snd_seq
+i2c_i801               12241  0 
+sr_mod                 20197  0 
+snd_pcm_oss            43489  0 
+snd_mixer_oss          19393  2 snd_pcm_oss
+cdrom                  37217  1 sr_mod
+i2c_core               24641  2 i2c_ec,i2c_i801
+iTCO_wdt               14693  0 
+iTCO_vendor_support     7877  1 iTCO_wdt
+snd_pcm                74565  3 snd_hda_intel,snd_hda_codec,snd_pcm_oss
+pcspkr                  7105  0 
+snd_timer              24773  2 snd_seq,snd_pcm
+snd                    53189  9 snd_hda_intel,snd_hda_codec,snd_seq_oss,snd_seq,snd_seq_device,snd_pcm_oss,snd_mixer_oss,snd_pcm,snd_timer
+soundcore              11553  2 snd
+snd_page_alloc         13769  2 snd_hda_intel,snd_pcm
+joydev                 13441  0 
+sg                     37213  0 
+usb_storage            65665  0 
+ata_piix               18757  5 
+ata_generic            12101  0 
+libata                115417  2 ata_piix,ata_generic
+sd_mod                 23873  6 
+scsi_mod              137549  5 sr_mod,sg,usb_storage,libata,sd_mod
+ext3                  125385  1 
+jbd                    59881  1 ext3
+mbcache                12357  1 ext3
+ehci_hcd               35405  0 
+ohci_hcd               23749  0 
+uhci_hcd               26833  0 
+[root@localhost helloworld]# rmmod hello
+Goodbye,  zieckey!
+
+也可以通过一下方式查看内核：
+[root@localhost helloworld]# cat /proc/modules
+hello 5504 0 - Live 0xf8a94000
+zaurus 9409 0 - Live 0xf8c89000
+cdc_ether 10049 1 zaurus, Live 0xf8b5d000
+usbnet 21961 2 zaurus,cdc_ether, Live 0xf8c8d000
+mii 9409 1 usbnet, Live 0xf8b61000
+cdc_acm 18273 0 - Live 0xf8b39000
+autofs4 24645 2 - Live 0xf8bda000
+hidp 26433 2 - Live 0xf8bd2000
+l2cap 30145 5 hidp, Live 0xf8b67000
+bluetooth 57125 2 hidp,l2cap, Live 0xf8bc3000
+cpufreq_ondemand 11981 1 - Live 0xf8b59000
+acpi_cpufreq 14281 1 - Live 0xf8b54000
+nls_cp936 131265 6 - Live 0xf8be5000
+vfat 16193 3 - Live 0xf8b3f000
+fat 53213 1 vfat, Live 0xf8bb5000
+dm_mirror 24405 0 - Live 0xf8b23000
+dm_multipath 21705 0 - Live 0xf8b32000
+dm_mod 57485 2 dm_mirror,dm_multipath, Live 0xf8b44000
+video 21065 0 - Live 0xf8b2b000
+sbs 19173 0 - Live 0xf8ad2000
+i2c_ec 9281 1 sbs, Live 0xf8b1f000
+button 12113 0 - Live 0xf8ab1000
+dock 13669 0 - Live 0xf8ad8000
+....
+
+
+如果在 XWindow 下面，会看不到内核输出，可以使用 dmesg 命令查看。
+
+
+http://blog.csdn.net/xdxiaodao/archive/2008/05/22/2470963.aspx
+
+学习心得：
+（1）驱动模块运行在内核空间，运行时不能依赖于任何函数库和模块连接，所以在写驱动时所调用的函数只能是作为内核一部分的函数。
+（2）驱动模块和应用程序的一个重要不同是：应用程序退出时可不管资源释放或者其他的清除工作，但模块的退出函数必须仔细撤销初始化函数所作的一切，否则，在系统重新引导之前某些东西就会残留在系统中。
+（3）处理器的多种工作模式（级别）其实就是为了操作系统的用户空间和内核空间设计的。在Unix类的操作系统中只用到了两个级别：最高和最低级别。
+（4）要十分注意驱动程序的并发处理。
+（5）内核API中具有双下划线（_ _）的函数，通常是接口的底层组件，应慎用。
+（6）内核代码不能实现浮点书运算。
+
+（7）Makefile文件分析：
+obj-m := hello.o  代表了我们要构造的模块名为hell.ko，make 会在该目录下自动找到hell.c文件进行编译。如果 hello.o是由其他的源文件生成（比如file1.c和file2.c）的，则在下面加上（注意红色字体的对应关系）：
+hello-objs := file1.o file2.o ......
+
+    $(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+其中 -C $(KERNELDIR) 指定了内核源代码的位置，其中保存有内核的顶层makefile文件。
+    M=$(PWD) 指定了模块源代码的位置
+    modules目标指向obj-m变量中设定的模块。
+
+（8）insmod使用公共内核符号表来解析模块中未定义的符号。公共内核符号表中包含了所有的全局内核项（即函数和变量的地址），这是实现模块化驱动程序所必须的。
+（9）Linux使用模块层叠技术，我们可以将模块划分为多个层，通过简化每个层可缩短开发周期。如果一个模块需要向其他模块到处符号，则使用下面的宏：
+
+EXPORT_SYMBOL(name);
+EXPORT_SYMBOL_GPL(name);
+符号必须在模块文件的全局变量部分导出，因为这两个宏将被扩展为一个特殊变量的声明，而该变量必须是全局的。
+
+（10）所有模块代码中都包含一下两个头文件：
+
+#include <linux/init.h>
+#include <linux/module.h>
+
+（11）所有模块代码都应该指定所使用的许可证：
+
+MODULE_LICENSE("Dual BSD/GPL");
+
+此外还有可选的其他描述性定义：
+
+MODULE_AUTHOR("");
+MODULE_DESCRIPTION("");
+MODULE_VERSION("");
+MODULE_ALIAS("");
+MODULE_DEVICE_TABLE("");
+
+上述MODULE_声明习惯上放在文件最后。
+
+（12）初始化和关闭
+初始化的实际定义通常如下：
+
+static int _ _init initialization_function(void)
+{
+/*初始化代码*/
+}
+
+module_init(initialization_function)
+
+清除函数的实际定义通常如下：
+
+static int _ _exit cleanup_function(void)
+{
+/*清除代码*/
+}
+
+module_exit(cleanup_function)
+
+（13） Linux内核模块的初始化出错处理一般使用“goto”语句。通常情况下很少使用“goto”，但在出错处理是（可能是唯一的情况），它却非常有用。在大二学习C语言时，老师就建议不要使用“goto”，并说很少会用到。在这里也是我碰到的第一个建议使用“goto”的地方。“在追求效率的代码中使用goto语句仍是最好的错误恢复机制。”－－《Linux设备驱动程序（第3版）》以下是初始化出错处理的推荐代码示例：
+
+struct something *item1;
+struct somethingelse *item2;
+int stuff_ok;
+
+
+void my_cleanup(void)
+{
+    if (item1)
+
+        release_thing(item1);
+    if (item2)
+        release_thing2(item2);
+    if (stuff_ok)
+        unregister_stuff();
+    return;
+}
+int __init my_init(void)
+{
+    int err = -ENOMEM;
+    item1 = allocate_thing(arguments);
+    item2 = allocate_thing2(arguments2);
+    if (!item2 || !item2)
+        goto fail;
+    err = register_stuff(item1, item2);
+    if (!err)
+        stuff_ok = 1;
+    else
+        goto fail;
+    return 0; /* success */
+
+ fail:
+        my_cleanup( );
+        return err;
+}
+
+（14）模块参数：内核允许对驱动程序指定参数，而这些参数可在装载驱动程序模块时改变。
+以下是我的实验程序：
+
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/moduleparam.h>
+
+MODULE_LICENSE("Dual BSD/GPL");
+
+static char *whom = "Tekkaman Ninja";
+static int howmany = 1;
+static int TNparam[] = {1,2,3,4};
+static int TNparam_nr = 4;
+module_param(howmany, int, S_IRUGO);
+module_param(whom, charp, S_IRUGO);
+module_param_array(TNparam , int , &TNparam_nr , S_IRUGO);
+
+static int hello_init(void)
+{
+    int i;
+    for (i = 0; i < howmany; i++)
+        printk(KERN_ALERT "(%d) Hello, %s ！\n", i, whom);
+    for (i = 0; i < 8; i++)
+        printk(KERN_ALERT "TNparam[%d] : %d \n", i, TNparam[i]);
+    return 0;
+}
+
+static void hello_exit(void)
+{
+    printk(KERN_ALERT "Goodbye, Tekkaman Ninja ！\n Love Linux !Love ARM ! Love KeKe !\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+
+实验结果是 ：
+
+[Tekkaman2440@SBC2440V4]#cd /lib/modules/
+[Tekkaman2440@SBC2440V4]#ls
+cs89x0.ko hello.ko prism2_usb.ko
+hello-param.ko p80211.ko
+[Tekkaman2440@SBC2440V4]#insmod hello-param.ko howmany=2 whom="KeKe" TNparam=4,3,2,1
+(0) Hello, KeKe ！
+(1) Hello, KeKe ！
+TNparam[0] : 4
+TNparam[1] : 3
+TNparam[2] : 2
+TNparam[3] : 1
+TNparam[4] : 1836543848
+TNparam[5] : 7958113
+TNparam[6] : 1836017783
+TNparam[7] : 0
+[Tekkaman2440@SBC2440V4]#insmod hello-param.ko howmany=2 whom="KeKe"  TNparam=4,3,2,1,5,6,7,8
+TNparam: can only take 4 arguments
+hello_param: `4' invalid for parameter `TNparam'
+insmod: cannot insert 'hello-param.ko': Invalid parameters (-1): Invalid argument
+[Tekkaman2440@SBC2440V4]# 
+
+我这个实验除了对参数的改变进行实验外，我的一个重要的目的是测试“ module_param_array(TNparam , int , &TNparam_nr , S_IRUGO);”中&TNparam_nr对输入参数数目的限制作用。经过我的实验，表明&TNparam_nr并没有对输入参数的数目起到限制作用。真正起到限制作用的是“static int TNparam[] = {1,2,3,4};”本身定义的大小，我将程序进行修改：
+static int TNparam[] = {1,2,3,4}; 
+改为 static int TNparam[] = {1,2,3,4,5,6,7,8};
+其他都不变。
+
+编译后再进行实验，其结果是：
+
+[Tekkaman2440@SBC2440V4]#insmod hello-param.ko howmany=2 whom="KeKe" TNparam=4,3,2,1,5,6,7,8
+(0) Hello, KeKe ！
+(1) Hello, KeKe ！
+TNparam[0] : 4
+TNparam[1] : 3
+TNparam[2] : 2
+TNparam[3] : 1
+TNparam[4] : 5
+TNparam[5] : 6
+TNparam[6] : 7
+TNparam[7] : 8
+[Tekkaman2440@SBC2440V4]#
+
+（15）“#include <linux/sched.h>”  最重要的头文件之一。包含驱动程序使用的大部分内核API的定义，包括睡眠函数以及各种变量声明。
+
+（16）“#include <linux/version.h>” 包含所构造内核版本信息的头文件。
+
+在学习过程中找到了几篇很好的参考文档：
+（1）第一章 模块（Modules） URL：http://greenlinux.blogcn.com/diary,103232026.shtml
+（2）《从 2.4 到 2.6：Linux 内核可装载模块机制的改变对设备驱动的影响》
+URL：http://www.ibm.com/developerworks/cn/linux/l-module26/
+（3）《Linux2.6内核驱动移植参考》
+URL：http://blog.chinaunix.net/u1/40912/showart_377391.html
+
+
+
+
+
+
+
+
+Linux系统telnet连接Moto E68080手机：
+
+iptables -A INPUT -i usb0 -j ACCEPT
+iptables -A OUTPUT -o usb0 -j ACCEPT 
+ifconfig usb0 192.168.1.6
+telnet 192.168.1.2
+
+mount -t nfs 192.168.1.6:/mnt/nfs /diska/mnt
+
+[root@localhost helloworld]# iptables -A INPUT -i usb0 -j ACCEPT
+[root@localhost helloworld]# iptables -A OUTPUT -o usb0 -j ACCEPT 
+[root@localhost helloworld]# ifconfig usb0 192.168.1.6
+[root@localhost helloworld]# telnet 192.168.1.2
+Trying 192.168.1.2...
+Connected to 192.168.1.2.
+Escape character is '^]'.
+
+MontaVista Linux Consumer Electronics Edition 3.0
+Linux/armv5tel 2.4.20_mvlcee30-mainstone
+
+
+(none) login: root
+Linux 192.168.1.11 2.4.20_mvlcee30-mainstone #7 Fri Feb 13 15:39:51 CST 2004 armv5tel unknown
+
+MontaVista Linux Consumer Electronics Edition 3.0
+
+No directory /root!
+Logging in with home = "/".
+# ls
+bin  dev  diska  diskb  etc  ezxlocal  home  lib  mmc  proc  ram  root  sbin  tmp  usr  var
+# 
+
+1. 使得你的E680的usb模式有usblan或usb网的选项。（网上很多方法，不知道的自己找找）
+
+2. 配置你的Linux内核（我的内核是2.6.17，好象2.6.12以上都可用）加入下面的模块：
+
+Device Drivers
+
+USB Support
+
+USB Network Adapters
+
+选上所有的模块，特别是
+
+Sharp Zaurus (stock ROMs) and compatible，
+
+这个模块是E680用的。
+
+3. make modules; make modules_install(remember to backup your /lib/modules before this step)
+
+4. 如果用iptables防火墙应加入：
+
+iptables -A INPUT -i usb0 -j ACCEPT
+
+iptables -A OUTPUT -o usb0 -j ACCEPT
+
+5. ifconfig usb0 192.168.1.6
+
+6. telnet 192.168.1.2 进入E680
+
+http://docs.blackfin.uclinux.org/doku.php?id=blackfin_usb-lan_extender
+
+http://www.troodon.org/a780/a780-linux-howto.htm
+
+http://tux.medhas.org/static/a768i.HTML
+
+http://tud.at/programm/a768i.html
+
+http://blog.csdn.net/aimself/archive/2007/03/01/1518707.aspx
+
+http://wiki.openezx.org/Get_a_shell 
+
+
+登录到E680：
+[root@localhost helloworld]# telnet 192.168.1.2
+
+# df -h
+Filesystem            Size  Used Avail Use% Mounted on
+rootfs                 54M   54M     0 100% /
+/dev/root              54M   54M     0 100% /
+/dev/tffsa             13M   14M     0 100% /usr/language
+/dev/roflash2         412k  412k     0 100% /usr/setup
+/dev/mtdblock2        5.2M  4.4M  852k  84% /ezxlocal
+/dev/mmca1            982M   64k  982M   1% /mmc/mmca1
+/dev/tffsb1            48M   26M   22M  54% /diska
+
+可以看到sd卡的挂载目录是：/mmc/mmca1
+下面就可以在/mmc/mmca1这个目录下面开发程序了。
+
+
+
+
+
+[root@localhost ezx-crosstool-0.5]# mkdir gcc-arm-iwmmxt
+[root@localhost ezx-crosstool-0.5]# chmod 777 gcc-arm-iwmmxt/
+[root@localhost ezx-crosstool-0.5]# chmod 777 build.sh
+
+
+
+
+
+
+
+
+
+busybox:
+
+http://busybox.net/downloads/
+
+
+
+下载一个交叉编译器：xscale-gcc-vfp-3.3
+解压后放到/usr/local/arm目录下
+
+
+
+# mount -t nfs 192.168.1.6:/mnt/nfs /diska/mnt
+mount: RPC: Unable to receive; errno = Connection refused
+
+
+You need to be running the rpc.portmap program, as well as nfsd,
+and mountd on the server. You also need to have the disk you
+want to export in the /etc/exports file (before you start mountd or
+nfsd) on the server.
+
+
+
+
+ln -s libqte-mt.so.2.3.7 libqte-mt.so.2.3
+ln -s libqte-mt.so.2.3.7 libqte-mt.so.2
+ln -s libqte-mt.so.2.3.7 libqte-mt.so
+
+ln -s libqte.so.2.3.7 libqte.so.2.3
+ln -s libqte.so.2.3.7 libqte.so.2
+ln -s libqte.so.2.3.7 libqte.so
+
+
+export PATH=/usr/local/arm/bin:$PATH
+
+
+
+
+E680上通过nfs共享PC机文件
+
+前面一文中http://blog.chinaunix.net/u/16292/showart_1076447.html已经实现了在Linux系统的PC机上telnet到E680手机的Linux系统。
+
+为了后续开发的方便，我们急迫的需要方便的文件传输方式，这里我选择nfs。
+
+[root@localhost helloworld]# cat /etc/exports
+/mnt/nfs *(rw,no_root_squash)
+
+首先在PC机上开启NFS服务。从上面可以看到我的共享目录是 /mnt/nfs
+
+然后telnet连接到手机：
+
+iptables -A INPUT -i usb0 -j ACCEPT
+iptables -A OUTPUT -o usb0 -j ACCEPT
+ifconfig usb0 192.168.1.6
+telnet 192.168.1.2
+Trying 192.168.1.2...
+Connected to 192.168.1.2.
+Escape character is '^]'.
+
+MontaVista Linux Consumer Electronics Edition 3.0
+Linux/armv5tel 2.4.20_mvlcee30-mainstone
+
+
+(none) login: root
+Linux 192.168.1.11 2.4.20_mvlcee30-mainstone #7 Fri Feb 13 15:39:51 CST 2004 armv5tel unknown
+
+MontaVista Linux Consumer Electronics Edition 3.0
+
+No directory /root!
+Logging in with home = "/".
+# ls
+bin  diska  etc       home  mmc   ram   sbin  usr
+dev  diskb  ezxlocal  lib   proc  root  tmp   var
+
+好了。现在已经telnet到手机了，然后在手机上输入mount命令挂载nfs：
+
+# mount -t nfs -o nolock 192.168.1.6:/mnt/nfs /diska/mnt
+# ls /diska/mnt
+welcome
+
+这里注意下mount的命令参数：-t nfs -o nolock 不能少
+
+现在手机里的/diska/mnt目录就是挂在的PC 机 linux系统上的/mnt/nfs，并且具有可读写权限。
+
+下面的开发就方便多了。
+
+
+
+
+2008.7.10
+
+交叉编译环境
+
+参考：
+http://lsb.blogdns.com/ezx-devkit
+http://blog.csdn.net/lesky/archive/2007/02/24/1513590.aspx
+http://blog.csdn.net/liwei_cmg/archive/2006/09/12/1214750.aspx
+
+
+1.首先下载包交叉编译器 xscale-gcc-vfp-3.3.tar.gz。
+解压。这里我放在/usr/local/arm目录下。
+[root@localhost t1]# ls /usr/local/arm
+arm-linux  bin  etc  include  info  lib  libexec  man  sbin  share
+
+
+2.下载dev-ezx-0.2.0工具， 在这里下载：http://lsb.blogdns.com/ezx-devkit
+
+解压缩复制到Linux下。可以看到一个英文说明
+文件BUILD-INSTRUCTIONS，其实里面讲得很清楚，这里用中文重复一下。
+
+3.telnet进入e680g，将手机里的/usr/lib目录所有文件复制到PC下的dev-ezx-0.2.0的lib目录下。
+ 这里通过nfs方式实现，简单方便。复制成功之后的目录结果如下：
+dev-ezx-0.2.0/lib/ezx/lib/libqte-mt-xscale-r.so.2.3.6
+dev-ezx-0.2.0/lib/ezx/lib/libezxappbase-xscale-r.so.1.0.0
+dev-ezx-0.2.0/lib/ezx/lib/libezxjpeg-xscale-r.so.1.0.0
+
+   
+4.进入dev-ezx-0.2.0/moc目录上，执行命令make all编译moc。
+   
+5.进入dev-ezx-0.2.0/helloworld下，执行命令make，此时需要设置好PATH环境
+变量，否则会系统会找不着arm-linux-g++。
+我的交叉编译工具链位置：/usr/local/arm
+设置环境变量命令如下：
+export PATH=/usr/local/arm/bin:$PATH
+
+6.编译成功后，将helloworld复制到手机上。手机的图形化的程序需要设置QT等环境
+变量，在手机上执行如下命令：
+
+    export QTDIR=/usr/lib/ezx
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$QTDIR/lib
+    export EZX_RES_FONT_PATH=$QTDIR/lib/fonts
+    cd /mmc/mmca1
+    ./helloworld
+   
+    即可看到运行效果
+
+
+
+
+
+
+
+
+
+
+
+
+
+五、编译QTE
+     1.在本文资源贴中下载e680-qt.rar，把解开的.h头文件和lib文件复制到
+     $TOOLCHAIN_DIR/arm-linux/gcc-3.3.2-glibc-2.3.2下的对应目录。这头文件
+     其实就是Linux PC机自带的头文件，而lib文件就是E680上的库文件。
+    
+     2.在ftp://ftp.trolltech.com/qt/source/qt-embedded-2.3.10-free.tar.gz
+下载QTE。关于这些路径，不行可以在Google搜索一下，不过国内的网站提供下载的
+不多。其实对于qt编译的相关配置，自带的英文文档还是比较详细的。
+     3.在/home/gcc/toolchain下解压缩并设置环境变量
+     export QTDIR=$TOOLCHAIN_DIR/qt-2.3.10
+    
+    
+     4.在qt-2.3.10\configs目录下修改linux-arm-g++-shared文件，我们会在下面
+的配置中指定使用arm平台。在文件中查找如下内容：
+     SYSCONF_LINK   = arm-linux-gcc
+     SYSCONF_LINK_SHLIB = arm-linux-gcc
+     均改为
+     SYSCONF_LINK   = arm-linux-g++
+     SYSCONF_LINK_SHLIB = arm-linux-g++
+     否则在编译中会出现链接错误，QT程序都是基于C++的，arm-linux-gcc不可能
+编译成功！
+     5.在$QTDIR下运行以下命令，配置编译参数，可以看出平台是arm。
+     ./configure -qconfig all -depths 8,16 -xplatform linux-arm-g++ -thread -sm -qvfb -qt-libpng -system-jpeg -gif -qt-zlib -no-xft -keypad-mode
+     对相关参数不明白的地方，可以通过./configure -help查看，实在不行，分析
+configure本身这个文件，相信你一定受益菲浅。
+     运行完这个命令后，相关Makefile文件都会建立好了。
+        
+     注意：在QTE编译过程中，先会编译moc可执行文件，并会放在$QTDIR/bin下。
+     (moc（Meta Object Compiler）是QT工具的工具，该工具是一个C++预处理程序，
+     它为高层次的事件处理自动生成所需要的附加代码。)此外还需要uic可执行程序
+     用于将Designer设计的界面文件(*.ui)转换成为相应的C++文件(*.cpp和*.h)，
+     然后让gcc进行编译。这个工具不能却不能顺利编译，原因是QTE编译过程中，也把
+     这个文件也用arm-linux-gcc编译了，不能在Linux PC机上运行了。解决方法有两个
+     直接复制Linux的uic文件到$QTDIR/bin下，或者手工去$QTDIR/tools/designer/uic
+     编译下uic，再复制过去。或者去http://www.vanille.de/tools/uic-qt2下载uic-qt2
+     改名并复制到$QTDIR/bin下。
+    
+     6.在$QTDIR下输入make，执行编译。
+    
+     7.编译成功后，随便复制个example下的例子，注意别忘了连编译好的库文件一起
+复制 $QTDIR/lib，设置好环境变量，即可在E680G上运行。
+     如：
+     #!/bin/bash
+     export QTDIR=/usr/lib/ezx
+     export LD_LIBRARY_PATH=$QTDIR/lib:`pwd`
+     export EZX_RES_FONT_PATH=$QTDIR/lib/fonts
+     ./aclock -qws
+    
+     即可以看到效果。
+    
+六.写在最后
+     本文关于QTE编译的方法说得比较简单，要能轻松解决编译产生的问题，必须对Linux
+下编译方法有一定的了解，加之一点点耐心去阅读自带文档，并不难。QT本身的教程也是
+熟悉学习QT的最好捷径。
+     从gcc到cross-tool再到Qte，其实整个过程都是完全开放的，可以任你去深入研究，
+主观的能动性是最重要的，文章的作用只是稍微点一下有这么一回事~
+     在下文，我们会做最后一步工作，编译OPIE。
+
+
+
+export QTDIR=/home/mkezx/qte-2.3.7
+
+
+arm-linux-g++ -D_REENTRANT -DQT_THREAD_SUPPORT -c -I/home/mkezx/qte-2.3.7/include  -pipe -DQWS -fno-exceptions -fno-rtti -O2 -Wall -W -DNO_DEBUG -fPIC -DQT_NO_IMAGEIO_MNG -DQT_NO_QWS_VOODOO3 -DQT_NO_QWS_MACH64 -DQT_NO_QWS_MATROX -DQT_NO_QWS_VNC -DQT_NO_QWS_VGA_16 -DQT_NO_QWS_DEPTH_4 -DQT_NO_QWS_DEPTH_24 -DQT_NO_QWS_DEPTH_32 -DQT_BUILTIN_GIF_READER=1 -DQT_NO_IMAGEIO_MNG -DQT_NO_SM_SUPPORT -DQT_NO_XKB  -I/home/mkezx/qte-2.3.7/src/3rdparty/zlib -I/home/mkezx/qte-2.3.7/src/3rdparty/libpng -I3rdparty/freetype/src -I3rdparty/freetype/include -I3rdparty/freetype/builds/unix -I3rdparty/kernel -I3rdparty/tools -o 3rdparty/tools/qsjiscodec.o 3rdparty/tools/qsjiscodec.cpp
+
+
+
+
+
+
+
+
+
+2008/7/12
+ 一个偶然的想法，把在夏新E600出现Segmentation Fault的QT程序放在 MotoE680上运行，居然也出现了Segmentation Fault。我突然意识到问题可 能不是原先设想的那么复杂，我简单的看下QT的Makefile，又经一系列测试， 发现造成Segmentaion Fault的直接原因居然是编译参数。
+
+ Linux手机DIY.移植软件专题.Qt/Qte的编译环境
+
+草木瓜  于 2006-11-15
+
+
+一、序
+
+  一个偶然的想法，把在夏新E600出现Segmentation Fault的QT程序放在
+MotoE680上运行，居然也出现了Segmentation Fault。我突然意识到问题可
+能不是原先设想的那么复杂，我简单的看下QT的Makefile，又经一系列测试，
+发现造成Segmentaion Fault的直接原因居然是编译参数。
+
+二、重要提示
+
+    为了方便更好的理解本文，提供下面链结。
+    全系列的文章地址，手机应用开发专栏：http://blog.csdn.net/liwei_cmg
+    相关的重要成果的下载地址：http://play.younet.com/view.php?tid=24045
+
+三、QTE程序的运行条件
+
+  大多数Linux手机都是基于QTE。运行QTE须要两个条件，一是lib文件，由
+LD_LIBRARY_PATH指定，另一个就是fontdir了，而fontdir要QTDIR指定。也就是说
+QTDIR/lib/fonts这个目录必须存在。可以看下面环境变量的实例：
+
+  Moto E680
+  
+  #!/bin/bash
+  export QTDIR=/usr/lib/ezx
+  export LD_LIBRARY_PATH=$QTDIR/lib:`pwd`
+  export EZX_RES_FONT_PATH=$QTDIR/lib/fonts
+  exec ./$*
+  
+  飞利浦 968 , 夏新 E600
+  
+  #!/bin/sh
+  export CECHOME=/mnt/cellon
+  export QTDIR=$CECHOME/qt
+  export CECDIR=$CECHOME/cec
+  export LD_LIBRARY_PATH=/mnt/sd/e600/lib:$CECHOME/lib:$CECDIR/lib:$QTDIR/lib:LD_LIBRARY_PATH
+  exec ./$*
+  
+  可见纯粹谈运行条件是很简单，QTE运行方式就不那么容易了。
+
+四、QTE程序的运行方式
+
+  先举一些实际例子来分析：
+  
+  A.在夏新E600运行飞利浦968的Qnes模拟器
+
+    #!/bin/sh
+    export CECHOME=/mnt/cellon
+    export QTDIR=$CECHOME/qt
+    export QWS_KEYBOARD=TTY
+    export CECDIR=$CECHOME/cec
+    export LD_LIBRARY_PATH=/mnt/sd/e600/lib:$CECHOME/lib:$CECDIR/lib:$QTDIR/lib:/mnt/doc/ibm/jvm/bin:$LD_LIBRARY_PATH
+    export QWS_DISPLAY=:1:/dev/fb0
+    /mnt/doc/cec_local/bin/qnesexe -qws 2>/mnt/sd/e600/log/qnesrunerror.txt
+    
+    描述：模拟器与手机原有系统有按键和屏幕冲突。即发生键盘和屏幕事件时
+    两者都接受事件。游戏会花屏。
+    
+    #!/bin/sh
+    export CECHOME=/mnt/cellon
+    export QTDIR=$CECHOME/qt
+    export CECDIR=$CECHOME/cec
+    export LD_LIBRARY_PATH=/mnt/sd/e600/lib:$CECHOME/lib:$CECDIR/lib:$QTDIR/lib:/mnt/doc/ibm/jvm/bin:$LD_LIBRARY_PATH
+    /mnt/doc/cec_local/bin/qnesexe 2>/mnt/sd/e600/log/qnesrunerror.txt
+    
+    描述：模拟器运行一切正常。模拟器优先接受键盘和屏幕事件。
+    
+  B.摩托罗拉E680运行普通的QTE程序
+    
+    使用E680自带库编译：
+    arm-linux-g++ helloqt.cpp -o helloqtezx -fno-exceptions -fno-rtti -DQWS -Wall -g  \
+     -I/home/gcc/src/dev-ezx-0.2.0/include/qt -I/home/gcc/src/dev-ezx-0.2.0/include/ezx  \
+     -L/home/gcc/src/dev-ezx-0.2.0/lib -L/home/gcc/src/dev-ezx-0.2.0/lib/ezx/lib  \
+     -lezxappbase-xscale-r -lqte-mt-xscale-r  \
+     -lezxjpeg-xscale-r -lezxnotification-xscale-r
+     
+         
+    #!/bin/bash
+    export QTDIR=`pwd`
+    export LD_LIBRARY_PATH=$QTDIR:/usr/lib/ezx/lib
+    export EZX_RES_FONT_PATH=$QTDIR/fonts
+    exec ./helloqtezx
+    
+    描述：QTE程序运行完全正常，可以拖动最大化最小化。
+
+    
+    使用自编译的QTE(qt2.3.10)库进行编译(VFP)：
+    arm-linux-g++  -c -I$QTDIR/include -pipe -DQWS -fno-exceptions -fno-rtti -O2 -Wall -W -DNO_DEBUG  -o helloqt.o helloqt.cpp
+    arm-linux-g++ -L$QTDIR/lib -Wl,-rpath,$QTDIR/lib   -o helloqtvfp helloqt.o -lqte -lm
+
+    #!/bin/bash
+    export QTDIR=`pwd`
+    export LD_LIBRARY_PATH=$QTDIR:/usr/lib/ezx/lib
+    export EZX_RES_FONT_PATH=$QTDIR/fonts
+    exec ./helloqtezx -qws
+    
+    描述：稍微操作下菜单，QTE程序就不见了，更不用谈最大化最小化和拖动了。
+
+   
+   [原因分析]
+   
+   我们可以初步理解，基于Qte的手机系统有一个Qte Server，手机系统的每个程
+序都是基于这个Qte Server，手机自带的lib文件则封装了基于Server的应用函数。
+我们看A例子，如果声明了Qws相关的环境变量，系统要求必须通过独立的Qte Server
+来运行Qnes，如果不加-qws参数，则提示：
+
+  QSocket::writeBlock: Socket is not open
+  QSocket::writeBlock: Socket is not open
+  QSocket::writeBlock: Socket is not open
+  QSocket::writeBlock: Socket is not open
+  No Qt/Embedded server appears to be running.
+  If you want to run helloqtvfp as a server,
+  add the "-qws" command-line option.
+  
+  加上-qws后，以Server态运行，这样肯定于原因手机已有的Qte Server相冲突，
+一旦发生按键屏幕事件，两个Server皆接受并处理，所以A例中的花屏也不难理解了。
+  再看B例，使用手机自带的lib文件，自然会让QTE程序运行于原先的Qte Server
+上，自己编译的Qte库文件显然需要重新以Qte Server态启动，一点就没，是很正常
+的。
+  
+  所以写E680软件也好，写E600，968的Qte软件也好，最好能用本身的lib文件，
+否则会与原有系统冲突，不能正常运行。
+  
+
+五、搭建编译环境
+
+  前面文章已经说过搭建交叉编译环境的要点，下面列出我实际使用的参数文件。
+  我使用的是cross-tools 0.42，做交叉编译环境没有比这个工具更省事的了。
+  
+  主脚本 liwei.sh
+  
+  #!/bin/sh
+  set -ex
+  TARBALLS_DIR=$TOOLCHAIN_DIR/crosstool-0.42/downloads
+  RESULT_TOP=$TOOLCHAIN_DIR
+  export TARBALLS_DIR RESULT_TOP
+  GCC_LANGUAGES="c,c++"
+  export GCC_LANGUAGES
+  
+  mkdir -p $RESULT_TOP
+  eval `cat liwei.dat liweicmp.dat` sh all.sh --notest  
+  echo Done.
+  
+  编译参数配置 liwei.dat
+  
+  KERNELCONFIG=`pwd`/arm.config
+  TARGET=arm-linux
+  TARGET_CFLAGS="-O"
+  GCC_EXTRA_CONFIG=" --with-float=soft --with-cpu=xscale  --enable-cxx-flags=-mcpu=xscale"
+  GLIBC_EXTRA_CONFIG="--without-fp"
+  
+  编译源文件配置 liweicmp.dat
+  
+  BINUTILS_DIR=binutils-2.15
+  GCC_DIR=gcc-3.4.0
+  GLIBC_DIR=glibc-2.2.5
+  LINUX_DIR=linux-2.4.19
+  GLIBCTHREADS_FILENAME=glibc-linuxthreads-2.2.5
+  
+  gcc-3.4.0 Patch去除了一些冲突项，glibc,kernel等其余patch为cross-tool
+默认自带
+  
+  gcc-3.3.3h-ppc-asm-spec.patch         
+  gcc-3.4.0-arm-softfloat.patch         
+  gcc-3.4.0-pr14808-refix.patch         
+  gcc-3.4.0-ultrasparc3-default64.patch
+  pr15647-fix.patch
+  pr13250-fix.patch 
+  
+  增加的gcc-3.4.0-arm-softfloat.patch可以去网上搜索，不过有不同的版本。
+这里列出我的全部内容(比较夸张，复制建立个patch文件即可，注意要是Unix格
+式)：
+
+
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/coff.h gcc-3.4.0/gcc/config/arm/coff.h
+--- gcc-3.4.0-orig/gcc/config/arm/coff.h        2004-02-24 15:25:22.000000000 +0100
++++ gcc-3.4.0/gcc/config/arm/coff.h     2004-05-01 19:07:06.059409600 +0200
+@@ -31,11 +31,16 @@
+ #define TARGET_VERSION fputs (" (ARM/coff)", stderr)
+ 
+ #undef  TARGET_DEFAULT
+-#define TARGET_DEFAULT (ARM_FLAG_SOFT_FLOAT | ARM_FLAG_APCS_32 | ARM_FLAG_APCS_FRAME | ARM_FLAG_MMU_TRAPS)
++#define TARGET_DEFAULT         \
++       ( ARM_FLAG_SOFT_FLOAT   \
++       | ARM_FLAG_VFP          \
++       | ARM_FLAG_APCS_32      \
++       | ARM_FLAG_APCS_FRAME   \
++       | ARM_FLAG_MMU_TRAPS )
+ 
+ #ifndef MULTILIB_DEFAULTS
+ #define MULTILIB_DEFAULTS \
+-  { "marm", "mlittle-endian", "msoft-float", "mapcs-32", "mno-thumb-interwork" }
++  { "marm", "mlittle-endian", "mapcs-32", "mno-thumb-interwork" }
+ #endif
+ 
+
+ /* This is COFF, but prefer stabs.  */
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/elf.h gcc-3.4.0/gcc/config/arm/elf.h
+--- gcc-3.4.0-orig/gcc/config/arm/elf.h 2004-02-24 15:25:22.000000000 +0100
++++ gcc-3.4.0/gcc/config/arm/elf.h      2004-05-01 19:12:16.976486400 +0200
+@@ -46,7 +46,9 @@
+ 
+ #ifndef SUBTARGET_ASM_FLOAT_SPEC
+ #define SUBTARGET_ASM_FLOAT_SPEC "\
+-%{mapcs-float:-mfloat} %{msoft-float:-mfpu=softfpa}"
++%{mapcs-float:-mfloat} \
++%{mhard-float:-mfpu=fpa} \
++%{!mhard-float: %{msoft-float:-mfpu=softfpa} %{!msoft-float:-mfpu=softvfp}}"
+ #endif
+ 
+ #ifndef ASM_SPEC
+@@ -106,12 +108,17 @@
+ #endif
+ 
+ #ifndef TARGET_DEFAULT
+-#define TARGET_DEFAULT (ARM_FLAG_SOFT_FLOAT | ARM_FLAG_APCS_32 | ARM_FLAG_APCS_FRAME | ARM_FLAG_MMU_TRAPS)
++#define TARGET_DEFAULT         \
++       ( ARM_FLAG_SOFT_FLOAT   \
++       | ARM_FLAG_VFP          \
++       | ARM_FLAG_APCS_32      \
++       | ARM_FLAG_APCS_FRAME   \
++       | ARM_FLAG_MMU_TRAPS )
+ #endif
+ 
+ #ifndef MULTILIB_DEFAULTS
+ #define MULTILIB_DEFAULTS \
+-  { "marm", "mlittle-endian", "msoft-float", "mapcs-32", "mno-thumb-interwork", "fno-leading-underscore" }
++  { "marm", "mlittle-endian", "mapcs-32", "mno-thumb-interwork", "fno-leading-underscore" }
+ #endif
+ 
+
+ #define TARGET_ASM_FILE_START_APP_OFF true
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/linux-elf.h gcc-3.4.0/gcc/config/arm/linux-elf.h
+--- gcc-3.4.0-orig/gcc/config/arm/linux-elf.h   2004-01-31 07:18:11.000000000 +0100
++++ gcc-3.4.0/gcc/config/arm/linux-elf.h        2004-05-01 19:19:06.935979200 +0200
+@@ -30,9 +30,27 @@
+ /* Do not assume anything about header files.  */
+ #define NO_IMPLICIT_EXTERN_C
+ 
+-/* Default is to use APCS-32 mode.  */
++/*
++ * Default is to use APCS-32 mode with soft-vfp.
++ * The old Linux default for floats can be achieved with -mhard-float
++ * or with the configure --with-float=hard option.
++ * If -msoft-float or --with-float=soft is used then software float
++ * support will be used just like the default but with the legacy
++ * big endian word ordering for double float representation instead.
++ */
++
+ #undef  TARGET_DEFAULT
+-#define TARGET_DEFAULT (ARM_FLAG_APCS_32 | ARM_FLAG_MMU_TRAPS)
++#define TARGET_DEFAULT         \
++       ( ARM_FLAG_APCS_32      \
++       | ARM_FLAG_SOFT_FLOAT   \
++       | ARM_FLAG_VFP          \
++       | ARM_FLAG_MMU_TRAPS )
++
++#undef  SUBTARGET_EXTRA_ASM_SPEC
++#define SUBTARGET_EXTRA_ASM_SPEC "\
++%{!mcpu=*:-mcpu=xscale} \
++%{mhard-float:-mfpu=fpa} \
++%{!mhard-float: %{msoft-float:-mfpu=softfpa} %{!msoft-float:-mfpu=softvfp}}"
+ 
+ #define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm6
+ 
+@@ -40,7 +58,7 @@
+ 
+ #undef  MULTILIB_DEFAULTS
+ #define MULTILIB_DEFAULTS \
+-       { "marm", "mlittle-endian", "mhard-float", "mapcs-32", "mno-thumb-interwork" }
++       { "marm", "mlittle-endian", "mapcs-32", "mno-thumb-interwork" }
+ 
+ #define CPP_APCS_PC_DEFAULT_SPEC "-D__APCS_32__"
+ 
+@@ -55,7 +73,7 @@
+    %{shared:-lc} \
+    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
+ 
+-#define LIBGCC_SPEC "%{msoft-float:-lfloat} -lgcc"
++#define LIBGCC_SPEC "-lgcc"
+ 
+ /* Provide a STARTFILE_SPEC appropriate for GNU/Linux.  Here we add
+    the GNU/Linux magical crtbegin.o file (see crtstuff.c) which
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/t-linux gcc-3.4.0/gcc/config/arm/t-linux
+--- gcc-3.4.0-orig/gcc/config/arm/t-linux       2003-09-20 23:09:07.000000000 +0200
++++ gcc-3.4.0/gcc/config/arm/t-linux    2004-05-01 20:31:59.102846400 +0200
+@@ -4,7 +4,10 @@
+ LIBGCC2_DEBUG_CFLAGS = -g0
+ 
+ LIB1ASMSRC = arm/lib1funcs.asm
+-LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx
++LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx \
++       _negdf2 _addsubdf3 _muldivdf3 _cmpdf2 _unorddf2 _fixdfsi _fixunsdfsi \
++       _truncdfsf2 _negsf2 _addsubsf3 _muldivsf3 _cmpsf2 _unordsf2 \
++       _fixsfsi _fixunssfsi
+ 
+ # MULTILIB_OPTIONS = mhard-float/msoft-float
+ # MULTILIB_DIRNAMES = hard-float soft-float
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/unknown-elf.h gcc-3.4.0/gcc/config/arm/unknown-elf.h
+--- gcc-3.4.0-orig/gcc/config/arm/unknown-elf.h 2004-02-24 15:25:22.000000000 +0100
++++ gcc-3.4.0/gcc/config/arm/unknown-elf.h      2004-05-01 19:09:09.016212800 +0200
+@@ -30,7 +30,12 @@
+ 
+ /* Default to using APCS-32 and software floating point.  */
+ #ifndef TARGET_DEFAULT
+-#define TARGET_DEFAULT (ARM_FLAG_SOFT_FLOAT | ARM_FLAG_APCS_32 | ARM_FLAG_APCS_FRAME | ARM_FLAG_MMU_TRAPS)
++#define TARGET_DEFAULT         \
++       ( ARM_FLAG_SOFT_FLOAT   \
++       | ARM_FLAG_VFP          \
++       | ARM_FLAG_APCS_32      \
++       | ARM_FLAG_APCS_FRAME   \
++       | ARM_FLAG_MMU_TRAPS )
+ #endif
+ 
+ /* Now we define the strings used to build the spec file.  */
+diff -urNd gcc-3.4.0-orig/gcc/config/arm/xscale-elf.h gcc-3.4.0/gcc/config/arm/xscale-elf.h
+--- gcc-3.4.0-orig/gcc/config/arm/xscale-elf.h  2003-07-02 01:26:43.000000000 +0200
++++ gcc-3.4.0/gcc/config/arm/xscale-elf.h       2004-05-01 20:15:36.620105600 +0200
+@@ -49,11 +49,12 @@
+                     endian, regardless of the endian-ness of the memory
+                     system.  */
+                    
+-#define SUBTARGET_EXTRA_ASM_SPEC "%{!mcpu=*:-mcpu=xscale} \
+-  %{mhard-float:-mfpu=fpa} \
+-  %{!mhard-float: %{msoft-float:-mfpu=softfpa;:-mfpu=softvfp}}"
++#define SUBTARGET_EXTRA_ASM_SPEC "\
++%{!mcpu=*:-mcpu=xscale} \
++%{mhard-float:-mfpu=fpa} \
++%{!mhard-float: %{msoft-float:-mfpu=softfpa} %{!msoft-float:-mfpu=softvfp}}"
+ 
+ #ifndef MULTILIB_DEFAULTS
+ #define MULTILIB_DEFAULTS \
+-  { "mlittle-endian", "mno-thumb-interwork", "marm", "msoft-float" }
++  { "mlittle-endian", "mno-thumb-interwork", "marm" }
+ #endif
+
+六、如何测试简单的QT程序
+
+  下面是一个十分简单的QT程序，也是来自Qte的教程。
+  
+  helloqt.cpp
+  
+  #include <qapplication.h>
+  #include <qpushbutton.h>
+  
+  int main( int argc, char **argv )
+  {
+      QApplication a( argc, argv );
+  
+      QPushButton hello( "Hello world!", 0 );
+      hello.resize( 100, 30 );
+  
+      a.setMainWidget( &hello );
+      hello.show();
+      return a.exec();
+  }
+  
+  下载qte-2.3.10(其他版本没有试)，我们需要他的头文件，解压缩。我的
+路径是/home/gcc/toolchain/qt-2.3.10，将E600或968自带libqte-mt.so.2.3.8
+复制到/home/gcc/toolchain/qt-2.3.10/lib下，并做一些软连接或者干脆直接
+复制(如libqte.so,libqte-mt.so ...)，将自带的libjpeg.so.62.0.0复制到交
+叉编译lib下，这时也需要做下类似的操作，我这里路径是/home/gcc/toolchain/gcc-3.4.0-glibc-2.2.5/arm-linux/arm-linux/lib
+  
+  设置环境变量：
+  
+  export TOOLCHAIN_DIR=/home/gcc/toolchain
+  export PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/X11R6/bin:/root/bin:$TOOLCHAIN_DIR/gcc-3.4.0-glibc-2.2.5/arm-linux/bin
+  export QTDIR=$TOOLCHAIN_DIR/qt-2.3.10
+
+  使用以下命令编译：
+  arm-linux-g++  -c -I$QTDIR/include -pipe -DQWS -fno-exceptions -fno-rtti -O2 -Wall -W -DNO_DEBUG  -o helloqt.o helloqt.cpp
+  arm-linux-g++ -L$QTDIR/lib -Wl,-rpath,$QTDIR/lib   -o helloqtfpa helloqt.o -lqte -lm
+
+  这个helloqtfpa就可以在E600,968上运行了，我当时用的E600的libqte-mt.so.2.3.8
+编译后放在968上也能正常运行，我个人认为E600，968这两个文件差异是在于
+对键盘的处理。
+ 
+  另外前一阵子令人郁闷的Segmentation Fault问题是由于，我使用了以下
+语句进行编译： 
+  arm-linux-g++ -L$QTDIR/lib -I$QTDIR/include -Wl,-rpath,$QTDIR/lib  -o helloqterr helloqt.cpp -lqte -lm
+  最重要参数是-DQWS，没有它编译后-qws运行肯定出现Segmentation Fault。
+  至于为何如此，我没有做过Qte开发，还是不了解。
+  
+  
+七、总结
+
+  至此，从解决安装包，到打开Shell入口，到解除软件安装限制，再到图形化
+软件移植，夏新E600和飞利浦968终于取得实质性的成果。
+  本文即将结束时，又听到了subtle关于telnet的重大突破，令人兴奋不已！
+  感兴趣的朋友可以参考E680编译Qte的方法，用E600环境编译下整个Qte，思路
+是完全一样的，此外qtopia，opie等等系列软件都需要众人去挖掘。
+  高兴之余，也有遗憾，一个是浮点问题没有得到彻底解决，二是E600,968上层
+图形化源码没有，三是E600,968自带Qte库文件内容太少。这几个问题的确是进行
+实际应用软件移植的烂路虎。
+  此外具体到实际软件，问题就越来越专业，以播放器为例，肯写要解决浮点问
+题而且还是研究系统本身的音频设备，可能还需要用反汇编来做。一个软件成果
+不是轻易能得到的，任重而道远。
+  话又说回来，如果你能实实际际一路跟着走过来，你获得的比一万个播放器可
+要多得多！
+
+
+
+编译for arm的程序所需设置的环境
+export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+
+
+
+
+
+
+
+
+
+
+
+tmake
+我的tmake路径：/usr/local/arm/tmake-1.11
+
+[root@localhost ~]# cd /usr/local/arm/tmake-1.11/lib/qws
+[root@localhost qws]# cp linux-arm-g++ linux-e680-g++ -r
+[root@localhost qws]# cd linux-e680-g++/
+[root@localhost linux-e680-g++]# ls
+app.t  lib.t  subdirs.t  tmake.conf
+[root@localhost linux-e680-g++]# chmod a+w tmake.conf 
+[root@localhost linux-e680-g++]# vim tmake.conf 
+
+来修改tmake.conf文件，具体改这么几行：
+54 行： TMAKE_LIBS_QT_THREAD = -lqte-mt
+改成 TMAKE_LIBS_QT_THREAD = -lezxappbase-xscale-r -lqte-mt-xscale-r -lezxjpeg-xscale-r -lezxnotification-xscale-r
+这样是为了连接 EZX库
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12、制作MKPG安装文件：
+
+             MKPG 是 tar.gz 的文件,要加上 Gzip 压缩：
+
+          A、Desktop文件设置：
+
+               a、Desktop文件格式：
+                [Desktop Entry]
+                BigIcon= ##大图标，缩列图显示用
+                Comment= ## 注释
+                Exec= ## 运行程序名称
+                Icon= ## 小图标，列表显示用
+                Name= ## 显示的名称
+                OsVersion=1.0
+                Shared=1
+                Type=Application
+
+               b、用UltraEdit新建test.desktop文件 ，输入下列内容：
+                [Desktop Entry]
+                BigIcon=test.png
+                Comment=TestSoft by 有恒
+                Exec=Test.lin
+                Icon=test_sm.png
+                Name=Test
+                OsVersion=1.0
+                Shared=0
+                Type=Application
+           B、lin文件设置：用UltraEdit（下载地址：http://www.skycn.com/soft/2249.html）新建Test.lin文件，输入下列内容：
+                #!/bin/bash
+                export QTDIR=/usr/lib/ezx
+                export LD_LIBRARY_PATH=$QTDIR/lib
+                export EZX_RES_FONT_PATH=$QTDIR/lib/fonts
+                export EZX_RES_ICON_PATH=/usr/language/icon
+                exec /mmc/mmca1/.system/QTDownLoad/test/testezx
+           C、制作两个图标test.png（尺寸37*32像素）test_sm.png（尺寸28*24像素 ）
+
+           D、新建test文件夹，把编译好的 testezx 文件和Test.lin、test.desktop、test.png、test_sm.png 等文件放入。
+           E、运行命令：
+                 tar cfz test.tar.gz test
+
+        13、把 test.tar.gz改成test.mpkg，复制到手机上安装，大功告成！！！！！！！！！！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-lcertificates-xscale-r -lDevDetailPlugin-xscale-r  -lDevInfoPlugin-xscale-r  -ldmengine-xscale-r  -lezx3dgraphics-xscale-r  -lezxaddrbk-xscale-r  -lezxairsync-xscale-r  -lezxalarmclock-xscale-r  -lezxamr-xscale-r  -lezxam-xscale-r  -lezxappbase-xscale-r  -lezxappsdk-xscale-r  -lezxaschangelog-xscale-r  -lezxasipc-xscale-r  -lezxasmanager-xscale-r  -lezxasprofile-xscale-r  -lezxasprovprofile-xscale-r  -lezxastp-xscale-r  -lezxbluetoothmp-xscale-r  -lezxbt-xscale-r  -lezxcalendartasks-xscale-r  -lezxcameraengine-xscale-r  -lezxcameratc  -lezxcameravf  -lezxcamera-xscale-r  -lezxcm-xscale-r  -lezxcomagent-xscale-r  -lezxdb  -lezxdb  -lezxdmbrowserplugin-xscale-r  -lezxdmdatasyncplugin-xscale-r  -lezxdmemailplugin-xscale-r  -lezxdmimplugin-xscale-r -lezxdmjavaplugin-xscale-r -lezxdmmmsplugin-xscale-r -lezxdmnetworkconnectionplugin-xscale-r -lezxdmutility-xscale-r -lezxdrawpad-xscale-r -lezxdrmcipher-xscale-r -lezxdrmc-lhack-xscale-r -lezxdrmdownloadutility-xscale-r -lezxdrmmsgutility-xscale-r -lezxdrmspentodcf-xscale-r -lezxdrmsp-xscale-r -lezxdrmsp-xscale-r  -lezxdynamic-xscale-r -lezxemailas-xscale-r -lezxemailcalendar-xscale-r -lezxemaildm-xscale-r -lezxemailutility-xscale-r -lezxencs-xscale-r -lezxexif-xscale-r -lezxflex-xscale-r -lezxfmradio-xscale-r -lezx_hwmidi-xscale-r -lezximdict-xscale-r  -lezxjaid-xscale-r -lezxjpeg-xscale-r -lezxkeytest-xscale-r -lezxlapi-xscale -lezxlocation-xscale-r -lezxmime-xscale-r -lezxmmsclient-xscale-r -lezxmmsutility-xscale-r -lezxmp4writer-xscale-r -lezxmpeg4encoder-xscale-r -lezx_mpeg4videodecoder-xscale-r -lezxmsamc -lezxmsgctrviewutility-xscale-r -lezxmslaunch -lezx_ms_playerengine-xscale-r -lezxmystuff_album-xscale-r -lezxmystuff-play-xscale-r -lezxnapi-xscale-r -lezxnotification-xscale-r -lezxopenwindow-xscale-r  -lezxphone-xscale-r -lezxpm-xscale-r -lezxpm-xscale-r -lezxqtnapi-xscale-r -lezxringtone-play-xscale-r -lezxsendmail-xscale-r -lezxshare-xscale-r -lezxsipsetup-xscale-r -lezxsipstubms-xscale-r -lezxsmilparser-xscale-r -lezxsort-xscale-r -lezxsound-xscale-r -lezxssl-xscale-r.so  -lezx_streamreader-xscale-r -lezxsyncml-xscale-r -lezxtapi-xscale-r -lezxvoicenote-xscale-r -lezxvr-xscale-r -lezxworldcity-xscale-r -lezxwvimpsutil-xscale-r -lipp-ac-iwmmxt-r -lipp-sc-iwmmxt-r -lipp-vc-iwmmxt-r -ljpeg -lobex -lopera_api-xscale-r -lqte-mt -lqte-mt-xscale-r -lstdc++--lc6.1-2 -lstdc++ -lz  
+
+
+
+
+
+构建更加通用的E680开发环境
+拷贝tmake
+拷贝moc
+拷贝qt/include
+拷贝qt/lib
+拷贝ezx/inlude
+拷贝ezx/lib
+
+
+
+
+export QTDIR=/home/work/e680/dev-ezx-0.3.0
+
+export QTDIR=/home/work/dev-ezx-0.3.0
+export TMAKEDIR=$QTDIR/tmake-1.11
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-e680-g++
+
+export PATH=$TMAKEDIR/bin:$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export PATH=/usr/local/arm/bin:$QTDIR/bin:$PATH
+
+
+
+
+
+
+
+
+
+
+export QTDIR=/home/work/e680/dev/qt-2.3.6
+export LD_LIBRARY_PATH=$QTDIR/lib
+
+export QTINC=$QTDIR/include
+
+export TMAKEDIR=/home/work/e680/dev/tmake-1.11
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-e680-g++
+
+export CROSSCOMPILEDIR=/usr/local/arm
+export PATH=$TMAKEDIR/bin:$QTDIR/bin:$CROSSCOMPILEDIR/bin:$PATH
+
+
+
+
+
+成功的单步编译：
+[root@localhost helloworld]# ../moc/moc helloworld.cpp -o helloworld.moc
+[root@localhost helloworld]# arm-linux-g++ -fno-exceptions -fno-rtti -DQWS -Wall -g -I../include/qt -I../include/ezx -c helloworld.cpp
+[root@localhost helloworld]# arm-linux-g++ helloworld.o -o helloworld -L../lib -L../lib/ezx/lib -lezxappbase-xscale-r -lqte-mt-xscale-r -lezxjpeg-xscale-r -lezxnotification-xscale-r
+
+
+
+
+
+2008/10/29
+LFS
+
+
+
+解压软件包方法：
+bzip2 -d  gcc-4.1.0.tar.bz2
+---上面解压完之后执行下面的命令。
+tar -xvf gcc-4.1.0.tar 或 tar -xvf *.tar
+解完之后会出现多一个文件夹 gcc-4.1.0
+
+
+
+
+
+
+
+
+
+
+
+在使用 "cat > filename.txt" 创建文件时，可采用下面步骤:
+
+　　1、键入cat > filename.txt 后回车 网管论坛bbs_bitsCN_com
+
+　　2、录入文本内容； 网管u家bitscn.net
+
+　　3、键入回车；
+
+网管u家u.bitscn@com
+
+　　4、在键盘上按下Ctrl+D (或者键入Control－D)。
+网管朋友网www_bitscn_net
+
+　　文本被存盘，shell提示符重新出现
+
+
+
+AbeEnstTuv] [--help] [--version] fileName
+说明：把档案串连接后传到基本输出（萤幕或加 > fileName 到另一个档案）
+参数：
+-n 或 --number 由 1 开始对所有输出的行数编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-s 或 --squeeze-blank 当遇到有连续两行以上的空白行，就代换为一行的空白
+行
+-v 或 --show-nonprinting
+范例：
+cat -n textfile1 > textfile2 把 textfile1 的档案内容加上行号后输入
+textfile2 这个档案里
+cat -b textfile1 textfile2 >> textfile3 把 textfile1 和 textfile2 的档
+案内容加上行号（空白行不加）之后将内容附加到 textfile3
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
+
+
+cat主要有三大功能：
+1.一次显示整个文件。$ cat     filename
+2.从键盘创建一个文件。$ cat > filename
+只能创建新文件,不能编辑已有文件.
+3.将几个文件合并为一个文件。 $cat     file1     file2 > file
+参数：
+-n 或 --number 由 1 开始对所有输出的行数编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-s 或 --squeeze-blank 当遇到有连续两行以上的空白行，就代换为一行的空白行
+-v 或 --show-nonprinting
+范例：
+cat -n textfile1 > textfile2 把 textfile1 的档案内容加上行号后输入 textfile2 这个档案里
+cat -b textfile1 textfile2 >> textfile3 把 textfile1 和 textfile2 的档案内容加上行号（空白行不加）之后将内容附加到 textfile3 里。
+范例：
+把 textfile1 的档案内容加上行号后输入 textfile2 这个档案里
+cat -n textfile1 > textfile2
+把 textfile1 和 textfile2 的档案内容加上行号（空白行不加）之后将内容附加到 textfile3 里。
+cat -b textfile1 textfile2 >> textfile3
+cat /dev/null > /etc/test.txt 此为清空/etc/test.txt档案内容
+cat 也可以用来制作 image file。例如要制作软碟的 image file，将软碟放好后打
+cat /dev/fd0 > OUTFILE
+相反的，如果想把 image file 写到软碟，请打
+cat IMG_FILE > /dev/fd0
+注：
+1. OUTFILE 指输出的 image 档名。
+2. IMG_FILE 指 image file。
+3. 若从 image file 写回 device 时，device 容量需与相当。
+4. 通常用在制作开机磁片。 
+
+
+
+
+
+
+把创建的.bash_profile,.bashrc等文件备份到/mnt/lfs/sources/profilebackup文件夹下面了.
+
+
+22:19
+
+
+
+
+
+Makefile:
+objects = foo.o bar.o
+all: $(objects)
+	$(objects): %.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+上面的例子中，指明了我们的目标从$object中获取，“%.o”表明要所有以“.o”结尾的目标，也就是“foo.o bar.o”，也就是变量$object集合的模式，而依赖模式“%.c”则取模式“%.o”的“%”，也就是“foo bar”，并为其加下“.c”的后缀，于是，我们的依赖目标就是“foo.c bar.c”。而命令中的“$<”和“$@”则是自动化变量，“$<”表示所有的依赖目标集（也就是“foo.c bar.c”），“$@”表示目标集（也就是“foo.o bar.o”）。于是，上面的规则展开后等价于下面的规则：
+foo.o : foo.c
+$(CC) -c $(CFLAGS) foo.c -o foo.o
+bar.o : bar.c
+$(CC) -c $(CFLAGS) bar.c -o bar.o
+
+
+
+
+查看文章
+mount: unknown filesystem type "smbfs"
+2008-11-05 19:03
+mount: unknown filesystem type "smbfs’
+
+今天在使用FC6时，发现mount不了windows的共享盘
+
+mount -t smbfs -o username=xxx,password=xxx //hostname/dir /mnt/tmp
+
+mount: unknown filesystem type ’smbfs’
+
+系统已经不能识别smbfs文件系统了
+
+查资料说RHE5的kernel已经不再支持smbfs，而改用Common Internet File Systemcifs(cifs)取代了原有的smbfs，猜想fc6也做了这个改动，所以命令就改为:
+
+# mount -t cifs -o username=xxx,password=xxx //hostname/dir /mnt/tmp
+
+很顺利地mount上了
+
+
+
+
+
+
+
+比如我用root用户，mount /dev/hda1 /mnt上，我想让guest用户也可以在/mnt下创建，删除文件等操作。是否要在mount后面加什么参数？或者什么其他的方法。
+将权限开放：
+#mount /dev/hda1 /mnt -o umask=0000
+
+
+mount -t cifs //192.168.11.89/workspace /data/windoc/ -o username=Administrator% -o umask=0000
+
+
+WindowsXP下使用SecureCRT SSH到Linux服务器上使用 gcc 编译程序发现里面带乱码，且多到几乎看不清意思的程度。
+原来我们的Linux服务器是中文环境，于是改为英文环境，设置方法如下：
+系统语言设置：
+[root@localhost pro2]# vi /etc/sysconfig/i18n
+LANG="en_US.UTF-8"
+
+现在问题好多了，不过还没有完全解决。如果编译错误，gcc的输出信息中也有少量乱码，
+在网上搜索了好久都没有找到有效的解决办法，在一高人的提示下，搞定了。跟大家分享下：
+解决办法，在用户的配置的文件中加入下面的一句话：
+export LANG=C
+
+
+
+2009.1..10
+error: default argument given for parameter 1 of
+错误原因，类的成员函数定义了默认的参数，在实现的时候就不要写出来了。
+例如：
+	class A
+	{
+		A(int a = 10);
+	}
+	
+	A::A(int a)//这里不能写成 A::A(int a = 10)
+	{
+		//...
+	}

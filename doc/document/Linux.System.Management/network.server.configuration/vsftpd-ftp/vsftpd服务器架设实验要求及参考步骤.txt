@@ -1,0 +1,176 @@
+本次实验要求：
+
+1. 理解 ftp 基本原理
+2. 会在 Linux 系统下用 ftp 上传下载文件
+3. 会自己架设ftp服务器，并提供上传下载服务
+
+
+vsftpd服务器配置实验步骤
+
+
+1. 备份配置文件 /etc/vsftpd/vsftpd.conf
+[root@localhost root]# cd /etc/vsftpd/
+[root@localhost vsftpd]# ls
+vsftpd.conf
+[root@localhost vsftpd]# cp vsftpd.conf vsftpd.conf.BAK
+[root@localhost vsftpd]# ls
+vsftpd.conf  vsftpd.conf.BAK
+
+
+2. 配置vsftpd服务器
+[root@localhost vsftpd]# gedit vsftpd.conf&
+[1] 4872
+
+删除vsftpd.conf中的所有内容，然后写入一下内容：
+
+
+
+#///////////////////////////////////////////////////
+#允许匿名访问，具有上传下载权限。
+anonymous_enable=YES
+write_enable=YES
+anon_upload_enable=YES
+anon_mkdir_write_enable=YES
+anon_world_readable_only=NO
+
+#显示登陆信息。登陆信息在ftp的共享目录下的" .message " 文件中
+dirmessage_enable=YES
+
+#是否使用端口20(ftp-data)进行数据联接
+connect_from_port_20=YES
+
+userlist_enable=YES
+
+# 以独立模式启动，
+listen=YES
+#///////////////////////////////////////////////////
+
+
+
+
+
+3. 重启vsftpd服务
+
+[root@localhost vsftpd]# service vsftpd restart
+关闭 vsftpd：                                              [失败]
+为 vsftpd 启动 vsftpd：                                    [  确定  ]
+[1]+  Done                    gedit vsftpd.conf
+[root@localhost vsftpd]# pgrep vsftpd
+4982
+[root@localhost vsftpd]# 
+查看vsftpd是否已经正常工做。如果象上面那样有一个数字表明已经启动了，
+如果没有反应，那么就没有启动，比如：
+[root@localhost vsftpd]# pgrep vsftpd
+[root@localhost vsftpd]# 
+
+
+4. 测试vsftpd服务器
+
+(1) 方法一
+现看看自己电脑的IP地址，检查IP地址是否配置好了
+[root@localhost vsftpd]# ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:11:5B:C4:AE:A5
+          inet addr:192.168.0.56  Bcast:192.168.0.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1952 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:378 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:100
+          RX bytes:486797 (475.3 Kb)  TX bytes:53334 (52.0 Kb)
+          Interrupt:11 Base address:0xe800
+ 
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:17721 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:17721 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1211137 (1.1 Mb)  TX bytes:1211137 (1.1 Mb)
+ 
+这里IP地址为 192.168.0.56 也就是下面这一项提示的：
+inet addr:192.168.0.56  Bcast:192.168.0.255  Mask:255.255.255.0
+[root@zieckey vsftpd]# ftp 192.168.0.29
+Connected to 192.168.0.29.
+220 (vsFTPd 1.1.3)
+530 Please login with USER and PASS.
+530 Please login with USER and PASS.
+KERBEROS_V4 rejected as an authentication type
+Name (192.168.0.29:root): ftp
+331 Please specify the password.
+Password:
+230 Login successful. Have fun.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> ls
+227 Entering Passive Mode (192,168,0,29,209,131)
+150 Here comes the directory listing.
+drwxrwxrwx    2 0        0            4096 Nov 03 12:27 incoming
+drwxr-xr-x    2 0        0            4096 Nov 03 12:06 pub
+226 Directory send OK.
+ftp> !ls									注：在命令前面加 ！ 号是对本地目录操作
+vsftpd.conf  vsftpd.conf~  vsftpd.conf.BAK  vsftpd.conf.BAK1  vsftpd服务器创建步骤.txt
+ftp>
+
+
+
+
+
+(2) 方法二
+[root@localhost vsftpd]# gftp&
+[1] 4892
+[root@localhost vsftpd]#
+
+
+注意，刚刚建立的 vsftpd 服务器，是具有上传下载权限的，
+但是我们现在可以发现，我们并不能上传任何文件，为什么？
+
+vsFTPd出于安全考虑，是不准让ftp用户的家目录的权限是完全没有限制的，
+您可以去读一下vsFTPd的文档就明白的了；否则也不能称为最安全的FTP服务器了，对不对？
+要作到这一点也简单，在/var/ftp下再建一个目录，权限是777的就行了
+
+比如：
+[root@zieckey ~]# cd /var/ftp/
+[root@zieckey ftp]# mkdir incoming
+[root@zieckey ftp]# chmod 777 incoming/
+
+
+
+
+5. 改变ftp共享目录
+
+[root@zieckey ftp]# cd /etc/
+[root@zieckey etc]# cp passwd passwd.BAK
+[root@zieckey etc]# gedit passwd&
+找到ftp那一行：
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+其中 /var/ftp 就是ftp的根目录
+改变它就可以改变ftp的根目录
+
+6. 临时将想共享的目录放到ftp根目录下
+
+这个可以用虚拟路径实现
+
+比如：
+/home/a 映射为 ftp://localhost/a
+/home/b/c 则为 ftp://localhost/c
+
+其实这个不能说是vsFTPd的内容，其实我们早就接触过了，可能我们没有注意，我们可以通过如下的方法来实现。
+[root@localhost ~]# mount --bind [原有的目录] [新目录]
+
+比如我们想将 /home 目录也能通过 ftp 共享给远程用户
+那么我们可以这样做：
+
+我们要先在/var/ftp目录中建一个目录
+[root@zieckey etc]# mkdir /var/ftp/home
+[root@zieckey etc]# mount --bind /home/ /var/ftp/home/
+这样就好拉。
+现在可以查看一下：
+[root@zieckey ftp]# ls /var/ftp/home/
+download  download(2)  work  zieckey
+
+可以看到 /var/ftp/home 目录下有了 /home 目录的内容
+
+如果又不想将 /home 共享了呢？使用  umount 就行拉
+[root@zieckey ftp]# umount /var/ftp/home/
+[root@zieckey ftp]# ls /var/ftp/home/
+[root@zieckey ftp]#
+

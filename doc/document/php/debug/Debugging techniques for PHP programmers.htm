@@ -1,0 +1,4031 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Debugging techniques for PHP programmers</title>
+<meta http-equiv="PICS-Label" content="(PICS-1.1 
+&quot;http://www.icra.org/ratingsv02.html&quot; l gen true r (cz 1 lz 1 
+nz 1 oz 1 vz 1) &quot;http://www.rsac.org/ratingsv01.html&quot; l gen 
+true r (n 0 s 0 v 0 l 0) &quot;http://www.classify.org/safesurf/&quot; l
+ gen true r (SS~~000 1))">
+<link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
+<link rel="SHORTCUT ICON" href="http://www.ibm.com/favicon.ico">
+<meta name="Owner" content="developerWorks Content/Raleigh/IBM">
+<meta name="DC.Language" scheme="rfc1766" content="en">
+<meta name="IBM.Country" content="ZZ">
+<meta name="Security" content="Public">
+<meta name="IBM.SpecialPurpose" content="SP001">
+<meta name="IBM.PageAttributes" content="sid=1003">
+<meta name="Source" content="v16 Template Generator">
+<meta name="Robots" content="index,follow">
+<meta name="Abstract" content="Explore various methods for debugging PHP
+ applications, including turning on error reporting in Apache and PHP, 
+and by placing strategic print statements to locate the source of more 
+difficult bugs through a simple example PHP script. The PHPeclipse 
+plug-in for Eclipse, a slick development environment with real-time 
+syntax parsing abilities, will also be covered, as well as the DBG 
+debugger extension for PHPeclipse.">
+<meta name="Description" content="Explore various methods for debugging 
+PHP applications, including turning on error reporting in Apache and 
+PHP, and by placing strategic print statements to locate the source of 
+more difficult bugs through a simple example PHP script. The PHPeclipse 
+plug-in for Eclipse, a slick development environment with real-time 
+syntax parsing abilities, will also be covered, as well as the DBG 
+debugger extension for PHPeclipse.">
+<meta name="Keywords" content="PHPEclipse, plugin, Eclipse, Tyler 
+Anderson, open source, PHP, debug, tttosca">
+<meta name="DC.Date" scheme="iso8601" content="2005-11-29">
+<meta name="DC.Type" scheme="IBM_ContentClassTaxonomy" content="CT316">
+<meta name="DC.Subject" scheme="IBM_SubjectTaxonomy" content="TT400">
+<meta scheme="IBM_WTMCategory" name="IBM.WTMCategory" 
+content="SOFDCOSRZZ">
+<meta name="DC.Rights" content="© Copyright&nbsp;IBM 
+Corporation&nbsp;2005">
+<meta name="IBM.Effective" scheme="W3CDTF" content="2005-11-29">
+<meta name="title" content="Debugging techniques for PHP programmers">
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/all.css" 
+media="all" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/screen.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/screen-uas.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/screen-fonts.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/handheld.css"
+ media="handheld" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/print.css" 
+media="print" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/overlay.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+
+<!-- dW-specific CSS -->
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/dw-screen.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link 
+href="Debugging%20techniques%20for%20PHP%20programmers_files/jquery.css"
+ media="screen,projection" rel="stylesheet" title="www" type="text/css">
+
+<script src="Debugging%20techniques%20for%20PHP%20programmers_files/ibmcommon.js" type="text/javascript">//</script><link
+ title="IBM Search" 
+href="http://www.ibm.com/search/opensearch/description.xml" 
+type="application/opensearchdescription+xml" rel="search">
+<script src="Debugging%20techniques%20for%20PHP%20programmers_files/dynamicnav.js" type="text/javascript">//</script>
+
+<!-- dW functional JS -->
+<script language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/urltactic.js" type="text/javascript"></script>
+<!-- Rating_START -->
+<script language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/artrating.js" type="text/javascript"></script>
+<style type="text/css">
+.metavalue {
+  display: none;
+}
+</style>
+<!-- Rating_END --><!-- RESERVED_HEADER_INCLUDE -->
+<script language="javascript" src="Debugging%20techniques%20for%20PHP%20programmers_files/ajax1.js" type="text/javascript"></script>
+<script language="javascript" src="Debugging%20techniques%20for%20PHP%20programmers_files/search_counter-maverick.js" type="text/javascript"></script>
+<script language="javascript" src="Debugging%20techniques%20for%20PHP%20programmers_files/request_referer_capture-maverick.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ setDefaultQuery('');
+ //-->
+</script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ function openNewWindow(url,tar,arg){window.open(url,tar,arg);}
+ //-->
+</script>
+<!-- Include file support -->
+<script language="JavaScript" type="text/javascript">
+(function($) {
+	jQuery.extend({
+		getInc: function(u,d){
+			if(u==null)return;
+			jQuery.ajax({
+	    		type: "GET",
+			url: u,
+			dataType: "text",
+	        	success: function(t) {
+				jQuery(d).html(t);
+			},
+			async: true
+			});
+		}
+	});
+})(jQuery);
+</script>
+<script charset="UTF-8" src="Debugging%20techniques%20for%20PHP%20programmers_files/flash-detect.js" type="text/javascript" id="flashdetect"></script><script charset="UTF-8" src="Debugging%20techniques%20for%20PHP%20programmers_files/usen-utf8.js" type="text/javascript" id="mhMenu"></script><script charset="UTF-8" src="Debugging%20techniques%20for%20PHP%20programmers_files/Controller" type="text/javascript" id="dynavEA"></script><script charset="UTF-8" src="Debugging%20techniques%20for%20PHP%20programmers_files/Controller_002" type="text/javascript" id="wiBundle"></script></head><body
+ id="ibm-com">
+<div id="ibm-top" class="ibm-landing-page">
+
+<!-- MASTHEAD_BEGIN -->
+<div class="ibm-access"><a href="#ibm-content">Skip to main content</a></div>
+<div id="ibm-masthead"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/print-header.gif"
+ id="ibm-print-masthead" width="510" height="32">
+<div id="ibm-logo"><a href="http://www.ibm.com/"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/ibm-logo.gif"
+ alt="IBM®" width="110" height="50"></a></div>
+<ul id="ibm-geo"><li id="ibm-country" class="ibm-first">Country/region</li><li
+ id="ibm-change-country">[ <a 
+href="http://www.ibm.com/developerworks/country/">select</a> ]</li></ul>
+  <form id="ibm-search-form" 
+action="//www.ibm.com/developerworks/search/searchResults.jsp" 
+method="get" name="form1"><input name="searchType" value="1" 
+type="hidden"><input name="searchSite" value="dW" type="hidden"><p>
+<span id="ibm-search-scope">
+<label for="sn"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt="Search in:" width="1" height="1"></label>
+<select name="searchScope" id="sn">
+<option value="dW" selected="selected">All of dW</option>
+<option value="dW">-----------------</option>
+<option value="aixunix">&nbsp;AIX and UNIX</option>
+<option value="db2">&nbsp;Information Mgmt</option>
+<option value="lotus">&nbsp;Lotus</option>
+<option value="rdd">&nbsp;Rational</option>
+<option value="tivoli">&nbsp;Tivoli</option>  
+<option value="WSDD">&nbsp;WebSphere</option>
+<option value="dW">-----------------</option> 
+<option value="javaZ">&nbsp;Java technology</option> 
+<option value="linuxZ">&nbsp;Linux</option> 
+<option value="opensrcZ">&nbsp;Open source</option>
+<option value="webservZ">&nbsp;SOA/Web services</option>
+<option value="webarchZ">&nbsp;Web development</option>  
+<option value="xmlZ">&nbsp;XML</option>
+<option value="dW">-----------------</option>
+<option value="forums">&nbsp;dW forums</option> 
+<option value="dW">-----------------</option>
+<option value="aI">University</option>
+<option value="dW">-----------------</option>
+<option value="aW">alphaWorks</option>
+<option value="dW">-----------------</option>
+<option value="all">All of IBM</option>
+</select>
+</span>
+
+<label for="q"><img alt="Search for:" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+width="1" height="1"></label><input name="query" maxlength="100" id="q" 
+type="text"><input id="ibm-search" class="ibm-btn-search" name="Search" 
+value="Search" type="submit"></p></form>
+<div id="ibm-site-name">
+<!-- IBM site name container -->
+</div>
+<div id="ibm-universal-nav">
+<ul><li id="ibm-unav-home" class="ibm-first"><a 
+href="http://www.ibm.com/us/en/">Home</a></li><li 
+id="ibm-unav-solutions"><a class=" ibm-unav-has-child" 
+href="http://www.ibm.com/solutions/us/en/">Solutions</a><div 
+id="gi-8c45000a" class="ibm-unav-menu"><span id="gi-8c45000a-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li class=" ibm-mhdyn-rule"><a
+ id="gi-9a6896d8-trigger" 
+href="http://www.ibm.com/smarterplanet/us/en/?cm_re=masthead-_-solutions-_-asmarterplanet">A
+ smarter planet</a><div id="gi-9a6896d8" class="ibm-unav-menu 
+ibm-mhdyn-rule"><span id="gi-9a6896d8-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-a24fa613-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">By industry</a><div 
+id="gi-a24fa613" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-a24fa613-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/industries/aerodefense/?cm_re=masthead-_-business-_-ind-aerodef">Aerospace
+ and defense</a></li><li><a 
+href="http://www.ibm.com/industries/automotive/?cm_re=masthead-_-business-_-ind-auto">Automotive</a></li><li><a
+ 
+href="http://www.ibm.com/industries/financialservices/banking/?cm_re=masthead-_-business-_-ind-banking">Banking</a></li><li><a
+ 
+href="http://www.ibm.com/industries/chemicalspetroleum/?cm_re=masthead-_-business-_-ind-chem">Chemicals
+ and petroleum</a></li><li><a 
+href="http://www.ibm.com/industries/construction/?cm_re=masthead-_-solutions-_-ind-construction">Construction</a></li><li><a
+ 
+href="http://www.ibm.com/industries/consumerproducts/?cm_re=masthead-_-business-_-ind-consumer">Consumer
+ products</a></li><li><a 
+href="http://www.ibm.com/industries/education/?cm_re=masthead-_-business-_-ind-edu">Education</a></li><li><a
+ 
+href="http://www.ibm.com/industries/electronics/?cm_re=masthead-_-business-_-ind-elec">Electronics</a></li><li><a
+ 
+href="http://www.ibm.com/industries/utilities/?cm_re=masthead-_-business-_-ind-energy">Energy
+ and utilities</a></li><li><a 
+href="http://www.ibm.com/industries/financialservices/financialmarkets/?cm_re=masthead-_-business-_-ind-finance">Financial
+ markets</a></li><li><a 
+href="http://www.ibm.com/industries/forestpaper/?cm_re=masthead-_-solutions-_-ind-forestpaper">Forest
+ and paper</a></li><li><a 
+href="http://www.ibm.com/industries/government/?cm_re=masthead-_-business-_-ind-gov">Government</a></li><li><a
+ 
+href="http://www.ibm.com/industries/healthcare/?cm_re=masthead-_-solutions-_-ind-health">Healthcare</a></li><li><a
+ 
+href="http://www.ibm.com/industries/financialservices/insurance/?cm_re=masthead-_-business-_-ind-ins">Insurance</a></li><li><a
+ 
+href="http://www.ibm.com/services/gbs/lifesciences?cm_re=masthead-_-solutions-_-ind-lifesci">Life
+ sciences</a></li><li><a 
+href="http://www.ibm.com/industries/media/?cm_re=masthead-_-business-_-ind-media">Media
+ and entertainment</a></li><li><a 
+href="http://www.ibm.com/industries/metalsmining/?cm_re=masthead-_-solutions-_-ind-metalsmining">Metals
+ and mining</a></li><li><a 
+href="http://www.ibm.com/industries/retail/?cm_re=masthead-_-business-_-ind-retail">Retail</a></li><li><a
+ 
+href="http://www.ibm.com/industries/telecom/?cm_re=masthead-_-business-_-ind-tele">Telecommunications</a></li><li><a
+ 
+href="http://www.ibm.com/industries/travel/?cm_re=masthead-_-business-_-ind-travel">Travel
+ and transportation</a></li><li><a 
+href="http://www.ibm.com/wholesaledistribution/?cm_re=masthead-_-business-_-ind-wholesale">Wholesale
+ distribution</a></li><li><a 
+href="http://www.ibm.com/businesscenter/smb/us/en/industries?cm_re=masthead-_-business-_-ind-medbus">Medium
+ business industries</a></li></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-b9930c0-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">By business need</a><div
+ id="gi-b9930c0" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-b9930c0-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/software/data/db2bi/?cm_re=masthead-_-business-_-bzn-busint">Business
+ intelligence</a></li><li><a 
+href="http://www.ibm.com/services/crm/?cm_re=masthead-_-business-_-bzn-crm">Customer
+ relationship management</a></li><li><a 
+href="http://www.ibm.com/solutions/erp/?cm_re=masthead-_-business-_-bzn-erp">Enterprise
+ resource planning</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_financialmgmt.html?re=bcs_home&amp;cm_re=masthead-_-business-_-bzn-finmgmt">Financial
+ management</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_humancapitalmgmt.html?re=bcs_home&amp;cm_re=masthead-_-business-_-bzn-humancap">Human
+ capital management</a></li><li><a 
+href="http://www.ibm.com/software/plm/?cm_re=masthead-_-business-_-bzn-plm">Product
+ lifecycle management</a></li><li><a 
+href="http://www.ibm.com/security/?cm_re=masthead-_-business-_-bzn-sec">Security</a></li><li><a
+ 
+href="http://www.ibm.com/software/solutions/sensors/?cm_re=masthead-_-business-_-bzn-sensors">Sensors</a></li><li><a
+ 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_strategyplanning.html?re=bcs_home&amp;cm_re=masthead-_-business-_-bzn-strat">Strategy
+ and change</a></li><li><a 
+href="http://www.ibm.com/services/scm/?cm_re=masthead-_-business-_-bzn-scm">Supply
+ chain management</a></li></ul></div></li><li class=" ibm-place-holder"><a
+ id="gi-5d03163d-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">By IT issue</a><div id="gi-5d03163d" 
+class="ibm-unav-menu ibm-place-holder"><span id="gi-5d03163d-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/itsolutions/business-process-management/?cm_re=masthead-_-business-_-bzn-bpm">Business
+ process management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/collaboration/?cm_re=masthead-_-business-_-bzn-collab">Collaboration</a></li><li><a
+ 
+href="http://www.ibm.com/itsolutions/content-management//?cm_re=masthead-_-business-_-bzn-content">Content
+ management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/it-cost/?cm_re=masthead-_-business-_-bzn-cost">Cost
+ management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/data/?cm_re=masthead-_-business-_-bzn-data">Data
+ management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/disaster-recovery/?cm_re=masthead-_-business-_-bzn-recovery">Disaster
+ recovery</a></li><li><a 
+href="http://www.ibm.com/itsolutions/distribution-management/?cm_re=masthead-_-business-_-bzn-disman">Distribution
+ management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/energy-efficiency/?cm_re=masthead-_-business-_-bzn-energy">Energy
+ efficiency</a></li><li><a 
+href="http://www.ibm.com/itsolutions/eai/?cm_re=masthead-_-business-_-bzn-eai">Enterprise
+ application integration</a></li><li><a 
+href="http://www.ibm.com/itsolutions/enterprisearchitecture/">Enterprise
+ architecture</a></li><li><a 
+href="http://www.ibm.com/itsolutions/compliance/?cm_re=masthead-_-business-_-bzn-compliance">Regulatory
+ compliance</a></li><li><a 
+href="http://www.ibm.com/security?cm_re=masthead-_-business-_-bzn-security">Security</a></li><li><a
+ 
+href="http://www.ibm.com/itsolutions/systems-management/?cm_re=masthead-_-business-_-bzn-sysman">Systems
+ management</a></li><li><a 
+href="http://www.ibm.com/itsolutions/virtualization/?cm_re=masthead-_-business-_-bzn-virtual">Virtualization</a></li><li><a
+ 
+href="http://www.ibm.com/itsolutions/portals/?cm_re=masthead-_-business-_-bzn-wrkforce">Workforce
+ productivity</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a 
+id="gi-cf2863f6-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">By Business Partner</a><div id="gi-cf2863f6" 
+class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-cf2863f6-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/solutions/cisco/us/en/?cm_re=masthead-_-business-_-bp-cisco">IBM
+ and Cisco</a></li><li><a 
+href="http://www.ibm.com/solutions/oracle/us/en/?cm_re=masthead-_-business-_-bp-oracle">IBM
+ and Oracle</a></li><li><a 
+href="http://www.ibm.com/solutions/sap/us/en/?cm_re=masthead-_-business-_-bp-sap">IBM
+ and SAP</a></li><li><a 
+href="http://www.ibm.com/solutions/alliance/us/en/?cm_re=masthead-_-business-_-bp-more">More
+ alliance partners</a></li><li><a 
+href="http://www-304.ibm.com/jct09002c/gsdod/showcase.do?cm_re=masthead-_-business-_-bp-select">Select
+ Business Partners</a></li></ul></div></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_index.html?cm_re=masthead-_-business-_-busconsult">Business
+ consulting</a></li><li><a 
+href="http://www.ibm.com/cloud?cm_re=masthead-_-solutions-_-cloud">Cloud
+ computing</a></li><li><a 
+href="http://www.ibm.com/systems/dynamicinfrastructure/?cm_re=masthead-_-business-_-di">Dynamic
+ infrastructure</a></li><li><a 
+href="http://www.ibm.com/financing/us/?cm_re=masthead-_-business-_-financing">Financing</a></li><li><a
+ href="http://www.ibm.com/green/?cm_re=masthead-_-business-_-green">Green:
+ energy, environment &amp; sustainability</a></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-5121ee2b-trigger" 
+href="http://www.ibm.com/soa?pgel=ibmhzn&amp;cm_re=masthead-_-business-_-soa">Service
+ oriented architecture (SOA)</a><div id="gi-5121ee2b" 
+class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-5121ee2b-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-df100722-trigger" 
+href="http://www-01.ibm.com/finder/businesscenter/us/en/businessstrategies_topic.wss?cm_re=masthead-_-business-_-sol4mb">Small
+ and medium business</a><div id="gi-df100722" class="ibm-unav-menu 
+ibm-mhdyn-rule"><span id="gi-df100722-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li><a 
+href="http://www.ibm.com/businesssolutions/us/en/?cm_re=masthead-_-business-_-more">More</a></li></ul></div></li><li
+ id="ibm-unav-services"><a class=" ibm-unav-has-child" 
+href="http://www.ibm.com/technologyservices/us/en/">Services</a><div 
+id="gi-40e26278" class="ibm-unav-menu"><span id="gi-40e26278-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li class=" ibm-mhdyn-rule"><a
+ id="gi-b3a77445-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">IT services</a><div id="gi-b3a77445" 
+class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-b3a77445-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/services/us/index.wss">All IT services</a></li><li><a
+ 
+href="http://www.ibm.com/services/continuity/?cm_re=masthead-_-itservices-_-buscont">Business
+ continuity and resiliency services</a></li><li><a 
+href="http://www.ibm.com/services/enduser/?cm_re=masthead-_-itservices-_-enduser">End-user
+ services</a></li><li><a 
+href="http://www.ibm.com/services/integratedcommunications/?cm_re=masthead-_-itservices-_-communications">Integrated
+ communications services</a></li><li><a 
+href="http://www.ibm.com/services/itsaconsulting/?cm_re=masthead-_-itservices-_-strategy">IT
+ strategy and architecture services</a></li><li><a 
+href="http://www.ibm.com/services/maintenance/?cm_re=masthead-_-itservices-_-maint">Maintenance
+ and technical support services</a></li><li><a 
+href="http://www.ibm.com/services/middleware/?cm_re=masthead-_-itservices-_-middleware">Middleware
+ services</a></li><li><a 
+href="http://www.ibm.com/services/security/?cm_re=masthead-_-itservices-_-security">Security
+ services</a></li><li><a 
+href="http://www.ibm.com/services/server/?cm_re=masthead-_-itservices-_-server">Server
+ services</a></li><li><a 
+href="http://www.ibm.com/services/siteandfacilities/?cm_re=masthead-_-itservices-_-site">Site
+ and facilities services</a></li><li><a 
+href="http://www.ibm.com/services/storage/?cm_re=masthead-_-itservices-_-storage">Storage
+ and data services</a></li><li><a 
+href="http://www.ibm.com/services/us/index.wss/allservices">IT services 
+A-Z</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a 
+id="gi-a9c59e55-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">Business consulting</a><div id="gi-a9c59e55" 
+class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-a9c59e55-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_index.html?cm_re=masthead-_-itservices-_-busconsult">All
+ business consulting</a></li><li><a 
+href="http://www.ibm.com/gbs/bao?cm_re=masthead-_-itservices-_-bao">Business
+ analytics and optimization</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_salesmrktingservices.html?re=bcs_home">Customer
+ relationship management</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_financialmgmt.html?re=bcs_home">Financial
+ management</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_humancapitalmgmt.html?re=bcs_home">Human
+ capital management</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_strategyplanning.html?re=bcs_home">Strategy
+ and change</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/bus/html/bcs_supplychainprocurement.html?re=bcs_home">Supply
+ chain management</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a
+ id="gi-24471486-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">Application services</a><div id="gi-24471486"
+ class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-24471486-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/services/applications?cm_re=masthead-_-business-_-apps-allappserv">All
+ application services</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/app/html/gbs_app_custom_appdev_sysinteg.html?cm_re=masthead-_-business-_-apps-appdev">Custom
+ application development and system integration</a></li><li><a 
+href="http://www.ibm.com/services/us/gbs/app/html/gbs_app_appmanagement.html?cm_re=masthead-_-business-_-apps-appmgmt">Application
+ management</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a 
+id="gi-70ad76c8-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">Outsourcing services</a><div id="gi-70ad76c8"
+ class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-70ad76c8-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/services/us/index.wss/offerfamily/aod/a1028600">Applications
+ outsourcing</a></li><li><a 
+href="http://www.ibm.com/services/us/index.wss/offerfamily/igs/a1001429">Business
+ process outsourcing</a></li><li><a 
+href="http://www.ibm.com/services/us/index.wss/offerfamily/gts/a1029385">IT
+ outsourcing and hosting</a></li></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-369d56db-trigger" 
+href="http://www.ibm.com/training">Training</a><div id="gi-369d56db" 
+class="ibm-unav-menu ibm-mhdyn-rule"><span id="gi-369d56db-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-3add2e9a-trigger" 
+href="http://www-01.ibm.com/finder/businesscenter/us/en/itsolutionsservices_topic.wss?cm_re=masthead-_-itservices-_-medbus">Small
+ and medium business</a><div id="gi-3add2e9a" class="ibm-unav-menu 
+ibm-mhdyn-rule"><span id="gi-3add2e9a-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-a13976c6-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">Other services</a><div
+ id="gi-a13976c6" class="ibm-unav-menu ibm-mhdyn-rule"><span 
+id="gi-a13976c6-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/financing/us/recovery/?cm_re=masthead-_-itservices-_-asset">Asset
+ recovery</a></li><li><a 
+href="http://www.ibm.com/software/sw-services/?cm_re=masthead-_-itservices-_-software">Software
+ services</a></li></ul></div></li><li><a 
+href="http://www.ibm.com/technologyservices/us/en/?cm_re=masthead-_-itservices-_-more">More</a></li></ul></div></li><li
+ id="ibm-unav-products"><a class=" ibm-unav-has-child" 
+href="http://www.ibm.com/products/us/en/">Products</a><div 
+id="gi-ba1a55e6" class="ibm-unav-menu"><span id="gi-ba1a55e6-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li class=" 
+ibm-place-holder"><a id="gi-5f32b302-trigger" 
+href="http://www.ibm.com/products/specialoffers/us/en/index.html?cm_re=masthead-_-products-_-promo">Special
+ offers</a><div id="gi-5f32b302" class="ibm-unav-menu ibm-place-holder"><span
+ id="gi-5f32b302-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-f1ef02fc-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">Software</a><div 
+id="gi-f1ef02fc" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-f1ef02fc-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/software?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-allsoftware">Software
+ overview</a></li><li><a 
+href="http://www.ibm.com/software/products/us/en/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-swprodfinder">Products</a></li><li
+ class=" ibm-mhdyn-rule"><a id="gi-5818dbc2-trigger" 
+href="http://www14.software.ibm.com/webapp/download/byproduct.jsp?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-trials">Trials
+ and demos</a><div id="gi-5818dbc2" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-5818dbc2-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li><a 
+href="http://www.ibm.com/software/data?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-infomgmt">Information
+ Management</a></li><li><a 
+href="http://www.ibm.com/software/data/cognos/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-cognos">-
+ Cognos</a></li><li><a 
+href="http://www.ibm.com/software/data/management/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-db2">-
+ DB2</a></li><li><a 
+href="http://www.ibm.com/software/data/content-management/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-filenet">-
+ ECM (including FileNet)</a></li><li><a 
+href="http://www.ibm.com/software/data/informix/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-informix">-
+ Informix</a></li><li><a 
+href="http://www.ibm.com/software/data/infosphere/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-infosphere">-
+ InfoSphere</a></li><li><a 
+href="http://www.ibm.com/software/lotus?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-lotus">Lotus</a></li><li><a
+ 
+href="http://www.ibm.com/software/rational?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-rational">Rational</a></li><li><a
+ 
+href="http://www.ibm.com/software/tivoli?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-tivoli">Tivoli</a></li><li><a
+ 
+href="http://www.ibm.com/software/websphere?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-websphere">WebSphere</a></li><li><a
+ 
+href="http://www.ibm.com/software/os/systemz/en_US/?pgel=ibmhzn&amp;cm_re=masthead-_-products-_-sw-sysz">System
+ z software</a></li></ul></div></li><li class=" ibm-place-holder"><a 
+id="gi-45eee1d-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">Storage</a><div id="gi-45eee1d" 
+class="ibm-unav-menu ibm-place-holder"><span id="gi-45eee1d-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/storage/?cm_re=masthead-_-products-_-stg-allstorage">All
+ storage</a></li><li><a 
+href="http://www.ibm.com/storage/disk/?cm_re=masthead-_-products-_-stg-disk">Disk
+ systems</a></li><li><a 
+href="http://www.ibm.com/storage/tape/?cm_re=masthead-_-products-_-stg-tape">Tape
+ systems</a></li><li><a 
+href="http://www.ibm.com/storage/snetwork/?cm_re=masthead-_-products-_-stg-san">Storage
+ area networks</a></li><li><a 
+href="http://www.ibm.com/totalstorage/nas/?cm_re=masthead-_-products-_-stg-nas">Network
+ attached storage</a></li><li><a 
+href="http://www.ibm.com/storage/software/?cm_re=masthead-_-products-_-stg-storagesoft">Storage
+ software</a></li><li><a 
+href="http://www.ibm.com/pc/ww/hdd/hddredirect.html?cm_re=masthead-_-products-_-stg-hdd">Hard
+ drives/microdrives</a></li><li><a 
+href="http://www.ibm.com/systems/storage/product/?cm_re=masthead-_-products-_-stg-storagea2z">Storage
+ A to Z</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a 
+id="gi-2ac55ab3-trigger" class=" ibm-unav-menu-has-child" 
+href="javascript:void(0);">Servers &amp; systems</a><div 
+id="gi-2ac55ab3" class="ibm-unav-menu ibm-mhdyn-rule"><span 
+id="gi-2ac55ab3-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/systems/?cm_re=masthead-_-products-_-sys-allsystems">All
+ servers and systems</a></li><li><a 
+href="http://www.ibm.com/systems/power/?cm_re=masthead-_-products-_-sys-power">Power
+ Systems</a></li><li><a 
+href="http://www.ibm.com/systems/i/?cm_re=masthead-_-products-_-sys-iseries">System
+ i (iSeries)</a></li><li><a 
+href="http://www.ibm.com/systems/p/?cm_re=masthead-_-products-_-sys-pseries">System
+ p (pSeries)</a></li><li><a 
+href="http://www.ibm.com/systems/z/?cm_re=masthead-_-products-_-sys-zseries">System
+ z (Mainframe)</a></li><li><a 
+href="http://www.ibm.com/systems/x/?cm_re=masthead-_-products-_-sys-xseries">System
+ x (xSeries)</a></li><li><a 
+href="http://www.ibm.com/systems/bladecenter/?cm_re=masthead-_-products-_-sys-blade">BladeCenter</a></li><li
+ class=" ibm-mhdyn-rule"><a id="gi-e9752f81-trigger" 
+href="http://www.ibm.com/systems/clusters/?cm_re=masthead-_-products-_-sys-cluster">Cluster
+ systems</a><div id="gi-e9752f81" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-e9752f81-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li><a 
+href="http://www.ibm.com/systems/hardware/browse/unix/?cm_re=masthead-_-products-_-sys-unix">UNIX
+ servers</a></li><li class=" ibm-mhdyn-rule"><a id="gi-59721953-trigger"
+ 
+href="http://www.ibm.com/systems/hardware/browse/linux/?cm_re=masthead-_-products-_-sys-linux">Linux
+ servers</a><div id="gi-59721953" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-59721953-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li><a 
+href="http://www.ibm.com/systems/hardware/browse/inpro/?cm_re=masthead-_-products-_-sys-intel">Intel
+ processor-based servers</a></li><li class=" ibm-mhdyn-rule"><a 
+id="gi-1f28a70d-trigger" 
+href="http://www.ibm.com/systems/hardware/browse/amdpro/?cm_re=masthead-_-products-_-sys-amd">AMD
+ processor-based servers</a><div id="gi-1f28a70d" class="ibm-unav-menu 
+ibm-mhdyn-rule"><span id="gi-1f28a70d-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li><a 
+href="http://www.ibm.com/systems/oem?cm_re=masthead-_-products-_-oemsys">OEM
+ systems</a></li></ul></div></li><li class=" ibm-place-holder"><a 
+id="gi-cbedea43-trigger" 
+href="http://www.ibm.com/services/us/index.wss/offerfamily/iss/a1029097?cm_re=masthead-_-products-_-iss">Internet
+ security</a><div id="gi-cbedea43" class="ibm-unav-menu 
+ibm-place-holder"><span id="gi-cbedea43-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-aa714ed6-trigger" 
+href="http://www.ibm.com/shop/pc">Personal computers</a><div 
+id="gi-aa714ed6" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-aa714ed6-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-201c56e9-trigger" 
+href="http://www.ibm.com/products/retail/?cm_re=masthead-_-products-_-pos">Point
+ of sale</a><div id="gi-201c56e9" class="ibm-unav-menu ibm-place-holder"><span
+ id="gi-201c56e9-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-ff48fe79-trigger" 
+href="http://www.infoprint.com/us">Printing systems from InfoPrint</a><div
+ id="gi-ff48fe79" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-ff48fe79-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-fb68f998-trigger" 
+href="http://www.ibm.com/technology/?cm_re=masthead-_-products-_-chips">Semiconductors</a><div
+ id="gi-fb68f998" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-fb68f998-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-a7f66418-trigger" 
+href="http://www.ibm.com/shop/americas/content/home/store_IBMPublicUSA/en_US/Upgrades.html?cm_re=masthead-_-products-_-upgrades">Upgrades,
+ accessories &amp; parts</a><div id="gi-a7f66418" class="ibm-unav-menu 
+ibm-mhdyn-rule"><span id="gi-a7f66418-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-4fb4c4de-trigger" 
+href="http://www.ibm.com/shop/usedsystems">Certified used systems &amp; 
+storage</a><div id="gi-4fb4c4de" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-4fb4c4de-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-e4a93311-trigger" 
+href="http://www.ibm.com/community/?cm_re=masthead-_-products-_-promo">Communities</a><div
+ id="gi-e4a93311" class="ibm-unav-menu ibm-mhdyn-rule"><span 
+id="gi-e4a93311-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-bdc5dc09-trigger" 
+href="http://www.ibm.com/businesscenter/smb/us/en/smallbusiness?cm_re=masthead-_-products-_-smallbus">Small
+ business products</a><div id="gi-bdc5dc09" class="ibm-unav-menu 
+ibm-place-holder"><span id="gi-bdc5dc09-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-575ad17f-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">Medium business 
+products</a><div id="gi-575ad17f" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-575ad17f-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/finder/businesscenter/us/en/hardware_topic.wss?cm_re=masthead-_-products-_-med-hardware">Hardware</a></li><li><a
+ 
+href="http://www.ibm.com/finder/businesscenter/us/en/software_topic.wss?cm_re=masthead-_-products-_-med-software">Software</a></li></ul></div></li><li
+ class=" ibm-place-holder"><a id="gi-44a8e510-trigger" 
+href="http://www.ibm.com/products/us/?cm_re=masthead-_-products-_-more">More</a><div
+ id="gi-44a8e510" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-44a8e510-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li></ul></div></li><li
+ style="z-index: 8;" class=" ibm-is-active" id="ibm-unav-support"><a 
+class=" ibm-unav-has-child" href="http://www.ibm.com/support/us/en/">Support
+ &amp; downloads</a><div style="z-index: 9; left: 0px; display: none;" 
+id="gi-55702ec" class="ibm-unav-menu"><span style="display: none; 
+height: 260px;" id="gi-55702ec-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li class=" 
+ibm-place-holder"><a id="gi-bafcf104-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">Download</a><div 
+id="gi-bafcf104" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-bafcf104-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/products/finder/us/finders?pg=ddfinder&amp;cm_re=other-_-suprcn-_-download">Fixes,
+ updates and drivers</a></li><li><a 
+href="http://www14.software.ibm.com/webapp/download/byproduct.jsp?pgel=ibmhzn1&amp;cm_re=masthead-_-supdl-_-dl-trials">Trials
+ and demos</a></li></ul></div></li><li class=" ibm-place-holder"><a 
+id="gi-2c045b41-trigger" 
+href="http://www.ibm.com/support/troubleshooting/en_US?cm_re=masthead-_-supdl-_-troubleshoot">Troubleshoot</a><div
+ id="gi-2c045b41" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-2c045b41-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-31164da-trigger" 
+href="http://www.ibm.com/support/advsrch.wss?rs=0&amp;loc=en_US&amp;cm_re=masthead-_-supdl-_-search">Search</a><div
+ id="gi-31164da" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-31164da-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-41bc7668-trigger" 
+href="http://www.ibm.com/support/documentation/en_US?cm_re=masthead-_-supdl-_-documentation">Documentation</a><div
+ id="gi-41bc7668" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-41bc7668-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-74f84b8-trigger" 
+href="http://www.ibm.com/support/forums/en_US?cm_re=masthead-_-supdl-_-forums">Forums
+ &amp; communities</a><div id="gi-74f84b8" class="ibm-unav-menu 
+ibm-place-holder"><span id="gi-74f84b8-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-ea003dc2-trigger" 
+href="http://www.ibm.com/support/plan/en_US?cm_re=masthead-_-supdl-_-plan">Plan</a><div
+ id="gi-ea003dc2" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-ea003dc2-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-b7df835f-trigger" 
+href="http://www.ibm.com/support/install/en_US?cm_re=masthead-_-supdl-_-install">Install</a><div
+ id="gi-b7df835f" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-b7df835f-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-1654be54-trigger" 
+href="http://www.ibm.com/support/use/en_US?cm_re=masthead-_-supdl-_-use">Use</a><div
+ id="gi-1654be54" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-1654be54-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-7133ff1-trigger" 
+href="http://www.ibm.com/support/electronic/uprtransition.wss?category=2&amp;locale=en_us&amp;cm_re=masthead-_-supdl-_-request">Open
+ a technical service request</a><div id="gi-7133ff1" 
+class="ibm-unav-menu ibm-place-holder"><span id="gi-7133ff1-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-36d95104-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0);">Support by product</a><div
+ id="gi-36d95104" class="ibm-unav-menu ibm-mhdyn-rule"><span 
+id="gi-36d95104-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="http://www.ibm.com/software/support/?cm_re=masthead-_-supdl-_-sbp-software">Software</a></li><li><a
+ 
+href="http://www.ibm.com/systems/support?cm_re=masthead-_-supdl-_-sbp-systems">Servers
+ and systems</a></li><li><a 
+href="http://www.ibm.com/systems/support/supportsite.wss/brandmain?brandind=5345868&amp;cm_re=masthead-_-supdl-_-sbp-storage">System
+ storage</a></li><li><a 
+href="http://www.infoprintsolutionscompany.com/internet/wwsites.nsf/vwwebpublished/sm_home_us?opendocument&amp;cm_re=masthead-_-supdl-_-sbp-print">Printing
+ systems from InfoPrint</a></li><li><a 
+href="http://www.lenovo.com/support/?cm_re=masthead-_-supdl-_-sbp-lenovo">Lenovo
+ ThinkPads and ThinkCentres</a></li></ul></div></li><li class=" 
+ibm-mhdyn-rule"><a id="gi-2e1f0c1a-trigger" 
+href="http://www.ibm.com/support/operations/us/en?cm_re=masthead-_-supdl-_-getadmin">Customer
+ support</a><div id="gi-2e1f0c1a" class="ibm-unav-menu ibm-mhdyn-rule"><span
+ id="gi-2e1f0c1a-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-77701e96-trigger" 
+href="http://www.ibm.com/support/us/en/?cm_re=masthead-_-supdl-_-more">More</a><div
+ id="gi-77701e96" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-77701e96-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li></ul></div></li><li
+ id="ibm-unav-myibm"><a class=" ibm-unav-has-child" 
+href="http://www.ibm.com/account/us/en/">My IBM</a><div id="gi-e94b29e2"
+ class="ibm-unav-menu"><span id="gi-e94b29e2-ehb" 
+class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li class=" 
+ibm-place-holder"><a id="gi-c5e3cb8-trigger" 
+href="http://www.ibm.com/account/myaccounts/us/en/?cm_re=masthead-_-myibm-_-myacct">My
+ accounts</a><div id="gi-c5e3cb8" class="ibm-unav-menu ibm-place-holder"><span
+ id="gi-c5e3cb8-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-504edd7b-trigger" 
+href="https://www.ibm.com/account/myibm/profile.do?cc=us&amp;lc=&amp;cm_re=masthead-_-myibm-_-myprofile">My
+ profile</a><div id="gi-504edd7b" class="ibm-unav-menu ibm-place-holder"><span
+ id="gi-504edd7b-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-myinterest"><a id="gi-83d8ec33-trigger" 
+href="https://www.ibm.com/account/myibm/myinterestView.do?cc=us&amp;lc=en&amp;cm_re=masthead-_-myibm-_-myinterests">My
+ interests</a><div id="gi-83d8ec33" class="ibm-unav-menu ibm-myinterest"><span
+ id="gi-83d8ec33-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-f3037e6-trigger" 
+href="http://www.ibm.com/account/mycommunity/us/en/?cm_re=masthead-_-myibm-_-community">My
+ community spaces</a><div id="gi-f3037e6" class="ibm-unav-menu 
+ibm-place-holder"><span id="gi-f3037e6-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-b549bd37-trigger" 
+href="https://www.ibm.com/systems/support/myview/subscription/css.wss/folders?methodName=listMyFolders&amp;cm_re=masthead-_-myibm-_-tech">My
+ technical support</a><div id="gi-b549bd37" class="ibm-unav-menu 
+ibm-place-holder"><span id="gi-b549bd37-ehb" class="ibm-unav-menu-ehb"><img
+ src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-c1202d2-trigger" class=" 
+ibm-unav-menu-has-child" href="javascript:void(0)">My customer support</a><div
+ id="gi-c1202d2" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-c1202d2-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul><li><a 
+href="https://www-132.ibm.com/webapp/wcs/stores/servlet/OrderItemDisplay?langId=-1&amp;storeId=1&amp;catalogId=-840&amp;krypto=g3mOZ2uZQalqnkMCJkVJ1Q%3D%3D&amp;ddkey=OrderItemDisplay&amp;cm_re=masthead-_-myibm-_-cs-cart">Shopping
+ cart</a></li><li><a 
+href="http://www.ibm.com/support/operations/us/en/contracts?cm_re=masthead-_-myibm-_-cs-contracts">Contracts</a></li><li><a
+ 
+href="http://www.ibm.com/support/operations/us/en/orderdelivery?cm_re=masthead-_-myibm-_-cs-orders">Orders
+ and delivery</a></li><li><a 
+href="http://www.ibm.com/support/operations/us/en/inventory?cm_re=masthead-_-myibm-_-cs-inventory">Inventory
+ and maintenance</a></li><li><a 
+href="http://www.ibm.com/support/operations/us/en/invoicespayments?cm_re=masthead-_-myibm-_-cs-invoices">Invoices
+ and payments</a></li><li><a 
+href="http://www.ibm.com/support/operations/us/en/learnmore3a?cm_re=masthead-_-myibm-_-cs-self">Self-service
+ tools</a></li><li><a 
+href="http://www.ibm.com/support/operations/us?cm_re=masthead-_-myibm-_-cs-more">More
+ customer support</a></li></ul></div></li><li class=" ibm-mhdyn-rule"><a
+ id="gi-36b98ce-trigger" 
+href="http://www-931.ibm.com/bin/subscriptions/welcome.cgi?cl=usen&amp;cm_re=masthead-_-myibm-_-subscriptions">Subscriptions</a><div
+ id="gi-36b98ce" class="ibm-unav-menu ibm-mhdyn-rule"><span 
+id="gi-36b98ce-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li><li class=" 
+ibm-place-holder"><a id="gi-990b6d32-trigger" 
+href="http://www.ibm.com/account/us/en/?cm_re=masthead-_-myibm-_-more">More</a><div
+ id="gi-990b6d32" class="ibm-unav-menu ibm-place-holder"><span 
+id="gi-990b6d32-ehb" class="ibm-unav-menu-ehb"><img 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+alt=""></span><a class="ibm-access"></a><ul></ul></div></li></ul></div></li></ul>
+</div>
+</div>
+<!-- MASTHEAD_END -->
+
+<div id="ibm-pcon">
+
+<!-- CONTENT_BEGIN -->
+<div id="ibm-content">
+
+<!-- Navigation_Trail_BEGIN -->
+<!-- &nbsp; -->
+        <div id="ibm-content-head"><ul id="ibm-navigation-trail"><li 
+class="ibm-first"><a href="http://www.ibm.com/developerworks/">developerWorks</a></li><li><a
+ href="http://www.ibm.com/developerworks/opensource/">Open source</a></li><li><a
+ href="http://www.ibm.com/developerworks/views/opensource/library.jsp">Technical
+ library</a></li></ul></div>
+<!-- Navigation_Trail_END -->
+
+<!-- dW_Summary Area_START -->
+<div id="dw-summary-article">
+
+<div class="dw-content-head">
+<h1>Debugging techniques for PHP programmers</h1><p><em>Using print 
+statements, error reporting, and the PHPeclipse plug-in</em></p>
+</div>
+
+<div class="ibm-container-body ibm-two-column">
+
+<div class="ibm-column ibm-first">
+<div class="author"><a title="" class="dwauthor" rel="#authortip1" 
+href="#author1">Tyler Anderson</a> (<a 
+href="mailto:tyleranderson5@yahoo.com?subject=Debugging%20techniques%20for%20PHP%20programmers&amp;cc=troy@backstopmedia.com">tyleranderson5@yahoo.com</a>),
+ Freelance writer</div><div style="display: none;" id="authortip1" 
+class="dwauthor-onload-state ibm-no-print">Tyler Anderson recieved both 
+his B.S. in Computer Science in 2004 and his M.S. in Electrical and 
+Computer Engineering in 2005 from Brigham Young University. Tyler has 
+written and coded numerous articles and tutorials for IBM developerWorks
+ and DevX.</div>
+<p></p>
+<p><b>Summary:</b>&nbsp; Explore various methods for debugging PHP 
+applications, including turning on error reporting in Apache and PHP, 
+and by placing strategic print statements to locate the source of more 
+difficult bugs through a simple example PHP script. The PHPeclipse 
+plug-in for Eclipse, a slick development environment with real-time 
+syntax parsing abilities, will also be covered, as well as the DBG 
+debugger extension for PHPeclipse.</p>
+
+<div id="dw-tag-content" class="ibm-no-print"></div><div 
+id="dw-moretags-access" class="ibm-access"></div>
+<p class="ibm-no-print"></p><div id="dw-tag-this" class="ibm-no-print"><a
+ class="ibm-external-link" onclick="jQuery.launchTagThisWindow(); return
+ false;" href="#">Tag this!</a></div><div id="interestShow" 
+class="ibm-no-print"><div id="dw-interest-anon"><a id="intAnonBtn" 
+class="ibm-external-link" href="">Update My dW interests</a> (<a 
+class="dw-interest" 
+href="https://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F">Log
+ in</a> | <a class="dw-interest" href="#overlay" 
+onclick="ibmCommon.Overlays.show('dwmyinterestadd', this);return false;">What's
+ this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to 
+help for Update My dW interests</a></div></div>
+</div>
+
+<div class="ibm-column ibm-second">
+<p class="leading"><b>Date:</b>&nbsp; 29 Nov  2005
+<br><b>Level: </b>&nbsp;Introductory
+
+
+
+
+
+
+
+
+
+<br>
+<br><b>Activity:</b>&nbsp; 91798 views
+<br><b>Comments:</b> &nbsp; <span id="nCmts">2&nbsp;(<a 
+href="#icomments">View or add comments</a>)</span>
+<!-- Rating_Area_Begin -->
+<!-- Ensure that div id is based on input id and ends with -widget -->	
+<input id="art-rating" name="ratinga" value="4" type="hidden"></p><div 
+id="art-rating-widget"><a href="javascript:void(0);"><img alt="1 star" 
+title="Click to rate 1 star" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/avg-star-on.gif"
+ width="20" height="20"></a><a href="javascript:void(0);"><img alt="2 
+stars" title="Click to rate 2 stars" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/avg-star-on.gif"
+ width="20" height="20"></a><a href="javascript:void(0);"><img alt="3 
+stars" title="Click to rate 3 stars" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/avg-star-on.gif"
+ width="20" height="20"></a><a href="javascript:void(0);"><img alt="4 
+stars" title="Click to rate 4 stars" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/avg-star-on.gif"
+ width="20" height="20"></a><a href="javascript:void(0);"><img alt="5 
+stars" title="Click to rate 5 stars" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/star-off.gif"
+ width="20" height="20"></a><span id="rateTxt">  Average rating (based 
+on 160 votes)</span></div>
+<script language="JavaScript" type="text/javascript">
+// <![CDATA[
+   // widget div id and article id as args
+   window.artRating.init('art-rating-widget');
+// ]]>
+</script>
+<!-- Rating_Area_End -->
+
+</div>
+
+</div>
+</div>
+<!-- dW_Summary_Area_END -->
+
+<!-- CONTENT_BODY -->
+<div id="ibm-content-body">
+
+<!-- MAIN_COLUMN_BEGIN -->
+<div id="ibm-content-main">
+
+<!-- Related_Searches_Area -->
+<!-- Related_Searches_Area_Begin -->
+<script type="text/javascript" language="javascript">
+	     capture_referrer();
+</script>
+
+<div id="dw-related-searches-article" style="display: none;">
+<div class="ibm-container ibm-alternate-two">
+<div class="ibm-container-body">
+
+<!--  START : HTML FOR ARTICLE SEARCH -->
+  <div id="article_results" style="display: block;"></div>
+<!--  END : HTML FOR ARTICLE SEARCH -->
+
+</div>
+</div>
+</div>
+<!-- Related_Searches_Area_End -->
+<!-- MAIN_COLUMN_CONTAINER_BEGIN -->
+<div class="ibm-container">
+
+<!-- MAIN_COLUMN_CONTENT_BEGIN -->
+<p><a name="N10049"><span class="atitle">Introduction</span></a></p>
+
+<p>There are many PHP debugging techniques that can save you countless 
+hours when coding. An effective but basic debugging technique is to 
+simply turn on error reporting. Another slightly more advanced technique
+ involves using print statements, which can help pinpoint more elusive 
+bugs by displaying what is actually going onto the screen. PHPeclipse is
+ an Eclipse plug-in that can highlight common syntax errors and can be 
+used in conjunction with a debugger to set breakpoints.</p>
+
+<p><a name="setup"><span class="atitle">Setting up</span></a></p>
+
+<p>To learn the concepts described in this article, you are going to 
+need PHP, a Web server, and Eclipse. The latest version of PHP supported
+ by the debugger extension is V5.0.3. </p>
+
+<p>We need a Web server to parse the pages you create in PHP and display
+ them to the browser. This article uses Apache V2. However, any Web 
+server will suffice.  </p>
+
+<p>To take advantage of some of the debugging techniques in this 
+article, you need to install Eclipse V3.1.1 and the plug-in: PHPeclipse 
+V1.1.8. Since Eclipse requires Java™ technology, you also need to 
+download that. </p>
+
+<p>You also need the debugger module extension for PHP. Installing it is
+ a bit tricky. Carefully follow the
+instructions for installing the debugger extension. For now, comment out
+ the lines where you are asked to load and configure the extension in 
+PHP in the php.ini file. We’ll uncomment those lines when we’re ready to
+ use
+the debugger.</p>
+
+<p>See <a href="#resources">Resources</a> for download information. Now 
+let's move on to error messages.</p>
+
+<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><a name="N1006E"><span class="atitle">Error messages</span></a></p>
+
+<p>Error messages are your first line of defense as a developer. You 
+don't want to be developing code in PHP on a server that is not 
+configured to display error messages. However, keep in mind that when 
+your code is debugged and ready to go live, you want to make sure error 
+reporting is turned off because you don't want visitors to your site 
+seeing error messages that may give them enough knowledge to exploit a 
+weakness and hack your site.</p>
+
+<p>You can also use error messages to your advantage because they 
+display the exact line of code that threw or generated an error. This 
+makes debugging a matter of looking at the line number shown on the 
+browser by the generated error and checking that line number in your 
+code. Later, you will see that the PHPeclipse plug-in aides 
+significantly in the development and debugging process by underlining 
+syntax errors on the fly and by marking syntax errors with a red "x" 
+when saving your file.</p>
+
+<p>Let's take a look at how to turn error reporting on in the php.ini 
+file and set the level of error reporting. Then you'll learn how to 
+override these settings in the Apache configuration file.</p>
+
+<p><a name="N1007D"><span class="smalltitle">Error reporting in PHP</span></a></p>
+
+<p>There are many configuration settings in the php.ini file. You should
+ already have set up up your php.ini file and placed it in the 
+appropriate directory, as shown in the instructions in the Install PHP 
+and Apache V2 on Linux document (see <a href="#resources">Resources</a>).
+ There are a couple configuration variables you should know about when 
+debugging your PHP applications. Here they are with their default 
+values:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td
+ class="code-outline"><pre class="displaycode">display_errors = Off
+error_reporting = E_ALL
+</pre></td></tr></tbody></table><br>
+
+<p>You can discover the current default values of these variables by 
+searching for them in the php.ini file. The purpose of the <code>display_errors</code>
+ variable is self-evident -- it tells PHP whether or not to display 
+errors. The default value is <code>Off</code>. To make your life easier 
+in the development process, however, set this value to <code>On</code> 
+by replacing <code>Off</code>:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td
+ class="code-outline"><pre class="displaycode">display_errors = On
+</pre></td></tr></tbody></table><br>
+
+<p>The <code>error_reporting</code> variable has a default value of <code>E_ALL</code>.
+ This displays everything from bad coding practices to harmless notices 
+to errors. <code>E_ALL</code> is a little too picky for my liking in the
+ development process because it clutters the browser output by 
+displaying notices on the screen for small things like uninitialized 
+variables. I prefer to see the errors, any bad coding practices, but not
+ the harmless notices. Therefore, replace the default value of <code>error_reporting</code>
+ as follows:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td
+ class="code-outline"><pre class="displaycode">error_reporting = E_ALL &amp; ~E_NOTICE
+</pre></td></tr></tbody></table><br>
+
+<p>Restart Apache, and you're all set. Next, you'll learn how to do the 
+same thing on Apache.</p>
+
+<p><a name="N100C2"><span class="smalltitle">Error reporting in the 
+server</span></a></p>
+
+<p>Depending on what Apache is doing, turning error reporting on in PHP 
+may not work because you may have multiple PHP versions on your 
+computer. It's sometimes hard to tell which PHP version Apache is  
+pointing to because Apache can only look at one php.ini file. Not 
+knowing which php.ini file Apache is using to configure itself is a 
+security problem. However, there is a way to configure PHP variables in 
+Apache to guarantee the setting of the correct error levels.</p>
+
+<p>Also, it's good to know how to set these configuration variables on 
+the server side to veto or pre-empt the php.ini file, providing a 
+greater level of security.</p>
+
+<p>You should already have toyed with basic configurations in the 
+http.conf file at &lt;apache2-install-dir&gt;/conf/httpd.conf when you 
+configured Apache.</p>
+
+<p>To do the same as you just did in the php.ini file, add the following
+ lines to your httpd.conf to override any and all php.ini files:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td
+ class="code-outline"><pre class="displaycode">php_flag  display_errors        on
+php_value error_reporting       2039
+</pre></td></tr></tbody></table><br>
+
+<p>This overrides the flag you have set for <code>display_errors</code> 
+in the php.ini file, as well as the value of <code>error_reporting</code>.
+ The value <code>2039</code> stands for <code>E_ALL &amp; ~E_NOTICE</code>.
+ If you prefer <code>E_ALL</code>, set the value to <code>2047</code>, 
+instead. Again, make sure you restart Apache.</p>
+
+<p>Next, we'll test error reporting on your server.</p>
+
+<p><a name="N100F7"><span class="smalltitle">Testing error reporting</span></a></p>
+
+<p>You will save a great deal of time if you leave error reporting 
+enabled. Errors in PHP point you right to the error in your code. Create
+ a simple PHP file, test.php, and define it as shown in Listing 1.</p>
+
+<br><a name="N10104"><b>Listing 1. A simple PHP that generates an error</b></a><br><table
+ border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td 
+class="code-outline"><pre class="displaycode">
+&lt;?php
+print("The next line generates an error.&lt;br&gt;");
+printaline("PLEASE?");
+print("This will not be displayed due to the above error.");
+?&gt;
+</pre></td></tr></tbody></table><br>
+
+<p>The first <code>print()</code> statement should display its contents 
+to the Web browser. However, the second statement generates and displays
+ an error to the Web page. This results in the last <code>print()</code>
+ statement do nothing, as shown in Figure 1.</p>
+
+
+<br><a name="N10117"><b>Figure 1. Generating an error</b></a><br>
+<img alt="Generating an error" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig01.jpg" 
+width="572" height="271">
+<br>
+
+<p>You have error reporting turned on! Next, we use print statements to 
+help debug applications.</p>
+
+<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><a name="N10126"><span class="atitle">Introducing print 
+statements</span></a></p>
+
+<p>Because functional bugs in your application don't generate errors, 
+knowledge on how to accurately place and use <code>print</code> or <code>die</code>
+ statements to debug your PHP application can be a great asset in your 
+arsenal of debugging strategies. You can use <code>print</code> 
+statements to narrow down the locations of problem statements in your 
+code that may not be syntactically incorrect or bugs in the code, but 
+they are bugs in the functionality of your code. These are the hardest 
+bugs to find and debug because they throw no errors. You only know that 
+what is being displayed to the browser isn't what you intended, or that 
+what you thought was being stored in your database isn't being stored at
+ all.</p>
+
+<p>Suppose you are processing form data sent in via a <code>GET</code> 
+request and want to display the information to the browser, but for 
+whatever reason, the data is either not being submitted properly, or it 
+isn't being read from the <code>GET</code> request properly. To debug 
+such a problem, it's important to know what the value of the variable 
+is, using a <code>print()</code> or a <code>die()</code> statement.</p>
+
+<p>The <code>die()</code> statement halts program execution and displays
+ text to the Web browser. The <code>die()</code> statement is 
+particularly useful if you don't want to have to comment out your code, 
+and you only want everything up to the error and the error displayed and
+ nothing after.</p>
+
+<p>Let's test this concept of using print statements in PHP.</p>
+
+<p><a name="N1015C"><span class="smalltitle">Debugging using print 
+statements</span></a></p>
+
+<p>In my years as a programmer where I developed applications on Linux® 
+boxes with no handy GUI to tell me where my bugs were, I quickly caught 
+on that the more print statements I laced my program with the more 
+chances I had of narrowing down the bugs in my application to a single 
+line. Create another PHP file, test2.php, and define it as shown in 
+Listing 2.</p>
+
+<br><a name="N1016B"><b>Listing 2. Display all variables submitted via 
+GET</b></a><br><table border="0" cellpadding="0" cellspacing="0" 
+width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">
+&lt;?php
+ $j = "";
+ print("Lets retrieve all the variables submitted to this ");
+ print("script via a GET request:&lt;br&gt;");
+ foreach($_GET as $key =&gt; $i){
+     print("$key=$j&lt;br&gt;");
+ }
+ if($_GET['Submit'] == "Send GET Request")
+     $j = "done!&lt;br&gt;";
+?&gt;
+&lt;form method="GET"&gt;
+     Name: &lt;input name="name"&gt;&lt;br&gt;
+     Email: &lt;input name="email" size="25"&gt;&lt;br&gt;
+     &lt;input name="Submit" type="submit" value="Send GET Request"&gt;
+&lt;/form&gt;
+</pre></td></tr></tbody></table><br>
+
+<p>You may be able to spot the bug in Listing 2 very easily. Good for 
+you! Note that this is a simple script, and is shown as an example in 
+using print statements to debug. The script simply takes all variables 
+in the <code>GET</code> request, if any, and displays them back to the 
+browser. A form is also supplied for you to send variables to the server
+ using a <code>GET</code> request for testing. See the output, as shown 
+in Figure 2.</p>
+
+
+<br><a name="N1017E"><b>Figure 2. Output of test2.php</b></a><br>
+<img alt="Output of test2.php" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig02.jpg" 
+width="572" height="264">
+<br>
+<br>
+<p>Now click the <b>Send GET Request</b> button. Notice that only the 
+keys of the <code>$_GET</code> request got displayed to the browser, and
+ the correct values did not. You can place a print statement within the 
+loop to verify that data indeed exists at each element in the <code>foreach</code>
+ loop. See Listing 3.</p>
+
+<br><a name="N1019E"><b>Listing 3. Using a print statement to verify 
+code functionality</b></a><br><table border="0" cellpadding="0" 
+cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">
+...
+ foreach($_GET as $key =&gt; $i){
+     <strong>print("Correct data? " . $_GET[$key] . "&lt;br&gt;")</strong>;
+     print("$key=$j&lt;br&gt;");
+ }
+...
+</pre></td></tr></tbody></table><br>
+
+<p>The placed print statement is in bold font. Notice that you already 
+know that the displayed <code>$key</code> values on the Web browser are 
+correct, but for some reason, the values aren't being displayed 
+correctly. See the new output, as shown in Figure 3.</p>
+
+
+<br><a name="N101B0"><b>Figure 3. Output of modified test2.php</b></a><br>
+<img alt="Output of modified test2.php" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig03.jpg" 
+width="572" height="305">
+<br>
+<br>
+<p>Now you know that your application is receiving the variables in the <code>GET</code>
+ request correctly, so there must be a bug in your code. You look over 
+and notice that the variable you are using for displaying the values, <code>$j</code>,
+ is the wrong one. You specified <code>$i</code> in the <code>foreach</code>
+ statement, which must have the correct values, but you accidentally 
+typed in <code>$j</code>. You quickly fix the problem by replacing <code>$j</code>
+ with <code>$i</code> and see the correct output by reloading the page, 
+as shown in Figure 4.</p>
+
+
+<br><a name="N101DF"><b>Figure 4. Output of fixed test2.php</b></a><br>
+<img alt="Output of fixed test2.php" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig04.jpg" 
+width="572" height="310">
+<br>
+<br>
+<p>You can now remove or comment out the print statement you added 
+because you have discovered the bug in your code. Notice that this is a 
+small subset of the many errors you might experience while debugging 
+your application. A good solution to a problem you may encounter when 
+working with a database is to print out your SQL statements to make sure
+ that what you are executing SQL you intended to execute.</p>
+
+<p>Now you'll take a look at using the Eclipse IDE and the PHPeclipse 
+plug-in and debugger extension to further aid you in your debugging 
+ventures.</p>
+
+<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><a name="N101F3"><span class="atitle">Using PHPeclipse</span></a></p>
+
+<p>You have probably used Eclipse, but you aren't familiar with it. See <a
+ href="#resources">Resources</a> for introductions to the Eclipse 
+platform.</p>
+
+<p>The PHPeclipse plug-in for Eclipse is a popular tool used for 
+developing PHP applications. Start Eclipse and specify your workspace 
+directory as the www directory for Apache (c:\www on my machine). Now 
+click on <b>File &gt; New &gt; Project</b>. The New Project wizard will 
+pop up. Double-click on the PHP folder and select PHP Project. Click <b>Next</b>,
+ enter a project name, debugArticle, and click <b>Finish</b>.</p>
+
+<p>If you set up your Web server to listen to port 80, you don't need to
+ change anything. Otherwise, go to the Navigator window and right-click 
+on your PHP project, <b>debugArticle</b>. Select Properties, then click <b>PHP
+ Project Settings</b>. Click <b>Configure Workspace Settings</b> and 
+change localhost appropriately or add the port your Web server is 
+listening on (http://localhost:8080, for example). Click <b>Apply</b> 
+and you're set.</p>
+
+<p>The Navigator Window should display your project and a single 
+.project file. Right-click on your project as you did before, except 
+this time select <b>New &gt; PHP File</b>. Replace *.php with the name 
+of the PHP file you want to create, test3.php, and click <b>Finish</b>. A
+ new file should appear in the Eclipse IDE. You may have to navigate the
+ bottom window to the PHP Browser to view the current output of your PHP
+ file (see Figure 5).</p>
+
+
+<br><a name="N10226"><b>Figure 5. The PHPeclipse plug-in for Eclipse</b></a><br>
+<img alt="The PHPeclipse plug-in for Eclipse" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig05.jpg" 
+width="572" height="322">
+<br>
+<br>
+<p>Note that only Windows® users can use the PHP browser as shown in 
+Listing 5. The exact same functionality can be used by opening up a 
+separate browser window and pointing your browser to the directory where
+ your test scripts are located.</p>
+
+<p>Now let's demo this application and prove its awesome capabilities.</p>
+
+<p>In the Using the debugger section, you will learn how to debug your 
+PHP application using Eclipse, PHPeclipse and the debugger PHP extension
+ downloaded earlier. You'll start by learning how to use its syntax 
+parsing abilities.</p>
+
+<p><a name="N1023F"><span class="smalltitle">Syntax parsing and 
+underlining</span></a></p>
+
+<p>Let's start by seeing how PHPeclipse provides you with real-time 
+syntax parsing abilities to assist you with debugging PHP applications. 
+To see this feature in action, start by defining the test3.php file in 
+Eclipse, as shown below.</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td
+ class="code-outline"><pre class="displaycode">&lt;?php
+print(,"Hello World!");
+?&gt;
+</pre></td></tr></tbody></table><br>
+
+<p>Notice that two characters underlined in Listing 4 get underlined in 
+Eclipse, notifying you of incorrect syntax. Saving the file by pressing <b>Ctrl+S</b>
+ displays the Parse error in Eclipse by placing a red "x" by the line 
+that matches the parse error in your code, as shown in Figure 6.</p>
+
+
+<br><a name="N10255"><b>Figure 6. Syntax error highlighting</b></a><br>
+<img alt="Syntax error highlighting" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig06.jpg" 
+width="572" height="322">
+<br>
+<br>
+<p>Now let's demo the PHP browser. This window gives you a preview of 
+the current PHP script, as shown in Figure 6.</p>
+
+<p>Remove the comma (<code>,</code>) from test3.php, defined above. Save
+ the file by pressing <b>Ctrl+S</b>, and watch the PHP browser window 
+update by displaying Hello World (see Figure 7).</p>
+
+
+<br><a name="N10272"><b>Figure 7. Previewing PHP scripts in PHPeclipse</b></a><br>
+<img alt="Previewing PHP scripts in PHPeclipse" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig07.jpg" 
+width="572" height="322">
+<br>
+<br>
+<p>Next up is setting breakpoints in PHP using the debugger.</p>
+
+<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><a name="N10283"><span class="atitle">Using the debugger</span></a></p>
+
+<p>Using the debugger, you can set breakpoints and see the browser 
+output from your PHP code up to the breakpoint you set. You can then 
+resume code execution and see the rest of the browser output up to the 
+next breakpoint and the next until your PHP script has completed.</p>
+
+<p>Uncomment the lines you commented out in the php.ini file in the 
+Setting up section and restart Apache. The
+debugger is loaded, and Eclipse will be able to hook into it.</p>
+
+<p>Now let's set up the debug environment in Eclipse. Create a new 
+test4.php file and leave it empty for now. Now click <b>Run &gt; Debug</b>.
+ Select PHP DBG Script on the left-side panel and click <b>New</b>. Now 
+go to the <b>File</b> tab, and type in your current project, <b>debugArticle</b>,
+ and the file you want to debug, <b>test4.php</b>. Now go to the <b>Environment
+ tab</b>, then to the <b>Interpreter</b> subtab. Browse for your php.exe
+ file in your PHP install directory (mine is c:\apps\php5.0.3\php.exe). 
+Now click on the <b>Remote Debug</b> subtab, select <b>Remote Debug</b>,
+ and if you're not using Windows, uncheck the "Open with DBGSession URL 
+in internal Browser box." Set the Remote Source path equal to the 
+absolute path (not the Web path) to the PHP script you're going to test 
+(I have mine set to c:\www\debugArticle\test4.php).
+Now click <b>Debug</b>.</p>
+
+<p>The Debug perspective should load, as shown in Figure 8. Otherwise, 
+click <b>Window &gt; Open Perspective &gt; Other</b>, and select <b>Debug</b>.</p>
+ 
+
+
+<br><a name="N102BB"><b>Figure 8. Debug perspective in Eclipse</b></a><br>
+<img alt="Debug perspective in Eclipse" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig08.jpg" 
+width="600" height="530">
+<br>
+
+<p>Now you're ready to set breakpoints.</p>
+
+<p>With the versions of the plug-in and extension used in this article, a
+ breakpoint function is required because PHP buffers output before 
+sending it to the browser. Besides that, you need to do more than set a 
+breakpoint to flush the current display data to your Web browser, so 
+define your test4.php file, as shown below and in Figure 8 above.</p>
+
+<br><a name="N102D1"><b>Listing 4. Setting and creating breakpoints</b></a><br><table
+ border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td 
+class="code-outline"><pre class="displaycode">
+&lt;?php
+function break-point(){
+    ob_flush();
+    flush();
+    sleep(.1);
+    debugBreak();
+}
+print("This will get shown first, ");
+print("as will this&lt;br&gt;");
+breakpoint();
+print("This won't get shown until after ");
+print("continuing the break-point&lt;br&gt;");
+breakpoint();
+print("END!");
+?
+</pre></td></tr></tbody></table><br>
+
+<p>The <code>breakpoint()</code> function flushes output buffered and 
+any other buffered data to the Web browser. The call to <code>sleep(.1)</code>
+ is necessary so the server has enough time to flush the data out to the
+ Web browser before code execution is halted at <code>debugBreak()</code>,
+ a function known internally to the PHP debugger extension you 
+downloaded earlier. Thus, calling <code>breakpoint()</code> flushes data
+ from HTML blocks, <code>print()</code> and <code>echo()</code> 
+statements to the browser, then halts code execution.</p>
+
+<p>After you have written the code shown in Listing 4, you can open a 
+browser and point to test4.php or you can look at the PHP browser window
+ (http://localhost/debugArticle/test4.php for me). Each time you type 
+and save the file, the debugging sequence is already initiated in the 
+PHP browser window. If you are not using Windows, look at test4.php 
+through your browser. After saving your file, resume code execution with
+ <b>F8</b> or by clicking <b>Run &gt; Resume</b>. Do this until you you 
+see <code>END!</code> as the last line of output (see figures 9, 10 and 
+11). </p>
+
+
+<br><a name="N10301"><b>Figure 9. Initial PHP browser output up to first
+ breakpoint</b></a><br>
+<img alt="Initial PHP browser output up to first breakpoint" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig09.jpg" 
+width="572" height="538">
+<br>
+<br>
+<p>Notice how the Debug window in Figure 9 shows the execution output as
+ suspended.</p>
+
+
+<br><a name="N10314"><b>Figure 10. PHP browser output after first 
+breakpoint and before second breakpoint</b></a><br>
+<img alt="PHP browser output after first breakpoint and before second 
+breakpoint" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig10.jpg" 
+width="600" height="564">
+<br>
+<br>
+<p>The Debug window in Figure 10 still shows execution as suspended and 
+the second set of data is shown in the PHP browser.</p>
+
+
+<br><a name="N10327"><b>Figure 11. Full PHP browser output</b></a><br>
+<img alt="Full PHP browser output" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/fig11.jpg" 
+width="572" height="538">
+<br>
+
+<p>Notice that the code is no longer suspended in the Debug window in 
+Figure 11, and the entire script has executed, as shown in the PHP 
+browser of Figure 11.</p>
+
+<p>Since you have witnessed the advantages of developing with PHPeclipse
+ and the debugger extension, you'll wonder how you ever got along 
+without it.</p>
+
+<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><a name="N10339"><span class="atitle">Summary</span></a></p>
+
+<p>Now that you have added the use of error reporting, print statements,
+ PHPeclipse, and the debugger extension to your arsenal of debugging 
+techniques in PHP, you will become a more effective PHP coder by 
+reducing the number of errors you create per line of code. See <a 
+href="#resources">Resources</a> for some PHP tutorials on which to test 
+your new skills.</p>
+
+<!-- CMA ID: 99250 --> <!-- Site ID: 1 --><!--XSLT stylesheet used to transform this file: dw-document-html-6.0.xsl-->
+<br><div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link 
+ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">Back to 
+top</a></p><p><span class="atitle"><a name="download">Download</a></span></p><table
+ class="ibm-data-table" border="0" cellpadding="0" cellspacing="0" 
+width="100%"><tbody><tr><th scope="col">Description</th><th scope="col">Name</th><th
+ scope="col">Size</th><th scope="col">Download method</th></tr><tr><td 
+class="tb-row" scope="row">Sample code for PHP debugging</td><td 
+nowrap="nowrap">os-debugsource.zip</td><td nowrap="nowrap">1.12KB</td><td
+ nowrap="nowrap"><a class="fbox" 
+href="http://www.ibm.com/developerworks/apps/download/index.jsp?contentid=99250&amp;filename=os-debugsource.zip&amp;method=http&amp;locale=worldwide">
+                    
+                    HTTP
+                    </a></td></tr></tbody></table><p><a 
+href="http://www.ibm.com/developerworks/library/whichmethod.html" 
+class="ibm-forward-link">Information about download methods</a></p><br>
+<p><a name="resources"><span class="atitle">Resources</span></a></p><p><b>Learn</b></p><ul><li>
+Learn <a href="http://www.jibble.org/settingupjava.php">How to install 
+Java</a> on Windows and UNIX®-based systems.<br><br></li><li> 
+Visit <a href="http://www.eclipse.org/">Eclipse.org</a> for 
+comprehensive information on the program and how to use it.<br><br></li><li>
+"<a href="http://www.ibm.com/developerworks/library/os-ecov/">Getting 
+started with the Eclipse Platform</a>" (developerWorks, November 2002) 
+provides a history and overview of Eclipse, including details on how to 
+install Eclipse and plug-ins.<br><br></li><li>
+Visit <a href="http://www.phpeclipse.de/">PHPeclipse</a> to learn more 
+about installing PHPeclipse and how to use it.<br><br></li><li>
+Learn more about DBG, the PHP debugger, and profiler at the <a 
+href="http://sourceforge.net/projects/dbg2">PHP debugger DBG</a> Web 
+site.<br><br></li><li>
+To learn more about Eclipse, visit developerWorks' <a 
+href="http://www.ibm.com/developerworks/opensource/top-projects/eclipse.html">Eclipse
+ project resources</a>.<br><br></li><li>
+To learn more about PHP, visit developerWorks' <a 
+href="http://www.ibm.com/developerworks/opensource/top-projects/php.html">PHP
+ project resources</a>.<br><br></li><li>
+See the PHP manual for more on <a href="http://php.net/error_reporting">error
+ reporting</a>.<br><br></li><li>
+Read the instructions for installing <a 
+href="http://dan.drydog.com/apache2php.html">PHP and Apache V2 on Linux</a>.<br><br></li><li>
+Read the instructions for installing <a 
+href="http://www.php-mysql-tutorial.com/install-apache-php-mysql.php">PHP
+ and Apache V2 on Windows</a>.<br><br></li><li>
+For a series of developerWorks tutorials on learning to program with 
+PHP, see "<a 
+href="http://www.ibm.com/developerworks/edu/os-dw-os-phptut1-i.html">Learning
+ PHP, Part 1</a>," <a 
+href="http://www.ibm.com/developerworks/edu/os-dw-os-phptut2-i.html">Part
+ 2</a>, and
+<a href="http://www.ibm.com/developerworks/edu/os-dw-os-phptut3-i.html">Part
+ 3</a>.<br><br></li><li>
+Stay current with <a 
+href="http://www.ibm.com/developerworks/offers/techbriefings/?S_TACT=105AGX03&amp;S_CMP=art">developerWorks
+ technical events and webcasts</a>.<br><br></li><li>
+Visit the developerWorks <a 
+href="http://www.ibm.com/developerworks/opensource">Open source zone</a>
+ for extensive how-to information, tools, and project updates to help 
+you develop with open source technologies and use them with IBM's 
+products.<br><br></li></ul><p><b>Get products and technologies</b></p><ul><li>
+Download the latest version of <a 
+href="http://www.php.net/downloads.php">PHP</a> from PHP.net.<br><br></li><li>
+Get the latest version of <a href="http://httpd.apache.org/download.cgi">Apache
+ V2</a>.<br><br></li><li>
+Download <a href="http://java.sun.com/downloads/">Java technology</a> 
+from Sun Microsystems.<br><br></li><li>
+Get the latest version of <a href="http://www.eclipse.org/downloads/">Eclipse</a>
+ from Eclipse.org.<br><br></li><li>
+Download <a 
+href="http://sourceforge.net/project/showfiles.php?group_id=57621">PHPeclipse</a>
+ from Sourceforge. Unzip Eclipse to eclipse-install-dir, then unzip 
+PHPeclipse to eclipse-install-dir. Follow the <a 
+href="http://www.plog4u.org/index.php/Using_PHPEclipse_:_Installation_:_Installing_the_DBG_Debugger">PHPeclipse
+ instructions</a> when installing the extension. However, comment out 
+the lines where you are asked to load and configure the extension in PHP
+ in the php.ini file. You'll uncomment those lines when you're ready to 
+use the debugger.<br><br></li><li>
+<a 
+href="http://www.ibm.com/developerworks/offers/sek/?S_TACT=105AGX03&amp;S_CMP=art">Order
+ the SEK for Linux</a>, a two-DVD set containing the latest IBM trial 
+software for Linux from DB2®, Lotus®, Rational®, Tivoli®, and 
+WebSphere®.<br><br></li><li>
+Innovate your next open source development project with 
+<a href="http://www.ibm.com/developerworks/downloads/?S_TACT=105AGX44">IBM
+ trial software</a>, available for download or on DVD.<br><br></li></ul><p><b>Discuss</b></p><ul><li>
+Get involved in the developerWorks community by participating in <a 
+href="http://www.ibm.com/developerworks/blogs/">developerWorks blogs</a>.<br><br></li></ul>
+<p><a name="author"><span class="atitle">About the author</span></a></p><div
+ class="ibm-container ibm-portrait-module ibm-alternate-two"><div 
+class="ibm-container-body"><p><a name="author1"></a>Tyler Anderson 
+recieved both his B.S. in Computer Science in 2004 and his M.S. in 
+Electrical and Computer Engineering in 2005 from Brigham Young 
+University. Tyler has written and coded numerous articles and tutorials 
+for IBM developerWorks and DevX.</p></div></div>
+<!-- MAIN_COLUMN_CONTENT_END -->
+
+<!-- INLINE_COMMENTS_START -->
+<p class="ibm-no-print"><span class="atitle"><a name="icomments">Comments</a></span></p>
+<div id="dw-icomments-container" class="ibm-no-print">
+<div class="ibm-alternate-rule"><hr></div>
+<div class="ibm-alternate-rule"><hr></div>
+<!-- Comment_Script -->
+<a id="comments" 
+href="http://www.ibm.com/developerworks/library/os-debug/comments"></a>
+<script language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/insertcomment.js" type="text/javascript">//</script>
+<div id="threadShow"><div id="cmtTog" style=""><p><span id="numCmts">2</span>&nbsp;comments
+ <span class="dw-bar">|</span> <a 
+href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F%23icomments"
+ style="display: none;" class="loginLk">Sign in</a><a id="addCmtLk" 
+class="dw-icomment-link">Add comment</a><a class="dw-icomment-report" 
+href="http://www.ibm.com/developerworks/forums/forum.jspa?forumID=1317">Report
+ inappropriate content</a></p><div class="ibm-alternate-rule"><hr></div><div
+ style="display: none;" id="commentForm"><div class="ibm-container"><h2>Add
+ a comment</h2><div class="ibm-container-body"><p>The field indicated 
+with an asterisk (<span class="ibm-required">*</span>) is required to 
+complete this transaction.</p><span id="infoCmt"></span><div 
+class="ibm-rule"><hr></div><form method="post" action="" 
+class="ibm-column-form" enctype="multipart/form-data" focus="name" 
+name="form"><p><label for="newCmt">Comment:<span class="ibm-required">*</span></label><br><textarea
+ name="newCmt" id="newCmt" cols="120" rows="4"></textarea></p><div 
+class="ibm-alternate-rule"><hr></div><p class="ibm-buttons-row"><input 
+value="Post" name="postCmt" class="ibm-btn-arrow-sec" id="postCmt" 
+type="button"><span class="ibm-sep">&nbsp;</span><input value="Clear 
+comment" name="clearCmt" class="ibm-btn-cancel-sec" id="clearCmt" 
+type="button"><span class="ibm-sep">&nbsp;</span><input value="Cancel" 
+name="cancelCmt" class="ibm-btn-cancel-sec" id="cancelCmt" type="button"></p></form></div></div></div><div
+ id="cmtSect"><div class="comment"><div class="dw-icomment-container"><table
+ class="dw-icomment-body" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td><p>Good
+ contribution to a very arcane field (free PHP debugging). I have a 
+question though:<br>
+I did setup the environment on Windows XT (took me a long time, I had to
+ backtrack my PHP version and find the DBG instructions at 
+http://www.php-debugger.com/dbg/installation.php, your plog4u link is 
+outdated) and finally had the breakpoints and variable inspection, etc. 
+It's great to have something working that has been around for 10 years 
+on Java and 20 on C++. I guess that's what they call progress... The 
+debugBreak() call does not work for me (the php_dbg.dll crashes) but 
+that's not a problem since regular Eclipse breakpoints do work. Now, the
+ very annoying thing is that the buffer flushing patch you suggest does 
+NOT do anything (the HTML page shows up only at the end after the parser
+ is left). I tried a longer sleep, NOTHING. I tried putting: 
+header("Cache-Control: no-cache, must-revalidate"); header("Expires: 
+Mon, 26 Jul 1997 05:00:00 GMT"); while (@ob_end_flush()); 
+ob_get_flush(); NOTHING. I tried in php.ini: output_buffering = 0 and 
+implicit_flush = On, NOTHING. I have Eclipse 3.4, PHPEclipse 1.2.3, 
+Apache 2.2, PHP 5.2, DBG 5.2<br>
+<br>
+Thanks for any tip, A. R.</p></td></tr><tr><td><p 
+class="ibm-item-note-alternate">Posted by <b><a 
+href="http://www.ibm.com/developerworks/forums/profile.jspa?userID=292159">alainr345</a></b>
+ on 20 April 2010</p></td></tr></tbody></table></div></div><div 
+class="comment"><div class="dw-icomment-container"><table 
+class="dw-icomment-body" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td><p>very
+ nicely written...thank you</p></td></tr><tr><td><p 
+class="ibm-item-note-alternate">Posted by <b><a 
+href="http://www.ibm.com/developerworks/forums/profile.jspa?userID=270438">joycejohnson</a></b>
+ on 30 January 2010</p></td></tr></tbody></table></div></div></div><div 
+id="paging"><p><a style="display: none;" id="lastCmts" 
+class="dw-icomment-link">Show 5 most recent comments</a><span 
+style="display: none;" id="cmtDivider"> <span class="dw-bar">|</span> </span><a
+ style="display: none;" id="nextCmts" class="dw-icomment-link">Show next
+ 5 comments</a><span style="display: none;" id="cmtDivider2"> <span 
+class="dw-bar">|</span> </span><a style="display: none;" 
+id="viewAllCmts" class="dw-icomment-link">Show all comments</a></p></div><p><a
+ 
+href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F%23icomments"
+ style="display: none;" class="loginLk">Sign in</a><a id="addCmtLk2" 
+href="#icomments">Add comment</a></p><div class="ibm-alternate-rule"><hr></div><div
+ class="ibm-alternate-rule"><hr></div></div></div>
+<script language="JavaScript" type="text/javascript">
+// <![CDATA[
+ jQuery('threadShow').insertComment('95%',5,'nCmts','icomments');
+// ]]>
+</script>
+</div>
+<!-- INLINE_COMMENTS_END -->
+
+<p class="ibm-ind-link ibm-back-to-top"><a class="ibm-anchor-up-link" 
+href="#ibm-pcon">Back to top</a></p>
+<p><a href="http://www.ibm.com/developerworks/ibm/trademarks/">Trademarks</a>
+ &nbsp;|&nbsp; <a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/terms/">My 
+developerWorks terms and conditions</a></p>
+
+<!-- Overlays -->
+<!-- Zone/Leaf_Interest_Overlay_Start -->
+<div class="ibm-common-overlay ibm-no-print" id="dwmyinterestadd">
+<div class="ibm-head"><p><a class="ibm-common-overlay-close" 
+href="#close">Close [x]</a></p></div>
+<div class="ibm-body">
+<div class="ibm-main">
+<a class="ibm-access" name="dwmyinterestaddhelp">Help: Update or add to 
+My dW interests</a>   
+<div class="ibm-title"><h1>What's this?</h1></div>
+<div class="ibm-container ibm-alternate">
+<p>This little timesaver lets you update your My developerWorks profile 
+with just one click!  The general subject of this content (AIX and UNIX,
+ Information Management, Lotus, Rational, Tivoli, WebSphere, Java, 
+Linux, Open source, SOA and Web services, Web development, or XML) will 
+be added to the interests section of your profile, if it's not there 
+already.  You only need to be logged in to My developerWorks.</p>
+<p>And what's the point of adding your interests to your profile?  
+That's how you find other users with the same interests as yours, and 
+see what they're reading and contributing to the community.  Your 
+interests also help us recommend relevant developerWorks content to you.</p>
+<p><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/home.do?lang=en">View
+ your My developerWorks profile</a></p>
+<p class="ibm-access"><a href="#interestShow">Return from help</a></p>
+</div> 
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+
+<div class="ibm-common-overlay ibm-no-print" id="dwmyinterestremove">
+<div class="ibm-head"><p><a class="ibm-common-overlay-close" 
+href="#close">Close [x]</a></p></div>
+<div class="ibm-body">
+<div class="ibm-main">
+<a class="ibm-access" name="dwmyinterestremovehelp">Help: Remove from My
+ dW interests</a> 
+<div class="ibm-title"><h1>What's this?</h1></div>
+<div class="ibm-container ibm-alternate">
+<p>Removing this interest does not alter your profile, but rather 
+removes this piece of content from a list of all content for which 
+you've indicated interest.  In a future enhancement to My 
+developerWorks, you'll be able to see a record of that content.</p>
+<p><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/home.do?lang=en">View
+ your My developerWorks profile</a></p>
+<p class="ibm-access"><a href="#interestShow">Return from help</a></p>
+</div> 
+</div>
+</div>
+<div class="ibm-footer"></div>
+</div>
+<!-- Zone/Leaf_Interest_Overlay_End --></div>
+<!-- MAIN_COLUMN_CONTAINER_END -->
+
+<!-- Rating_Meta_BEGIN -->
+<!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div
+ class="metavalue">SITE_ID=1</div><div class="metavalue">Zone=Open 
+source</div><div class="metavalue">ArticleID=99250</div><div 
+class="metavalue">ArticleTitle=Debugging techniques for PHP programmers</div><div
+ class="metavalue">publish-date=11292005</div><div class="metavalue">author1-email=tyleranderson5@yahoo.com</div><div
+ class="metavalue">author1-email-cc=troy@backstopmedia.com</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href+'</div>');</script><div
+ class="metavalue">url=http://www.ibm.com/developerworks/library/os-debug/</div><!--Rating_Meta_END-->
+<!-- Rating_Meta_END -->
+
+</div>
+<!-- MAIN_COLUMN_END-->
+
+<!-- RIGHT_COLUMN_BEGIN -->
+<div id="ibm-content-sidebar">
+
+<!-- RIGHT_COLUMN_CONTENT_BEGIN --> 
+<div class="ibm-container"><h2>Table of contents</h2><div 
+class="ibm-container-body"><img alt="" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/c.gif" 
+width="1" height="1"><ul class="ibm-bullet-list"><li><a 
+class="ibm-feature-link" href="#N10049">Introduction</a></li><li><a 
+class="ibm-feature-link" href="#setup">Setting up</a></li><li><a 
+class="ibm-feature-link" href="#N1006E">Error messages</a></li><li><a 
+class="ibm-feature-link" href="#N10126">Introducing print statements</a></li><li><a
+ class="ibm-feature-link" href="#N101F3">Using PHPeclipse</a></li><li><a
+ class="ibm-feature-link" href="#N10283">Using the debugger</a></li><li><a
+ class="ibm-feature-link" href="#N10339">Summary</a></li><li><a 
+class="ibm-feature-link" href="#download">Download</a></li><li><a 
+class="ibm-feature-link" href="#resources">Resources</a></li><li><a 
+class="ibm-feature-link" href="#author">About the author</a></li><li><a 
+class="ibm-feature-link" href="#icomments">Comments</a></li></ul></div></div>
+<!--XSLT stylesheet used to transform this content: s-nextsteps.xsl--><div
+ class="ibm-container"><h2>Next steps from IBM</h2><div 
+class="ibm-container-body"><img alt="" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/spot-nextsteps.jpg"
+ border="0" width="188" height="58"><p>With the no-charge DB2 Express-C,
+ Zend Core PHP, and Java you can develope advanced Web 2.0 applications 
+quickly that matter.</p><div class="ibm-rule"><hr></div><ul 
+class="ibm-bullet-list"><li><a 
+href="http://www.ibm.com/developerworks/downloads/im/udbexp/learn.html" 
+class="ibm-feature-link">Try: Download a free trial version of DB2 
+Express-C, which includes Zend Core PHP and pureXML technology that is 
+ideally suited for managing both XML and relational data and powering a 
+new breed of SOA and Web 2.0 solutions.</a></li><li><a 
+href="http://www.redbooks.ibm.com/abstracts/SG247218.html?open" 
+class="ibm-feature-link">Article: This IBM Redbook shows how to port PHP
+ apps from MySQL to DB2, and includes code samples for creating Zend 
+Core PHP applications.</a></li><li><a 
+href="http://www.ibm.com/developerworks/edu/r-dw-r-face3.html" 
+class="ibm-feature-link">Tutorial: In this Mastering Facebook app 
+development tutorial series, you will use Java and PHP in parallel to 
+build a Facebook interface for an online stock trading J2EE application 
+using the Spring framework.</a></li><li><a 
+href="http://www.ibm.com/software/dre/h2b/buildh2bpage.wss?synkey=I432401F08084L16"
+ class="ibm-feature-link">Buy: DB2 9 for Linux, UNIX and Windows</a></li></ul></div></div>
+<!--XSLT stylesheet used to transform this content: s-community.xsl--><div
+ class="ibm-container"><h2>My developerWorks community</h2><div 
+class="ibm-container-body"><p>Interact, share, and communicate with 
+developers worldwide.</p><div class="ibm-rule"><hr></div><ul 
+class="ibm-bullet-list"><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/homepage/web/getuserpref?ca=dma-"
+ class="ibm-feature-link">My Home</a></li><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/home.do?lang=en&amp;ca=dma-"
+ class="ibm-feature-link">Profiles</a></li><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/groups/service/html/allcommunities?ca=dma-"
+ class="ibm-feature-link">Groups</a></li><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/blogs/?ca=dma-"
+ class="ibm-feature-link">Blogs</a></li><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/bookmarks/?ca=dma-"
+ class="ibm-feature-link">Bookmarks</a></li><li><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/activities/service/html/mainpage?ca=dma-"
+ class="ibm-feature-link">Activities</a></li><li><a 
+href="http://www.ibm.com/developerworks/spaces/?ca=dma-" 
+class="ibm-feature-link">Spaces</a></li><li><a 
+href="http://www.ibm.com/developerworks/forums/index.html?ca=dma-" 
+class="ibm-feature-link">Forums</a></li><li><a 
+href="http://www.ibm.com/developerworks/wikis/dashboard.action?ca=dma-" 
+class="ibm-feature-link">Wikis</a></li><li><a 
+href="http://www.ibm.com/developerworks/podcast/?ca=dma-" 
+class="ibm-feature-link">Podcasts</a></li><li><a 
+href="http://www.ibm.com/developerworks/exchange/dw_index.jspa?ca=dma-" 
+class="ibm-feature-link">Exchange</a></li></ul><div class="ibm-rule"><hr></div><p
+ class="ibm-ind-link"><a 
+href="https://www.ibm.com/developerworks/mydeveloperworks/?ca=dma-" 
+class="ibm-forward-link">My developerWorks overview</a></p></div></div>
+<!-- Tagging_Start -->
+<div id="dw-tag-cloud-container" class="ibm-container"><h2>Tags</h2>
+<div id="dw-tag-help"><a class="dwauthor" rel="#tagtip" id="dwtagtip"><img
+ alt="Help" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/help_icon.gif"
+ align="top" width="16" height="16"></a></div>
+<div style="display: none;" id="tagtip" class="dwauthor-onload-state 
+ibm-no-print">Use the <strong>search field</strong> to find all types of
+ content in My developerWorks with that tag.<p>Use the <strong>slider 
+bar</strong> to see more or fewer tags.</p><p><strong>Popular tags</strong>
+ shows the top tags for this particular content zone (for example, Java 
+technology, Linux, WebSphere).</p><p><strong>My tags</strong> shows your
+ tags for this particular content zone (for example, Java technology, 
+Linux, WebSphere).</p></div>
+<div class="ibm-access">Use the search field to find all types of 
+content in My developerWorks with that tag.  <em>Popular tags</em> shows
+ the top tags for this particular content zone (for example, Java 
+technology, Linux, WebSphere).  <em>My tags</em> shows your tags for 
+this particular content zone (for example, Java technology, Linux, 
+WebSphere).</div>
+<div class="ibm-container-body">
+<div class="dw-tag-search"><form 
+action="//www.ibm.com/developerworks/mydeveloperworks/bookmarks/html?lang=en"
+ method="get" id="actualtagform" onsubmit="popupform(this, 'join')">
+<p><label for="tagfield"><strong>Search all tags</strong></label><input 
+id="tagfield" name="tag" maxlength="20" size="17" type="text">&nbsp;<input
+ 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/short-btn.gif"
+ class="ibm-btn-view" alt="submit search" title="submit search" 
+value="Search" type="image"></p></form></div>
+<div class="ibm-rule"><hr></div>
+<div id="dw-tag-select">
+<div id="dw-tag-select-popular"><p><strong>Popular article tags</strong>&nbsp;|&nbsp;<br><a
+ id="a-my" href="javascript:;">My article tags</a><a 
+href="#dw-tag-access" class="ibm-access">Skip to tags list</a></p></div>
+<div id="dw-tag-select-my" class="dw-hidetag"><p><a id="a-popular" 
+href="javascript:;">Popular article tags</a>&nbsp;|&nbsp;<br><strong>My 
+article tags</strong></p><a href="#dw-tag-access" class="ibm-access">Skip
+ to tags list</a></div><div id="dw-tag-access" class="ibm-access"><h2>Popular
+ tags</h2><ul>
+					
+										
+				<li class="f1-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=accessibility&amp;lang=en')">
+					accessibility
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f2-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=agavi&amp;lang=en')">
+					agavi
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f3-67">
+					
+					<a title="58" class="lotusF4 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">
+					ajax
+					<span class="ibm-access">(58)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f4-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">
+					and
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f5-30">
+					
+					<a title="20" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">
+					android
+					<span class="ibm-access">(20)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f6-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">
+					apache
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f7-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=en')">
+					api
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f9-47">
+					
+					<a title="33" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">
+					architecture
+					<span class="ibm-access">(33)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f10-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">
+					atom
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f11-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=brett_mclaughlin&amp;lang=en')">
+					brett_mclaughlin
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f12-41">
+					
+					<a title="27" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud&amp;lang=en')">
+					cloud
+					<span class="ibm-access">(27)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f13-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud_computing&amp;lang=en')">
+					cloud_computing
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f14-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=community&amp;lang=en')">
+					community
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f16-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=data&amp;lang=en')">
+					data
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f18-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=david_mertz&amp;lang=en')">
+					david_mertz
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f19-38">
+					
+					<a title="25" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=design&amp;lang=en')">
+					design
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f20-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=development&amp;lang=en')">
+					development
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f21-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=docbook&amp;lang=en')">
+					docbook
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f22-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dom&amp;lang=en')">
+					dom
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f23-53">
+					
+					<a title="39" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=en')">
+					eclipse
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f24-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=esb&amp;lang=en')">
+					esb
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f25-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=framework&amp;lang=en')">
+					framework
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f26-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=frameworks&amp;lang=en')">
+					frameworks
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f27-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=gae&amp;lang=en')">
+					gae
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f28-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=general_programming&amp;lang=en')">
+					general_programming
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f29-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=google&amp;lang=en')">
+					google
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f30-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=green_it&amp;lang=en')">
+					green_it
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f31-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=groovy&amp;lang=en')">
+					groovy
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f32-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=gwt&amp;lang=en')">
+					gwt
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f33-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=en')">
+					html
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f34-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ibm&amp;lang=en')">
+					ibm
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f35-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=iepd&amp;lang=en')">
+					iepd
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f36-90">
+					
+					<a title="112" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=en')">
+					java
+					<span class="ibm-access">(112)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f37-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_technology&amp;lang=en')">
+					java_technology
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f38-29">
+					
+					<a title="19" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=en')">
+					javascript
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f39-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jquery&amp;lang=en')">
+					jquery
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f40-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=en')">
+					jsf
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f41-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json&amp;lang=en')">
+					json
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f42-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=kernel&amp;lang=en')">
+					kernel
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f43-82">
+					
+					<a title="90" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=linux&amp;lang=en')">
+					linux
+					<span class="ibm-access">(90)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f44-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=model&amp;lang=en')">
+					model
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f45-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mvc&amp;lang=en')">
+					mvc
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f46-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=networking&amp;lang=en')">
+					networking
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f47-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=niem&amp;lang=en')">
+					niem
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f48-60">
+					
+					<a title="47" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=open_source&amp;lang=en')">
+					open_source
+					<span class="ibm-access">(47)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f49-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=part&amp;lang=en')">
+					part
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f50-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=patterns&amp;lang=en')">
+					patterns
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f51-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=performance&amp;lang=en')">
+					performance
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f52-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=perl&amp;lang=en')">
+					perl
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f53-61">
+					
+					<a title="49" class="lotusF4 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php&amp;lang=en')">
+					php
+					<span class="ibm-access">(49)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f54-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=process&amp;lang=en')">
+					process
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f55-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=programming&amp;lang=en')">
+					programming
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f56-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=purexml&amp;lang=en')">
+					purexml
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f57-29">
+					
+					<a title="19" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=python&amp;lang=en')">
+					python
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f58-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=read&amp;lang=en')">
+					read
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f59-41">
+					
+					<a title="27" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=en')">
+					rest
+					<span class="ibm-access">(27)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f60-21">
+					
+					<a title="15" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=security&amp;lang=en')">
+					security
+					<span class="ibm-access">(15)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f61-25">
+					
+					<a title="17" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=services&amp;lang=en')">
+					services
+					<span class="ibm-access">(17)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f62-51">
+					
+					<a title="37" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa&amp;lang=en')">
+					soa
+					<span class="ibm-access">(37)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f63-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soap&amp;lang=en')">
+					soap
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f64-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=social_networking&amp;lang=en')">
+					social_networking
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f65-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=en')">
+					spring
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f66-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=the&amp;lang=en')">
+					the
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f67-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tip&amp;lang=en')">
+					tip
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f68-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=to&amp;lang=en')">
+					to
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f69-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tomcat&amp;lang=en')">
+					tomcat
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f70-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=twitter&amp;lang=en')">
+					twitter
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f71-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=vikram_vaswani&amp;lang=en')">
+					vikram_vaswani
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f72-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=virtualization&amp;lang=en')">
+					virtualization
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f73-56">
+					
+					<a title="42" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=en')">
+					web
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f74-46">
+					
+					<a title="32" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_development&amp;lang=en')">
+					web_development
+					<span class="ibm-access">(32)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f75-39">
+					
+					<a title="26" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_services&amp;lang=en')">
+					web_services
+					<span class="ibm-access">(26)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f76-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=webservice&amp;lang=en')">
+					webservice
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f77-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=windows&amp;lang=en')">
+					windows
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f78-100">
+					
+					<a title="152" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=en')">
+					xml
+					<span class="ibm-access">(152)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f79-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml_matters&amp;lang=en')">
+					xml_matters
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f80-34">
+					
+					<a title="22" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt&amp;lang=en')">
+					xslt
+					<span class="ibm-access">(22)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+					
+			</ul><p>End of Popular tags</p><h2>My tags</h2><div 
+id="dw-tag-access-my" class="ibm-access"><center>To access My Tags, 
+please <a 
+href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=auth&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F">sign
+ in</a><p>Read Popular tags</p></center><br></div><p>End of My tags</p></div>
+<div id="dw-tag-cloud">
+	<div id="dogearTagCloud">
+		<div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content
+ ui-corner-all" id="content-slider"><a style="left: 0%;" 
+class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a></div>
+		<div id="ui-slider-scale"><p><span class="content-slider-more">More</span><span
+ class="content-slider-less">Less</span></p></div>
+	    <div id="cloud-container">
+			<ul>
+					
+										
+				<li class="f1-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=accessibility&amp;lang=en')">
+					accessibility
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f2-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=agavi&amp;lang=en')">
+					agavi
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f3-67">
+					
+					<a title="58" class="lotusF4 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">
+					ajax
+					<span class="ibm-access">(58)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f4-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">
+					and
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f5-30">
+					
+					<a title="20" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">
+					android
+					<span class="ibm-access">(20)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f6-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">
+					apache
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f7-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=en')">
+					api
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f9-47">
+					
+					<a title="33" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">
+					architecture
+					<span class="ibm-access">(33)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f10-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">
+					atom
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f11-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=brett_mclaughlin&amp;lang=en')">
+					brett_mclaughlin
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f12-41">
+					
+					<a title="27" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud&amp;lang=en')">
+					cloud
+					<span class="ibm-access">(27)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f13-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud_computing&amp;lang=en')">
+					cloud_computing
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f14-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=community&amp;lang=en')">
+					community
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f16-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=data&amp;lang=en')">
+					data
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+					
+										
+				<li class="f18-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=david_mertz&amp;lang=en')">
+					david_mertz
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f19-38">
+					
+					<a title="25" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=design&amp;lang=en')">
+					design
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f20-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=development&amp;lang=en')">
+					development
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f21-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=docbook&amp;lang=en')">
+					docbook
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f22-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=dom&amp;lang=en')">
+					dom
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f23-53">
+					
+					<a title="39" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=en')">
+					eclipse
+					<span class="ibm-access">(39)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f24-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=esb&amp;lang=en')">
+					esb
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f25-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=framework&amp;lang=en')">
+					framework
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f26-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=frameworks&amp;lang=en')">
+					frameworks
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f27-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=gae&amp;lang=en')">
+					gae
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f28-16">
+					
+					<a title="13" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=general_programming&amp;lang=en')">
+					general_programming
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f29-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=google&amp;lang=en')">
+					google
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f30-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=green_it&amp;lang=en')">
+					green_it
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f31-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=groovy&amp;lang=en')">
+					groovy
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f32-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=gwt&amp;lang=en')">
+					gwt
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f33-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=en')">
+					html
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f34-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ibm&amp;lang=en')">
+					ibm
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f35-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=iepd&amp;lang=en')">
+					iepd
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f36-90">
+					
+					<a title="112" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=en')">
+					java
+					<span class="ibm-access">(112)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f37-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_technology&amp;lang=en')">
+					java_technology
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f38-29">
+					
+					<a title="19" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=en')">
+					javascript
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f39-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jquery&amp;lang=en')">
+					jquery
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f40-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=en')">
+					jsf
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f41-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=json&amp;lang=en')">
+					json
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f42-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=kernel&amp;lang=en')">
+					kernel
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f43-82">
+					
+					<a title="90" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=linux&amp;lang=en')">
+					linux
+					<span class="ibm-access">(90)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f44-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=model&amp;lang=en')">
+					model
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f45-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mvc&amp;lang=en')">
+					mvc
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f46-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=networking&amp;lang=en')">
+					networking
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f47-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=niem&amp;lang=en')">
+					niem
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f48-60">
+					
+					<a title="47" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=open_source&amp;lang=en')">
+					open_source
+					<span class="ibm-access">(47)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f49-19">
+					
+					<a title="14" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=part&amp;lang=en')">
+					part
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f50-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=patterns&amp;lang=en')">
+					patterns
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f51-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=performance&amp;lang=en')">
+					performance
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f52-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=perl&amp;lang=en')">
+					perl
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f53-61">
+					
+					<a title="49" class="lotusF4 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=php&amp;lang=en')">
+					php
+					<span class="ibm-access">(49)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f54-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=process&amp;lang=en')">
+					process
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f55-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=programming&amp;lang=en')">
+					programming
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f56-1">
+					
+					<a title="8" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=purexml&amp;lang=en')">
+					purexml
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f57-29">
+					
+					<a title="19" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=python&amp;lang=en')">
+					python
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f58-23">
+					
+					<a title="16" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=read&amp;lang=en')">
+					read
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f59-41">
+					
+					<a title="27" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=en')">
+					rest
+					<span class="ibm-access">(27)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f60-21">
+					
+					<a title="15" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=security&amp;lang=en')">
+					security
+					<span class="ibm-access">(15)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f61-25">
+					
+					<a title="17" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=services&amp;lang=en')">
+					services
+					<span class="ibm-access">(17)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f62-51">
+					
+					<a title="37" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soa&amp;lang=en')">
+					soa
+					<span class="ibm-access">(37)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f63-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=soap&amp;lang=en')">
+					soap
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f64-8">
+					
+					<a title="10" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=social_networking&amp;lang=en')">
+					social_networking
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f65-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=en')">
+					spring
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f66-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=the&amp;lang=en')">
+					the
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f67-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tip&amp;lang=en')">
+					tip
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f68-11">
+					
+					<a title="11" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=to&amp;lang=en')">
+					to
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f69-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tomcat&amp;lang=en')">
+					tomcat
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f70-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=twitter&amp;lang=en')">
+					twitter
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f71-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=vikram_vaswani&amp;lang=en')">
+					vikram_vaswani
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f72-13">
+					
+					<a title="12" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=virtualization&amp;lang=en')">
+					virtualization
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f73-56">
+					
+					<a title="42" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=en')">
+					web
+					<span class="ibm-access">(42)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f74-46">
+					
+					<a title="32" class="lotusF3 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_development&amp;lang=en')">
+					web_development
+					<span class="ibm-access">(32)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f75-39">
+					
+					<a title="26" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_services&amp;lang=en')">
+					web_services
+					<span class="ibm-access">(26)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f76-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=webservice&amp;lang=en')">
+					webservice
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f77-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=windows&amp;lang=en')">
+					windows
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f78-100">
+					
+					<a title="152" class="lotusF5 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=en')">
+					xml
+					<span class="ibm-access">(152)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f79-4">
+					
+					<a title="9" class="lotusF1 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml_matters&amp;lang=en')">
+					xml_matters
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+										
+				<li class="f80-34">
+					
+					<a title="22" class="lotusF2 my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xslt&amp;lang=en')">
+					xslt
+					<span class="ibm-access">(22)</span>					
+					</a>&nbsp;
+				</li>
+								
+					
+					
+			</ul>
+		</div>
+		<div class="ibm-rule"><hr></div><p>View as <strong>cloud</strong>&nbsp;|
+ <a id="alist" class="lotusAction" href="javascript:;">list</a></p>
+		</div> 
+
+		
+		
+			<div class="lotusChunk dw-hidetag" id="dogearTagList">
+			<div id="list-container">
+				<ul class="lotusList lotusEditable lotusTags lotusMeta">
+				
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="9" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=accessibility&amp;lang=en')">accessibility</a>
+								9
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="9" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=agavi&amp;lang=en')">agavi</a>
+								9
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="58" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=en')">ajax</a>
+								58
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="16" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=and&amp;lang=en')">and</a>
+								16
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="20" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=android&amp;lang=en')">android</a>
+								20
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="13" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=en')">apache</a>
+								13
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="14" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=en')">api</a>
+								14
+							</li>
+					
+				
+			
+					
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="33" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=architecture&amp;lang=en')">architecture</a>
+								33
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="9" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=atom&amp;lang=en')">atom</a>
+								9
+							</li>
+					
+				
+			
+					
+					
+						
+						
+			
+						
+							<li>				
+								<a title="10" class="lotusLeft my" 
+href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=brett_mclaughlin&amp;lang=en')">brett_mclaughlin</a>
+								10
+							</li>
+					
+				
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+				
+			</ul>
+			</div>		
+			<div class="ibm-rule"><hr></div><p>View as <a id="acloud" 
+class="lotusAction" href="javascript:;">cloud</a>&nbsp;| <strong>list</strong></p>
+			</div></div>  
+</div>   
+</div>
+</div>
+<!-- Tagging_End -->
+<!-- Dig_Deeper -->
+<div class="ibm-container"><h2>Dig deeper into Open source on 
+developerWorks</h2><div class="ibm-container-body"><ul 
+class="ibm-link-list"><li class="ibm-first"><a 
+href="http://www.ibm.com/developerworks/opensource/" 
+class="ibm-forward-link">Overview</a></li><li><a 
+href="http://www.ibm.com/developerworks/opensource/newto/" 
+class="ibm-forward-link">New to Open source</a></li><li><a 
+href="http://www.ibm.com/developerworks/views/opensource/projects.jsp" 
+class="ibm-forward-link">Projects</a></li><li><a 
+href="http://www.ibm.com/developerworks/views/opensource/library.jsp" 
+class="ibm-forward-link">Technical library (articles, tutorials, and 
+more)</a></li><li><a 
+href="http://www.ibm.com/developerworks/opensource/training/" 
+class="ibm-forward-link">Training</a></li><li><a 
+href="http://www.ibm.com/developerworks/forums/dw_osforums.jsp" 
+class="ibm-forward-link">Forums</a></li><li><a 
+href="http://www.ibm.com/developerworks/views/opensource/events.jsp" 
+class="ibm-forward-link">Events</a></li></ul></div></div>
+<!-- High_Visibility_Offer -->
+<!--XSLT stylesheet used to transform this content: s-highvisibilityoffer.xsl--><div
+ class="ibm-container"><h2>Impact 2010</h2><div 
+class="ibm-container-body"><img alt="Redefine how you work smarter at 
+work: Impact 2010 May 2-7 Las Vegas, NV" 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/hivis-w-impact2010.jpg"
+ border="0" width="188" height="70"><p class="ibm-ind-link"><a 
+href="http://www-01.ibm.com/software/websphere/events/impact/" 
+class="ibm-forward-link">Redefine how you work smarter at work: Impact 
+2010 May 2-7 Las Vegas, NV</a></p></div></div>
+<!-- Special_Offers -->
+<div class="ibm-container"><h2>Special offers</h2><div 
+class="ibm-container-body"><p class="dw-special-offers"><a 
+href="http://www.ibm.com/software/websphere/events/impact/?S_CMP=TILE&amp;ca=dti-tileimpact10educ&amp;ca=dth-w"><img
+ 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/tile_v16_impact2010B.gif"
+ alt="Get the best education in shortest time" border="0" width="158" 
+height="50"></a></p><p class="dw-special-offers"><a 
+href="https://www.ibm.com/developerworks/forums/index.html?ca=dth-mydw&amp;S_CMP=TILE&amp;ca=dti-tiledwforuma"><img
+ 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/tile_v16_dwforumsB.gif"
+ alt="Find an answer for your technical question in Forums" border="0" 
+width="158" height="50"></a></p><p class="dw-special-offers"><a 
+href="http://www.ibm.com/developerworks/offers/lp/demos/summary/r-sadynamicviews.html?S_TACT=105AGX44&amp;S_CMP=TILE&amp;ca=dti-tileratsysarchdemo&amp;ca=dth-r"><img
+ 
+src="Debugging%20techniques%20for%20PHP%20programmers_files/tile_v16_puzzleview.gif"
+ alt="Create a dynamic view with Rational System Architect" border="0" 
+width="158" height="50"></a></p><div class="ibm-rule"><hr></div><p 
+class="ibm-ind-link"><a class="ibm-forward-link" 
+href="http://www.ibm.com/developerworks/downloads/?ca=dti-tilemoreoffers">Trial
+ software offers</a></p></div></div>
+<!-- RIGHT_COLUMN_CONTENT_END -->
+
+</div>
+<!-- RIGHT_COLUMN_END -->
+
+<!-- CONTENT_BODY_END -->
+</div>
+
+</div>
+<!-- CONTENT_END -->
+
+ <!-- END_IBM-PCON -->
+</div>
+
+<!-- FOOTER_BEGIN -->
+<div id="ibm-page-tools">
+<!-- IBM page tools container -->
+</div>
+<div id="ibm-footer">
+<ul>
+<li class="ibm-first"><a href="http://www.ibm.com/ibm/">About IBM</a></li>
+<li><a href="http://www.ibm.com/privacy/">Privacy</a></li>
+<li><a href="http://www.ibm.com/contact/">Contact</a></li>
+<li><a href="http://www.ibm.com/legal/">Terms of use</a></li>
+<li><a 
+href="http://www.ibm.com/ibm/syndication/us/en/?cm_re=footer-_-ibmfeeds-_-top_level">IBM
+ Feeds</a></li></ul>
+</div><div id="ibm-social-tools"><ul><li><a rel="print" href="#" 
+title="Print this page" class="ibm-share-print"></a></li><li><a 
+rel="email" href="#" title="E-mail this page" class="ibm-share-email"></a></li><li><a
+ rel="digg" 
+href="http://digg.com/submit?phase=2&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F&amp;title=Debugging%20techniques%20for%20PHP%20programmers"
+ title="Digg" class="ibm-share-digg"></a></li><li><a rel="facebook" 
+href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F&amp;t=Debugging%20techniques%20for%20PHP%20programmers"
+ title="Facebook" class="ibm-share-facebook"></a></li><li><a 
+rel="twitter" 
+href="http://twitter.com/home?status=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F%20-%20Debugging%20techniques%20for%20PHP%20programmers"
+ title="Twitter" class="ibm-share-twitter"></a></li><li><a 
+rel="delicious" 
+href="http://delicious.com/post?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F&amp;title=Debugging%20techniques%20for%20PHP%20programmers"
+ title="Delicious" class="ibm-share-delicious"></a></li><li><a 
+rel="linkedin" 
+href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Flibrary%2Fos-debug%2F&amp;title=Debugging%20techniques%20for%20PHP%20programmers"
+ title="Linked In" class="ibm-share-linkedin"></a></li></ul></div>
+<!-- FOOTER_END -->
+
+ <!-- END_IBM-TOP -->
+<div id="ibm-overlay-top"></div></div>
+ 
+ <!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- JQuery start -->
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/jquery.js"></script>
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/jquery_003.js"></script>
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/jquery_002.js"></script>
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/ui.js"></script>
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/ui_002.js"></script>
+<script type="text/javascript" language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/dwjquerytags.js"></script>
+<script type="text/javascript" language="JavaScript">
+	jQuery.noConflict();     
+	// Put all your code in your document ready area
+	jQuery(document).ready(function(jQuery) {
+	// Do jQuery stuff using jQuery 
+	jQuery('a.dwauthor').cluetip({
+		local: true,
+		showTitle: false,
+		positionBy: 'bottomTop',
+		sticky: true,	
+		mouseOutClose: true,
+		closeText: '<img src="//www.ibm.com/developerworks/js/jquery/cluetip98/i/x.gif" alt="Close" />',
+		arrows: false,
+		dropShadow: true,
+		cluetipClass: 'dwbasic'
+		});   	
+	});
+ </script>
+ <!-- JQuery end -->
+ <!-- Overlay js -->
+<script language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/overlay.js" type="text/javascript"></script>
+<!-- My dW Interest article -->
+<script language="JavaScript" src="Debugging%20techniques%20for%20PHP%20programmers_files/showinterest.js" type="text/javascript">//</script>
+<script language="JavaScript" type="text/javascript">
+        // <![CDATA[
+			var contentId = '';
+			var contentAreas = '';
+			var caArr = [];
+			contentId = '99250';
+			contentAreas = 'opensource';
+			if(contentAreas != ''){caArr = contentAreas.split(',');}
+			var loginLink = 'https://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&d=' + encodeURIComponent(window.location);jQuery('interestShow').showInterest(contentId,'dw-article',{'int_tops':[267,54],'int_prods':[], 'int_prod_fam':[],'int_cont_area':caArr},
+'<div id="dw-interest-anon"><a id="intAnonBtn" class="ibm-external-link" href="">Update My dW interests</a> (<a class="dw-interest" href="' + loginLink + '">Log in</a> | <a class="dw-interest" href="#overlay" onclick="ibmCommon.Overlays.show(\'dwmyinterestadd\', this);return false;">What\'s this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to help for Update My dW interests</a></div>',
+'<div id="dw-interest-add"><a id="intSelectBtn" class="ibm-external-link" href="">Add to My dW interests</a> (<a class="dw-interest" href="#overlay" onclick="ibmCommon.Overlays.show(\'dwmyinterestadd\', this);return false;">What\'s this?</a>) <a class="ibm-access" href="#dwmyinterestaddhelp">Skip to help for Add to My dW interests</a></div>',
+'<div id="dw-interest-remove">Added to My dW interests (<a class="dw-interest" href="https://www.ibm.com/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=en">Edit</a>)</div>'
+);
+// ]]>
+</script>
+<!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=1&ibmAdoptPhase=-&ibmRole=-";</script>
+<!--END --><!-- SCRIPTS_INCLUDE_END -->
+
+<div id="ibm-metrics">
+<script src="Debugging%20techniques%20for%20PHP%20programmers_files/stats.js" type="text/javascript">//</script>
+</div>
+
+<div style="position: absolute; z-index: 95; display: none;" 
+id="cluetip-waitimage"></div><div style="z-index: 96; display: none; 
+position: absolute;" id="cluetip"><div style="z-index: 95; opacity: 0.1;
+ top: 1px; left: 1px; position: absolute; background-color: rgb(0, 0, 
+0);"></div><div style="z-index: 94; opacity: 0.1; top: 2px; left: 2px; 
+position: absolute; background-color: rgb(0, 0, 0);"></div><div 
+style="z-index: 93; opacity: 0.1; top: 3px; left: 3px; position: 
+absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 
+92; opacity: 0.1; top: 4px; left: 4px; position: absolute; 
+background-color: rgb(0, 0, 0);"></div><div style="z-index: 91; opacity:
+ 0.1; top: 5px; left: 5px; position: absolute; background-color: rgb(0, 
+0, 0);"></div><div style="z-index: 90; opacity: 0.1; top: 6px; left: 
+6px; position: absolute; background-color: rgb(0, 0, 0);"></div><div 
+style="position: relative; z-index: 97;" id="cluetip-outer"><h3 
+id="cluetip-title"></h3><div id="cluetip-inner"></div></div><div 
+id="cluetip-extra"></div><div style="z-index: 97;" id="cluetip-arrows" 
+class="cluetip-arrows"></div></div></body></html>

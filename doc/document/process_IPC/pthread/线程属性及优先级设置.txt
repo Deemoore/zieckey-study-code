@@ -1,0 +1,96 @@
+POSIX.1线程属性及优先级设置
+
+	By zieckey
+	All Right Reserved
+	
+	线程的属性由pthread_attr_t结构类型表示。
+
+    在使用pthread_attr_t之前，需要调用pthread_attr_init对其初始化。pthread_attr_init为pthread_attr_t结构里面的各个属性设置默认值。程序可以修改这些值，定制线程的各个属性。在使用完pthread_attr_t后，需要调用pthread_attr_destroy，完成一些清理工作。
+[cpp]
+int pthread_attr_init ( pthread_attr_t *attr );
+int pthread_attr_destroy ( pthread_attr_t *attr );
+[/cpp]
+    无需了解pthread_attr_t的具体结构，POSIX.1指定了一系列方法获取和设置pthread_attr_t结构里面的各个属性。
+    
+	(1)分离状态（detached state）：若线程终止时，线程处于分离状态，系统不保留线程终止的状态。当不需要线程的终止状态时，可以分离线程（调用pthread_detach 函数）。若在线程创建的时候，就已经知道以后不需要使用线程的终止状态时，可以在线程创建属性里面指定该状态，那么线程一开始就处于分离状态。通过下面两个函数，设置和获取线程的分离属性。
+[cpp]
+    int pthread_attr_getdetachstate ( const pthread_attr_t *attr, int *state );
+    int pthread_attr_setdetachstate ( pthread_attr_t *attr, int state );
+[/cpp]
+    该属性的可选值有：PTHREAD_CREATE_DETACHED、PTHREAD_CREATE_JOINABLE。
+
+    (2)栈地址（stack address）：POSIX.1定义了两个常量_POSIX_THREAD_ATTR_STACKADDR 和_POSIX_THREAD_ATTR_STACKSIZE检测系统是否支持栈属性。当然也可以给sysconf函数传递_SC_THREAD_ATTR_STACKADDR或 _SC_THREAD_ATTR_STACKSIZE来进行检测。当进程栈地址空间不够用时，指定新建线程使用由malloc分配的空间作为自己的栈空间。通过pthread_attr_setstackaddr和pthread_attr_getstackaddr两个函数分别设置和获取线程的栈地址。传给pthread_attr_setstackaddr函数的地址是缓冲区的低地址（不一定是栈的开始地址，栈可能从高地址往低地址增长）。
+[cpp]
+    int pthread_attr_getstackaddr ( const pthread_attr_t *attr, void **addr );
+    int pthread_attr_setstackaddr ( pthread_attr_t *attr, void *addr );
+[/cpp]
+
+    (3)栈大小（stack size）：当系统中有很多线程时，可能需要减小每个线程栈的默认大小，防止进程的地址空间不够用；当线程调用的函数会分配很大的局部变量或者函数调用层次很深时，可能需要增大线程栈的默认大小。函数pthread_attr_getstacksize和 pthread_attr_setstacksize被提供。
+[cpp]
+    int pthread_attr_getstacksize ( const pthread_attr_t *attr, size_t *size );
+    int pthread_attr_setstacksize ( pthread_attr_t *attr, size_t size );
+[/cpp]
+    函数pthread_attr_getstack和pthread_attr_setstack函数可以同时操作栈地址和栈大小两个属性：
+[cpp]
+    int pthread_attr_getstack ( const pthread_attr_t *attr, void **stackaddr, size_t *size );
+    int pthread_attr_setstack ( pthread_attr_t *attr, void *stackaddr, size_t size );
+[/cpp]
+
+    (4)栈保护区大小（stack guard size）：在线程栈顶留出一段空间，防止栈溢出。当栈指针进入这段保护区时，系统会发出错误，通常是发送信号给线程。该属性默认值是PAGESIZE大小，该属性被设置时，系统会自动将该属性大小补齐为页大小的整数倍。当改变栈地址属性时，栈保护区大小通常清零。
+[cpp]
+    int pthread_attr_getguardsize ( const pthread_attr_t *attr, size_t *guardsize );
+    int pthread_attr_setguardsize ( pthread_attr_t *attr, size_t guardsize );
+[/cpp]
+
+    (5)线程优先级（priority）：新线程的优先级为 0。
+[cpp]
+    int pthread_attr_getschedparam(const pthread_attr_t *restrict attr, struct sched_param *restrict param);
+    int pthread_attr_setschedparam(pthread_attr_t *restrict attr, const struct sched_param *restrict param);
+[/cpp]
+
+	(6)继承父进程优先级（inheritsched）：新线程不继承父线程调度优先级(PTHREAD_EXPLICIT_SCHED)
+	
+	(7)调度策略（schedpolicy）：新线程使用 SCHED_OTHER 调度策略。线程一旦开始运行，直到被抢占或者直到线程阻塞或停止为止。
+[cpp]	
+	int pthread_attr_setschedpolicy(pthread_attr_t* attr, int policy)
+	int pthread_attr_setschedparam (pthread_attr_t* attr, struct sched_param* param); 
+[/cpp]	
+
+	(8)争用范围（scope）建立线程的争用范围（PTHREAD_SCOPE_SYSTEM 或 PTHREAD_SCOPE_PROCESS）。使用 PTHREAD_SCOPE_SYSTEM 时，此线程将与系统中的所有线程进行竞争。使用 PTHREAD_SCOPE_PROCESS 时，此线程将与进程中的其他线程进行竞争。这个又叫绑定状态，PTHREAD_SCOPE_SYSTEM（绑定的）和PTHREAD_SCOPE_PROCESS（非绑定的）。具有不同范围状态的线程可以在同一个系统甚至同一个进程中共存。进程范围只允许这种线程与同一进程中的其他线程争用资源，而系统范围则允许此类线程与系统内的其他所有线程争用资源。对于Solaris系统，实际上，从 Solaris 9 发行版开始，系统就不再区分这两个范围。
+[cpp]		
+	int pthread_attr_getscope(const pthread_attr_t *restrict attr, int *restrict contentionscope);
+    int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope);	
+[/cpp]	
+
+	(9)线程并行级别（concurrency）应用程序使用 pthread_setconcurrency() 通知系统其所需的并发级别。
+[cpp]
+	int pthread_getconcurrency(void);
+	int pthread_setconcurrency(int new_level);
+[/cpp]
+
+	
+POSIX标准指定了三种调度策略：先入先出策略 (SCHED_FIFO)、循环策略 (SCHED_RR) 和自定义策略 (SCHED_OTHER)。SCHED_FIFO 是基于队列的调度程序，对于每个优先级都会使用不同的队列。SCHED_RR 与 FIFO 相似，不同的是前者的每个线程都有一个执行时间配额。
+SCHED_FIFO 和 SCHED_RR 是对 POSIX Realtime 的扩展。SCHED_OTHER 是缺省的调度策略。
+
+
+	POSIX标准指定了三种调度策略：先入先出策略 (SCHED_FIFO)、循环策略 (SCHED_RR) 和自定义策略 (SCHED_OTHER)。SCHED_FIFO 是基于队列的调度程序，对于每个优先级都会使用不同的队列。SCHED_RR 与 FIFO 相似，不同的是前者的每个线程都有一个执行时间配额。
+
+	SCHED_FIFO
+	
+如果调用进程具有有效的用户 ID 0，则争用范围为系统 (PTHREAD_SCOPE_SYSTEM) 的先入先出线程属于实时 (RT) 调度类。如果这些线程未被优先级更高的线程抢占，则会继续处理该线程，直到该线程放弃或阻塞为止。对于具有进程争用范围 (PTHREAD_SCOPE_PROCESS)) 的线程或其调用进程没有有效用户 ID 0 的线程，请使用 SCHED_FIFO。SCHED_FIFO 基于 TS 调度类。
+
+	SCHED_RR
+
+	如果调用进程具有有效的用户 ID 0，则争用范围为系统 (PTHREAD_SCOPE_SYSTEM)) 的循环线程属于实时 (RT) 调度类。如果这些线程未被优先级更高的线程抢占，并且这些线程没有放弃或阻塞，则在系统确定的时间段内将一直执行这些线程。对于具有进程争用范围 (PTHREAD_SCOPE_PROCESS) 的线程，请使用 SCHED_RR（基于 TS 调度类）。此外，这些线程的调用进程没有有效的用户 ID 0。
+
+
+例：创建优先级为50的线程。
+
+pthread_attr_t attr;
+struct sched_param param;
+pthread_attr_init(&attr);
+pthread_attr_setschedpolicy(&attr, SCHED_RR);
+param.sched_priority = 50;
+pthread_attr_setschedparam(&attr, &param);
+pthread_create(&threadid, &attr, &threadfunc, NULL);
+pthread_attr_destroy(&attr);

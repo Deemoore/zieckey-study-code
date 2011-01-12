@@ -1,0 +1,116 @@
+嵌入式Arm－Linux开发环境建立
+
+1. 安装工具链。
+	本来安装工具链是件很麻烦的事情，特别是对于初学者而言。
+不过现在亿道公司几乎都帮我们做好了这些麻烦的事情。
+我们所需要做的只是把亿道公司提供的ToolChain工具包安放到我们的系统中去就行了。
+
+将 ToolChain/arm-linux-toolchain.tar.gz 文件解压到 /usr/local/ 下面。
+[root@zieckey ToolChain]# cp  arm-linux-toolchain.tar.gz  /usr/local/
+[root@zieckey local]# tar zxvf arm-linux-toolchain.tar.gz
+[root@zieckey local]# rm arm-linux-toolchain.tar.gz
+这里将生成/usr/local/arm-linux/目录
+
+[root@zieckey local]# vi /root/.bash_profile
+在改文件中添加一下内容，有的部分已经存在就不需重复，如下：
+# .bash_profile
+                                                                                                    
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+                                                                                                    
+# User specific environment and startup programs
+                                                                                                    
+PATH=$PATH:$HOME/bin
+PATH=$PATH:/usr/local/arm-linux/bin
+PATH=$PATH:/root
+BASH_ENV=$HOME/.bashrc
+USERNAME="root"
+                                                                                                    
+export USERNAME BASH_ENV PATH
+
+至此ToolChain已经安装好。
+重启一下使其配置文件生效，或者使用下列命令：
+[root@localhost local]# source /root/.bash_profile 
+
+
+2. 用qt-2.3.7编写第一个X86 PC 上用qvfv模拟的应用程序。
+首先要设置qt-2.3.7的路径。
+设置qt-2.3.7路径
+[root@localhost qttest]# export QTDIR=/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7
+[root@localhost qttest]# export PATH=$QTDIR/bin:$PATH
+[root@localhost qttest]# export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+[
+设置tmake路径
+[root@localhost qttest]# export TMAKEDIR=/usr/local/arm-linux/qt_pc_toolchain/tmake-1.11
+[root@localhost qttest]# export PATH=$TMAKEDIR/bin:$PATH
+[root@localhost qttest]# export TMAKEPATH=$TMAKEDIR/lib/qws/linux-x86-g++
+
+
+然后写个最简单的程序：main.cpp
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+                                                                                                    
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+                                                                                                    
+    QPushButton hello( "Hello world!", 0 );
+    hello.resize( 200, 80 );
+                                                                                                    
+    a.setMainWidget( &hello );
+    hello.show();
+    return a.exec();
+}
+
+再写个pro文件以用来生成Makefile文件：hello.pro
+TEMPLATE	= app
+CONFIG		+= qte warn_on release
+SOURCES		+= main.cpp
+TARGET		= hello_zieckey
+
+将上面两文件保存在同一个文件夹下
+用tmake生成Makefile文件，然后编译。
+[root@localhost qttest]# tmake hello.pro -o Makefile
+[root@localhost qttest]# make
+[root@localhost qttest]# ./hello_zieckey
+[root@localhost qttest]# ./hello_zieckey 
+QSocket::writeBlock: Socket is not open
+QSocket::writeBlock: Socket is not open
+QSocket::writeBlock: Socket is not open
+QSocket::writeBlock: Socket is not open
+No Qt/Embedded server appears to be running.
+If you want to run this program as a server,
+add the "-qws" command-line option.
+出现错误，这里需要加上 "-qws" 来运行程序
+[root@localhost qttest]# ./hello_zieckey -qws
+Can't open framebuffer device /dev/fb0
+Can't open framebuffer device /dev/fb0
+ driver cannot connect
+ 我们在qvfb里面模拟运行，当然要先运行qvfb：
+[root@localhost qttest]# qvfb -width 640 -height 480 &
+[root@localhost qttest]# ./hello_zieckey -qws
+
+
+3. 用上面编写应用程序编译成ARM平台的可执行文件
+设置qte路径 
+[root@localhost qttest]# export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+[root@localhost qttest]# export PATH=$QTDIR/bin:$PATH
+[root@localhost qttest]# export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+设置tmake路径
+[root@localhost qttest]# export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+[root@localhost qttest]# export PATH=$TMAKEDIR/bin:$PATH
+[root@localhost qttest]# export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+用tmake生成Makefile文件，然后编译。
+[root@localhost qttest]# tmake hello.pro -o makefile
+[root@localhost qttest]# make
+可以用file命令查看生成文件的属性
+[root@localhost qttest]# file hello_zieckey 
+hello_zieckey: ELF 32-bit LSB executable, ARM, version 1, dynamically linked (uses shared libs), for GNU/Linux 2.0.0, not stripped
+可以看到该文件是ARM平台的
+
+
+

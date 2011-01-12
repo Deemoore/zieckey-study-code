@@ -1,0 +1,27 @@
+NFS服务创建步骤
+
+1. 准备
+# mkdir /mnt/nfs
+# mkdir /mnt/incoming/
+# chmod 777 /mnt/incoming/
+
+
+2. 配置
+打开配置文件
+# gedit  /etc/exports &
+
+输入:
+
+/mnt/incoming  *(ro,no_root_squash)
+
+保存退出
+
+3. 重启
+# service nfs restart
+# service portmap restart
+# touch /mnt/incoming/hello.txt
+
+4. 挂载
+# mount -t nfs 192.168.38.151:/mnt/incoming/ /mnt/nfs/
+
+# ls /mnt/nfs/

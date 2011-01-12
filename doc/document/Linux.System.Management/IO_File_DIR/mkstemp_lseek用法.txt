@@ -1,0 +1,133 @@
+mkstemp(建立唯一的临时文件)
+表头文件 #include<stdlib.h>
+定义函数 int mkstemp(char * template);
+函数说明:
+     mkstemp()用来建立唯一的临时文件。参数 template 所指的文件
+     名称字符串中最后六个字符必须是 XXXXXX。mkstemp()会以可
+     读写模式和 0600 权限来打开该文件,如果该文件不存在则会建立
+     该文件。打开该文件后其文件描述词会返回。
+     文件顺利打开后返回可读写的文件描述词。若果文件打开失败则返
+     回 NULL,并把错误代码存在 errno 中。
+
+错误代码
+     EINVAL 参数 template 字符串最后六个字符非 XXXXXX。
+     EEXIST 无法建立临时文件。
+     
+附加说明
+	参数 template 所指的文件名称字符串必须声明为数组,如:
+        char template[ ] =”template-XXXXXX”;
+     	千万不可以使用下列的表达方式
+        char *template = “template-XXXXXX”;
+
+#include <stdlib.h>
+#include <stdio.h>
+
+int main(void)
+{
+	char temp[] = "tempfile_XXXXXX";
+	char content[] = "This is written by the program.";
+	int fd;
+	fd = mkstemp( temp );
+	write( fd, content, sizeof(content) );
+	printf( "The template file name is %s\n", temp );
+	close( fd );
+	return 0;	
+}
+
+
+
+
+lseek(移动文件的读写位置)
+       
+表头文件       
+     #include<sys/types.h>
+     #include<unistd.h>
+定义函数: off_t lseek(int fildes,off_t offset ,int whence);
+函数说明:
+	每一个已打开的文件都有一个读写位置,当打开文件时通常其读写
+	位置是指向文件开头,若是以附加的方式打开文件(如	O_APPEND)
+	,则读写位置会指向文件尾。当 read() 或 write()
+	时,读写位置会随之增加,lseek()便是用来控制该文件的读写位
+	置。参数 fildes 为已打开的文件描述词,参数 offset 为根据参数
+	whence 来移动读写位置的位移数。参数 whence 为下列其中一种:
+	SEEK_SET 参数 offset 即为新的读写位置。
+	SEEK_CUR 以目前的读写位置往后增加 offset 个位移量。
+	SEEK_END 将读写位置指向文件尾后再增加 offset 个位移量。
+	当 whence 值为 SEEK_CUR 或 SEEK_END 时,参数 offet 允许负值
+	的出现。
+	下列是较特别的使用方式:
+	1) 欲将读写位置移到文件开头时:lseek(int fildes,0,SEEK_SET)     ;
+	2) 欲将读写位置移到文件尾时:lseek(int fildes,0,SEEK_END)      ;
+	3) 想要取得目前文件位置时:lseek(int fildes,0,SEEK_CUR)      ;
+	
+ 返回值      
+     当调用成功时则返回目前的读写位置,也就是距离文件开头多少个
+     字节。若有错误则返回-1,errno 会存放错误代码。
+
+附加说明
+	Linux 系统不允许 lseek()对 tty 装置作用,此项动作会令 lseek()
+     返回 ESPIPE。
+
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+int main(void)
+{
+	int fd, i, rev;
+	char buf[] = "Hello world!";
+
+	fd = open( "temp.log", O_WRONLY|O_CREAT );//以可读写的方式打开一个文件，如果不存在则创建该文件
+	
+	for( i=0; i<10; i++ )
+	{
+		write( fd, buf, sizeof(buf) );
+		lseek( fd, -5, SEEK_CUR);
+	}
+	
+	close( fd );
+	return 0;
+}
+
+[root@localhost src]# gcc lseek.c 
+[root@localhost src]# ./a.out 
+[root@localhost src]# cat temp.log 
+Hello woHello woHello woHello woHello woHello woHello woHello woHello woHello world!
+
+
+
+
+
+
+
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+int main(void)
+{
+	int fd, i, rev;
+	char buf1[] = "abcdefghij";
+	char buf2[] = "abcdefghij";
+
+	fd = open( "temp.log", O_WRONLY|O_CREAT );//以可读写的方式打开一个文件，如果不存在则创建该文件
+	
+	for( i=0; i<10; i++ )
+	{
+		write( fd, buf, sizeof(buf) );
+		lseek( fd, -5, SEEK_CUR);
+	}
+	
+	close( fd );
+	return 0;
+}
+
+
+
+

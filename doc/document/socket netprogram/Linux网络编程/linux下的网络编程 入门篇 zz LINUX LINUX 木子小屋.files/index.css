@@ -1,0 +1,555 @@
+ {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+UL {
+	LIST-STYLE-TYPE: none
+}
+A {
+	COLOR: #ff9b0d; TEXT-DECORATION: none
+}
+.spanButton {
+	CURSOR: pointer; COLOR: #003366; TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+A IMG {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+TEXTAREA {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FONT-SIZE: 12px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px
+}
+INPUT {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; FONT-SIZE: 12px; PADDING-BOTTOM: 1px; PADDING-TOP: 1px
+}
+.fabiao {
+	TEXT-ALIGN: right
+}
+#misc-entry-ticker A {
+	COLOR: #1c3d7d
+}
+#misc-entry-ticker A {
+	COLOR: #fff
+}
+HR {
+	DISPLAY: none
+}
+#album-basket .col-body {
+	WIDTH: 565px
+}
+#all-photo-basket .col-body {
+	WIDTH: 565px
+}
+BODY {
+	BACKGROUND: #1b3d67; FONT: 12px Verdana, Arial, Helvetica, sans-serif; COLOR: #666666; TEXT-ALIGN: center
+}
+#misc-sms-link A {
+	FONT-FAMILY: simsun
+}
+#container {
+	BACKGROUND-POSITION: left top; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/template/800/31/38/images/index_06.gif); MARGIN: 0px auto; OVERFLOW: hidden; WIDTH: 760px; BACKGROUND-REPEAT: repeat-y; TEXT-ALIGN: left
+}
+#pageBody {
+	CLEAR: both; FLOAT: left; WIDTH: 760px
+}
+#pageHeader {
+	WIDTH: 760px; HEIGHT: 236px
+}
+.misc-row1 TD {
+	BACKGROUND: #d7e1f6
+}
+.erro-row TD {
+	BACKGROUND: #fffccd
+}
+SPAN.required-sign {
+	COLOR: #f00
+}
+.required {
+	COLOR: #d00; POSITION: relative; TOP: 3px
+}
+#blog-card-edit .misc-seprate-tr TD {
+	HEIGHT: 6px
+}
+TABLE {
+	MARGIN: 5px; BORDER-COLLAPSE: collapse
+}
+UNKNOWN {
+	BORDER-RIGHT: #999999 1px solid; BORDER-TOP: #999999 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/btn-bg.gif) #fff repeat-x 50% bottom; BORDER-LEFT: #999999 1px solid; BORDER-BOTTOM: #999999 1px solid; HEIGHT: 22px
+}
+ HTML .style-btn {
+	BORDER-RIGHT: #999999 1px solid; BORDER-TOP: #999999 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/btn-bg.gif) #fff repeat-x 50% bottom; BORDER-LEFT: #999999 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #999999 1px solid; HEIGHT: 22px
+}
+ HTML #blog-card-edit #detail-info INPUT.style-btn {
+	BORDER-RIGHT: #999999 1px solid; BORDER-TOP: #999999 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/btn-bg.gif) #fff repeat-x 50% bottom; BORDER-LEFT: #999999 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #999999 1px solid; HEIGHT: 22px
+}
+.col-body {
+	SCROLLBAR-FACE-COLOR: #fff; SCROLLBAR-HIGHLIGHT-COLOR: #666; SCROLLBAR-SHADOW-COLOR: #666; SCROLLBAR-3DLIGHT-COLOR: #fff; SCROLLBAR-ARROW-COLOR: #666; SCROLLBAR-TRACK-COLOR: #eee; SCROLLBAR-DARKSHADOW-COLOR: #fff
+}
+#guestBook #msg-list {
+	SCROLLBAR-FACE-COLOR: #fff; SCROLLBAR-HIGHLIGHT-COLOR: #666; SCROLLBAR-SHADOW-COLOR: #666; SCROLLBAR-3DLIGHT-COLOR: #fff; SCROLLBAR-ARROW-COLOR: #666; SCROLLBAR-TRACK-COLOR: #eee; SCROLLBAR-DARKSHADOW-COLOR: #fff
+}
+#leave-msg TEXTAREA {
+	SCROLLBAR-FACE-COLOR: #fff; SCROLLBAR-HIGHLIGHT-COLOR: #666; SCROLLBAR-SHADOW-COLOR: #666; SCROLLBAR-3DLIGHT-COLOR: #fff; SCROLLBAR-ARROW-COLOR: #666; SCROLLBAR-TRACK-COLOR: #eee; SCROLLBAR-DARKSHADOW-COLOR: #fff
+}
+.green-h {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; FONT-WEIGHT: normal; FONT-SIZE: 12px; PADDING-BOTTOM: 3px; MARGIN: 5px; PADDING-TOP: 3px
+}
+.red-strong {
+	FONT-WEIGHT: normal; COLOR: #f00
+}
+.misc-this-page {
+	COLOR: #f00
+}
+#trackback {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 5px; MARGIN: 5px 10px; COLOR: #666; PADDING-TOP: 5px
+}
+TABLE TH {
+	BORDER-BOTTOM: #666 1px solid
+}
+TABLE.with-checkbox TD {
+	BORDER-TOP: #666 1px solid; BORDER-BOTTOM: #666 1px solid
+}
+#log {
+	COLOR: #000
+}
+#submit-btns {
+	BACKGROUND: #d7e1f6
+}
+#album-choose TABLE {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid
+}
+#control-btns {
+	BORDER-RIGHT: #dbe4f7 1px solid; BORDER-TOP: #dbe4f7 1px solid; BORDER-LEFT: #dbe4f7 1px solid; BORDER-BOTTOM: #dbe4f7 1px solid
+}
+#photo-img {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid
+}
+#photo-album-col TABLE {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BACKGROUND: #dbe4f7; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid
+}
+#comment H4 {
+	
+}
+#sms-content H4 {
+	
+}
+#comment .cmt-entry {
+	BORDER-BOTTOM: #666 1px solid
+}
+.cat-h {
+	BORDER-BOTTOM: #666 1px solid
+}
+#sms-content #sms DT {
+	BORDER-BOTTOM: #666 1px solid
+}
+#setup FIELDSET LEGEND {
+	
+}
+#cmt-manage DT {
+	BACKGROUND: #d7e1f6
+}
+.edit-col-bottom #page-browse {
+	Z-INDEX: 20; RIGHT: 0px; POSITION: absolute; TOP: 0px
+}
+.edit-col #page-browse {
+	Z-INDEX: 20; RIGHT: 0px; POSITION: absolute; TOP: 0px
+}
+#page-browse {
+	PADDING-RIGHT: 8px; DISPLAY: block; TEXT-ALIGN: right
+}
+#page-browse A {
+	DISPLAY: inline-block; TEXT-DECORATION: underline
+}
+#page-browse A:hover {
+	BACKGROUND: #999; COLOR: #fff; TEXT-DECORATION: none
+}
+.func-btns {
+	PADDING-RIGHT: 8px; PADDING-TOP: 4px; TEXT-ALIGN: right
+}
+#header-banner-ad {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 8px; BACKGROUND: #000; PADDING-BOTTOM: 0px; COLOR: #fff; LINE-HEIGHT: 17px; PADDING-TOP: 0px; HEIGHT: 17px
+}
+#header-banner-ad A {
+	COLOR: #fff; TEXT-DECORATION: underline
+}
+#pageHeader {
+	BACKGROUND-POSITION: left 17px; FLOAT: left; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/template/800/31/38/images/index_03.jpg); BACKGROUND-REPEAT: no-repeat; POSITION: relative; BACKGROUND-COLOR: #0e5193
+}
+#pageHeader LI {
+	BORDER-RIGHT: #fff 1px solid; PADDING-RIGHT: 6px; DISPLAY: block; PADDING-LEFT: 6px; FLOAT: left; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+#pageHeader LI.misc-last-list {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+#bokee-logo {
+	DISPLAY: none
+}
+#blog-title {
+	LEFT: 40px; POSITION: absolute; TOP: 35px
+}
+#blog-title H1 {
+	FONT-SIZE: 25px
+}
+#blog-title H1 A {
+	COLOR: #fff
+}
+#blog-title P {
+	MARGIN: 5px; COLOR: #fff
+}
+#header-txt-ad {
+	LEFT: 8px; POSITION: absolute; TOP: 0px
+}
+#tool-nav {
+	RIGHT: 0px; WIDTH: 760px; COLOR: #fff; POSITION: absolute; TOP: 3px
+}
+#tool-nav UL {
+	RIGHT: 0px; POSITION: absolute; TOP: 0px
+}
+#tool-nav A {
+	COLOR: #fff
+}
+#tool-nav #misc-sms-link A {
+	FONT-WEIGHT: bold
+}
+#tool-nav #misc-sms-number {
+	COLOR: #f00
+}
+#tool-nav #singin-btn {
+	RIGHT: 5px; WIDTH: 4em; POSITION: absolute; TOP: 25px
+}
+#page-switch {
+	DISPLAY: block; Z-INDEX: 10; RIGHT: 4px; BOTTOM: 5px; LINE-HEIGHT: 18px; POSITION: absolute; TEXT-ALIGN: center
+}
+#page-switch A {
+	DISPLAY: block; PADDING-LEFT: 2px; FLOAT: left; WIDTH: 33px; COLOR: #000; PADDING-TOP: 2px; HEIGHT: 19px; TEXT-DECORATION: none
+}
+#page-switch #to-edit {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/left-stat.gif) no-repeat right top
+}
+#page-switch .this-stat#to-edit {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/left-this-stat.gif) no-repeat right top; COLOR: #fff
+}
+#page-switch #to-edit:hover {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/left-this-stat.gif) no-repeat right top; COLOR: #fff
+}
+#page-switch #to-view {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/right-stat.gif) no-repeat left top
+}
+#page-switch .this-stat#to-view {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/right-this-stat.gif) no-repeat left top; COLOR: #fff
+}
+#page-switch #to-view:hover {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/right-this-stat.gif) no-repeat left top; COLOR: #fff
+}
+#page-switch #back-to-mine {
+	PADDING-RIGHT: 11px; PADDING-LEFT: 10px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-back2.gif) no-repeat left center; WIDTH: auto
+}
+#page-switch #back-to-mine:hover {
+	COLOR: #999
+}
+#edit-nav {
+	Z-INDEX: 2; RIGHT: 5px; BOTTOM: 5px; POSITION: absolute
+}
+#edit-nav UL LI A {
+	DISPLAY: block; PADDING-LEFT: 1em; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/manage-icon.gif) no-repeat left center; COLOR: #000
+}
+#edit-nav UL LI {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+#edit-nav LI A.at-here {
+	FONT-WEIGHT: bold; TEXT-DECORATION: underline
+}
+#content-nav {
+	PADDING-LEFT: 4px; Z-INDEX: 1; WIDTH: 756px; BOTTOM: 0px; BORDER-BOTTOM: #eee 3px solid; POSITION: absolute
+}
+#content-nav LI {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; BORDER-TOP-STYLE: none; LINE-HEIGHT: 21px; PADDING-TOP: 0px; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; TEXT-ALIGN: center; BORDER-BOTTOM-STYLE: none
+}
+#content-nav LI A {
+	PADDING-RIGHT: 15px; DISPLAY: block; PADDING-LEFT: 15px; BACKGROUND: #396aac; PADDING-BOTTOM: 0px; MARGIN: 0px 1px; COLOR: #fff; PADDING-TOP: 0px; TEXT-DECORATION: none
+}
+#content-nav LI A:hover {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/main-tab-bg.gif) #999 repeat-x 50% bottom; COLOR: #666
+}
+#content-nav LI A.at-here {
+	DISPLAY: block; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/main-tab-bg.gif) #999 repeat-x 50% bottom; COLOR: #000
+}
+#content-nav LI#manage-nav A {
+	MARGIN-LEFT: 20px
+}
+#edit-sub-nav {
+	CLEAR: both; PADDING-LEFT: 13px; BACKGROUND: #eee; FLOAT: left; WIDTH: 760px; PADDING-TOP: 0px; BORDER-BOTTOM: #666 1px solid
+}
+#edit-sub-nav UL LI {
+	FLOAT: left; MARGIN-RIGHT: 1em
+}
+#index-view #edit-sub-nav {
+	PADDING-BOTTOM: 2px; PADDING-TOP: 2px
+}
+#index-edit #edit-sub-nav {
+	PADDING-BOTTOM: 2px; PADDING-TOP: 2px
+}
+#index-view #edit-sub-nav UL LI A {
+	PADDING-RIGHT: 16px; PADDING-LEFT: 10px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/down-arrow.gif) no-repeat right 7px; FLOAT: left; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+#index-view #edit-sub-nav UL LI .spanButton {
+	PADDING-RIGHT: 16px; PADDING-LEFT: 10px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/down-arrow.gif) no-repeat right 7px; FLOAT: left; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+#index-edit #edit-sub-nav UL LI A {
+	PADDING-RIGHT: 16px; PADDING-LEFT: 10px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/down-arrow.gif) no-repeat right 7px; FLOAT: left; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+#index-edit #edit-sub-nav UL LI .spanButton {
+	PADDING-RIGHT: 16px; PADDING-LEFT: 10px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/down-arrow.gif) no-repeat right 7px; FLOAT: left; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+#edit-sub-nav A {
+	PADDING-RIGHT: 14px; DISPLAY: block; PADDING-LEFT: 14px; FLOAT: left; PADDING-BOTTOM: 4px; COLOR: #000; PADDING-TOP: 1px
+}
+#edit-sub-nav A:hover {
+	DISPLAY: block; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/nav-bullet.gif) no-repeat center bottom; FLOAT: left; TEXT-DECORATION: none
+}
+#edit-sub-nav #this-sub A {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/nav-bullet.gif) no-repeat center bottom
+}
+#alert {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 30px; FLOAT: left; PADDING-BOTTOM: 10px; MARGIN: 5px 5px 3px; WIDTH: 700px; LINE-HEIGHT: 1.5em; PADDING-TOP: 10px
+}
+.warning {
+	BORDER-RIGHT: #999 1px solid; BORDER-TOP: #999 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/stat-warn.gif) #fffccd no-repeat 5px 13px; BORDER-LEFT: #999 1px solid; COLOR: #000000; BORDER-BOTTOM: #999 1px solid
+}
+.stat-erro {
+	BORDER-RIGHT: #ff5a5a 1px solid; BORDER-TOP: #ff5a5a 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/stat-error.gif) #ffecec no-repeat 5px 13px; BORDER-LEFT: #ff5a5a 1px solid; COLOR: #000000; BORDER-BOTTOM: #ff5a5a 1px solid
+}
+.stat-erro#alert A {
+	COLOR: #b40000; TEXT-DECORATION: underline
+}
+.stat-ok {
+	BORDER-RIGHT: #99ff7a 1px solid; BORDER-TOP: #99ff7a 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/stat-ok.gif) #ecfee6 no-repeat 5px 13px; BORDER-LEFT: #99ff7a 1px solid; COLOR: #000000; BORDER-BOTTOM: #99ff7a 1px solid
+}
+.stat-ok#alert A {
+	COLOR: #1d7b00; TEXT-DECORATION: underline
+}
+#alert-msg {
+	FLOAT: left
+}
+#alert-btns {
+	FLOAT: right
+}
+#alert-btns INPUT {
+	MARGIN: 0px 5px
+}
+.operation {
+	BORDER-RIGHT: #484848 1px solid; BACKGROUND-POSITION: left top; BORDER-TOP: #484848 1px solid; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/template/800/31/38/images/index_07.gif); MARGIN-BOTTOM: 10px; BORDER-LEFT: #484848 1px solid; BORDER-BOTTOM: #484848 1px solid; BACKGROUND-REPEAT: repeat-x; BACKGROUND-COLOR: #fff
+}
+.operation H3 {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 2px; FONT-SIZE: 12px; MARGIN-LEFT: 6px; COLOR: #fff; PADDING-TOP: 3px; HEIGHT: 17px
+}
+.select {
+	BORDER-RIGHT: #484848 1px solid; PADDING-RIGHT: 8px; BACKGROUND-POSITION: left top; BORDER-TOP: #484848 1px solid; PADDING-LEFT: 8px; FONT-WEIGHT: bold; FONT-SIZE: 12px; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/template/800/31/38/images/index_07.gif); MARGIN-BOTTOM: 10px; BORDER-LEFT: #484848 1px solid; COLOR: #fff; PADDING-TOP: 3px; BORDER-BOTTOM: #484848 1px solid; BACKGROUND-REPEAT: repeat-x; HEIGHT: 17px; BACKGROUND-COLOR: #fff
+}
+.operation .col-body {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 8px; PADDING-BOTTOM: 5px; PADDING-TOP: 8px; ZOOM: 1
+}
+.operation .col-body .edit-col {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 8px; PADDING-BOTTOM: 0px; MARGIN: -8px -8px 0px; COLOR: #000000; LINE-HEIGHT: 20px; PADDING-TOP: 0px; BORDER-BOTTOM: #ccc 1px solid; ZOOM: 1; POSITION: relative; HEIGHT: 20px
+}
+.operation .col-body .edit-col A {
+	COLOR: #000000
+}
+.operation .col-body .edit-col-bottom {
+	CLEAR: both; PADDING-RIGHT: 8px; BORDER-TOP: #ccc 1px solid; PADDING-LEFT: 8px; BACKGROUND: #ddd; PADDING-BOTTOM: 0px; MARGIN: 5px -8px -8px; LINE-HEIGHT: 20px; PADDING-TOP: 0px; POSITION: relative; HEIGHT: 20px
+}
+.entry-footer A {
+	PADDING-LEFT: 1em; COLOR: #000
+}
+.entry-footer SPAN {
+	PADDING-LEFT: 1em; COLOR: #000
+}
+.entry-footer {
+	PADDING-BOTTOM: 5px; LINE-HEIGHT: 1.5em
+}
+.entry-footer .pub-date {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/date-icon.gif) no-repeat left center
+}
+.entry-footer .pub-time {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/time-icon.gif) no-repeat left center
+}
+.entry-footer .ln-author A {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-author.gif) no-repeat left top
+}
+.entry-footer .ln-trackbacks {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-trackbacks.gif) no-repeat left top
+}
+.entry-footer .ln-bookmark {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-bookmark.gif) no-repeat left top
+}
+.entry-footer .ln-comments {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-comments.gif) no-repeat left top
+}
+.entry-footer .ln-bocai {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-bocai.gif) no-repeat left top
+}
+.entry-footer .ln-viewed {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/ln-viewed.gif) no-repeat left top
+}
+#myPhoto DT {
+	TEXT-ALIGN: center
+}
+#myPhoto DL {
+	MARGIN-BOTTOM: 0px
+}
+#renark DL {
+	BORDER-BOTTOM: #ddd 1px solid
+}
+#guestBook DL {
+	BORDER-BOTTOM: #ddd 1px solid
+}
+.entry-title {
+	MARGIN: 10px 0px
+}
+.entry-title H2 {
+	FONT-SIZE: 14px
+}
+.entry-title H2 A {
+	COLOR: #000000
+}
+.entry-title {
+	POSITION: relative
+}
+.entry-title P {
+	RIGHT: 8px; WIDTH: 8em; POSITION: absolute; TOP: 2px; TEXT-ALIGN: right
+}
+.entry-body P {
+	TEXT-INDENT: 2em
+}
+.entry-preview {
+	BORDER-BOTTOM: #ddd 1px solid
+}
+#entry-view .entry-preview {
+	BORDER-BOTTOM-STYLE: none
+}
+.entry-body {
+	FONT-SIZE: 14px
+}
+#blogIndex-list CAPTION {
+	PADDING-RIGHT: 0.5em; PADDING-LEFT: 0px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; TEXT-ALIGN: left
+}
+#blogIndex-list TABLE {
+	WIDTH: 97%
+}
+#blogIndex-list .list-pub-date {
+	WIDTH: 9em
+}
+#blogIndex-list .list-delete-icon {
+	WIDTH: 2.2em; TEXT-ALIGN: center
+}
+#photoAlbum TABLE {
+	WIDTH: 95%
+}
+#photoAlbum .misc-seprate-tr TD {
+	HEIGHT: 5px
+}
+#photoAlbum TD {
+	PADDING-RIGHT: 2px; BORDER-TOP: #ddd 1px solid; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; VERTICAL-ALIGN: middle; PADDING-TOP: 2px; BORDER-BOTTOM: #ddd 1px solid
+}
+#photoAlbum TD P {
+	MARGIN: 0px
+}
+#photoAlbum .td1 {
+	WIDTH: 35px
+}
+#more-msg {
+	TEXT-ALIGN: right
+}
+#leave-msg TEXTAREA {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px; WIDTH: 95%; PADDING-TOP: 1px; HEIGHT: 8em
+}
+#index-edit #msg-list {
+	OVERFLOW: scroll; HEIGHT: 300px
+}
+#index-view #msg-list {
+	OVERFLOW: scroll; HEIGHT: 300px
+}
+#name {
+	PADDING-RIGHT: 1px; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px; WIDTH: 95%; PADDING-TOP: 1px
+}
+#guestBook #cmt-btn {
+	MARGIN-TOP: 5px
+}
+#centerDiv #categories LI {
+	BACKGROUND-IMAGE: none
+}
+#photoblog-view #photo-browse-col {
+	BACKGROUND: #fff
+}
+#pageFooter {
+	CLEAR: both; COLOR: #ffffff; PADDING-TOP: 40px; HEIGHT: 60px; TEXT-ALIGN: center
+}
+#pageFooter P {
+	MARGIN: 5px 0px
+}
+.error {
+	BORDER-RIGHT: #ff5a5a 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #ff5a5a 1px solid; PADDING-LEFT: 20px; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/stat-error.gif) #ffecec no-repeat 2px 3px; PADDING-BOTTOM: 3px; BORDER-LEFT: #ff5a5a 1px solid; WIDTH: 180px; COLOR: #000; PADDING-TOP: 3px; BORDER-BOTTOM: #ff5a5a 1px solid
+}
+#menu {
+	BORDER-RIGHT: #000 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #000 1px solid; DISPLAY: none; PADDING-LEFT: 5px; Z-INDEX: 1; PADDING-BOTTOM: 5px; MARGIN: 0px; BORDER-LEFT: #000 1px solid; PADDING-TOP: 5px; BORDER-BOTTOM: #000 1px solid; POSITION: absolute; BACKGROUND-COLOR: #ccc; TEXT-ALIGN: left
+}
+#menu A {
+	TEXT-DECORATION: none
+}
+.normalImg {
+	BORDER-RIGHT: #000 1px solid; BORDER-TOP: #000 1px solid; MARGIN: 5px; BORDER-LEFT: #000 1px solid; BORDER-BOTTOM: #000 1px solid
+}
+.selectImg {
+	BORDER-RIGHT: #00f 2px solid; BORDER-TOP: #00f 2px solid; MARGIN: 4px; BORDER-LEFT: #00f 2px solid; BORDER-BOTTOM: #00f 2px solid
+}
+#messageDiv {
+	DISPLAY: none
+}
+#bokee-nav {
+	BACKGROUND: #666; COLOR: #fff; POSITION: relative; HEIGHT: 30px
+}
+#bokee-nav LI {
+	PADDING-RIGHT: 1em; DISPLAY: block; PADDING-LEFT: 1em; FLOAT: left; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+#bokee-nav A {
+	COLOR: #fff
+}
+#bokee-nav-help {
+	PADDING-LEFT: 1.5em; BACKGROUND: url(http://blogteam.bokee.com/pub/template/800/31/38/images/help-icon.gif) no-repeat left top
+}
+#bokee-nav-logo {
+	LEFT: 10px; POSITION: absolute
+}
+#bokee-nav-1 {
+	LEFT: 135px; BOTTOM: 8px; POSITION: absolute
+}
+#bokee-nav-2 {
+	RIGHT: 10px; BOTTOM: 8px; POSITION: absolute
+}
+#photo .operation {
+	BORDER-TOP-WIDTH: 0px! important; BORDER-LEFT-WIDTH: 0px! important; BORDER-BOTTOM-WIDTH: 0px! important; MARGIN-BOTTOM: 10px; BORDER-RIGHT-WIDTH: 0px! important
+}
+#leftDivFooter {
+	HEIGHT: 1px
+}
+#centerDivFooter {
+	HEIGHT: 1px
+}
+#rightDivFooter {
+	HEIGHT: 1px
+}
+#leftDiv .diary-all {
+	DISPLAY: none
+}
+#rightDiv .diary-all {
+	DISPLAY: none
+}
+#leftDiv .diary-easy {
+	DISPLAY: block
+}
+#rightDiv .diary-easy {
+	DISPLAY: block
+}
+#centerDiv .diary-easy {
+	DISPLAY: none
+}

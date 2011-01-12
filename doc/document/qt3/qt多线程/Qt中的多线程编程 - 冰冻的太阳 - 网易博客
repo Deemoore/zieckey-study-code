@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>转载：Qt中的多线程编程 - 冰冻的太阳 - 网易博客</title>
+    <meta name="Author" content="冰冻的太阳,wjh2-316">
+    <meta name="Keywords" content="冰冻的太阳的博客 wjh2-316 冰冻的太阳 转载：Qt中的多线程编程 网易博客 网易">
+    <meta name="Description" content="转载：Qt中的多线程编程 冰冻的太阳的网易博客">  
+    <meta http-equiv="Content-Type" content="text/html;charset=gbk"/>
+<link rel="shortcut icon" href="http://st1.blog.163.com/04132300/style/common/favicon.ico" />
+<script type="text/javascript">try{document.execCommand('BackgroundImageCache',false,true);}catch(e){}</script>
+<link type="text/css" rel="stylesheet" href="http://st.blog.163.com/04132300/style/css/base/core.css" />
+
+<link type="text/css" rel="stylesheet" href="http://st1.blog.163.com/04132300/style/css/fixed/4080/o.css" id="_$$_link_layout"/>
+<link type="text/css" rel="stylesheet" href="http://st1.blog.163.com/04132300/style/css/fixed/4080/s.css"  id="_$$_link_theme"/>
+
+ 
+<link type="text/css" rel="stylesheet" href="http://st3.blog.163.com/04132300/style/common/musicbox/common.css"/>
+<link type="text/css" rel="stylesheet" href="http://st4.blog.163.com/04132300/style/common/musicbox/2/style.css" id="music_skin_css"/>
+
+<script type="text/JavaScript">
+<!--//--><![CDATA[//><!--
+var UD = {
+     status       : 'prev',
+     themeId      :  4080,
+     hostId       :  27872753,
+     visitorId    :  0,
+     visitorIP	  :  '202.160.181.45',
+     visitorAvatar:	 '',
+     hostPath     : '',
+     hostName     : 'wjh2-316', 
+     pageName     : 'prevBlogPerma',
+     visitorRank  : '-100',
+     visitorName  : '', 
+     hostNickname : '冰冻的太阳',
+     visitorNickname : '',
+     commentRank  : -100,
+     externHash   : '',
+     hasAdminCircles : 'false',
+     hostImgUrl   : 'http://ava.blog.163.com/photo/z6OLjqPayw92EjF8cN9WVA==/489203509524375537.jpg',
+     themeFileId  : '-1208185403522',
+     serverName   : 'wjh2-316.blog.163.com',
+     dataDigest	  : 'null',
+     lastModifyTime : ''
+};   
+
+UD.visitorUserType = [];
+
+if(UD.pageName == "prevHome" || UD.pageName == "editHome"){
+	var date = new Date();
+	date.setMinutes(0,0,0);
+	UD.weatherGenTime = date.getTime();
+}
+//--><!]]>
+</script>
+
+<script type="text/javascript" src="http://st3.blog.163.com/04132300/js/gen/core1.js"></script>
+<script type="text/javascript" src="http://st4.blog.163.com/04132300/js/gen/core_ext.js"></script>
+
+<script type="text/javascript" src="http://st5.blog.163.com/04132300/js/gen/core2.js"></script>
+<script type="text/javascript" src="http://st1.blog.163.com/04132300/js/gen/core3.js"></script>
+
+<script type="text/javascript" src="http://st2.blog.163.com/04132300/js/gen/interface.js"></script>
+
+
+<script type="text/javascript" src="http://st2.blog.163.com/04132300/js/gen/blog.js"></script>
+  </head> 
+  <body lang="zh" id="blog-163-com">   
+    <div id="tptlbr" style="display:none">&nbsp;</div>
+    <div class="bggb" id="blog-163-com-body">
+      <div class="innerlayer" id="_$$_inner_layer"><div class="g_p_none"><span class="a_a">&nbsp;</span></div>
+<script language="JavaScript">
+<!--//--><![CDATA[//><!--
+ 	if (NEBlog==undefined) 
+		var NEBlog={};
+		
+//--><!]]>
+</script>
+<div class="g_p_none">
+  <!-- 单篇日志预览-菜单 -->
+  <div id="_$$_blog_perma_menu">
+   		<a class="g_p_block g_w_45 g_p_left g_t_left n_ n34 g_t_14 c05" id="olderBlogLink" style="display:none;"><p class="g_w_95 g_t_hide g_c_hand g_p_left g_t_14" id="olderBlogTitle">&nbsp;</p></a>
+    	<a class="g_p_block g_w_45 g_p_right g_t_right n_ n33c g_t_14 c05" id="newerBlogLink" style="display:none;"><p class="g_p_right g_w_95 g_t_hide g_c_hand g_t_14" id="newerBlogTitle">&nbsp;</p></a>
+    <div class="g_p_clear g_t_space">&nbsp;</div>
+  </div>
+  
+  <!-- 单篇日志预览-内容 -->
+  <div class="g_c_container g_p_hide " id="_$$_blog_perma" >
+	<div class="g_t_right g_c_pdin g_h_20 c08"><div>字号：
+		<a id="bigfont" href="#" class="c06" onclick="NEBlog.gPermaLinkPage.updownMenu.changeFont('blogtext_fks!084064082080087071082094087095086081089068086081083064', 1);return false;">大</a><span class="c07" id="bigfont_off" style="display:none;font-size:14px;">大</span>&nbsp;
+		<a id="middlefont" href="#" class="c06" onclick="NEBlog.gPermaLinkPage.updownMenu.changeFont('blogtext_fks!084064082080087071082094087095086081089068086081083064', 2);return false;">中</a><span class="c07" id="middlefont_off" style="display:none;font-size:14px;">中</span>&nbsp;
+		<a id="smallfont" class="c06" href="#" onclick="NEBlog.gPermaLinkPage.updownMenu.changeFont('blogtext_fks!084064082080087071082094087095086081089068086081083064', 3);return false;" style="display:none;">小</a><span class="c07" id="smallfont_off" style="display:inline;font-size:14px;">小</span>
+	</div></div>
+   	<p class="g_w_100 g_t_wrap g_t_center g_t_bold g_t_24 g_c_pdin c07" id="blogtitle_fks!084064082080087071082094087095086081089068086081083064">转载：Qt中的多线程编程</p>
+   	
+	<div class="g_blog_list">
+		<div class="g_t_center g_c_pdin g_p_center c07 content"  style="width:760px" id="blogtext_fks!084064082080087071082094087095086081089068086081083064">
+		   <div  ><blockquote>Qt 作为一种基于 C++ 的跨平台 GUI 系统，能够提供给用户构造图形用户界面的强大功能。为了满足用户构造复杂图形界面系统的需求，Qt 提供了丰富的多线程编程支持。</blockquote>
+<p>Qt 作为一种基于 C++ 的跨平台 GUI
+系统，能够提供给用户构造图形用户界面的强大功能。为了满足用户构造复杂图形界面系统的需求，Qt 提供了丰富的多线程编程支持。从 2.2
+版本开始，Qt 主要从下面三个方面对多线程编程提供支持：一、构造了一些基本的与平台无关的线程类；二、提交用户自定义事件的
+Thread-safe
+方式；三、多种线程间同步机制，如信号量，全局锁。这些都给用户提供了极大的方便。不过，在某些情况下，使用定时器机制能够比利用 Qt
+本身的多线程机制更方便地实现所需要的功能，同时也避免了不安全的现象发生。本文不仅对 Qt
+中的多线程支持机制进行了讨论，还着重探讨了利用定时器机制模拟多线程编程的方法。</p>
+<p><a ><span ><font color="#000000" size="4">1、系统对多线程编程的支持</font></span></a></p>
+
+<p>不同的平台对 Qt 的多线程支持方式是不同的。当用户在 Windows 操作系统上安装 Qt 系统时，线程支持是编译器的一个选项，在 Qt 的 mkfiles 子目录中包括了不同种类编译器的编译文件，其中带有 -mt 后缀的文件才是支持多线程的。</p>
+<p>而在 Unix 操作系统中，线程的支持是通过在运行 configure 脚本文件时添加 -thread
+选项加入的。安装过程将创建一个独立的库，即
+libqt-mt，因此要支持多线程编程时，必须与该库链接（链接选项为-lqt-mt），而不是与通常的 Qt 库（-lqt）链接。</p>
+<p>另外，无论是何种平台，在增加线程支持时都需要定义宏
+QT_THREAD_SUPPORT（即增加编译选项-DQT_THREAD_SUPPORT）。在 Windows 操作系统中，这一点通常是在
+qconfig.h 文件中增加一个选项来实现的。而在 Unix 系统中通常添加在有关的 Makefile 文件中。</p>
+<br>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td><img src="http://www.ibm.com/i/v14/rules/blue_rule.gif" height="1" width="100%"><br>
+            <img src="http://www.ibm.com/i/c.gif" border="0" height="6" width="8"></td>
+        </tr>
+    </tbody>
+</table>
+<table  align="right" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr align="right">
+            <td><img src="http://www.ibm.com/i/c.gif" height="4" width="100%"><br>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td valign="middle"><img src="http://www.ibm.com/i/v14/icons/u_bold.gif" border="0" height="16" width="16"><br>
+                        </td>
+                        <td align="right" valign="top"><a  href="http://www-128.ibm.com/developerworks/cn/linux/l-qt-mthrd/#main"><strong><font color="#996699">回页首</font></strong></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<p><a ><span ><font color="#000000" size="4">2、Qt中的线程类</font></span></a></p>
+
+<p>在 Qt 系统中与线程相关的最重要的类当然是 QThread 类，该类提供了创建一个新线程以及控制线程运行的各种方法。线程是通过
+QThread::run() 重载函数开始执行的，这一点很象 Java 语言中的线程类。在 Qt 系统中，始终运行着一个GUI
+主事件线程，这个主线程从窗口系统中获取事件，并将它们分发到各个组件去处理。在 QThread
+类中还有一种从非主事件线程中将事件提交给一个对象的方法，也就是 QThread::postEvent()方法，该方法提供了 Qt 中的一种
+Thread-safe 的事件提交过程。提交的事件被放进一个队列中，然后 GUI
+主事件线程被唤醒并将此事件发给相应的对象，这个过程与一般的窗口系统事件处理过程是一样的。值得注意的是，当事件处理过程被调用时，是在主事件线程中被
+调用的，而不是在调用QThread::postEvent 方法的线程中被调用。比如用户可以从一个线程中迫使另一个线程重画指定区域：</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">QWidget *mywidget;<br>QThread::postEvent(mywidget, new QPaintEvent(QRect(0,0,100,100)));<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>然而，只有一个线程类是不够的，为编写出支持多线程的程序，还需要实现两个不同的线程对共有数据的互斥访问，因此 Qt 还提供了 QMutex
+类，一个线程在访问临界数据时，需要加锁，此时其他线程是无法对该临界数据同时加锁的，直到前一个线程释放该临界数据。通过这种方式才能实现对临界数据的
+原子操作。</p>
+<p>除此之外，还需要一些机制使得处于等待状态的线程在特定情况下被唤醒。QWaitCondition 类就提供了这种功能。当发生特定事件时，QWaitCondition 将唤醒等待该事件的所有线程或者唤醒任意一个被选中的线程。</p>
+<br>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td><img src="http://www.ibm.com/i/v14/rules/blue_rule.gif" height="1" width="100%"><br>
+            <img src="http://www.ibm.com/i/c.gif" border="0" height="6" width="8"></td>
+        </tr>
+    </tbody>
+</table>
+<table  align="right" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr align="right">
+            <td><img src="http://www.ibm.com/i/c.gif" height="4" width="100%"><br>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td valign="middle"><img src="http://www.ibm.com/i/v14/icons/u_bold.gif" border="0" height="16" width="16"><br>
+                        </td>
+                        <td align="right" valign="top"><a  href="http://www-128.ibm.com/developerworks/cn/linux/l-qt-mthrd/#main"><strong><font color="#996699">回页首</font></strong></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<p><a ><span ><font color="#000000" size="4">3、用户自定义事件在多线程编程中的应用</font></span></a></p>
+
+<p>在 Qt 系统中，定义了很多种类的事件，如定时器事件、鼠标移动事件、键盘事件、窗口控件事件等。通常，事件都来自底层的窗口系统，Qt 的主事件循环函数从系统的事件队列中获取这些事件，并将它们转换为 QEvent，然后传给相应的 QObjects 对象。</p>
+<p>除此之外，为了满足用户的需求，Qt 系统还提供了一个 QCustomEvent 类，用于用户自定义事件，这些自定义事件可以利用
+QThread::postEvent() 或者QApplication::postEvent() 被发给各种控件或其他 QObject
+实例，而 QWidget 类的子类可以通过 QWidget::customEvent()
+事件处理函数方便地接收到这些自定义的事件。需要注意的是：QCustomEvent 对象在创建时都带有一个类型标识 id
+以定义事件类型，为了避免与 Qt 系统定义的事件类型冲突，该 id 值应该大于枚举类型 QEvent::Type 中给出的 "User" 值。</p>
+<p>在下面的例子中，显示了多线程编程中如何利用用户自定义事件类。</p>
+<p>UserEvent类是用户自定义的事件类，其事件标识为346798，显然不会与系统定义的事件类型冲突。</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">class UserEvent : public QCustomEvent   //用户自定义的事件类<br>{<br>public:<br> UserEvent(QString s) : QCustomEvent(346798), sz(s) { ; }<br> QString str() const { return sz; }<br>private:<br> QString sz;    <br>};<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>UserThread类是由QThread类继承而来的子类，在该类中除了定义有关的变量和线程控制函数外，最主要的是定义线程的启动函数
+UserThread::run()，在该函数中创建了一个用户自定义事件UserEvent，并利用QThread类的postEvent函数提交该事
+件给相应的接收对象。</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">class UserThread : public QThread      //用户定义的线程类<br>{<br>public:<br> UserThread(QObject *r, QMutex *m, QWaitCondition *c);<br>QObject *receiver;<br>}<br><br>void UserThread::run()     //线程类启动函数，在该函数中创建了一个用户自定义事件<br>{UserEvent *re = new UserEvent(resultstring);<br>   QThread::postEvent(receiver, re); <br>}<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>UserWidget类是用户定义的用于接收自定义事件的QWidget类的子类，该类利用slotGo()函数创建了一个新的线程recv（UserThread类），当收到相应的自定义事件（即id为346798）时，利用customEvent函数对事件进行处理。</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">void UserWidget::slotGo()    //用户定义控件的成员函数<br>{ mutex.lock();  <br> if (! recv)<br>  recv = new UserThread(this, &amp;mutex, &amp;condition);<br> recv-&gt;start();<br> mutex.unlock();<br>}<br><br>void UserWidget::customEvent(QCustomEvent *e)   //用户自定义事件处理函数<br>{ if (e-&gt;type()==346798) <br> {<br>  UserEvent *re = (UserEvent *) e;<br>        newstring = re-&gt;str();<br>    }<br>}<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>在这个例子中，UserWidget对象中创建了新的线程UserThread，用户可以利用这个线程实现一些周期性的处理（如接收底层发来的消息
+等），一旦满足特定条件就提交一个用户自定义的事件，当UserWidget对象收到该事件时，可以按需求做出相应的处理，而一般情况下，
+UserWidget对象可以正常地执行某些例行处理，而完全不受底层消息的影响。</p>
+<br>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td><img src="http://www.ibm.com/i/v14/rules/blue_rule.gif" height="1" width="100%"><br>
+            <img src="http://www.ibm.com/i/c.gif" border="0" height="6" width="8"></td>
+        </tr>
+    </tbody>
+</table>
+<table  align="right" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr align="right">
+            <td><img src="http://www.ibm.com/i/c.gif" height="4" width="100%"><br>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td valign="middle"><img src="http://www.ibm.com/i/v14/icons/u_bold.gif" border="0" height="16" width="16"><br>
+                        </td>
+                        <td align="right" valign="top"><a  href="http://www-128.ibm.com/developerworks/cn/linux/l-qt-mthrd/#main"><strong><font color="#996699">回页首</font></strong></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<p><a ><span ><font color="#000000" size="4">4、利用定时器机制实现多线程编程</font></span></a></p>
+
+<p>为了避免Qt系统中多线程编程带来的问题，还可以使用系统中提供的定时器机制来实现类似的功能。定时器机制将并发的事件串行化，简化了对并发事件的处理，从而避免了thread-safe方面问题的出现。</p>
+<p>在下面的例子中，同时有若干个对象需要接收底层发来的消息（可以通过Socket、FIFO等进程间通信机制），而消息是随机收到的，需要有一个
+GUI主线程专门负责接收消息。当收到消息时主线程初始化相应对象使之开始处理，同时返回，这样主线程就可以始终更新界面显示并接收外界发来的消息，达到
+同时对多个对象的控制；另一方面，各个对象在处理完消息后需要通知GUI主线程。对于这个问题，可以利用第3节中的用户自定义事件的方法，在主线程中安装
+一个事件过滤器，来捕捉从各个对象中发来的自定义事件，然后发出信号调用主线程中的一个槽函数。</p>
+<p>另外，也可以利用Qt中的定时器机制实现类似的功能，而又不必担心Thread-safe问题。下面就是有关的代码部分：</p>
+<p>在用户定义的Server类中创建和启动了定时器，并利用connect函数将定时器超时与读取设备文件数据相关联：</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">Server:: Server(QWidget *parent) : QWidget(parent)<br>{<br>readTimer = new QTimer(this);   //创建并启动定时器<br>   connect(readTimer, SIGNAL(timeout()), this, SLOT(slotReadFile()));   //每当定时器超时时调用函数slotReadFile读取文件<br>   readTimer-&gt;start(100);<br>}<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>slotReadFile函数负责在定时器超时时，从文件中读取数据，然后重新启动定时器：</p>
+<table bgcolor="#eeeeee" border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td>
+            <pre><code ><br><br><font face="Lucida Console">int Server::slotReadFile()    // 消息读取和处理函数<br>{<br>  readTimer-&gt;stop();     //暂时停止定时器计时<br>  ret = read(file, buf );   //读取文件<br>if(ret == NULL)<br>{    readTimer-&gt;start(100);     //当没有新消息时，重新启动定时器<br>    return(-1);<br>}<br>  else<br>       根据buf中的内容将消息分发给各个相应的对象处理……；<br>readTimer-&gt;start(100);    //重新启动定时器<br>}<br><br>                </font></code></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<p>在该程序中，利用了类似轮循的方式定时对用户指定的设备文件进行读取，根据读到的数据内容将信息发送到各个相应的对象。用户可以在自己的GUI主线
+程中创建一个Server类，帮助实现底层的消息接收过程，而本身仍然可以处理诸如界面显示的问题。当各个对象完成处理后，通过重新启动定时器继续进行周
+期性读取底层设备文件的过程。当然，这种方法适合于各对象对事件的处理时间较短，而底层设备发来消息的频率又相对较慢的情况。在这种情况下，上述方法完全
+可以满足用户的需求，而又避免了处理一些与线程并发有关的复杂问题。</p>
+<p>当然，利用定时器机制实现多线程编程在某些方面具有一定的局限性，有关到底如何实现多线程编程，如何编写出效率更高的代码，还有待于开发者进一步研究和探讨。</p></div>
+		</div>
+			<div class="g_p_center" style="width:760px;">
+				<div id="relateBlogCircle_fks!084064082080087071082094087095086081089068086081083064" class="g_blog_circle g_circle_perm g_t_hide" style="margin-left:25px;"></div>
+			</div>			
+		<div class="g_p_center" style="width:760px;">
+			<div id="blogReader_fks!084064082080087071082094087095086081089068086081083064" class="g_recent_read g_t_hide" style="margin-left:25px;"></div>
+		</div>
+	</div>
+
+	<div class="g_tab_btn00" id="cssTabBar_fks!084064082080087071082094087095086081089068086081083064">
+				<div class="bdl" id="ShareDiv_fks!084064082080087071082094087095086081089068086081083064"><a class="c05" href="#" onclick="NEBlog.gPermaLinkPage.updownMenu.upDownShare('fks!084064082080087071082094087095086081089068086081083064','blog/27872753200831484944633.track','blog/static/27872753200831484944633');return false;" >分享(<nobr id="tbCount_fks!084064082080087071082094087095086081089068086081083064">?</nobr>)<span class="n_ n32 g_p_none">&nbsp;</span></a></div>
+				<div class="bdl bdr" id="ComDiv_fks!084064082080087071082094087095086081089068086081083064"><a class="c05" href="#" onclick="NEBlog.gPermaLinkPage.updownMenu.upDownComments('fks!084064082080087071082094087095086081089068086081083064', '转载：Qt中的多线程编程', 'blog/static/27872753200831484944633');return false;">评论(<nobr id="comCount_fks!084064082080087071082094087095086081089068086081083064">?</nobr>)<span class="n_ n32 g_p_none">&nbsp;</span></a></div>
+				<div class="bdl bdr c09">分类：<a id="aBelongClsfks!084064082080087071082094087095086081089068086081083064" class="c05" href="#" onclick="NEBlog.gPermaLinkPage.updownMenu.openSameClass('fks!087067080085089064092085074065083094086065083083085', 'QT编程');">QT编程</a></div>
+				<div class="c08"><nobr id="accessCount_fks!084064082080087071082094087095086081089068086081083064">?</nobr>次阅读</div>
+		<div class="c09">　2008-04-14 08:49</div>
+    	
+    	<input id="openCom_fks!084064082080087071082094087095086081089068086081083064" type="hidden" value="-1"/>
+	    <input id="openShare_fks!084064082080087071082094087095086081089068086081083064" type="hidden" value="-1"/>
+	</div>
+	<div class="g_p_clear g_t_space">&nbsp;</div>
+  	<div id="com_fks!084064082080087071082094087095086081089068086081083064" class="g_p_relative g_h_1">
+    	<div id="comShow_fks!084064082080087071082094087095086081089068086081083064"></div>
+  		<div id="comPub_fks!084064082080087071082094087095086081089068086081083064" class="g_h_1"></div>
+  	</div>
+  	<div id="share_fks!084064082080087071082094087095086081089068086081083064" class="g_t_left" style="display:none;"></div>
+  </div>    
+</div>
+
+
+<!-- 生成模块脚本 -->
+<script language="JavaScript">
+	function initPage(){
+    	var _$$_blog_perma = new netease.ui.module.Module("日志","_$$_blog_perma_menu",$("_$$_blog_perma"),null,"",{parent:"_$$_module_container_center"});
+
+	}
+</script>
+</div>
+<div class="wsy topbar" id="_$$_TopBar">
+	<div class="g_menu_llk sep" style="padding-left:5px;">
+      <a id="rmndtplhm" href="http://blog.163.com/" target="_blank">网易博客</a><span>|</span>
+      <a id="rmndtplfrnd" href="http://blog.163.com/findFriend.do?ap=true" target="_blank">找朋友</a><span>|</span>
+      <a id="rmndtplcrcl" href="http://q.163.com/" target="_blank">圈子</a><span>|</span>
+      <a id="rmndtplpp" href="http://pp.blog.163.com/" target="_blank">拍拍</a><span>|</span>
+      <a id="rmndtplsrch" href="http://blog.163.com/search.html" target="_blank">搜索</a>
+	</div>
+    <div class="g_menu_rlk sep" id="_$$_TopBarRight">
+    </div>
+</div>
+      <div class="bgtt wsy">
+<div class="bg10 wsy" id="_$$_Top_Outer">
+  <div class="bg11 ht wkg" id="_$$_Top_Inner">
+    <div class="flash ht" id="_$$_Top_Flash"></div>
+    <div class="logo" onclick="window.location.href='http://blog.163.com/login.html';return false;">&nbsp;</div>
+    <div class="title" id="_$$_Top_Title">
+    </div>
+  </div>
+</div>
+<div class="bg20 wsy">
+  <div class="bg21 hn c02 wkg advnav">
+    <div class="wnl hn">&nbsp;</div>
+    <div class="wnr hn">&nbsp;</div>
+    <div class="wnc hn">
+      <div class="hn g_menu_nv">
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/" onclick="">首页</a>
+        </div>
+        <div class="hn item seltag">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/blog/" onclick="">日志</a>
+        </div>
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/album/" onclick="">相册</a>
+        </div>
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/music/" onclick="">音乐<span class="icn_new">&nbsp;</span></a>
+        </div>
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/collection/" onclick="">收藏</a>
+        </div>
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/friends/" onclick="">好友</a>
+        </div>
+        <div class="hn item ">
+          <a hidefocus="true" href="http://wjh2-316.blog.163.com/profile/" onclick="">关于我</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bgtf wsy"><div class="bgtf_ hz wkg"><div class="wzl hz">&nbsp;</div><div class="wzr hz">&nbsp;</div><div class="wzc hz">&nbsp;</div></div></div>
+<div class="bgmt wsy"><div class="bgmt_ hy wkg"><div class="wyl hy">&nbsp;</div><div class="wyr hy">&nbsp;</div><div class="wyc hy">&nbsp;</div></div></div>
+<div class="bg40 wsy">
+  <div class="bg41 wkg g_p_hide" id="_$$_module_container">
+	  <div class="wml bgml g_p_fill">&nbsp;</div>
+	  <div class="wmr bgmr g_p_fill">&nbsp;</div>
+	  <div class="wml mtl">&nbsp;</div><div class="wml mbl">&nbsp;</div>
+	  <div class="wmr mtr">&nbsp;</div><div class="wmr mbr">&nbsp;</div>
+	  <div class="wmc"><div id="layout_ctrl" class="css_inr_1 innerLayout">
+	    <div class="wql hm" id="_$$_module_container_left" index="0"></div>
+	    <div class="wqc hm" id="_$$_module_container_center" index="1"></div>
+	    <div class="wqr hm" id="_$$_module_container_right" index="2"></div>
+	    <div class="g_p_clear">&nbsp;</div>
+	  </div></div>
+  </div>        
+</div>
+<div class="bgmf wsy"><div class="bgmf_ hx wkg"><div class="wxl hx">&nbsp;</div><div class="wxr hx">&nbsp;</div><div class="wxc hx">&nbsp;</div></div></div>
+<div class="bg50 wsy">
+  <div class="bg51 hf wkg c10">
+    <div class="g_menu_bt fmgtp">
+      <a target="_blank" href="http://corp.163.com/index_gb.html">公司简介</a><span>-</span>
+      <a target="_blank" href="http://gb.corp.163.com/gb/contactus.html">联系方法</a><span>-</span>
+      <a target="_blank" href="http://corp.163.com/gb/job/job.html">招聘信息</a><span>-</span>
+      <a target="_blank" href="http://help.163.com/?b13abk1">客户服务</a><span>-</span>
+      <a target="_blank" href="http://corp.163.com/gb/legal/legal.html">相关法律</a><span>-</span>
+      <a href="#" onclick="openPopAdvice();return false;" >用户反馈</a><span>-</span>
+      <a href="#" onclick="openPopreport();return false;" >举报不良信息</a><span>-</span>
+      	  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://wjh2-316.blog.163.com/rss/">
+	      <a target="_blank" href="http://wjh2-316.blog.163.com/rss/" class="p_ p0">&nbsp;</a>
+    </div>
+    <div>网易公司版权所有 &copy;1997-2008</div>
+  </div>
+</div>
+      </div>
+    </div>
+    <div id="_$$_outer_layer"></div>
+    <div class="g_p_none">
+	  <input type="hidden" id="$_oppoPageUrlForLogin" value="/blog/static/27872753200831484944633/edit/"/>
+    </div>
+  <script language="JavaScript">     
+  	function initUD(){
+       UD.body=$("_$$_inner_layer");
+       UD.layer=$("_$$_outer_layer");
+       UD.window=$("blog-163-com-body");
+       UD.bar=$("theme_selector_pointer");
+     }
+  </script>
+<script language="JavaScript">
+// <![CDATA[
+     var g_urlPrefix="";
+     function g_initCommon(){
+         var _arr = ["rmdtpxt","rmdtplgn"];
+         for (var i=_arr.length-1;i>=0;i--){
+              _o = $(_arr[i]);
+              if(i==0)_o && (_o.onclick=function(){exitAfterLogged();return false;});
+              else if(i==1)_o && (_o.onclick=function(){showLoginDlg('wjh2-316.blog.163.com');return false;});
+         }
+         topFromUrsLogin();
+     } 
+     function g_initUtil(){
+     }
+
+// ]]>
+</script>
+
+<style type="text/css">
+<!--/*--><![CDATA[/*><!--*/
+#messageZone {top:0px; right:20px; background:#ffffae; width:100px; position:fixed!important;
+	position:absolute;font-family: Arial,Helvetica,sans-serif; padding:4px;font-size:12px;}
+/*]]>*/-->
+</style>
+
+<script type='text/javascript' src='http://st.blog.163.com/js/utils/InfoAlertPad.js'></script>
+ 
+  
+  <script language="javascript">
+  function initAll(){
+  	try{
+  		initUD();
+  		g_initCommon();
+  		initFlash(0);
+		  showPageTopBar({serverName:'wjh2-316.blog.163.com',serverHostName:'blog.163.com'});
+  		initPage();
+  		window.setTimeout("g_initUtil();",3000);
+ 	 }catch(e){}
+  }
+  initAll();
+  </script>
+ 
+
+	<script language="JavaScript">
+  		var ver = new Date().getTime();
+  		document.write('<script type="text/javascript" id="visitorInfoJs" src="http://blog.163.com/js/static/visitorInfo.js?host=wjh2-316&mode=prev&channel=blog&blogId=fks!084064082080087071082094087095086081089068086081083064&pubTime=1208134184633&v=' + ver + '"></'+'script>');
+  	</script>
+	
+  	<script language="JavaScript">
+  		gLoadPermaLink(1, 'prev', 'fks!084064082080087071082094087095086081089068086081083064', 20, -100, 
+			'转载：Qt中的多线程编程', 'blog/static/27872753200831484944633', '27872753200831484944633', 'http://q.163.com', 
+			0, 1,	'off'
+);
+			
+		topFromUrsLogin();
+	</script>
+	
+  
+  </body>
+</html>

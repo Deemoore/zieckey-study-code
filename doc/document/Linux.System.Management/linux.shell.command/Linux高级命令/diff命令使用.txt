@@ -1,0 +1,163 @@
+摘要：本文详细介绍了diff命令的基本用法
+
+有这样两个文件：
+
+程序清单1 ：hello.c
+
+#include <stdio.h>
+
+int main(void)
+{
+	char msg[] = "Hello world!";
+	
+	puts(msg);
+	printf("Welcome to use diff commond.\n");
+	
+	return 0;	
+}
+
+
+程序清单2：hello_diff.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	char msg[] = "Hello world,fome hello_diff.c";
+	
+	puts(msg);
+	printf("hello_diff.c says,'Here you are,using diff.'\n");
+	
+	return 0;	
+}
+
+我们使用diff命令来查看这两个文件的不同之处，有一下几种方便的方法：
+1、普通格式输出：
+[root@localhost diff]# diff hello.c hello_diff.c 
+1a2
+> #include <stdlib.h>
+5c6
+<       char msg[] = "Hello world!";
+---
+>       char msg[] = "Hello world,fome hello_diff.c";
+8c9
+<       printf("Welcome to use diff commond.\n");
+---
+>       printf("hello_diff.c says,'Here you are,using diff.'\n");
+[root@localhost diff]# 
+
+上面的“1a2”表示后面的一个文件"hello_diff.c"比前面的一个文件"hello.c"多了一行
+"5c6"表示第一个文件的第5行与第二个文件的第6行有区别
+
+2、并排格式输出
+[root@localhost diff]# diff hello.c hello_diff.c -y -W 130
+#include <stdio.h>                                              #include <stdio.h>
+                                                              > #include <stdlib.h>
+
+int main(void)                                                  int main(void)
+{                                                               {
+        char msg[] = "Hello world!";                          |         char msg[] = "Hello world,fome hello_diff.c";
+
+        puts(msg);                                                      puts(msg);
+        printf("Welcome to use diff commond.\n");             |         printf("hello_diff.c says,'Here you are,using diff.'\
+
+        return 0;                                                       return 0;
+}                                                               }
+[root@localhost diff]# 
+这种并排格式的对比一目了然，可以快速找到不同的地方。
+-W选择可以指定输出列的宽度，这里指定输出列宽为130
+
+3、上下文输出格式
+[root@localhost diff]# diff hello.c hello_diff.c -c
+*** hello.c     2007-09-25 17:54:51.000000000 +0800
+--- hello_diff.c        2007-09-25 17:56:00.000000000 +0800
+***************
+*** 1,11 ****
+  #include <stdio.h>
+  
+  int main(void)
+  {
+!       char msg[] = "Hello world!";
+  
+        puts(msg);
+!       printf("Welcome to use diff commond.\n");
+  
+        return 0;
+  }
+--- 1,12 ----
+  #include <stdio.h>
++ #include <stdlib.h>
+  
+  int main(void)
+  {
+!       char msg[] = "Hello world,fome hello_diff.c";
+  
+        puts(msg);
+!       printf("hello_diff.c says,'Here you are,using diff.'\n");
+  
+        return 0;
+  }
+[root@localhost diff]# 
+这种方式在开头两行作了比较文件的说明，这里有三中特殊字符：
+＋		比较的文件的后者比前着多一行
+－		比较的文件的后者比前着少一行		
+！		比较的文件两者有差别的行
+
+4、统一输出格式
+[root@localhost diff]# diff hello.c hello_diff.c -u
+--- hello.c     2007-09-25 17:54:51.000000000 +0800
++++ hello_diff.c        2007-09-25 17:56:00.000000000 +0800
+@@ -1,11 +1,12 @@
+ #include <stdio.h>
++#include <stdlib.h>
+ 
+ int main(void)
+ {
+-       char msg[] = "Hello world!";
++       char msg[] = "Hello world,fome hello_diff.c";
+ 
+        puts(msg);
+-       printf("Welcome to use diff commond.\n");
++       printf("hello_diff.c says,'Here you are,using diff.'\n");
+ 
+        return 0;
+ }
+[root@localhost diff]# 
+正如看到的那样，统一格式的输出更加紧凑，所以更易于理解，更易于修改。
+
+5、其他
+假如你想查看两个文件是否不同又不想显示差异之处的话，可以加上－q选项：
+[root@localhost diff]# diff hello.c hello_diff.c -q
+Files hello.c and hello_diff.c differ
+[root@localhost diff]# 另外你还可以提供一些匹配规则来忽略某中差别，可以用 -I regexp
+
+[root@localhost diff]# diff hello.c hello_diff.c -c -I include
+*** hello.c     2007-09-25 17:54:51.000000000 +0800
+--- hello_diff.c        2007-09-25 17:56:00.000000000 +0800
+***************
+*** 2,11 ****
+  
+  int main(void)
+  {
+!       char msg[] = "Hello world!";
+  
+        puts(msg);
+!       printf("Welcome to use diff commond.\n");
+  
+        return 0;
+  }
+--- 3,12 ----
+  
+  int main(void)
+  {
+!       char msg[] = "Hello world,fome hello_diff.c";
+  
+        puts(msg);
+!       printf("hello_diff.c says,'Here you are,using diff.'\n");
+  
+        return 0;
+  }
+[root@localhost diff]# 
+
+这里通过“ -I include”选项来忽略带有“ include”字样的行

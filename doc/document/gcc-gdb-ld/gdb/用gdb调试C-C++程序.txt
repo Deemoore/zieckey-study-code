@@ -1,0 +1,296 @@
+用 gdb 调试 C/C++ 程序
+   
+
+		作者：zieckey (zieckey@yahoo.com.cn)
+		All Rights Reserved!
+		
+		
+		
+ 	Linux 下有一个叫 gdb 的 GNU 调试程序. gdb 是一个用来调试 C 和 C++ 程序的强有力调试器. 它使你能在程序运行时观察程序的内部结构和内存的使用情况. 以下是 gdb 所提供的一些功能:
+
+    * 它使你能监视你程序中变量的值.
+    * 它使你能设置断点以使程序在指定的代码行上停止执行.
+    * 它使你能一行行的执行你的代码.
+
+
+
+	在命令行上键入 gdb 并按回车键就可以运行 gdb 了, 如果一切正常的话, gdb 将被启动并且你将在屏幕上看到类似的内容:
+
+[root@localhost root]# gdb
+GNU gdb Red Hat Linux (5.3post-0.20021129.18rh)
+Copyright 2003 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu".
+(gdb)
+
+
+    当你启动 gdb 后, 你能在命令行上指定很多的选项. 
+你也可以以下面的方式来运行 gdb :
+gdb <fname>
+例如，
+[root@localhost exam-source-file]# gdb a.out
+GNU gdb Red Hat Linux (5.3post-0.20021129.18rh)
+Copyright 2003 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu"...
+(gdb)
+
+下面我们以一个简单的例子来开始我们的gdb调试之旅。
+一个调试示例
+
+源程序：testgbd.c
+
+// name： testgbd.c
+// This file is used to test how to use gdb to debug a c program .It is very simple ! Enjoy yourself!
+// Author : zieckey
+// date : 2006/11/13
+
+
+#include <stdio.h>
+
+int accumulate( int n )
+{
+	int sum = 0 , i ;
+	
+	for( i=1; i<=n; i++)
+	{
+		sum += i;
+	}
+	
+	return sum;
+}
+
+
+int main( void )
+{
+	int i , n ;
+	int result ;
+	
+	printf("Please input a number which you want to calculate :");
+	scanf("%d",&n);
+	
+	result = accumulate ( n ) ;
+	
+	printf("The result of accumulating from 1 to %d is : %d " , n , result ) ;
+	
+	return 0;
+}
+
+编译生成执行文件：
+[root@localhost exam-source-file]# gcc -o testgbd.o testgbd.c
+
+使用GDB调试：
+[root@localhost exam-source-file]# gdb testgbd.o 	<========= 启动GDB
+GNU gdb Red Hat Linux (5.3post-0.20021129.18rh)
+Copyright 2003 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu"...
+(gdb) l		<==================-- l命令相当于list，从第一行开始列出程序源代码。
+1       ../sysdeps/i386/elf/start.S: 没有那个文件或目录.
+        in ../sysdeps/i386/elf/start.S
+(gdb) 
+
+怎么回事，这里应该是列出程序源代码,怎么好象出错了呢？
+还记得学习gcc编译时，有个 -g 参数吗？
+哦，对了，就是因为刚刚没有加上 -g 参数使得 testgbd.o 没有调试信息。
+好了，我们在重新来一次，退出 gdb 
+(gdb) quit
+[root@localhost exam-source-file]# ll testgbd.o
+-rwxr-xr-x    1 root     root        11908 11月 14 19:55 testgbd.o
+这里我们顺便看看 testgbd.o 文件的大小。
+重新用gcc编译，不过这次我们加上 -g 参数。
+[root@localhost exam-source-file]# gcc -o testgbd.o testgbd.c -g
+好了，看看现在文件大小
+[root@localhost exam-source-file]# ll testgbd.o
+-rwxr-xr-x    1 root     root        16288 11月 14 20:00 testgbd.o
+看到没有，这次加上 -g 参数后的输出文件要比原来的那个大一些，不是吗？
+当然拉，因为输出文件中现在带有的一些便于调试的信息。
+
+好了，我们开始调试：
+
+[root@localhost exam-source-file]# gdb testgbd.o 	<=========- 启动GDB
+GNU gdb Red Hat Linux (5.3post-0.20021129.18rh)
+Copyright 2003 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu"...
+(gdb) l 0  		<==================-- l 命令相当于list，后面加的数子“0”表示从第一行开始列出程序源代码。
+1       // name： testgbd.c
+2       // This file is used to test how to use gdb to debug a c program .It is very simple ! Enjoy
+yourself!
+3       // Author : zieckey
+4       // date : 2006/11/13
+5
+6       #include <stdio.h>
+7
+8       int accumulate( int n )
+9       {
+10              int sum = 0 , i ;
+(gdb) <==================-- 直接回车表示，重复上一次命令
+11
+12              for( i=1; i<=n; i++)
+13              {
+14                      sum += i;
+15              }
+16
+17              return sum;
+18      }
+19
+20      int main( void )
+(gdb) <==================-- 直接回车表示，重复上一次命令
+21      {
+22              int i , n ;
+23              int result ;
+24
+25              printf("Please input a number which you want to calculate :");
+26              scanf("%d",&n);
+27
+28              result = accumulate ( n ) ;
+29
+30              printf("The result of accumulating from 1 to %d is : %d \n" , n , result ) ;
+(gdb) <==================-- 直接回车表示，重复上一次命令
+31
+32              return 0;
+33      }
+(gdb) b 23   <==================-- b 为 break 命令简写， 设置断点，在源程序第23行处。
+Breakpoint 1 at 0x804839e: file testgbd.c, line 23.
+(gdb) b accumulate  <==================-- 设置断点，在函数 accumulate() 入口处。
+Breakpoint 2 at 0x8048362: file testgbd.c, line 10.
+(gdb) info b  <==================-- 查看断点信息。
+Num Type           Disp Enb Address    What
+1   breakpoint     keep y   0x0804839e in main at testgbd.c:23
+2   breakpoint     keep y   0x08048362 in accumulate at testgbd.c:10
+(gdb) info break <==================-- 查看断点信息。
+Num Type           Disp Enb Address    What
+1   breakpoint     keep y   0x0804839e in main at testgbd.c:23
+2   breakpoint     keep y   0x08048362 in accumulate at testgbd.c:10
+(gdb) r <===================== 运行程序，run命令简写
+Starting program: /mnt/usb/wuruan/gcc-gdb/exam-source-file/testgbd.o
+ 
+Breakpoint 1, main () at testgbd.c:25   <=========- 在断点处停住。
+25              printf("Please input a number which you want to calculate :");
+(gdb) n <===================== 单条语句执行，next命令简写。
+26              scanf("%d",&n);
+(gdb) n
+Please input a number which you want to calculate :100
+28              result = accumulate ( n ) ;
+(gdb) n
+ 
+Breakpoint 2, accumulate (n=100) at testgbd.c:10
+10              int sum = 0 , i ;
+(gdb) l	<==================-- l 命令相当于list，列出当前程序运行处的源代码。
+5
+6       #include <stdio.h>
+7
+8       int accumulate( int n )
+9       {
+10              int sum = 0 , i ;
+11
+12              for( i=1; i<=n; i++)
+13              {
+14                      sum += i;
+(gdb) n
+12              for( i=1; i<=n; i++)
+(gdb) n
+14                      sum += i;
+(gdb) n
+12              for( i=1; i<=n; i++)
+(gdb) n
+14                      sum += i;
+(gdb) c <===================== 继续运行程序，continue命令简写。
+Continuing.
+The result of accumulating from 1 to 100 is : 5050    <=========-程序输出
+ 
+Program exited normally.  <===============程序运行完，正常退出
+(gdb)
+(gdb) r
+Starting program: /mnt/usb/wuruan/gcc-gdb/exam-source-file/testgbd.o
+ 
+Breakpoint 1, main () at testgbd.c:25
+25              printf("Please input a number which you want to calculate :");
+(gdb) n
+26              scanf("%d",&n);
+(gdb)
+Please input a number which you want to calculate :100
+28              result = accumulate ( n ) ;
+(gdb) p result     <===================== 打印变量 result 的值，print命令简写。
+$1 = 134513658
+(gdb) n
+ 
+Breakpoint 2, accumulate (n=100) at testgbd.c:10
+10              int sum = 0 , i ;
+(gdb)
+12              for( i=1; i<=n; i++)
+(gdb)
+14                      sum += i;
+(gdb)
+12              for( i=1; i<=n; i++)
+(gdb)
+14                      sum += i;
+(gdb)
+12              for( i=1; i<=n; i++)
+(gdb)
+14                      sum += i;
+(gdb)
+12              for( i=1; i<=n; i++)
+(gdb)
+14                      sum += i;
+(gdb) bt    <===================== 查看当前程序堆栈信息
+#0  accumulate (n=100) at testgbd.c:14
+#1  0x080483cd in main () at testgbd.c:28
+#2  0x42015574 in __libc_start_main () from /lib/tls/libc.so.6
+(gdb) f
+file            finish          flushregs       forward-search  frame
+(gdb) finish  <===================== 退出函数
+Run till exit from #0  accumulate (n=100) at testgbd.c:14
+0x080483cd in main () at testgbd.c:28
+28              result = accumulate ( n ) ;
+Value returned is $2 = 5050
+(gdb) n
+30              printf("The result of accumulating from 1 to %d is : %d \n" , n , result ) ;
+(gdb) n
+The result of accumulating from 1 to 100 is : 5050    <=========-程序输出
+32              return 0;
+(gdb) c
+Continuing.
+ 
+Program exited normally.
+(gdb) quit <=========退出gdb
+[root@localhost exam-source-file]#
+
+	好了，现在我们来回顾一下刚刚的示例。
+
+	为了使 gdb 正常工作, 你必须使你的程序在编译时包含调试信息. 调试信息包含你程序里的每个变量的类型和在可执行文件里的地址映射以及源代码的行号.  gdb 利用这些信息使源代码和机器码相关联.
+
+    在编译时用 -g 选项打开调试选项.
+ 
+gdb 基本命令
+     gdb 支持很多的命令使你能实现不同的功能. 这些命令从简单的文件装入到允许你检查所调用的堆栈内容的复杂命令, 表27.1列出了你在用 gdb 调试时会用到的一些命令. 想了解 gdb 的详细使用请参考 gdb 的指南页.
+
+命   令 	描  述
+file 	装入想要调试的可执行文件.
+kill 	终止正在调试的程序.
+list 	列出产生执行文件的源代码的一部分.
+next 	执行一行源代码但不进入函数内部.
+step 	执行一行源代码而且进入函数内部.
+run 	执行当前被调试的程序
+quit 	终止 gdb
+watch 	使你能监视一个变量的值而不管它何时被改变.
+break 	在代码里设置断点, 这将使程序执行到这里时被挂起.
+make 	使你能不退出 gdb 就可以重新产生可执行文件.
+shell 	使你能不离开 gdb 就执行 UNIX shell 命令. 
+ 
+    gdb 支持很多与 UNIX shell 程序一样的命令编辑特征. 你能象在 bash 或 tcsh里那样按 Tab 键让 gdb 帮你补齐一个唯一的命令, 如果不唯一的话 gdb 会列出所有匹配的命令. 你也能用光标键上下翻动历史命令.
+
+

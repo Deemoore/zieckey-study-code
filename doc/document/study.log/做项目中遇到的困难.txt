@@ -1,0 +1,151 @@
+
+
+2009.2.25
+
+遇到的难题、困难、疑难
+
+在多线程的环境下，一定要注意保护关键区域。
+关键区域包含内存、IO等
+
+例如，今天的这个tcp长连接程序中，
+主线程处理业务逻辑，子线程发送心跳包，这两个线程都是调用同一个socket的send和recv方法，
+send、recv都是IO操作，如果不注意保护的话，就会出现意想不到的错误(core dump)。
+
+
+
+
+2009.2.26
+遇到的难题、困难、疑难
+
+socket在send时程序自动退出是怎么回事啊，急！
+
+serv发送消息，当client收到消息包后，业务处理完毕，发送返回消息（但在serv发送消息后，马上停掉serv端），发现client端的程序就退出了，我跟踪了一下，如下： 只看到了OK，没有看到OK1，不知道大家有没有碰到过，给怎么办啊
+
+client端：
+
+printf("ok\n");
+send(_gSockId,&ans_cz,sizeof(Ans_CZ_Pack),0);
+printf("ok1\n");
+
+用户1
+
+可能是收到了信号，捕捉一下就知道了
+
+用户1
+
+楼上的，能说的详细点吗，怎么捕捉啊
+
+用户1
+
+你捕获一下SIGPIPE信号
+signal(SIGPIPE,func);
+func是你的信号捕获函数
+
+用户1
+
+此时的 sockid 也许已经无效了，你可以
+read 一下查看是否有数据可读，如有，则 sockid  已经无效了。
+
+用户1
+
+就是sigpipe。做一下对信号的处理。
+
+用户1
+
+sigpipe会让程序退出吗？
+信号处理完不继续printf("ok1\n");?
+
+用户1
+
+应该有core文件生成吧，从这里入手去查
+
+
+
+
+
+
+
+【Linux: 异常处理】
+当连接断开，还发数据的时候，不仅send()的返回值会有反映，而且还会像系统发送一个异常消息，如果不作处理，系统会出BrokePipe，程序会退出。为此，send()函数的最后一个参数可以设MSG_NOSIGNAL，禁止send()函数向系统发送异常消息。
+
+
+
+
+2009.3.3
+
+遇到的难题、困难、疑难
+
+epoll问题：
+
+thread1 调用 epoll_wait
+int CTEPoll::wait(struct epoll_event * events, unsigned int maxevents, unsigned int timeout)
+{
+	int retv = -1;
+	locker.lock();
+	retv = epoll_wait(m_epfd, events, maxevents, timeout);
+	locker.unlock();
+	//usleep(timeout * 100);//if no delay, other thread will always blocked at this locker.
+	return retv;
+}
+
+thread2 调用 epoll_ctl
+int CTEPoll::ctl(int op, int fd, struct epoll_event *event)
+{
+	int retv = -1;
+	locker.lock();
+	retv = epoll_ctl(m_epfd, op, fd, event);
+	locker.unlock();
+	return retv;
+}
+
+thread2有时候会始终阻塞在 locker.lock(); 这里。。。，
+因为thread1线程还没有来得及切换到thread2，，thread1又locker了这个mutex
+这个时候thread2继续阻塞。。
+
+
+
+
+
+
+
+
+2009.3.13
+tcp连接，send函数发送数据，如果参数len=0，其返回值也是0，而client端接收不到这个消息。
+
+
+
+
+
+
+
+
+
+
+2009.3.18
+tcp服务器在多个client连接的时候，始终只为一个大数据量的连接服务，而另一个小数据量的连接几乎得不到服务，
+找了好多原因，最好发现服务器printf的问题，注释掉打印大数据量那条语句就没有问题了。
+
+至于为什么printf的会引起这个原因，可能是因为
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

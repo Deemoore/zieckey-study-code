@@ -1,0 +1,564 @@
+Qt教程一 —— 第十章：像丝一样滑
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+在这个例子中，我们介绍画一个pixmap来除去闪烁。我们也加入了一个力量控制。
+
+    * t10/lcdrange.h包含LCDRange类定义。
+    * t10/lcdrange.cpp包含LCDRange类实现。
+    * t10/cannon.h包含CannonField类定义。
+    * t10/cannon.cpp包含CannonField类实现。
+    * t10/main.cpp包含MyWidget和main。 
+
+一行一行地解说
+
+t10/cannon.h
+
+/****************************************************************
+**
+** Definition of CannonField class, Qt tutorial 10
+**
+****************************************************************/
+
+#ifndef CANNON_H
+#define CANNON_H
+
+#include <qwidget.h>
+
+class CannonField : public QWidget
+{
+    Q_OBJECT
+public:
+    CannonField( QWidget *parent=0, const char *name=0 );
+
+    QSizePolicy sizePolicy() const;
+
+    int   angle() const { return ang; }
+    int   force() const { return f; }
+
+public slots:
+    void  setAngle( int degrees );
+    void  setForce( int newton );
+
+signals:
+    void  angleChanged( int );
+    void  forceChanged( int );
+
+protected:
+    void  paintEvent( QPaintEvent * );
+
+private:
+    QRect cannonRect() const;
+
+    int ang;
+    int f;
+};
+
+#endif // CANNON_H
+
+
+
+
+
+与第9章不同的是，CannonField现在除了角度又多了一个力量值。
+
+        int   angle() const { return ang; }
+        int   force() const { return f; }
+
+    public slots:
+        void  setAngle( int degrees );
+        void  setForce( int newton );
+
+    signals:
+        void  angleChanged( int );
+        void  forceChanged( int );
+
+力量的一些接口函数和角度一样，其实现方法也一样。这里我们就不多介绍拉，
+如果不清楚，可以回过去看看第9章。
+
+    private:
+        QRect cannonRect() const;
+
+我们把加农炮封装的矩形的定义放到了一个单独的函数中。
+
+        int ang;
+        int f;
+    };
+
+力量被存储到一个整数f中，正如角度被存储到一个整数 ang 中一样。
+
+
+
+t10/cannon.cpp
+
+/****************************************************************
+**
+** Implementation CannonField class, Qt tutorial 10
+**
+****************************************************************/
+
+#include "cannon.h"
+#include <qpainter.h>
+#include <qpixmap.h>
+
+
+CannonField::CannonField( QWidget *parent, const char *name )
+        : QWidget( parent, name )
+{
+    ang = 45;
+    f = 0;
+    setPalette( QPalette( QColor( 250, 250, 200) ) );
+}
+
+
+void CannonField::setAngle( int degrees )
+{
+    if ( degrees < 5 )
+	degrees = 5;
+    if ( degrees > 70 )
+	degrees = 70;
+    if ( ang == degrees )
+	return;
+    ang = degrees;
+    repaint( cannonRect(), FALSE );
+    emit angleChanged( ang );
+}
+
+
+void CannonField::setForce( int newton )
+{
+    if ( newton < 0 )
+	newton = 0;
+    if ( f == newton )
+	return;
+    f = newton;
+    emit forceChanged( f );
+}
+
+
+void CannonField::paintEvent( QPaintEvent *e )
+{
+    if ( !e->rect().intersects( cannonRect() ) )
+	return;
+
+    QRect cr = cannonRect();
+    QPixmap pix( cr.size() );
+    pix.fill( this, cr.topLeft() );
+
+    QPainter p( &pix );
+    p.setBrush( blue );
+    p.setPen( NoPen );
+    p.translate( 0, pix.height() - 1 );
+    p.drawPie( QRect( -35,-35, 70, 70 ), 0, 90*16 );
+    p.rotate( -ang );
+    p.drawRect( QRect(33, -4, 15, 8) );
+    p.end();
+
+    p.begin( this );
+    p.drawPixmap( cr.topLeft(), pix );
+}
+
+
+QRect CannonField::cannonRect() const
+{
+    QRect r( 0, 0, 50, 50 );
+    r.moveBottomLeft( rect().bottomLeft() );
+    return r;
+}
+
+
+QSizePolicy CannonField::sizePolicy() const
+{
+    return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+}
+
+
+
+    #include <qpixmap.h>
+
+我们包含了QPixmap类定义。
+
+    CannonField::CannonField( QWidget *parent, const char *name )
+            : QWidget( parent, name )
+    {
+        ang = 45;
+        f = 0;
+        setPalette( QPalette( QColor( 250, 250, 200) ) );
+    }
+
+力量（f）被初始化为0。
+
+    void CannonField::setAngle( int degrees )
+    {
+        if ( degrees < 5 )
+            degrees = 5;
+        if ( degrees > 70 )
+            degrees = 70;
+        if ( ang == degrees )
+            return;
+        ang = degrees;
+        repaint( cannonRect(), FALSE );
+        emit angleChanged( ang );
+    }
+
+我们在setAngle()函数中做了一个小的改变。它只重画窗口部件中含有加农炮的一小部分。FALSE参数说明在一个绘画事件发送到窗口部件之前,指定的矩形区域将不会被擦去。这将会使绘画过程加速和平滑。
+
+    void CannonField::setForce( int newton )
+    {
+        if ( newton < 0 )
+            newton = 0;
+        if ( f == newton )
+            return;
+        f = newton;
+        emit forceChanged( f );
+    }
+
+setForce()的实现和setAngle()很相似。唯一的不同是因为我们不显示力量值，我们不需要重画窗口部件。
+
+    void CannonField::paintEvent( QPaintEvent *e )
+    {
+        if ( !e->rect().intersects( cannonRect() ) )
+            return;
+
+我们现在仅仅重新绘画那些需要刷新的窗口部件来优化绘画事件。首先我们检查是否不得不完全重画任何事，我们返回是否不需要。
+
+        QRect cr = cannonRect();
+        QPixmap pix( cr.size() );
+
+然后，我们创建一个临时的pixmap，我们用来不闪烁地画。所有的绘画操作都在这个pixmap中完成，并且之后只用一步操作来把这个pixmap画到屏幕上。
+
+这是不闪烁绘画的本质：一次准确地在每一个像素上画。更少，你会得到绘画错误。更多，你会得到闪烁。在这个例子中这个并不重要——当代码被写时，仍然是很慢的机器导致闪烁，但以后不会再闪烁了。我们由于教育目的保留了这些代码。
+
+        pix.fill( this, cr.topLeft() );
+
+我们用这个pixmap来充满这个窗口部件的背景。
+
+        QPainter p( &pix );
+        p.setBrush( blue );
+        p.setPen( NoPen );
+        p.translate( 0, pix.height() - 1 );
+        p.drawPie( QRect( -35,-35, 70, 70 ), 0, 90*16 );
+        p.rotate( -ang );
+        p.drawRect( QRect(33, -4, 15, 8) );
+        p.end();
+
+我们就像第九章中一样画，但是现在我们是在pixmap上画。
+
+在这一点上，我们有一个绘画工具变量和一个pixmap看起来相当正确，但是我们还没有在屏幕上画呢。
+
+        p.begin( this );
+        p.drawPixmap( cr.topLeft(), pix );
+
+所以我们在CannonField上面打开绘图工具并在这之后画这个pixmap。
+
+这就是全部了。在顶部和底部各有一对线，并且这个代码是100%不闪烁的。
+
+    QRect CannonField::cannonRect() const
+    {
+        QRect r( 0, 0, 50, 50 );
+        r.moveBottomLeft( rect().bottomLeft() );
+        return r;
+    }
+
+这个函数返回一个在窗口部件坐标中封装加农炮的矩形。首先我们创建一个50*50大小的矩形，然后移动它，使它的左下角和窗口部件自己的左下角相等。
+
+QWidget::rect()函数在窗口部件自己的坐标（左上角是0,0）中返回窗口部件封装的矩形。
+
+
+
+
+t10/lcdrange.h
+
+/****************************************************************
+**
+** Definition of LCDRange class, Qt tutorial 8
+**
+****************************************************************/
+
+#ifndef LCDRANGE_H
+#define LCDRANGE_H
+
+#include <qvbox.h>
+
+class QSlider;
+
+
+class LCDRange : public QVBox
+{
+    Q_OBJECT
+public:
+    LCDRange( QWidget *parent=0, const char *name=0 );
+
+    int value() const;
+
+public slots:
+    void setValue( int );
+    void setRange( int minVal, int maxVal );
+
+signals:
+    void valueChanged( int );
+
+private:
+    QSlider  *slider;
+};
+
+
+#endif // LCDRANGE_H
+
+
+
+这个文件和第九章中的lcdrange.h几乎一样的，不是吗？
+
+
+
+
+t10/lcdrange.cpp
+/****************************************************************
+**
+** Implementation of LCDRange class, Qt tutorial 8
+**
+****************************************************************/
+
+#include "lcdrange.h"
+
+#include <qslider.h>
+#include <qlcdnumber.h>
+
+LCDRange::LCDRange( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+    slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     lcd, SLOT(display(int)) );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     SIGNAL(valueChanged(int)) );
+
+    setFocusProxy( slider );
+}
+
+int LCDRange::value() const
+{
+    return slider->value();
+}
+
+void LCDRange::setValue( int value )
+{
+    slider->setValue( value );
+}
+
+void LCDRange::setRange( int minVal, int maxVal )
+{
+    if ( minVal < 0 || maxVal > 99 || minVal > maxVal ) {
+      qWarning( "LCDRange::setRange(%d,%d)\n"
+	       "\tRange must be 0..99\n"
+	       "\tand minVal must not be greater than maxVal",
+	       minVal, maxVal );
+      return;
+    }
+    slider->setRange( minVal, maxVal );
+}
+
+
+
+
+
+ #include "lcdrange.h"
+
+#include <qslider.h>
+#include <qlcdnumber.h>
+
+LCDRange::LCDRange( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+
+ LCDRange现在继承了QVBox，而不是QWidget。我们通过这种方式来使用QVBox的布局（它可以把它的子窗口部件垂直地放在自己里面）。重新定义大小自动地被QVBox处理，因此现在也就被MyWidget处理了。
+
+        QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd" );
+
+lcd是一个QLCDNumber，一个可以按像LCD的方式显示数字的窗口部件。这个实例被设置为显示两个数字，并且是this的子窗口部件。它被命名为“lcd”。 
+
+        slider = new QSlider( Horizontal, this, "slider" );
+    	slider->setRange( 0, 99 );
+    	slider->setValue( 0 );
+
+QSlider是一个经典的滑块，用户可以通过在拖动一个东西在一定范围内调节一个整数数值的方式来使用这个窗口部件。这里我们创建了一个水平的滑块，设置它的范围是0~99（包括0和99，参见QSlider::setRange()文档）并且它的初始值是0。 
+
+	connect( slider, SIGNAL(valueChanged(int)),
+	     lcd, SLOT(display(int)) );
+	connect( slider, SIGNAL(valueChanged(int)),
+	     SIGNAL(valueChanged(int)) );
+
+ 这里我们是用了信号/槽机制把滑块的valueChanged()信号和LCD数字的display()槽连接起来了,同时把滑块的valueChanged()信号和QLCDNumber类自定义的 valueChanged(int) 信号也关联起来，这里可以看到信号和信号也是可以关联的。
+
+        setFocusProxy( slider );
+
+在构造函数中还有这一个变化（稍后我们会讨论的）。
+
+	int LCDRange::value() const
+	{
+    		return slider->value();
+	}
+
+返回 slider 的值。
+
+	void LCDRange::setValue( int value )
+	{
+	    slider->setValue( value );
+	}
+
+设置 slider 的值。
+
+
+    void LCDRange::setRange( int minVal, int maxVal )
+    {
+        if ( minVal < 0 || maxVal > 99 || minVal > maxVal ) {
+          qWarning( "LCDRange::setRange(%d,%d)\n"
+                   "\tRange must be 0..99\n"
+                   "\tand minVal must not be greater than maxVal",
+                   minVal, maxVal );
+          return;
+        }
+        slider->setRange( minVal, maxVal );
+    }
+
+setRange()设置了LCDRange中滑块的范围。因为我们已经把QLCDNumber设置为只显示两位数字了，我们想通过限制minVal和maxVal为0~99来避免QLCDNumber的溢出。（我们可以允许最小值为-9，但是我们没有那样做。）如果参数是非法的，我们使用Qt的qWarning()函数来向用户发出警告并立即返回。qWarning()是一个像printf一样的函数，默认情况下它的输出发送到stderr。如果你想改变的话，你可以使用::qInstallMsgHandler()函数安装自己的处理函数。
+
+
+
+
+
+
+
+t10/main.cpp
+
+/****************************************************************
+**
+** Qt tutorial 10
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qlcdnumber.h>
+#include <qfont.h>
+#include <qlayout.h>
+
+#include "lcdrange.h"
+#include "cannon.h"
+
+
+class MyWidget: public QWidget
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QWidget( parent, name )
+{
+    QPushButton *quit = new QPushButton( "&Quit", this, "quit" );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    LCDRange *angle = new LCDRange( this, "angle" );
+    angle->setRange( 5, 70 );
+
+    LCDRange *force  = new LCDRange( this, "force" );
+    force->setRange( 10, 50 );
+
+    CannonField *cannonField = new CannonField( this, "cannonField" );
+
+    connect( angle, SIGNAL(valueChanged(int)),
+	     cannonField, SLOT(setAngle(int)) );
+    connect( cannonField, SIGNAL(angleChanged(int)),
+	     angle, SLOT(setValue(int)) );
+
+    connect( force, SIGNAL(valueChanged(int)),
+	     cannonField, SLOT(setForce(int)) );
+    connect( cannonField, SIGNAL(forceChanged(int)),
+	     force, SLOT(setValue(int)) );
+
+    QGridLayout *grid = new QGridLayout( this, 2, 2, 10 );
+    grid->addWidget( quit, 0, 0 );
+    grid->addWidget( cannonField, 1, 1 );
+    grid->setColStretch( 1, 10 );
+
+    QVBoxLayout *leftBox = new QVBoxLayout;
+    grid->addLayout( leftBox, 1, 0 );
+    leftBox->addWidget( angle );
+    leftBox->addWidget( force );
+
+    angle->setValue( 60 );
+    force->setValue( 25 );
+    angle->setFocus();
+}
+
+int main( int argc, char **argv )
+{
+    QApplication::setColorSpec( QApplication::CustomColor );
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    w.setGeometry( 100, 100, 500, 355 );
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+
+
+
+
+
+
+
+    MyWidget::MyWidget( QWidget *parent, const char *name )
+            : QWidget( parent, name )
+    {
+
+构造函数也是一样，但是已经加入了一些东西。
+
+        LCDRange *force  = new LCDRange( this, "force" );
+        force->setRange( 10, 50 );
+
+我们加入了第二个LCDRange，用来设置力量。
+
+        connect( force, SIGNAL(valueChanged(int)),
+                 cannonField, SLOT(setForce(int)) );
+        connect( cannonField, SIGNAL(forceChanged(int)),
+                 force, SLOT(setValue(int)) );
+
+我们把force窗口部件和cannonField窗口部件连接起来，就和我们对angle窗口部件做的一样。
+
+        QVBoxLayout *leftBox = new QVBoxLayout;
+        grid->addLayout( leftBox, 1, 0 );
+        leftBox->addWidget( angle );
+        leftBox->addWidget( force );
+
+在第九章，我们把angle放到了布局的左下单元。现在我们想在这个单元中放入两个窗口部件，所一个我们用了一个垂直的盒子，把这个垂直的盒子放到这个网格单元中，并且把angle和force放到这个垂直的盒子中。
+
+        force->setValue( 25 );
+
+我们初始化力量的值为25。
+
+行为
+
+闪烁已经走了，并且我们还有一个力量控制。
+
+（请看第一章来学习如何创建一个makefile文件和连编应用程序。）
+
+练习
+
+让加农炮的炮筒的大小依赖于力量。
+
+把加农炮放到右下角。
+
+试着加入一个更好的键盘接口。例如，用+和-来增加或者减少力量，用enter来发射。提示：QAccel和在LCDRange中新建addStep()和subtractStep()，就像QSlider::addStep()。如果你被左面和右面键所苦恼（我就是！），试着都改变！
+
+现在你可以进行第十一章了。 

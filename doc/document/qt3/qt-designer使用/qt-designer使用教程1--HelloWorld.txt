@@ -1,0 +1,71 @@
+qt-designer使用教程
+
+作者：zieckey(zieckey@yahoo.com.cn)
+All Rights Reserved
+
+第一章  Hello World!
+
+好的，现在我们一起来学习使用 QT Designer 设计我们的QT应用程序。
+现在我们做一些准备工作，我们最好为每一个QT程序建立一个单独的文件夹，
+这样就可以让我们更方便的使用QT为我们提供的工具，例如qmake等。
+
+[root@localhost test]# mkdir /root/DesignerTutorial1
+[root@localhost test]# cd /root/DesignerTutorial1
+
+然后打开 QT Designer ,直接在命令行下输入：designer，如下：
+[root@localhost DesignerTutorial1]# designer&
+[3] 16544
+[root@localhost DesignerTutorial1]#
+
+这里我们看到"Qt Designer - New/Open"对话框，这是一个新建对话框，
+我们可以通过从菜单栏的 File->New 来打开它。
+我们先选择对话框上的第一个"C++ Project"，确定，然后更改名字，这里我们改为 tutorial1.pro 保存，
+默认情况是保存到我们刚刚创建的文件夹 /root/DesignerTutorial1
+
+这样我们就创建了一个 *.pro 文件。下面我们再创建一个对话框。
+从菜单栏的 File->New 打开新建对话框，选择第二个：Dialog，
+然后也同样保存到刚刚创建的文件夹 /root/DesignerTutorial1 下。
+这时侯,你的 QT Designer 中就会出现一个 From1 来. 
+更改右下角那个窗口里的 caption ，原内容 "Form1"改为 "我的第一个QT Desiger程序",
+                       name    , 原内容 "Form1"改为 "form_main"
+可以看到这时候窗口的标题栏文字已经改变为"Form1"改为 "我的第一个QT Desiger程序",不是吗？
+
+现在我们点击一下左边窗口上面的 ToolBox 中的那个 PushButton (标有 OK 的图标）
+并且用鼠标选择一个合适的大小. 在这个 PushButton 上面用用鼠标双击一下，
+我们就可以改变按钮上显示的字了。
+这里我们把"pushButton1"这几个字,换成 “Hello World！”, 然後用选择 OK 就可以了. 
+现在我们看到, 那个按钮上的标签已将变成 “Hello World！” 了. 
+更改右下角那个窗口"Property Editor"里的 name  , 原内容 "pushButton1"改为 "pBtnHello"
+
+我们就算是基本完成了。保存下。 如果想看看这个小程序长什麽样子.
+可以用 CTRL+T来看 PreView. 
+
+这时侯我们只需要一个小的 main.cpp 就可以编译了。同样我们的 QT Designer 也可以为我们生成 main.cpp 。
+从菜单栏的 File->New 打开新建对话框，选择最后一个：C++ Main-File(main.cpp).
+然后也同样保存到刚刚创建的文件夹 /root/DesignerTutorial1 下。
+
+好了，现在来编译我们的程序。
+生成Makefile文件：
+[root@localhost DesignerTutorial1]# qmake
+编译：
+[root@localhost DesignerTutorial1]# make
+/usr/lib/qt-3.1/bin/uic form1.ui -o .ui/form1.h
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/main.o main.cpp
+/usr/lib/qt-3.1/bin/uic form1.ui -i form1.h -o .ui/form1.cpp
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/form1.o .ui/form1.cpp
+/usr/lib/qt-3.1/bin/moc .ui/form1.h -o .moc/moc_form1.cpp
+g++ -c -pipe -Wall -W -O2 -march=i386 -mcpu=i686 -g -DGLX_GLXEXT_LEGACY -fno-use-cxa-atexit -fno-exceptions  -DQT_NO_DEBUG -I/usr/lib/qt-3.1/mkspecs/default -I. -I/usr/lib/qt-3.1/include -I.ui/ -I.moc/ -o .obj/moc_form1.o .moc/moc_form1.cpp
+g++  -o tutorial1 .obj/main.o .obj/form1.o .obj/moc_form1.o  -L/usr/lib/qt-3.1/lib -L/usr/X11R6/lib -lqt-mt -lXext -lX11 -lm
+[root@localhost DesignerTutorial1]# ls
+form1.ui  form1.ui~  main.cpp  Makefile  tutorial1  tutorial1.pro
+可以看到 tutorial1 ,这就是我们的可执行程序，
+运行：
+[root@localhost DesignerTutorial1]# ./tutorial1
+ 
+大功告成。
+
+总结：
+这里我们学习了在Linux下 QT Designer 的基本使用方法，
+并且了解了QT程序的编译方法，很简单，不是吗？
+
+

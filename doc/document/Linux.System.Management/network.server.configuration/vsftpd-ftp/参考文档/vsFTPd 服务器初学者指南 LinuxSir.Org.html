@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-hans" xml:lang="zh-hans">
+<head>
+ <title>vsFTPd 服务器初学者指南（欢迎大家参与补充） | LinuxSir.Org</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<base href="http://www.linuxsir.org/main/" />
+<style type="text/css" media="all">@import "misc/drupal.css";</style><style type="text/css">@import url(http://www.linuxsir.org/main/modules/codefilter/codefilter.css);</style>
+<style type="text/css" media="all">@import "modules/taxonomy_context/taxonomy_context.css";</style>
+<link rel="stylesheet" type="text/css" media="screen" href="http://www.linuxsir.org/main/modules/taxonomy_dhtml/menuExpandable3.css" />
+<script type="text/javascript" src="http://www.linuxsir.org/main/modules/taxonomy_dhtml/menuExpandable3.js"></script>
+ <link rel="stylesheet" type="text/css" href="themes/chameleon/common.css" />
+<style type="text/css" media="all">@import "themes/chameleon/marvin/style.css";</style></head><body>
+ <div id="header">  <a href="./" title="Home"><img src="logo.jpg" alt="Home" /></a></div>
+ <div class="navlinks"><div class="primary"><a href="?q"><font color=white>首页</font></a> | <a href="?q=taxonomy/term/34"><font color=white>事件</font></a> | <a href="?q=taxonomy/term/1/25/"><font color=white>文档</font></a> | <a href="?q=taxonomy/term/35/48/"><font color=white>资源</font></a> | <a href="?q=search"><font color=white>搜索</font></a> | <a href="http://www.linuxsir.org/bbs"><font color=white>论坛</font></a> |  <a href="?q=taxonomy/term/38"><font color=white>贡献者</font></a> | <a href="?q=node/3"><font color=white>关于</font></a> |  <a href="?q=user"><font color=white>注册/登录</font></a></div> </div>
+ <table id="content">
+  <tr>
+   <td id="sidebar-left"><div class="block block-block" id="block-block-1">
+ <h2 class="title">子站索引</h2>
+ <div class="content"><ul>
+<li><a href="http://fedora.linuxsir.org" target"_blank">Fedora中文</a>
+<li><a href="http://debian.linuxsir.org" target"_blank">Debian中文</a>
+<li><a href="http://lfs.linuxsir.org" target"_blank">LFS   中文</a>
+<li><a href="http://slack.linuxsir.org">Slackware</a>
+<li><a href="http://gentoo.linuxsir.org">Gentoo中文</a>
+<li><a href="http://arch.linuxsir.org">Arch 中文</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-3">
+ <h2 class="title">重要资讯</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/36">本站公告</a>
+<li><a href="?q=taxonomy/term/34">新闻事件</a>
+<li><a href="http://www.linuxsir.org/bbs" target="_blank">本站论坛</a>
+<li><a href="?q=taxonomy/term/38">贡 献 者</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-7">
+ <h2 class="title">项目索引</h2>
+ <div class="content"><ul>
+<li><a href="http://www.fcitx.org" target="_blank">小企鹅输入法</a>
+<li><a href="http://lumaqq.linuxsir.org" target="_blank">LumaQQ</a>
+<li><a href="http://openq.linuxsir.org" target="_blank">OpenQ</a>
+<li><a href="http://www.relaxbsd.org" target="_blank">RelaxBSD</a>
+</ul>
+</div>
+</div>
+<div class="block block-user" id="block-user-1">
+ <h2 class="title">站点导航</h2>
+ <div class="content"><div class="menu">
+<ul>
+<li class="leaf"><a href="?q=user" title="注册/登录">注册/登录</a></li>
+<li class="collapsed"><a href="?q=aggregator">新闻聚合</a></li>
+
+</ul>
+</div></div>
+</div>
+<div class="block block-aggregator" id="block-aggregator-feed-2">
+ <h2 class="title">LinuxSir.Org 论坛</h2>
+ <div class="content"><div class="item-list"><ul><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=278208&amp;goto=newpost">无法启用3D桌面特效。。</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=278207&amp;goto=newpost">FC6下YUM没源？？？</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=278206&amp;goto=newpost">成功启用ailgx＋beryl</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=278205&amp;goto=newpost">有关命令的</a>
+</li><li><a href="http://www.linuxsir.org/bbs/showthread.php?t=278204&amp;goto=newpost">进退两难地求助!!!!版主请进!!关于ati显卡的驱动问题.</a>
+</li></ul></div><div class="more-link"><a href="?q=aggregator/sources/2" title="查看此feed的最新消息">更多</a></div></div>
+</div>
+<div class="block block-user" id="block-user-2">
+ <h2 class="title">最新注册</h2>
+ <div class="content"><div class="item-list"><ul><li>greyby</li><li>daimaozai</li><li>cclili</li><li>musa</li><li>lfmfyj</li></ul></div></div>
+</div>
+<div class="block block-user" id="block-user-3">
+ <h2 class="title">当前在线</h2>
+ <div class="content">0 users 和 59 游客 在线</div>
+</div>
+</td>
+   <td id="main">
+<div class="breadcrumb"><a href="?q=">首页</a> &raquo; <a href="?q=taxonomy/term/27">文件服务器</a></div><h2>vsFTPd 服务器初学者指南（欢迎大家参与补充）</h2>
+<!-- begin content -->
+<div class="node">
+ <div class="content">
+<p><b>作者：</b>北南南北，正在修订之中<br />
+<b>来自：</b>LinuxSir.Org<br />
+<b>摘要：</b>vsFTPD是一款小巧易用FTP服务器程序；本文面向初学者的一点疑问，能让初学者在最短的时间内学会最简单的vsftpd服务器的架设；本文应该算是初学者练手篇；正在更新之中；本文基于 vsftpd-2.0.3；</p>
+<p><b>欢迎大家共同修订本教程，有些功能的实现，需要大家参与；</b>您可以以留言的形式参与，我会每天把大家的留言整理加入文档；谢谢。</p>
+<p><font size=4><b>目录</b></font></p>
+<p><a href="?q=node/152#1">1、vsFTPd，目前常用FTP服务器套件；</a><br />
+<a href="?q=node/152#2">2、ftp 用户管理解说；</a></p>
+<ul>
+<a href="?q=node/152#2.1">2.1、匿名ftp 用户和用户组的理解；</a><br />
+<a href="?q=node/152#2.2">2.2、匿名ftp 用户和ftp用户组是否可以删除；</a>
+</ul>
+<p><a href="?q=node/152#3">3、vsFTPd的安装；</a><br />
+<a href="?q=node/152#4">4、vsFTPd的服务器的启动和关闭；</a></p>
+<ul>
+<a href="?q=node/152#4.1">4.1、vsFTPd服务器启动和关闭的通用方法；</a><br />
+<a href="?q=node/152#4.2">4.2、在Fedora/Redhat/CentOS中vsFTPd 服务器的启动和关闭：</a>
+</ul>
+<p><a href="?q=node/152#5">5、vsFTPd的服务器和防火墙及SELINUX的关系；</a><br />
+<a href="?q=node/152#6">6、500 OOPS: vsftpd: refusing to run with writable anonymous root</a><br />
+<a href="?q=node/152#7">7、关于vsFTPd配置文件的说明；</a><br />
+<a href="?q=node/152#8">8、关于vsFTPd服务器的一些常用功能的实现；</a></p>
+<ul>
+<a href="?q=node/152#8.1">8.1、关于匿名上传下载的实现；</a><br />
+<a href="?q=node/152#8.2">8.2、关于添加本地用户及打开读写权限示例；</a><br />
+<a href="?q=node/152#8.4">8.4、如何实现虚拟路径？</a><br />
+<a href="?q=node/152#8.5">8.5、打开vsFTP服务器的日志功能；</a><br />
+<a href="?q=node/152#8.6">8.6、如何定制欢迎信息；</a><br />
+<a href="?q=node/152#8.7">8.7、硬盘空间有限，如何把帐号ftp默认的路径/var/ftp更改到别处？</a><br />
+<a href="?q=node/152#8.8">8.8、如何让vsFTP服务器限制链接数，以及每个IP最大的链接数？</a><br />
+<a href="?q=node/152#8.9">8.9、如何限制传输速度？</a><br />
+<a href="?q=node/152#8.10">8.10、如何有选择的把用户限制在家目录中呢？</a></p>
+</ul>
+<p><font color=blue><b><br />
++++++++++++++++++++++++++++++++++++++++++++<br />
+正文<br />
++++++++++++++++++++++++++++++++++++++++++++<br />
+</b></font></p>
+<p><font size=4 id="1"><b>1、vsFTPd，目前常用FTP服务器套件；</b></font></p>
+<p>vsFTPd是一款在Linux发行版中最受推崇的FTP服务器程序；特点是小巧轻快，安全易用；能让其自身特点得发发挥和掌握，也然最主要的是会用； </p>
+<p>目前在开源操作系统中常用的FTPD套件主要有ProFTPD、PureFTPd和wuftpd等；至于哪个FTP服务器套件更好，哪个是你最熟悉的，哪个就是最好的；</p>
+<p><font size=4 id="2"><b>2、ftp 用户管理解说；</b></font></p>
+<p>FTP服务器对用户的管理，在默认的情况下是根据 /etc/passwd及/etc/group 来进行的，所以我们一定要了解Linux系统用户和用户组的管理，用户和用户组的管理是一切应用的的基础，有的弟兄不想去了解基础的东西，就想一步成架好各种服务器，事实证明这种学习方法是最不明智的；虽然在您可能在几分钟启动了ftp服务器，但遇到问题时，您不一定能知道是哪里出错；所以基础还是极为重要的；</p>
+<p><b>推荐文章：</b>  <a href="?q=node/91">《Linux 用户（user）和用户组（group）管理概述》</a></p>
+<p><font size=3 id="2.1"><b>2.1、匿名ftp 用户和用户组的理解；</b></font></p>
+<p>当我们访问各大FTP上访问时，可能我们不去想我们以什么身份登录的，如果他的FTP允许匿名登录的话；比如我们在浏览器上打入；</p>
+<p><div class="codeblock"><code>ftp://mirrors.kernel.org<br />
+或<br />
+ftp://ftp:ftp@mirrors.kernel.org</code></div></p>
+<p>我们会发现上面的两行最终都能访问，而且显示的结果也完全一样，最终都跳到 ftp://mirrors.kernel.org 地址；那我们访问这个FTP时，是不是有用户和密码呢？是的，也是需要在的，只是在服务器端允许匿名访问，而匿名访问的用户名和密码都是ftp，只是我们因为匿名访问，没有感觉到他有用户名和密码罢了。第二个地址就是以ftp用户，密码也是ftp来访问 ftp://mirrors.kernel.org；</p>
+<p>如果我们以ftp命令连接 mirrors.kernel.org 时，我们会发现需要输入用户ftp，密码ftp才能访问；</p>
+<p>在FTP服务器中，匿名用户的用户名和密码都是ftp ；这个用户可以在您的操作系统中的 /etc/passwd 中能找得到；可能有类似下面的一行；</p>
+<p><div class="codeblock"><code>ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</code></div></p>
+<p><b>说明：</b></p>
+<p>/etc/passwd 是系统用户的配置文件；/etc/group是系统用户组配置文件，您可以通过 <a href="?q=node/91">《Linux 用户（user）和用户组（group）管理概述》</a> 及其相关文档中了解一些用户管理的一些基础知识；</p>
+<p>在ftp用户这行中，我们看到七个字段，每个字段写字段之间用:号分割；</p>
+<p>ftp 是用户名<br />
+x   是密码字段，是隐藏的；<br />
+14   是用户的UID字段，可以自己来设定，不要和其它用户的UID相同，否则会造成系统安全问题；<br />
+50   用用户组的GID，可以自己设定，不要和其它用户组共用FTP的GID，否则会造成系统全全问题；<br />
+FTP User 是用户说明字段；<br />
+/var/ftp  是ftp用户的家目录，可以自己来定义；<br />
+/sbin/nologin 这是用户登录SHELL ，这个也是可以定义的，/sbin/nologin 表示不能登录系统；系统虚拟帐号（也被称为伪用户）一般都是这么设置。比如我们把ftp用户的/sbin/nologin 改为 /bin/bash ，这样ftp用户通过本地或者远程工具ssh或telnet以真实用户身份登录到系统。这样做对系统来说是不安全的；如果您认为一个用户没有太大的必要登录到系统，就可以只给他FTP帐号的权限，也就是说只给他FTP的权限，而不要把他的SHELL设置成 /bin/bash 等；</p>
+<p><b>关于ftp用户组的理解：</b></p>
+<p>我们查看 /etc/group 的时候，会发现类似这样一条；</p>
+<p><div class="codeblock"><code>ftp:x:50:</code></div></p>
+<p>/etc/group 是用户组的管理配置文件，上面这行表示用户组ftp，x是密码段，50是GID；我们对照在/etc/passwd中的ftp那行得知ftp用户是属于ftp用户组的，因为ftp用户那行中的GID和ftp用户组的GID是相同的；</p>
+<p><font size=3 id="2.2"><b>2.2、匿名ftp 用户和ftp用户组是否可以删除</b></font></p>
+<p>在一般情况下是不能把/etc/passwd和/etc/group 中有把ftp用户和用户组的行删除的，因为FTP服务器是需要他们来对FTP用户实现管理，在默认的情况下。</p>
+<p>虽然不能删除，但对/etc/passwd及/etc/group中的ftp用户及ftp用户组的一些相关的东西是能修改的；比如我们可以把ftp用户的家目录改掉，也可以把ftp用户的UID改掉 ... ... 前提是你对用户管理有所了解，系统用户管理是一切应用基础之一，可能初学Linux的弟兄并不了解用户管理的重要性，但慢慢您就会发现这个道理；</p>
+<p><font size=4 id="3"><b>3、vsFTPd的安装；</b></font></p>
+<p>在最新的各大发行版中的安装盘中都有vsFTPd的软件包，您用相应发行版提供的软件包管理工具就能安装上；当然您可以到各大发行版的FTP镜像中找到vsftpd的软件包；当然也能用软件包的管理工具在线安装；vsftpd的软件包本来不大，花不了多长时间，两分钟就够了吧；因为本文是初学者教程，我严重推荐您用发行版提供的软件来安装，不推荐您自己来编译源码包的安装方式；</p>
+<p><b>如果您用的是Fedora 或Redhat 系统，可以用下面的命令在线安装；</b></p>
+<p><div class="codeblock"><code>[root@localhost ~]# yum install vsftpd</code></div></p>
+<p><b>如果是debian 类系统，可以用apt 来在线安装；</b></p>
+<p><div class="codeblock"><code>[root@localhost ~]# apt-get install vsftpd</code></div></p>
+<p><b>如果您是RPM的系统，也可以找到vsftpd-xxxx.rpm 的包来通过rpm命令来安装；</b></p>
+<p><div class="codeblock"><code>[root@localhost ~]# rpm -ivh vsftpd*.rpm</code></div></p>
+<p><b>您可以下载源码包来安装</b></p>
+<p>比如我们下载的是 vsftpd-2.0.3.tar.gz ；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# tar zxvf vsftpd-2.0.3.tar.gz<br />
+[root@localhost ~]# cd vsftpd-2.0.3<br />
+[root@localhost ~]# make ;make install<br />
+[root@localhost ~]# cp vsftpd.conf /etc</code></div></p>
+<p>然后修改/etc/vsftpd.conf ，在配置文件的最后一行加入下面一行；</p>
+<p><div class="codeblock"><code>listen=yes</code></div></p>
+<p>源码包安装的方法，如果您的系统是RPM包管理的系统，可以删除/etc/xinetd.d/vsftpd 这个文件；然后启动xinetd 服务器；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# /etc/init.d/xinetd restart<br />
+停止 xinetd：                                              [  确定  ]<br />
+启动 xinetd：                                              [  确定  ]</code></div></p>
+<p>vsFTPd运行有两种模式，在RPM包管理的系重审统，大多是由Fedora/Redhat 开发而来，对于这样的系统有xinted服务器一说；对于非RPM包管理的系统，一般没有xinted这一说。为了保证本文档的统一，我们都不要用xinetd模式，而用initd运行模式来启动和管理服务器，也就是独立运行模式； 至于什么是xinted和inted 模式，您可以参考<a href="http://www.linuxsir.org/bbs/showthread.php?t=42075">《 用vsFTPd自架Linux网络安装服务器》</a></p>
+<p><font size=4 id="4"><b>4、vsFTPd的服务器的启动和关闭；</b></font></p>
+<p>vsFTPd服务器启动和关闭是极容易的；我们可以直接把服务器运行调到后台运行；这是几乎所有服务器管理的运行方式；</p>
+<p><font size=3 id="4.1"><b>4.1、vsFTPd服务器启动和关闭的通用方法；</b></font></p>
+<p>运行vsftpd命令，要用到root权限，如果您当前操作用户并非是root，可以用su切换到root权限；关于root权限的切换，您有两种方式，一种是su，另一种是sudo；<b>请参考：</b> <a href="?q=node/104">《Linux 系统中的超级权限的控制》</a></p>
+<p><b>vsFTPd服务器的运行；</b></p>
+<p><div class="codeblock"><code>[root@localhost ~]# /usr/sbin/vsftpd &amp;<br />
+[root@localhost ~]# /usr/local/sbin/vsftpd &amp;</code></div></p>
+<p><b>vsFTPd服务器是否运行起来；</b></p>
+<p>我们可以通过pgrep vsftpd 来查看vsftpd是否运行起来；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# pgrep vsftpd<br />
+4248</code></div></p>
+<p>上面显示vsFTPd服务器运行起来了，您可以通过ftp命令、lftp工具或gftp或其它的FTP客户端来测试连接；</p>
+<p><b>vsFTPd 服务器关闭：</b></p>
+<p>我们用pkill vsftpd 来杀死vsftpd进程，这样就把vsFTPd关闭，用psgrep vsftpd 来查看进程，如果没有进程，证明vsFTPd已经关掉；当然也要用到root权限。</p>
+<p><div class="codeblock"><code>[root@localhost ~]# pkill vsftpd<br />
+[root@localhost ~]# pgrep vsftpd</code></div><br />
+<br></p>
+<p><font size=3 id="4.2"><b>4.2、在Fedora/Redhat/CentOS中vsFTPd 服务器的启动和关闭：</b></font></p>
+<p>在Fedora/Redhat/CentOS中，也可以用下面的方法来启动vsFTPd；当然也要用到root权限；</p>
+<p><div class="codeblock"><code>[root@localhost beinan]# /etc/init.d/vsftpd start<br />
+为 vsftpd 启动 vsftpd：                                    [  确定  ]</code></div></p>
+<p>重新启动vsFTPd用下面的命令；</p>
+<p><div class="codeblock"><code>[root@localhost beinan]# /etc/init.d/vsftpd restart<br />
+关闭 vsftpd：                                              [  确定  ]<br />
+为 vsftpd 启动 vsftpd：                                    [  确定  ]</code></div></p>
+<p>关掉vsFTPd服务器，应该用下面的命令；</p>
+<p><div class="codeblock"><code>[root@localhost beinan]# /etc/init.d/vsftpd stop<br />
+关闭 vsftpd：                                              [  确定  ]</code></div></p>
+<p><br></p>
+<p><font size=4 id="5"><b>5、vsFTPd的服务器和防火墙及SELINUX的关系；（重要）</b></font></p>
+<p>我在论坛上看到有些弟兄说vsFTPd服务器启动正常，但却不能访问或用户不能上传文件，我感觉应该是防火墙或SELINUX的事；可能FTPD服务器被防火墙或SELINUX的安全机制防住了。所以您必须要让防火墙通过ftp，当然也要让SELINUX通过ftp服务器才行；</p>
+<p>在Fedora/Redhat/CentOS中，您要设置一下防火墙，可以把防火墙关掉，或者在自定义中让ftp “通过”防火墙；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# system-config-securitylevel-tui</code></div></p>
+<p>或者运行一下如下的命令，清除防火墙规则（通用）；</p>
+<p><div class="codeblock"><code>[root@localhost beinan]# iptables -F</code></div></p>
+<p>关于SELINUX服务器的解说 ，可能老手或新手对SELINUX都有点麻烦，建议您SELINUX；或者让vsFTPd服务器跳过SELINUX启动；也就是说要用到 <b><a href="?q=node/152#4.1">4.1、vsFTPd服务器启动和关闭的通用方法；</a></b>；这在Fedora/Redhat/CentOS中这样启动vsFTPd服务器是有效的；</p>
+<p>当然您可也可以关掉SELINUX，在/etc/selinux/config 配置文件如下；</p>
+<p><div class="codeblock"><code>/etc/selinux/config<br />
+# This file controls the state of SELinux on the system.<br />
+# SELINUX= can take one of these three values:<br />
+#       enforcing - SELinux security policy is enforced.<br />
+#       permissive - SELinux prints warnings instead of enforcing.<br />
+#       disabled - SELinux is fully disabled.<br />
+SELINUX=Disabled  #这样就把SELINUX服务器关掉了，请重新启动系统；<br />
+# SELINUXTYPE= type of policy in use. Possible values are:<br />
+#       targeted - Only targeted network daemons are protected.<br />
+#       strict - Full SELinux protection.<br />
+SELINUXTYPE=targeted</code></div></p>
+<p><br></p>
+<p><font size=4 id="6"><b>6、500 OOPS: vsftpd: refusing to run with writable anonymous root</b></font></p>
+<p>如果我们已经把vsFTPd服务器启动好了，但登录测试是会出现类似下面的提示；</p>
+<p>500 OOPS: vsftpd: refusing to run with writable anonymous root</p>
+<p>这表示ftp用户的家目录的权限不对，应该改过才对；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# more /etc/passwd |grep ftp<br />
+ftp:x:1000:1000:FTP User:/var/ftp:/sbin/nologin</code></div></p>
+<p>我们发现ftp用户的家目录在/var/ftp，就是这个/var/ftp的权限不对所致，这个目录的权限是不能打开所有权限的；是您运行了chmod 777 /var/ftp所致；如果没有ftp用户这个家目录，当然您要自己建一个；</p>
+<p>如下FTP用户的家目录是不能针对所有用户、用户组、其它用户组完全开放；<br />
+<div class="codeblock"><code>[root@localhost ~]# ls -ld /var/ftp<br />
+drwxrwxrwx  3 root root 4096 2005-03-23  /var/ftp</code></div></p>
+<p><b>修正这个错误，应该用下面的办法；</b></p>
+<p><div class="codeblock"><code>[root@localhost ~]# chown  root:root /var/ftp<br />
+[root@localhost ~]# chmod  755 /var/ftp</code></div></p>
+<p>有的弟兄可能会说，那匿名用户的可读、可下载、可上传怎么办呢？这也简单，在/var/ftp下再建一个目录，权限是777的就行了，再改一改vsftpd.conf就OK了；没有什么难的；</p>
+<p>vsFTPd出于安全考虑，是不准让ftp用户的家目录的权限是完全没有限制的，您可以去读一下vsFTPd的文档就明白的了；否则也不能称为最安全的FTP服务器了，对不对？<br />
+<br></p>
+<p><font size=4 id="7"><b>7、关于vsFTPd配置文件的说明；</b></font></p>
+<p>vsftpd.conf是vsFTPd服务器的配置文件，此文件一般是/etc/vsftpd.conf或/etc/vsftpd/vsftpd.conf ，以系统为准吧。。</p>
+<p>vsftpd.conf配置文件就是vsFTPd服务器的全局控制文件，此配置文件中，每行应该算做一个规则；前面带有#号的服务器不会解释，这和apache 的配置文件类似；#后所接的内容一般是说明性的，或者是关掉某些功能的选项；</p>
+<p>vsftpd.conf 这个配置文件并不包括所有您想实现的功能，有些功能的实现，我们要自己动手来解决，我们要学会查vsFTPd的文档和FAQ等，虽然是英文的，但都是比较简单的；我们要习惯看洋文文档，为什么呢？因为Linux本来就是洋人厉害，重量级的软件都是洋人的。呵，兄弟不要抱怨，谁让我们落后了呢？</p>
+<p><b>注意：</b>修改完配置文件后，一定要重启vsFTPd服务器才能生效，切记~~</p>
+<p><br></p>
+<p><font size=4 id="8"><b>8、关于vsFTPd服务器的一些常用功能的实现；</b></font></p>
+<p><font size=3 id="8.1"><b>8.1、关于匿名上传下载的实现；</b></font></p>
+<p>关于匿名上传，其实也比较简单，首先我们要修改一下vsftpd.conf ，此文件位于 /etc/目录下，可能是/etc/vsftpd.conf，也可能是/etc/vsftpd/vsftpd.conf文件。以您的系统环境为准；</p>
+<p><b>首先：我们要改一下vsftpd.conf，确保有以下几行；</b></p>
+<p><div class="codeblock"><code>anonymous_enable=YES<br />
+anon_upload_enable=YES<br />
+anon_mkdir_write_enable=YES<br />
+anon_umask=022</code></div></p>
+<p><b>其次：在ftp用户家目录的下建一个文件夹，并修改其权限为完全开放；</b></p>
+<p>ftp用户的家目录在哪？我们前面已经说了，要通过/etc/passwd来查看；也可以通过finger ftp来查看；</p>
+<p><div class="codeblock"><code>[root@localhost beinan]# finger ftp<br />
+Login: ftp                              Name: FTP User<br />
+Directory: /var/ftp                     Shell: /sbin/nologin</code></div></p>
+<p>这说明ftp用户的家目录在/var/ftp ，我们要在这个目录下建一个目录，然后把他的权限设置为任何用户可读可写可执行就行了；一般的情况下，在发行版中，有一个/var/ftp/pub的目录，如果没有，您也可以自己建一个；把配置文件改好后，只要把/var/ftp下的任何一个目录的权限打开，都可以用来匿名上传和下载；</p>
+<p>比如您想让匿名用户上传和下载都在/var/ftp/pub，就可以把/var/ftp/pub的权限打开，如果没有这个目录，您要自己建一个；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# mkdir /var/ftp/pub<br />
+[root@localhost ~]# chmod 777 /var/ftp/pub</code></div></p>
+<p>这样上传的时候传到pub目录就OK了，对不对？？</p>
+<p><font size=3 id="8.2"><b>8.2、关于添加本地用户及打开读写权限示例；</b></font></p>
+<p>FTP用户一般是不能登录系统的，这也是为了安全。在系统中，没有权限登录系统的用户一般也被称之为虚拟用户；虚拟用户也是要写进/etc/passwd中；这只是一种虚拟用户的方法，但说实在的并不是真正的虚拟用户，只是把他登录SHELL的权限去掉了，所以他没有能力登录系统；</p>
+<p>如果我们想把beinan这个用户目录定位在/opt/beinan这个目录中，并且不能登录系统；我们应该如下操作</p>
+<p><div class="codeblock"><code>[root@localhost ~]# adduser -d /opt/beinan -g ftp -s /sbin/nologin beinan<br />
+[root@localhost ~]# passwd beinan<br />
+Changing password for user beinan.<br />
+New password:<br />
+Retype new password:<br />
+passwd: all authentication tokens updated successfully.<br />
+[root@localhost ~]#</code></div></p>
+<p>其实这还是不够的，还要改一下配置文件vsftpd.conf  ，以确保本地虚拟用户能有读写权限；</p>
+<p><div class="codeblock"><code>local_enable=YES<br />
+write_enable=YES<br />
+local_umask=022</code></div></p>
+<p><br><br />
+<font size=3 id="8.4"><b>8.4、如何实现虚拟路径？</b></font></p>
+<p><b>比如：</b><br />
+<div class="codeblock"><code>/home/a 映射为 ftp://localhost/a<br />
+/home/b/c 则为 ftp://localhost/c</code></div></p>
+<p>其实这个不能说是vsFTPd的内容，其实我们早就接触过了，可能我们没有注意，我们可以通过如下的方法来实现。<br />
+<div class="codeblock"><code>[root@localhost ~]# mount --bind [原有的目录] [新目录]</code></div></p>
+<p>比如我的ftp的默认目录是/var/ftp，我想把/mnt/LinG/WinSoft文件夹，映射到/var/ftp目录中，我就如下操作</p>
+<p>我们要先在/var/ftp目录中建一个目录<br />
+<div class="codeblock"><code>[root@localhost ~]# mkdir /var/ftp/WinSoft</code></div></p>
+<p>然后执行mount命令<br />
+<div class="codeblock"><code>[root@localhost ~]# mount --bind /mnt/LinG/WinSoft /var/ftp/WinSoft</code></div></p>
+<p>这样就OK了。 </p>
+<p><font size=3 id="8.5"><b>8.5、打开vsFTP服务器的日志功能；</b></font></p>
+<p>把下面xferlog_file前面的#号对掉，也就是把vsftp的log功能打开，这样我们就能在/var/log目录下查看vsftpd.log。这是vsFTP的日志功能，这对于我们来说是极为重要的。<br />
+<div class="codeblock"><code>xferlog_file=/var/log/vsftpd.log</code></div></p>
+<p><br><br />
+<font size=3 id="8.6"><b>8.6、如何定制欢迎信息；</b></font></p>
+<p>如何定制欢迎信息，也就是我们登入有些FTP之后，会出现类似：欢迎您来到LinuxSir FTP，在这里，您会得到最真诚的帮助，如果有什么问题和建议，请来信，多谢。</p>
+<p>实现这个并不难，我们可以查看vsftpd.conf文件中，是否有这行。</p>
+<p><div class="codeblock"><code>dirmessage_enable=YES<br />
+message_file=.message</code></div></p>
+<p>如果没有就加上，如果dirmessage_enable=YES前面有#号，就把#号去掉。其实FTP信息默认的就是.message，所以可以不加 message_file= 来指定。自己指定也行，无所谓的事；</p>
+<p>然后我们制定一个.message文件，写上您想要写的东西，比如是.message的内容是如下的：</p>
+<p><div class="codeblock"><code>--欢迎您来到LinuxSir FTP！<br />
+--在这里，您会得到最真诚的帮助；<br />
+--如果有什么问题和建议，请来信，多谢。</code></div></p>
+<p>我们可以用编辑器来写这个.message，我想这个过程就不用说了吧。</p>
+<p>然后我们把.message这个文件复制到各个用户的家目录中。比如我的FTP的一个用户是beinan，这个用户所在的家目录是/opt/beinan<br />
+我们就要把.message放在/opt/beinan这个目录下。如果系统用户ftp，他的目录就是/var/ftp这个目录，这个是默认的，当匿名用户登入时就访问的是/var/ftp这个目录。我们要让匿名用户能看到欢迎信息。就要把.message放在/var/ftp目录中。其它的用户，也无非就是类似的操作。</p>
+<p><font size=3 id="8.7"><b>8.7、硬盘空间有限，如何把帐号ftp默认的家目录更改到别处？</b></font></p>
+<p>我的硬盘空间有限，如何把帐号ftp默认的路径/var/ftp更改到别处？或者是，我的linux所有的目录都放在/根分区，因为空间紧张，我能否把ftp这个用户的默认路径放到别的分区？？</p>
+<p>对于ftp这个用户的管理，我们应该查看/etc/passwd ，然后修改ftp用户那行；</p>
+<p><div class="codeblock"><code>ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</code></div></p>
+<p>比如我们想把ftp用户的家目录改为/opt/ftp，则要把类似上一行改为 </p>
+<p><div class="codeblock"><code>ftp:x:14:50:FTP User:/opt/ftp:/sbin/nologin</code></div></p>
+<p>然后我们要建立ftp用户的新的家目录；</p>
+<p><div class="codeblock"><code>[root@localhost ~]# mkdir /opt/ftp<br />
+[root@localhost ~]# chmod 755 /opt/ftp<br />
+[root@localhost ~]# chown root:root /opt/ftp</code></div></p>
+<p>如果默认的ftp磁盘空间紧张，我们其实也可以用虚拟路径映射的方法来解决；也就是mount --bind的办法；看情况吧，哪个适合就是最好的方法；</p>
+<p><font size=3 id="8.8"><b>8.8、如何让vsFTP服务器限制链接数，以及每个IP最大的链接数？</b></font></p>
+<p>应该改vsFTPd服务器的配制文件vsftpd.conf，加入下面的两行：</p>
+<p><div class="codeblock"><code>max_clients=数字<br />
+max_per_ip=数字</code></div></p>
+<p><b>举例：</b>我想让我的vsFTP最大支持链接数为100个，每个IP，最多能支持5个链接，所以我应该在vsftpd.conf中加上如下的两行：</p>
+<p><div class="codeblock"><code>max_clients=100<br />
+max_per_ip=5</code></div><br />
+改好了配制文件，不要忘记启动vsftp服务器。<br />
+<br><br />
+<font size=3 id="8.9"><b>8.9、如何限制传输速度？</b></font><br />
+<br><br />
+<div class="codeblock"><code>anon_max_rate=数字</code></div></p>
+<p>注：这是匿名的速度<br />
+<div class="codeblock"><code>local_max_rate=数字</code></div><br />
+注：这是vsFTP服务器上本地用户的速度</p>
+<p>注：这个数字的单位是byte，所以我们要计算一下。比如我想让匿名用户和vsFTP上的用户都以80KB下载，所以这个数字应该是1024x80=81920<br />
+所以我们要在vsftpd.conf中加入下面的两行</p>
+<p><div class="codeblock"><code>anon_max_rate=81920<br />
+local_max_rate=81920</code></div></p>
+<p><br></p>
+<p><font size=3 id="8.10"><b>8.10、如何有选择的把用户限制在家目录中呢？</b></font></p>
+<p>我们要自己建一个文件，在/etc目录中或/etc/vsftpd目录中（假如您的vsftpd配置文件都是放在这个目录的话）；<br />
+<div class="codeblock"><code>#touch /etc/vsftpd.chroot_list</code></div><br />
+以beinan和nanbei这两个用户限制在他们所在的家目录中，而其它的FTP用户不做此限制。</p>
+<p>在vsftpd.chroot_list这个文件中，把beinan和nanbei添上去就行，注意，每个用户占一行。<br />
+<div class="codeblock"><code>beinan<br />
+nanbei</code></div></p>
+<p>然后改/etc/vsftpd/vsftpd.conf文件，找如下的两行</p>
+<p><div class="codeblock"><code>chroot_list_enable=YES<br />
+chroot_list_file=/etc/vsftpd.chroot_list</code></div></p>
+<p>如果没有这样的两行，就可以自己添加上去也是一样的。</p>
+<p>设置好后，重新vsFTPD服务器。</p>
+<p>补充一之补充：如何把系统内所有的FTP用户都限制在家目录中呢？？经juliaugong兄的提示，我查找了vsFTPd的洋文说明，证明这个选项是一刀切的解决所有的用户都能限制在家目录中</p>
+<p>我们可以通过更改vsftpd.conf文件，加入如下的一行<br />
+<div class="codeblock"><code>chroot_local_user=YES</code></div></p>
+<p>改完配制文件，不要忘记重启vsFTPd服务器；</p>
+<p><font size=3 id="8.11"><b>8.11、如何让绑定IP到vsFTPd？</b></font></p>
+<p>如何让绑定IP到vsFTPd？也就是说，如何让用户只能通过某个IP来访问FTP。其实这个功能很有意思。如果绑定的是内网的IP，外部是没有办法访问的。如果绑定的是对外服务的IP，内网也只能通过对外服务的IP来访问FTP</p>
+<p>在vsftpd.conf中加一行，以我的局域网为例，请看第一帖中的操作环境，这样外网就不能访问我的FTP了，内网也可能通过192.168.0.2来访问FTP；</p>
+<p><div class="codeblock"><code>listen_address=192.168.0.2</code></div></p>
+ </div>
+ <div class="links">By 北南南北 at 2006/01/07 - 18:21 | <a href="?q=taxonomy/term/27">文件服务器</a> | <a href="?q=comment/reply/152#comment" title="共享你有关本文的思想和意见。">参与评论</a> | 12754 阅读</div>
+</div>
+<a id="comment"></a>
+<form method="post" action="?q=comment"><div>
+<input type="hidden" name="edit[nid]" value="152" />
+<a id="comment-714"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-714" class="active">怎么解决在windows客户端下中文显示乱码的问题阿</a></h3>
+ <div class="content"><p>linux下vsftpd下的中文文件，在windows下却显示乱码，请问北南大哥有什么方法解决？</p>
+</div>
+ <div class="links">By noodleses at 周六, 2006/09/09 - 10:05 | <a href="?q=comment/reply/152/714">回复</a></div>
+</div>
+<a id="comment-457"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-457" class="active">匿名用户可以登陆，但是本地用户无法登陆</a></h3>
+ <div class="content"><p>我在2.4.21-4.ELsmp下用vsftpd2.0.3的源码安装：<br />
+make; make install<br />
+将vsftpd.conf拷贝到/etc目录下<br />
+设置<br />
+local_enable=YES<br />
+write_enable=YES<br />
+local_unmask=22<br />
+listen=yes</p>
+<p>随后/usr/local/sbin/vsftpd &amp;启动vsftpd</p>
+<p>在本机上ftp localhost<br />
+输入用户ftp和密码ftp，可以登陆<br />
+但是输入本地用户，无法登陆，提示是530 login incorrect。</p>
+<p>为什么？</p>
+</div>
+ <div class="links">By Anonymous at 周三, 2006/05/24 - 15:05 | <a href="?q=comment/reply/152/457">回复</a></div>
+</div>
+<a id="comment-241"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-241" class="active">求助!!!</a></h3>
+ <div class="content"><p>我的ftp服务器ip是192.168.0.5<br />
+我在另一台windowxp机器上用命令ftp 192.168.0.5<br />
+user:ftp  password:ftp 可以正常访问,但是用ie或者firefox就不能访问(ftp://192.168.0.5或ftp://ftp:ftp@192.168.0.5).这是怎么回事?<br />
+而且我用smartftp等ftp工具也不能访问.用了一个叫做32bit什么的软件却好使.我现在就想能够通过ie能够访问ftp服务器,该怎么办?</p>
+</div>
+ <div class="links">By Anonymous at 周五, 2006/02/03 - 16:02 | <a href="?q=comment/reply/152/241">回复</a></div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-247"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-247" class="active">你是不是用防火墙关闭了其他端口，而只开了一�</a></h3>
+ <div class="content"><p>你是不是用防火墙关闭了其他端口，而只开了一个21端口？<br />
+如果是这样那就用软件连接的时候管理PASV模式就可以了</p>
+</div>
+ <div class="links">By Anonymous (没有被验证) at 周一, 2006/02/06 - 20:12 | <a href="?q=comment/reply/152/247">回复</a></div>
+</div>
+</div>
+<a id="comment-206"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-206" class="active">如何把某个用户的上传限制在某个目录内呢?</a></h3>
+ <div class="content"><p>一般是一个用户在home下有个相对应的文件(如test用户).当你在ftp中登陆后,他会默认到该文件夹(文件夹test).我怎么才能把他默认为打开test下的public_html文件夹呢?<br />
+就是一登陆,public_html就是根目录?谢谢</p>
+</div>
+ <div class="links">By Anonymous at 周五, 2006/01/13 - 12:20 | <a href="?q=comment/reply/152/206">回复</a></div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-232"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-232" class="active">把/etc/passwd里面的用户的HOME目录改了就可以了</a></h3>
+ <div class="content"><p>把/etc/passwd里面的用户的HOME目录改了就可以了</p>
+</div>
+ <div class="links">By Anonymous at 周二, 2006/01/24 - 19:12 | <a href="?q=comment/reply/152/232">回复</a></div>
+</div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-215"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-215" class="active">用anon_root试试</a></h3>
+ <div class="content"><p>用anon_root试试</p>
+</div>
+ <div class="links">By Anonymous at 周二, 2006/01/17 - 13:32 | <a href="?q=comment/reply/152/215">回复</a></div>
+</div>
+</div>
+<a id="comment-205"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-205" class="active">如何基于client的源IP来提供不同的服务</a></h3>
+ <div class="content"><p>我的方法是用tcp wrappers<br />
+先设置一个全局配置文件<br />
+然后在hosts.allow中写上来源IP<br />
+然后设置VSFTPD_LOAD_CONF为指定的个性配置文件</p>
+</div>
+ <div class="links">By Anonymous at 周二, 2006/01/10 - 21:20 | <a href="?q=comment/reply/152/205">回复</a></div>
+</div>
+<a id="comment-204"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-204" class="active">希望加入关于vsftpd支持zh_CN的方法</a></h3>
+ <div class="content"><p>vsftpd本事不支持东方语言<br />
+所以如果你的文件名字有中文符号<br />
+则在日志中及ps axf看到的都是???问号<br />
+在一个台湾的BBS上看到可以修改vsftpd的代码使之支持UTF-8<br />
+很有实际意义的</p>
+</div>
+ <div class="links">By Anonymous at 周二, 2006/01/10 - 21:10 | <a href="?q=comment/reply/152/204">回复</a></div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-739"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-739" class="active">vsftpd在日志中不支持中文(utf-8)的原因</a></h3>
+ <div class="content"><p>针对FC4中自带的vsftpd_2.0.3-1<br />
+在源码中，发现写日志处理是这样的：</p>
+<p>logging.c: Line146-165<br />
+<div class="codeblock"><code>static void<br />
+vsf_log_do_log_to_file(int fd, struct mystr* p_str)<br />
+{<br />
+&nbsp;&nbsp;if (!tunable_no_log_lock)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int retval = vsf_sysutil_lock_file(fd);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (vsf_sysutil_retval_is_error(retval))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;str_replace_unprintable(p_str, &#039;?&#039;);<br />
+&nbsp;&nbsp;str_append_char(p_str, &#039;\n&#039;);<br />
+&nbsp;&nbsp;/* Ignore write failure; maybe the disk filled etc. */<br />
+&nbsp;&nbsp;(void) str_write_loop(p_str, fd);<br />
+&nbsp;&nbsp;if (!tunable_no_log_lock)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;vsf_sysutil_unlock_file(fd);<br />
+&nbsp;&nbsp;}<br />
+}</code></div></p>
+<p>str.c: Line652-663<br />
+<div class="codeblock"><code>void<br />
+str_replace_unprintable(struct mystr* p_str, char new_char)<br />
+{<br />
+&nbsp;&nbsp;unsigned int i;<br />
+&nbsp;&nbsp;for (i=0; i &lt; p_str-&gt;len; i++)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!vsf_sysutil_isprint(p_str-&gt;p_buf[i]))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_str-&gt;p_buf[i] = new_char;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+}</code></div></p>
+<p>sysutil.c: Line881-901<br />
+<div class="codeblock"><code>int<br />
+vsf_sysutil_isprint(int the_char)<br />
+{<br />
+&nbsp;&nbsp;/* From Solar - we know better than some libc&#039;s! Don&#039;t let any potential<br />
+&nbsp;&nbsp;&nbsp;* control chars through<br />
+&nbsp;&nbsp;&nbsp;*/<br />
+&nbsp;&nbsp;unsigned char uc = (unsigned char) the_char;<br />
+&nbsp;&nbsp;if (uc &lt;= 31)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;if (uc == 177)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;if (uc &gt;= 128 &amp;&amp; uc &lt;= 159)<br />
+&nbsp;&nbsp;{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;return isprint(the_char);<br />
+}</code></div><br />
+这样的结果就是在日志中的中文会变成"?"。他的解释是Don't let any potential control chars through.<br />
+不过，vsftpd在通过syslog写系统日志时，不会这样处理。(具体信息请man vsftpd.conf)<br />
+所以，写入系统日志时的中文是存在的。</p>
+</div>
+ <div class="links">By Anonymous at 周三, 2006/09/27 - 23:16 | <a href="?q=comment/reply/152/739">回复</a></div>
+</div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-658"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-658" class="active">如何支持zh-CN</a></h3>
+ <div class="content"><p>中国人嘛难免用方块字，此时最痛苦的就是显示出来的都是天书<br />
+北南南北兄能否增加关于支持中文的文档？？</p>
+</div>
+ <div class="links">By jazzi at 周六, 2006/08/12 - 10:36 | <a href="?q=comment/reply/152/658">回复</a></div>
+</div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-292"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-292" class="active">我要把 ftp 端口改成5000,该怎莫办</a></h3>
+ <div class="content"><p>如题</p>
+</div>
+ <div class="links">By Anonymous at 周二, 2006/03/14 - 16:54 | <a href="?q=comment/reply/152/292">回复</a></div>
+</div>
+</div>
+<div style="margin-left:50px;">
+<a id="comment-294"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-294" class="active">修改/etc/vsftpd/vsftpd.conf</a></h3>
+ <div class="content"><p>修改/etc/vsftpd/vsftpd.conf<br />
+添加listen_port=5000</p>
+</div>
+ <div class="links">By Anonymous (没有被验证) at 周三, 2006/03/15 - 14:42 | <a href="?q=comment/reply/152/294">回复</a></div>
+</div>
+</div>
+<div style="margin-left:75px;">
+<a id="comment-358"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-358" class="active">chown_enable</a></h3>
+ <div class="content"><p>为什么加上chown_enable=YES以后编译vsftpd服务器不成功呢？？？</p>
+</div>
+ <div class="links">By Anonymous at 周日, 2006/04/09 - 21:41 | <a href="?q=comment/reply/152/358">回复</a></div>
+</div>
+</div>
+<div style="margin-left:100px;">
+<a id="comment-485"></a>
+<div class="comment">
+ <h3 class="title"><a href="?q=node/152#comment-485" class="active">这么高深的东西,除了顶还是顶</a></h3>
+ <div class="content"><p>这么高深的东西,除了顶还是顶</p>
+</div>
+ <div class="links">By Anonymous (没有被验证) at 周二, 2006/06/06 - 16:43 | <a href="?q=comment/reply/152/485">回复</a></div>
+</div>
+</div>
+</div></form>
+<!-- end content -->
+ <div id="footer"><center>
+<a href="http://www.linuxsir.org"><img src="http://www.linuxsir.org/main/logo.jpg"></a> <br>
+
+<a href="http://www.miibeian.gov.cn" target="_blank"><font size=3 color=blue><b> 闽ICP备06025536号</b></font></a><br>
+<script language=JavaScript src="http://210.83.208.156/cyber/cyberpolice.asp?uid=007700770077002E006C0069006E00750078007300690072002E006F00720067"   ></script >
+<br>
+<a href="?q=node/78"><font size=3 color=blue><b> © 2002-2006 LinuxSir.Org</b></font></a><br>
+</center></div>
+   </td>
+   <td id="sidebar-right"><div class="block block-block" id="block-block-2">
+ <h2 class="title">基础知识</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/23">安装配置</a>
+<li><a href="?q=taxonomy/term/1/25/">基础入门</a>
+<li><a href="?q=taxonomy/term/22/">硬件解决</a>
+<li><a href="?q=taxonomy/term/21">软件管理</a>
+<li><a href="?q=taxonomy/term/35/48/">重要资源</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-4">
+ <h2 class="title">软件应用</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/30">网络工具</a>
+<li><a href="?q=taxonomy/term/32">图形图像</a>
+<li><a href="?q=taxonomy/term/31">音乐视频</a>
+<li><a href="?q=taxonomy/term/49">字体中文</a>
+<li><a href="?q=taxonomy/term/33">软件其它</a>
+</ul>
+</div>
+</div>
+<div class="block block-block" id="block-block-5">
+ <h2 class="title">网络服务器</h2>
+ <div class="content"><ul>
+<li><a href="?q=taxonomy/term/27">文件服务器<a>
+<li><a href="?q=taxonomy/term/28">Web服务器</a>
+<li><a href="?q=taxonomy/term/29">邮件服务器</a>
+<li><a href="?q=taxonomy/term/37">数据库应用</a>
+<li><a href="?q=taxonomy/term/50">服务器其它</a>
+</ul>
+</div>
+</div>
+<div class="block block-comment" id="block-comment-0">
+ <h2 class="title">最新评论</h2>
+ <div class="content"><div class="item-list"><ul><li><a href="?q=node/250#comment-833">贺喜</a><br />2 min 32 sec 前</li><li><a href="?q=node/250#comment-832">同贺</a><br />16 hours 22 min 前</li><li><a href="?q=node/250#comment-831">恭喜恭喜啊^_^</a><br />21 hours 37 min 前</li><li><a href="?q=node/250#comment-830">恭喜北南</a><br />1 day 15 hours 前</li><li><a href="?q=node/250#comment-829">恭喜北南~~</a><br />1 day 17 hours 前</li><li><a href="?q=node/250#comment-828"></a><br />2 days 1 hour 前</li><li><a href="?q=node/250#comment-827">恭喜恭喜</a><br />2 days 2 hours 前</li><li><a href="?q=node/250#comment-826">hao</a><br />2 days 3 hours 前</li><li><a href="?q=node/250#comment-825"></a><br />2 days 5 hours 前</li><li><a href="?q=node/250#comment-824">恭喜恭喜</a><br />2 days 5 hours 前</li></ul></div></div>
+</div>
+</td>
+  </tr>
+ </table>
+ </body>
+</html>

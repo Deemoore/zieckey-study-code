@@ -1,0 +1,212 @@
+Linux下NFS的配置与注意的问题
+
+
+1.什么是NFS(Network FileSystem)
+NFS 就是 Network FileSystem 的缩写，最早之前是由 Sun 所发展出来的。他最大的功能就是可以透过网络，让不同的机器、不同的操作系统、可以彼此分享个别的档案 ( share file )，所以，也可以简单的将他看做是一个 file server 呢！这个 NFS Server 可以让你的 PC 来将网络远程的 NFS 主机分享的目录，挂载到本地端的机器当中，所以，在本地端的机器看起来，那个远程主机的目录就好象是自己的 partition 一般！
+虽然 NFS 有属于自己的协议与使用的 port number ，但是在资料传送或者其它相关讯息传递的时候， NFS 使用的则是一个称为远程过程调用( Remote Procedure Call, RPC )的协议来协助 NFS 本身的运作！
+
+2.RPC
+当我们在使用某些服务来进行远程联机的时候，有些信息，例如主机的IP、服务的 port number、与对应到的服务之 PID 等等，都需要管理与对应！这些管理 port 的对应与服务相关性的工作，就是这个 Remote Procedure Call, RPC 的任务了
+NFS 本身的服务并没有提供资料传递的协议，但是 NFS 却能让我们进行档案的分享，这其中的原因，就是 NFS 使用到一些其它相关的传输协议！而这些传输的协议，就是使用到这个所谓的 RPC 的功能啰！这也就是说， NFS 本身就是使用 RPC 的一个 program 就是了！说的更白话一点， NFS 也可以视作是一个 RPC server 啦！同时要注意到的是，在某些状况中，不但跑 NFS 的 Server 需要激活 RPC 的服务，连带的，要挂载 NFS partition 的 Client 机器，也需要同步激活 RPC 才行！这样 Server 端与 Client 端才能藉由 RPC 的协议来进行 program port 的对应喔！NFS 主要在管理分享出来的目录，而至于资料的传递，就直接将他丢给 RPC 的协议来运作就是了！
+
+3.NFS 激活的 RPC daemons
+o rpc.nfsd：这个 daemon 主要的功能就是在管理 Client 是否能够登入主机的权限啦，其中还包含这个登入者的 ID 的判别
+o rpc.mountd：这个 daemon 主要的功能，则是在管理 NFS 的档案系统！当 Client 端顺利的通过 rpc.nfsd 而登入主机之后，在他可以使用 NFS server 提供的档案之前，还会经过档案使用权限 ( 就是那个 -rwxrwxrwx 与 owner, group 那几个权限啦 ) 的认证程序！他会去读 NFS 的设定档 /etc/exports 来比对 Client 的权限，当通过这一关之后， Client 就可以取得使用 NFS 档案的权限啦！(注：这个也是我们用来管理 NFS 分享之目录的使用权限与安全设定的地方哩)
+
+4.NFS需要有两个套件才行，分别是:
+nfs-utils
+就是提供 rpc.nfsd 及 rpc.mountd 这两个 NFS daemons 与其它相关 documents 与说明文件、执行档等的套件！这个就是 NFS 的主要套件
+portmap
+就如同刚刚提的到，我们的 NFS 其实可以被视为一个 RPC server program，而要激活任何一个 RPC server program 之前，我们都需要做好 port 的对应 ( mapping ) 的工作才行，这个工作其实就是『 portmap 』这个服务所负责的！也就是说，在激活任何一个 RPC server 之前，我们都需要激活 portmap 才行呢！那么这个 portmap 到底在干嘛呢？就如同这个服务的名称，哈哈！就是作 port 的 mapping 啊！举个例子来说：当 Client 端尝试来使用 RPC server 所提供的服务时，由于 Client 需要取得一个可以连接的 port 才能够使用 RPC server 所提供的服务，因此， Client 首先就会去跟 portmap 讲『喂！可不可以通知一下，给我个 port number ，好让我可以跟 RPC 联络吧！』这个时候 portmap 就自动的将自己管理的 port mapping 告知 Client ，好让他可以连接上来 server 呢！所以啰：『激活 NFS 之前，请先激活 portmap ！』
+
+5.NFS server端的设定:
+a)./etc/exports
+分享的目录 主机名称1或IP1(参数1，参数2) 主机名称2或IP2(参数3，参数4)
+b).参数
+rw: 可擦写的权限
+ro: 只读的权限
+no_root_squash: 登入 NFS 主机使用分享目录的使用者，如果是 root 的话，那么对于这个分享的目录来说，他就具有 root 的权限！这个项目『极不安全』，不建议使用！
+root_squash: 在登入 NFS 主机使用分享之目录的使用者如果是 root 时，那么这个使用者的权限将被压缩成为匿名使用者，通常他的 UID 与 GID 都会变成 nobody 那个身份；
+all_squash: 不论登入 NFS 的使用者身份为何，他的身份都会被压缩成为匿名使用者，通常也就是 nobody 啦！
+anonuid: 前面关于 *_squash 提到的匿名使用者的 UID 设定值，通常为 nobody，但是你可以自行设定这个 UID 的值！当然，这个 UID 必需要存在于你的 /etc/passwd 当中！
+anongid: 同 anonuid ，但是变成 group ID 就是了
+sync: 资料同步写入到内存与硬盘当中
+async: 资料会先暂存于内存当中，而非直接写入硬盘
+
+        ro                      只读访问 
+        rw                      读写访问 
+        sync                    所有数据在请求时写入共享 
+        async                   NFS在写入数据前可以相应请求 
+        secure                  NFS通过1024以下的安全TCP/IP端口发送 
+        insecure                NFS通过1024以上的端口发送 
+        wdelay                  如果多个用户要写入NFS目录，则归组写入（默认） 
+        no_wdelay               如果多个用户要写入NFS目录，则立即写入，当使用async时，无需此设置。 
+        hide                    在NFS共享目录中不共享其子目录 
+        no_hide                 共享NFS目录的子目录 
+        subtree_check           如果共享/usr/bin之类的子目录时，强制NFS检查父目录的权限（默认） 
+        no_subtree_check        和上面相对，不检查父目录权限 
+        all_squash              共享文件的UID和GID映射匿名用户anonymous，适合公用目录。 
+        no_all_squash           保留共享文件的UID和GID（默认） 
+        root_squash             root用户的所有请求映射成如anonymous用户一样的权限（默认） 
+        no_root_squas           root用户具有根目录的完全管理访问权限 
+        anonuid=xxx             指定NFS服务器/etc/passwd文件中匿名用户的UID 
+        anongid=xxx             指定NFS服务器/etc/passwd文件中匿名用户的GID 
+
+
+6.设置的实例:
+a). /tmp *(rw,no_root_squash)   //*号表示所有的IP都可以访问
+b). /tmp *(rw)
+   /home/public 192.168.0.*(rw) *(ro)   //下面两行作用一样
+   /home/public 192.168.0.0/24(rw) *(ro)
+c). /home/test 192.168.0.100(rw) //只对某部机器设置权限
+d). /home/linux *.linux.org(rw,all_squash,anonuid=40,anongid=40) //当*.linux.org登陆此NFS主机，并且在/home/linux下面写入档案时，该档案的所有人与所有组，就会变成/etc/passwd 里面对应的UID为40的那个身份的使用者了.
+
+
+
+7.权限问题
+假设/etc/exports里面的内容为
+#vi /etc/exports
+/tmp *(rw,no_root_squash)
+/home/public 192.168.0.*(rw) *(ro)
+/home/test 192.168.0.100(rw)
+/home/linux *.linux.org(rw,all_squash,anonuid=40,anongid=40)
+假设我们在192.168.0.100这个client端登陆此NFS主机(192.168.0.2),那么
+情况一:在192.168.0.100的帐号为test这个身份，同时，NFS主机上也有test这个帐号
+   a).由于NFS主机的/tmp权限为-rwxrwxrwt，所以我(test在192.168.0.100上)在/tmp下面具有存取的权限，并且写入档案的所有人为test.
+   b).在/home/public中，由于我有读写的权限，如果NFS主机在/home/public这个目录的权限对于test开放写入的话，那么就可以读写，并且写入档案的所有人是test。如果NFS主机的/home/public对于test这个使用者并没有开放写入权限时，那就无法写入，虽然 /etc/exports里面是rw，也不起作用.
+   c).在/home/test中，权限与/home/public有相同的状态，需要NFS主机的/home/test对于test有开放的权限.
+   d).在/home/linux当中，不论是何种的user,身份都会被变成UID=40的这个帐号
+情况二:如果我们在192.168.0.100的身份为test2,但是NFS主机却没有test2这个帐号时
+   a).在/tmp下还是可以写入，但是写入的档案所有人变成nobody.
+   b).在/home/public与/home/test里面是否可以写入，还需要看/home/public的权限而定，不过身份就被变成nobody了
+   c)/home/linux下的身份还是变成UID=40的帐号.
+情况三:在192.168.0.100的身份为root
+   a).在/tmp里面可以写入，但是由于no_root_squash的参数，改变了预设的root_squash的设定值，所以在/tmp写入档案的所有人为root了.
+   b).在/home/public底下的身份被压缩成了nobody,因为预设的属性都具有root_squash，所以档案所有人就变成了nobody.
+   c)./home/test情况与/home/public相同.
+   d)./home/linux中，root的身份也被压缩成UID=40的那个使用者了.
+
+8.启动服务portmap,nfs
+#/etc/rc.d/init.d/portmap start   (or:#service portmap start)
+#/etc/rc.d/init.d/nfs start    (or:#service nfs start)
+可以到/var/log/messages里面查看是否正确激活
+
+9.exportfs的用法
+如果我们修改了/etc/exports后，并不需要重启nfs服务，只要用exportfs重新扫描一次/etc/exports，并且重新加载即可
+语法: exportfs [-aruv]
+-a: 全部挂载(或卸载) /etc/exports档案内的设定
+-r: 重新挂载/etc/exports里面的设定，也同步的更新/etc/exports和/var/lib/nfs/xtab里面的内容
+-u:卸载某一目录
+-v:在export的时候，将分享的目录显示到荧屏上.
+例子
+#exportfs -rv //重新export一次
+#exportfs -au //全部卸载
+
+10./var/lib/nfs/xtab里面可以查看每个目录的分享权限(要有人mount上nfs后才会出现内容)，如:
+/tmp    node3(ro,sync,wdelay,hide,secure,root_squash,no_all_squash,subtree_check,secure_locks,mapping=identity,anonuid=-2,anongid=-2)
+为什么anonuid=-2呢？呵呵！其实它说的是将 65536 - 2 的值，也就是 65534 的那个 UID 啦！对照一下 /etc/passwd ，你就会发现，哇！原来那就是 nobody 的啦
+
+11.showmount命令
+语法: showmount [-ae] hostname
+-a: 显示目前主机与client所连上来的使用目录的状态
+-e: 显示hostname的/etc/exports里面共享的目录
+
+            # showmount -e 192.168.102.47
+
+            Export list for 192.168.102.47:
+            /home/share (everyone)
+
+
+12.查看激活的portnumber
+#netstat -utln
+nfs 自己所开启的 port ，就是那个 2049 的 port 啦！就是 NFS 主要产生的 port NFS server 在前面我们就提过了，他是 RPC server 的一种，而 NFS 由于提供了多个 program ( 例如 rpc.mountd, rpc.rquotad, rpc.nfsd... ) ，因此就需要激活多个 port 了！而且这些 port 是『随机产生的』，也就是那个 port number 不会是固定的啦！每次 restart nfs 都会得到不一样的 port number 呢！那么 Client 端怎么知道要连接上那个 port 来呼叫需要的 program 呢？呵呵！那就是 sunrpc ( port 111 ) 那个 portmap 服务所产生的 port number 的功用啦！Client 会先连接到 sunrpc 那个 port 去知道应该到那个 port 去呼叫所需要的程序！所以啰， rpc.xxxx 等之类的 daemon 自然就不需要有固定的 port number 啰！
+
+
+
+13. 安全问题：
+5.1 Iptables 防火墙
+
+如果我们的NFS服务器在防火墙后边，则需要在防火强策略中加入如下策略：
+
+            -A INPUT -p tcp -m state --state NEW -m multiport --dport 111,2049,4001,32764:32767 -j ACCEPT
+            -A INPUT -p udp -m state --state NEW -m multiport --dport 111,2049,4001,32764:32767 -j ACCEPT
+
+5.2 使用 /etc/hosts.allow和/etc/hosts.deny 控制客户端的访问
+
+/etc/hosts.allow和/etc/hosts.deny这两个文件是tcpd服务器的配置文件，tcpd服务器可以控制外部IP对本机服务的访问。这两个配置文件的格式如下：
+
+            #服务进程名:主机列表:当规则匹配时可选的命令操作
+
+            server_name:hosts-list[:command]
+
+/etc/hosts.allow控制可以访问本机的IP地址，/etc/hosts.deny控制禁止访问本机的IP。如果两个文件的配置有冲突，以 /etc/hosts.deny为准。下面是一个/etc/hosts.allow的示例：
+
+            ALL:127.0.0.1         #允许本机访问本机所有服务进程
+
+            smbd:192.168.0.0/255.255.255.0     #允许192.168.0.网段的IP访问smbd服务
+
+ALL关键字匹配所有情况，EXCEPT匹配除了某些项之外的情况，PARANOID匹配你想控制的IP地址和它的域名不匹配时(域名伪装)的情况。
+
+比如，在服务器的 /etc/hosts.deny 文件作如下设置：
+
+            # cat /etc/hosts.deny
+
+            portmap:192.168.102.15
+
+然后在客户机192.168.102.15上加载共享目录
+
+            #  mount 192.168.102.47:/home/share /mnt
+            mount to NFS server '192.168.102.47' failed.
+
+我们发现现在已经无法加载共享目录的。
+
+***********************************************
+NFS客户端的设定
+#mount -t nfs hostname(orIP):/directory /mountpoint   搞定，就这么简单
+为了担心会不小心将 NFS 端挂进来的具有 SUID 权限档案的程序执行，root可以将NFS 所分享的目录以较为安全的情况挂载进来，可以
+#mount -t nfs -o nosuid,ro hostname:/directory /mountponit
+
+可能出问题的地方:
+1.权限的设定不符合
+2.忘记了激活portmap,此时会报错:
+mount: RPC: Port mapper failure - RPC: Unable to receive 或者
+mount: RPC: Program not registered
+那么，启动portmap，并且重新启动nfs
+#service portmap start
+#service nfs restart
+3.被防火墙搞掉
+重新设置防火墙,包括iptables与TCP_Wrappers,因为激活了portmap，所以port 111必须提供出去.因此在iptables rules中，要增加:
+iptables -A INPUT -p TCP --dport 111 -j ACCEPT
+iptables -A INPUT -p UDP --dport 111 -j ACCEPT
+如果还不行，那就是TCP_Wrappers的问题，检查/etc/hosts.deny，如果有一行是:
+   ALL: ALL: deny
+那就必须在/etc/hosts.allow中增加:
+   portmap: ALL: allow
+如果我们的NFS针对内部网络开发，对于外部网络只对学术网络开发(140.0.0.0/8)，可以:
+iptables -A INPUT -i eth0 -p TCP -s 192.168.0.0/24 --dport 111 -j ACCEPT
+iptables -A INPUT -i eth0 -p UDP -s 192.168.0.0/24 --dport 111 -j ACCEPT
+iptables -A INPUT -i eth0 -p TCP -s 140.0.0.0/8 --dport 111 -j ACCEPT
+iptables -A INPUT -i eth0 -p UDP -s 140.0.0.0/8 --dport 111 -j ACCEPT
+还可以使用TCP_Wrappers，在/etc/hosts.allow里面规定连上 NFS 主机的主机 IP 与名称，例如
+#vi /.etc/hosts.allow
+portmap: 192.168.0.0/255.255.255.0 :allow
+portmap: 140.113.23.23     :allow
+portmap: .sdu.edu.cn     :allow
+
+RPC Server的相关命令
+rpcinfo
+#rpcinfo -p hostname(orIP)
+
+要注意的问题:
+需要注意的是，由于 NFS 使用的这个 RPC 在 client 端连上主机时，那么你的主机想要关机，那可就会成为『不可能的任务』！我还不知道正确的原因是什么，但是，如果你的 Server 上面还有 Client 在联机，那么你要关机，可能得要等到数个钟头才能够正常的关机成功！嗄！真的假的！不相信吗？不然您自个儿试试看！ ^_^！所以啰，建议您的 NFS Server 想要关机之前，能更先『关掉 portmap 与 nfs 』这两个东西！如果无法正确的将这两个 daemons 关掉，那么先以 netstat -utlp 找出 PID ，然后以 kill 将他关掉先！这样才有办法正常的关机成功喔！这个请特别特别的注意呢！
+
+在TurboLinux8.0 for AMD64 (kernel 2.4.21-4smp),mount NFS时候报错为:
+   portmap: server localhost not responding, timed out
+解决办法:
+   mount -t nfs -o nolock node1:/public /public
+即增加-o nolock参数,原因:
+Unfsd doesn't support NLM locking, and it's causing the lockd daemon to be started (which again requires the portmapper to be installed etc.)
+
+
+
+chown nobody.nogroup /home/share

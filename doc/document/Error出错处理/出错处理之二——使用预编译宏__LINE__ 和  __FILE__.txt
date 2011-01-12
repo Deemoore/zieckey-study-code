@@ -1,0 +1,86 @@
+出错处理之——使用预编译
+
+上一节（http://blog.chinaunix.net/u/16292/showart_391324.html）中，
+我们说明了assert函数的用法，除此之外，标准C还定义了两个宏：__LINE__ 和  __FILE__，
+它们可以和assert联合起来用以定位更精确的程序bug点。
+下面我们通过一个例子来说明__LINE__ 和  __FILE__的用法。
+
+程序清单1：
+/*
+*	filefcn.h - A function to open files.
+*/
+
+#ifndef FILEFCN_H_
+#define FILEFCN_H_
+
+int open_file( FILE **fp, char *fname, char *mode, int line, char *file );
+
+#endif/* FILEFCN_H_ */
+
+
+程序清单2：
+/*
+*	filefcn.c - A function to open files,using __LINE__ and __FILE__
+*/
+
+#include <stdio.h>
+#include "filefcn.h"
+
+int open_file( FILE **fp, char *fname, char *mode, int line, char *file )
+{
+	if ( NULL == (*fp = fopen(fname, mode)) )
+	{
+		fprintf( stderr, "[%s:%d] open_file() failed.\n", file ,line );
+		return 1;
+	}
+	
+	return 0;
+}
+
+
+程序清单3：
+/*
+*	testmacros.c - Exercise the function defined in filefcn.c
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "filefcn.h"
+
+int main(void)
+{
+	FILE *fp;
+	
+	if ( open_file( &fp, "test.txt", "w", __LINE__, __FILE__ ) )
+	{
+		return EXIT_FAILURE;
+	}
+	else
+	{
+		fputs( "This is the text proves we scribbled in the file.\n", fp );
+		fclose( fp );
+	}
+	
+	if ( open_file ( &fp, "noexitfile.txt", "r", __LINE__, __FILE__ ) )
+	{
+		return EXIT_FAILURE;
+	}
+	else
+	{
+		fclose( fp );
+	}
+	
+	return 0;
+}
+
+编译运行：
+[root@localhost error_process]# gcc testmacros.c filefcn.c 
+[root@localhost error_process]# ./a.out 
+[testmacros.c:23] open_file() failed.
+[root@localhost error_process]# 
+
+在编译之前，预处理器把 __LINE__分别换成了 13 和 23，把__FILE__换成了源码文件的文件名 testmacros.c。
+如果open_file函数调用成功，则返回0，否则打印出诊断信息。
+
+这样我通过标准C的两个宏：__LINE__ 和  __FILE__实现了一个更健壮的fopen函数。
+

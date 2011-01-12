@@ -1,0 +1,79 @@
+Ubuntu 5.10下安装chmsee
+
+
+chmsee直接用dpkg是装不了的，因为有版本冲突的问题，想把libgtkhtml版本降下来也不现实，那样会造成更多测版本冲突。我现在用的是另外一种方法，虽然不好看，但也有效。 
+
+首先： 
+
+sudo apt-get install chmlib 
+sudo ln -sf usrliblibgtkhtml-3.8.so.15 usrliblibgtkhtml-3.1.so.11 
+
+注意，我用的是breezy，默认libgtkhtml版本是3.8-15，如果你用的不是这个版本，usrliblibgtkhtml-3.8.so.15这个文件可能不存在，你要改成适合的。 
+
+然后去httplinuxfire.dhis.org~zhongfileschmsee_0.9.5-1_i386.deb下载一个0.9.5的chmsee，运行： 
+
+dpkg -x chmsee_0.9.5-1_i386.deb ~ 
+~usrbinchmsee 
+
+看看chmsee能不能起来了。这样是把chmsee解到你自己的Home目录下，如果想在全系统范围内用，可以用 
+代码sudo dpkg -x chmsee_0.9.5-1_i386.deb 
+
+
+不过我不推荐这样使用，不是系统源里面的还是放在自己的目录里面比较好，这样卸载起来方便一点。
+
+
+
+
+FC4下成功安装chmsee的方法
+
+Windows下面有一些电子图书是chm格式的,在Linux下面如何看呢?我推荐一个不错的软件ChmSee,今天安装成功,特分享一下安装经验,因为看到好多人都没有安装成功. 
+
+环境: Fedora Core 4 (Linux kernel: 2.6.12-1.1398_FC4) 
+前提:你的系统已经有Gtk+, FC4带有Gtk 2.6.7! 
+1 下载软件包 
+(1)gtkhtml-3.6.2.tar.gz 
+下载地址:http://www.icewalkers.com/Linux/Software/59910/GtkHTML.html 
+
+(2)chmsee-0.9.5.tar.bz2 
+下载地址:http://211.92.88.40/~zhong/ 
+
+2 安装 
+(1)安装gtkhtml 
+$ tar zvxf gtkhtml-3.6.2.tar.gz 
+$cd gtkhtml-3.6.2 
+$ ./configure --prefix=/usr 
+$ make 
+$ su 
+password 
+# make install 
+
+(2)安装chmsee 
+$ tar jvxf chmsee-0.9.5.tar.bz2 
+$cd chmsee-0.9.5 
+此处要先修改一下configure文件，因为安装的gtklhtml的版本不一定是3.1，所以在
+configure里检查libgtkhtml 3.1 >= libgtkhtml 3.1.8都会不通过。所以一定要修改一下，
+例如我安装的是gtkhtml3.6，那么可以修改为libgtkhtml 3.6 >= libgtkhtml 3.6。有很多
+人安装过程中出错就是这个原因了。
+$ ./configure 
+$ make 
+$ su 
+password 
+# make install 
+默认安装到/usr/local下面 
+
+到此就安装好了!
+
+
+
+
+
+
+
+
+
+
+
+
+
+主页
+http://chmsee.gro.clinux.org/

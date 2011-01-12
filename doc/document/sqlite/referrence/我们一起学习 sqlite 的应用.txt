@@ -1,0 +1,272 @@
+我们一起学习 sqlite 的应用
+
+我们一起学习 sqlite 的应用
+
+作者： zieckey ( zieckey@yahoo.com.cn )
+All Rights Reserved
+
+第一章 从这里开始
+1.0 引言
+最近发现网上很多人在问 sqlite 数据库的问题，可是解答的人并不多。于是萌生了写点这方面的文章的念头。虽然我也是刚接触 sqlite 不到半年，对其了解得也不是很深很透彻，但是写点东西让初学者能够很快上手，也算是我的心愿之一。也许很多高手会觉得我这是班门弄斧，但是我还是想写点关于 sqlite 的基本知识，这样也许能给予某些人一些帮助，希望如此。
+
+下文介绍的内容都是基于 Linux RedHat 9.0 平台的。
+
+1.1 sqlite简介
+sqlite是嵌入式SQL数据库引擎SQLite（SQLite Embeddable SQL Database Engine）的一个扩展。SQLite是一个实现嵌入式SQL数据库引擎小型C语言库（C library），实现了独立的，可嵌入的，零配置的SQL数据库引擎。特性包括：事务操作是原子，一致，孤立，并且持久的，即使在系统崩溃和电源故障之后。零配置——不需要安装和管理。实现了绝大多数SQL92标准。整个数据库存储在一个单一的文件中。数据库文件可以在不同字节序的机器之间自由地共享。支持最大可达2T的数据库。字符串和BLOB类型的大小只受限于可用内存。完整配置的少于250KB，忽略一些可选特性的少于150KB。在大多数常见操作上比流行的客户/服务器数据库引擎更快。 简单易于使用的API。 内建TCL绑定。另外提供可用于许多其他语言的绑定。具有良好注释的源代码，代码95%有较好的注释。独立：没有外部依赖。源代码位于公共域，可用于任何用途。用 SQLite连接的程序可以使用SQL数据库，但不需要运行一个单独的关系型数据库管理系统进程（separate RDBMS process）。SQLite不是一个用于连接到大型数据库服务器（big database server）的客户端库（client library），而是非常适合桌面程序和小型网站的数据库服务器。SQLite直接读写（reads and writes directly）在硬盘上的数据库文件。
+这一章告诉你怎么开始体验 SQLite ，这里没有长长的说明和冗烦的配置。
+
+1.2 下载代码
+取得一份二进制拷贝, 或者是源代码并自己编译它。关于这个可以到 http://www.sqlite.org/的下载页面获得更多信。
+这里我就不多说了。
+
+1.3 安装
+请阅读在安装包里的 INSTALL 文件。或者使用PEAR installer with "pear install sqlite"。SQLite已经内置了，你不需要安装任何附加的软件（additional software）。
+Windows users可以下载SQLite扩展DLL。
+这里简单介绍一下：
+假设你得到的是源代码，这里将告诉你怎么编译它。
+解压sqlite-3.0.8.tar.gz 到 /home目录下
+For example:
+
+# tar xzf sqlite.tar.gz –C /home/ ;# Unpack the source tree into "sqlite"
+# mkdir sqlite-pc ;# Build will occur in a sibling directory
+# cd sqlite-pc ;# Change to the build directory
+# ../sqlite/configure ;# Run the configure script
+# make ;# Run the makefile.
+# make install
+生成帮助文档
+# make doc
+
+如果一切顺利的话，sqlite的库文件将会生成在 /usr/local/lib 目录下。去看看有没有这些库文件。
+libsqlite3.a libsqlite3.la libsqlite3.so libsqlite3.so.0 libsqlite3.so.0.8.6 pkgconfig
+好了我们可以进入下一节了。激动人心的时刻到了，我们可以轻而易举的创建和操纵数据库了。
+
+1.4 创建一个新数据库
+在 shell 命令行下, 输入: "sqlite3 zieckey.db"。 将创建一个新的数据库文件名叫"zieckey.db". (当然你可以使用不同的名字)
+输入 SQL 命令在提示符下创建和写入新的数据。
+例如，新建一个名为ex1.db的数据库，并创建一个名为 tbl1 的表，其包含两个列元素，并插入具体列元素，具体如下
+# sqlite3 ex1.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> create table tbl1(one varchar(10), two smallint);
+sqlite> insert into tbl1 values('hello!',10);
+sqlite> insert into tbl1 values('goodbye', 20);
+sqlite> select * from tbl1;
+hello!|10
+goodbye|20
+sqlite>
+安全退出 sqlite 的方法是
+sqlite> .quit
+这样刚才的操作就保存下来了，如果强行退出有可能丢失刚才对数据库的操作。
+是不是相当容易，呵呵，当然拉！如果你会 SQL 语言，你会发现，sqlite的语法几乎和它一个样。
+这里先到这里，后面的章节中我们会继续学习sqlite的语法规则的。
+1.5 写个C语言程序调用SQLite
+现在我们来写个C/C++程序，调用 sqlite 的 API 接口函数。
+下面是一个C程序的例子，显示怎么使用 sqlite 的 C/C++ 接口. 数据库的名字由第一个参数取得且第二个参数或更多的参数是 SQL 执行语句. 这个函数调用sqlite3_open() 在 22 行打开数据库, sqlite3_exec() 在 27 行执行 SQL 命令, 并且sqlite3_close() 在 31 行关闭数据库连接。
+代码:
+
+// name： opendbsqlite.c
+// This file is used to test C/C++ API for sqlite
+// Author : zieckey
+// 2006/04/11
+#include <stdio.h>
+#include <sqlite3.h>
+
+int main( void )
+{
+sqlite3 *db=NULL;
+char *zErrMsg = 0;
+int rc;
+rc = sqlite3_open("zieckey.db", &db); //打开指定的数据库文件,如果不存在将创建一个同名的数据库文件
+if( rc ){
+fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+sqlite3_close(db);
+exit(1);
+}
+else printf("open zieckey.db successfully!\n");
+
+sqlite3_close(db); //关闭数据库
+return 0;
+}
+
+编译：# gcc opendbsqlite.c -o db.out
+也许会碰到类似这样的问题：
+/tmp/ccTkItnN.o(.text+0x2b): In function `main':
+: undefined reference to `sqlite3_open'
+/tmp/ccTkItnN.o(.text+0x45): In function `main':
+: undefined reference to `sqlite3_errmsg'
+/tmp/ccTkItnN.o(.text+0x67): In function `main':
+: undefined reference to `sqlite3_close'
+/tmp/ccTkItnN.o(.text+0x8f): In function `main':
+: undefined reference to `sqlite3_close'
+collect2: ld returned 1 exit status
+
+这是个没有找到库文件的问题。
+由于用到了用户自己的库文件,所用应该指明所用到的库，我们可以这样编译：
+
+# gcc opendbsqlite.c -o db.out -lsqlite3
+
+我用用 -lsqlite3 选项就可以了(前面我们生成的库文件是 libsqlite3.so.0.8.6 等,
+去掉前面的lib和后面的版本标志,就剩下 sqlite3 了所以是 -lsqlite3 )。
+如果我们在编译安装的时候，选择了安装路径，例如这样的话：
+.......
+# ../sqlite/configure --prefix=/usr/local/arm-linux/sqlite-ix86-linux
+.......
+这样编译安装时，sqlite的库文件将会生成在 /usr/local/arm-linux/sqlite-ix86-linux/lib 目录下
+这时编译还要指定库文件路径，因为系统默认的路径没有包含 /usr/local/arm-linux/sqlite-ix86-linux/lib
+
+# gcc opendbsqlite.c -lsqlite3 -L/usr/local/arm-linux/sqlite-ix86-linux/lib
+
+如果还不行的话，可能还需要指定头文件 sqlite3.h 的路径，如下：
+
+# gcc opendbsqlite.c -lsqlite3 -L/usr/local/arm-linux/sqlite-ix86-linux/lib -I/usr/local/arm-linux/sqlite-ix86-linux/include
+
+这样编译应该就可以了 ，运行：
+# ./db.out
+./db.out: error while loading shared libraries: libsqlite3.so.0: cannot open shared object file: No such file or directory
+运行是也许会出现类似上面的错误。
+这个问题是由于运行沿着系统默认路径没有找到库文件引起的。这时需要指定 libsqlite3.so.0 库文件的路径。
+在shell下输入：
+export LD_LIBRARY_PATH=/usr/local/arm-linux/sqlite-ix86-linux/lib:$LD_LIBRARY_PATH
+再运行
+# ./db.out
+open zieckey.db successfully!
+是不是很有成就感阿 ，呵呵，这个上手还是很快的。
+
+
+
+第二章 SQLite的基本语法
+
+作者： zieckey ( zieckey@yahoo.com.cn )
+
+这一章我们将会学习到sqlite的基本语法，sqlite的语法现象和SQL92是比较相象的，
+或者说sqlite3兼容大部份SQL92的语法现象。
+下面我们看看怎么用这些语法现象来创建数据库以及对数据库的各种操作。
+
+2.1 新建一个数据库
+例如我们想新建一个数据库命名为zieckey.db ，可以直接在shell下输入 sqlite3 zieckey.db ，
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite>
+
+这里 SQLite version 3.0.8 是SQLite的版本信息。也就是说本文使用的sqlite版本为 version 3.0.8 .
+这样就创建了一个新的数据库文件，命名为 zieckey.db
+
+2.2 创建表和插入值
+刚刚我们创建了一个新的数据库zieckey.db，加入我们想在其中新建一个名为 SensorData 的表，其包含五个列元素。
+可以用CREATE TABLE语法命令。
+CREATE TABLE语句基本上就是"CREATE TABLE"关键字后跟一个新的表名以及括号内的一堆定义和约束。表名可以是字符串或者标识符。以"sqlite_"开头的表名是留给sqlite数据库引擎使用的。每个字段的定义是字段名后跟字段的数据类型，接着是一个或多个的字段约束。字段的 数据类型并不限制字段中可以存放的数据。更多信息，参见sqlite的CREATE TABLE语法。
+
+这里具体作法如下：
+
+# sqlite3 zieckey.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> CREATE TABLE SensorData(
+...> ID INTEGER PRIMARY KEY,
+...> SensorID INTEGER,
+...> SiteNum INTEGER,
+...> Time VARCHAR(12),
+...> SensorParameter REAL
+...> );
+
+注意sqlite下除了特殊命令都要以分号 “;” 结尾，否则它将一直等待第一个分号的出现才判断这条命令结束。
+
+现在我们可以用 schema 命令看看我们刚刚创建的表。具体作法如下：
+
+sqlite> .schema
+CREATE TABLE SensorData(
+ID INTEGER PRIMARY KEY,
+SensorID INTEGER,
+SiteNum INTEGER,
+Time VARCHAR(12),
+SensorParameter REAL
+);
+sqlite>
+
+.schema 是用来查看数据库中所有的表的定义内容。如果后面跟了具体的表名称，则显示该表的内容。
+
+假如我们想想SensorData表中插入具体列元素值，该怎么办呢？这里可以用INSERT语句。
+INSERT语句有两种基本形式。一种带有"VALUES"关键字，在已有表中插入一个新的行。若不定义字段列表，那么值的数目将与表中的字段数目相同。否则值的数目须与字段列表中的字段数目相同。不在字段列表中的字段被赋予缺省值或NULL(当未定义缺省值)。
+INSERT的第二种形式从SELECT语句中获取数据。若未定义字段列表，则从SELECT得到的字段的数目必须与表中的字段数目相同，否则应与定义的字段列表中的字段数目相同。SELECT的每一行结果在表中插入一个新的条目。SELECT可以是简单的或者复合的。如果SELECT语句带有 ORDER BY子句，ORDER BY会被忽略。
+这里我们可以这样做：
+
+sqlite> INSERT INTO "SensorData" VALUES(NULL, 1, 0, '200605011206', 18.9);
+sqlite> INSERT INTO "SensorData" VALUES(2, 1, 0, '200605011306', 16.4);
+sqlite> INSERT INTO "SensorData" VALUES(3, 1, 0, '200605011406', 15.3);
+sqlite> INSERT INTO "SensorData" VALUES(4, 1, 0, '200605011506', 15.5);
+sqlite>
+
+很简单对不对？简直太easy了。
+
+
+
+
+
+2.3 在线帮助
+
+前面两节，我们已经知道了sqlite语法最基本的用法。下面可以看看如何获得联机帮助。
+很简单，输入 .help 就行了。注意要help前加上“.”，这与上面说的以分号结尾有点不同，因为help命令被视为特殊命令。
+
+sqlite> .help
+.databases List names and files of attached databases
+.dump ?TABLE? ... Dump the database in an SQL text format
+.echo ON|OFF Turn command echo on or off
+.exit Exit this program
+.explain ON|OFF Turn output mode suitable for EXPLAIN on or off.
+.header(s) ON|OFF Turn display of headers on or off
+.help Show this message
+.import FILE TABLE Import data from FILE into TABLE
+.indices TABLE Show names of all indices on TABLE
+.mode MODE ?TABLE? Set output mode where MODE is on of:
+csv Comma-separated values
+column Left-aligned columns. (See .width)
+html HTML <table> code
+insert SQL insert statements for TABLE
+line One value per line
+list Values delimited by .separator string
+tabs Tab-separated values
+tcl TCL list elements
+.nullvalue STRING Print STRING in place of NULL values
+.output FILENAME Send output to FILENAME
+.output stdout Send output to the screen
+.prompt MAIN CONTINUE Replace the standard prompts
+.quit Exit this program
+.read FILENAME Execute SQL in FILENAME
+.schema ?TABLE? Show the CREATE statements
+.separator STRING Change separator used by output mode and .import
+.show Show the current values for various settings
+.tables ?PATTERN? List names of tables matching a LIKE pattern
+.timeout MS Try opening locked tables for MS milliseconds
+.width NUM NUM ... Set column widths for "column" mode
+sqlite>
+
+这里看到的命令都带有“.”开头，或者说sqlite下，只有这些命令是需要带“.”的。我们会经常用到的命令有：
+
+.output FILENAME
+.output stdout
+.quit
+.read FILENAME
+.schema ?TABLE?
+.dump ?TABLE? ...
+.echo ON|OFF
+.exit
+在下面会涉及到这些具体内容的。我们慢慢来。
+
+2.4 退出sqlite3
+对于初学者，也许不知道怎么安全退出，不过如果是从头看到此处的读者也许已经知道了，
+因为刚才 .help 命令已经告诉我们答案了。安全退出有两个命令：.exit 和 .quit
+好了，我们已经新建一个名为zieckey.db的数据库，并在其中新建一个名为 SensorData 的表.
+现在我们想退出，那么可以用到刚刚提到的 .exit 和 .quit 命令。
+例如我们可以这样退出：
+sqlite> .exit
+这里需要说明一下，如果不是用 .exit 和 .quit 这两个命令退出，我们对数据库的修改有可能丢失。
+
+2.5 查看当前数据库下的所有表
+当数据库越来越大时，我们也许并不太记得数据库中有多少个表了，这时就需要查看当前数据库下的有些什么表。
+我们可以用 .tables 命令 。
+
+sqlite> .tables
+SensorData
+sqlite>

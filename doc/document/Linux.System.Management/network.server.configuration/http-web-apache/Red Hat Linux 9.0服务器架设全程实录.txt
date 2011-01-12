@@ -1,0 +1,668 @@
+Red Hat Linux 9.0服务器架设全程实录
+来自:Chinaunix.net  作者:lsw  发表于：2004-02-18 12:02:14
+
+Linux 是多用户、多任务的操作系统，具有可移植性、强大的网络功能和良好的编程环境。在Linux的发行版中已经附带了多套服务器软件，无论是架设网页服务器、邮件服务器，还是FTP服务器，都可以轻而易举地实现。本文以Red Hat Linux 9.0为基础，向你全面讲述Linux环境下服务器架设的方法与技巧。
+
+lsw 回复于：2004-02-18 12:03:13
+一、动态域名的实现
+　　1.动态域名基础
+　　搭建Linux服务器是一个系统工程，涉及到硬件购置、软件安装、域名申请、网络服务提供等。这里的前提就是域名的申请，因为对于虚拟拨号上网的用户而言，使用的都是动态IP地址，别人根本无法和你联系。
+
+　　解决的办法就是采用动态域名解析工具，通过运行一个专门的客户端程序，一旦拨号用户上线，就会把当前的动态IP地址发送到专门的动态域名解析服务器，然后该动态域名解析服务器就可以及时更新自己的数据库，把某个"固定"域名指向该临时IP地址。这样，不管现在的IP地址是多少，总是可以通过一个固定的域名来访问我们的Linux服务器。
+
+　　需要注意的是，计算机所拥有的IP地址应该是公网IP地址，也就是Internet所采用的IP地址，而非内网(局域网)IP地址。
+
+　　2.动态域名解析
+　　(1)注册动态域名
+
+　　我们可以到科迈网http://www.comexe.cn/register.php注册一个用户账户。然后在"域名管理"页面中单击"申请科迈公网免费二级域名"链接，注册一个合适的名称(例如myname)，即会得到一个myname.kmip.net的二级域名，然后单击"提交"按钮，如果该域名没有被别人注册，则可以立即生效。
+
+　　注意：本文假设用户已经完全安装Red Hat Linux 9.0，并使用KDE桌面系统。
+
+　　(2)安装动态域名解析工具
+
+　　注册成功以后，我们可以到http://www.comexe.cn/client/linux_i.tar.gz中下载动态域名解析工具(如，版本号 "公网Ver 2.00 Build 104")。下载得到的是一个压缩文件，在系统里建立一个目录，如/usr/local/comexe，把下载的文件解压到这个目录即可。
+
+　　[root@ahpeng root]# cd /tmp
+
+　　[root@ahpeng tmp]# tar -xvzf linux_i.tar.gz
+
+　　[root@ahpeng tmp]# cp pipclient /usr/local/comexe/pipclient
+
+　　(3)配置客户端
+
+　　解压后得到一个执行文件pipclient。在终端命令窗口切换到该目录并运行以下命令：
+
+　　[root@ahpeng comexe]# ./ pipclient
+
+　　第一次运行pipclient，会要求输入配置信息：
+
+　　[root@ahpeng comexe]# ./ pipclient
+
+　　Usage: pipclient -h -c -w /home/pipclient
+
+　　-h: help message.
+
+　　-c: do configuration.
+
+　　-w ＜dir＞: set work directory.
+
+　　Do configuration now.
+
+　　Input User name:　
+
+　　这里按照屏幕提示输入以下配置信息：
+
+　　Input User name：　　　//在科迈网注册的用户名
+
+　　Input Password：　　　 //科迈网用户密码
+
+　　Input Domain：　　　　 //域名
+
+　　Input Offline URL or Offline IP(Enter for none)：　//域名离线URL。如果没有请直接按回车键。这里要注意离线功能对科迈的二级域名(如abc.dns0755.net、abc.kmip.net)无效
+
+　　Has another domain?(Y/N)：　　//如果要解析多个域名，请按"Y"，逐个输入域名及其离线URL
+
+　　配置完毕后应该出现以下提示信息：
+
+　　030827 155904:MESG:
+
+　　COMEXE DDNS (Public IP) Ver 2.00a Build 102
+
+　　Copyright 2003 Shenzhen COMEXE Communication Technology Co. Ltd.
+
+　　All Rights Reserved.
+
+　　http://www.comexe.cn
+
+　　030827 155904:MESG:服务启动.
+
+　　030827 155904:INFO:Connected to:210.22.12.54:9994
+
+　　030827 155904:INFO:Connected to:210.22.12.54:9993
+
+　　030827 155904:MESG:登录成功! 出口IP是: xxx.xxx.xxx.xxx
+
+　　030827 155904:INFO:xxx.xxx.xxx.xxx N 20　
+
+　　现在可以按Ctrl+C组合键退出。如果以后要修改配置，可以在终端命令窗口运行以下命令：
+
+　　[root@ahpeng comexe]#./pipclient -c
+
+　　3.内网映射
+　　所谓内网(局域网)，就是只有一台主机(可能是代理服务器或路由器)连接到Internet，具有公网地址，假设为A1。别的计算机通过它与Internet连接，假设为A2，只有内网地址，外网计算机显然无法直接访问A2。
+
+　　要让外网用户可以访问Linux服务器，通常有三种解决思路：
+
+　　(1)如果A1是Windows主机
+
+　　如果A1是Windows主机，可以考虑安装端口映射工具，如PortTunnel，把外网计算机对A1特定端口的访问，转驳到对A2特定端口的访问。
+
+　　(2)如果你采用路由器
+
+　　如果你采用路由器，或具有路由功能的ADSL Modem，可以直接在路由器上进行设置。这里以AboveCable无线路由器为例进行介绍：
+
+　　首先在浏览器地址栏中输入"192.168.100.100"，回车进入路由器设置界面，输入密码即可进入管理界面。展开页面左侧的"重定向规则→虚拟主机"链接，然后在右侧页面中依次填上服务端口、服务器IP地址，这样外网对路由器的特定端口访问，都会被转驳到指定服务器的端口。
+
+　　(3)下载客户端程序
+
+　　登录到http://www.comexe.cn/helptruehost.php下载一个特殊的客户端程序，不过这需要支付一定的费用、并且带宽受到限制(通过专门的服务器中转)，它可以实现内网用户对外提供服务。
+
+　　4.内置防火墙的配置
+　　在搭建Linux网站时，还有一个很容易疏忽的问题，即是没有正确配置系统内置的防火墙，这可能会导致"客户"无法访问我们的Linux服务器，所以必须对防火墙进行配置。单击"主菜单→系统设置→安全级别"菜单项，即可打开"安全级别配置"对话框，如图1所示。选中"定制"选项，然后选择所需启用的服务，例如WWW、FTP、邮件(SMTP)等，最后单击"确定"按钮即可。
+
+
+
+--------------------------------------------------------------------------------
+lsw 回复于：2004-02-18 12:03:58
+二、架设Web服务器
+　　Apache是使用范围最广的Web服务器工具套件，这里我们将详细介绍如何在Red Hat Linux 9.0环境里安装、启动和配置Apache服务器。
+
+　　1.安装Apache服务器
+　　在安装Red Hat Linux 9.0时，会提示是否安装Apache服务器。如果不能确定是否已经安装，可以在终端命令窗口输入以下命令：
+
+　　[root@ahpeng root] rpm -qa | grep httpd
+
+　　如果结果显示为"httpd-2.0.40-21"，则说明系统已经安装Apache服务器。
+
+　　如果安装Red Hat Linux 9.0时没有选择Apache服务器，则可以在图形环境下单击"主菜单→系统设置→添加删除应用程序"菜单项，在出现的"软件包管理"对话框里确保选中" 万维网服务器"选项，然后单击"更新"按钮，按照屏幕提示插入安装光盘即可开始安装。
+
+　　另外，你也可以直接插入第1张安装光盘，定位到/RedHat/RPMS下的httpd-2.0.40-21.i386.rpm安装包，然后在终端命令窗口运行以下命令即可开始安装进程：
+
+　　[root@ahpeng RPMS] rpm -ivh httpd-2.0.40-21.i386.rpm
+
+　　安装好Apache服务器，可以在终端命令窗口运行以下命令来启动Apache服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/httpd start
+
+　　重新启动Apache服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/httpd restart
+
+　　关闭Apache服务：
+
+　　［root@ahpeng root］ /etc/rc.d/init.d/httpd stop
+
+　　确认Apache服务已经启动后，我们可以在Web浏览器里输入以下地址，如果可以看到默认的Apache首页，则说明Apache服务器工作正常。
+
+　　Htpp://WebServerAddress
+
+　　此处的WebServerAddress指代Web服务器的IP地址或者域名。即是说WebServerAddress应该用实际的Web服务器的IP地址或者域名来代替。
+
+　　2.配置httpd.conf文件
+　　在早期Apache服务器版本里，其配置内容分散在httpd.conf、srm.conf、access.conf三个文件里。而新版本的 Apache服务器，则统一在httpd.conf里进行配置。对于默认安装的Red Hat Linux来说，该配置文件位于/etc/httpd/conf目录下，如果安装的是tar.gz版本，则该文件位于 /usr/local/apache/conf目录。
+
+　　利用httpd.conf，我们可以对Apache服务器进行全局配置、主要或预设服务器的参数定义、虚拟主机的设置。httpd.conf是一个文本文件，我们可以用Vi、Kate等文本编辑工具进行修改。通过分析该 httpd.conf配置文件，我们不难发现：
+
+　　该配置文件分为若干个小节，例如Section 1: Global Environment(第一小节：全局环境)；Section 2: 'Main' server configuration(第二小节：主服务器配置)等。
+
+　　每个小节都有若干个配置参数，其表达形式为"配置参数名称 具体值"，每个配置参数都有详尽的英文解释(用#号引导每一个注释行)。
+
+　　为了帮助大家理解，这里给出httpd.conf的最常用配置参数：
+
+　　(1)DocumentRoot
+
+　　该参数指定Apache服务器存放网页的路径，默认所有要求提供HTTP服务的连接，都以这个目录为主目录。以下为Apache的默认值：
+
+　　DocumentRoot "/var/www/html"
+
+　　(2)MaxClients
+
+　　该参数限制Apache所能提供服务的最高数值，即同一时间连接的数目不能超过这个数值。一旦连接数目达到这个限制，Apache服务器则不再为别的连接提供服务，以免系统性能大幅度下降。本例假设最大连接数是150个：
+
+　　MaxClients 150
+
+　　(3)Port
+
+　　该参数用来指定Apache服务器的监听端口。一般来说，标准的HTTP服务默认端口号是80，一般不要更改这个数值。本例为80端口：
+
+　　Port 80
+
+　　(4)ServerName
+
+　　该参数使得用户可以自行设置主机名，以取代安装Apache服务器主机的真实名字。此名字必须是已经在DNS服务器上注册的主机名。如果当前主机没有已注册的名字，也可以指定IP地址。本例将服务器名设为Peter.vicp.net：
+
+　　ServerName Peter.vicp.net
+
+　　(5)MaxKeepAliveRequests
+
+　　当使用保持连接(Persistent Connection)功能时，可以使用本参数决定每次连接所能发出的要求数目的上限。如果此数值为0，则表示没有限制。建议尽可能使用较高的数值，以充分发挥Apache的高性能，本例设置每次连接所能发出的要求数目上限为100：
+
+　　MaxKeepAliveRequests 100
+
+　　(6)MaxRequestsPerChild
+
+　　该参数限制每个子进程(Child Process)在结束前所能处理的请求数目，一旦达到该数目，这个子进程就会被中止，以避免长时间占据Apache(或者Apache服务器所采用的函数库)，防止造成内存或者其他系统资源的超负荷。
+
+　　需要注意的是，该参数的数值并不包括保持连接所发出的请求数目。举例说明，如果某个子进程负责某一个请求，该请求随后带来保持连接功能所需的10个请求，这时候对于该参数而言，Apache服务器会认为这个子进程只处理了1个要求，而非11个要求。
+
+　　以下设置最多可以处理10个要求：
+
+　　MaxRequestsPerChild 10
+
+　　(7)MaxSpareServers 和MinSpareServers
+
+　　提供Web服务的HTTP守护进程，其数目会随连接的数目而变动。Apache服务器采用动态调整的方法，维持足够的HTTP守护进程数目，以处理目前的负载，也就是同时保持一定的空闲HTTP守护进程来等候新的连接请求。
+
+　　Apache会定期检查有多少个HTTP守护进程正在等待连接请求，如果空闲的HTTP守护进程多于MaxSpareServers参数指定的值，则 Apache会终止某些空闲进程；如果空闲HTTP守护进程少于MinSpareServers参数指定的值，则Apache会产生新的HTTP守护进程。本例将最高空闲守护进程设置为20个，将最低的空闲守护进程设置为5个：
+
+　　MaxSpareServers 20
+
+　　MinSpareServers 5
+
+　　当然这只是Apache的一些基本设置项，大家可以根据自己的实际情况加以灵活的修改，以充分发挥Apache的潜能。如果修改配置文件之后没能立即生效，可以重启Apache服务。
+
+注意：修改之前一定要先备份！
+
+　　3.图形化配置界面
+　　图形化配置直观、简单，足够应付Apache服务器的日常管理维护工作。我们可以通过单击"主菜单→系统设置→服务器设置→HTTP服务器"菜单项，或者直接在"运行命令"对话框里输入"apacheconf"命令并回车，来访问"Apache配置"对话框。可以看到该配置对话框共有4个标签页。
+
+　　(1)"主"标签页
+
+　　在"服务器名"框中可以输入服务器的名称，等同于httpd.conf文件里的"ServerName"字段。"网主电子邮件地址"框中可以输入管理员的邮件地址，等同于httpd.conf文件里的"ServerAdmin"字段。单击"可用地址"选项组中的"添加"(或者"编辑")按钮，我们可以添加或者修改服务器的IP地址和端口。
+
+　　(2)"虚拟主机"标签页
+
+　　所谓的虚拟主机服务就是指将一台计算机虚拟成多台Web服务器。利用Apache服务器提供的"虚拟主机"服务，我们可以利用一台计算机提供多个Web服务。
+
+　　用Apache设置虚拟主机服务通常可以采用两种方案：基于IP地址的虚拟主机和基于名字的虚拟主机。基于IP地址的虚拟主机的实现方法有一个严重的不足，每增加一个虚拟主机，就必须增加一个IP地址。所以这里介绍如何创建基于名字的虚拟主机。
+
+　　假设一台Apache服务器的IP地址是210.79.81.212，主机名称为www.companyname.net，同时它拥有两个别名： sales.companyname.net、marketing.companyname.net。虽然这3个网站的IP地址相同，都指向 210.79.81.212，但是由于架设了基于名字的虚拟主机，所以可以指向不同的网页。
+
+　　设置时，请单击"虚拟主机"标签页上的"添加"按钮，在打开的配置对话框的"主机信息"下拉列表框里选中"基于名称的虚拟主机"选项，然后输入合适的数据IP地址、主机名称等，记住，还要添加合适的别名，如图2所示。
+
+
+
+　　"Apache配置"对话框的其他两个标签页的设置内容基本等同于前面所介绍的httpd.conf参数配置，这里就不再介绍了。
+
+
+
+--------------------------------------------------------------------------------
+lsw 回复于：2004-02-18 12:04:28
+三、架设FTP服务器
+　　FTP，即File Transfer Protocol，文件传输协议。它是目前Internet上最流行的数据传送方法之一。利用FTP协议，我们可以在FTP服务器和FTP客户端之间进行双向数据传输，既可以把数据从FTP服务器上下载到本地客户端，又可以从客户端上传数据到远程FTP服务器。
+
+　　1.安装vsftpd服务器
+　　vsftpd是目前Linux最好的FTP服务器工具之一，其中的vs就是"Very Secure"(很安全)的缩写，可见它的最大优点就是安全，除此之外，它还具有体积小，可定制强，效率高的优点。
+
+　　如果选择完全安装Red Hat Linux 9.0，则系统会默认安装vsftpd服务器。我们可以在终端命令窗口输入以下命令进行验证：
+
+　　[root@ahpeng root] rpm -qa | grep vsftpd
+
+　　如果结果显示为"vsftpd-1.1.3-8"，则说明系统已经安装vsftpd服务器。如果安装Red Hat Linux 9.0时没有选择vsftpd服务器，则可以在图形环境下单击"主菜单→系统设置→添加删除应用程序"菜单项，在出现的"软件包管理"对话框里确保选中 "FTP服务器"选项，然后单击"更新"按钮，按照屏幕提示插入第3张安装光盘即可开始安装。
+
+　　另外，你也可以直接插入第3张安装光盘，定位到/RedHat/RPMS下的vsftpd-1.1.3-8.i386.rpm安装包，然后在终端命令窗口运行以下命令即可开始安装进程：
+
+　　[root@ahpeng RPMS] rpm -ivh vsftpd-1.1.3-8.i386.rpm
+
+　　2.启动/重新启动/停止vsftpd服务
+　　从Red Hat Linux 9.0开始，vsftpd默认只采用standalone方式启动vsftpd服务，方法是在终端命令窗口运行以下命令：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/vsftpd start
+
+　　重新启动vsftpd服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/ vsftpd restart
+
+　　关闭vsftpd服务：
+
+　　[root@ahpeng root] /etc/rc.d/init.d/ vsftpd stop
+
+　　确认vsftpd服务已经启动后，我们可以在任意一台Windows主机的DOS命令窗口里输入"ftp FTPAddres"(用实际的FTP服务器IP地址或者域名代替FTPAddres)，注意用户名、密码都是ftp(ftp是匿名用户的映射用户账号)，如下所述：
+
+　　Microsoft Windows XP [版本 5.1.2600]
+
+　　(C) 版权所有 1985-2001 Microsoft Corp.
+
+　　F:\Peter>ftp FTPAddress
+
+　　Connected to FTPAddress
+
+　　220 (vsFTPd 1.1.3) 　　//vsftpd的响应请求
+
+　　User (FTPAddress:(none)): ftp　　//输入用户账号ftp
+
+　　331 Please specify the password.
+
+　　Password:　　//输入密码ftp
+
+　　230 Login successful. Have fun.
+
+　　ftp>
+
+　　3.vsftpd的配置
+　　在Red Hat Linux 9.0里的vsftpd共有3个配置文件，它们分别是：
+
+　　vsftpd.ftpusers：位于/etc目录下。它指定了哪些用户账户不能访问FTP服务器，例如root等。
+
+　　vsftpd.user_list：位于/etc目录下。该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。
+
+　　vsftpd.conf：位于/etc/vsftpd目录下。它是一个文本文件，我们可以用Kate、Vi等文本编辑工具对它进行修改，以此来自定义用户登录控制、用户权限控制、超时设置、服务器功能选项、服务器性能选项、服务器响应消息等FTP服务器的配置。
+
+　　(1)用户登录控制
+
+　　anonymous_enable=YES，允许匿名用户登录。
+
+　　no_anon_password=YES，匿名用户登录时不需要输入密码。
+
+　　local_enable=YES，允许本地用户登录。
+
+　　deny_email_enable=YES，可以创建一个文件保存某些匿名电子邮件的黑名单，以防止这些人使用Dos攻击。
+
+　　banned_email_file=/etc/vsftpd.banned_emails，当启用deny_email_enable功能时，所需的电子邮件黑名单保存路径(默认为/etc/vsftpd.banned_emails)。
+
+　　(2)用户权限控制
+
+　　write_enable=YES，开启全局上传权限。
+
+　　local_umask=022，本地用户的上传文件的umask设为022(系统默认是077，一般都可以改为022)。
+
+　　anon_upload_enable=YES，允许匿名用户具有上传权限，很明显，必须启用write_enable=YES，才可以使用此项。同时我们还必须建立一个允许ftp用户可以读写的目录(前面说过，ftp是匿名用户的映射用户账号)。
+
+　　anon_mkdir_write_enable=YES，允许匿名用户有创建目录的权利。
+
+　　chown_uploads=YES，启用此项，匿名上传文件的属主用户将改为别的用户账户，注意，这里建议不要指定root账号为匿名上传文件的属主用户！
+
+　　chown_username=whoever，当启用chown_uploads=YES时，所指定的属主用户账号，此处的whoever自然要用合适的用户账号来代替。
+
+　　chroot_list_enable=YES，可以用一个列表限定哪些本地用户只能在自己目录下活动，如果chroot_local_user=YES，那么这个列表里指定的用户是不受限制的。
+
+　　chroot_list_file=/etc/vsftpd.chroot_list，如果chroot_local_user=YES，则指定该列表(chroot_local_user)的保存路径(默认是/etc/vsftpd.chroot_list)。
+
+　　nopriv_user=ftpsecure，指定一个安全用户账号，让FTP服务器用作完全隔离和没有特权的独立用户。这是vsftpd系统推荐选项。
+
+　　async_abor_enable=YES，强烈建议不要启用该选项，否则将可能导致出错！
+
+　　ascii_upload_enable=YES；ascii_download_enable=YES，默认情况下服务器会假装接受ASCⅡ模式请求但实际上是忽略这样的请求，启用上述的两个选项可以让服务器真正实现ASCⅡ模式的传输。
+
+　　注意：启用ascii_download_enable选项会让恶意远程用户们在ASCⅡ模式下用"SIZE/big/file"这样的指令大量消耗FTP服务器的I/O资源。
+
+　　这些ASCⅡ模式的设置选项分成上传和下载两个，这样我们就可以允许ASCⅡ模式的上传(可以防止上传脚本等恶意文件而导致崩溃)，而不会遭受拒绝服务攻击的危险。
+
+　　(3)用户连接和超时选项
+
+　　idle_session_timeout=600，可以设定默认的空闲超时时间，用户超过这段时间不动作将被服务器踢出。
+
+　　data_connection_timeout=120，设定默认的数据连接超时时间。
+
+　　(4)服务器日志和欢迎信息
+
+　　dirmessage_enable=YES，允许为目录配置显示信息，显示每个目录下面的message_file文件的内容。
+
+　　ftpd_banner=Welcome to blah FTP service，可以自定义FTP用户登录到服务器所看到的欢迎信息。
+
+　　xferlog_enable=YES，启用记录上传/下载活动日志功能。
+
+　　xferlog_file=/var/log/vsftpd.log，可以自定义日志文件的保存路径和文件名，默认是/var/log/vsftpd.log。
+
+
+
+--------------------------------------------------------------------------------
+lsw 回复于：2004-02-18 12:05:11
+四、架设邮件服务器
+　　邮件服务器是一个网站所必须的服务，在这里我们可以通过Red Hat Linux 9.0自带的Sendmail来架设邮局服务器。
+
+　　1.安装Sendmail
+　　如果是完全安装Red Hat Linux 9.0，那么系统已经内置有Sendmail 8.12.8-4服务器。如果不能确定是否已经安装sendmail，可以在终端命令窗口输入如下命令：
+
+　　[root@ahpeng root] rpm -qa | grep sendmail
+
+　　如果结果显示为"sendmail-8.12.8-4"，则说明系统已经安装sendmail服务器。如果安装Red Hat Linux 9.0时没有选择Sendmail服务器，则可以在图形环境下单击"主菜单→系统设置→添加删除应用程序"菜单项，在打开的"软件包管理"对话框中确保选中"邮件服务器"选项，然后单击"更新"按钮，按照屏幕提示插入第一张安装光盘即可开始安装。
+
+　　另外，你也可以直接插入第1张安装光盘，定位到/RedHat/RPMS目录下的sendmail-8.12.8-4.i386.rpm安装包，然后在终端命令窗口运行以下命令即可开始安装进程：
+
+　　[root@ahpeng RPMS] # rpm -ivh sendmail-8.12.8-4.i386.rpm
+
+　　用类似的方法安装sendmail-cf.8.12.8-4.i386.rpm、sendmail-doc. 8.12.8-4.i386.rpm，位于第3张安装光盘的/RedHat/RPMS目录下。
+
+　　2.启动/重新启动/停止Sendmail服务
+　　安装Sendmail服务器以后，最简单的启动方式是在终端命令窗口运行如下命令：
+
+　　[root@ahpeng root]/etc/rc.d/init.d/sendmail start
+
+　　应该会出现以下的结果，表明邮件服务器已经启动成功：
+
+　　启动 sendmail： [确定]
+
+　　启动 sm-client：[确定]
+
+　　除以上方式，我们还可以使用带参数的Sendmail命令控制邮件服务器的运行，例如：
+
+　　[root@ahpeng root]# sendmail -bd -q1h
+
+　　Sendmail的命令参数的含义如下：
+
+　　-b：指定Sendmail在后台运行，并且监听端口25的请求。
+
+　　-d：指定Sendmail以Daemon方式运行(守护进程)。
+
+　　-q：当Sendmail无法将邮件成功地发送到目的地时，它会将邮件保存在队列里。该参数指定邮件在队列里保存的时间。例子里的1h表示保留1小时。
+
+　　在终端命令窗口运行以下命令来重新启动Sendmail服务：
+
+　　[root@ahpeng root]#/etc/rc.d/init.d/sendmail restart
+
+　　在终端命令窗口运行以下命令来关闭Sendmail服务：
+
+　　[root@ahpeng root]#/etc/rc.d/init.d/sendmail stop
+
+　　我们还可以在终端命令窗口运行以下命令来检测Sendmail服务器的运行状态：
+
+　　[root@ahpeng root]# /etc/rc.d/init.d/sendmail status
+
+　　系统应该显示：
+
+　　sendmail (pid 3251) 正在运行...
+
+　　3.配置Sendmail
+　　Sendmail的配置十分复杂。它的配置文件是sendmail.cf，位于/etc/mail目录下。由于sendmail.cf的语法深奥难懂，很少有人会直接去修改该文件来对Sendmail服务器进行配置。我们一般通过m4宏处理程序来生成所需的sendmail.cf文件。创建的过程中还需要一个模板文件，系统默认在/etc/mail目录下有一个sendmail.mc模板文件。
+
+　　我们可以根据简单、直观的 sendmail.mc模板来生成sendmail.cf文件，而无需直接编辑sendmail.cf文件。可以直接通过修改sendmail.mc模板来达到定制sendmail.cf文件的目的。这里介绍创建sendmail.cf文件的步骤：
+
+　　(1)备份原有sendmail.cf文件
+
+　　在终端命令窗口运行以下命令：
+
+　　cp /etc/mial/sendmail.cf /etc/mail/sendmail.cf.BAK
+
+　　(2)生成sendmail.cf文件
+
+　　根据sendmail.mc模板文件产生sendmail.cf配置文件，并导出到/etc/mail/目录下：
+
+　　m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
+
+　　(3)重启sendmail服务
+
+　　[root@ahpeng root] /etc/rc.d/init.d/sendmail restart
+
+　　很显然，用m4宏编译工具创建sendmail.cf文件比较方便，而且不容易出错，更可以避免某些带有安全漏洞或者过时的宏所造成的破坏。一个sendmail.mc模板的大致内容如下：
+
+divert(-1)dnl
+
+　　......
+
+　　include('/usr/share/sendmail-cf/m4/cf.m4')dnl
+
+　　VERSIONID('setup for Red Hat Linux')dnl
+
+　　OSTYPE('linux')dnl
+
+　　......
+
+　　dnl #
+
+　　dnl define('SMART_HOST','smtp.your.provider')
+
+　　dnl #
+
+　　define('confDEF_USER_ID',''8:12'')dnl
+
+　　define('confTRUSTED_USER', 'smmsp')dnl
+
+　　dnl define(′confAUTO_REBUILD′)dnl
+
+　　......
+
+　　这里介绍sendmail.mc模板的语法组成：
+
+　　dnl：用来注释各项，同时dnl命令还用来标识一个命令的结束。
+
+　　divert(-1)：位于mc模板文件的顶部，目的是让m4程序输出时更加精简一些。
+
+　　OSTYPE ('OperationSystemType')：定义使用的操作系统类型，显然这里应该用linux代替OperationSystemType，注意要用一个反引号和一个正引号把对应的操作系统类型括起来。
+
+　　define：定义一些全局设置，对于Linux系统，设置了OSTYPE之后，可以定义下面的一些全局参数，如果不定义，就使用默认值。这里举两个简单例子：define('ALIAS_FILE'，'/etc/aliases')
+
+　　定义别名文件(alia file)的保存路径，默认是/etc/aliases
+
+　　define('STATUS_FILE', '/etc/mail/statistics')
+
+　　sendmail的状态信息文件。
+
+　　以上只是sendmai.mc的一些简单的语法解释，更多的参数含义及其配置信息可以参见http://www.sendmail.org/m4/tweaking_config.html。
+
+　　4.为新用户开电子邮件账号
+　　在Linux里为新用户开设电子邮件账户比较简单，只需在Linux系统里新增一个用户即可。单击"主菜单→系统设置→用户和组群"菜单项，打开 "Red Hat用户管理器"对话框，单击"添加用户"按钮，在出现的"创建新用户"对话框里指定用户名、登录口令即可，如图3所示。
+
+
+
+　　假设我们添加了一个用户Peter(密码为peter)，这样该用户就有了一个邮件地址Peter@YourDomain.com(此处的YourDomain.com用你自己域名代替)。
+
+　　以上过程也可以在终端命令窗口运行以下命令来实现：
+
+　　[root@ahpeng root]#adduser peter -p peter
+
+　　5.为电子邮件账户设置别名
+　　有一些用户想使用多个电子邮件地址，是不是需要创建多个邮件账号呢？我们可以使用别名(alias)来解决这个问题。
+
+　　比如说，用户peter想拥有以下3个电子邮件地址：
+
+　　peter@YourDomain.com、dearpeter@ YourDomain.com、truepeter@ YourDomain.com。
+
+　　我们可以通过以下步骤来实现这样的别名设置：
+
+　　新增一个账号peter；然后用vi、或者Kate等文本编辑器打开/etc/aliases，在里面加上两行：
+
+　　dearpeter: peter
+
+　　truepeter: peter
+
+　　保存该/etc/aliases退出。
+
+　　不过，就这样还不能让Sendmail接受新增的别名，我们必须在终端命令窗口运行newaliases命令，以要求Sendmail重新读取/etc/aliases文件。如果一切无误，应该可以看到类似以下的回应消息：
+
+　　[root@ahpeng root]# newaliases
+
+　　/etc/aliases: 63 aliases, longest 10 bytes, 625 bytes total
+
+　　这样，发给peter的邮件可以使用3个邮件地址，而peter只需要使用一个电子邮件账号peter@YourDomain.com就可以接收所有寄给以上3个地址的电子邮件。
+
+　　6.指定邮箱容量限制
+　　当一个邮件服务器为许多人提供邮件服务时，无限量的电子邮件将很容易塞满服务器的硬盘，造成硬盘负担。如果不想为用户提供无限空间的邮件暂存空间，可以使用"邮件限额"来给用户一个有限的暂存空间。
+
+　　其实，它是利用磁盘配额功能来实现的。电子邮件的暂存空间是在/var/spool/mail目录下，只要通过磁盘配额设定每一个用户在这个目录下能使用的最大空间即可。
+
+　　7.支持POP和IMAP功能
+　　到现在为止，我们已经可以用Outlook Express发送邮件，或者登录服务器使用mail、pine命令收取、管理邮件。但是还不能用Outlook Express等客户端从服务器下载邮件，这是因为Sendmail并不具备POP3(IMAP)的功能，所以我们必须自己安装。
+
+　　(1)POP和IMAP服务器安装
+
+　　安装Red Hat Linux 9.0时，可以选择安装POP和IMAP服务器，可以在终端命令窗口运行以下命令进行验证：
+
+　　[root@ahpeng root]# rpm -qa imap
+
+　　imap-2001a-18
+
+　　如果没有安装，可以将第2张安装光盘放进光驱，然后在终端命令窗口运行以下命令即可开始安装：
+
+　　[root@ahpeng root]#cd /mnt/cdrom/RedHat/RPMS
+
+　　[root@ahpeng root]#rpm -ivh imap-2001a-18.i386.rpm
+
+　　由于Red Hat Linux 9.0已经将POP和IMAP打包成一个单独的套件，安装好imap-2001a-18.i386.rpm，就会同时安装这两个服务器
+
+　　(2)启动POP和IMAP服务
+
+　　要成功启动POP和IMAP服务器，首先要确定这些服务存在于/etc/services文件，确保以下的服务前面没有加上#注释(如果有，必须去除注释)。
+
+　　imap　　143/tcp imap2　 # Interim Mail Access Proto v2
+
+　　imap　　143/udp imap2
+
+　　pop2　　109/tcp pop-2　 postoffice　# POP version 2
+
+　　pop2　　109/udp pop-2
+
+　　pop3　　110/tcp pop-3　 # POP version 3
+
+　　pop3　　110/udp pop-3
+
+　　修改好/etc/services文件，接下来就要对相应服务配置文件进行定制：
+
+　　启动POP3服务：必须修改/etc/xinetd.d/ipop3文件，将其中的"disable=yes"改为"disable=no"，保存该文件。最后必须重新启动xinetd程序来读取新的配置文件，使得设定内容生效：
+
+　　[root@ahpeng root]#/etc/rc.d/init.d/xinetd reload
+
+　　启动IMAP服务：必须修改/etc/xinetd.d/imap文件，将其中的"disable = yes"改为"disable =no"，保存该文件。最后必须重新启动xinetd程序来读取新的配置文件，使得设定内容生效：
+
+　　[root@ahpeng root]#/etc/rc.d/init.d/xinetd reload
+
+　　设置好以后，就可以在Outlook Express里面设置好邮件账号，以后就可以直接利用Sendmail服务器进行收发邮件了，由于邮件服务器就在本地局域网，所以速度很快。
+
+
+
+--------------------------------------------------------------------------------
+lsw 回复于：2004-02-18 12:05:42
+五、Linux下的网络邻居Samba
+　　Windows可以通过网络邻居访问局域网主机，而在Linux下可以通过Samba客户端访问局域网内的Windows主机，也可以通过Samba服务器给Windows主机提供文件、打印机服务。为了方便讲述，这里假设Windows主机的计算机名为Peter，设Linux主机的名称为 RedHat。
+
+　　1.安装Samba组件
+　　如果选择完全安装Red Hat Linux 9.0，则系统会默认安装Samba组件。我们可以在终端命令窗口输入以下命令进行验证：
+
+　　[root@ahpeng root] rpm -qa | grep samba
+
+　　如果结果出现以下所示的5个软件包，则表示已经安装：
+
+　　samba-swat-2.2.7a-7.9.0
+
+　　samba-2.2.7a-7.9.0
+
+　　redhat-config-samba-1.0.4-1
+
+　　samba-common-2.2.7a-7.9.0
+
+　　samba-client-2.2.7a-7.9.0
+
+　　如果没有安装过Samba软件包，则可以插入第1张安装光盘，然后鼠标依次单击"主菜单→系统设置→添加/删除应用程序"菜单项，打开"软件包管理"对话框，在该对话框中找到"Windows文件服务器"选项，确保该选项处于选中状态，然后单击"更新"按钮即可开始安装。
+
+　　你也可以把第1张安装光盘插入光驱，然后在终端命令窗口输入以下命令：
+
+　　[root@ahpeng root]# cd /mnt/cdrom/RedHat/RPMS
+
+　　[root@ahpeng RPMS]# rpm -ivh samba*
+
+　　[root@ahpeng RPMS]# rpm -ivh redhat-config-samba-1.0.4-1.noarch.rpm
+
+　　2.Linux主机访问Windows主机
+　　安装好Samba之后，就有了与Windows互相访问的基础。这里先介绍一下如何用字符命令方式访问Windows宿主机的共享资源。
+
+　　(1)查询宿主机的共享资源
+
+　　可以使用"smbclient -L WindowsHostName"命令(此处的WindowsHostName用Windows主机名代替)。本例是要查询Windows主机Peter 上的共享资源，可以在终端窗口输入"smbclient -L Peter"命令，然后回车即可看到Windows主机的共享资源。
+
+　　(2)连接宿主机的共享目录
+
+　　可以使用"smbclient //WindowsHostName/ShareName"命令来连接Windows主机上的某个共享文件夹，如果该共享文件夹需要用户名和密码，则可以使用"smbclient //WindowsHostName/ShareName -U UserName"命令。例如要连接Windows主机Peter上的共享目录Share，我们可以在终端窗口输入"smbclient //Peter/Share"命令然后回车即可。
+
+　　如果连接成功，即可出现"smb:\>"提示符，在该命令提示符下输入适当的命令，即可对所连接的共享目录进行操作。
+
+　　Smb支持的命令有大约40个命令，可以很方便地对共享目录进行删除、重命名、切换目录等操作。如果要列出共享目录"Share"下的具体内容，可以使用ls命令。要删除其下的test.txt文件，可以使用"del test.txt"命令。
+
+　　(3)映射网络驱动器
+
+　　我们知道，Windows下可以将共享目录映射为网络驱动器，这样就可以把共享目录当成本地文件夹来使用。在Linux下可以借助于smbmount命令来实现，具体的命令参数是"smbmount //WindowsHostName/ShareName /mnt/smbdir"(此处的ShareName指代Windows共享资源名称，smbdir指代挂载点名称)。假设要将Windows主机 Peter下的共享文件夹Share映射为/mnt/WinShare目录，具体步骤是：
+
+　　首先在/mnt目录下创建一个目录，假设为/mnt/WinShare；
+
+　　然后打开终端命令窗口，运行"smbmount //Peter/Share /mnt/WinShare"即可；
+
+　　现在再在文件管理器里打开/mnt/WinShare目录可以看到共享目录的内容！要卸载该映射目录，可以使用umount命令。
+
+　　(4)用Nautilus访问Windows主机
+
+　　借助Gnome桌面下的文件管理器Nautilus，我们可以用图形界面来访问Windows主机，这里要注意的是Nautilus只是提供访问Windows主机的图形界面，具体的底层操作还是借助于Samba客户端来完成。
+
+　　在Gnome桌面环境下，单击"主菜单→网络服务器"菜单项，即可用Nautilus文件管理器查看工作组列表。双击工作组名称，即可看到其下的Windows主机。
+
+　　 双击其中的某台Windows主机图标，即可看到该主机的共享文件夹，可以看到这和Windows下的网络邻居几乎一样。
+
+　　由于Nautilus本身就是Red Hat Linux的文件管理器，所以我们可以任意往Windows共享目录里拷贝文件、删除文件、创建目录等等(对于Windows 2000/XP主机还需要考虑该共享资源的权限设置)。
+
+　　3.Windows主机访问Linux主机
+　　要想让Windows宿主机能够访问Linux虚拟机，就必须在Linux虚拟机上启动Samba服务。在启动之前，还需要对Samba服务的属性进行配置，例如指定Linux虚拟机的共享目录、所在的工作组名称等。
+
+　　(1)配置Samba服务器
+
+　　在以前版本的Red Hat Linux，我们必须直接修改Samba配置文件smb.conf，或者使用SWAT对Samba进行全方位的设置。Red Hat Linux 9.0新引入了一个图形化的Samba服务器配置工具，可以让我们很方便地对Samba服务器进行配置。以root用户身份登录系统，单击"主菜单→系统设置→服务器设置→Samba服务器"菜单项，即可打开Samba服务器配置对话框。也可以在终端命令窗口输入"redhat-config- samba"，来访问Samba服务器配置对话框。
+
+　　首先对Samba服务器的基本设置和安全选项进行配置，单击配置对话框上的"首选项→服务器设置"菜单项，即可打开服务器设置对话框。
+
+　　基本设置：在对话框的"基本"标签页，我们可以指定Linux主机所在的工作组名称，需要注意的是，此处的工作组名称不一定非得与Windows主机所在的工作组名称一致。
+
+　　安全设置：然后进行Samba服务器安全设置，这里一共有4个选项。
+
+　　"验证模式"代表如果Windows主机不是位于NT域里，此处应该选择"共享"验证模式，这样只有在连接Samba服务器上的指定共享时才要求输入用户名、密码；"验证服务器"代表对于"共享"验证模式，无需启用此项设置；"加密口令"选项应该选择"是"，这样可以防止黑客用嗅探器截获密码明文；"来宾账号"代表当来宾用户要登录入 Samba 服务器时，他们必须被映射到服务器上的某个有效用户。选择系统上的现存用户名之一作为来宾Samba账号。当用户使用来宾账号登录入 Samba 服务器，他们拥有和这个用户相同的特权。
+
+　　添加共享目录：单击Samba配置对话框工具栏上的"增加"按钮。在打开的对话框中的" 基本"标签页上，指定(共享)目录为某个存在的目录，例如可以指定/tmp，再指定该目录的基本权限是只读还是读/写。在"访问"标签页上，可以指定允许所有用户访问、或者只允许某些用户访问。
+
+　　(2)启动Samba服务器
+
+　　打开终端命令窗口，输入"/sbin/service smb start"命令，即可出现以下提示信息，表示Samba服务已经启动。
+
+　　# /sbin/service smb start
+
+　　启动SMB 服务　[确定]
+
+　　启动NMB 服务　[确定]
+
+　　接下来在Windows里打开"网络邻居"，就可以看到我们刚才设置的Samba服务器了！

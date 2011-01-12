@@ -1,0 +1,77 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CFindDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CFindDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>314</width>
+            <height>168</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>checkBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>50</y>
+                <width>87</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>checkBox1</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>getMsgPushButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Get Message</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>msgTextLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>100</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>textLabel1</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">cfinddialog.ui.h</include>
+</includes>
+<slots>
+    <slot>setMsg( const QString &amp; str )</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

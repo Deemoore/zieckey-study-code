@@ -1,0 +1,437 @@
+据我的了解config.sub是用来在运行configure的时候，使得到的运行平台的系统名字规范化。
+也就是config.guess是用来猜测平台信息的，而这个用来规范它得到的信息  ??????
+
+
+
+
+./configure 出现下面的错误：
+configure: error: cannot run /bin/sh ./config.sub
+未装 libtool ？
+sudo apt-get install libtool
+没用，接着：
+cp -f /usr/share/misc/config.sub config.sub
+cp -f /usr/share/misc/config.guess config.guess
+
+	[weizili@hi43 zjson]$ cp /usr/share/automake-1.9/config.sub .
+	[weizili@hi43 zjson]$ cp /usr/share/automake-1.9/config.guess .
+
+还不行？
+
+libtool 已安装了
+libtool-ltdl
+libtool-ltdl-devel
+这两个安装了没有，
+如没有就可以吧!
+yum -y install libtool-ltdl libtool-ltdl-devel
+
+
+
+
+required file ./ltmain.sh not found
+Libtool comes with a tool called libtoolize that will install libtool's supporting files into a package. Running this command will install `ltmain.sh'. You should execute it before aclocal and automake. 
+运行一下：libtoolize
+
+
+
+
+make的时候libtool:link: only absolute run-paths are allowed错误
+解决办法：要修改/tslib/plugins/Makefile里面找rpath
+将LDFLAGS :=$(LDFLAGS) -rpath $(PLUGIN_DIR)
+修改为：
+LDFLAGS :=$(LDFLAGS) -rpath `cd $(PLUGIN_DIR) && pwd`
+（参考自http://blog.chinaunix.net/u1/44087/showart_346684.html）
+
+
+env LIBTOOL=/usr/bin/libtool make 
+
+
+
+
+
+
+
+
+configure.in:5: error: possibly undefined macro: AC_INIT_AUTOMAKE
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+AC_INIT_AUTOMAKE可能無效，這個問題是因為aclocal命令沒成功導致還是因為什麼原因導致的？後面的步驟都沒法執行了，儘管能執行生成makefile，但make時報錯
+謝謝指點
+
+使用automake等遇到的問題
+AC_INIT_AUTOMAKE 改成AM_INIT_AUTOMAKE
+
+
+
+加上下面的变量会定义一些路径
+AC_SUBST([abs_srcdir])
+AC_SUBST([abs_build_dir])
+AC_SUBST([abs_top_srcdir])
+AC_SUBST([abs_top_builddir])
+
+
+abs_srcdir  当前Makefile.am所在路径
+abs_top_builddir 最顶层的configure等工程路径
+abs_top_srcdir 最顶层的configure等工程路径
+
+自定义变量，在 configure.in 文件中定义 AC_SUBST([abs_installdir], ["$(pwd)/debug"])，这样就定义了 abs_installdir(./debug 就是它代表的目录) 变量。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+预编译头 gch pch
+## Process this file with automake to produce Makefile.in
+
+SUBDIRS = generation correlations stats clustering
+
+AM_CPPFLAGS =\
+    -I. -I.. \
+    -I../boost-workaround \
+    -DHAVE_CONFIG_H
+
+	AM_CXXFLAGS =\
+	    -Wall \
+	    $(PYTHON_CPPFLAGS) \
+	    $(BOOST_CPPFLAGS)
+	
+	AM_CFLAGS=$(AM_CXXFLAGS)
+	
+	libgraph_tool_coredir = $(pythondir)/graph_tool
+	
+	libgraph_tool_core_LTLIBRARIES = libgraph_tool_core.la
+	
+	libgraph_tool_core_la_includedir = $(pythondir)/graph_tool/include
+	
+	libgraph_tool_core_la_SOURCES = \
+	    graph_bind.cc \
+	    graph.cc \
+	    graph_copy.cc \
+	    graph_filtering.cc \
+	    graph_io.cc \
+	    graph_properties.cc \
+	    graph_python_interface.cc \
+	    graph_python_interface_export.cc \
+	    graph_selectors.cc \
+	    graphml.cpp\
+	    read_graphviz_spirit.cpp\
+	    ../boost-workaround/boost/graph/filtered_graph.hpp\
+	    ../boost-workaround/boost/graph/graphml.hpp
+	
+	libgraph_tool_core_la_include_HEADERS = \
+	    graph_adaptor.hh \
+	    graph_filtering.hh \
+	    graph.hh \
+	    graph_properties.hh \
+	    graph_python_interface.hh \
+	    graph_selectors.hh \
+	    graph_util.hh \
+	    histogram.hh \
+	    mpl_nested_loop.hh \
+	    shared_map.hh \
+	    numpy_bind.hh \
+	    ../../config.h
+	
+	# leave out precompiled headers for now, since it doesn't seem to help much
+	# BUILT_SOURCES = \
+	#     graph_filtering.hh.gch
+	
+	# ## Header precompilation
+	# ## FIXME: need a better way to convince libtool to let us do this.
+	# $(libgraph_tool_la_include_HEADERS):
+	
+	# $(BUILT_SOURCES):
+	#       $(CXXCOMPILE) $(CXXFLAGS) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -fPIC -DPIC -x c++-header `basename $@ .gch`
+	# mostlyclean-local:
+	#       -rm -f *.gch
+	
+	libgraph_tool_core_la_LIBADD = \
+	    $(PYTHON_LDFLAGS) \
+	    $(BOOST_LDFLAGS) \
+	    $(OPENMP_LDFLAGS) \
+	    -lboost_python \
+	    -lboost_iostreams \
+	    -lexpat
+	
+	# needed for typeinfo objects to work across DSO boundaries.
+	# see http://gcc.gnu.org/faq.html#dso
+	libgraph_tool_core_la_LDFLAGS = \
+	    -module \
+	    -avoid-version \
+	    -export-dynamic \
+	    -no-undefined \
+	    -Wl,-E
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+---------------------------------------------
+
+
+ACLOCAL_AMFLAGS = -I m4 -I m4-local
+SUBDIRS         = intl po tests
+EXTRA_DIST      = build-aux/config.rpath windows kdevelop scripts
+
+bin_PROGRAMS    = i3
+CLEANFILES      = *.gcno po/stamp-po #XXXpo/stamp-po!?
+DISTCLEANFILES  =
+BUILT_SOURCES   =
+DISTCHECK_CONFIGURE_FLAGS = --disable-nls
+	
+	if ENABLE_DEBUG
+	bin_PROGRAMS  += i3_test i3_test2 mil_test mil_profile
+	WARNING_OPTIONS = \
+	 -Wall \
+	 -Wextra \
+	 -Wcast-align \
+	 -Wcast-qual \
+	 -Winit-self \
+	 -Winvalid-pch \
+	 -Wpointer-arith \
+	 -Wwrite-strings \
+	 -Wfloat-equal \
+	 -Wformat=2 \
+	 -Wimplicit \
+	 -Wmissing-braces \
+	 -Wdisabled-optimization \
+	 -Wconversion \
+	  \
+	 -Wno-non-virtual-dtor \
+	 -Wno-unused
+	
+	#-Wno-unused-value
+	#-Wno-unused-parameter
+	#-Wno-missing-field-initializers
+	
+	#
+	# -Weffc++ \
+	# -Wpadded \
+	# -Wunsafe-loop-optimizations \
+	# -Wdisabled-optimization \
+	#
+	
+	else
+	WARNING_OPTIONS = -Wall -Wextra
+	endif
+	
+	# gcc precompiled header files
+	gch_files =
+	if ENABLE_DEBUG
+	if USE_GCC_PRECOMPILED_HEADER
+	BUILT_SOURCES += ${gch_files}
+	gch: ${gch_files}
+	else
+	gch:
+	endif
+	else
+	gch:
+	endif
+	
+	include am/i3.am
+	include am/i3_test.am
+	include am/mil_test.am
+	include am/mil_profile.am
+	include am/fakecygpty.am
+	
+	dist-hook:
+	        cp -ru ${top_srcdir}/am ${top_srcdir}/src ${top_distdir}
+	        cd ${top_distdir} && sh ${abs_top_srcdir}/scripts/clean_distdir.sh
+	
+	# copy locale file for windows
+	windows-locale:
+	        perl windows/locale.pl ${PACKAGE_NAME}
+	
+	if WITH_OS_WINDOWS
+	if WITH_GUI_WINDOWS
+	
+	windows/bin/i3.exe: i3.exe
+	        cp i3.exe windows/bin/i3.win9x.exe
+	
+	# dist
+	windows-dist: \
+	    windows/bin/i3.Release.Win32.exe \
+	    windows/bin/i3.Release.x64.exe \
+	    windows/bin/i3.win9x.exe
+	        perl windows/dist.pl ${PACKAGE_TARNAME} ${PACKAGE_VERSION}
+	
+	endif
+	endif
+	
+	
+	
+-----------------------=-----------------------------------------
+
+Import de la version initial (tag v1_27 du CVS)
+
+# ==========================================================================
+# $Source: /Users/gautier/CVS/Kaapi/Makefile.am,v $
+# Copyright(c)'2004 by Apache Team, MOAIS Team
+# see the copyright file for more information
+# Author: T. Gautier
+# Makefile.am for Kaapi library
+#
+# ==========================================================================
+
+lib_LIBRARIES= libkaapi.a
+EXTRA_LIBRARIES= libsocknet.a libgmnet.a libmpinet.a
+libkaapi_a_LIBADD= @SOCKNET_LIBOBJ@ @GMNET_LIBOBJ@ @MPINET_LIBOBJ@
+libkaapi_a_DEPENDENCIES= @SOCKNET_LIB@ @GMNET_LIB@ @MPINET_LIB@
+
+libkaapi_a_CPPFLAGS=-I${srcdir}/src -I${srcdir}/network -I${srcdir}/shmnet -I${srcdir}/socknet -I${srcdir}/utils
+CLEANFILES=kaapi.gch libsocknet.a
+nobase_include_HEADERS=kaapi_config.h
+
+bin_SCRIPTS=bin/karun bin/kanewnode bin/kaapi.sh bin/kaapi.csh bin/kasysinfo.default bin/kasysinfo.oar bin/kasysinfo.macosx bin/kaaddnode.macosx
+
+bin_PROGRAMS= kaapichkinfo kaapipsinfo kaapichkmanager kaapiserver kaapiadmin
+kaapiserver_LDADD=${lib_LIBRARIES}
+kaapiadmin_LDADD=${lib_LIBRARIES}
+kaapichkmanager_LDADD=${lib_LIBRARIES}
+kaapichkinfo_LDADD=${lib_LIBRARIES}
+kaapipsinfo_LDADD=${lib_LIBRARIES}
+#CPPFLAGS=${libkaapi_a_CPPFLAGS} -I.
+kaapiserver_SOURCES=bin/kaapiserver.cpp
+kaapiadmin_SOURCES=bin/kaapiadmin.cpp
+kaapichkmanager_SOURCES=bin/kaapichkmanager.cpp
+kaapichkinfo_SOURCES=bin/kaapichkinfo.cpp
+kaapipsinfo_SOURCES=bin/kaapipsinfo.cpp
+
+#
+# SOCK Network
+#
+libsocknet_a_SOURCES=socknet/socknet_addr.cpp     socknet/socknet_sockclient.cpp ${SOCKNET_H}
+
+
+#
+# GM Network
+#
+GMNET_H=gmnet/gmnet_addr.h       gmnet/gmnet_channel.h  gmnet/gmnet_error.h
+
+libgmnet_a_SOURCES=gmnet/gmnet_addr.cpp     gmnet/gmnet_error.cpp         gmnet/gmnet_skeleton.cpp
+${GMNET_H}
+
+
+#
+# MPI Network
+#
+MPINET_H=mpinet/mpinet_addr.h            mpinet/mpinet_channel.h         mpinet/mpinet_error.h
+
+libmpinet_a_SOURCES=mpinet/mpinet_addr.cpp          mpinet/mpinet_error.cpp         mpinet/mpinet_skeleton.cpp
+${MPINET_H}
+
+
+#
+# Base of Kaapi
+#
+libkaapi_a_SOURCES=\
+utils/utils_init.cpp\
+shmnet/shmnet_network_init.cpp
+
+
+include_HEADERS=\
+kaapi\
+utils/utils_init.h\
+utils/utils_fwd.h\
+utils/utils_allocator.h\
+utils/utils_error.h\
+socknet/socknet_addr.h
+
+#
+# Rules to build precompiled header with g++ on MacOS X
+#
+kaapi.gch: ${srcdir}/kaapi $(patsubst %,$(srcdir)/%, $(include_HEADERS))
+	${CXXCOMPILE} -x c++-header @KAAPILIB_CPPFLAGS@ -c ${srcdir}/kaapi -o kaapi.gch
+
+if KAAPI_DARWIN
+${libkaapi_a_SOURCES} ${libsocknet_a_SOURCES} ${kaapiserver_SOURCES} ${kaapichkmanager_SOURCES} ${kaapichkinfo_SOURCES} ${kaapipsinfo_SOURCES}: kaapi.gch
+endif
+
+	    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+预编译头的Makefile文件:
+
+include ../Makefile
+
+CPPFLAGS+=-I./include -c -fPIC
+LDFLAGS= -shared -L../../debug/lib -lrt -lpthread -llog4cxx -lpcre
+
+VPATH=./include/ ./src
+
+object = HAppShell.o HAsyncWorkSet.o HClassType.o HDataStream.o HDynLib.o HDynLibManager.o HEvent.o HFileUtil.o HFSFile.o HInstanceC
+ounter.o HJSONArray.o HJSONObject.o HJSONValue.o HJSONTokener.o HLock.o HLog.o HLogManager.o HMemAlloc.o HNetInvokee.o HNetUtility.o
+ HObject.o HOS.o HOSLibPrerequisits.o HOS_LinuxImpl.o HReadWriteFile.o HRingBuffer.o HServerCleaner.o HString.o HThread.o HTimer.o H
+UUID.o HXmlConfig.o tinyxml.o tinyxmlerror.o tinyxmlparser.o
+
+dest=libhoslib.so
+
+GCH=HOSLibPrerequisits.h.gch
+GCH_H=HOSLibPrerequisits.h
+
+%o:%cpp $(GCH)
+        $(CXX) $< $(CPPFLAGS)
+
+$(dest):$(object)
+        $(CXX) $^ $(LDFLAGS) -o $(dest)
+        mv $(dest) ../../debug/lib
+
+
+$(GCH):$(GCH_H)
+        $(CXX) $< $(CPPFLAGS)
+
+all:$(dest)
+
+
+.PHONY:clean
+
+clean:
+        $(RM) $(object) $(dest) ./include/$(GCH)
+	    

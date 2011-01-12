@@ -1,0 +1,118 @@
+Qt教程一 —— 第五章：组装积木
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+这个例子显示了创建几个窗口部件并用信号和槽把它们连接起来，和如何处理重新定义大小事件。
+
+/****************************************************************
+**
+** Qt教程一 - 5
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qslider.h>
+#include <qlcdnumber.h>
+#include <qfont.h>
+
+#include <qvbox.h>
+
+class MyWidget : public QVBox
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd" );
+
+    QSlider * slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+
+    connect( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+}
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+
+一行一行地解说
+
+    #include <qapplication.h>
+    #include <qpushbutton.h>
+    #include <qslider.h>
+    #include <qlcdnumber.h>
+    #include <qfont.h>
+
+    #include <qvbox.h>
+
+这里显示的是三个新的被包含的头文件。qslider.h和qlcdnumber.h在这里是因为我们使用了两个新的窗口部件，QSlider和QLCDNumber。qvbox.h在这里是因为我们使用了Qt的自动布局支持。
+
+    class MyWidget : public QVBox
+    {
+    public:
+        MyWidget( QWidget *parent=0, const char *name=0 );
+    };
+
+    MyWidget::MyWidget( QWidget *parent, const char *name )
+            : QVBox( parent, name )
+    {
+
+MyWidget现在继承了QVBox，而不是QWidget。我们通过这种方式来使用QVBox的布局（它可以把它的子窗口部件垂直地放在自己里面）。重新定义大小自动地被QVBox处理，因此现在也就被MyWidget处理了。
+
+        QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd" );
+
+lcd是一个QLCDNumber，一个可以按像LCD的方式显示数字的窗口部件。这个实例被设置为显示两个数字，并且是this的子窗口部件。它被命名为“lcd”。
+
+        QSlider * slider = new QSlider( Horizontal, this, "slider" );
+        slider->setRange( 0, 99 );
+        slider->setValue( 0 );
+
+QSlider是一个经典的滑块，用户可以通过在拖动一个东西在一定范围内调节一个整数数值的方式来使用这个窗口部件。这里我们创建了一个水平的滑块，设置它的范围是0~99（包括0和99，参见QSlider::setRange()文档）并且它的初始值是0。
+
+        connect( slider, SIGNAL(valueChanged(int)), lcd, SLOT(display(int)) );
+
+这里我们是用了信号/槽机制把滑块的valueChanged()信号和LCD数字的display()槽连接起来了。
+这一行在两个Qt对象（直接或间接继承QObject对象的对象）中建立了一种单向的连接。每一个Qt对象都有signals（信号--发送消息）和slots（槽--接收消息）。所有窗口部件都是Qt对象。它们继承QWidget，而QWidget继承QObject。第一个对象 “slider”发送一个信号，以 SIGNAL(valueChanged(int) 方式发送一个 valueChanged(int) 信号,并且带有参数，该参数随之一起发送出去;第二个对象“lcd”得到这个信号并作出响应，响应通过 SLOT(display(int)) 方式到达 lcd->display(int),并传入一个参数，该参数由信号中发出的参数决定，然汉执行该函数定义的功能。
+
+
+无论什么时候滑块的值发生了变化，它都会通过发射valueChanged()信号来广播这个新的值。因为这个信号已经和LCD数字的display()槽连接起来了，当信号被广播的时候，这个槽就被调用了。这两个对象中的任何一个都不知道对方。这就是组件编程的本质。
+
+槽和普通C++成员函数的方式不同，但有着普通C++成员函数的应用和书写规则。
+
+行为
+
+LCD数字反应了你对滑块做的一切，并且这个窗口部件很好地处理了重新定义大小事件。注意当窗口被重新定义大小（因为它可以）的时候，LDC数字窗口部件也改变了大小，但是其它的还是和原来一样（因为如果它们变化了，看起来好像很傻）。
+
+（请看第一章来学习如何创建一个makefile文件和连编应用程序。）
+
+
+练习
+
+试着改变LCD数字，添加更多的数字或者改变模式。你甚至可以添加四个按钮来设置基数。
+
+你也可以改变滑块的范围。
+
+也许使用QSpinBox比滑块更好？
+
+试着当LCD数字溢出的时候使这个应用程序退出。
+
+现在你可以进行第六章了。 

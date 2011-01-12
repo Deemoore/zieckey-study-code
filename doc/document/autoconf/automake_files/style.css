@@ -1,0 +1,261 @@
+/* Yahoo!'s Reset Stylesheet begin */
+/*
+Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.7.0
+*/
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{font-size:100%;}
+/* Yahoo!'s Reset Stylesheet end */
+
+/* Our default settings begin */
+a img {
+  border:none;
+}
+
+a {
+  color: #6292f5;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:link {
+  color: #6292f5;
+}
+
+a:visited {
+  color: #6292f5;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #6292f5;
+}
+
+ul, ol {
+  padding-left: 3em;
+  margin: 0.5em 0em;
+}
+
+li {
+  list-style: disc;
+  margin-bottom: 0.25em;
+}
+
+blockquote {
+  padding-left: 3em;
+  margin-bottom: 0.25em;
+}
+
+dl dt {
+  font-weight:bold;
+}
+
+dl dd {
+  padding-left: 3em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.25em 0em;
+  font-weight: bold;
+}
+
+/* make sure that images, for example, don't float over headings 1, 2 and 3 */
+h1, h2, h3 {
+  clear: both;
+}
+
+pre {
+  font-family:  monospace;
+  color: #555;
+  margin: auto 1em auto 1em;
+  padding-left: 1em;
+  padding-bottom: 1em;
+  /* border-left: 5px solid #ddd; */
+}
+
+/* Our default settings end */
+
+/* Since we have no dedicated page container the body element will have to suffice for alignments. */
+/* TODO: So why not add one? murrayc. */
+body {
+  margin: 0.5em;
+  border: 0.15em solid #444;
+  border-radius: 1em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  background: #6699FF; /* blue. Usually covered by a white block (such as contentsbox) to create a border .*/
+  
+  font-family: sans-serif;
+}
+
+
+/* Menu CSS begin */
+#menu {
+  padding: 2em 0.5em 0 2em;
+}
+
+#menu a {
+  text-decoration: none;
+  color: white;
+}
+
+#menu div.menu_title {
+  margin-bottom: 1.5em;
+}
+
+#menu div.menu_item_group_box {
+  text-align: right; /* Also aligns any child element, not just text. */
+  font-weight: bold;
+
+  margin: 0.5em;
+}
+
+#menu div.menu_item_box {
+  color: #6699FF; /* blue */
+  background: #fff;
+  
+  border-top-right-radius: 0.2em;
+  border-top-left-radius: 0.2em;
+  -webkit-border-top-right-radius: 0.2em;
+  -webkit-border-top-left-radius: 0.2em;
+  -moz-border-radius-topleft: 0.2em;
+  -moz-border-radius-topright: 0.2em;
+ 
+  padding: 0.5em;
+  margin-left: 0.2em; /* Put some space between elements. */
+ 
+  display:inline;}
+
+#menu div.menu_item a {
+  color: #6292f5;
+}
+
+#menu div.menu_item_box a:link {
+  color: #6292f5;
+}
+
+#menu div.menu_item_box a:visited {
+  color: #6292f5;
+}
+
+#menu div.menu_item_box a:hover {
+  text-decoration: underline;
+  color: #6292f5;
+}
+/* Menu CSS end */
+
+/* Contents CSS begin */
+div.contentsbox { /* Should be an CSS ID, not a CSS class. IDs make great namespaces. */
+  margin: 0.25em;
+  margin-top: 0;
+  background: #fff; /* white */
+  border-radius: 0.8em;
+  -webkit-border-radius: 0.8em;
+  -moz-border-radius: 0.8em;
+
+  padding: 0.75em;
+}
+
+div.contentsbox h2,
+div.contentsbox h3 {
+  font-weight: bold;
+  background: #6292f5;
+  color: white;
+
+  margin: 0em;
+  margin-bottom: 0.5em;
+
+  border-bottom: 0.1em solid #444;
+  border-top-right-radius: 0.3em;
+  border-top-left-radius: 0.3em;
+  -webkit-border-top-right-radius: 0.3em;
+  -webkit-border-top-left-radius: 0.3em;
+  -moz-border-radius-topright: 0.3em;
+  -moz-border-radius-topleft: 0.3em;
+}
+
+div.contentsbox h2 {
+  font-size: 1.5em;
+
+  padding: 0.25em 0.4em;
+}
+
+div.contentsbox h3 {
+  font-size: 1.25em;
+  
+  padding: 0.1em 0.4em;
+}
+
+div.contentsbox p {
+  margin-bottom: 0.5em;
+}
+
+div.contentsbox div.headerbox,
+div.contentsbox div.projectsbox {
+  background: white;
+
+  padding: 0em;
+  margin: 0em;
+  margin-bottom: 1.5em;
+}
+
+div.contentsbox div.projectsimage {
+  margin: 0em;
+  margin-left: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+div.contentsbox div.projectsimage img {
+  border: 0.1em solid #333; 
+}
+
+div.contentsbox div.pushtoright {
+  clear: both;
+  text-align: right;
+
+  margin-top: 0.5em;
+}
+
+div.contentsbox div.shoutbox {
+    color: white;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    font-size: 200%;
+    font-family: sans-serif;
+    background: #444;
+
+    padding: .25em;
+    padding-top: 1em;
+    margin: 0em;
+    margin-left: .5em;
+
+    height: 15em;
+    
+    border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;;
+}
+
+div.image {
+  width: 410px;
+  border: thin silver solid;
+  margin: 0.5em;
+  padding: 0.5em;
+  float: right;
+  overflow: hidden;
+}
+
+div.thumbnail {
+  text-align: center;
+}
+
+div.image p {
+  text-align: left;
+  font-style: italic;
+  font-size: smaller;
+  text-indent: 0;
+}
+/* Contents CSS end */
+

@@ -1,0 +1,168 @@
+　　 进程由fock函数创建，在unistd.h库中定义如下：
+　　
+　　　　#include	<unistd.h>
+　　　　pid_t fock(void);
+　　
+　　 fock函数调用一次却返回两次；向父进程返回子进程的ID，向子进程中返回0，
+这是因为父进程可能存在很多过子进程，所以必须通过这个返回的子进程ID来跟踪子进程，
+而子进程只有一个父进程，他的ID可以通过getppid取得。下面程序创建一个子进程：　 
+
+/*******************************************************************************************
+** Name:fork.c
+**	This program is used to show the usage of fork() .
+** Author:zieckey,(zieckey@yahoo.com.cn)
+** Date:2007/9/29 21:33
+** All rights reserved!
+*******************************************************************************************/
+#include <unistd.h>
+#include <stdio.h>
+
+int main(void)
+{
+	pid_t pid;
+	int count=0;
+	pid = fork();
+	
+	printf( "This is first time, pid = %d\n", pid );
+	printf( "This is second time, pid = %d\n", pid );	
+	count++;
+	printf( "count = %d\n", count );
+	
+	if ( pid>0 )
+	{
+		printf( "This is the parent process,the child has the pid:%d\n", pid );
+	}	
+	else if ( !pid )
+	{		
+		printf( "This is the child process.\n");
+	}
+	else 
+	{
+		printf( "fork failed.\n" );
+	}
+	
+	printf( "This is third time, pid = %d\n", pid );
+	printf( "This is fouth time, pid = %d\n", pid );	
+	
+	return 0;
+}
+
+
+[root@localhost src]# gcc fork.c 
+[root@localhost src]# ./a.out 
+This is first time, pid = 0
+This is second time, pid = 0
+count = 1
+This is the child process.
+This is third time, pid = 0
+This is fouth time, pid = 0
+This is first time, pid = 3512
+This is second time, pid = 3512
+count = 1
+This is the parent process,the child has the pid:3512
+This is third time, pid = 3512
+This is fouth time, pid = 3512
+
+问题：
+这个结果太奇怪了，为什么printf的语句执行两次，
+而那句“count++;”的语句却只执行了一次
+
+
+
+#include <unistd.h>
+#include <stdio.h>
+
+int main(void)
+{
+	pid_t pid;
+	int count=0;
+	pid = fork();
+	
+	printf( "Now, the pid returned by calling fork() is %d\n", pid );
+	
+	if ( pid>0 )
+	{
+		printf( "This is the parent process,the child has the pid:%d\n", pid );
+		printf( "In the parent process,count = %d\n", count );
+	}	
+	else if ( !pid )
+	{		
+		printf( "This is the child process.\n");
+		printf( "Do your own things here.\n" );
+		count ++;
+		printf( "In the child process, count = %d\n", count );
+	}
+	else 
+	{
+		printf( "fork failed.\n" );
+	}
+	
+	return 0;
+}
+[root@localhost src]# gcc fork.c 
+[root@localhost src]# ./a.out 
+Now, the pid returned by calling fork() is 0
+This is the child process.
+Do your own things here.
+In the child process, count = 1
+Now, the pid returned by calling fork() is 4139
+This is the parent process,the child has the pid:4139
+In the parent process,count = 0
+[root@localhost src]# 
+
+这个程序的执行效果上，可以窥探fork函数的机理。
+现在来解释上面提出的问题。
+首先我们来看看APUE2中对fork的说明：
+The new process created by fork is called the child process. This function is called once but returns twice. The only difference in the returns is that the return value in the child is 0, whereas the return value in the parent is the process ID of the new child. The reason the child's process ID is returned to the parent is that a process can have more than one child, and there is no function that allows a process to obtain the process IDs of its children. The reason fork returns 0 to the child is that a process can have only a single parent, and the child can always call getppid to obtain the process ID of its parent. (Process ID 0 is reserved for use by the kernel, so it's not possible for 0 to be the process ID of a child.)
+被fork创建的新进程叫做自进程。fork函数被调用一次，却两次返回。返回值唯一的区别是在子进程中返回0，而在父进程中返回子进程的pid。在父进程中要返回子进程的pid的原因是父进程可能有不止一个子进程，而一个进程又没有任何函数可以得到他的子进程的pid。
+
+Both the child and the parent continue executing with the instruction that follows the call to fork. The child is a copy of the parent. For example, the child gets a copy of the parent's data space, heap, and stack. Note that this is a copy for the child; the parent and the child do not share these portions of memory. The parent and the child share the text segment (Section 7.6).
+子进程和父进程都执行在fork函数调用之后的代码，子进程是父进程的一个拷贝。例如，父进程的数据空间、堆栈空间都会给子进程一个拷贝，而不是共享这些内存。
+
+Current implementations don't perform a complete copy of the parent's data, stack, and heap, since a fork is often followed by an exec. Instead, a technique called copy-on-write (COW) is used. These regions are shared by the parent and the child and have their protection changed by the kernel to read-only. If either process tries to modify these regions, the kernel then makes a copy of that piece of memory only, typically a "page" in a virtual memory system. Section 9.2 of Bach [1986] and Sections 5.6 and 5.7 of McKusick et al. [1996] provide more detail on this feature.
+
+
+我们来给出详细的注释：
+#include <unistd.h>
+#include <stdio.h>
+
+int main(void)
+{
+	pid_t pid;
+	int count=0;
+	/*此处，执行fork调用，创建了一个新的进程，
+	这个进程共享父进程的数据和堆栈空间等，这之后的代码指令为子进程创建了一个拷贝。
+	fock 调用是一个复制进程，fock 不象线程需提供一个函数做为入口， 
+	fock调用后，新进程的入口就在 fock的下一条语句。*/
+	pid = fork();
+	
+	/*此处的pid的值，可以说明fork调用后，目前执行的是那父进程还是子进程*/
+	printf( "Now, the pid returned by calling fork() is %d\n", pid );
+	
+	if ( pid>0 )
+	{				
+		/*当fork在子进程中返回后，fork调用又向父进程中返回子进程的pid，
+		如是该段代码被执行，但是注意的事，count仍然为0，
+		因为父进程中的count始终没有被重新赋值,
+		这里就可以看出子进程的数据和堆栈空间和父进程是独立的，而不是共享数据*/
+		printf( "This is the parent process,the child has the pid:%d\n", pid );
+		printf( "In the parent process,count = %d\n", count );
+	}	
+	else if ( !pid )
+	{	/*在子进程中对count进行自加1的操作，但是并没有影响到父进程中的count值，父进程中的count值仍然为0*/	
+		printf( "This is the child process.\n");
+		printf( "Do your own things here.\n" );
+		count++;
+		printf( "In the child process, count = %d\n", count );
+	}
+	else 
+	{
+		printf( "fork failed.\n" );
+	}
+	
+	return 0;
+}
+
+
+
+

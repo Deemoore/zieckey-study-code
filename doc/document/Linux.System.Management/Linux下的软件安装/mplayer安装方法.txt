@@ -1,0 +1,89 @@
+关键词： mplayer                                           
+1.下载: 
+
+MPlayer-1.0pre7 
+http://www4.mplayerhq.hu/MPlayer/re...1.0pre7.tar.bz2 
+官方CODES-all 
+all-20050412.tar.bz2 
+官方win32_CODES-all 
+windows-all-20050115.zip
+字体 
+gb2312-ming.tar.bz2 
+皮肤 
+Blue-1.4.tar.bz2 
+
+以上请到官方主页下载 
+
+
+2. 安装code 
+
+tar xjvf all-20050412.tar.bz2
+mv all-20050412 /usr/lib/codes 
+chmod 644 /usr/lib/codes/* 
+chown root.root /usr/lib/codes/* 
+
+unzip windows-all-20050115.zip                  //or  tar xjvf essential-20050412.tar.bz2  ////*******
+mv windows-all-20050115 /usr/lib/wincodes        //or  mv essential-20050412 /usr/lib/wincodes 
+chmod 644 /usr/lib/wincodes/* 
+chown root.root /usr/lib/wincodes/* 
+
+
+3.安装MPlayer 
+
+tar vjxf MPlayer-1.0pre7.tar.bz2 
+
+cd MPlayer-1.0pre7 
+
+./configure --prefix=/usr/local/mplayer --enable-gui --enable-freetype --with-codecsdir=/usr/lib/codes/ --with-win32libdir=/usr/lib/wincodes/ 
+
+参数说明: 
+./configure \ #详细说明见./configure --help 
+--prefix=/usr/local/mplayer/ \ #安装路径 
+--enable-gui \ #如果你只在命令下用可以不要这个,相信是不会的 
+\ #方便以后调整字体 
+--with-codecsdir=/usr/lib/codes/ \ #我们把下载的插件拷贝到这里 
+--with-win32libdir=/usr/lib/wincodes/ \ #指定win32代码目录 
+
+
+make 
+
+make install 
+
+时间较长
+
+cd etc 
+cp example.conf /usr/local/mplayer/etc/config 
+cp codecs.conf /usr/local/mplayer/etc/ 
+
+
+4.安装字体 
+#cd ---/mplayer-pre7
+tar xjvf gb2312-ming.tar.bz2
+mv gb2312-ming /usr/local/mplayer/share/mplayer/font/ 
+cd /usr/local/mplayer/share/mplayer/font/ 
+ln -s gb2312-ming font 
+
+5.安装皮肤 
+tar vjxf Blue-1.4.tar.bz2 
+mv Blue /usr/local/mplayer/share/mplayer/Skin/ 
+cd /usr/local/mplayer/share/mplayer/Skin/ 
+ln -s Blue default 
+
+桌面启动 
+创建启动器 
+名称:MPlayer 
+命令令: /usr/local/mplayer/bin/gmplayer 
+然后选择一个你喜欢的图标. 
+也可以在终端用/usr/local/mplayer/bin/gmplayer 启动.
+
+补充.............................................
+在FC4下编译Mplayer会遇到一些麻烦.
+1.FC4使用了GCC 4.0,该版本mplayer必需打上补丁才可编译..
+2.FC4并没提供gtk包,所以在安装mplayer并开启GUI的情况下无法会出现问题,无法继续编译.
+解决方法....
+首先下载Mplayer的补丁 地址:
+http://www.chinalinuxpub.com/bbs/attachment.php?attachmentid=4380
+root@jjk MPlayer-1.0pre7# patch -p1 < ../mplayer-1.0_pre7-gcc4-fix.patch
+这样就给mplayer打上补丁了.
+然后用APT-GET 找到gtk+-devel 文件并安装..(本人的土办法..如哪位大虾有更好的办法,请赐教)
+

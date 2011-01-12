@@ -1,0 +1,980 @@
+
+<html>
+<head>
+<title>Linux之线程同步篇|Linux,线程同步-中国源码网</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta http-equiv="Refresh" content=500>
+<meta name="keywords" content="开源,编程,源代码,Linux,线程同步">
+<meta name="description" content="Linux之线程同步篇">
+<link rel="stylesheet" href="/templates/yobo/style/default/style.css" type="text/css" media="all" />
+</head><body >
+<a name="top"></a>
+<!--页面头部信息-->
+<div class="mainline">&nbsp;</div>
+<div class="gleft">
+<div id="dhnavc">
+<img src="/images/open-source-China-yuanma.gif" alt="China Open source community" />
+</div>
+<div id="dhtitle">站内导航:</div>
+<div id="dhnavc">
+<ul id="navlist">
+ <li id="active"><a href="/data/osprojectssd/">程序设计</a> 
+   <ul id="subnavlist">
+    <li id="subactive"><a href="/data/yuanmaprogramsf/">数据结构与算法</a></li>
+    <li><a href="/data/yuanmaprogramjava/">Java</a></li>
+    <li><a href="/data/yuanmaprogramgame/">游戏开发</a></li>
+   </ul>
+ </li>
+ <li><a href="/data/osupdate/">开源动态</a>
+    <ul id="subnavlist">
+    <li id="subactive"><a href="/data/yuanmanewssfrelease/">软件发布信息</a></li>
+    <li><a href="/data/yuanmanewsglobal/">国际新闻</a></li>
+    <li><a href="/data/oscnprojects/">国内新闻</a></li>
+   </ul>
+ </li>
+ <li><a href="/data/osprojects/">开源软件</a>
+   <ul id="subnavlist">
+    <li id="subactive"><a href="/data/osprojectseditor/">文本编辑</a></li>
+    <li><a href="/data/osprojectsmultimedia/">桌面与多媒体</a></li>
+    <li><a href="/data/osprojectsnetwork/">网络软件</a></li>
+    <li><a href="/data/osprojectsdb/">数据库</a></li>
+    <li><a href="/data/osprojectsappserver/">应用服务器</a></li>
+   </ul>
+ </li>
+ <li><a href="/data/osprojectsos/">操作系统</a></li>
+ <li><a href="/data/osarticles/">开源文章</a></li>
+ <li><a href="/data/yuanmaprotocol/">网络协议与安全</a></li>
+ <br />
+ <li><a href="#">开源专题导航</a>
+   <ul id="subnavlist">
+    <li id="subactive"><a href="/data/2006/0302/special_3.htm">Linux OS</a></li>
+    <li><a href="/data/2006/0302/special_4.htm">BSD 操作系统</a></li>
+    <li><a href="/data/2006/0602/special_8.htm">嵌入式开发</a></li>
+    <li><a href="/data/2006/0326/special_7.htm">网站开发</a></li>
+    <li><a href="/data/2006/0308/special_5.htm">开源人物志</a></li>
+    <li><a href="/data/2006/0308/special_6.htm">图书推荐</a></li>
+   </ul>
+ </li>
+ <li><a href="#">Google 相关主题推荐</a>
+   <div class="ggrecom">
+      <script type="text/javascript"><!--
+        google_ad_client = "pub-4357927283882197";
+        /* 180x90mainleft, 08-11-25 */
+        google_ad_slot = "4420802039";
+        google_ad_width = 180;
+        google_ad_height = 90;
+        //-->
+      </script>
+      <script type="text/javascript"
+        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+      </script>
+    </div>
+ </li>	
+</ul>
+</div>
+</div>
+<div class="gsep"></div>
+<div class="gmain">
+<a name="中国源码网 - 开放源代码,程序员,编程"></a>
+<div class="mainad">
+<script type="text/javascript"><!--
+google_ad_client = "pub-4357927283882197";
+/* 728x90-homepage1, 08-11-12 */
+google_ad_slot = "3416638265";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<br />
+<div id="header">
+  <div id="topmenu">
+    <div class="left">
+      <div id="topdate"><a href="http://www.yuanma.org/rss.php" target="_blank" title="中国源码网 RSS订阅 "><img src="/images/rss.gif" border="0"></a> 中国源码网: 中国人的开放源代码社区</div>
+    </div>
+    <div class="right">
+      <div id="topnavlist">
+        <ul>
+                    <li><a href="/member.php?action=reg" title="注册会员">注册会员</a></li>
+          <li><a href="/member.php?action=login" title="会员登录">会员登录</a></li>
+          <li><a href="#" onClick="this.style.behavior= 'url(#default#homepage)';this.setHomePage ('http://www.yuanma.org');">设为首页</a></li>
+          <li><a href="#" onClick="window.external.addFavorite('http://www.yuanma.org','中国源码网 -中国人的开放源代码社区')">加入收藏</a></li>
+                  </ul>
+      </div>
+    </div>
+  </div>
+  <div id="maintop">
+<div id="LogoSide1">
+<a href="/sec/" target=_blank><img src="/images/sec.gif" alt="Network Security" /></a>&nbsp;&nbsp;&nbsp;
+<a href="/blog/" target=_blank><img src="/images/blog.gif" alt="Blog" /></a>&nbsp;&nbsp;&nbsp;
+<a href="/download/" target=_blank><img src="/images/download.gif" alt="源码下载" /></a>&nbsp;&nbsp;&nbsp;
+<a href="/mobile/" target=_blank><img src="/images/mobile.gif" alt="Mobile program" /></a><br />
+网络安全&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp博客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下载&nbsp;&nbsp;&nbsp;&nbsp;手机编程&nbsp;&nbsp;
+</div>
+    <div id="Logo"><a href="/"><img src="/images/logo.gif" alt="中国源码网首页" /></a></div>
+<div id="LogoSide2">
+<a href="/bbs/" target=_blank><img src="/images/forum.gif" alt="论坛" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/eng/" target=_blank><img src="/images/rss_reader.gif" alt="Open source News" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/data/page/7.htm" target=_blank><img src="/images/manual.gif" alt="在线编程手册" /></a><br />
+&nbsp;&nbsp;论坛&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;English&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;编程手册
+</div>
+  </div>
+<div class="navup">
+    <iframe id="nav" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="100%" height="35" src="/nav2.htm"></iframe>
+</div>
+  <div class="navline">&nbsp;</div>
+</div>
+
+<SCRIPT language=javascript type=text/javascript>
+var currentpos,timer;
+
+function initialize()
+{
+timer=setInterval("scrollwindow()",2);
+}
+function sc(){
+clearInterval(timer);
+}
+function scrollwindow()
+{
+currentpos=document.body.scrollTop;
+window.scroll(0,++currentpos);
+if (currentpos != document.body.scrollTop)
+sc();
+}
+document.onmousedown=sc
+document.ondblclick=initialize
+</SCRIPT>
+<script language="JavaScript">
+function fontZoom(size)
+{
+ document.getElementById('fontzoom').style.fontSize=size+'px'
+}
+
+function doCheck(){
+
+// 检测表单的有效性
+// 如：标题不能为空，内容不能为空，等等....
+if (myform.username.value=="") {
+alert("请输入姓名!");
+myform.username.focus();
+return false;
+}
+
+if (myform.content.value=="") {
+alert("请输入评论内容!");
+myform.content.focus();
+return false;
+}
+if (myform.checkcode.value=="") {
+alert("请输入验证码!");
+myform.checkcode.focus();
+return false;
+}
+return true;
+}
+</script>
+<div class="mainline">&nbsp;</div>
+<div class="maincolumnad">
+<!-- Google ads -->
+</div>
+<div class="mainline">&nbsp;</div>
+
+<div class="maincolumn">
+<div class="navadimg">
+        <!-- SiteSearch Google -->
+        <form method="get" action="http://www.google.cn/custom" target="google_window">
+        <table border="0" bgcolor="#ffffff">
+        <tr><td nowrap="nowrap" valign="top" align="left" height="32">
+        <a href="http://www.google.com/">
+        <img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" align="middle"></img></a>
+        </td>
+        <td nowrap="nowrap">
+        <input type="hidden" name="domains" value="yuanma.org"></input>
+        <label for="sbi" style="display: none">输入您的搜索字词</label>
+        <input type="text" name="q" size="80" maxlength="255" value="" id="sbi"></input>
+        <label for="sbb" style="display: none">提交搜索表单</label>
+        <input type="submit" name="sa" value="搜索" id="sbb"></input>
+        </td></tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td nowrap="nowrap">
+        <table>
+        <tr>
+        <td>
+        <input type="radio" name="sitesearch" value="" checked id="ss0"></input>
+        <label for="ss0" title="搜索网络"><font size="-1" color="#000000">Web</font></label></td>
+        <td>
+        <input type="radio" name="sitesearch" value="yuanma.org" id="ss1"></input>
+        <label for="ss1" title="搜索 yuanma.org"><font size="-1" color="#000000">yuanma.org</font></label></td>
+        </tr>
+        </table>
+        <input type="hidden" name="client" value="pub-4357927283882197"></input>
+        <input type="hidden" name="forid" value="1"></input>
+        <input type="hidden" name="ie" value="GB2312"></input>
+        <input type="hidden" name="oe" value="GB2312"></input>
+        <input type="hidden" name="safe" value="active"></input>
+        <input type="hidden" name="cof" value="GALT:#0066CC;GL:1;DIV:#999999;VLC:336633;AH:center;BGC:FFFFFF;LBGC:FF9900;ALC:0066CC;LC:0066CC;T:000000;GFNT:666666;GIMP:666666;LH:50;LW:160;L:http://www.yuanma.org/images/logo.gif;S:http://www.yuanma.org;FORID:1"></input>
+        <input type="hidden" name="hl" value="zh-CN"></input>
+        </td></tr></table>
+        </form>
+        <!-- SiteSearch Google -->
+</div>
+</div>
+<div class="mainline">&nbsp;</div>
+<div class="maincolumn" overflow=hidden>
+  <div id="flist">
+    <div class="ftitlebg">
+      <div class="ftitlename">当前位置: <a href='/' class='position'>首页</a> >> <a href='/data/osprojectssd/' class='position'>程序设计</a>  &gt;&gt; Linux之线程同步篇</div>
+    </div>
+    <div class="clear">&nbsp;</div>
+    <div id="newsview">
+        <div class="title">
+          <h1>Linux之线程同步篇</h1>
+                    <h2><strong>作者：</strong><a href="/member.php?action=show&username=webmaster" target="_blank">relianceslee</a>            &nbsp;&nbsp;&nbsp;&nbsp; <strong>来源：</strong><a href="http://blog.csdn.net/relianceslee/archive/2006/07/21/952861.aspx" target="_blank">csdn</a>&nbsp;&nbsp;&nbsp;&nbsp; <strong>发表时间：</strong>2006-07-21&nbsp;&nbsp;&nbsp;&nbsp;
+            <strong>浏览次数：</strong>
+            <script language=Javascript src="/view.php?articleid=1195"></script>
+            &nbsp;&nbsp;&nbsp;&nbsp; <strong>字号：</strong><a href="javascript:fontZoom(16)" class=black>大</a>&nbsp;&nbsp;<a href="javascript:fontZoom(14)" class=black>中</a>&nbsp;&nbsp;<a href="javascript:fontZoom(12)" class=black>小</a></h2>
+        </div>
+                <div class="relatedandad">
+           <div class="relatedleft">
+<script type="text/javascript"><!--
+google_ad_client = "pub-4357927283882197";
+/* 336x280, 08-11-17 */
+google_ad_slot = "0894349534";
+google_ad_width = 336;
+google_ad_height = 280;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+            </div>
+            <div class="relatedright">
+                  <b>中国源码网内相关主题链接</b><br>
+                      <li><a href="/data/2008/1203/article_3359.htm" title="Linux基金会总裁预测2009年Linux大势" target="_blank"><font color="">Linux基金会总裁预测2009年Li...</font></a></li>
+          
+          <li><a href="/data/2008/1203/article_3358.htm" title="Linux文件系统现状" target="_blank"><font color="">Linux文件系统现状</font></a></li>
+          
+          <li><a href="/data/2008/1201/article_3354.htm" title="学习 Linux 几点忠告" target="_blank"><font color="">学习 Linux 几点忠告</font></a></li>
+          
+          <li><a href="/data/2008/1111/article_3311.htm" title="是谁在编写Linux？" target="_blank"><font color="">是谁在编写Linux？</font></a></li>
+          
+          <li><a href="/data/2008/1110/article_3305.htm" title="Linux查看网络流量的脚本" target="_blank"><font color="">Linux查看网络流量的脚本</font></a></li>
+          
+          <li><a href="/data/2008/1107/article_3298.htm" title="Linux代码已超过1000万行" target="_blank"><font color="">Linux代码已超过1000万行</font></a></li>
+          
+          <li><a href="/data/2008/1103/article_3280.htm" title="Linux meminfo 输出详解" target="_blank"><font color="">Linux meminfo 输出详解</font></a></li>
+          
+          <li><a href="/data/2008/1030/article_3273.htm" title="Ubuntu Linux: 用户数量超过800万" target="_blank"><font color="">Ubuntu Linux: 用户数量超过8...</font></a></li>
+          
+
+                  </div>
+         </div>
+
+<!-- google_ad_section_start -->
+        <div id="fontzoom" class="content">
+          <p><P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 21pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>进行多线程编程，最头疼的就是那些共享的数据。因为你无法知道哪个线程会在哪个时候对它进行操作，你也无法得知那个线程会先运行，哪个线程会后运行。下面介绍一些技术，通过他们，你会合理安排你的线程之间对资源的竞争。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">互斥体</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">Mutex</FONT></SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">信号灯</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">Semophore</FONT></SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">条件变量</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">Conditions</FONT></SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>先说一下互斥量。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">什么时候会用上互斥量了？比如你现在有一全局链表，你有几个工作线程。每一个线程从该链表中取出头节点，然后对该头节点进行处理。比如现在线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">1</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">正在取出头节点，他的操作如下：</SPAN></FONT></P>
+<TABLE class=MsoTableGrid style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: #e6e6e6; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 480; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR style="mso-yfti-irow: 0; mso-yfti-firstrow: yes; mso-yfti-lastrow: yes">
+<TD style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 426.1pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BACKGROUND-COLOR: transparent; mso-border-alt: solid windowtext .5pt" vAlign=top width=568>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>Item * p =queue_list;</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>Queue_list=queue_list-&gt;next;</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>Process_job(p);</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>Free(p);</FONT></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">当线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">1</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">处理完第一步，也就是</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">Item *p=queue_list</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">后，这时候系统停止线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">1</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的运行，改而运行线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">2</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">2</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">照样取出头节点，然后进行处理，最后释放了该节点。过了段时间，线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">1</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">重新得到运行。而这个时候，其实</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">p</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所指向的节点已经被线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">2</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">释放掉，而线程</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">1</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对此毫无知晓。他会接着运行</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">process_job(p)</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。而这将导致无法预料的后果！</SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>对于这种情况，系统给我们提供了互斥量。你在取出头节点前必须要等待互斥量，如果此时有其他线程已经获得该互斥量，那么线程将会阻塞在这个地方。只有等到其他线程释放掉该互斥量后，你的线程才有可能得到该互斥量。为什么是可能了？因为可能此时有不止你一个线程在等候该互斥量，而系统无法保证你的线程将会优先运行。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">互斥量的类型为</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">pthread_mutex_t</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。你可以声明多个互斥量。在声明该变量后，你需要调用</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">pthread_mutex_init()</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">来创建该变量。</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">pthread_mutex_init</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的格式如下：</SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>int<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>pthread_mutex_init(pthread_mutex_t<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>*mutex,<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>const<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>pthread_mutex-</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US><FONT size=3><FONT face="Times New Roman"><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>attr_t *mutexattr);</FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><FONT size=3><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">第一个参数，</SPAN><SPAN lang=EN-US><FONT face="Times New Roman">mutext</FONT></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，也就是你之前声明的那个互斥量，第二个参数为该互斥量的属性。这个将在后面详细讨论。</SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>在创建该互斥量之后，你便可以使用它了。要得到互斥量，你需要调用下面的函数：</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>int pthread_mutex_lock(pthread_mutex_t *mutex);</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>该函数用来给互斥量上锁，也就是我们前面所说的等待操作。互斥量一旦被上锁后，其他线程如果想给该互斥量上锁，那么就会阻塞在这个操作上。如果在此之前该互斥量已经被其他线程上锁，那么该操作将会一直阻塞在这个地方，直到获得该锁为止。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>在得到互斥量后，你就可以进入关键代码区了。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>同样，在操作完成后，你必须调用下面的函数来给互斥量解锁，也就是前面所说的释放。这样其他等待该锁的线程才有机会获得该锁，否则其他线程将会永远阻塞。</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US><FONT face="Times New Roman" size=3>int pthread_mutex_unlock(pthread_mutex_t *mutex);</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>下面给出一个简单的例子：</FONT></SPAN></P>
+<TABLE class=MsoTableGrid style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: #e6e6e6; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 480; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR style="mso-yfti-irow: 0; mso-yfti-firstrow: yes; mso-yfti-lastrow: yes">
+<TD style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 426.1pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BACKGROUND-COLOR: transparent; mso-border-alt: solid windowtext .5pt" vAlign=top width=568>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">#include &lt;malloc.h&gt;<?XML:NAMESPACE PREFIX = O /><O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">#include &lt;pthread.h&gt;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job {<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Link field for linked list. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* next;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Other fields describing work to be done... */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">};<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* A linked list of pending jobs. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* job_queue;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* A mutex protecting job_queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_t job_queue_mutex = PTHREAD_MUTEX_INITIALIZER;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Process queued jobs until the queue is empty. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">void* thread_function (void* arg)<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">{<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">while (1) {<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* next_job;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Lock the mutex on the job queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_lock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Now it’s safe to check if the queue is empty. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">if (job_queue == NULL)<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">next_job = NULL;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">else {<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Get the next available job. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">next_job = job_queue;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Remove this job from the list. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">job_queue = job_queue-&gt;next;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Unlock the mutex on the job queue because we’re done with the<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">queue for now. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_unlock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Was the queue empty? If so, end the thread. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">if (next_job == NULL)<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">break;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Carry out the work. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">process_job (next_job);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Clean up. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">free (next_job);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">return NULL;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt"><O:P><FONT face="Times New Roman" size=3>&nbsp;</FONT></O:P></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'"><FONT size=3>在这个例子中我们使用了下面一条语句：</FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_t job_queue_mutex = PTHREAD_MUTEX_INITIALIZER;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><FONT size=3><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><SPAN style="mso-tab-count: 1"><FONT face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </FONT></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体; mso-bidi-font-size: 10.5pt; mso-font-kerning: 0pt">他的作用和调用<SPAN lang=EN-US>pthread_mutex_init()</SPAN>函数一样。<SPAN lang=EN-US><O:P></O:P></SPAN></SPAN></FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>如果一个线程已经给一个互斥量上锁了，后来在操作的过程中又再次调用了该上锁的操作，那么该线程将会无限阻塞在这个地方，从而导致死锁。怎么变了？这就需要我们之前所提到的互斥量的属性。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>互斥量分为下面三种：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l0 level1 lfo2; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>快速型。这种类型也是默认的类型。该线程的行为正如上面所说的。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l0 level1 lfo2; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>递归型。如果遇到我们上面所提到的死锁情况，同一线程循环给互斥量上锁，那么系统将会知道该上锁行为来自同一线程，那么就会同意线程给该互斥量上锁。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l0 level1 lfo2; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>错误检测型。如果该互斥量已经被上锁，那么后续的上锁将会失败而不会阻塞，<SPAN lang=EN-US>pthread_mutex_lock()</SPAN>操作将会返回<SPAN lang=EN-US>EDEADLK</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>互斥量的属性类型为<SPAN lang=EN-US>pthread_mutexattr_t</SPAN>。声明后调用<SPAN lang=EN-US>pthread_mutexattr_init()</SPAN>来创建该互斥量。然后调用<SPAN lang=EN-US>int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);</SPAN>来设置属性。<SPAN lang=EN-US>int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);</SPAN>格式如下：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 21pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>第一个参数，<SPAN lang=EN-US>attr</SPAN>，就是前面声明的属性变量，第二个参数<SPAN lang=EN-US>,kind</SPAN>，就是我们要设置的属性类型。他有下面几个选项：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l2 level1 lfo3; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>PTHREAD_MUTEX_FAST_NP<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l2 level1 lfo3; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>PTHREAD_MUTEX_RECURSIVE_NP<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 63pt; TEXT-INDENT: -21pt; mso-list: l2 level1 lfo3; tab-stops: list 63.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>PTHREAD_MUTEX_ERRORCHECK_NP<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>下面给出一个使用属性的简单过程：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<TABLE class=MsoTableGrid style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: #e6e6e6; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 480; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR style="mso-yfti-irow: 0; mso-yfti-firstrow: yes; mso-yfti-lastrow: yes">
+<TD style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 426.1pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BACKGROUND-COLOR: transparent; mso-border-alt: solid windowtext .5pt" vAlign=top width=568>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_t mutex;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutexattr_t attr;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutexattr_init(&amp;attr);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutexattr_settype(&amp;attr,PTHREAD_MUTEX_RECURSIVE_NP);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_init(&amp;mutex,&amp;attr);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_destroy(&amp;attr);<O:P></O:P></FONT></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>前面我们提到在调用<SPAN lang=EN-US>pthread_mutex_lock()</SPAN>的时候，如果此时<SPAN lang=EN-US>mutex</SPAN>已经被其他线程上锁，那么该操作将会一直阻塞在这个地方。如果我们此时不想一直阻塞在这个地方，那么可以调用下面函数：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_trylock()<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>如果此时互斥量没有被上锁，那么<SPAN lang=EN-US>pthread_mutex_trylock()</SPAN>将会返回<SPAN lang=EN-US>0</SPAN>，并会对该互斥量上锁。如果互斥量已经被上锁，那么会立刻返回<SPAN lang=EN-US>EBUSY</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>上面谈到的是使用互斥量。如果碰到下面这种情况，该怎么办了？<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>还是上面程序中提到的工作链表。此时必然有一个生产者线程，用于往链表里添加节点。如果这一段时间没有工作，那么工作线程将会不停的调用<SPAN lang=EN-US>lock,unlock</SPAN>操作。而这样的操作毫无疑义。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>在这里系统给我们提供了另外一种同步机制，信号灯<SPAN lang=EN-US>,Semaphore</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>信号灯其实就是一个计数器，也是一个整数。每一次调用<SPAN lang=EN-US>wait</SPAN>操作将会使<SPAN lang=EN-US>semaphore</SPAN>值减一，而如果<SPAN lang=EN-US>semaphore</SPAN>值已经为<SPAN lang=EN-US>0</SPAN>，则<SPAN lang=EN-US>wait</SPAN>操作将会阻塞。每一次调用<SPAN lang=EN-US>post</SPAN>操作将会使<SPAN lang=EN-US>semaphore</SPAN>值加一。将这些操作用到上面的问题中。工作线程每一次调用<SPAN lang=EN-US>wait</SPAN>操作，如果此时链表中没有节点，则工作线程将会阻塞，直到链表中有节点。生产者线程在每次往链表中添加节点后调用<SPAN lang=EN-US>post</SPAN>操作，信号灯值会加一。这样阻塞的工作线程就会停止阻塞，继续往下执行。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>信号灯的类型为<SPAN lang=EN-US>sem_t</SPAN>。在声明后必须调用<SPAN lang=EN-US>sem_init()</SPAN>。需要传递两个参数，第一个参数就是你之前声明的<SPAN lang=EN-US>sem_t</SPAN>变量，第二个必须为<SPAN lang=EN-US>0</SPAN>。当你不再需要信号灯时，你必须调用<SPAN lang=EN-US>sem_destroy()</SPAN>来释放资源。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>等待信号灯的操作为<SPAN lang=EN-US>sem_wait()</SPAN>。投递一个信号的操作为<SPAN lang=EN-US>sem_wait()</SPAN>。和互斥量一样，等待信号灯也有一个非阻塞的操作，<SPAN lang=EN-US>sem_trywait()</SPAN>。该操作在没有信号灯的时候返回<SPAN lang=EN-US>EAGAIN</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>下面是一个结合了互斥量和信号灯的例子：<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<TABLE class=MsoTableGrid style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: #e6e6e6; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 480; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR style="mso-yfti-irow: 0; mso-yfti-firstrow: yes; mso-yfti-lastrow: yes">
+<TD style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 426.1pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BACKGROUND-COLOR: transparent; mso-border-alt: solid windowtext .5pt" vAlign=top width=568>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">#include &lt;malloc.h&gt;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">#include &lt;pthread.h&gt;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">#include &lt;semaphore.h&gt;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job {<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Link field for linked list. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* next;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Other fields describing work to be done... */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">};<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* A linked list of pending jobs. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* job_queue;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* A mutex protecting job_queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_t job_queue_mutex = PTHREAD_MUTEX_INITIALIZER;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* A semaphore counting the number of jobs in the queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">sem_t job_queue_count;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Perform one-time initialization of the job queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">void initialize_job_queue ()<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">{<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* The queue is initially empty. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">job_queue = NULL;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Initialize the semaphore which counts jobs in the queue. Its<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">initial value should be zero. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">sem_init (&amp;job_queue_count, 0, 0);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Process queued jobs until the queue is empty. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">void* thread_function (void* arg)<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">{<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">while (1) {<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* next_job;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Wait on the job queue semaphore. If its value is positive,<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">indicating that the queue is not empty, decrement the count by<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">1. If the queue is empty, block until a new job is enqueued. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">sem_wait (&amp;job_queue_count);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Lock the mutex on the job queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_lock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Because of the semaphore, we know the queue is not empty. Get<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">the next available job. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">next_job = job_queue;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Remove this job from the list. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">job_queue = job_queue-&gt;next;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Unlock the mutex on the job queue because we’re done with the<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">queue for now. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_unlock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Carry out the work. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">process_job (next_job);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Clean up. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">free (next_job);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">return NULL;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Add a new job to the front of the job queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">void enqueue_job (/* Pass job-specific data here... */)<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">{<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">struct job* new_job;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Allocate a new job object. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">new_job = (struct job*) malloc (sizeof (struct job));<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Set the other fields of the job struct here... */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Lock the mutex on the job queue before accessing it. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_lock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Place the new job at the head of the queue. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">new_job-&gt;next = job_queue;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">job_queue = new_job;<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Post to the semaphore to indicate that another job is available. If<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">threads are blocked, waiting on the semaphore, one will become<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">unblocked so it can process the job. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">sem_post (&amp;job_queue_count);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">/* Unlock the job queue mutex. */<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT size=3><FONT face="Times New Roman">pthread_mutex_unlock (&amp;job_queue_mutex);<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-ALIGN: left; mso-layout-grid-align: none" align=left><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: MCPdigital; mso-font-kerning: 0pt"><FONT face="Times New Roman"><FONT size=3>}<O:P></O:P></FONT></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="mso-bidi-font-size: 10.5pt"><O:P><FONT face="Times New Roman" size=3>&nbsp;</FONT></O:P></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>下面说一下第三种同步机制<SPAN lang=EN-US>—</SPAN>条件变量。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>如果现在在等待一个信号。如果该信号被设置，则继续运行。如果没有条件变量，我们将会不停的去查询该信号是否被设置，这样就会浪费大量的<SPAN lang=EN-US>cpu</SPAN>。而通过使用条件变量，我们就可以将等待信号的线程阻塞，直到有信号的时候再去唤醒它。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>条件变量的类型是<SPAN lang=EN-US>pthread_cond_t</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt; TEXT-INDENT: 21pt; mso-char-indent-count: 2.0"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>下面简单说一下如何使用条件变量。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l3 level1 lfo4; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>声明<SPAN lang=EN-US>pthread_cond_t</SPAN>变量后，调用<SPAN lang=EN-US>pthread_cond_init()</SPAN>函数，第一个参数为之前声明的变量。第二个参数在<SPAN lang=EN-US>Linux</SPAN>中不起作用。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l3 level1 lfo4; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>声明一个<SPAN lang=EN-US>pthread_mutex_t</SPAN>变量，并调用<SPAN lang=EN-US>pthread_mutex_init()</SPAN>初始化。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l3 level1 lfo4; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>调用<SPAN lang=EN-US>pthread_cond_signal()</SPAN>，发出信号。如果此时有线程在等待该信号，那么该线程将会唤醒。如果没有，该信号就会别忽略。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l3 level1 lfo4; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>如果想唤醒所有等待该信号的线程，调用<SPAN lang=EN-US>pthread_cond_broadcast()</SPAN>。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt; TEXT-INDENT: -21pt; mso-list: l3 level1 lfo4; tab-stops: list 42.0pt"><SPAN lang=EN-US style="FONT-FAMILY: Wingdings; mso-bidi-font-family: Wingdings; mso-fareast-font-family: Wingdings"><SPAN style="mso-list: Ignore"><FONT size=3>l</FONT><SPAN style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></SPAN><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>调用<SPAN lang=EN-US>pthread_cond_wait()</SPAN>等待信号。如果没有信号，线程将会阻塞，直到有信号。该函数的第一个参数是条件变量，第二个参数是一个<SPAN lang=EN-US>mutex</SPAN>。在调用该函数之前必须先获得互斥量。如果线程阻塞，互斥量将立刻会被释放。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt"><SPAN style="FONT-FAMILY: 宋体"><FONT size=3>下面给出一个简单的使用例子。<SPAN lang=EN-US><O:P></O:P></SPAN></FONT></SPAN></P>
+<TABLE class=MsoTableGrid style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: #e6e6e6; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 480; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" cellSpacing=0 cellPadding=0 border=1>
+<TBODY>
+<TR style="mso-yfti-irow: 0; mso-yfti-firstrow: yes; mso-yfti-lastrow: yes">
+<TD style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 426.1pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; BACKGROUND-COLOR: transparent; mso-border-alt: solid windowtext .5pt" vAlign=top width=568>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>#include &lt;pthread.h&gt;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>#include &lt;stdio.h&gt;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_t mutex;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_cond_t cond;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>int flag;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>void init()<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>{<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_mutex_init(&amp;mutex,NULL);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>pthread_cond_init(&amp;cond,NULL);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>flag=0;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>}<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>void * Thread_Function(void * arg)<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>{<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>//loop infinitely<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>while(1)<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>{<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_mutex_lock(&amp;mutex);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>while(!flag)<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_cond_wait(&amp;cond,&amp;mutex);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_mutex_unlock(&amp;mutex);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>do_some_work();<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>}<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>}<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>void SetFlag()<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>{<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_mutex_lock(&amp;mutex);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>flag=1;<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_cond_signal(&amp;cond);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>pthread_mutex_unlock(&amp;mutex);<O:P></O:P></FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><FONT size=3>}<O:P></O:P></FONT></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt 42pt"><SPAN lang=EN-US style="FONT-FAMILY: 宋体"><O:P><FONT size=3>&nbsp;</FONT></O:P></SPAN></P><SPAN style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 12.0pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">关于线程同步的技术先说到这个地方。</SPAN>&nbsp;<BR></p>
+        </div>
+        <!-- google_ad_section_end -->
+        <div class="content">
+          <p align="right">编辑 webmaster</p>
+        </div>
+
+      </div>
+      <div class="tool">
+        <div>
+          <div align="center"><img src="/templates/yobo/style/default/images/pencil.gif" width="18" height="18" align="absmiddle" border="0"> 发表评论　<a href="javascript:window.print();"><img src="/templates/yobo/style/default/images/print.gif" width="19" height="16" align="absmiddle" border="0"> 打印本文</a>　<a href="#" onclick="javascript:window.open('/sendmail.php?subject=Linux之线程同步篇&content='+window.location,'中国源码网','width=460,height=310,top=0,left=0');"><img src="/templates/yobo/style/default/images/commend.gif" width="19" height="14" align="absmiddle" border="0"> 推荐本文</a>　<a href="javascript:window.external.addFavorite(window.location,'Linux之线程同步篇')"><img src="/templates/yobo/style/default/images/favorite.gif" width="22" height="14" align="absmiddle" border="0"> 加入收藏</a>　<a href="#top"><img src="/templates/yobo/style/default/images/top.gif" width="12" height="11" align="absmiddle" border="0"> 返回顶部</a>　<a href="javascript:window.close()"><img src="/templates/yobo/style/default/images/close.gif" width="23" height="18" align="absmiddle" border="0"> 关闭窗口</a> </div>
+        </div>
+      </div>
+      <div class="clear">&nbsp;</div>
+      <div id="sublistfooter">
+        <div id="prv"> <img src="/templates/yobo/style/default/images/ar2b.gif" width="6" height="7" />&nbsp;<a href="/data/2006/0721/article_1194.htm" title="Java实现归并排序(Merge-Sort)算法" target="_blank"><font color="">Java实现归并排序(Merge-Sort)算法</font></a> </div>
+        <div id="next"> &nbsp;<a href="/data/2006/0721/article_1196.htm" title="Crontab应用简介" target="_blank"><font color="">Crontab应用简介</font></a>&nbsp;<img src="/templates/yobo/style/default/images/ar2.gif" width="6" height="7" />&nbsp; </div>
+      </div>
+</div>
+</div>
+
+<div class="mainline">&nbsp;</div>
+<div class="maincolumn">
+  <div class="mainleft">
+    <div class="listleft">
+      <div class="indexlist">
+        <div class="lefttitlebg">
+          <div class="lefttitlename">最新文章</div>
+        </div>
+        <div class="clear">&nbsp;</div>
+        <div class="mainlist">
+          <div class="list">
+            <p><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
+   <!-- 文章列表循环显示开始 -->
+   
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/0421/article_3011.htm" title="C语言常用排序全解" target="_blank" class="list">C语言常用排序全解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2007/0614/article_2676.htm" title="程序员数据结构笔记" target="_blank" class="list">程序员数据结构笔记</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/1228/article_2026.htm" title="C语言缺陷与陷阱(笔记)" target="_blank" class="list">C语言缺陷与陷阱(笔记)</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1201/article_3349.htm" title="shared pool study" target="_blank" class="list">shared pool study</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1127/article_3344.htm" title="wxPython frame的布局详解(一)" target="_blank" class="list">wxPython frame的布局详解(一)</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1121/article_3335.htm" title="Python 学习:网址大全" target="_blank" class="list">Python 学习:网址大全</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1121/article_3333.htm" title="Python对Excel 表格编程" target="_blank" class="list">Python对Excel 表格编程</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3327.htm" title="2读者2写者问题编程实现" target="_blank" class="list">2读者2写者问题编程实现</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3326.htm" title="线程安全性的概念" target="_blank" class="list">线程安全性的概念</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3325.htm" title="Java环境变量配置" target="_blank" class="list">Java环境变量配置</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3324.htm" title="JavaScript多线程编程" target="_blank" class="list">JavaScript多线程编程</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3323.htm" title="开源测试工具" target="_blank" class="list">开源测试工具</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3322.htm" title="Java与模式: 6大原则" target="_blank" class="list">Java与模式: 6大原则</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3321.htm" title="web 基础JavaBean" target="_blank" class="list">web 基础JavaBean</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1114/article_3320.htm" title="C语言特性补充" target="_blank" class="list">C语言特性补充</a>
+             </td>
+                 </tr>
+          
+
+   <!-- 文章列表循环显示结束 -->
+</table>
+
+   <!-- 如果 $pages 不为空则显示分页 -->
+   <!-- 分页显示结束 -->
+</p><p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="listright">
+      <div class="indexlist">
+        <div class="lefttitlebg">
+          <div class="lefttitlename">推荐文章</div>
+        </div>
+        <div class="clear">&nbsp;</div>
+        <div class="mainlist">
+          <div class="list"> <table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
+   <!-- 文章列表循环显示开始 -->
+   
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/0421/article_3011.htm" title="C语言常用排序全解" target="_blank" class="list">C语言常用排序全解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2007/0614/article_2676.htm" title="程序员数据结构笔记" target="_blank" class="list">程序员数据结构笔记</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/1228/article_2026.htm" title="C语言缺陷与陷阱(笔记)" target="_blank" class="list">C语言缺陷与陷阱(笔记)</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1121/article_3333.htm" title="Python对Excel 表格编程" target="_blank" class="list">Python对Excel 表格编程</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3324.htm" title="JavaScript多线程编程" target="_blank" class="list">JavaScript多线程编程</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1118/article_3322.htm" title="Java与模式: 6大原则" target="_blank" class="list">Java与模式: 6大原则</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1114/article_3319.htm" title="C++: 设计模式" target="_blank" class="list">C++: 设计模式</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1114/article_3317.htm" title="Cygwin技巧" target="_blank" class="list">Cygwin技巧</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1110/article_3307.htm" title="Unix环境高级编程之signal笔记(下)" target="_blank" class="list">Unix环境高级编程之signal笔记(下)</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1107/article_3299.htm" title="PowerPC原子操作源码" target="_blank" class="list">PowerPC原子操作源码</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1103/article_3278.htm" title="C++箴言:尽可能推迟变量定义" target="_blank" class="list">C++箴言:尽可能推迟变量定义</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1101/article_3274.htm" title="八数码问题详解" target="_blank" class="list">八数码问题详解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1029/article_3270.htm" title="四道微软面试算法题" target="_blank" class="list">四道微软面试算法题</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1024/article_3260.htm" title="可重入详解" target="_blank" class="list">可重入详解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/1024/article_3259.htm" title="设计模式之Singleton" target="_blank" class="list">设计模式之Singleton</a>
+             </td>
+                 </tr>
+          
+
+   <!-- 文章列表循环显示结束 -->
+</table>
+
+   <!-- 如果 $pages 不为空则显示分页 -->
+   <!-- 分页显示结束 -->
+ </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mainright">
+    <div class="rightblock">
+      <div class="righttitlename">&nbsp;&nbsp;热点文章</div>
+      <div class="clear">&nbsp;</div>
+      <div class="rightlist rightlistad">
+        <p><table width="99%" border="0" align="center" cellpadding="0" cellspacing="0">
+   <!-- 文章列表循环显示开始 -->
+   
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/1228/article_2026.htm" title="C语言缺陷与陷阱(笔记)" target="_blank" class="list">C语言缺陷与陷阱(笔记)</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2007/0614/article_2676.htm" title="程序员数据结构笔记" target="_blank" class="list">程序员数据结构笔记</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2008/0421/article_3011.htm" title="C语言常用排序全解" target="_blank" class="list">C语言常用排序全解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/1029/article_1738.htm" title="C语言字符串函数大全" target="_blank" class="list">C语言字符串函数大全</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0623/article_928.htm" title="C语言面试题大汇总" target="_blank" class="list">C语言面试题大汇总</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0730/article_1262.htm" title="Linux环境下的Socket编程" target="_blank" class="list">Linux环境下的Socket编程</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0723/article_1213.htm" title="字节对齐详解" target="_blank" class="list">字节对齐详解</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0721/article_1195.htm" title="Linux之线程同步篇" target="_blank" class="list">Linux之线程同步篇</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0607/article_710.htm" title="WebService的介绍" target="_blank" class="list">WebService的介绍</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/1010/article_1637.htm" title="CRC算法原理及C语言实现" target="_blank" class="list">CRC算法原理及C语言实现</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0829/article_1422.htm" title="Linux 内存调试工具- Valgrind 使用初探" target="_blank" class="list">Linux 内存调试工具- V...</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0621/article_896.htm" title="排序算法实现大全" target="_blank" class="list">排序算法实现大全</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0625/article_948.htm" title="GNU C 扩展之__attribute__ 机制简介" target="_blank" class="list">GNU C 扩展之__attribu...</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_elite.gif' alt='精华文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0914/article_1537.htm" title="JAVA程序员面试宝典" target="_blank" class="list">JAVA程序员面试宝典</a>
+             </td>
+                 </tr>
+          
+                  <tr>
+                    <td class="dot" width='100%'>
+<img src='/images/article_common.gif' alt='普通文章' border='0'>&nbsp;&nbsp;<a href="/data/2006/0609/article_740.htm" title="快速排序算法原理与实现" target="_blank" class="list">快速排序算法原理与实现</a>
+             </td>
+                 </tr>
+          
+
+   <!-- 文章列表循环显示结束 -->
+</table>
+
+   <!-- 如果 $pages 不为空则显示分页 -->
+   <!-- 分页显示结束 -->
+</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mainline">&nbsp;</div>
+<div class="maincolumn">
+  <div id="flist">
+    <div class="ftitlebg">
+      <div class="ftitlename">评论</div>
+    </div>
+    <div class="clear">&nbsp;</div>
+     </div>
+  <div class="mainline">&nbsp;</div>
+  <div class="maincolumn">
+    <div id="flist">
+      <div class="ftitlebg">
+        <div class="ftitlename">发表</div>
+      </div>
+      <div class="clear">&nbsp;</div>
+      <div class="gray">
+        <tr>
+          <td width="60%" align="center"><div align="center">
+              <!-------------------form--------------------------------->
+            </div>
+            <table width="550"  border="0" cellspacing="0" cellpadding="0" align="center">
+              <form name="myform" method="post" action="/comment.php?articleid=1195" onsubmit="return doCheck();">
+                <tr>
+                  <td width="65" height="25" align="right">姓名：</td>
+                  <td width="160" align="left"><input name="username" type="text" id="username" size="25" maxlength="30"></td>
+                  <td width="45" align="right">QQ：</td>
+                  <td width="186"><input name="qq" type="text" id="qq" size="25" maxlength="20"></td>
+                </tr>
+                <tr>
+                  <td height="25" align="right">性别：</td>
+                  <td align="left"><input name="gender" type="radio" class="radio" value="1" checked>
+                    男
+                    <input name="gender" type="radio" class="radio" value="0">
+                    女</td>
+                  <td align="right">MSN：</td>
+                  <td><input name="msn" type="text" id="msn" size="25" maxlength="50"></td>
+                </tr>
+                <tr>
+                  <td height="25" align="right">E-mail：</td>
+                  <td align="left"><input name="email" type="text" id="email" size="25"></td>
+                  <td align="right">主页：</td>
+                  <td><input name="homepage" type="text" id="homepage" size="25" maxlength="255"></td>
+                </tr>
+                <tr>
+                  <td height="25" align="right">评分：</td>
+                  <td colspan="3" align="left"><input name="score" type="radio" class="radio" value="1">
+                    1
+                    <input name="score" type="radio" class="radio" value="2">
+                    2
+                    <input name="score" type="radio" class="radio" value="3" checked>
+                    3
+                    <input name="score" type="radio" class="radio" value="4">
+                    4
+                    <input name="score" type="radio" class="radio" value="5">
+                    5</td>
+                </tr>
+                <tr>
+                  <td align="right">评论内容：</td>
+                  <td colspan="3" align="left"><textarea name="content" cols="60" rows="8" id="content"></textarea></td>
+                </tr>
+                                <tr>
+                  <td height="25" align="right">验证码：</td>
+                  <td><input name="checkcode" type="text" size="5" maxlength="4">
+                    <SCRIPT language=Javascript src="/checkcode.php"></SCRIPT></td>
+                </tr>
+                                <tr>
+                  <td height="35"></td>
+                  <td colspan="3" align="left"><input name="submit" type="submit" class="button" value=" 确定 ">
+                    &nbsp;&nbsp;
+                    <input name="reset" type="reset" class="button" value=" 重置 ">
+                  </td>
+                </tr>
+              </form>
+            </table></td>
+          <td width="40%" valign="top" style="padding-top:10px"><LI>请遵守<FONT color=red>《互联网电子公告服务管理规定》</FONT>及中华人民共和国其他各项有关法律法规。<BR>
+            <LI>严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容的评论 。<BR>
+            <LI>用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的）。<BR>
+            <LI>本站管理员有权保留或删除评论内容。<BR>
+            <LI>评论内容只代表网友个人观点，与本网站立场无关。</LI></td>
+        </tr>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+<div class="mainline">&nbsp;</div>
+<div id="footer">
+  <div id="bottommenu">
+     | <a href="/data/page/1.htm" class="pagemenu">关于我们</a> 
+ | <a href="/data/page/2.htm" class="pagemenu">联系方式</a> 
+ | <a href="/data/page/3.htm" class="pagemenu">开源站点导航</a> 
+ | <a href="/data/page/4.htm" class="pagemenu">休闲游戏-连连看</a> 
+ | <a href="/data/page/6.htm" class="pagemenu">广告合作</a> 
+ | <a href="/data/page/7.htm" class="pagemenu">开放源代码 - 在线编程手册及库函数大全</a> 
+
+  </div>
+<div class="topline">&nbsp;</div>
+<div id="bottom">
+中国源码网 yuanma.org copyright &copy; 2005-2010. | <span><a href="http://www.miibeian.gov.cn"  target=_blank>京ICP备06020298号</a></span> | <span><a href="http://www.giantsoft.org"  target=_blank>Designed by Giantsoft.org</a></span>
+</div>
+</div>
+</div>
+<div class="gsep"></div>
+<div class="gright">中国源码网 - WWW.YUANMA.ORG - 中国开放源代码社区</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-400144-1";
+urchinTracker();
+</script>
+</body></html><div class='copyright'><a href='http://www.phpcms.cn' title='点击进入phpcms网站管理系统官方技术支持网站！' target='_blank'><font size='1' face='Arial, Helvetica, sans-serif'>Power by <b>phpcms 2.4</b></font></a></div>

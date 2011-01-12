@@ -1,0 +1,124 @@
+  ubuntu 显卡＋桌面的安装方法
+第一节 背景
+ubuntu6.10 edgy已经发布许久了，edgy已经把xorg升级到了7.1，已经带有AIGLX了，对于安装compiz或者是Brtyl提供了极大的方便。其次 edgy把i686和K7/K8的核心整合在Generic一起了（据说有可能支持32/64位混合环境运算），nvidia-kernel- common是restricted模块的依赖（如果删除会导致一些硬件功能无法使用）。
+
+NVIDIA 1.0-9631正式版驱动已经发布，增加了对于 GLX_EXT_texture_from_pixmap 的支持，可以直接使用Beryl了。
+而且Beryl已经进入了亚洲官方和CN99的源，现在的版本是0.1.5。
+很可惜，Legacy驱动还是7184版本的，看来想用Beryl，老式显卡只能用XGL了。
+
+
+对于使用Dapper的朋友，只能才用XGL+Beryl的方法了，可以参见本人的拙文：
+http://forum.ubuntu.org.cn/viewtopic.php?t=26309&highlight=
+
+基于以上的前提，我们下面介绍一下才用NV+1.0-9631驱动+edgy+aiglx+Beryl方法汇总
+
+假设你的edgy是新安装的，不是从Dapper升级上来的
+
+我们开始吧！！
+第二节 安装NV 1.0-9631驱动
+
+1.NV的官方正式版1.0-9631驱动已经发布，而且ubuntu的源里面已经有官方的编译，用一下的方法安装源里的驱动：
+http://wiki.ubuntu.org.cn/NVIDIA%E6%98%BE%E5%8D%A1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97
+
+一下的方法为手动编译安装驱动，新手如果想锻炼身手可以尝试：
+
+1.去http://www.nvidia.com/object/unix.html下载对应32/64位版本的驱动，放置在home根目录下，方便调用。
+
+2.删除原有驱动(假设你安装过源里面的nvidia-glx驱动，曾经手动安装驱动的可以跳过）：
+sudo apt-get --purge remove nvidia-glx
+然后灰复X的设置
+sudo cp /etc/X11/xorg.conf.backup /etc/X11/xorg.conf
+重启，确定起动正常
+
+3.安装编译环境和前期步骤：
+安装头文件和编译环境
+sudo apt-get install linux-headers-$(uname -r) build-essential
+edgy已经安装好了最新的gcc了，没有装的，自己装上
+
+sudo gedit /etc/default/linux-restricted-modules-common
+在最后的双引号里面添加nv两个字，添加后就是“nv”
+
+预防起动X失败
+sudo cp /etc/X11/xorg.conf /etc/X11/xorg.conf.mybackup
+如果起动X失败，可以用sudo cp /etc/X11/xorg.conf.mybackup /etc/X11/xorg.conf来灰复X设置，然后起动
+
+以下为网络上留传的要点，本人多台机器安装没有使用，如果不行，可以尝试（但是会删除受限制模块，导致某些别的硬件无法使用：
+sudo apt-get --purge remove nvidia-settings nvidia-kernel-common
+sudo rm /etc/init.d/nvidia-*
+
+4.开始安装（对于曾经手动安装nv驱动的，可以在安装的时候选择卸载旧版的驱动）：
+请拿出一张纸和一支笔，记录下一下的命令，因为我们要去到纯终端里面安装
+
+注销后，按Ctrl+Alt+F1，登录后
+关闭gdm
+sudo /etc/init.d/gdm stop
+然后开始安装（假设下载的文件放在home根目录下）
+sudo sh NVIDIA-Linux-x86-1.0-9631-pkg1.run(如果你下载的是64位驱动 sudo sh NVIDIA-Linux-x86_64-1.0-9629-pkg1.run）
+进入安装界面后，首先接受协议，选“接受”
+可能会有提示已经安装了旧的驱动（视乎你自己是否有手动安装过），是否删除，选yes就是了，
+一般会提示缺少模块，问是否网上下载，选“no”，
+提示需要自己编译模块，选“ok”，然后编译安装开始，
+最后提示需要修改xorg.conf，是否允许，选yes，
+完成安装，选ok。
+然后回到终端界面,重启gdm
+sudo /etc/init.d/gdm start
+
+现在可以重启试试驱动是否已经装好，在“应用程序-》系统工具-》NVIDIA X server setting里面可以看到驱动的信息
+
+提示：每次更新内核后都需要重新安装nv的驱动！重复第5点的步骤即可
+
+第三节 安装Beryl
+1.添加源
+建议直接是用亚洲官方或者cn99的源里面的！
+
+不过也可以是用官方的源：
+sudo gedit /etc/apt/sources.list
+
+加入以下源
+
+deb http://beryl-mirror.lupine.me.uk edgy main
+deb-src http://beryl-mirror.lupine.me.uk edgy main
+
+保存后退出
+
+然后加入钥匙：
+wget http://beryl-mirror.lupine.me.uk/1609B551.gpg -O- | sudo apt-key add -
+
+刷新库
+sudo apt-get update
+sudo apt-get dist-upgrade
+
+详细最新的变化，请看：http://ubuntu.beryl-project.org/
+
+2.安装beryl
+
+sudo apt-get install beryl emerald emerald-themes
+
+修改xorg.conf
+
+sudo gedit /etc/X11/xorg.conf
+
+在 Section "Screen" 里面添加
+Option "AddARGBGLXVisuals" "True"
+
+可选：
+在 Section "Device" 里面添加
+Option "TripleBuffer" "true"
+
+添加如下一项：（本人没有添加）
+Section "Extensions"
+Option "Composite" "Enable"
+EndSection
+
+保存退出
+
+在系统-》首选项-》会话-》起动程序 里面添加一项”beryl-manager“
+注销
+alt+ctrl+backspace，重启X
+登录后享受Beryl带来的快感吧~！
+Wink
+
+第四节 错误解决
+
+如果出现窗口框闪烁，可以在系统-》首选项-》会话-》起动程序 里面添加一项”emerald --replace“
+对于升级Beryl的朋友，最好删除home里面的.beryl和.emerald里面的setting.ini

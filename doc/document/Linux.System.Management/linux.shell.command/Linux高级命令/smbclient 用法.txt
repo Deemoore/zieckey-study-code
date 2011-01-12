@@ -1,0 +1,36 @@
+﻿smbclient –L IP或者NETBIOS名称，作用是显示某台提供samba服务的服务器上的共享资源。命令执行效果如下：
+
+smbclient –L glass
+Sharename Type Comment
+--------- ---- -------
+IPC$ IPC 远程 IPC
+HPLaserJ Printer HP LaserJet 6P
+ADMIN$ Disk 远程管理
+littlep Disk
+C$ Disk 默认共享
+Server Comment
+--------- -------
+GLASS
+GRIND
+Workgroup Master
+--------- -------
+BLUESUN GLASS
+WORKGROUP HEIHEI
+第一段列举了该机器（glass）上面的共享资源，第二段列举了glass所在的工作组里面所有提供samba服务的机器，第三列举了其他工作组提供 browse服务的Master机器（关于Master和Browse服务可以参考我的前面一篇samba使用大全-samba服务器）。
+使用网络资源：
+smbclient //IP或者NETBIOS名称/共享资源名 [-U 用户名]
+命令执行效果如下：
+smbclient //glass/littlep
+added interface ip=192.168.1.123 bcast=192.168.1.255 nmask=255.255.255.0
+Got a positive name query response from 192.168.1.123 (192.168.1.123)
+Password:
+Domain=[BLUESUN] OS=[Windows 5.0] Server=[Windows 2000 LAN Manager]
+smb: >
+接下来的操作和ftp的时候命令一样，用get下载文件而用put上传文件，命令可以用help查看。
+还有一种方法是用文件系统的方式（这种方式要确定你的内核支持smbfs，如果没有支持的话，编译内核的时候必须选中File systems--->Network File Systems---> SMB file system support (to mount Windows shares etc.) ）：
+smbmount //IP或者NETBIOS名称/共享资源名 /本地挂接点 [-o option]
+常用的的option有username=<用户名>，password=<密码>，guest（指定为用guest访问，不用提供密码，前面的即使用username=guest参数的话也会要求输入密码），ro（有时候为了系统安全要指定为只读模式），rw，同时多个 option的话用逗号隔开。
+或者可以用mount –t smbfs [–o option] //IP或者NETBIOS名称/共享资源名 /本地挂接点来实现同样的功能。
+例子如下：
+smbmount //glass/littlep /test -o guest或者mount –t smbfs –o guest //glass/littlep /test，然后就能通过访问/test来使用网络上的资源了。
+如果不需要使用的时候，可以简单地使用smbumount /test或者umount /test来解除这个挂接。 

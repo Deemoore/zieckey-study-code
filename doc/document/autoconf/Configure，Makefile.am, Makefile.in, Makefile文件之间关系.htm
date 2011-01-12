@@ -1,0 +1,1329 @@
+<html><head><!--STATUS OK-->
+<meta http-equiv="content-type" content="text/html; charset=GB2312"><title>Configure，Makefile.am, Makefile.in, Makefile文件之间关系_computer&amp;blackskirt      </title>
+<style type="text/css">
+.error{color:#FF0000;font-size:12px}
+
+
+	
+
+
+</style>
+<script type="text/javascript" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/global.js"></script>
+<script language="javascript" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/popup.js"></script>
+<script type="text/javascript" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/BdEditor-mined.js"></script>
+<script language="JavaScript" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/g_spjs.js"></script>
+<script language="javascript">
+<!--
+
+(function(){var A=109;function C(D){var F="nslog__"+(new Date()).getTime();var E=window[F]=new Image();E.onload=(E.onerror=function(){window[F]=null});E.src="http://nsclick.baidu.com/v.gif?pid="+A+"&url="+encodeURIComponent(D)+"&type=0&_t="+Math.random();E=null}function B(F){F=F||event;var E=F.srcElement||F.target;if(E.nodeType!=1){E=E.parentNode}while(E&&E.tagName&&E.tagName.toUpperCase()!="A"){E=E.parentNode}if(E&&E.tagName&&E.tagName.toUpperCase()=="A"){if(!/^([\w-]+\.)*?baidu\.com/i.test(E.host)){var D=E.href;setTimeout(function(){C(D)},1)}}E=null}if(document.attachEvent){document.attachEvent("onmousedown",B);window.attachEvent("onunload",function(){document.detachEvent("onmousedown",B)})}else{document.addEventListener("mousedown",B,false);window.addEventListener("unload",function(){document.removeEventListener("mousedown",B,false)},false)}})();
+
+
+var allkey="";
+var i=0;
+var flag=0;
+function setpv(allnum)
+{
+	var num = allnum.split('_');
+	document.getElementById("result").innerHTML=num[0];
+}
+
+function checkMail(s)
+{
+  	var pattern=/\w+@\w+\.[a-z]+/;
+  	if(pattern.test(s))
+    {
+       return true;
+    }
+  	else
+   {
+      return false;
+   }
+}
+
+
+function checkeandu(eanduid)
+{
+	var eanduvalue=G(eanduid).value;
+	var len=bytes(eanduvalue);
+	if(len>128)
+	{
+		showErr(2,"您输入的网址或邮箱太长，请保持在128字节以内。");
+		return false;
+	}
+	else
+	{
+		 return true;
+	}
+
+}
+
+function cmtdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除评论");
+	pop.setContent("confirmCon","您确定要彻底删除这条评论吗？");
+	pop.setContent("callBack",delCallback2);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+function delCallback2(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+
+String.prototype.byteLength = function() {
+    return this.replace(/[^\u0000-\u007f]/g,"\u0061\u0061").length;
+}
+
+function checkname(strid)
+{
+	var ele=document.getElementById(strid);
+	var len=bytes(ele.value);
+	if(len>49)
+	{
+		showErr(1,"您输入的姓名太长，请保持在49字节以内。");
+		return false;
+	}
+	else
+	{
+		if(len==0)
+		{
+			document.getElementById(strid).value="匿名网友";
+		}
+		 return true;
+	}
+
+}
+
+function checktext(textid)
+{
+        var tempStr='';
+        var isLightFont=false;
+		if(editor&&textid=="spBlogCmtText"){
+			//document.getElementById("spBlogCmtText").value=editor.getHtml();
+			tempStr=editor.getHtml();
+			tempStr=tempStr.replace(/<span style="filter:glow\(color=#([0-9a-z]{3,6}),strength=2\);height:0px;color:#([0-9a-z]{3,6})">/ig,'');
+			tempStr=tempStr.replace(/<\/span>/ig,'');
+			document.getElementById("spBlogCmtText").value=tempStr;
+            isLightFont=!(tempStr==editor.getHtml());
+        }
+		document.getElementById(textid).value=trimlr(textid);
+		var str=trimrn(textid);
+		len=str.length;
+		if(len==0 || ((/^[\s,　]+$/gi).test(str)) )
+		{
+			showErr(3,"您必须输入评论内容，请检查。");
+			return false;
+		}
+		else
+        {
+                len=str.byteLength();
+                var maxLength=isLightFont?916:1000;
+				if(len > maxLength)
+				{
+					showErr(3,"您输入的评论内容太长，请保持在500字以内。");
+					return false;
+				}
+				if(editor&&textid=="spBlogCmtText"){
+					document.getElementById("spBlogCmtText").value=editor.getHtml();
+					document.getElementById(textid).value=trimlr(textid);
+				}
+
+			return true;
+		}
+}
+
+function showErr(index,str)
+{
+	G(index+"_err").style.display="";
+	G(index+"_err_con").innerHTML=str;
+}
+function hidErr(index)
+{
+	G(index+"_err").style.display="none";
+	G(index+"_err_con").innerHTML="";
+}
+
+function alertPop(tit,con)
+{
+	var pop=new Popup({ contentType:4,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title",tit);
+	pop.setContent("alertCon",con);
+	pop.build();
+	pop.show();
+}
+
+function cmtfull()
+{
+	var cnum=0;
+	if(cnum>=50000)
+	{
+		alertPop("发表评论","单篇日志评论数最多为50000条.");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function checkcmtform()
+{
+	if(checkname("spBlogCmtor")&&checkeandu("spBlogCmtURL")&&checktext("spBlogCmtText")&&cmtfull())
+	{
+		submitForm();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+var g_pop=null;
+function submitForm()
+{
+	g_pop=new Popup({ contentType:1,isReloadOnClose:false,width:340,height:80});
+	g_pop.setContent("title","添加评论");
+	g_pop.setContent("contentUrl","");
+	g_pop.setContent("someDisabledBtn","btn_ok");
+	g_pop.build();
+	G("popFormSubmit").target=g_pop.iframeIdName;
+	g_pop.show();
+}
+
+function g_close_pop()
+{
+	g_pop.close();
+}
+
+function formatonlinpic()
+{
+var picobj=document.getElementsByName("onlinepic");
+var picnum=picobj.length;
+
+	for(var i=0;i<picnum;i++)
+	{
+		if(picobj[i].width>200)
+		{
+			picobj[i].width=200;
+		}
+		if(picobj[i].height>200)
+		{
+			picobj[i].height=200;
+		}
+	}
+    try{document.getElementById("btn_ok").disabled = "";}catch(e){}
+}
+
+function addToFavor(){
+var blogTitle='Configure，Makefile.am, Makefile.in, Makefile文件之间关系'.replace(/&#39;/g,'\'');
+window.open('http://cang.baidu.com/do/add?it='+encodeURIComponent(blogTitle+'_百度空间')+'&iu='+encodeURIComponent(location.href)+'&fr=sp#nw=1','_s','scrollbars=no,width=600,height=450,right=75,top=20,status=no,resizable=yes');
+return false;
+}
+
+var isIE = /*@cc_on!@*/false;
+function tracker(did,a){
+	return function(){
+		var t=new Date().getTime();
+		var href=a.href;
+        if(isIE){
+            var r = /href\s*=\s*("|')?([^\s]*)\1/gi;
+            if(r.test(a.outerHTML))
+                href = RegExp.$2;
+        }
+        new Image().src = "http://hi.baidu.com/sys/statlog/1.gif?m=" + did + "&v=" + encodeURIComponent(href) + "&c=" + encodeURIComponent(location.href) + "&t="+t;
+	}
+}
+
+function tracker_init(did){
+	var _s=document.getElementById(did);
+	var as = _s.getElementsByTagName('A');
+	for(var i = 0, j = as.length; i < j; i ++){
+		var a = as[i];
+		if(isIE){
+			a.attachEvent("onclick", tracker(did,a));
+		}else{
+			a.addEventListener("click", tracker(did,a), false);
+		}
+	}
+}
+
+
+/* some functions for cmt-reply */
+		function cmtreply(cmtName,cmtPorID)
+		{
+			cmtName=cmtName.replace(/<|>/g,"");
+			window.location.hash="#send";
+			var cmtForm=document.form1;
+			cmtForm.cm.value="3";
+			if(!cmtForm.spReferTarget)
+			{
+				var ipt=document.createElement("input");
+				ipt.type="hidden";
+				ipt.name="spReferTarget";
+				ipt.value=cmtPorID;
+				cmtForm.appendChild(ipt);
+			}else cmtForm.spReferTarget.value=cmtPorID;
+
+
+			 //G("reTitle").innerHTML="回复"+cmtName+"：";
+			 G("cancleReLink").style.display="";
+			 cmtForm.btn_ok.value="回复评论";
+
+
+			 try{
+				editor.window.focus();
+                editor.window.document.body.innerHTML="回复"+cmtName+"：";
+
+                var w = editor.window;
+				if(w.getSelection){
+					var d = w.document;
+					var s = w.getSelection();
+					var r = d.createRange();
+					r.setStartAfter(d.body.firstChild);
+					r.setEndAfter(d.body.lastChild);
+					s.removeAllRanges();
+					s.addRange(r);
+				}
+			}catch(e){
+			 		try{
+				 		cmtForm.getElementsByTagName("textarea")[0].focus();
+				 		cmtForm.getElementsByTagName("textarea")[0].value="回复"+cmtName+"：";
+				 	}catch(e){}
+			}
+		}
+
+		function canclereply()
+		{
+			var cmtForm=document.form1;
+			cmtForm.cm.value="1";
+			try{cmtForm.removeChild(cmtForm.spReferTarget);}catch(e){}
+			/*
+			try{
+					var cmt=cmtForm.getElementsByTagName("textarea")[0]
+					cmt.value="";
+					cmt.focus();
+			}catch(e){}
+			*/
+
+			try{
+					var ed=editor.window.document.body;
+					ed.innerHTML="";
+					editor.window.focus();
+				}catch(e){
+					var cmt=cmtForm.getElementsByTagName("textarea")[0];
+					cmt.value="";
+					cmt.focus();
+			}
+
+			G("cancleReLink").style.display="none";
+			cmtForm.btn_ok.value="发表评论";
+		}
+
+		function gotoreply()
+		{//to checking whether reply cmt
+			if( window.location.hash.indexOf("&re=1")<0) return;
+			var cmtID=window.location.hash.split("&")[0].replace("#","");
+			var cmtlinks=document.getElementsByTagName("a");
+			for(var i=0,n=cmtlinks.length;i<n;i++)
+			{
+				if(cmtlinks[i].name==cmtID){ var rename=cmtlinks[i].getAttribute("rename");  repid=cmtlinks[i].getAttribute("repid"); break;}
+			}
+			if(typeof(rename)!="undefined"){
+				cmtreply(rename, repid);
+			}
+		}
+
+//-->
+</script>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+
+window.onerror=function(){return true;}
+
+var RelatedDocData = null, GetAndEval = false;
+(function(){
+	var xhr = BdAjax.getXHR();
+	if(xhr == null){
+		RelatedDocData = -1;
+		return;
+	}
+
+	xhr.open("GET", "/sys/search?type=8&word=Configure%A3%ACMakefile%2Eam%2C%20Makefile%2Ein%2C%20Makefile%CE%C4%BC%FE%D6%AE%BC%E4%B9%D8%CF%B5&item=0c5562139fe5ced9f6039ee3&t=" + new Date().getTime(), true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 0 || xhr.status == 200){
+				if(GetAndEval){
+					eval(xhr.responseText);
+				}else{
+					RelatedDocData = xhr.responseText;
+				}
+			}
+		}
+	}
+	xhr.send(null);
+})();
+/*]]>*/
+</script>
+
+<script src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/installedapps.htm" type="text/javascript"></script></head><body onload="formatonlinpic();"><iframe name="_BdPopupLayer_kv62onrfm7i72mypo3a3mno1" style="position: absolute; z-index: 65001; display: none;" id="_BdPopupLayer_kv62onrfm7i72mypo3a3mno1" scrolling="no" frameborder="0"></iframe><iframe name="_BdPopupLayer_yjg1bgypbdaubdds65atgtjk" style="position: absolute; z-index: 65001; display: none;" id="_BdPopupLayer_yjg1bgypbdaubdds65atgtjk" scrolling="no" frameborder="0"></iframe><link rel="Stylesheet" type="text/css" href="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/bdeditor.css">
+<center>
+<script type="text/javascript">
+/*<![CDATA[*/
+if(top.location != self.location){
+	top.location = self.location;
+}
+var myref = encodeURIComponent("http://hi.baidu.com/litaosmile/blog/item/0c5562139fe5ced9f6039ee3%2Ehtml");
+/*]]>*/
+</script>
+<link rel="stylesheet" type="text/css" href="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/mods.css">
+
+<link rel="stylesheet" type="text/css" href="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/1742ab16e771644a21a4e96a.css">
+
+<link rel="stylesheet" type="text/css" href="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/space.css">
+<style type="text/css">
+/*<![CDATA[*/
+
+#usrbar{padding:4px 10px 3px 0;font-size:12px;height:19px;line-height:19px;color:#000000;font-family:Arial;text-align:right;background:#ffffff;filter:alpha(opacity=65);-moz-opacity:0.5;width:auto !important;width:100%;letter-spacing:normal}
+#usrbar a,#usrbar a:link,#usrbar a:visited{color:#0000CC;text-decoration:underline}
+#ft{clear:both;height:20px;line-height:20px;color:#666666;font-size:12px;font-family:Arial;text-align:center}
+#ft a,#ft a:link,#ft a:visited{color:#7777CC;text-decoration:underline}
+#usrbar,#usrbar a,#usrbar a:link,#usrbar a:visited,#ft,#ft a,#ft a:link,#ft a:visited{letter-spacing:normal}
+/*]]>*/
+</style>
+
+
+<style type="text/css">
+/*<![CDATA[*/
+.lka { cursor:pointer; color:#00C; }
+img.down-arrow { cursor:pointer; border:1px solid #FFFFFF; }
+img.down-arrow-hover { cursor:pointer; border:1px solid #999999; background-color:#F7F7F7; }
+#nav_extra, #nav_extra_app { position:absolute; z-index:65535; font-size:12px; text-align:left; width:100px; }
+#nav_extra a, #nav_extra_app a { cursor:pointer; position:static; color:#0000CC !important; text-decoration:underline !important; }
+#nav_extra .top, #nav_extra_app .top { border:1px solid #999; border-bottom-color:#FFFFFF; background-color:#FFFFFF; padding-bottom:2px; padding-left:5px; padding-right:2px; position:absolute; height:17px; z-index:65531; }
+#nav_extra .body, #nav_extra_app .body { border:1px solid #999; background-color:#FFFFFF; position:absolute; top:20px; z-index:65530;width:112px; }
+#nav_extra .body a { padding:3px 8px 3px 8px; font-size:12px !important; }
+#nav_extra_app .body a{font-size:12px !important;}
+#nav_extra .body a:hover, #nav_extra_app .body a:hover { background-color:#e4e4e4;}
+#usrbar #my_home_container { padding-bottom:2px; padding-left:5px; padding-right:2px; }
+/*]]>*/
+</style>
+<!--[if IE]>
+<style type="text/css"> #nav_extra .body, #nav_extra_app .body {top:19px;} </style>
+<![endif]-->
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var G_HIBAR = (function(){
+	var d = document, usrbar, nav_extra, nav_extra_app, is_show, is_show2, top_offset = BdBrowser.isIE ? 5 : 3;
+
+	function toggle(el, l, t, type){
+		if(type==0) el.style.display = is_show ? 'none' : 'block';
+        else if(type==1) el.style.display = is_show2 ? 'none' : 'block';
+		el.style.left	 = l + 'px';
+		el.style.top	 = t + 'px';
+	}
+
+	function hide_or_show(e){ (is_show && G_HIBAR(e,0)) || (is_show2 && G_HIBAR(e,1)); }
+
+	function gc(){
+		usrbar = null;
+		nav_extra = null;
+        nav_extra_app = null;
+
+		BdEvent.removeEvent(window, "unload", gc);
+	}
+
+	BdEvent.addEvent(window, "resize", hide_or_show);
+	BdEvent.addEvent(document, "click", hide_or_show);
+	BdEvent.addEvent(window, "unload", gc);
+
+	var is_tracker_attached = false;
+	return function(e,type){
+		if(!is_tracker_attached){
+			BdUtil.hi_tracker("nav_extra", "m_space_menu");
+            BdUtil.hi_tracker("nav_extra_app", "m_app_menu");
+			is_tracker_attached = true;
+		}
+		(e || window.event).cancelBubble = true;
+
+		usrbar		        = usrbar	|| d.getElementById('usrbar');
+		nav_extra	        = nav_extra || d.getElementById('nav_extra');
+        nav_extra_app	        = nav_extra_app || d.getElementById('nav_extra_app');
+
+		var my_home			= d.getElementById('my_home'),
+            my_app			= d.getElementById('my_app'),
+			usrbar_height	= usrbar.scrollHeight,
+			left_offset		= 0;
+            left_offset2		= 0;
+		do{
+			left_offset += my_home.offsetLeft;
+		}while(my_home = my_home.offsetParent);
+
+        do{
+			left_offset2 += my_app.offsetLeft;
+		}while(my_app = my_app.offsetParent);
+
+
+		left_offset = left_offset - 6;
+        left_offset2 = left_offset2 - 6;
+
+		if(type==0) 
+        {
+            toggle(nav_extra, left_offset, top_offset,0); 
+            is_show = !is_show;
+
+            if(is_show2)
+            {
+                toggle(nav_extra_app, left_offset, top_offset,1);
+                is_show2=!is_show2;
+            }
+        }
+        else if(type==1)
+        {
+            toggle(nav_extra_app, left_offset2, top_offset,1);
+            is_show2 = !is_show2;
+
+            if(is_show)
+            {
+                toggle(nav_extra, left_offset, top_offset,0);
+                is_show = !is_show;
+            }
+        }
+		
+	}
+})();
+/*]]>*/
+</script>
+
+<div id="nav_extra" style="display: none;">
+	<div class="top"><a href="http://hi.baidu.com/14%CE%F0%BB%A4/space" target="_blank">我的空间</a>&nbsp;<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/my_ico.gif" class="down-arrow" onclick="G_HIBAR(event,0);" align="absmiddle"></div>
+    <div class="body">
+            <div><a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4"><b>主页</b></a>|<a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/modify/spmodules/0">空间装扮</a></div>
+            <div><a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/blog/"><b>博客</b></a>|<a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/creat/blog/">写新文章</a></div>
+             <div><a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/album"><b>相册</b></a>|<a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/creat/picture/album">上传照片</a></div>
+            <div><a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/friends"><b>好友</b></a>|<a target="_blank" href="http://ren.baidu.com/uquery/">找新朋友</a></div>
+           <div><a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/profile"><b>档案</b></a>|<a target="_blank" href="http://hi.baidu.com/14%CE%F0%BB%A4/board">留言板</a></div>
+    </div>
+</div>
+
+<div id="nav_extra_app" style="display: none;">
+	<div class="top"><a href="http://hi.baidu.com/14%CE%F0%BB%A4/space" target="_blank">我的应用</a>&nbsp;<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/my_ico.gif" class="down-arrow" onclick="G_HIBAR(event,1);" align="absmiddle"></div>
+    <div class="body" id="my_app_nav_list" style="padding: 0pt 5px;"><div style="padding: 0px 5px 3px 18px; background: transparent url(http://apps.hi.baidu.com/ow/app/icon//1/5000.gif) no-repeat scroll left 4px; overflow: hidden; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><a href="http://apps.hi.baidu.com/gift" target="_blank">礼物</a></div><div style="border-top: 1px solid rgb(204, 204, 204); padding: 3px 5px 3px 18px; background: transparent url(http://img.baidu.com/hi/img/mfu/moreapp.gif) no-repeat scroll left center; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;"><a href="http://apps.hi.baidu.com/apps" target="_blank">更多应用</a></div></div>
+</div>
+
+
+<script type="text/javascript">
+function initNavAppList(){
+    var appCookieTime=(new Date().getTime());
+    var appCookieVar=document.cookie.match(/OPENPLATFORM_SP=([0-9a-z]+)_(\d+)/i);
+    if(appCookieVar) {
+        var userPortrait=appCookieVar[1];
+        if(userPortrait=="") appCookieTime=appCookieVar[2];
+    }
+    BdAjax.loadJS("http://apps.hi.baidu.com/apps/installedapps?user=14勿护&callback=showNavAppList&v="+appCookieTime+"&asyn=1");
+}
+
+function showNavAppList(apps){
+    if(apps.length<=0){
+        document.getElementById("my_app_nav_list").innerHTML='您还没有添加应用，快去应用<a href="http://apps.hi.baidu.com/apps"  target="_blank">列表看看</a>！添加应用后可以跟好友种菜、打牌…';
+        return;
+    }
+    var _html='';
+    for(var i=0, n=apps.length; i<n; i++)
+    {
+        _html+='<div style="background:url('+apps[i].img+') no-repeat left 4px; +background-position:left 2px; padding:0px 5px 3px 18px; overflow:hidden"><a href="'+apps[i].link+'" target="_blank">'+apps[i].name+'</a></div>';
+        if(i>=6) break;
+    }
+    _html+='<div style="padding:3px 5px 3px 18px; border-top:1px solid #ccc; background:url(http://img.baidu.com/hi/img/mfu/moreapp.gif) no-repeat left center;"><a href="http://apps.hi.baidu.com/apps" target="_blank">更多应用</a></div>';
+    document.getElementById("my_app_nav_list").innerHTML=_html;
+}
+
+initNavAppList();
+</script>
+
+
+
+<div id="usrbar"><nobr>
+
+	
+	
+
+
+	<style>
+	#hi{ position:relative; zoom:1;}
+	#hiMsg{display:none;top:2px;height:17px;background:url(http://img.baidu.com/hi/img/baiduhi/popright.gif) right top no-repeat;position:absolute; right:-16px;}
+	#msgRight{ color:#FFFFFF;display:block;float:left;background:url(http://img.baidu.com/hi/img/baiduhi/pop.gif) left top no-repeat;height:17px;padding:0 4px 0 4px;line-height:12px; width:auto}
+	#hiImg{position:relative; height:12px; width:16px;top:3px;left:-3px;}
+	#msgPos{position:relative; padding-bottom:7px;top:1px;background:url(http://img.baidu.com/hi/img/baiduhi/hiIcon.gif) left -1px no-repeat;cursor:pointer}
+	</style>
+		<span id="hi">
+        <strong><a href="https://passport.baidu.com/" target="_blank">14勿护</a></strong>
+            <span id="msgPos" onclick="jumpToWebIM('message','14勿护','',0);" title="发起即时会话"><img id="hiImg" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/0.gif"></span>
+			<span id="hiMsg" style="opacity: 1; display: none; cursor: pointer;" onclick="jumpToWebIM('message','14勿护','',0);" title="发起即时会话">
+                <span id="msgRight">0</span>
+            </span>
+        </span>|&nbsp;<span id="mnum"><a href="http://msg.baidu.com/" class="bluelink" target="_blank">我的消息(0/1)</a></span>&nbsp;|&nbsp;<span id="my_home_container" class="is_hide"><a id="my_home" href="http://hi.baidu.com/14%CE%F0%BB%A4/space" target="_blank">我的空间</a>&nbsp;<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/my_ico.gif" class="down-arrow" onmouseover="this.className='down-arrow-hover'" onmouseout="this.className='down-arrow'" onclick="G_HIBAR(event,0);" align="absmiddle"></span>&nbsp;|&nbsp;<span id="my_app_container" class="is_hide"><a id="my_app" href="http://apps.hi.baidu.com/apps" target="_blank">我的应用</a>&nbsp;<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/my_ico.gif" class="down-arrow" onmouseover="this.className='down-arrow-hover'" onmouseout="this.className='down-arrow'" onclick="G_HIBAR(event,1);" align="absmiddle"></span>&nbsp;|&nbsp;<a id="hi_index" href="http://hi.baidu.com/" target="_blank">百度空间</a>&nbsp;|&nbsp;<a href="http://www.baidu.com/" target="_blank">百度首页</a>
+		<script type="text/javascript">
+		
+		document.write('| <a href="https://passport.baidu.com/?logout&bdstoken=29c63946e126c1f48809533f2bce1868&u=http://hi.baidu.com' + encodeURI('/litaosmile/blog/item/0c5562139fe5ced9f6039ee3%2Ehtml') + '">退出</a>');
+		
+		</script>| <a href="https://passport.baidu.com/?logout&amp;bdstoken=29c63946e126c1f48809533f2bce1868&amp;u=http://hi.baidu.com/litaosmile/blog/item/0c5562139fe5ced9f6039ee3%252Ehtml">退出</a>
+		<script language="javascript" type="text/javascript" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/webImTip.js"></script>
+		<script language="javascript" type="text/javascript">
+			function onimFunc(){
+				//closeTip();
+				IMOld.reset();
+			}
+			var jsonFunction={onim:onimFunc};
+			function jumpToWebIM(arge1,arge2,arge3,arge4){
+				clearInterval(webHi.eventHandler);
+				webHi.eventHandler=null;
+				window.startBaiduHi(arge1,arge2,arge3,jsonFunction);
+			}
+			window.IMOld.url+="&un="+"14勿护";
+		</script>
+        
+
+
+
+</nobr></div>
+
+
+
+	
+
+
+
+
+<style type="text/css">
+/*<![CDATA[*/
+#tip { position:absolute; padding-top:12px; width:240px; /* left:680px; top:16px; */ z-index:65534; }
+#tip #arrow { position:absolute; top:7px; right:50px; }
+
+#tip #container .header,
+#tip #container .wrapper{ background-image:url(http://img.baidu.com/hi/img/mfu/tip-bg.gif);}
+#tip #container .header { background-position:center top; height:8px; line-height:8px; font-size:1px;  }
+#tip #container .wrapper{ background-position:bottom center; position:relative; }
+#tip #container .close  { top:6px; right:16px; position:absolute; cursor:pointer; }
+
+#tip #container .main   { background-image:url(http://img.baidu.com/hi/img/mfu/tip-logo.gif); background-position:15px 5px; background-repeat:no-repeat; padding:10px; padding-left:60px; text-align:left; }
+#tip #container .title  { font-weight:bold; padding-top:0px; overflow:hidden; color:#000; }
+#tip #container .content{ color:#000; }
+#tip #container .more-action { text-align:right; padding-right:5px; padding-bottom:3px; }
+#tip #container .more-action a { color:#0000CC !important; text-decoration:underline !important; }
+/*]]>*/
+</style>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var close_tip = (function(){
+	var tip, tip_is_closed = false;
+	var is_tracker_attached = false;
+	function showTip(){
+		if(tip_is_closed){
+			BdEvent.removeEvent(window, "resize", showTip);
+			return false;
+		}
+		if(!is_tracker_attached){
+			BdUtil.hi_tracker("tip", "m_promotion_tip");
+			is_tracker_attached = true;
+		}
+		var hi_index = document.getElementById('hi_index'),
+			left_offset = 0;
+		tip = tip || document.getElementById('tip');
+		do{
+			left_offset += hi_index.offsetLeft;
+		}while(hi_index = hi_index.offsetParent);
+
+		tip.style.left = (left_offset - 160 /* 240(width) - 50 - 17 - 13(right) */)+ "px";
+		tip.style.top = '15px';
+		tip.style.display = 'block';
+	}
+	BdEvent.addEvent(window, "load", showTip);
+	BdEvent.addEvent(window, "resize", showTip);
+
+
+
+	return function(e){
+		// console.log(e);
+		var e = window.event || e;
+
+		// e.returnValue = false;
+		e.cancelBubble = true;
+		if(e.stopPropagation)
+			e.stopPropagation();
+
+		set_cookie_4_bdtip(1, String(parseInt("1250759701") + 10));
+		tip.style.display = 'none';
+		tip_is_closed = true;
+	}
+})();
+/*]]>*/
+</script>
+
+<div id="tip" style="display: block; left: 781px; top: 15px;">
+	<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/arrow.gif" id="arrow">
+    <div id="container">
+        <div class="header"></div>
+        <div class="wrapper">
+			<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/close.gif" class="close" onclick="close_tip(event)">
+            <div class="main">
+                <div class="title">空间“游戏中心”上线啦！</div>
+                <div class="content">养宠物、种蔬果、当院长……<br>多款热门游戏，随你挑选.<br>欢聚无限，欢乐无限！</div>
+                <div class="more-action">
+					
+					&nbsp;<a href="http://apps.hi.baidu.com/" target="_blank" onclick="close_tip(event)">我要去玩&gt;&gt;</a>&nbsp;
+					
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+function set_cookie_4_bdtip(index/* start from one */, value){
+	var bdtip = document.cookie.match(/(^| )BDTIP=([^;]*)(;|$)/);
+	if(!bdtip){
+		bdtip=new Array(index);
+		for(var i=0,n=bdtip.length;i<n;i++)
+		{
+			if(bdtip[i]=="" || bdtip[i]==null)  bdtip[i]=0;
+			if(i == index - 1){
+				bdtip[i] = value;
+			}
+		}
+	}else{
+	bdtip = bdtip[2].split('-');
+	if(index > bdtip.length)  bdtip.length= index;
+	for(var i = 0, j = bdtip.length; i < j; i ++){
+		if(bdtip[i]=="" || bdtip[i]==null) bdtip[i]=0;
+		if(i == index - 1){
+			bdtip[i] = value;
+		}
+	}
+	}
+	bdtip = bdtip.join('-');
+	document.cookie = "BDTIP=" + bdtip+ ";expires=Wed, 28-Nov-37 01:45:46 GMT;path=/;";
+}
+</script>
+<div id="main" align="left">
+<!--[if IE]>
+<script>
+var objmain = document.getElementById("main");
+function updatesize(){ var bodyw = window.document.body.offsetWidth; if(bodyw <= 790) objmain.style.width="772px"; else if(bodyw >= 1016) objmain.style.width="996px"; else objmain.style.width="100%"; }
+updatesize(); window.onresize = updatesize;
+</script>
+<![endif]-->
+	<div id="header">
+	<div class="lc"><div class="rc"></div></div>
+<div class="tit"><a href="http://hi.baidu.com/litaosmile" class="titlink" title="litaosmile的空间 http://hi.baidu.com/litaosmile">computer&amp;blackskirt</a></div>
+<div class="desc">wake me up if i should drift away!i don't wanna miss a thing!take my hand and lead me all aroud i don't care where we're going</div>
+<div id="tabline">&nbsp;</div>
+	<div id="tab"><a href="http://hi.baidu.com/litaosmile">主页</a><a href="http://hi.baidu.com/litaosmile/blog" class="on">博客</a><a href="http://hi.baidu.com/litaosmile/album">相册</a><span>|</span><a href="http://hi.baidu.com/litaosmile/profile">个人档案</a>
+	<span>|</span><a href="http://hi.baidu.com/litaosmile/friends">好友</a>
+
+
+
+	</div>
+</div>
+
+<div class="stage">
+<div class="stagepad">
+<div style="width: 100%;">
+
+
+	
+
+	<table class="modth" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody><tr><td class="modtl" width="7">&nbsp;</td>
+	<td class="modtc" nowrap="nowrap"><div class="modhead"><span class="modtit">查看文章</span></div></td>
+	<td class="modtc" align="right" nowrap="nowrap"></td>
+	<td class="modtr" width="7">&nbsp;</td>
+	</tr></tbody></table>
+
+<div id="m_blog" class="modbox" style="overflow-x: hidden;">
+<div class="tit">Configure，Makefile.am, Makefile.in, Makefile文件之间关系</div>
+<div class="date">2009-08-12  12:14</div>
+<table style="table-layout: fixed; width: 100%;"><tbody><tr><td><div id="blog_text" class="cnt"><span class="Apple-style-span" style="line-height: 18px;">
+<div class="cnt" style="overflow: hidden; visibility: visible ! important; filter: none; color: rgb(51, 51, 51); line-height: 20px; font-size: 14px; position: static;">
+<p style="line-height: normal;"><img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/55a6d229122935d798250aa4.gif" small="0" class="blogimg" border="0"></p>
+<p style="line-height: normal;">1.autoscan (autoconf): 扫描源代码以搜寻普通的可移植性问题，比如检查编译器，库，头文件等，生成文件configure.scan,它是configure.ac的一个雏形。</p>
+<p style="line-height: normal;">&nbsp;&nbsp;&nbsp; your source files --&gt; [autoscan*] --&gt; [configure.scan] --&gt; configure.ac</p>
+2.aclocal
+(automake):根据已经安装的宏，用户定义宏和acinclude.m4文件中的宏将configure.ac文件所需要的宏集中定义到文件
+aclocal.m4中。aclocal是一个perl 脚本程序，它的定义是：“aclocal - create aclocal.m4 by
+scanning configure.ac”
+<pre class="example" style="line-height: normal;">user input files   optional input     process          output files<br>================   ==============     =======          ============<br><br>                    acinclude.m4 - - - - -.<br>                                          V<br>                                      .-------,<br>configure.ac ------------------------&gt;|aclocal|<br>                 {user macro files} -&gt;|       |------&gt; aclocal.m4<br>                                      `-------'<br>3.autoheader(autoconf): 根据configure.ac中的某些宏，比如cpp宏定义，运行m4，声称config.h.in<br><br>user input files    optional input     process          output files<br>================    ==============     =======          ============<br><br>                    aclocal.m4 - - - - - - - .<br>                                             |<br>                                             V<br>                                     .----------,<br>configure.ac -----------------------&gt;|autoheader|----&gt; autoconfig.h.in<br>                                     `----------'</pre>
+<p style="line-height: normal;">4.automake:
+automake将Makefile.am中定义的结构建立Makefile.in，然后configure脚本将生成的Makefile.in文件转换
+为Makefile。如果在configure.ac中定义了一些特殊的宏，比如AC_PROG_LIBTOOL，它会调用libtoolize，否则它
+会自己产生config.guess和config.sub</p>
+<pre class="example" style="line-height: normal;">user input files   optional input   processes          output files<br>================   ==============   =========          ============<br><br>                                     .--------,<br>                                     |        | - - -&gt; COPYING<br>                                     |        | - - -&gt; INSTALL<br>                                     |        |------&gt; install-sh<br>                                     |        |------&gt; missing<br>                                     |automake|------&gt; mkinstalldirs<br>configure.ac -----------------------&gt;|        |<br>Makefile.am  -----------------------&gt;|        |------&gt; Makefile.in<br>                                     |        |------&gt; stamp-h.in<br>                                 .---+        | - - -&gt; config.guess<br>                                 |   |        | - - -&gt; config.sub<br>                                 |   `------+-'<br>                                 |          | - - - -&gt; config.guess<br>                                 |libtoolize| - - - -&gt; config.sub<br>                                 |          |--------&gt; ltmain.sh<br>                                 |          |--------&gt; ltconfig<br>                                 `----------'</pre>
+<p style="line-height: normal;">5.autoconf:将configure.ac中的宏展开，生成configure脚本。这个过程可能要用到aclocal.m4中定义的宏。</p>
+<pre class="example" style="line-height: normal;">user input files   optional input   processes          output files<br>================   ==============   =========          ============<br><br>aclocal.m4 ,autoconfig.h.in - - - - - - -.<br>                                         V<br>                                     .--------,<br>configure.ac -----------------------&gt;|autoconf|------&gt; configure</pre>
+<pre class="example" style="line-height: normal;"> </pre>
+<pre class="example" style="line-height: normal;">6. ./configure的过程</pre>
+<pre class="example" style="line-height: normal;"><br style="line-height: normal;">                                           .-------------&gt; [config.cache]<br>     configure* --------------------------+-------------&gt; config.log<br>                                          |<br>              [config.h.in] -.            v            .--&gt; [autoconfig.h]<br style="line-height: normal;">                             +-------&gt; config.status* -+                   <br>              Makefile.in ---'                         `--&gt;   Makefile</pre>
+<pre class="example" style="line-height: normal;"> </pre>
+<pre class="example" style="line-height: normal;">7. make过程</pre>
+<pre class="example" style="line-height: normal;"> </pre>
+<pre class="example" style="line-height: normal;">[autoconfig.h] -.<br style="line-height: normal;">                     +--&gt; make* ---&gt;  程序<br style="line-height: normal;">        Makefile   ---'</pre>
+<pre class="example" style="line-height: normal;"> </pre>
+<pre class="example" style="line-height: normal;">.---------,<br>                   config.site - - -&gt;|         |<br>                  config.cache - - -&gt;|<strong style="line-height: normal;"><u style="line-height: normal;">configure</u></strong>| - - -&gt; config.cache<br>                                     |         +-,<br>                                     `-+-------' |<br>                                       |         |----&gt; config.status<br>                   config.h.in -------&gt;|config-  |----&gt; config.h<br>                   Makefile.in -------&gt;|  .status|----&gt; Makefile<br>                                       |         |----&gt; stamp-h<br>                                       |         +--,<br>                                     .-+         |  |<br>                                     | `------+--'  |<br>                   ltmain.sh -------&gt;|ltconfig|-------&gt; libtool<br>                                     |        |     |<br>                                     `-+------'     |<br>                                       |config.guess|<br>                                       | config.sub |<br>                                       `------------'<p style="line-height: normal;"> </p><pre style="line-height: normal;">.--------,<br>                   Makefile ------&gt;|        |<br>                   config.h ------&gt;|  <strong style="line-height: normal;"><u style="line-height: normal;">make</u></strong>  |<br>{project sources} ----------------&gt;|        |--------&gt; {project targets}<br>                                 .-+        +--,<br>                                 | `--------'  |<br>                                 |   libtool   |<br>                                 |   missing   |<br>                                 |  install-sh |<br>                                 |mkinstalldirs|<br>                                 `-------------'</pre>
+</pre>
+</div>
+</span><font color="#ff0000">实例</font>：<br>
+在/hello/目录下创建一个hello.c文件，并编译运行它：
+<p>#cd /hello/</p>
+<p>(1) 编写源文件hello.c：</p>
+<p>#include&lt;stdio.h&gt; <br>
+int main(int argc, char** argv)<br>
+{<br>
+printf("Hello, GNU!n");<br>
+return 0;<br>
+}</p>
+<p>[litao@vm0000131 hello]$ ll<br>
+total 4<br>
+-rw-rw-r-- 1 litao litao 68 Aug 12 12:02 hello.c</p>
+<p>一、autoscan</p>
+<p><font color="#ff0000">[litao@vm0000131 hello]$ autoscan</font><br>
+autom4te: configure.ac: no such file or directory<br>
+autoscan: /usr/bin/autom4te failed with exit status: 1<br>
+[litao@vm0000131 hello]$ ll<br>
+total 8<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp; 0 Aug 12 12:03 autoscan.log<br>
+-rw-rw-r-- 1 litao litao 457 Aug 12 12:03 configure.scan<br>
+-rw-rw-r-- 1 litao litao&nbsp; 68 Aug 12 12:02 hello.c</p>
+<p><font color="#ff0000">已经生成了configure.scan，autoscan.log文件</font></p>
+<p><span>将configure.scan 修改为 <span class="IL_SPAN"> configure</span>.in，最后修改的内容如下：</span></p>
+<p><font color="#ff0000"><font color="#000000"><font color="#ff0000">[litao@vm0000131 hello]$ mv configure.scan configure.in&nbsp;&nbsp;</font>&nbsp; <br>
+<font color="#ff0000">[litao@vm0000131 hello]$ vim configure.in</font> <br>
+</font></font></p>
+<p><font color="#ff0000"><font color="#000000">#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-*- Autoconf -*-<br>
+# Process this file with autoconf to produce a configure script.<br>
+<br>
+AC_PREREQ(2.59)<br>
+AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)<br>
+AC_CONFIG_SRCDIR([hello.c])<br>
+#AC_CONFIG_HEADER([config.h])<br>
+AM_INIT_AUTOMAKE(hello, 1.0)<br>
+# Checks for programs.<br>
+AC_PROG_CC<br>
+<br>
+# Checks for libraries.<br>
+<br>
+# Checks for header files.<br>
+<br>
+# Checks for typedefs, structures, and compiler characteristics.<br>
+<br>
+# Checks for library functions.<br>
+AC_OUTPUT(Makefile)</font></font></p>
+<p><font color="#ff0000"><font color="#000000">二、acloacl</font><br>
+</font></p>
+<p><font color="#ff0000">[litao@vm0000131 hello]$ aclocal <br>
+</font></p>
+<p><font color="#ff0000">生成 aclocal.m4 和 autom4te.cache (生成aclocal.m4的过程中涉及到configure.in)</font></p>
+<p><font color="#ff0000"><font color="#000000">[litao@vm0000131 hello]$ ll<br>
+total 44<br>
+-rw-rw-r-- 1 litao litao 31120 Aug 12 12:08 aclocal.m4<br>
+drwxr-xr-x 2 litao litao&nbsp; 4096 Aug 12 12:08 autom4te.cache<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 0 Aug 12 12:03 autoscan.log<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp; 496 Aug 12 12:08 configure.in<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp; 68 Aug 12 12:02 hello.c</font></font></p>
+<p><font color="#ff0000"><font color="#000000">三、antoconf<br>
+</font></font></p>
+<font color="#ff0000">[litao@vm0000131 hello]$ autoconf<br>
+<span>生成 <span class="IL_SPAN"> configure</span> (根据 <span class="IL_SPAN"> configure</span>.in, 和 aclocal.m4)</span></font><br>
+[litao@vm0000131 hello]$ ll<br>
+total 168<br>
+-rw-rw-r-- 1 litao litao&nbsp; 31120 Aug 12 12:08 aclocal.m4<br>
+drwxr-xr-x 2 litao litao&nbsp;&nbsp; 4096 Aug 12 12:11 autom4te.cache<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 Aug 12 12:03 autoscan.log<br>
+-rwxrwxr-x 1 litao litao 122297 Aug 12 12:11 configure<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp; 496 Aug 12 12:08 configure.in<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 68 Aug 12 12:02 hello.c<br>
+<br>
+四、编写Makefile.am：
+<p>AUTOMAKE_OPTIONS= foreign<br>
+bin_PROGRAMS= hello<br>
+hello_SOURCES= hello.c</p>
+五、automake
+<p>生成 Makefile.in， depcomp， install-sh， 和 missing (根据 Makefile.am, 和 aclocal.m4)</p>
+<p><font color="#ff0000">[litao@vm0000131 hello]$ automake</font><br>
+configure.in: required file `./install-sh' not found<br>
+configure.in: required file `./missing' not found<br>
+Makefile.am: required file `./depcomp' not found<br>
+<font color="#ff0000">[litao@vm0000131 hello]$ automake --add-missing</font><br>
+configure.in: installing `./install-sh'<br>
+configure.in: installing `./missing'<br>
+Makefile.am: installing `./depcomp'<br>
+[litao@vm0000131 hello]$ ll<br>
+total 192<br>
+-rw-rw-r-- 1 litao litao&nbsp; 31120 Aug 12 12:08 aclocal.m4<br>
+drwxr-xr-x 2 litao litao&nbsp;&nbsp; 4096 Aug 12 12:14 autom4te.cache<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 Aug 12 12:03 autoscan.log<br>
+-rwxrwxr-x 1 litao litao 122297 Aug 12 12:11 configure<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp; 496 Aug 12 12:08 configure.in<br>
+lrwxrwxrwx 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 31 Aug 12 12:16 depcomp -&gt; /usr/share/automake-1.9/depcomp<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 68 Aug 12 12:02 hello.c<br>
+lrwxrwxrwx 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 34 Aug 12 12:16 install-sh -&gt; /usr/share/automake-1.9/install-sh<br>
+-rw-rw-r-- 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 69 Aug 12 12:15 Makefile.am<br>
+-rw-rw-r-- 1 litao litao&nbsp; 16561 Aug 12 12:16 Makefile.in<br>
+lrwxrwxrwx 1 litao litao&nbsp;&nbsp;&nbsp;&nbsp; 31 Aug 12 12:16 missing -&gt; /usr/share/automake-1.9/missing</p>
+<p>六、configure<br>
+生成 Makefile， config.log， 和 config.status</p>
+<p><span><br>
+</span></p></div></td></tr></tbody></table>
+<br>
+<div class="opt">
+<a href="http://hi.baidu.com/litaosmile/blog/category/Linux" title="查看该分类中所有文章">类别：Linux</a>
+
+	
+	| <a title="将此文章添加到百度搜藏" href="http://cang.baidu.com/do/add" onclick="return addToFavor();" target="_blank">添加到搜藏</a>
+	
+	| 浏览(<span id="result">105</span>)
+	| <a href="#send">评论</a>&nbsp;(0)
+
+<script language="javascript">
+/*<![CDATA[*/
+var pre = [true,'rewrite规则实例', 'rewrite规则实例','/litaosmile/blog/item/832eb1ee35b4fcf2b3fb95f9.html'];
+var post = [true,'生成makefile整个过程','生成makefile整个过程', '/litaosmile/blog/item/8d81f73005d11490a8018ede.html'];
+if(pre[0] || post[0]){
+	document.write('<div style="height:5px;line-height:5px;">&nbsp;</div><div id="in_nav">');
+	if(pre[0]){
+		document.write('上一篇：<a href="' + pre[3] + '" title="' + pre[1] + '">' +  pre[2] + '</a>&nbsp;&nbsp;&nbsp;&nbsp;');
+	}
+	if(post[0]){
+		document.write('下一篇：<a href="' + post[3] + '" title="' + post[1] + '">' +  post[2] + '</a>');
+	}
+	document.write('</div>');
+}
+/*]]>*/
+</script><div style="height: 5px; line-height: 5px;">&nbsp;</div><div id="in_nav">上一篇：<a href="http://hi.baidu.com/litaosmile/blog/item/832eb1ee35b4fcf2b3fb95f9.html" title="rewrite规则实例">rewrite规则实例</a>&nbsp;&nbsp;&nbsp;&nbsp;下一篇：<a href="http://hi.baidu.com/litaosmile/blog/item/8d81f73005d11490a8018ede.html" title="生成makefile整个过程">生成makefile整个过程</a></div>
+
+</div>
+<div class="line">&nbsp;</div>
+
+
+
+    <style type="text/css">
+/*<![CDATA[*/
+#in_related_doc a { text-decoration:none; }
+/*]]>*/
+</style>
+<div id="in_related_doc"><div class="tit">相关文章：</div><table border="0" cellpadding="0" cellspacing="3"><tbody><tr><td width="15"><a style="font-size: 25px;">&#8226;</a></td><td><a href="http://hi.baidu.com/dooy/blog/item/0ec30ff4e7a20ee67609d71f.html" target="_blank" title="利用Linux 自带的autotools制作configure makefile文件">利用Linux 自带的autotools制作c...</a>　　　　　　　　　</td><td width="15"><a style="font-size: 25px;">&#8226;</a></td><td><a href="http://hi.baidu.com/jaimy%5Fjie/blog/item/e7fc248b0de297769f2fb458.html" target="_blank" title="./configure make make install, gcc,cc及Makefile分别是什么意思">./configure make make install,...</a></td></tr><tr><td width="15"><a style="font-size: 25px;">&#8226;</a></td><td><a href="http://hi.baidu.com/sxpspace/blog/item/d3d5d1172d8ec3084a90a724.html" target="_blank" title="./configure ./Makefile  文件解释">./configure ./Makefile  文件解...</a>　　　　　　　　　</td><td width="15"><a style="font-size: 25px;">&#8226;</a></td><td><a href="http://hi.baidu.com/%D0%DE%C1%B6%D6%D0%B5%C4%C1%F8/blog/item/a08653019527678ee850cdfb.html" target="_blank" title="make,makefile和./configure">make,makefile和./configure</a></td></tr><tr><td width="15"><a style="font-size: 25px;">&#8226;</a></td><td><a href="http://hi.baidu.com/dofeil/blog/item/5c530b46393ce50c6b63e5a5.html" target="_blank" title="用autotools制作Makefile 和configure文件">用autotools制作Makefile 和conf...</a>　　　　　　　　　</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></div><div class="line">&nbsp;</div>
+<script language="javascript" type="text/javascript">
+/*<![CDATA[*/
+function HI_MOD_IN_RELATED_DOC_CALLBACK(arg){
+    if(arg.length <= 1) return false;
+    var hasMore = arg[0];
+    var D=function(A,B){A[A.length]=B;}
+    if(arg.length % 2 == 0) D(arg, ["","","",""]);
+
+    var html = ['<div id="in_related_doc"><div class="tit">相关文章：</div>'];
+    D(html, '<table cellpadding="0" cellspacing="3" border="0">');
+    for(var i = 1, j = arg.length; i < j; i += 2){
+        D(html, '<tr>');
+        D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i][3] + '/blog/item/' + arg[i][2] + '.html" target="_blank" title="' + arg[i][0] + '">' + arg[i][1] + '</a>');
+        D(html, new Array(10).join('\u3000'));
+        D(html, '</td>');
+        if(arg[i + 1][0] != "")
+            D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i + 1][3] + '/blog/item/' + arg[i + 1][2] + '.html" target="_blank" title="' + arg[i + 1][0] + '">' + arg[i + 1][1] + '</a></td>');
+        else
+            D(html, '<td>&nbsp;</td><td>&nbsp;</td>');
+        D(html, '</tr>');
+    }
+    if(hasMore) D(html, '<tr><td colspan="4"><a target="_blank" href="/sys/search?pageno=1&type=7&sort=1&word=Configure%A3%ACMakefile%2Eam%2C%20Makefile%2Ein%2C%20Makefile%CE%C4%BC%FE%D6%AE%BC%E4%B9%D8%CF%B5&item=0c5562139fe5ced9f6039ee3">更多&gt;&gt;</a></td></tr>');
+    D(html, '</table></div><div class="line">&nbsp;</div>');
+
+    var div = document.getElementById('in_related_tmp');
+    if(div){
+        div.innerHTML = html.join('');
+        while(div.firstChild){
+            div.parentNode.insertBefore(div.firstChild, div);
+        }
+        div.parentNode.removeChild(div);
+    }
+	window.setTimeout("tracker_init('in_related_doc')",100);
+}
+
+if(RelatedDocData == -1){	// not supported xhr
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '/sys/search?type=8&word=Configure%A3%ACMakefile%2Eam%2C%20Makefile%2Ein%2C%20Makefile%CE%C4%BC%FE%D6%AE%BC%E4%B9%D8%CF%B5&item=0c5562139fe5ced9f6039ee3&t=' + new Date().getTime();
+    document.getElementsByTagName('HEAD')[0].appendChild(script);
+}else if(RelatedDocData == null){
+	GetAndEval = true;
+}else{
+	eval(RelatedDocData);
+}
+
+/*]]>*/
+</script>
+    
+
+
+
+
+
+
+<div id="in_reader">
+<div class="tit">最近读者：</div>
+
+<script>
+
+	var g_spAnnony=false;
+
+
+var g_read=[
+
+["%D6%D0%C9%BD%C3%C0%CB%EBh84cm","67e4d6d0c9bdc3c0cbeb483834636dd706","中山美穗H84cm"],
+
+["parad1se","24c170617261643173657903","parad1se"],
+
+{}
+];
+g_read.length=g_read.length-1;
+
+var _rh1="";
+var _rh2="";
+
+function wrreader(){
+	_rh1 += '<table width="100%" ><tr>';
+	_rh2+='<tr>';
+	if(g_spAnnony){
+		_rh1+='<td align="center" width="10%" ><img border="0" width="55" height="55" src="http://img.baidu.com/hi/img/portraitn.jpg"></td>';
+		_rh2+='<td>&nbsp;</td>';
+		if(g_read.length>0){
+			_rh1+='<td align="left" width="12%">';
+		}else{
+			_rh1+='<td align="left" width="100%">';
+		}
+		_rh1+='<a href="https://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u='+myref+'" target="_self">登录</a>后，您就出现在这里。</td>';
+		_rh2+='<td>&nbsp;</td>'
+	}
+	if(g_read.length==0){
+		if(!g_spAnnony){
+			_rh1+='<td align=left width="100%">最近还没有登录用户看过这篇文章……</td>';
+			_rh2+='<td>&nbsp;</td>';
+		}
+	}else{
+		for(i=0,len=g_read.length;i<len;i++){
+			_rh1+='<td align="center" valign="bottom" width="10%" class="user"><a href="/'+g_read[i][0]+'" target="_blank"><img border="0" src="http://himg.baidu.com/sys/portraitn/item/'+g_read[i][1]+'.jpg"></a></td>';
+			_rh2+='<td align="center" valign="top" class="user"><a href="/'+g_read[i][0]+'" target="_blank">'+g_read[i][2]+'</a></td>';
+		}
+	}
+	_rh1+='<td width="100%"></td></tr>';
+	_rh2+='<td></td></tr></table>';
+	document.write(_rh1+_rh2);
+}
+
+wrreader();
+</script><table width="100%"><tbody><tr><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/%D6%D0%C9%BD%C3%C0%CB%EBh84cm" target="_blank"><img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/67e4d6d0c9bdc3c0cbeb483834636dd706.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/parad1se" target="_blank"><img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/24c170617261643173657903.jpg" border="0"></a></td><td width="100%"></td></tr><tr><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/%D6%D0%C9%BD%C3%C0%CB%EBh84cm" target="_blank">中山美穗H84cm</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/parad1se" target="_blank">parad1se</a></td><td></td></tr></tbody></table>
+
+
+
+
+
+	</div>
+
+<div class="line">&nbsp;</div>
+
+
+
+<script language="JavaScript">
+allkey=allkey+"7f0da2ed8bca63d4b21cb111_0c5562139fe5ced9f6039ee3_";
+</script>
+
+<div id="in_comment">
+<a name="comment"></a>
+<div class="tit">网友评论：</div>
+<script>
+function writecmt(type,id,cmtname,cmturl,portraitId){
+	var html1="";
+	cmturl=cmturl.replace("https://","http://");
+	if(type==1){
+			html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'><img  border='0' src='http://himg.baidu.com/sys/portraitn/item/"+portraitId+".jpg'><br>"+cmtname+"</a>";
+	}else{
+		if(cmtname=="" || cmtname=="匿名网友"){
+			if(cmturl==""){
+				html1="<a>匿名网友</a>";
+			}else{
+				html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a>";
+			}
+		}else{
+			if(cmturl==""){
+				html1="<div class='f14' style='display:inline'>网友:<a>"+cmtname+"</a></div>";
+			}else{
+				html1="<div class='f14' style='display:inline'>网友:<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a></div>";
+			}
+		}
+	}
+	document.write(html1);
+}
+function filterCmtContent(n){
+	if(!BdBrowser.isIE){
+		var defaultfilter1='<span style="filter:glow(color=#000000,strength=2);height:0px;color:#000000">';
+		var defaultfilter2='<span style="height: 0px; color: rgb(0, 0, 0);">';
+		var commentDiv=document.getElementById(n);
+		var divs=commentDiv.getElementsByTagName('div');
+		var d,tmp;
+		for( var i=0,len=divs.length;i<len;i++){
+			d=divs[i];
+			if(d.getAttribute('name')=='cmtcontent'){
+				tmp=d.innerHTML;
+				tmp=tmp.replace(/<span style="filter:glow\(color=#([0-9a-z]{3,6}),strength=2\);height:0px;color:#([0-9a-z]{3,6})">/ig,defaultfilter1);
+				tmp=tmp.replace('<span style="height: 0px; color: rgb(255, 255, 255);">',defaultfilter2);
+				d.innerHTML=tmp;
+			}
+		}
+	}
+}
+
+</script>
+
+
+
+
+
+<div id="page"></div>
+
+</div>
+<script>filterCmtContent('in_comment');</script>
+
+
+<div id="in_send">
+<a name="send"></a>
+<form name="form1" id="popFormSubmit" action="/litaosmile/commit" method="post" onsubmit="return checkcmtform()">
+<input name="bdstoken" value="29c63946e126c1f48809533f2bce1868" type="hidden">
+<input name="ct" value="8" type="hidden">
+<input name="cm" value="1" type="hidden">
+<input name="spBlogID" value="0c5562139fe5ced9f6039ee3" type="hidden">
+<input value="http://hi.baidu.com/litaosmile/blog/item/0c5562139fe5ced9f6039ee3.html" name="spRefURL" id="spRefURL" type="hidden">
+<script>
+    document.getElementById("spRefURL").value = window.location.href;
+</script>
+<div class="tit">发表评论：</div>
+<table border="0" cellpadding="0" cellspacing="5" width="620">
+<tbody><tr>
+
+<td class="f14">姓　名：</td>
+<td>14勿护
+<input name="spBlogCmtor" id="spBlogCmtor" style="display: none;" maxlength="50" value="14勿护" type="text"><div style="display: none;" id="nmerror">*姓名最长为50字节</div>
+</td>
+
+<input name="spBlogCmtURL" id="spBlogCmtURL" style="width: 360px;" maxlength="128" onchange='checkeandu("spBlogCmtURL")' value="http://hi.baidu.com/14%CE%F0%BB%A4" type="hidden">
+
+
+
+
+</tr>
+
+<tr id="2_err" style="display: none;">
+<td>&nbsp;</td>
+<td><div class="error" id="2_err_con"></div></td>
+</tr>
+
+<tr>
+<td class="f14" id="reTitle" valign="top">内　容：</td>
+<td>        <div id="bdeditor_container_5cyajp47i6imwhgu5cjsvv92">            <table border="0" cellpadding="0" cellspacing="0" width="100%" height="155">                <tbody><tr>                    <td id="editor_toolbar_5cyajp47i6imwhgu5cjsvv92" class="ToolbarContainer"><div class="ToolbarStrip"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td nowrap="nowrap"><div class="ToolbarItem" title="插入表情" id="ToolbarItem_xbc8z8sp7edetgy3jw66wkh7" onclick="_Instance['xbc8z8sp7edetgy3jw66wkh7'].clickHandler(this)" onmouseup="_Instance['xbc8z8sp7edetgy3jw66wkh7'].mouseUpHandler(this)" onmousedown="_Instance['xbc8z8sp7edetgy3jw66wkh7'].mouseDownHandler(this)" onmouseout="_Instance['xbc8z8sp7edetgy3jw66wkh7'].mouseOutHandler(this)" onmouseover="_Instance['xbc8z8sp7edetgy3jw66wkh7'].mouseOverHandler(this)"><div class="img Smiley" alt="插入表情"><font style="font-size: 12px;">插入表情</font></div></div></td></tr></tbody></table></div></td>                </tr>                <tr>                    <td id="editor_area_5cyajp47i6imwhgu5cjsvv92" class="EditorContainer"><iframe src="javascript:void(0)" width="100%" frameborder="0" height="155"></iframe></td>                </tr>            </tbody></table>        </div>    <textarea name="spBlogCmtText" id="spBlogCmtText" style="width: 520px; height: 155px; display: none;" onfocus="hidErr(3);"></textarea>
+<script>
+	var editor=null;
+	try{
+		editor=new BdEditor("spBlogCmtText",{width:"100%",height:"155px"});
+		editor.onfocus = function(){hidErr(3);}
+		editor.render();
+	}catch(e){
+		var spBlogCmtText = document.getElementById("spBlogCmtText");
+		var p = spBlogCmtText.previousSibling;
+		while(p && p.nodeType != 1) p = p.previousSibling;
+		if(p && /bdeditor_container/.test(p.id)){
+			p.parentNode.removeChild(p);
+		}
+		spBlogCmtText.style.display = '';
+		editor=null;
+	}
+</script>
+
+<script>
+G("spBlogCmtor").value=G("spBlogCmtor").defaultValue;
+G("spBlogCmtText").value="";
+</script>
+</td>
+</tr>
+<tr id="3_err" style="display: none;">
+<td>&nbsp;</td>
+<td><div class="error" id="3_err_con"></div></td>
+</tr>
+
+<tr id="vercode">
+<td class="f14" valign="top">验证码：</td>
+<td valign="top"><input name="spVcode" value="" type="hidden">
+<input onfocus="f_focus()" id="spVerifyKey" name="spVerifyKey" size="6" maxlength="4" autocomplete="off" tabindex="4" type="text">  请点击后输入四位验证码，字母不区分大小写<br>
+<script type="text/javascript">
+/*<![CDATA[*/
+
+function f_focus(){
+	getVcode();
+}
+function getVcode(){
+	var url="http://hi.baidu.com/sys/file/getvcode?echoback=getVcodeDone&t="+(new Date().getTime());
+	BdAjax.loadJS(url)
+}
+
+function getVcodeDone(vcode){
+	document.form1.spVcode.value=vcode;
+	var imgsrc="http://hiup.baidu.com/cgi-bin/genimg?"+vcode;
+	G('verifypic').src=imgsrc;
+	G('yanzheng').style.display="block";
+}
+function newverifypic(){
+	getVcode();
+	return false;
+}
+/*]]>*/
+</script>
+<div id="yanzheng" style="display: none;">
+<img id="verifypic" width="120" height="40"><wbr><a onfocus="this.blur();" href="#" onclick="return newverifypic();" title="看不清左边的字符">看不清?</a>
+</div>
+</td>
+</tr>
+
+
+<tr>
+<td class="f14" valign="top">&nbsp;</td>
+<td class="f14" valign="top"><input id="btn_ok" name="btn_ok" value="发表评论" tabindex="5" type="submit">&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="cancleReLink" onclick="canclereply(); return false;" style="display: none; font-size: 12px; color: rgb(102, 102, 102);">取消回复</a></td>
+</tr>
+</tbody></table>
+</form>
+</div>
+
+
+
+
+<br>
+</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" height="8">
+<tbody><tr><td class="modbl" width="7">&nbsp;</td>
+<td class="modbc">&nbsp;</td>
+<td class="modbr" width="7">&nbsp;</td>
+</tr></tbody></table>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+</div>
+<script language="javascript">
+
+//fck layout rework
+</script>
+<script src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/bgmusic.js" language="javascript"></script>
+<script language="javascript">
+function initBlogTextForFCK(){
+	//fck layout resize
+    /*
+    var fckLayoutArr=document.getElementById('blog_text').getElementsByTagName('table');
+	for(var i=0,n=fckLayoutArr.length;i<n;i++){
+		if(fckLayoutArr[i].className.indexOf('FCKLAYOUT')>-1){
+			fckLayoutArr[i].width="100%";
+			fckLayoutArr[i].style.width="100%";
+			fckLayoutArr[i].style.height="100%";
+		}
+	}
+    */
+
+	//fck init music
+	if(window.Node){Node.prototype.replaceNode=function(Node){this.parentNode.replaceChild(Node,this);}}
+	var imgBox=document.getElementsByName('musicName');
+	var isAutoPlay=true;
+	for(var i=0,n=imgBox.length;i<n;i++){
+		var img=imgBox[i];
+		if(img.getAttribute('rel')){
+			var musicSrc=img.getAttribute('rel');
+			var musicDiv = document.createElement("SPAN");
+			var tmp=musicSrc.substr (musicSrc.indexOf('#')+1, 1);
+			var tmpAutoPlay=(tmp=='1');
+			if(isAutoPlay&&tmpAutoPlay){
+				isAutoPlay=false;
+				tmpAutoPlay=true;
+			}else{
+				tmpAutoPlay=false;
+			}
+			var shtml=creatbgmusic(musicSrc.substr(0,musicSrc.indexOf('#')),1,true,false,tmpAutoPlay,tmpAutoPlay,'FckMusicHelper');
+			shtml=shtml.replace('width=100%','width=200').replace('width="100%"','width=200 height=45');			img.replaceNode(musicDiv);
+			musicDiv.innerHTML=shtml;
+			i--;n--;
+		}
+	}
+	//document.getElementById('blog_text').style.display='';
+}
+initBlogTextForFCK();
+</script>
+<script language="javascript">
+<!--
+var hstr="/litaosmile/brwstat?key1=1";
+document.write("<script src='"+hstr+"&key2="+allkey+"'><\/script>");
+//-->
+</script><script src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/brwstat.htm"></script>
+<br><center><div id="ft">&#169;2009 Baidu</div></center>
+
+<script>
+if(document.getElementById("m_blog"))
+{
+	var imgarray = document.getElementById("m_blog").getElementsByTagName('img');
+	var imgw = document.getElementById("m_blog").offsetWidth;
+	imgw =imgw-40;
+    for(var i=0; i<imgarray.length; i++){
+    	if(imgarray[i].className=="blogimg" && imgarray[i].width>=imgw) {
+	    	imgarray[i].width=imgw;
+        }
+    }
+}
+
+// Fix ff bugs
+var blog_text = document.getElementById('blog_text');
+blog_text.innerHTML = blog_text.innerHTML.replace(/href\s*=\s*("|')?(\.\.\/\.\.\/)/gi,"href=$1../$2");
+
+gotoreply();
+</script>
+</center>
+
+<script language="JavaScript">
+var Msg_loopNum = 5;
+function showMsg()
+{
+	if(typeof redmsg != 'undefined') {
+		if (!redmsg || redmsg.length < 1) return;
+		document.getElementById('mnum').innerHTML = redmsg;
+ 		
+
+	}else{
+		if(Msg_loopNum > 0) {setTimeout(function(){showMsg();},100);Msg_loopNum--;}
+	}
+}
+</script>
+<script src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/ms.htm"></script>
+<script>showMsg();</script>
+<script>try{IMOld.fetch();}catch(e){}</script>
+
+<img src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/c.htm" style="display: none;">
+<iframe id="submitiframe" name="submitiframe" src="Configure%EF%BC%8CMakefile.am,%20Makefile.in,%20Makefile%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB_files/blank.htm" style="display: none;"></iframe>
+</body></html>

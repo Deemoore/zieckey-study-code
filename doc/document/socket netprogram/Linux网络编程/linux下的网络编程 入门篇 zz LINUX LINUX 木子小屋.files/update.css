@@ -1,0 +1,597 @@
+TEXTAREA {
+	FONT-SIZE: 12px
+}
+#people-invite TEXTAREA {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+#profile TD {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; PADDING-TOP: 2px
+}
+#profile .col1 {
+	WIDTH: 4em
+}
+#peopleSearch #key {
+	WIDTH: 62%
+}
+#peopleSearch INPUT {
+	
+}
+#search-result TABLE .col2 {
+	WIDTH: 35em
+}
+.col-body .col2 UL LI {
+	BACKGROUND-IMAGE: none
+}
+#peopleSearch .search-args {
+	MARGIN-LEFT: 10px
+}
+#search-result .col1 {
+	WIDTH: 18em
+}
+#search-result .col3 {
+	WIDTH: 6em
+}
+#search-result .col3 A {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #eee 1px solid; DISPLAY: block; BACKGROUND: #ddd; MARGIN: 4px 2px; BORDER-LEFT: #eee 1px solid; COLOR: #333; LINE-HEIGHT: 16px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 16px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+#friend-list .col3 A {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #eee 1px solid; DISPLAY: block; BACKGROUND: #ddd; MARGIN: 4px 2px; BORDER-LEFT: #eee 1px solid; COLOR: #333; LINE-HEIGHT: 16px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 16px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+.a-btn {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #eee 1px solid; DISPLAY: block; BACKGROUND: #ddd; MARGIN: 4px 2px; BORDER-LEFT: #eee 1px solid; COLOR: #333; LINE-HEIGHT: 16px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 16px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+.add-f-link {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #eee 1px solid; DISPLAY: block; BACKGROUND: #ddd; MARGIN: 4px 2px; BORDER-LEFT: #eee 1px solid; COLOR: #333; LINE-HEIGHT: 16px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 16px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+.del-link {
+	BORDER-RIGHT: #333 1px solid; BORDER-TOP: #eee 1px solid; DISPLAY: block; BACKGROUND: #ddd; MARGIN: 4px 2px; BORDER-LEFT: #eee 1px solid; COLOR: #333; LINE-HEIGHT: 16px; BORDER-BOTTOM: #333 1px solid; HEIGHT: 16px; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+#search-result .col3 A:hover {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #333 1px solid; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #eee 1px solid; TEXT-DECORATION: none
+}
+#friend-list .col3 A:hover {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #333 1px solid; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #eee 1px solid; TEXT-DECORATION: none
+}
+.a-btn:hover {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #333 1px solid; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #eee 1px solid; TEXT-DECORATION: none
+}
+.add-f-link:hover {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #333 1px solid; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #eee 1px solid; TEXT-DECORATION: none
+}
+.del-link:hover {
+	BORDER-RIGHT: #eee 1px solid; BORDER-TOP: #333 1px solid; BORDER-LEFT: #333 1px solid; BORDER-BOTTOM: #eee 1px solid; TEXT-DECORATION: none
+}
+#search-result .col-body .edit-col {
+	POSITION: relative
+}
+#search-result .col-body .edit-col-bottom {
+	POSITION: relative
+}
+#friend-list .col-body .edit-col {
+	POSITION: relative
+}
+#friend-list .col-body .edit-col-bottom {
+	POSITION: relative
+}
+#friend-group-list .col-body .edit-col {
+	POSITION: relative
+}
+#friend-group-list .col-body .edit-col-bottom {
+	POSITION: relative
+}
+.edit-col .page-browse {
+	RIGHT: 5px; POSITION: absolute; TOP: 5px
+}
+.edit-col-bottom .page-browse {
+	RIGHT: 5px; POSITION: absolute; TOP: 5px
+}
+#friend-list .col2 {
+	WIDTH: 33em
+}
+#friend-list .col0 {
+	
+}
+#friend-listt .col1 {
+	WIDTH: 60px
+}
+#friend-list .col3 {
+	WIDTH: 6em
+}
+#friend-list .tool-box {
+	MARGIN: 5px; POSITION: relative
+}
+#friend-group-list .tool-box {
+	MARGIN: 5px; POSITION: relative
+}
+#friend-list .upper #new-grp-btn {
+	RIGHT: 100px; WIDTH: 5em; POSITION: absolute; TOP: 0px
+}
+#friend-group-list .upper #new-grp-btn {
+	RIGHT: 100px; WIDTH: 5em; POSITION: absolute; TOP: 0px
+}
+#friend-list .upper #mail-friend-btn {
+	RIGHT: 10px; WIDTH: 5em; POSITION: absolute; TOP: 0px
+}
+#friend-group-list .upper #mail-friend-btn {
+	RIGHT: 10px; WIDTH: 5em; POSITION: absolute; TOP: 0px
+}
+.with-checkbox TD {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.with-checkbox TH {
+	LINE-HEIGHT: 25px
+}
+.col4 {
+	WIDTH: 10%
+}
+#friend-list .inner-pop {
+	PADDING-RIGHT: 3px; MARGIN-TOP: 5px; PADDING-LEFT: 2em; PADDING-BOTTOM: 3px; COLOR: #000; PADDING-TOP: 3px
+}
+#friend-group-list .inner-pop {
+	PADDING-RIGHT: 3px; MARGIN-TOP: 5px; PADDING-LEFT: 2em; PADDING-BOTTOM: 3px; COLOR: #000; PADDING-TOP: 3px
+}
+.inner-pop {
+	MARGIN-TOP: 10px; PADDING-LEFT: 0px! important; LINE-HEIGHT: 40px; PADDING-TOP: 10px; HEIGHT: 40px; TEXT-ALIGN: left
+}
+.ner-p {
+	RIGHT: 200px; WIDTH: 550px; LINE-HEIGHT: 20px; PADDING-TOP: 0px! important; POSITION: absolute; TOP: 200px; HEIGHT: 370px; BACKGROUND-COLOR: #fff; TEXT-ALIGN: left
+}
+#edit-audio {
+	RIGHT: 200px; WIDTH: 550px; LINE-HEIGHT: 20px; PADDING-TOP: 0px! important; POSITION: absolute; TOP: 200px; HEIGHT: 370px; BACKGROUND-COLOR: #fff; TEXT-ALIGN: left
+}
+#music-url-edit {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; LINE-HEIGHT: 20px; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+#alert-pop {
+	WIDTH: 250px; LINE-HEIGHT: 20px; PADDING-TOP: 0px! important; POSITION: absolute; HEIGHT: 100px; BACKGROUND-COLOR: #fff; TEXT-ALIGN: center
+}
+#friend-group-list TABLE {
+	WIDTH: 97%
+}
+#friend-group-list .col0 {
+	WIDTH: 2em
+}
+#friend-group-listt .col1 {
+	WIDTH: 60px
+}
+#people-invite #invite-mail P {
+	MARGIN: 5px 10px; LINE-HEIGHT: 1.5em
+}
+#people-invite #invite-link P {
+	MARGIN: 5px 10px; LINE-HEIGHT: 1.5em
+}
+#people-invite #to TEXTAREA {
+	WIDTH: 30em; HEIGHT: 4em
+}
+#people-invite #subject INPUT {
+	WIDTH: 30em
+}
+#mail-body {
+	MARGIN: 10px
+}
+#people-invite #mail-body TEXTAREA {
+	MARGIN: 10px; WIDTH: 95%; HEIGHT: 5em
+}
+.fun-btns {
+	TEXT-ALIGN: right
+}
+#invite-mail .fun-btns {
+	TEXT-ALIGN: center
+}
+#invite-mail .fun-btns INPUT {
+	MARGIN: 0px 3em
+}
+#invite-recept #bokee-logo {
+	DISPLAY: none
+}
+.big-btn A {
+	BORDER-RIGHT: #ffcc00 1px outset; PADDING-RIGHT: 0px; BORDER-TOP: #ffcc00 1px outset; DISPLAY: block; PADDING-LEFT: 0px; FONT-SIZE: 14px; BACKGROUND: #f7e9b3; PADDING-BOTTOM: 10px; MARGIN: 20px 90px; BORDER-LEFT: #ffcc00 1px outset; COLOR: #000; PADDING-TOP: 10px; BORDER-BOTTOM: #ffcc00 1px outset; TEXT-ALIGN: center; TEXT-DECORATION: underline
+}
+.big-btn A:hover {
+	BORDER-RIGHT: #ffcc00 1px inset; BORDER-TOP: #ffcc00 1px inset; BORDER-LEFT: #ffcc00 1px inset; BORDER-BOTTOM: #ffcc00 1px inset; TEXT-DECORATION: underline
+}
+#invite-recept #friends .col-body {
+	TEXT-ALIGN: center
+}
+#invite-recept #friends .col-body {
+	PADDING-TOP: 5px
+}
+#invite-recept #post-list UL {
+	MARGIN-LEFT: 5px; LINE-HEIGHT: 1.5em
+}
+#invite-recept #recept P {
+	MARGIN: 10px; LINE-HEIGHT: 1.5em
+}
+#popup P {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; LINE-HEIGHT: 1.5em; PADDING-TOP: 5px
+}
+#popup TEXTAREA {
+	WIDTH: 29em; HEIGHT: 6em
+}
+#popup .note {
+	PADDING-LEFT: 4em; COLOR: #f00
+}
+#sms-content .add-f-link {
+	LEFT: 600px; WIDTH: 6em; TEXT-INDENT: 0px; POSITION: relative; TOP: 0px
+}
+#msg-manage .col-body TD {
+	PADDING-RIGHT: 4px; PADDING-LEFT: 4px
+}
+#msg-manage #guestBook TEXTAREA {
+	WIDTH: 140px; HEIGHT: 8em
+}
+#msg-manage .col2 {
+	VERTICAL-ALIGN: top
+}
+#msg-manage #guestBook #name {
+	WIDTH: 100px
+}
+#msg-list .edit-col {
+	POSITION: relative
+}
+#msg-list .edit-col-bottom {
+	POSITION: relative
+}
+#player-setup {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; WIDTH: 95%; PADDING-TOP: 5px
+}
+.col2 {
+	PADDING-RIGHT: 5px! important; PADDING-LEFT: 5px! important; PADDING-BOTTOM: 0px! important; PADDING-TOP: 0px! important
+}
+#msg-list .del-link {
+	FLOAT: right; MARGIN: 0px
+}
+#msg-list .info {
+	WIDTH: 100%
+}
+#msg-list .date {
+	DISPLAY: block; FLOAT: left
+}
+#msg-list .who {
+	TEXT-ALIGN: center
+}
+#network-list .edit-col {
+	POSITION: relative
+}
+#network-list #back-to-root {
+	RIGHT: 5px; POSITION: absolute; TOP: 4px
+}
+#network-list .person IMG {
+	DISPLAY: block
+}
+#network-list .person {
+	BORDER-RIGHT: #ddd 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #ddd 1px solid; PADDING-LEFT: 5px; BACKGROUND: #fff; FLOAT: left; PADDING-BOTTOM: 5px; MARGIN: 9px; BORDER-LEFT: #ddd 1px solid; COLOR: #000; PADDING-TOP: 5px; BORDER-BOTTOM: #ddd 1px solid; TEXT-ALIGN: center
+}
+#network-list .person:hover {
+	BORDER-RIGHT: #666 1px solid; BORDER-TOP: #666 1px solid; BORDER-LEFT: #666 1px solid; BORDER-BOTTOM: #666 1px solid
+}
+#network-list .slicer {
+	CLEAR: both
+}
+#tips LI {
+	PADDING-RIGHT: 2px
+}
+#index-view #friends IMG {
+	MARGIN: 4px
+}
+#index-edit #friends IMG {
+	MARGIN: 4px
+}
+#my-groups TABLE DD {
+	MARGIN-TOP: 0.5em; LINE-HEIGHT: 1.5em
+}
+#groups-search TABLE DD {
+	MARGIN-TOP: 0.5em; LINE-HEIGHT: 1.5em
+}
+#my-groups TABLE TD {
+	PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; PADDING-BOTTOM: 0.5em; VERTICAL-ALIGN: top; PADDING-TOP: 0.5em
+}
+#groups-search TABLE TD {
+	PADDING-RIGHT: 0.5em; PADDING-LEFT: 0.5em; PADDING-BOTTOM: 0.5em; VERTICAL-ALIGN: top; PADDING-TOP: 0.5em
+}
+#created-groups .group-avatar {
+	WIDTH: 45px
+}
+#belong-groups .group-avatar {
+	WIDTH: 45px
+}
+#groups-search .group-avatar {
+	WIDTH: 45px
+}
+.grp-list TD {
+	WIDTH: 90px
+}
+#groups-search TABLE {
+	WIDTH: 96%
+}
+#group-topics .grp-topic-title {
+	
+}
+#audio-info {
+	WIDTH: 70%
+}
+#title {
+	PADDING-LEFT: 10px; FONT-WEIGHT: bold; FONT-SIZE: 14px; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/images/music.jpg); LINE-HEIGHT: 31px; BACKGROUND-REPEAT: repeat-x; HEIGHT: 31px; TEXT-ALIGN: left; TEXT-DECORATION: none
+}
+.title-bj {
+	BACKGROUND-IMAGE: none! important; LINE-HEIGHT: 20px! important; HEIGHT: 20px! important
+}
+#url-nav {
+	BORDER-RIGHT: #ccc 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #ccc 1px solid; MARGIN-TOP: 5px; PADDING-LEFT: 3px; FONT-SIZE: 12px; LEFT: 100px; FLOAT: left; PADDING-BOTTOM: 3px; BORDER-LEFT: #ccc 1px solid; CURSOR: pointer; PADDING-TOP: 3px; BORDER-BOTTOM: #ccc 0px solid; POSITION: absolute; TOP: 30px; BACKGROUND-COLOR: #fff
+}
+#file-nav {
+	BORDER-RIGHT: #ccc 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #ccc 1px solid; MARGIN-TOP: 5px; PADDING-LEFT: 3px; FONT-SIZE: 12px; LEFT: 20px; FLOAT: left; PADDING-BOTTOM: 3px; BORDER-LEFT: #ccc 1px solid; CURSOR: pointer; PADDING-TOP: 3px; BORDER-BOTTOM: #ccc 0px solid; POSITION: absolute; TOP: 30px; BACKGROUND-COLOR: #fff
+}
+#music-file {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+#search-init {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+#music-file P {
+	BORDER-TOP: #ccc 1px solid; MARGIN-TOP: 30px; WIDTH: 100%; LINE-HEIGHT: 30px; PADDING-TOP: 10px! important
+}
+#search-init P {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+.music-note {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; LINE-HEIGHT: 20px; PADDING-TOP: 5px; TEXT-ALIGN: left
+}
+.col1 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.col2 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.col3 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.col4 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.col5 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.col6 {
+	BORDER-BOTTOM: #eee 1px solid
+}
+.table_ruler TD IMG {
+	MARGIN: 2px 0px
+}
+.music-Tab {
+	BORDER-TOP: #ccc 1px solid; MARGIN-TOP: 30px; WIDTH: 100%; LINE-HEIGHT: 30px; PADDING-TOP: 10px! important
+}
+#music-url {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+.zhiddin INPUT {
+	FLOAT: none! important; MARGIN-LEFT: 10px
+}
+.style-btn01 {
+	BORDER-RIGHT: #ccc 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #ccc 1px solid; MARGIN-TOP: 7px; PADDING-LEFT: 2px; LEFT: 220px; FLOAT: left; PADDING-BOTTOM: 1px; BORDER-LEFT: #ccc 1px solid; LINE-HEIGHT: 18px; MARGIN-RIGHT: 10px; PADDING-TOP: 1px; BORDER-BOTTOM: #ccc 1px solid; POSITION: absolute; TOP: 61px; BACKGROUND-COLOR: #eee
+}
+#group-topics .grp-topic-creator {
+	WIDTH: 6em
+}
+.close-inner-pop {
+	MARGIN-TOP: 10px; RIGHT: 10px; FLOAT: right; WIDTH: 20px; POSITION: absolute
+}
+#group-topics .grp-topic-belong {
+	WIDTH: 6em
+}
+#grp-serch-form {
+	MARGIN: 1em 0px 1em 2em; LINE-HEIGHT: 2em
+}
+#create-group H4 {
+	FONT-WEIGHT: normal; FONT-SIZE: 14px; MARGIN: 20px
+}
+#create-group TABLE {
+	MARGIN-LEFT: 100px
+}
+#create-group TD {
+	VERTICAL-ALIGN: top
+}
+#create-group .col1 {
+	TEXT-ALIGN: right
+}
+#create-group .tip-row TD {
+	FILTER: progid:DXImageTransform.Microsoft.Alpha(opacity=0); PADDING-TOP: 0px; opacity: 0.6
+}
+#create-group #grp-name {
+	WIDTH: 14em
+}
+#create-group #grp-tags {
+	WIDTH: 18em
+}
+#create-group #grp-des {
+	WIDTH: 33em; HEIGHT: 6em
+}
+.grp-list {
+	HEIGHT: 1%
+}
+.grp-list:unknown {
+	CLEAR: both; DISPLAY: block; VISIBILITY: hidden; HEIGHT: 0px; content: "."
+}
+.grp-list DT {
+	DISPLAY: block; TEXT-ALIGN: center
+}
+#group-topics {
+	WIDTH: 100%
+}
+#group-topics TABLE {
+	WIDTH: 98%
+}
+.grp-list DD {
+	MARGIN-LEFT: 0px; TEXT-ALIGN: center
+}
+#player {
+	PADDING-RIGHT: 5px; BACKGROUND-POSITION: 5px 5px; PADDING-LEFT: 5px; BACKGROUND-IMAGE: url(http://blogteam.bokee.com/pub/css/player/top-left.gif); PADDING-BOTTOM: 5px; PADDING-TOP: 5px; BACKGROUND-REPEAT: no-repeat
+}
+#myMusic .edit-col {
+	MARGIN-BOTTOM: 8px
+}
+#pannel {
+	BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/top-right.gif) no-repeat right top; MARGIN-LEFT: 2px; HEIGHT: 45px
+}
+#capText {
+	DISPLAY: none; PADDING-LEFT: 5px; WIDTH: 100%; COLOR: white; PADDING-TOP: 3px; BACKGROUND-COLOR: #555555
+}
+#indicator TABLE {
+	MARGIN-TOP: 5px; WIDTH: 96%; BORDER-COLLAPSE: collapse
+}
+#mmList {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; TEXT-INDENT: -15px! important; PADDING-TOP: 2px; TEXT-ALIGN: left
+}
+#mmList LI {
+	DISPLAY: block; TEXT-INDENT: 2px; TEXT-ALIGN: left
+}
+#mmList A {
+	TEXT-INDENT: 1px! important
+}
+#indicator {
+	POSITION: relative
+}
+#payler-btns {
+	POSITION: relative
+}
+#payler-btns TABLE {
+	WIDTH: 95%
+}
+#playback {
+	WIDTH: 56%; TEXT-ALIGN: left
+}
+#volume {
+	VERTICAL-ALIGN: top; TEXT-ALIGN: right
+}
+#volume {
+	PADDING-RIGHT: 0px! important; PADDING-LEFT: 0px! important; PADDING-BOTTOM: 0px! important; MARGIN: 0px; PADDING-TOP: 0px! important
+}
+#fav-song {
+	WIDTH: 17px
+}
+#play-time {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 8px; PADDING-BOTTOM: 0px; WIDTH: 25%; PADDING-TOP: 0px
+}
+#disp1 {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; WIDTH: 100%; COLOR: #fff; PADDING-TOP: 2px; HEIGHT: 12px
+}
+#disp2 {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; WIDTH: 100%; COLOR: #fff; PADDING-TOP: 2px; HEIGHT: 12px
+}
+.t-1 #disp1 {
+	BORDER-RIGHT: #f1daaa 1px solid; BORDER-TOP: #f1daaa 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t1.gif) repeat-x 50% top; BORDER-LEFT: #f1daaa 1px solid; BORDER-BOTTOM: #f1daaa 1px solid
+}
+.t-1 #disp2 {
+	BORDER-RIGHT: #f1daaa 1px solid; BORDER-TOP: #f1daaa 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t1.gif) repeat-x 50% top; BORDER-LEFT: #f1daaa 1px solid; BORDER-BOTTOM: #f1daaa 1px solid
+}
+.t-2 #disp1 {
+	BORDER-RIGHT: #ffc9e5 1px solid; BORDER-TOP: #ffc9e5 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t2.gif) repeat-x 50% top; BORDER-LEFT: #ffc9e5 1px solid; BORDER-BOTTOM: #ffc9e5 1px solid
+}
+.t-2 #disp2 {
+	BORDER-RIGHT: #ffc9e5 1px solid; BORDER-TOP: #ffc9e5 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t2.gif) repeat-x 50% top; BORDER-LEFT: #ffc9e5 1px solid; BORDER-BOTTOM: #ffc9e5 1px solid
+}
+.t-3 #disp1 {
+	BORDER-RIGHT: #caccda 1px solid; BORDER-TOP: #caccda 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t3.gif) repeat-x 50% top; BORDER-LEFT: #caccda 1px solid; BORDER-BOTTOM: #caccda 1px solid
+}
+.t-3 #disp2 {
+	BORDER-RIGHT: #caccda 1px solid; BORDER-TOP: #caccda 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t3.gif) repeat-x 50% top; BORDER-LEFT: #caccda 1px solid; BORDER-BOTTOM: #caccda 1px solid
+}
+.t-4 #disp1 {
+	BORDER-RIGHT: #d4f371 1px solid; BORDER-TOP: #d4f371 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t4.gif) repeat-x 50% top; BORDER-LEFT: #d4f371 1px solid; BORDER-BOTTOM: #d4f371 1px solid
+}
+.t-4 #disp2 {
+	BORDER-RIGHT: #d4f371 1px solid; BORDER-TOP: #d4f371 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t4.gif) repeat-x 50% top; BORDER-LEFT: #d4f371 1px solid; BORDER-BOTTOM: #d4f371 1px solid
+}
+.t-5 #disp1 {
+	BORDER-RIGHT: #cececd 1px solid; BORDER-TOP: #cececd 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t5.gif) repeat-x 50% top; BORDER-LEFT: #cececd 1px solid; BORDER-BOTTOM: #cececd 1px solid
+}
+.t-5 #disp2 {
+	BORDER-RIGHT: #cececd 1px solid; BORDER-TOP: #cececd 1px solid; BACKGROUND: url(http://blogteam.bokee.com/pub/css/player/t5.gif) repeat-x 50% top; BORDER-LEFT: #cececd 1px solid; BORDER-BOTTOM: #cececd 1px solid
+}
+#player-mid {
+	BORDER-RIGHT: #ececec 1px solid; BACKGROUND: #fff; PADDING-BOTTOM: 10px; BORDER-LEFT: #ececec 1px solid
+}
+.t-1 #playlist {
+	BORDER-RIGHT: #d68202 1px solid; BORDER-TOP: #d68202 1px solid; BACKGROUND: #ef9102; MARGIN: 0px 6px; BORDER-LEFT: #d68202 1px solid; COLOR: #fcc269; BORDER-BOTTOM: #d68202 1px solid
+}
+.t-1 #playlist OL LI A {
+	COLOR: #fcc269
+}
+.t-2 #playlist {
+	BORDER-RIGHT: #ffc9e5 1px solid; BORDER-TOP: #ffc9e5 1px solid; BACKGROUND: #ff61c4; MARGIN: 0px 6px; BORDER-LEFT: #ffc9e5 1px solid; COLOR: #ffc9e5; BORDER-BOTTOM: #ffc9e5 1px solid
+}
+.t-2 #playlist OL LI A {
+	COLOR: #ffc9e5
+}
+.t-3 #playlist {
+	BORDER-RIGHT: #caccda 1px solid; BORDER-TOP: #caccda 1px solid; BACKGROUND: #5e6894; MARGIN: 0px 6px; BORDER-LEFT: #caccda 1px solid; COLOR: #caccda; BORDER-BOTTOM: #caccda 1px solid
+}
+.t-3 #playlist OL LI A {
+	COLOR: #caccda
+}
+.t-4 #playlist {
+	BORDER-RIGHT: #d4f371 1px solid; BORDER-TOP: #d4f371 1px solid; BACKGROUND: #aee110; MARGIN: 0px 6px; BORDER-LEFT: #d4f371 1px solid; COLOR: #d4f371; BORDER-BOTTOM: #d4f371 1px solid
+}
+.t-4 #playlist OL LI A {
+	COLOR: #d4f371
+}
+.t-5 #playlist {
+	BORDER-RIGHT: #cececd 1px solid; BORDER-TOP: #cececd 1px solid; BACKGROUND: #7a7977; MARGIN: 0px 6px; BORDER-LEFT: #cececd 1px solid; COLOR: #cececd; BORDER-BOTTOM: #cececd 1px solid
+}
+.t-5 #playlist OL LI A {
+	COLOR: #cececd
+}
+#playlist OL LI.playing A {
+	COLOR: #fff
+}
+#playlist .playing {
+	COLOR: #fff
+}
+#playlist OL {
+	PADDING-LEFT: 5px; LIST-STYLE-TYPE: none
+}
+#playlist OL LI {
+	OVERFLOW-Y: visible; PADDING-LEFT: 0px; BACKGROUND-IMAGE: none; OVERFLOW-X: visible; MARGIN-LEFT: 27px; CURSOR: pointer; LINE-HEIGHT: 1.2em
+}
+.col-commenter .avatar IMG {
+	BORDER-RIGHT: #c0e1f8 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #c0e1f8 1px solid; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; BORDER-LEFT: #c0e1f8 1px solid; WIDTH: 22px; PADDING-TOP: 2px; BORDER-BOTTOM: #c0e1f8 1px solid; POSITION: relative; TOP: 5px; HEIGHT: 22px
+}
+.col-commenter .avatar:hover IMG {
+	BORDER-RIGHT: #85c6f4 1px solid; BORDER-TOP: #85c6f4 1px solid; BORDER-LEFT: #85c6f4 1px solid; WIDTH: 22px; BORDER-BOTTOM: #85c6f4 1px solid; POSITION: relative; TOP: 5px; HEIGHT: 22px
+}
+ HTML .operation .col-body .edit-col {
+	POSITION: static
+}
+ HTML .operation .col-body .edit-col {
+	POSITION: static
+}
+.entry-footer A {
+	PADDING-LEFT: 0px
+}
+.entry-footer SPAN {
+	PADDING-LEFT: 0px
+}
+.entry-footer .pub-date {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .pub-time {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-author A {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-trackbacks {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-bookmark {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-comments {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-bocai {
+	BACKGROUND-IMAGE: none
+}
+.entry-footer .ln-viewed {
+	BACKGROUND-IMAGE: none
+}

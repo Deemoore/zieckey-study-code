@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>线程基本编程</title>
+<link href="../../../stylesheet/duangw.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="wrapper">
+	<div id="mastHead">
+		<h1>Duangw</h1>
+		<ul id="mainNav">
+			<li><a href="../../../index.html">首页</a></li>
+			<li><a href="../../../computer/computer.html" id="currentMainMenu">计算机</a></li>
+			<li><a href="../../../bicycle/bicycle.html">自行车</a></li>
+		</ul>
+	</div>
+	<ul id="computerSubMenu" class="subNav">
+		<li><a href="../../../computer/work-env/work-env.html">工作环境</a></li>
+		<li><a href="../../../computer/languages/languages.html">编程语言</a></li>
+		<li><a href="../../../computer/history/history.html" id="currentSubMenu">历史资料</a></li>
+	</ul>
+	<div id="content">  
+<!-- content begin -->
+<h1>线程基本编程</h1>
+
+<h3>索引：</h3>
+<ol>
+	<li><a href="#pthread_create">创建线程pthread_create</a></li>
+	<li><a href="#pthread_join">等待线程结束pthread_join</a></li>
+	<li><a href="#pthread_detach">分离线程pthread_detach</a></li>
+	<li><a href="#pthread_key_create">创建线程键pthread_key_create</a></li>
+	<li><a href="#pthread_key_delete">删除线程键pthread_key_delete</a></li>
+	<li><a href="#pthread_setspecific">设置线程数据pthread_setspecific</a></li>
+	<li><a href="#pthread_getspecific">获取线程数据pthread_getspecific</a></li>
+	<li><a href="#pthread_self">获取线程标示符pthread_self</a></li>
+	<li><a href="#pthread_equal">比较线程pthread_equal</a></li>
+	<li><a href="#pthread_once">一次执行pthread_once</a></li>
+	<li><a href="#sched_yield">出让执行权sched_yield</a></li>
+	<li><a href="#pthread_setschedparam">修改优先级pthread_setschedparam</a></li>
+	<li><a href="#pthread_getschedparam">获取优先级pthread_getschedparam</a></li>
+	<li><a href="#pthread_kill">发送信号pthread_kill</a></li>
+	<li><a href="#pthread_sigmask">设置线程掩码pthread_sigmask</a></li>
+	<li><a href="#pthread_exit">终止线程pthread_exit</a></li>
+	<li><a href="#pthread_cancel">退出线程pthread_cancel</a></li>
+	<li><a href="#pthread_setcancelstate">允许/禁止退出线程pthread_setcancelstate</a></li>
+	<li><a href="#pthread_setcanceltype">设置退出类型pthread_setcanceltype</a></li>
+	<li><a href="#pthread_testcancel">创建退出点pthread_testcancel</a></li>
+	<li><a href="#pthread_cleanup_push">压入善后处理函数pthread_cleanup_push</a></li>
+	<li><a href="#pthread_cleanup_pop">弹出善后处理函数pthread_cleanup_pop</a></li>
+</ol>
+<hr />
+
+
+<h2 id="pthread_create">1.创建线程pthread_create</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_create(pthread_t *tid, const pthread_attr_t *tattr, \
+	void *(*start_routine)(void *), void *arg);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>创建一个线程。</p>
+<p>参数tattr中含有初始化线程所需要的属性，start_routine是线程入口函数的地址，当start_routine返回时，相应的线程就结束了。</p>
+<p>当函数成功时，线程标示符保存在参数tid指向的内存中。</p>
+<p>如果不指定属性对象，将其置为NULL，则创建一个缺省的线程，有如下属性：</p>
+<ul>
+	<li>非绑定的；</li>
+	<li>未分离的；</li>
+	<li>由一个缺省大小的堆栈；</li>
+	<li>具有和父线程一样的优先级。</li>
+</ul>
+<p>注意：在创建子线程时，传给子线程的输入参数最好是由malloc()函数返回的指针或指向全局变量的指针，而不要是指向局部变量的指针。要保证子线程处理参数时，该区域仍然有效。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_join">2.等待线程结束pthread_join</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_join(pthread_t tid, void **status);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>等待一个线程结束。</p>
+<p>该函数阻塞调用它线程，直到参数tid指定的线程结束。</p>
+<p>tid指定的线程必须在当前进程中，同时tid指定的线程必须是非分离的。</p>
+<p>不能有多个线程等待同一个线程终止。如果出现这种情况，一个线程将成功返回，别的线程将返回错误ESRCH。</p>
+<p>如果参数status不为NULL，则将线程的退出状态放在status指向的内存中。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_detach">3.分离线程pthread_detach</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_detach(pthread_t tid);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>将非分离的线程设置为分离线程。即通知线程库在指定的线程终止时回收线程占用的内存等资源。</p>
+<p>在一个线程上使用多次pthread_detach的结果是不可预见的。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_key_create">4.创建线程键pthread_key_create</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_key_create(pthread_key_t *key,
+void (*destructor)(void*));
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>在进程中分配一个键值，这个键被用来表示一个线程数据项。这个键对进程中所有的线程都是可见的。刚创建线程数据键时，在所有线程中和这个键相关联的值都是NULL。</p>
+<p>函数成功返回后，分配的键放在key参数指向的内存中，必须保证key参数指向的内存区的有效性。</p>
+<p>如果指定了解析函数destructor，那么当线程结束时并且将非空的值绑定在这个键上，系统将调用destructor函数，参数就是相关线程与这个键绑定的值。绑定在这个键上的内存块可由destructor函数释放。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_key_delete">5.删除线程键pthread_key_delete</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_key_delete(pthread_key_t key);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>删除线程数据键。这个键占用的内存将被释放，该键再被引用将返回错误。</p>
+<p>在调用该函数之前，程序必须释放和本线程相关联的资源，该函数不会引发线程数据键的解析函数。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_setspecific">6.设置线程数据pthread_setspecific</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_setspecific(pthread_key_t key, const void *value);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>设置和某个线程数据键绑定在一起的线程专用数据(一般是指针)。</p>
+<p>函数不会释放原来绑定在键上的内存，给一个键值绑定新的指针时，必须释放原指针指向的内存，否则会发生内存泄漏。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_getspecific">7.获取线程数据pthread_getspecific</h2>
+<pre>
+#include &lt;pthread.h&gt;
+void pthread_getspecific(pthread_key_t key, void **value);
+无返回值。出错时value指向NULL
+</pre>
+<p>获取绑定在线程数据键上的值，并在指定的位置存储取来的值。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_self">8.获取线程标示符pthread_self</h2>
+<pre>
+#include &lt;pthread.h&gt;
+pthread_t pthread_self(void);
+</pre>
+<p>返回当前线程的标示符。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_equal">9.比较线程pthread_equal</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_equal(pthread_t tid1, pthread_t tid2);
+</pre>
+<p>如果tid1和tid2相同，函数返回一个非0值，否则返回0。</p>
+<p>如果tid1或tid2中任何一个是非法值，则返回将是不可预料的。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_once">10.一次执行pthread_once</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_once(pthread_once_t *once_control,
+void (*init_routine)(void));
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>函数用来调用初始化函数。如果已经有线程通过pthread_once调用过这个初始化函数一次，那么以后通过pthread_once函数再调用这个初始化函数将无效。</p>
+<p>参数once_control决定了相应的初始化函数是否被调用过。它一般如下使用：</p>
+<pre>
+[static] pthread_once_t once_control = PTHREAD_ONCE_INIT;
+</pre>
+<p>&nbsp;</p>
+
+
+<h2 id="sched_yield">11.出让执行权sched_yield</h2>
+<pre>
+#include &lt;sched.h&gt;
+int sched_yield(void);
+返回值：函数成功返回0；-1表示错误
+</pre>
+<p>把当前线程的执行权(即对处理器的控制权)出让给另一个有相同或更高优先级的线程。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_setschedparam">12.修改优先级pthread_setschedparam</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_setschedparam(pthread_t tid, int policy, \
+	const struct sched_param *param);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>修改线程的优先权。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_getschedparam">13.获取优先级pthread_getschedparam</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_getschedparam(pthread_t tid, int policy, \
+	struct schedparam *param);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>获取线程的优先级。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_kill">14.发送信号pthread_kill</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_kill(pthread_t tid, int sig);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>向tid指定的线程发送一个信号，tid指定的线程必须和当前线程在同一个进程中。</p>
+<p>当sig参数为0时，函数将进行错误检查，不发送信号，这常常用来检查tid的合法性。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_sigmask">15.设置线程掩码pthread_sigmask</h2>
+<pre>
+#include &lt;pthread.h&gt;
+#include &lt;signal.h&gt;
+int pthread_sigmask(int how, const sigset_t *new, sigset_t *old);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>改变或检验当前线程的信号掩码。</p>
+<p>参数how表示对当前信号掩码进行什么操作，有如下值：SIG_BLOCK、SIG_UNBLOCK、SIG_SETMASK。</p>
+<p>当参数new为NULL时，不论how的值是什么，当前线程的信号掩码都不会改变。</p>
+<p>旧的信号掩码保存在参数old指向的内存中，当old不为NULL时。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_exit">16.终止线程pthread_exit</h2>
+<pre>
+#include &lt;pthread.h&gt;
+void pthread_exit(void *status);
+</pre>
+<p>终止当前线程，所有绑定在线程数据键上的内存将被释放。如果当前线程是非分离的，那么这个线程的标示符合退出代码将被保留，直到其他线程用pthread_join来等待当前线程的终止。如果当前线程是分离的，status将被忽略，线程标示符将被立即回收。</p>
+<p>若status不为NULL，线程的退出代码被置为status参数指向的值。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_cancel">17.退出线程pthread_cancel</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_cancel(pthread_t thread);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>退出一个线程。如何响应退出请求取决于目标线程的状态。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_setcancelstate">18.允许/禁止退出线程pthread_setcancelstate</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_setcancelstate(int state, int *oldstate);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>参数state取值为PTHREAD_CANCEL_ENABLE或PTHREAD_CANCEL_DISABLE。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_setcanceltype">19.设置退出类型pthread_setcanceltype</h2>
+<pre>
+#include &lt;pthread.h&gt;
+int pthread_setcanceltype(int type, int *oldtype);
+返回值：函数成功返回0；任何其他返回值都表示错误
+</pre>
+<p>将线程退出类型设置为延迟类型或异步类型。参数type的取值为PTHREAD_CANCEL_DEFERRED或PTHREAD_CANCEL_ASYNCHRONOUS。</p>
+<p>当一个线程被创建后，缺省值是延迟类型。在异步方式下，线程可以在执行的任何时候被退出。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_testcancel">20.创建退出点pthread_testcancel</h2>
+<pre>
+#include &lt;pthread.h&gt;
+void pthread_testcancel(void);
+</pre>
+<p>设置线程的退出点。</p>
+<p>只有当线程的退出状态是允许退出的，而且线程的退出类型是延迟时，调用该函数才有效。如果调用时线程的退出状态是禁止的，则该调用不起作用。</p>
+<p>小心使用该函数，只有在能够安全的被退出的地方才能够设置退出点。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_cleanup_push">21.压入善后处理函数pthread_cleanup_push</h2>
+<pre>
+#include &lt;pthread.h&gt;
+void pthread_cleanup_push(void (*routine)(void *), void *args);
+</pre>
+<p>将一个善后处理函数压入善后处理函数堆栈。</p>
+<p>&nbsp;</p>
+
+
+<h2 id="pthread_cleanup_pop">22.弹出善后处理函数pthread_cleanup_pop</h2>
+<pre>
+#include &lt;pthread.h&gt;
+void pthread_cleanup_pop(int execute);
+</pre>
+<p>从善后处理函数堆栈中弹出一个善后处理函数。如果参数execute非0，则执行弹出的函数；如果参数为0，则不执行弹出函数。</p>
+<p>如果一个线程显式或隐式的调用pthread_exit()函数或线程接受了退出请求，线程库实际上将会以非0参数调用pthread_cleanup_pop函数。</p>
+<p>&nbsp;</p>
+
+<!-- content end -->
+	</div>
+	<div id="footer">
+		<p>Free Open Technology!</p>
+	</div>
+</div>
+</body>
+</html>

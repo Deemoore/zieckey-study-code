@@ -1,0 +1,56 @@
+popen使用FIFO管道执行外部程序。
+
+#include <stdio.h>
+FILE *popen(const char *command, const char *type);
+int pclose(FILE *stream);
+
+popen 通过type是r还是w确定command的输入/输出方向，r和w都是相对command的管道而言的。r表示command从管道中读入，w表示 command通过管道输出到它的stdout，popen返回FIFO管道的文件流指针。pclose则用于使用结束后关闭这个指针。
+
+下面看一个例子：
+
+/*******************************************************************************************
+** Name:popen.c
+**      This program is used to show the usage of popen() .
+** Author:zieckey,(zieckey@yahoo.com.cn)
+** Date:2007/9/30 11:47
+** All rights reserved!
+*******************************************************************************************/
+#include <sys/types.h>  
+#include <unistd.h>  
+#include <stdlib.h>  
+#include <stdio.h>  
+#include <string.h>
+
+int main( void )  
+{  
+	FILE   *stream;  
+	FILE	*wstream;
+	char   buf[1024]; 
+	 
+	memset( buf, '\0', sizeof(buf) );//初始化buf,以免后面写如乱码到文件中
+	stream = popen( "ls -l", "r" ); //将“ls －l”命令的输出通过管道读取（“r”参数）到FILE* stream
+	wstream = fopen( "test_popen.txt", "w+"); //新建一个可写的文件
+
+	fread( buf, sizeof(char), sizeof(buf),  stream);  //将刚刚FILE* stream的数据流读取到buf中
+	fwrite( buf, 1, sizeof(buf), wstream );//将buf中的数据写到FILE	*wstream对应的流中，也是写到文件中
+	
+	pclose( stream );  
+	fclose( wstream );
+	
+	return 0;
+}   
+
+[root@localhost src]# gcc popen.c 
+[root@localhost src]# ./a.out   
+[root@localhost src]# cat test_popen.txt 
+总计 128
+-rwxr-xr-x 1 root root 5558 09-30 11:51 a.out
+-rwxr-xr-x 1 root root  542 09-30 00:00 child_fork.c
+-rwxr-xr-x 1 root root  480 09-30 00:13 execve.c
+-rwxr-xr-x 1 root root 1811 09-29 21:33 fork.c
+-rwxr-xr-x 1 root root  162 09-29 18:54 getpid.c
+-rwxr-xr-x 1 root root 1105 09-30 11:49 popen.c
+-rwxr-xr-x 1 root root  443 09-30 00:55 system.c
+-rwxr-xr-x 1 root root    0 09-30 11:51 test_popen.txt
+-rwxr-xr-x 1 root root 4094 09-30 11:39 test.txt
+

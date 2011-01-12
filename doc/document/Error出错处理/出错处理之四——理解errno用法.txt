@@ -1,0 +1,55 @@
+出错处理之四——理解errno用法
+
+Linux在系统调用和很多库函数调用时，如果出错会设置一个全局变量errno为一个非0值。
+但是没有那个库函数能够把errno清零，而有时-1是一个合法的返回值，
+为了避免这种虚假的出错条件，最好在调用一个可能设置errno变量的库函数之前把errno清零。
+下面给出一个具体的例子：
+
+/*
+*	errno.c - Clearing errno before or between library calls.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <math.h>
+
+int main(void)
+{
+	double d;
+	d = sqrt( (double)-1 );
+	if ( errno )
+	{
+		perror( "sqrt(-1) failed");
+		errno = 0;
+	}
+	else 
+	{
+		printf( "sqrt(-1) = %f\n", d );
+	}
+	
+	d = sqrt( (double)2 );
+	if ( errno )
+	{
+		perror( "sqrt(2) failed");
+		errno = 0;
+	}
+	else 
+	{
+		printf( "sqrt(2) = %f\n", d );
+	}
+	
+	exit (EXIT_SUCCESS);
+}
+
+[root@localhost error_process]# gcc errno.c -lm
+[root@localhost error_process]# ./a.out 
+sqrt(-1) failed: Numerical argument out of domain
+sqrt(2) = 1.414214
+
+如果将上面的第一个  "errno=0;"的语句注释掉或者删除，结果将是下面的：
+[root@localhost error_process]# ./a.out 
+sqrt(-1) failed: Numerical argument out of domain
+sqrt(2) failed: Illegal seek
+
+很显然，2处于sqrt函数的定义域，可是这里却错了，所以在调用可能设置errno变量的函数之前一定要把errno清零。

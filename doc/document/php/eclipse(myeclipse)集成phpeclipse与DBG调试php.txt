@@ -1,0 +1,83 @@
+Eclipse(MyEclipse)是一个多编程语言开发平台，安装支持相应的语言开发插件后，在Eclipse(MyEclipse)下还可以开发除了Java以外的C/C++, C#, Groovy, Ruby, JavaFX script, ActionScript/Flash/Flex等语言的工程。
+
+下面介绍结合PHPEclipse插件和DBG php调试模块，在Eclipse环境里开发PHP项目，实现debug功能。
+安装PHPEclipse
+
+最新版本的phpeclipse可以在这里下载 http://www.rsky.com.cn/Soft/HTML/1164.html， 下载后解开压缩包使用local site方式安装完成后，重新启动eclipse。
+
+这时就可以在eclipse中的配置页里看到phpeclipse的配置标签，进行正确设置后，点击启动apache（这里要注意服务器的运行方式要用run in background mode，否则，启动停止apache可能会有比较奇特的现象发生）。
+下载安装DBG php调试模块
+
+http://sourceforge.net/projects/dbg2/
+下载地址在sourceforge上搜索‘dbg’, 解压到临时目录后，更名x86子目录下的php_dbg.dll-5.x.x为php_dbg.dll, 拷贝至php安装目录下的ext扩展所在目录，然后修改php.ini, 加入扩展项, 并且新增debug配置段:
+
+
+extension=php_dbg.dll
+[debugger]
+debugger.enabled = true
+debugger.profiler_enabled = true
+debugger.JIT_host = clienthost
+debugger.JIT_port = 10001
+
+
+在eclipse里新建php工程和php测试页面 test.php,
+将工程与apache 进行关联
+test.php如下：
+echo "just a test";
+phpinfo();
+?>
+
+   1. 启动apache, 在eclipse打开php web browser, 可以看到php info输出页面，若是有: ... DBG v2.15.5, (C) 2000,2007, by Dmitri Dmitrienko...信息输出的话，说明dbg调试模块与php集成已生效。若是没有正确集成，请检查上述步骤，并确保各配置参数正确，同时保证 php_dbg.dll所在路径在windows的PATH环境变量内(路径倒是无所谓了，如果不能正常运行，就要设置好了)。
+   2. 在eclipse里设置php debug项，选中test.php,打开eclipse的菜单中的Run->debug...(这里最好直接点击要测试的文件，然后右键 debug as...菜单)，在标签中找到PHP DBG script，新建一个调试配置页，给定名字，并且在右栏各标签中填写类似如下内容:
+
+      File-> Project: phptest
+      File: test.php
+      Arguments-> Working Dir: E:/data/project/phpTuto (注意路径一定要正确)
+      Envirement-> Remote Debug: Remote Debug(勾上) Open with DBGSession URL in internal browser(勾上)
+      Remote Sourcepath: E:\data\project\phpTuto (注意路径一定要正确)
+      Interpreter: E:\php\php.exe (如果这类不设置，会没法调试，出现you must define an interpreter before running php.错误)
+   3. 最后点击Apply, 切换到eclipse的Debug视图下，先在test.php中设置断点，然后选择eclipse的Debug菜单命令，此时程序将会在断点处挂起，现在就可以查看php变量 和步进跟踪php代码了。 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+ [转]Eclipse+PHPEclipse+DBG的PHP开发调试环境的安装与配置 收藏
+导读：
+　　若上述链接失效，大家可以自己搜索其它下载地址，若使用和如上所列不同的版本，配置方法可能会略有差异，但本文应仍有一定参考价值（注意，版本差异可能导致配置失败）。
+　　第一步、安装JDK。
+　　第二步、将eclipse-SDK-3.1.2- win32.zip里的eclipse文件夹解压出来（下文以d:\eclipse为例），然后将 net.sourceforge.phpeclipse_1.1.8.bin.dist.zip里的features和plugins文件夹下的内容分别解压到d:\eclipse\features和d:\eclipse\plugins下。
+　　第三步、从dbg-2.13.1- win32.zip找到你所使用的PHP版本所对应的扩展文件，例如我使用的是PHP 5.1.5，所以就使用php_dbg.dll-5.1.x，将其重命名为php_dbg.dll，然后拷贝到PHP安装目录下的ext子目录下（例如 c:\php\ext下）。
+　　第四步、修改PHP安装目录下的php.ini，添加或修改如下设置（这里不明白的话请先通过搜索引擎了解一下 php.ini配置的基础知识）：
+　　extension_dir = "./ext"
+　　[debugger]
+　　 extension = php_dbg.dll
+　　debugger.enabled = on
+　　 debugger.profiler_enabled = on
+　　debugger.hosts_allow = localhost 127.0.0.1
+　　debugger.hosts_deny = ALL
+　　debugger.ports = 7869, 10001, 10002, 10003, 10000/16
+　　第五步、修改Apache安装目录下的httpd.conf（通常位于 conf子目录下），将
+　　
+　　 Options FollowSymLinks
+　　 AllowOverride None
+　　 Order deny,allow
+　　 Deny from all
+　　 Satisfy all
+　　
+　　修改为
+　　
+　　 Options Indexes FollowSymLinks
+　　 AllowOverride None
+　　 Order allow, deny
+　　 Allow from all
+　　
+　　第六步、运行 d:\eclipse\eclipse.exe，在弹出的Workspace Launcher对话框中输入项目要保存的默认路径（下文以d:\workspace为例）并确定。单击菜单中的 Window->Preferences，展开PHPeclipse->PHP External Tools，在此处设置Apache、Mysql和XAMPP等程序的启动或关闭参数及命令。这个跟具体环境有关，大家查一下自己所用版本的 Apache、Mysql或XAMPP的相关资料即可。例如我使用的Apache 2.2.3的启动参数为-w -n "Apache2.2" -k start -c "DocumentRoot {0}"。这里特别说明一下-c "DocumentRoot {0}"的作用，它的意思是把当前项目目录设置为HTTP服务器的根目录，其中{0}代表当前项目目录。
+　　第七步、单击菜单中的 Run->Debug...，单击New，单击Environment选项卡，在Interpreter中输入php.exe的位置（如 c:\php\php.exe），在Remote Debug中选中Remote Debug。    

@@ -1,0 +1,3244 @@
+
+zieckey工作日志文件
+
+										2006/4/24
+
+1. 首先安装sqlite-3.0.8
+解压sqlite-3.0.8.tar.gz 
+     # tar xzf sqlite.tar.gz        
+     # mkdir /usr/local/arm-linux/sqlite-ix86-linux                       	;#  Build will occur in a sibling directory
+     # cd sqlite-ix86-linux                        							;#  Change to the build directory
+     # ../sqlite/configure --prefix=/usr/local/arm-linux/sqlite-ix86-linux	;#  Run the configure script
+     #  make                                  								;#  Run the makefile.
+     #  make install
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-ix86-linux/lib
+./libtool --mode=install /usr/bin/install -c libsqlite3.la /usr/local/arm-linux/sqlite-ix86-linux/lib
+/usr/bin/install -c .libs/libsqlite3.so.0.8.6 /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlite3.so.0.8.6
+(cd /usr/local/arm-linux/sqlite-ix86-linux/lib && rm -f libsqlite3.so.0 && ln -s libsqlite3.so.0.8.6 libsqlite3.so.0)
+(cd /usr/local/arm-linux/sqlite-ix86-linux/lib && rm -f libsqlite3.so && ln -s libsqlite3.so.0.8.6 libsqlite3.so)
+/usr/bin/install -c .libs/libsqlite3.lai /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlite3.la
+/usr/bin/install -c .libs/libsqlite3.a /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlite3.a
+ranlib /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlite3.a
+chmod 644 /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlite3.a
+PATH="$PATH:/sbin" ldconfig -n /usr/local/arm-linux/sqlite-ix86-linux/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /usr/local/arm-linux/sqlite-ix86-linux/lib
+ 
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+ 
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-ix86-linux/bin
+./libtool --mode=install /usr/bin/install -c sqlite3 /usr/local/arm-linux/sqlite-ix86-linux/bin
+/usr/bin/install -c .libs/sqlite3 /usr/local/arm-linux/sqlite-ix86-linux/bin/sqlite3
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-ix86-linux/include
+/usr/bin/install -c -m 0644 sqlite3.h /usr/local/arm-linux/sqlite-ix86-linux/include
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-ix86-linux/lib/pkgconfig;
+/usr/bin/install -c -m 0644 sqlite3.pc /usr/local/arm-linux/sqlite-ix86-linux/lib/pkgconfig;
+
+ 生成帮助文档
+    #  make doc
+
+///////////////////////////////////  这步还没有成功   官方网站支持:http://sqlitedataset.sourceforge.net
+	编译SqliteDataset组件库
+解压sqlitedataset.v.0.6.0.tar.gz
+	# tar zxvf sqlitedataset.v.0.6.0.tar.gz
+	# cd sqlitedataset
+	# ./configure --with-sqlite=/usr/local/arm-linux/sqlite-ix86-linux --prefix=/usr/local/arm-linux/sqlite-ix86-linux/sqlitedataset
+将Makefile文件中
+LIBTOOL = /usr/bin/libtool 改为 LIBTOOL = /usr/local/arm-linux/sqlite-ix86-linux/libtool
+LIBS = -lstdc++ -lsqlite3 -lsqlitedataset 
+改为 LIBS = -lstdc++ -lsqlite3 -lsqlitedataset -L/usr/local/arm-linux/sqlite-ix86-linux/lib
+	# make
+/usr/local/arm-linux/sqlite-ix86-linux/libtool --mode=compile gcc -I/usr/local/arm-linux/sqlite-ix86-linux/include -Iinclude  -c ./src/sqlitedataset.cpp \
+ 
+ gcc -I/usr/local/arm-linux/sqlite-ix86-linux/include -Iinclude -c ./src/sqlitedataset.cpp  -fPIC -DPIC -o .libs/sqlitedataset.o
+src/sqlitedataset.cpp: In member function `virtual int
+   dbiplus::SqliteDatabase::drop()':
+src/sqlitedataset.cpp:185: `unlink' undeclared (first use this function)
+src/sqlitedataset.cpp:185: (Each undeclared identifier is reported only once
+   for each function it appears in.)
+make: *** [sqlitedataset.lo] Error 1
+///////////////////////////////////////////////////////
+//////////////////////////////////替代方案:从 陈勇全 那里拷贝过来
+
+
+
+解决在C语言中调用sqlit3的问题
+编译的时候要带上 -lsqlit3 这个参数,
+前提是必须已经生成sqlite3的库文件,这个问题前面安装的时候就已经解决了
+
+
+
+2. 交叉编译sqlite库
+解压sqlite-3.0.8.tar.gz 到/usr/local/arm-linux/sqlite
+  	# tar zxvf sqlite-3.0.8.tar.gz -C /usr/local/arm-linux/sqlite
+  	# cd /usr/local/arm-linux/sqlite
+将目录下的 configure 文件的
+  19206行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+  20107行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+  20514行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+  20540行 { (exit 1); exit 1; }; }改为 { (echo 1); echo 1; }; }
+  	# mkdir /usr/local/arm-linux/sqlite-arm-linux
+  	# cd /usr/local/arm-linux/sqlite-arm-linux
+设置交叉编译环境
+	# export PATH=/usr/local/arm-linux/bin:$PATH
+	# export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+	# export PATH=$QTDIR/bin:$PATH
+	# export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+	# export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+ 	# export PATH=$TMAKEDIR/bin:$PATH
+	# export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+  			
+    # make
+    # make install
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-arm-linux/lib
+./libtool --mode=install /usr/bin/install -c libsqlite3.la /usr/local/arm-linux/sqlite-arm-linux/lib
+/usr/bin/install -c .libs/libsqlite3.so.0.8.6 /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.so.0.8.6
+(cd /usr/local/arm-linux/sqlite-arm-linux/lib && rm -f libsqlite3.so.0 && ln -s libsqlite3.so.0.8.6 libsqlite3.so.0)
+(cd /usr/local/arm-linux/sqlite-arm-linux/lib && rm -f libsqlite3.so && ln -s libsqlite3.so.0.8.6 libsqlite3.so)
+/usr/bin/install -c .libs/libsqlite3.lai /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.la
+/usr/bin/install -c .libs/libsqlite3.a /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.a
+arm-linux-ranlib /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.a
+chmod 644 /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.a
+PATH="$PATH:/sbin" ldconfig -n /usr/local/arm-linux/sqlite-arm-linux/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /usr/local/arm-linux/sqlite-arm-linux/lib
+ 
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+ 
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-arm-linux/bin
+./libtool --mode=install /usr/bin/install -c sqlite3 /usr/local/arm-linux/sqlite-arm-linux/bin
+/usr/bin/install -c .libs/sqlite3 /usr/local/arm-linux/sqlite-arm-linux/bin/sqlite3
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-arm-linux/include
+/usr/bin/install -c -m 0644 sqlite3.h /usr/local/arm-linux/sqlite-arm-linux/include
+/usr/bin/install -c -d /usr/local/arm-linux/sqlite-arm-linux/lib/pkgconfig;
+/usr/bin/install -c -m 0644 sqlite3.pc /usr/local/arm-linux/sqlite-arm-linux/lib/pkgconfig;
+
+注明: "# make install" 这一步将生成库文件
+	# cd lib
+	# file libsqlite3.so.0.8.6
+libsqlite3.so.0.8.6: ELF 32-bit LSB shared object, ARM, version 1 (ARM), not stripped
+生成帮助文档
+	# make doc
+
+3. 交叉编译SqliteDataset组件库
+解压sqlitedataset.v.0.6.0.tar.gz
+	# tar zxvf sqlitedataset.v.0.6.0.tar.gz
+	# cd sqlitedataset
+ 	找到./include/sqlitedataset.h中的如下一句话：
+sqlite3 *con;
+class SqliteDatabase: public Database {
+protected:
+	注释掉sqlite3 *con; 如下:
+//sqlite3 *con;
+class SqliteDatabase: public Database {
+protected:
+
+设置交叉编译环境
+	# export PATH=/usr/local/arm-linux/bin:$PATH
+	# export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+	# export PATH=$QTDIR/bin:$PATH
+	# export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+	# export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+ 	# export PATH=$TMAKEDIR/bin:$PATH
+	# export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+	# ./configure --host=arm-linux --with-sqlite=/usr/local/arm-linux/sqlite-arm-linux --prefix=/usr/local/arm-linux/sqlite-arm-linux/sqlitedataset
+将Makefile文件中
+LIBTOOL = /usr/bin/libtool 改为 LIBTOOL = /usr/local/arm-linux/sqlite-arm-linux/libtool
+LIBS = -lstdc++ -lsqlite3 -lsqlitedataset   改为
+LIBS = -lstdc++ -lsqlite3 -lsqlitedataset -L/usr/local/arm-linux/sqlite-arm-linux/lib
+	# make
+/usr/local/arm-linux/sqlite-arm-linux/libtool  --mode=compile   arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/dataset.cpp
+mkdir .libs
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/dataset.cpp  -fPIC -DPIC -o .libs/dataset.o
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/dataset.cpp -o dataset.o >/dev/null 2>&1
+/usr/local/arm-linux/sqlite-arm-linux/libtool  --mode=compile  arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/qry_dat.cpp
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/qry_dat.cpp  -fPIC -DPIC -o .libs/qry_dat.o
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/qry_dat.cpp -o qry_dat.o >/dev/null 2>&1
+/usr/local/arm-linux/sqlite-arm-linux/libtool --mode=compile arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude  -c ./src/sqlitedataset.cpp \
+ 
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/sqlitedataset.cpp  -fPIC -DPIC -o .libs/sqlitedataset.o
+ arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -c ./src/sqlitedataset.cpp -o sqlitedataset.o >/dev/null 2>&1
+/usr/local/arm-linux/sqlite-arm-linux/libtool --mode=link arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -L/usr/local/arm-linux/sqlite-arm-linux/lib  -o libsqlitedataset.la dataset.lo qry_dat.lo sqlitedataset.lo \
+-rpath /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/lib  -version-info "6:0:6"
+arm-linux-gcc -shared  .libs/dataset.o .libs/qry_dat.o .libs/sqlitedataset.o  -L/usr/local/arm-linux/sqlite-arm-linux/lib  -Wl,-soname -Wl,libsqlitedataset.so.0 -o .libs/libsqlitedataset.so.0.6.0
+(cd .libs && rm -f libsqlitedataset.so.0 && ln -s libsqlitedataset.so.0.6.0 libsqlitedataset.so.0)
+(cd .libs && rm -f libsqlitedataset.so && ln -s libsqlitedataset.so.0.6.0 libsqlitedataset.so)
+arm-linux-ar cru .libs/libsqlitedataset.a  dataset.o qry_dat.o sqlitedataset.o
+arm-linux-ranlib .libs/libsqlitedataset.a
+creating libsqlitedataset.la
+(cd .libs && rm -f libsqlitedataset.la && ln -s ../libsqlitedataset.la libsqlitedataset.la)
+/usr/local/arm-linux/sqlite-arm-linux/libtool --mode=link arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -L   -lstdc++ -lsqlite3 -lsqlitedataset -L/usr/local/arm-linux/sqlite-arm-linux/lib -o dstest ./src/dstest.cpp
+arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -o .libs/dstest ./src/dstest.cpp  -L/home/work/assistant_coach/component/sqlitedataset /usr/local/arm-linux/arm-linux/lib/./libstdc++.so -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/arm-linux/libstdc++-v3/src -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/arm-linux/libstdc++-v3/src/.libs -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/gcc -L/usr/local/arm-linux/arm-linux/bin -L/usr/local/arm-linux/arm-linux/lib -L/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2 -L/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2/../../../../arm-linux/lib -lm -lc -lgcc_s /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.so /home/work/assistant_coach/component/sqlitedataset/.libs/libsqlitedataset.so -L/usr/local/arm-linux/sqlite-arm-linux/lib -Wl,--rpath -Wl,/usr/local/arm-linux/arm-linux/lib/. -Wl,--rpath -Wl,/usr/local/arm-linux/sqlite-arm-linux/lib -Wl,--rpath -Wl,/usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/lib
+creating dstest
+/usr/local/arm-linux/sqlite-arm-linux/libtool --mode=link arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -L   -lstdc++ -lsqlite3 -lsqlitedataset -L/usr/local/arm-linux/sqlite-arm-linux/lib -o transact ./src/transact.cpp
+arm-linux-gcc -I/usr/local/arm-linux/sqlite-arm-linux/include -Iinclude -o .libs/transact ./src/transact.cpp  -L/home/work/assistant_coach/component/sqlitedataset /usr/local/arm-linux/arm-linux/lib/./libstdc++.so -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/arm-linux/libstdc++-v3/src -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/arm-linux/libstdc++-v3/src/.libs -L/home/yyin/arm-linux-toolchain-src-11-26-04/build-gcc/gcc -L/usr/local/arm-linux/arm-linux/bin -L/usr/local/arm-linux/arm-linux/lib -L/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2 -L/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2/../../../../arm-linux/lib -lm -lc -lgcc_s /usr/local/arm-linux/sqlite-arm-linux/lib/libsqlite3.so /home/work/assistant_coach/component/sqlitedataset/.libs/libsqlitedataset.so -L/usr/local/arm-linux/sqlite-arm-linux/lib -Wl,--rpath -Wl,/usr/local/arm-linux/arm-linux/lib/. -Wl,--rpath -Wl,/usr/local/arm-linux/sqlite-arm-linux/lib -Wl,--rpath -Wl,/usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/lib
+creating transact
+	# make install
+/usr/local/arm-linux/sqlite-arm-linux/libtool --mode=install /usr/bin/install libsqlitedataset.la /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/lib
+/usr/bin/install .libs/libsqlitedataset.so.0.6.0 /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/libsqlitedataset.so.0.6.0
+(cd /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset && rm -f libsqlitedataset.so.0 && ln -s libsqlitedataset.so.0.6.0 libsqlitedataset.so.0)
+(cd /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset && rm -f libsqlitedataset.so && ln -s libsqlitedataset.so.0.6.0 libsqlitedataset.so)
+/usr/bin/install .libs/libsqlitedataset.lai /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/libsqlitedataset.la
+/usr/bin/install .libs/libsqlitedataset.a /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/libsqlitedataset.a
+arm-linux-ranlib /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/libsqlitedataset.a
+chmod 644 /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/libsqlitedataset.a
+libtool: install: warning: remember to run `libtool --finish /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/lib'
+/usr/bin/install -m 0644 ./include/sqlitedataset.h /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/include
+/usr/bin/install -m 0644 ./include/dataset.h /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/include
+/usr/bin/install -m 0644 ./include/qry_dat.h /usr/local/arm-linux/sqlite-arm-linux/sqlitedataset/include
+
+
+						2006/04/26
+1. 学习Makefile的写法,推荐看 <<跟我一起写 Makefile>>  陈皓 著
+http://www.stlchina.org/twiki/bin/view.pl/ScriptProgram/LearnMakefile
+
+
+						2006/04/27
+今天专家组来人视察我们的进度,受益非浅.
+1. 什么是创新?
+别人没有的,我做了
+别人做了,我做的更好更深
+2. 培养解决问题的能力
+3. 作品的稳定性
+4. 测试环境的建立
+
+						2006/04/28
+安装rarlinux3.5.0.tar.gz for linux
+解压后,进入rar目录下,直接  make 就行
+
+用 gvim 查看源代码
+选择 Edit->Select fond
+在字体栏选择 courier(biznet)  
+
+
+						2006/04/29
+将sqlitdataset的库文件 
+include  libsqlitedataset.la  libsqlitedataset.so.0  libsqlitedataset.a  libsqlitedataset.so  libsqlitedataset.so.0.6.0
+arm  版本的拷贝到 /usr/local/arm-linux/sqlite-arm-linux/lib 下
+ix86 版本的拷贝到 /usr/local/arm-linux/sqlite-ix86-linux/lib 下
+将sqlitdataset的头文件
+dataset.h  dll.h  qry_dat.h  sqlitedataset.h
+拷贝到  /usr/local/arm-linux/sqlite-arm-linux/include 和 /usr/local/arm-linux/sqlite-ix86-linux/include 两个目录下
+
+这样使 sqlitdataset的头文件和库文件与sqlite的在同一目录下，便于管理。
+例如一个完整的 qt 的 .pro文件如下：
+
+TEMPLATE     = app
+
+CONFIG       = qt ix86
+#CONFIG     = qt arm 
+
+CONFIG      += thread
+CONFIG      += warn_on
+CONFIG      += release
+
+ix86:QWT_PATH=/usr/local/arm-linux/qt_pc_toolchain/qwt-4.2.0
+arm:QWT_PATH=/usr/local/arm-linux/qt_toolchain/qwt-4.2.0
+
+ix86:SQLITE3_PATH = /usr/local/arm-linux/sqlite-ix86-linux
+arm: SQLITE3_PATH = /usr/local/arm-linux/sqlite-arm-linux
+
+MOC_DIR      = moc
+OBJECTS_DIR  = obj
+
+INCLUDEPATH += $$QWT_PATH/include 
+INCLUDEPATH += $$SQLITE3_PATH/include
+DEPENDPATH  += $$QWT_PATH/include
+DEPENDPATH  += $$SQLITE3_PATH/include
+
+LIBS += -L$$QWT_PATH/lib 
+LIBS += -L$$SQLITE3_PATH/lib
+LIBS += -lqwt -lsqlite3 -lsqlitedataset
+
+TMAKE_CXXFLAGS += -fno-exceptions 
+
+SOURCES = main.cpp
+TARGET  = ix86-out
+
+
+
+编译 sqlitedataset/src 目录下的 dstest.cpp 没有问题，
+g++ dstest.cpp -lsqlite3 -lsqlitedataset -L/usr/local/arm-linux/sqlite-ix86-linux/lib -I/usr/local/arm-linux/sqlite-ix86-linux/include
+这里 -L 选项指明了编译时用到的库文件路径， -I 选项指明了编译时用到的头文件路径，如果不指明这两项路径，编译将会出错，
+指明之后编译没有问题，但是运行的时候还是不能自动找到库文件，又需要显示的指明库文件路径.
+运行时出现 ： 
+./a.out: error while loading shared libraries: libsqlitedataset.so.0: cannot open shared object file: No such file or directory
+找不到库,这问题可以这样解决，将要用到的库的路径 export 后，在运行就行了。
+export LD_LIBRARY_PATH=/usr/local/arm-linux/sqlite-ix86-linux/lib
+或者查看一下 LD_LIBRARY_PATH 的路径，
+# echo $LD_LIBRARY_PATH
+/usr/local/lib:/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib:
+这样可以建立一个连接到 /usr/local/lib 下
+ln -s /usr/local/arm-linux/sqlite-ix86-linux/lib/libsqlitedataset.so.0.6.0 /usr/lib/libsqlitedataset.so.0
+这样也解决了 ./a.out: error while loading shared libraries: libsqlitedataset.so.0: cannot open shared object file: No such file or directory 这个库找不到的问题
+
+
+该目录 sqlitedataset/src 下面 dstest.cpp 、transact.cpp 几个文件可以通过上述方法编译成功
+
+
+						2006/04/30
+使用 sqlitedataset 组件
+	#include "sqlitedataset.h"
+	using namespace dbiplus;
+
+ 	SqliteDatabase db; //
+   	db.setDatabase("colliery.db");    	// 让 db 就代表已经存在的数据库 colliery.db 或者创建新的 colliery.db 数据库
+   	Dataset* ds = db.CreateDataset();	//
+   	db.connect();
+
+找到一个 sqlite 的中文站点 http://www.8mang.com/  资料比较全
+
+
+
+葛钦钦 2006年4月30日 周日 晴
+
+今天先用qt232编写一个程序
+
+熟悉了后再编写发短信的程序
+
+1、进入工作路径：
+/root/programs/qt232
+
+编译X11上运行的程序所需设置的环境
+export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.2
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+export PATH=/usr/local/arm-linux/qt_toolchain/tmake-1.11/bin:$PATH
+export TMAKEPATH=/usr/local/arm-linux/qt_toolchain/tmake-1.11/lib/linux-g++
+
+编译for arm的程序所需设置的环境
+export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+
+现在开始正式的qt designer之旅吧。
+form widget 
+invode  command-line promt，splash，
+
+
+A dialog is always a window of its own, while widgets usually are integrated into some other widget or a dialog.
+
+The term 'form' might need some explanation. Everything that you design in Qt Designer is a form.This could be a widget, a dialog, or a wizard, and maybe in the future even other things. We'll use the term 'form' here when it does not matter whether we are working with a dialog or a widget or something else and just want to refer to 'whatever you are currently designing in the right half of the Qt Designer window'.---经典
+
+Since we want a dialog in which we can specify our pizza preferences, click on Empty Dialog here. Now the Qt Designer screen changes fundamentally and becomes a lot less boring, as you can see in Figure 2-3.
+
+qt lingo ，moniker ，
+
+There is already a default name, Form1, filled in here, but this is both not very descriptive and just plain boring, so click in the text-entry field and change the name to something more suitable, like PizzaEntryForm. 
+
+combo boxes enumeration
+
+Before we continue with the next widgets, we need to give the button group a good header text. So, select Edit Title... from the context menu to give the button group the title Toppings, or achieve the same result by changing the title property in the property editor.
+
+
+This screenshot and all the following ones were taken on a Windows system. If you are running a Unix system, your screens may look slightly different. 嗯~~~~
+
+When you are done, the dialog should look more or less like the one in Figure 2-12. Using the File/Save As... menu entry, save it under the name pizza.ui.
+
+
+Generating C++ Source Code From The Qt Designer File
+uic, the user interface compiler.
+
+You need to call uic twice to generate both the header file and the implementation file of your dialog class. Assuming that uic is in your search path, you can generate the header file as follows:
+
+uic -o PizzaEntry.h pizza.ui
+
+The option -o tells uic how to name the header file, and pizza.ui is the name of the file you saved with Qt Designer. As with the XML file, let's have a brief look at the generated file:
+
+
+If you have programmed with Qt before, the only thing that might surprise you here is the fact that all the widget members of the dialog are made public. We'll discuss later why this is so.
+
+The next step is to create the implementation file. You tell uic that you want to create an implementation file instead of a header file by specifying the option -i and passing the name of the already generated header file:
+
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+
+As before, the option -o determines the name of the generated file. Again, let's look at the result:
+
+
+参照魏自立的程序中的uic.sh
+#! /bin/sh
+
+rm -f mainInterface.cpp  moc_mainInterface.o  moc_mainInterface.cpp
+rm -f mainInterface.h    mainInterface.o
+
+uic -o mainInterface.h mainInterface.ui
+uic -i mainInterface.h -o mainInterface.cpp mainInterface.ui
+
+
+rm -f PizzaEntry.cpp  	moc_mainInterface.o  moc_mainInterface.cpp
+rm -f PizzaEntry.h    PizzaEntry.o
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+
+
+参照魏自立的程序中的pro.pro
+TEMPLATE	= app
+
+CONFIG  += qte warn_on debug arm
+#CONFIG  += qte warn_on debug ix86
+
+#DEFINES += DISPLAY_WELCOME
+#DEFINES += _DEBUG_
+
+HEADERS  =  mainface/mainInterface.h 
+
+SOURCES  =  mainface/mainInterface.cpp \
+			main.cpp
+			
+#INCLUDEPATH += $$INC_ROOTPATH/include/sqlite3
+
+arm:TARGET  = arm-out
+ix86:TARGET = ix86-out
+
+参照examples中的hello.pro
+TEMPLATE	= app
+CONFIG		+= qt warn_on release
+HEADERS		= hello.h
+SOURCES		= hello.cpp \
+		  main.cpp
+TARGET		= hello
+DEPENDPATH=../../include
+REQUIRES=
+
+
+TEMPLATE	= app
+CONFIG		+= qt warn_on release
+HEADERS		= PizzaEntry.h
+SOURCES		= PizzaEntry.cpp \
+		  PizzaEntryTest.cpp
+TARGET		= PizzaEntry
+REQUIRES=
+
+1、得到ui文件，（用designer2 或 亿道给的qt232中的也行）
+2、用uic生成 .h 及 .cpp
+3、写主程序文件 cpp 及工程文件 pro
+4、用tmake生成Makefile
+5、make
+
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+vi main.cpp
+vi pizza.pro
+tmake -o Makefile pizza.pro
+[root@gege Pizza]# make
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntry.o PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryTest.o PizzaEntryTest.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntry.h -o moc_PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntry.o moc_PizzaEntry.cpp
+g++  -o PizzaEntry PizzaEntry.o PizzaEntryTest.o moc_PizzaEntry.o  -L/usr/local/arm-linux/qt_toolchain/qt-2.3.2/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm
+./PizzaEntry
+
+
+moc -o moc_PizzaEntry.cpp PizzaEntry.h
+g++ -I$QTDIR/include PizzaEntry.cpp PizzaEntryTest.cpp  moc_PizzaEntry.cpp -L$QTDIR/lib -lqt
+
+
+Adding Functionality To The Push Buttons
+
+The first thing we will do now is connect the Cancel button's clicked() signal, which is emitted when this button is clicked, to the dialog's reject() method, which closes the dialog and sets a negative return code. To do this, start the connection tool by hitting F3, choosing Edit/Connections from the menu, or clicking on the connections icon on the toolbar (see Figure 3-2). As soon as you have done this, click on the Cancel button on your form, hold down the mouse button, and move the mouse cursor to somewhere on the background of the form. Release it there. With this gesture, you indicate that you want to create a connection from the Cancel button to the form as a whole. Pink frames show which widgets you have currently selected while you move the mouse.
+
+Close the dialog. Your first signal-slot connection is in place, and you did not even have to write a single line of code yet.
+
+Now for the OK button. We want this button to close the dialog with a positive return code—i.e., call the dialog's accept() slot—but we also want to show the aforementioned message box. In order to do the latter, we need to create our own slot.
+
+To do this, select Edit/Slots... from the menu. This shows the Slots dialog (see Figure 3-4). Click on the Add button to add a slot. A slot is added with the default name new_slot(). Go to the edit field labeled Slot: in the Slot properties box and change the name to sendOrder(). Leave everything else as it is and click OK.
+
+Now start the connection tool again, but this time connect the OK button to the dialog. When the Connections dialog opens again, you can see not only the predefined slots, but also your newly created slot sendOrder(). Click on the clicked() signal first and then on the sendOrder() slot so that the connection appears in the lower half. Close the Connections dialog.
+
+That's true, and to solve this problem, we need to inherit a new class from our PizzaEntry class where we can implement the new slot. This sounds like somewhat of a bother now, but you will get used to it. The whole thing works because Qt Designer declares all user-defined slots as virtual and provides an empty implementation for them. At runtime, then, you do not create an instance of the uic-generated class but an instance of your own implementation class instead. When the OK button is clicked, your own virtual method will be called instead of the generated empty one. If this sounds like black magic to you, you can either simply believe that this works or (recommended) read in any good C++ book about virtual methods and polymorphism.
+
+
+    The Name Of The Game: In a larger project, you may have a large number of dialog (or other) classes generated by Qt Designer and uic as well as implementation classes for many (if not all) of these dialogs. In such a situation, it is best to think of a smart naming scheme right away in order to avoid confusion later.
+
+    There are two demands on such a naming scheme: It should be easy, obvious, and unique to get from the generated class name to the implementation class name or the other way around, and the class names should not be too cumbersome to type. One naming scheme that fulfills these conditions is the one used in this tutorial: The generated dialog class gets the name that seems “natural” (like PizzaEntry in this case); the implementation class, the same name with Impl attached.
+
+    This scheme and many others are equally good. The important thing is that you pick one consistent scheme and stick to it throughout your project.
+
+All we need in this implementation class is an empty constructor, so that we can pass the usual parameters, and the slot we want to implement. Here's what the header file PizzaEntryImpl.h for our implementation class PizzaEntryImpl looks like:
+
+Finally, since by using the slots accept() and reject() we have committed to using the dialog as a modal dialog (instead of as a modeless dialog, as in the previous tutorial), we need to stretch the notion of “clean Qt programming” a bit in order to keep our test bed simple. Usually, you start the event processing by calling QApplication::exec(), but since modal dialogs have an event loop of their own, we can get away with just calling exec() on our dialog class. Here is the new file PizzaEntryTest.cpp:
+
+
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+moc -o moc_PizzaEntry.cpp PizzaEntry.h
+moc -o moc_PizzaEntryImpl.cpp PizzaEntryImpl.h
+moc -o moc_PizzaEntryTest.cpp PizzaEntryTest.cpp 
+g++ -I$QTDIR/include PizzaEntry.cpp PizzaEntryTest.cpp PizzaEntryImpl.cpp moc_PizzaEntry.cpp moc_PizzaEntryImpl.cpp -L$QTDIR/lib -lqt
+
+
+//PizzaEntryImpl.h
+
+#ifndef PIZZAENTRYIMPL_H
+#define PIZZAENTRYIMPL_H
+
+#include "PizzaEntry.h"
+
+class PizzaEntryImpl : public PizzaEntry
+{
+  Q_OBJECT
+
+public:
+    PizzaEntryImpl( QWidget* parent = 0, const char* name = 0,
+                    bool modal = FALSE, WFlags f = 0 ) :
+    PizzaEntry( parent, name, modal, f ) {}
+
+public slots:
+    virtual void sendOrder();
+
+};
+
+#endif
+
+
+
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+moc -o moc_PizzaEntry.cpp PizzaEntry.h
+moc -o moc_PizzaEntryImpl.cpp PizzaEntryImpl.h
+g++ -I$QTDIR/include PizzaEntry.cpp PizzaEntryTest.cpp PizzaEntryImpl.cpp moc_PizzaEntry.cpp moc_PizzaEntryImpl.cpp -L$QTDIR/lib -lqt
+
+到现在为止，已经作好了PissaEntry这个程序了。同时编译了qt31版本的，也可以运行。
+
+
+到此为止吧。
+
+
+
+					2006/05/01
+SqliteDataset组件					
+1. 从数据库中读取数据(此处读取的是 char* 类型的)					
+     29     m_pDatabase = new dbiplus::SqliteDatabase( );
+     30     m_pDatabase->setDatabase( "colliery.db" );
+     31     m_pDataset = m_pDatabase->CreateDataset( );
+     32     m_pDatabase->connect( );
+     33     QString string;
+     34     string.sprintf( "SELECT Time FROM %s WHERE SensorID == %d","SensorData", 2 );
+     35     m_pDataset->query( string.latin1() );
+     36     m_pDataset->next();
+     37     const char* str ;
+     38     str = m_pDataset->fv("Time").get_asString( ).c_str();
+     39     printf("\n SensorName is  %s \n",str);
+解释：
+29~32 	是数据库变量声明和连接到数据库
+33~34	得到一个标准 SQL 语句，这里 string is : SELECT Time FROM SensorData WHERE SensorID == 2
+35 		查询数据库，这个时候 m_pDataset 指向所有满足 SELECT Time FROM SensorData WHERE SensorID == 2 记录的第一条记录，
+		所有满足条件的记录个数可以用 int num = m_pDataset->num_rows();	来确定
+36		给 m_pDataset 重新赋值，让 m_pDataset指向其自身指向数据记录的下一条记录，通过这个函数调用可以周游数据记录
+37~38	该记录赋值给一个 char* 型数据 str 
+
+		
+char* 型数据转换为 int 型数据方法：
+	char *str = "1856"
+	int temp ;
+	bool ok;
+	QString strtemp= (QString)str;
+	temp = strtemp.toInt(&ok,10);   //以十进制转换
+	printf("\nTime is INT : %d\n",temp);
+也可一进行类似转换为 double 、float等类型
+该方法是利用 QString 类的成员函数转换的，可以参考 QString 类帮助文档
+
+下面是两个小函数程序，实现转换
+int 	stringToInt(const char * str)
+{	//Convert char * to int
+	int temp ;
+	bool ok;
+	QString strtemp= (QString)str;
+	temp = strtemp.toInt(&ok,10);
+	return temp;
+}
+
+double stringToDouble(const char * str)
+{	//Convert char * to double
+	double temp ;
+	bool ok;
+	QString strtemp= (QString)str;
+	temp = strtemp.toDouble(&ok);
+	return temp;
+}
+
+
+
+
+
+qt中文化,国际化
+Qt提供对于把应用程序翻译为本地语言的极好的支持。
+本指南解释了在翻译应用程序的时候每个角色如何使用Qt的翻译工具。
+本指南从一些必须考虑的的方面的一个简要的概述开始，接下来的各章将针对每个角色和所提供的工具支持。
+很好的网上资源：http://www.qiliang.net/qt/linguist-manual-1.html
+ 工具：lupdate, linguist and lrelease
+ 
+注意要翻译的文本一定要用 tr 括起来
+
+在example.pro文件中添加
+
+TRANSLATIONS = example_CN.ts
+
+# lupdate example.pro 生成example_CN.ts文件
+
+# linguist example_CN.ts 在linguist中对example_CN.ts文件翻译并保存,
+
+# lrelease example_CN.ts 生成example_CN.qm
+
+拷贝example_CN.qm到sitsang的/usr/qpe/i18n/zh_CN目录下。
+
+在main.cpp中的“QApplicaton a...”语句后添加：
+
+
+
+QTranslator translator( 0 );
+
+translator.load( "/usr/qpe/i18n/zh_CN/example_CN", "." );
+
+a.installTranslator( &translator );
+
+注意：QTE/Qtopia的语言设置必须选简体中文。
+
+例如：
+
+    int main( int argc, char ** argv )
+    {
+        QApplication app( argc, argv );
+
+        QTranslator translator( 0 );
+        translator.load( "french.qm", "." );
+        app.installTranslator( &translator );
+
+        MyWidget m;
+        app.setMainWidget( &m );
+        m.show();
+
+        return app.exec();
+    }
+
+
+
+
+
+
+
+
+geqinqin日志一篇
+2006年5月1日 周一  晴
+
+
+                           什么是PERL语言
+　　  Perl(Practical Extraction and Report Language)叫做文字分析报告语言。是由劳利·华尔(Larry
+  Wall)所建立出来的语言。他设计Perl时的哲学是以实用为第一优先，也就是语言容易使用，有效率，而
+  且完整。
+
+看到一个好东东：progen，
+The progen Utility
+The progen utility creates project files for you. It can be used like this:
+
+  progen -n hello -o hello.pro
+
+If no .cpp or .h files are specified on the command line, progen searches for .cpp and .h (except moc_*.cpp) in the current directory and below.
+
+Usage:
+
+  progen [options] [C/C++ header files and source files]
+
+Options:
+
+  -lower   Lower-case letters in filenames (useful on Windows).
+  -n name  Specify a project name (TARGET).
+  -o file  Write output to file instead of stdout.
+  -t file  Specify a template file.
+
+把/usr/programs/qt232/pizzaEntry 复制为 pizzaEntry3， 先放到shan下试一试
+
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+moc -o moc_PizzaEntry.cpp PizzaEntry.h
+moc -o moc_PizzaEntryImpl.cpp PizzaEntryImpl.h
+moc -o moc_PizzaEntryTest.cpp PizzaEntryTest.cpp //这步没执行
+g++ -I$QTDIR/include PizzaEntry.cpp PizzaEntryTest.cpp PizzaEntryImpl.cpp moc_PizzaEntry.cpp moc_PizzaEntryImpl.cpp -L$QTDIR/lib -lqt
+
+可以，但是用tmake那一套编译有错：
+
+progen -n shan -o shan.pro
+tmake -o Makefile shan.pro
+
+[root@gege shan]# make
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -o ./pizza.h
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntry.o PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryImpl.o PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryTest.o PizzaEntryTest.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -i pizza.h -o pizza.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o pizza.o pizza.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntry.h -o moc_PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntry.o moc_PizzaEntry.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntryImpl.h -o moc_PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntryImpl.o moc_PizzaEntryImpl.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc pizza.h -o moc_pizza.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_pizza.o moc_pizza.cpp
+g++  -o shan PizzaEntry.o PizzaEntryImpl.o PizzaEntryTest.o pizza.o moc_PizzaEntry.o moc_PizzaEntryImpl.o moc_pizza.o  -L/usr/local/arm-linux/qt_toolchain/qt-2.3.2/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm
+pizza.o(.text+0x0): In function `PizzaEntry::PizzaEntry[not-in-charge](QWidget*, char const*, bool, unsigned)':
+: multiple definition of `PizzaEntry::PizzaEntry[not-in-charge](QWidget*, char const*, bool, unsigned)'
+PizzaEntry.o(.text+0x0): first defined here
+pizza.o(.text+0xa18): In function `PizzaEntry::PizzaEntry[in-charge](QWidget*, char const*, bool, unsigned)':
+: multiple definition of `PizzaEntry::PizzaEntry[in-charge](QWidget*, char const*, bool, unsigned)'
+PizzaEntry.o(.text+0xa18): first defined here
+pizza.o(.text+0x1430): In function `PizzaEntry::~PizzaEntry [not-in-charge]()':
+: multiple definition of `PizzaEntry::~PizzaEntry [not-in-charge]()'
+PizzaEntry.o(.text+0x1430): first defined here
+pizza.o(.text+0x1454): In function `PizzaEntry::~PizzaEntry [in-charge]()':
+: multiple definition of `PizzaEntry::~PizzaEntry [in-charge]()'
+PizzaEntry.o(.text+0x1454): first defined here
+pizza.o(.text+0x1478): In function `PizzaEntry::~PizzaEntry [in-charge deleting]()':
+: multiple definition of `PizzaEntry::~PizzaEntry [in-charge deleting]()'
+PizzaEntry.o(.text+0x1478): first defined here
+pizza.o(.text+0x14a4): In function `PizzaEntry::sendOrder()':
+: multiple definition of `PizzaEntry::sendOrder()'
+PizzaEntry.o(.text+0x14a4): first defined here
+moc_pizza.o(.text+0x0): In function `PizzaEntry::className() const':
+: multiple definition of `PizzaEntry::className() const'
+moc_PizzaEntry.o(.text+0x0): first defined here
+moc_pizza.o(.data+0x0): multiple definition of `PizzaEntry::metaObj'
+moc_PizzaEntry.o(.data+0x0): first defined here
+moc_pizza.o(.text+0xc): In function `PizzaEntry::initMetaObject()':
+: multiple definition of `PizzaEntry::initMetaObject()'
+moc_PizzaEntry.o(.text+0xc): first defined here
+moc_pizza.o(.text+0xcc): In function `PizzaEntry::staticMetaObject()':
+: multiple definition of `PizzaEntry::staticMetaObject()'
+moc_PizzaEntry.o(.text+0xcc): first defined here
+moc_pizza.o(.text+0x74): In function `PizzaEntry::tr(char const*)':
+: multiple definition of `PizzaEntry::tr(char const*)'
+moc_PizzaEntry.o(.text+0x74): first defined here
+moc_pizza.o(.text+0xa0): In function `PizzaEntry::tr(char const*, char const*)':
+: multiple definition of `PizzaEntry::tr(char const*, char const*)'
+moc_PizzaEntry.o(.text+0xa0): first defined here
+collect2: ld returned 1 exit status
+make: *** [shan] Error 1
+[root@gege shan]#
+
+
+
+报的是重定义错误。对比不用tmake和用tmake两个编译过程：
+uic -o PizzaEntry.h pizza.ui
+uic -i PizzaEntry.h -o PizzaEntry.cpp pizza.ui
+moc -o moc_PizzaEntry.cpp PizzaEntry.h
+moc -o moc_PizzaEntryImpl.cpp PizzaEntryImpl.h
+g++ -I$QTDIR/include PizzaEntry.cpp PizzaEntryTest.cpp PizzaEntryImpl.cpp moc_PizzaEntry.cpp moc_PizzaEntryImpl.cpp -L$QTDIR/lib -lqt
+
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -o ./pizza.h
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -i pizza.h -o pizza.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntry.h -o moc_PizzaEntry.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntryImpl.h -o moc_PizzaEntryImpl.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc pizza.h -o moc_pizza.cpp
+
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -o ./pizza.h
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntry.o PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryImpl.o PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryTest.o PizzaEntryTest.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -i pizza.h -o pizza.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o pizza.o pizza.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntry.h -o moc_PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntry.o moc_PizzaEntry.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntryImpl.h -o moc_PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntryImpl.o moc_PizzaEntryImpl.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc pizza.h -o moc_pizza.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_pizza.o moc_pizza.cpp
+g++  -o shan PizzaEntry.o PizzaEntryImpl.o PizzaEntryTest.o pizza.o moc_PizzaEntry.o moc_PizzaEntryImpl.o moc_pizza.o  -L/usr/local/arm-linux/qt_toolchain/qt-2.3.2/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm
+
+从以上过程看，如果用progen，tmake的话，就不用手动去uic，moc生成file了。
+试一下吧。
+直接删掉手动生成的uic moc file后，
+progen -n shan -o shan.pro
+tmake -o Makefile shan.pro
+make
+报错如下：
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic pizza.ui -o ./pizza.h
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryImpl.o PizzaEntryImpl.cpp
+In file included from PizzaEntryImpl.cpp:3:
+PizzaEntryImpl.h:6:24: PizzaEntry.h: 没有那个文件或目录
+In file included from PizzaEntryImpl.cpp:3:
+PizzaEntryImpl.h:9: parse error before `{' token
+PizzaEntryImpl.cpp:7: invalid use of undefined type `class PizzaEntryImpl'
+PizzaEntryImpl.h:8: forward declaration of `class PizzaEntryImpl'
+PizzaEntryImpl.cpp: In member function `void PizzaEntryImpl::sendOrder()':
+PizzaEntryImpl.cpp:9: no matching function for call to `QMessageBox::
+   information(PizzaEntryImpl* const, const char[24], const char[66],
+   QMessageBox::<anonymous enum>)'
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include/qmessagebox.h:76: candidates
+   are: static int QMessageBox::information(QWidget*, const QString&, const
+   QString&, int, int = 0, int = 0)
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include/qmessagebox.h:83:
+        static int QMessageBox::information(QWidget*, const QString&, const
+   QString&, const QString& = QString::null, const QString& = QString::null,
+   const QString& = QString::null, int = 0, int = -1)
+make: *** [PizzaEntryImpl.o] Error 1
+看来是文件名的问题。
+把 pizza.ui重命名为 PizzaEntry.ui
+progen -n shan -o shan.pro
+tmake -o Makefile shan.pro
+
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic PizzaEntry.ui -o ./PizzaEntry.h
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryImpl.o PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntryTest.o PizzaEntryTest.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/uic PizzaEntry.ui -i PizzaEntry.h -o PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o PizzaEntry.o PizzaEntry.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntryImpl.h -o moc_PizzaEntryImpl.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntryImpl.o moc_PizzaEntryImpl.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc pizza.h -o moc_pizza.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_pizza.o moc_pizza.cpp
+/usr/local/arm-linux/qt_toolchain/qt-2.3.2/bin/moc PizzaEntry.h -o moc_PizzaEntry.cpp
+g++ -c -pipe -Wall -W -O2 -DNO_DEBUG -I/usr/local/arm-linux/qt_toolchain/qt-2.3.2/include -o moc_PizzaEntry.o moc_PizzaEntry.cpp
+g++  -o shan PizzaEntryImpl.o PizzaEntryTest.o PizzaEntry.o moc_PizzaEntryImpl.o moc_pizza.o moc_PizzaEntry.o  -L/usr/local/arm-linux/qt_toolchain/qt-2.3.2/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm
+moc_PizzaEntry.o(.text+0x0): In function `PizzaEntry::className() const':
+: multiple definition of `PizzaEntry::className() const'
+moc_pizza.o(.text+0x0): first defined here
+moc_PizzaEntry.o(.data+0x0): multiple definition of `PizzaEntry::metaObj'
+moc_pizza.o(.data+0x0): first defined here
+moc_PizzaEntry.o(.text+0xc): In function `PizzaEntry::initMetaObject()':
+: multiple definition of `PizzaEntry::initMetaObject()'
+moc_pizza.o(.text+0xc): first defined here
+moc_PizzaEntry.o(.text+0xcc): In function `PizzaEntry::staticMetaObject()':
+: multiple definition of `PizzaEntry::staticMetaObject()'
+moc_pizza.o(.text+0xcc): first defined here
+moc_PizzaEntry.o(.text+0x74): In function `PizzaEntry::tr(char const*)':
+: multiple definition of `PizzaEntry::tr(char const*)'
+moc_pizza.o(.text+0x74): first defined here
+moc_PizzaEntry.o(.text+0xa0): In function `PizzaEntry::tr(char const*, char const*)':
+: multiple definition of `PizzaEntry::tr(char const*, char const*)'
+moc_pizza.o(.text+0xa0): first defined here
+collect2: ld returned 1 exit status
+make: *** [shan] Error 1
+[root@gege shan]#
+g++  -o shan PizzaEntryImpl.o PizzaEntryTest.o PizzaEntry.o moc_PizzaEntryImpl.o moc_pizza.o moc_PizzaEntry.o  -L/usr/local/arm-linux/qt_toolchain/qt-2.3.2/lib -L/usr/X11R6/lib -lqt -lXext -lX11 -lm 中去掉moc_pizza.o moc_PizzaEntry.o中任意一个，编译就OK了。
+
+
+但是这又是为什么呢？	
+仔细研究一下，发现这个pizza.h文件是从哪来的？
+估计是上面makeclean 没clean掉的。
+
+下面进入pizzaEntry3目录：
+只留四个文件：ui文件，main文件，自定义实现的cpp 和 h文件。
+
+[root@gege pizzaEntry3]# ls
+main.cpp  PizzaEntryImpl.cpp  PizzaEntryImpl.h  PizzaEntry.ui
+progen -n PizzaEntry -o PizzaEntry.pro
+tmake -o Makefile PizzaEntry.pro
+make
+
+为方便起见写一个 compile.sh，把命令集成到里面：
+
+#! /bin/sh
+#compile.sh
+make clean
+progen -n PizzaEntry -o PizzaEntry.pro 
+tmake -o Makefile PizzaEntry.pro
+make
+
+
+					2006/05/02
+1. nfs服务，在linux系统间实现共享
+添加共享目录：添加到/etc/exports文件的内容，注意需要重启nfs服务才能生效
+例如想共享/mnt/happy/movie/这个目录，应该在/etc/exports文件添加一下内容 ： /mnt/happy/movie   (ro,no_root_squash)  
+这里(ro,no_root_squash)只有只读权限   可读写权限为  (rw,no_root_squash)
+启动nfs服务前执行命令 # portmap
+启动	|关闭|重启 service nfs start|stop|restart 
+挂载： mount -t nfs 192.168.0.29:/mnt/happy/movie/ /mnt/nfs/
+注明：	192.168.0.29:/mnt/happy/movie/ 表示远程计算机IP和nfs共享目录
+		/mnt/nfs/ 为本地目录，即将 192.168.0.29:/mnt/happy/movie/ 挂载到该目录下
+
+2.qt编程习惯
+	 命名规则
+类的名字都以大写字母开头如：QApplication， QPushButton 等
+用户自己编写的类名一大写C开头如：CPlotTab，
+类的成员函数以小写字母开头，而后续单词的第一个字母要大写，如：setMainWidget(&)
+类的成员变量以小写 m_开头 ，指针变量以 m_p开头,如：    QwtPlotPicker *m_Picker;    bool m_bDragCurve;
+				int以m_i、double以m_d 、bool以m_b开头
+给类和类的成员函数以及变量的取名都尽量用完整的单词。
+给类和类的成员函数以及变量的取名都尽量用完整的单词。
+
+	为每一个类都使用单独的头文件（mainwidget.h）和实现文件（mainwidget.cpp）
+			
+3. 今天碰到添加曹(slot)的问题		
+我们的界面用 designer 生成好后，不知道怎么向其中添加 slot 
+找了好久，发现可以在 form 的空白处用 F3 编辑自己的 slot
+而不能在form上的其他组件上新建自己的 slot
+
+由于用 designer 编辑的 ui 界面，用uic生成的 .h .cpp 文件一般不能修改
+所以自己添加 slot 就有点麻烦
+为此，我们可以再创建一个类，这个类继承 ui 生成的类，
+这样我们就可以在这个类里建立自己的 slot 
+并把该 slot 设置为 public  和 virtual 类型
+然后到 ui 中去设置这个 slot 对应的信号连接关系
+		
+		
+							2006/05/03
+ldconfig
+为了让执行程序找到不在/lib或/usr/lib目录下的动态库，可以在/etc/ld.so.conf文件中把库所在路径加到文件尾，
+并执行#ldconfig刷新。		
+ 
+
+linux 下Qt 3安装qwt插件
+
+版本qwt-4.2.0.tar.bz2
+
+解压之后按其中的INSTALL文件安装
+
+#Builds for Qt 3.x need qmake, that is official part of Qt 3.x.
+
+qmake qwt.pro 
+make
+
+The designer plugin is available for Qt > 3.x only. You can build and 
+install it with(这个东西编出来在qwt-4.2.0/designer/plugins/designer里生成libqwtplugin.so):
+
+cd designer
+qmake qwtplugin.pro
+make
+make install(这个命令把libqwtplugin.so这个插件库安装在QTDIR/plugins/designer/里,等designer运行的时候就会自动加载qwt了)
+如下：
+make install
+rm -f "/usr/lib/qt-3.1/plugins/designer/libqwtplugin.so"
+cp -f "plugins/designer/libqwtplugin.so" "/usr/lib/qt-3.1/plugins/designer/libqwtplugin.so"
+一般说来,只要LD_LIBRARY_PATH路径设得对,就没问题，或者如果你根本不想管路径问题，
+最方便的就是将刚生成的qwt的库拷贝到原来qt3.1的库文件目录下，和原来的库放在一起
+
+
+If you like to build the examples:
+
+cd examples
+qmake examples.pro 
+make
+
+If you like to run the examples, don't forget to install the qwt libraries
+or set the LD_LIBRARY_PATH to the lib directory of your local build.
+
+qwt doesn't distribute binary unix packages. qwt.spec is a template
+spec file for building rpm packages. Read the comments at the beginning 
+of qwt.pro how to use it.
+
+一般说来,只要LD_LIBRARY_PATH路径设得对,就没问题
+
+
+
+在FC4下 Qt 3.3在 /usr/lib/qt-3.3/ 目录中 
+
+为了方便,可以在$QTDIR/bin中建立一个bash文件,起动designer
+
+#!/bin/bash
+export QTDIR=/usr/lib/qt-3.3
+export LD_LIBRARY_PATH=$(QTDIR)/lib:$(QTDIR)/plugins/designer:/Software/temp/qwt-4.2.0/lib
+
+./designer &
+ 
+source 它就可以了
+
+
+
+				2006	/05/04
+QListBox 类中的 void doubleClicked ( QListBoxItem * item )	可以发出按钮信号
+void QListBox::highlighted ( int index ) 只要有QListBox里面被选择(highlighted)的Item改变，该信号就发出，
+									index是Item的序号(从0开始的)								
+	    connect( navigateListBox, SIGNAL( highlighted ( int ) ), this, SLOT( inserTabSlot(int ) ) );
+void mainForm::inserTabSlot(int index)
+{
+    qDebug( "Entering into mainForm::inserTabSlot( )" );
+	if(index==1)    
+	{
+		.....................		
+   	}   
+    qDebug( "Leaving out of mainForm::inserTabSlot( )" );
+}	    
+
+
+
+				2006/05/05
+QIconView类中 void QIconView::clicked ( QIconViewItem * item ) [signal] 	问题
+
+假如我们想用QIconView类，并在其中放置了很多图标按钮，
+我们怎么才能捕捉到鼠标点击某个图标按钮而响应一件事情呢？
+
+这里我选择 void QIconView::clicked ( QIconViewItem * item ) [signal] 该信号来实现这个想法。
+
+假设我们有这个类：
+class mainForm : public QDialog
+{ 
+    Q_OBJECT
+
+public:
+    mainForm( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~mainForm();
+
+    QIconView* navigateIconView;
+	QIconViewItem *mpfindIconViewItem;
+	
+public slots:
+    virtual void iconClickedSlot( QIconViewItem * );
+};
+
+构造函数为：
+mainForm::mainForm( QWidget* parent,  const char* name, bool modal, WFlags fl )
+    : QDialog( parent, name, modal, fl )
+{
+    QPixmap image0( ( const char** ) image0_data );
+    QPixmap image1( ( const char** ) image1_data );
+    if ( !name )
+	setName( "mainForm" );
+    resize( 596, 480 ); 
+    setCaption( tr( "Signal Icon View" ) );
+
+    navigateIconView = new QIconView( this, "navigateIconView" );
+    mpfindIconViewItem = new QIconViewItem( navigateIconView, tr( "find" ), image0 );
+    
+
+    // signals and slots connections
+    connect( navigateIconView, SIGNAL( clicked( QIconViewItem *) ), this, SLOT( iconClickedSlot( QIconViewItem* ) ) );
+}
+
+我们想捕捉到鼠标点击 mpfindIconViewItem 按钮图标的信号，可以像上那样连接一个信号和曹。
+该曹的内容该怎么写呢？
+这里我给出一个比较好的写法
+void mainForm::iconClickedSlot( QIconViewItem * tempIconViewItem )
+{
+    qDebug( "Entering into mainForm::iconClickedSlot( )" );
+	if( tempIconViewItem == mainForm::mpfindIconViewItem )
+	{
+    	static int count = 0;
+		printf("This is the %dth time you clicked the mpfindIconViewItem item!\n",count++);
+	}
+	else	
+	{
+		printf("You clicked other area instead of the mpfindIconViewItem !! Please try again!!\n");
+	}
+	
+    qDebug( "Leaving out of mainForm::iconClickedSlot( )" );
+}
+
+这里说明一下，当有鼠标点击QIconView类对象的区域时，就发出clicked( QIconViewItem *)该信号，
+如果鼠标点击(无论是右键还是左键)到了某一 item ，item 就为该被点击到的 QIconViewItem 类图标，否则为空。
+该信号将QIconViewItem * 这个参数传递给iconClickedSlot这个曹。为了捕捉到我们需要的信号，
+我们就在对应的SLOT函数里添加判断语句，如程序中：	if( tempIconViewItem == mainForm::mpfindIconViewItem ) 这样。
+
+	今天发现一个新的编辑器， kate 
+很不错，推荐使用。
+在命令行下直接输入：kate就行了。
+使用就不说了，赶快去试试吧
+
+
+
+
+
+
+下载03.05.2006colliery_software到Liod平台上。
+
+首先解压03.05.2006colliery_software.tar.gz到/root/programs/qte/下，修改colliery.pro编译qvfb版本，设置路径如下：
+export PATH=/usr/local/arm-linux/bin:$PATH
+
+export QTDIR=/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_pc_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-x86-g++
+
+编译时找不到qwt、sqlite的库，加了下面两条：
+export LD_LIBRARY_PATH=/usr/local/arm-linux/qt_pc_toolchain/qwt-4.2.0/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/arm-linux/sqlite-ix86-linux/lib:$LD_LIBRARY_PATH
+qvfb版编译成功。
+
+编译arm版本，修改colliery.pro,注掉CONFIG  +=  ix86，打开 CONFIG  += arm，直接设置路径：
+export PATH=/usr/local/arm-linux/bin:$PATH
+
+export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+即可编译出arm版本的程序。
+
+下载到Liod平台，运行，找不到库：
+./arm.out: error while loading shared libraries: libts-0.0.so.0: cannot open shy
+设置开发版路径：
+Liod平台的环境设置：
+export QTDIR=/usr/qpe
+export QPEDIR=/usr/qpe
+export LANG=zh_CN
+export LD_LIBRARY_PATH=/usr/qpe/lib:$LD_LIBRARY_PATH
+export QT_TSLIBDIR=/usr/qpe/lib
+export TSLIB_CONFFILE=/usr/qpe/etc/ts.conf
+export TSLIB_PLUGINDIR=/usr/qpe/lib
+export QWS_MOUSE_PROTO=TPanel:/dev/touchscreen/ucb1x00
+#export QWS_MOUSE_PROTO=TPanel:/dev/ts
+export KDEDIR=/usr/qpe
+运行，找不到库：
+./arm.out: error while loading shared libraries: libqwt.so.4: cannot open sharey
+下载arm版的libqwt.so.4.2.0，重命名为libqwt.so.4,
+再次运行，找不到库：
+./arm.out: error while loading shared libraries: libsqlite3.so.0: cannot open sy
+下载arm版的libsqlite3.so.0.8.6 重命名libsqlite3.so.0，
+运行，数据库读取文件error：
+[root@51Board ~]# ./arm.out  -qws
+Cannot open /dev/ts (No such device)	//这一句无论运行哪个qt程序都有，但是触摸屏又可用，不知是什么原因
+Enter into MainInterface::MainInterface();
+Create DataTableTab
+Enter into CPlotTab::CPlotTab( )
+Enter into CPlotTab::initDataBase( )
+Leave out of CPlotTab::initDataBase( )
+Enter into CPlotTab::readDataFromDB( ),reading data from DB!!
+Aborted
+同时自动生成数据库文件colliery.db。
+下一个03.05.06.dump ASCII文件，将它导入到colliery.db中去，首先下sqlite3程序文件到板子上，再导入：(sqlite3在/usr/local/arm-linux/sqlite-arm-linux/bin下，编译时已自动生成)
+[root@51Board ~]# ./sqlite3  colliery.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> .help
+.databases             List names and files of attached databases
+.dump ?TABLE? ...      Dump the database in an SQL text format
+.echo ON|OFF           Turn command echo on or off
+.exit                  Exit this program
+.explain ON|OFF        Turn output mode suitable for EXPLAIN on or off.
+.header(s) ON|OFF      Turn display of headers on or off
+.help                  Show this message
+.import FILE TABLE     Import data from FILE into TABLE
+.indices TABLE         Show names of all indices on TABLE
+.mode MODE ?TABLE?     Set output mode where MODE is on of:
+                         csv      Comma-separated values
+                         column   Left-aligned columns.  (See .width)
+                         html     HTML <table> code
+                         insert   SQL insert statements for TABLE
+                         line     One value per line
+                         list     Values delimited by .separator string
+                         tabs     Tab-separated values
+                         tcl      TCL list elements
+.nullvalue STRING      Print STRING in place of NULL values
+.output FILENAME       Send output to FILENAME
+.output stdout         Send output to the screen
+.prompt MAIN CONTINUE  Replace the standard prompts
+.quit                  Exit this program
+.read FILENAME         Execute SQL in FILENAME
+.schema ?TABLE?        Show the CREATE statements
+.separator STRING      Change separator used by output mode and .import
+.show                  Show the current values for various settings
+.tables ?PATTERN?      List names of tables matching a LIKE pattern
+.timeout MS            Try opening locked tables for MS milliseconds
+.width NUM NUM ...     Set column widths for "column" mode
+sqlite> .read a
+sqlite> .schema
+CREATE TABLE Sensor(
+SensorID INTEGER,
+SensorName  VARCHAR(15),
+SensorLimit REAL
+);
+CREATE TABLE SensorData(
+        ID   INTEGER PRIMARY KEY,
+    SensorID    INTEGER,
+    SiteNum     INTEGER,
+    Time        VARCHAR(10),
+    SensorParameter   REAL
+    );
+CREATE TABLE Worker(
+        WorkerID        INTEGER PRIMARY KEY,
+        WorkerName      VARCHAR(20),
+        Sex         VARCHAR(1),
+        WorkGroup    INTEGER
+);
+CREATE TABLE WorkerData(
+        WorkerID   INT NOT NULL UNIQUE,
+        Time       VARCHAR(10),
+        SiteNum    INTEGER
+);
+sqlite> .quit
+[root@51Board ~]# ./arm.out  -qws
+Cannot open /dev/ts (No such device)
+Enter into MainInterface::MainInterface();
+Create DataTableTab
+Enter into CPlotTab::CPlotTab( )
+Enter into CPlotTab::initDataBase( )
+Leave out of CPlotTab::initDataBase( )
+Enter into CPlotTab::readDataFromDB( ),reading data from DB!!
+                                                                                
+ string is : SELECT SensorParameter FROM SensorData WHERE SensorID == 1
+Total numbers of the result is : 13
+Firedamp : SensorParameter number 1 is  3
+Firedamp : SensorParameter number 2 is  4
+Firedamp : SensorParameter number 3 is  2
+Firedamp : SensorParameter number 4 is  2
+Firedamp : SensorParameter number 5 is  3
+Firedamp : SensorParameter number 6 is  3
+Firedamp : SensorParameter number 7 is  2
+Firedamp : SensorParameter number 8 is  4
+Firedamp : SensorParameter number 9 is  2.23
+Firedamp : SensorParameter number 10 is  1.23
+Firedamp : SensorParameter number 11 is  1.23
+Firedamp : SensorParameter number 12 is  1.23
+Firedamp : SensorParameter number 13 is  1.23
+                                                                                
+ string is : SELECT SensorParameter FROM SensorData WHERE SensorID == 2
+Total numbers of the result is : 13
+AirSpeed : SensorParameter number 1 is  18.9
+AirSpeed : SensorParameter number 2 is  16.4
+AirSpeed : SensorParameter number 3 is  15.3
+AirSpeed : SensorParameter number 4 is  15.5
+AirSpeed : SensorParameter number 5 is  15.8
+AirSpeed : SensorParameter number 6 is  12.5
+AirSpeed : SensorParameter number 7 is  3.6
+AirSpeed : SensorParameter number 8 is  5.5
+AirSpeed : SensorParameter number 9 is  15.23
+AirSpeed : SensorParameter number 10 is  12.23
+AirSpeed : SensorParameter number 11 is  15.23
+AirSpeed : SensorParameter number 12 is  14.23
+AirSpeed : SensorParameter number 13 is  16.23
+                                                                                
+ string is : SELECT SensorParameter FROM SensorData WHERE SensorID == 3
+Total numbers of the result is : 15
+Oxygen : SensorParameter number 1 is  21.6
+Oxygen : SensorParameter number 2 is  21.5
+Oxygen : SensorParameter number 3 is  21.2
+Oxygen : SensorParameter number 4 is  21.3
+Oxygen : SensorParameter number 5 is  21.6
+Oxygen : SensorParameter number 6 is  21.5
+Oxygen : SensorParameter number 7 is  21.2
+Oxygen : SensorParameter number 8 is  21.3
+Oxygen : SensorParameter number 9 is  21.1
+Oxygen : SensorParameter number 10 is  21.2
+Oxygen : SensorParameter number 11 is  13.23
+Oxygen : SensorParameter number 12 is  21.23
+Oxygen : SensorParameter number 13 is  23.23
+Oxygen : SensorParameter number 14 is  15.23
+Oxygen : SensorParameter number 15 is  16.23
+Leave out of CPlotTab::readDataFromDB( )
+Leave out of CPlotTab::CPlotTab( )
+Leaving out of MainInterface::MainInterface();
+                                                                                
+[root@51Board ~]#
+运行成功。
+
+
+[root@51Board ~]# ./sqlite3  colliery.db
+SQLite version 3.0.8
+Enter ".help" for instructions
+sqlite> .read a
+sqlite> .schema
+CREATE TABLE Sensor(
+SensorID INTEGER,
+SensorName  VARCHAR(15),
+SensorLimit REAL
+);
+CREATE TABLE SensorData(
+        ID   INTEGER PRIMARY KEY,
+    SensorID    INTEGER,
+    SiteNum     INTEGER,
+    Time        VARCHAR(10),
+    SensorParameter   REAL
+    );
+CREATE TABLE Worker(
+        WorkerID        INTEGER PRIMARY KEY,
+        WorkerName      VARCHAR(20),
+        Sex         VARCHAR(1),
+        WorkGroup    INTEGER
+);
+CREATE TABLE WorkerData(
+        WorkerID   INT NOT NULL UNIQUE,
+        Time       VARCHAR(10),
+        SiteNum    INTEGER
+);
+sqlite>
+
+注意一点，下到开发板的程序都要untrip一下，因为我们编译时加了调试信息在二进制文件里，这样增加了文件大小。
+[root@gege bin]# file sqlite3
+sqlite3: ELF 32-bit LSB executable, ARM, version 1 (ARM), for GNU/Linux 2.0.0, dynamically linked (uses shared libs), not stripped
+[root@gege bin]# ll
+总用量 72
+-rwxr-xr-x    1 root     root        65673  5月  4 00:29 sqlite3
+[root@gege bin]# cp sqlite3 sqlite3.old.not.stripped
+[root@gege bin]# arm-linux-strip  sqlite3
+[root@gege bin]# ll
+总用量 100
+-rwxr-xr-x    1 root     root        28068  5月  6 00:26 sqlite3
+-rwxr-xr-x    1 root     root        65673  5月  6 00:25 sqlite3.old.not.stripped
+[root@gege bin]# file sqlite3
+sqlite3: ELF 32-bit LSB executable, ARM, version 1 (ARM), for GNU/Linux 2.0.0, dynamically linked (uses shared libs), stripped
+
+另外，修正软件界面关闭但qt进程未关闭的bug.
+
+//
+
+
+						2006/05/06
+//李熠 程序 问题***********************************************************************
+下载qtopia程序到开发板错误：qgarray.cpp 229  out of memory						
+但是在pc上仿真没有问题
+CMaskLabel.o(.text+0x30):/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qarray.h:73: undefined reference to `QLabel::QLabel[not-in-charge](QWidget*, char const*, unsigned)'
+CMaskLabel.o(.text+0x90):/var/ftp/pub/src/CMaskLabel.cpp:10: undefined reference to `QLabel::QLabel[not-in-charge](QWidget*, char const*, unsigned)'
+CMaskLabel.o(.text+0x138):/var/ftp/pub/src/CMaskLabel.cpp:17: undefined reference to `QFrame::frameRect() const'
+CMaskLabel.o(.text+0x140):/var/ftp/pub/src/CMaskLabel.cpp:18: undefined reference to `QWidget::colorGroup() const'
+CMaskLabel.o(.text+0x22c):/var/ftp/pub/src/CMaskLabel.cpp:25: undefined reference to `QFont::pointSize() const'CMaskLabel.o(.text+0x2b4):/var/ftp/pub/src/CMaskLabel.cpp:25: undefined reference to `QFont::~QFont [in-charge]()'
+CMaskLabel.o(.text+0x2d4):/var/ftp/pub/src/CMaskLabel.cpp:25: undefined reference to `QFont::~QFont [in-charge]()'
+//李熠 程序 问题***********************************************************************
+
+
+建议使用 QWedgitStack 类管理窗口，主窗口用QWedgit
+QDialog类用来show   ，不能在一个QDialog窗口中是调用另一个QDialog窗口
+
+
+设置 Tab 键的顺序：
+    // tab order
+    setTabOrder( navigateIconView, navigateSensorListBox );
+    setTabOrder( navigateSensorListBox, navigateMapListBox );
+    setTabOrder( navigateMapListBox, mainTabWidget );
+    setTabOrder( mainTabWidget, detailTextBrowser );
+    setTabOrder( detailTextBrowser, dataTable );
+    setTabOrder( dataTable, notationTextBrowser );
+好像是个链表形式的
+
+
+程序中需要贴图的地方，一定要注意了，
+当所贴的图片不是图标之类的小型图片时，不要将其放到 designer 中生成该图的点阵数据，
+否则在编译的时候需要耗费很长时间，这个时间是难以忍受的。
+所以应该将该图片保存到程序的目录中，并且该图片应为 .png 类型
+调用方式如下：
+
+    pixmapLable = new QLabel( this, "pixmapLable" );
+    pixmapLable->setGeometry( QRect( 0, 0, 480, 600 ) ); 
+    pixmapLable->setText( tr( " " ) );
+
+    QPixmap loginpic("login.png");    //如需要的话，可能需要绝对路径
+    pixmapLable->setPixmap(loginpic);
+    pixmapLable->show();
+    
+    
+    
+    
+将主窗口改为 QWidget 类
+通过 show() 函数把 QDialog类的函数show出来  
+如果主窗口是 QDialog 类，那么show()函数就好像不起作用一样
+ 但是第二次就不行了，
+ 或者是因为已经存在了，所以在后面被主窗口遮住了    
+    
+    
+    					2006/05/07
+写程序是我们经常将常用的常量变量放到一个公共的文件 ccommon.h 中，
+有时候我们也将一些头文件放到这个文件中,以便让任何程序在调用头文件时只需包含该 ccommon.h 文件就可以了
+
+但是这样要小心使用，比如：ccommon.h文件中有这样的内容：
+#ifndef CCOMMON_H
+#define CCOMMON_H
+
+
+//All header files here
+#include "cmaininterfacewidget.h"
+#include "creaddatafromdb.h"
+#include "cwidgetmanager.h"
+
+//use this four const various to define which curve to be draw
+const 	int FiredampKEYEable		 	= 1 ;		
+const 	int AirSpeedKEYEable	 	 	= 2 ;
+const 	int OxygenKEYEable		 	= 4 ;
+const	int CarbonicOxideKEYEable 	= 8 ;		
+
+//The max pix number of a curve
+const 	int	CURVE_PIX_NUMBER 		= 100;		
+#endif
+
+这里就有可能出现下面这样的编译错误：
+In file included from ccommon.h:20,
+                 from cmaininterfacewidget.h:14,
+                 from main.cpp:19:
+cplottab.h:28: `FiredampKEYEable' was not declared in this scope
+
+这个是由于	cmaininterfacewidget.h 和 它要引用的常量声明在同一文件中。
+所有要避免这样的定义。
+
+怎么解决在同一程序里，同一时刻只有一个窗口是活动的。  
+好像是exec()这个函数的 connectDialog.exec() == QDialog::Rejected
+
+
+
+							2006/05/28
+eventFilter事件函数的使用
+	我们想对某个控件的所有事件进行监控,可以使用eventFilter事件函数.
+	假如我们想对collieryPixmapLabel上面的事件监控,那么首先得注册(或者说安装一个事件过滤器),	
+		collieryPixmapLabel->installEventFilter( this );
+然后,写eventFilter事件函数,
+bool CMainInterfaceWidget::eventFilter( QObject *obj, QEvent *ev )
+{	//obj 为监控的对象,ev为响应事件类型
+	#ifdef _DEBUG_
+		cout<<"******Entering into eventFilter():\n";
+	#endif	
+    if ( obj == collieryPixmapLabel )
+	{
+		if ( ev->type() == QEvent::MouseButtonPress )
+		{
+			#ifdef _DEBUG_
+				qDebug("MouseButtonPress,this event has been caught!\n");
+			#endif	
+			QMouseEvent* mouseEvent = ( QMouseEvent* ) ev;
+			int x = mouseEvent->x();
+			int y = mouseEvent->y();
+	
+			#ifdef _DEBUG_
+				cout<<"The mouse clicked x="<<x<<",y="<<y<<endl;
+			#endif	
+	
+			if (x>300 && x<320 && y>110 && y<130)
+    			emit mouseclicked();
+			return TRUE;			
+		}
+		else
+		{
+			#ifdef _DEBUG_
+				qDebug("MouseButtonPress,this event has not been caught!\n");
+			#endif
+			return FALSE;
+		}
+	}
+	else
+	{
+		return CMainInterfaceWidget::eventFilter( obj, ev );
+	}
+}		
+						
+
+
+当obj->installEventFilter( this );时，如果obj不适合安装事件过滤器，不停的打印信息,
+除非关闭命令行窗口。
+
+
+	
+编译x86的qvfb版本时,编译没有问题
+可是编译arm版本时,出错
+/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2/../../../../arm-linux/bin/ld: ERROR: /usr/local/arm-linux/qt_toolchain/qt-2.3.7/lib/libqte.so uses FPA instructions, whereas arm.out does not
+/usr/local/arm-linux/lib/gcc-lib/arm-linux/3.3.2/../../../../arm-linux/bin/ld: ERROR: /usr/local/arm-linux/qt_toolchain/qt-2.3.7/lib/libqte.so uses hardware FP, whereas arm.out uses software FP
+File format not recognized: failed to merge target specific data of file /usr/local/arm-linux/qt_toolchain/qt-2.3.7/lib/libqte.so
+obj/main.o(.text+0x2c): In function `main':
+/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:153: undefined reference to `QApplication::QApplication[in-charge](int&, char**)'
+obj/main.o(.text+0x54): In function `main':
+/home/work/collieryMainSrc/main.cpp:29: undefined reference to `QApplication::setMainWidget(QWidget*)'
+obj/main.o(.text+0x60):/home/work/collieryMainSrc/main.cpp:30: undefined reference to `QWidgetStack::show()'
+obj/main.o(.text+0x6c):/home/work/collieryMainSrc/main.cpp:31: undefined reference to `QApplication::exec()'
+obj/main.o(.text+0x88):/home/work/collieryMainSrc/main.cpp:31: undefined reference to `QApplication::~QApplication [in-charge]()'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0xc): undefined reference to `QGList::clear()'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x10): undefined reference to `QGList::~QGList [in-charge]()'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x14):/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:152: undefined reference to `QGList::~QGList [in-charge deleting]()'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x18):/home/work/collieryMainSrc/main.cpp:26: undefined reference to `QCollection::newItem(void*)'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x1c):/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:153: undefined reference to `QCollection::deleteItem(void*)'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x20):/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:153: undefined reference to `QGList::compareItems(void*, void*)'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x24): In function `main':
+/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:153: undefined reference to `QGList::read(QDataStream&, void*&)'
+obj/main.o(.gnu.linkonce.r._ZTV6QGList+0x28):/usr/local/arm-linux/qt_toolchain/qt-2.3.7/include/qglist.h:153: undefined reference to `QGList::write(QDataStream&, void*) const'
+obj/cplottab.o(.text+0x54):/home/work/collieryMainSrc/cplottab.cpp:10: undefined reference to `qDebug(char const*, ...)'
+obj/cplottab.o(.text+0x88):/home/work/collieryMainSrc/cplottab.cpp:15: undefined reference to `QString::QString[in-charge](char const*)'
+obj/cplottab.o(.text+0xc8):/home/work/collieryMainSrc/cplottab.cpp:25: undefined reference to `qDebug(char const*, ...)'
+obj/cplottab.o(.text+0xd8):/home/work/collieryMainSrc/cplottab.cpp:28: undefined reference to `QString::QString[in-charge](char const*)'
+obj/cplottab.o(.text+0x120):/home/work/collieryMainSrc/cplottab.cpp:30: undefined reference to `QPen::QPen[in-charge](QColor const&, unsigned, Qt::PenStyle)'
+obj/cplottab.o(.text+0x140):/home/work/collieryMainSrc/cplottab.cpp:30: undefined reference to `QPen::~QPen [in-charge]()'
+obj/cplottab.o(.text+0x184):/home/work/collieryMainSrc/cplottab.cpp:34: undefined reference to `QString::QString[in-charge](char const*)'
+obj/cplottab.o(.text+0x1dc):/home/work/collieryMainSrc/cplottab.cpp:40: undefined reference to `qDebug(char const*, ...)'
+obj/cplottab.o(.text+0x1ec):/home/work/collieryMainSrc/cplottab.cpp:42: undefined reference to `QString::QString[in-charge](char const*)'
+obj/cplottab.o(.text+0x234):/home/work/collieryMainSrc/cplottab.cpp:43: undefined reference to `QPen::QPen[in-charge](QColor const&, unsigned, Qt::PenStyle)'
+obj/cplottab.o(.text+0x254):/home/work/collieryMainSrc/cplottab.cpp:43: undefined reference to `QPen::~QPen [in-charge]()'
+obj/cplottab.o(.text+0x298):/home/work/collieryMainSrc/cplottab.cpp:45: undefined refere
+...........................
+
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QScrollView::contentsWheelEvent(QWheelEvent*)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLabel::setNum(double)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPainter::drawText(int, int, int, int, int, QString const&, int, QRect*, char**)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLayoutItem::widget()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QScrollView::viewport() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QWidget::update()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPainter::setBrush(QBrush const&)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QString::setNum(double, char, int)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `non-virtual thunk [nv:-36] to QLayout::maximumSize() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QFontMetrics::height() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QGList::QGList[not-in-charge]()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QSimpleRichText::height() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QBrush::QBrush[in-charge]()'/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLayout::className() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLabel::setMovie(QMovie const&)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QScrollView::contentsMouseDoubleClickEvent(QMouseEvent*)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QCursor::pos()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QRect::moveTopLeft(QPoint const&)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPainter::drawText(int, int, QString const&, int)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QFrame::staticMetaObject()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPushButton::sizeHint() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QRegion::boundingRect() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QColor::QColor[in-charge](int, int, int, QColor::Spec)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPushButton::className() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QWidget::childrenRegion() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QColor::QColor[in-charge](unsigned, unsigned)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QColor::light(int) const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QFrame::contentsRect() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QObject::className() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QWidget::updateGeometry()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QGDict::clear()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLayout::setSupportsMargin(bool)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPainter::end()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QScrollView::setMargins(int, int, int, int)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QRegion::operator=(QRegion const&)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QColor::rgb(int*, int*, int*) const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QLabel::sizePolicy() const'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QGListIterator::~QGListIterator [not-in-charge]()'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QRect::moveBottomRight(QPoint const&)'
+/usr/local/arm-linux/qt_toolchain/qwt-4.2.0/lib/libqwt.so: undefined reference to `QPainter::save()'
+collect2: ld returned 1 exit status
+make: *** [arm.out] Error 1
+这个错误不知道是什么原因，肯定是设置或者有些文件不对造成的。
+将原来备份过的工具链覆盖现有的工具链就好了。
+这个提醒我们做任何事情在它还是比较理想的时候就备份一下，并写好帮助注释文档，如readme.txt。然后再做。
+特别是编写软件是的时候，注意随时备份，并写后修改更新文档。
+
+
+
+
+
+两个类的头文件之间不能相互包含,否则就出错,出现cplottab.h:34: syntax error before `*' token
+等错误
+
+								2006/05/29
+当用QWidget类调用QDialog类显示时，想要鼠标只响应QDialog类上操作，
+先将QDialog ( QWidget * parent = 0, const char * name = 0, bool modal = FALSE, WFlags f = 0 ) 默认的构造函数
+的第三个参数该为TRUE，然后用exec()调用它。
+
+QString 类的变量不能用printf("%s\n",timeQString);之类的语句输出，虽然不报错，但是程序运行该处时即停止了。
+应该转换为char*型，例如这样就行了：printf("%s\n",timeQString.latin1());
+
+Qt的时间类似乎不好用，还是用linux自带的系统函数的好。
+#include <time.h>
+main(){
+	char *wday[]={"sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+	time_t timep;
+	struct tm *p;
+	time(&timep);
+	p=localtime(&timep); /*取得当地时间*/
+	printf ("%d %d %d ", (1900+p->tm_year),( 1+p->tm_mon), p->tm_mday);
+	printf("%d:%d:%d\n", p->tm_hour, p->tm_min, p->tm_sec);
+}
+
+
+								2006/06/02
+昨天添加了geqinqin写的串口类到CDatabase 类中，出现图片不能显示的问题。
+但是欢迎界面中图片能够显示。李熠说可能是图片的原始大小问题引起的某些数组初始化时有残余值，
+建议我们把图片改小，至少比QLable(我们用QLable显示图片)小。
+改后图片还是怒能显示。回溯到27.05.2006.collieryMainSrc.tar.gz版本就可以了。这样原因不知道怎么来的。
+
+
+
+								2006/06/03
+canvas 画布的用法。								
+								
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <qapplication.h>
+#include <qcanvas.h>
+#include <qpen.h>
+#include <qcolor.h>
+#include <qwidget.h>
+#include <qscrollview.h>
+
+int main(int argc, char **argv)
+{
+    QApplication a( argc, argv );
+
+//     QWidget m;
+
+    QCanvas canvas( 800, 600 );
+    canvas.setAdvancePeriod(30);
+
+    QCanvasView m;
+    m.setCanvas(&canvas);
+    a.setMainWidget(&m);
+
+    QCanvasLine* i = new QCanvasLine(&canvas);
+    i->setPoints( rand()%canvas.width(), rand()%canvas.height(),
+                  rand()%canvas.width(), rand()%canvas.height() );
+    i->setPen( QPen(QColor(rand()%32*8, rand()%32*8, rand()%32*8), 6) );
+    i->setZ(rand()%256);
+    i->show();
+
+    m.show();
+
+    return a.exec();
+}
+								
+
+
+添加cshowdatalcddialog.cpp,cshowdatalcddialog.h 后编译错误：
+Makefile:445: warning: overriding commands for target `moc/cshowdatalcddialog.moc'
+Makefile:442: warning: ignoring old commands for target `moc/cshowdatalcddialog.moc'
+g++ -c -pipe -DQWS -fno-exceptions -fno-rtti -v -Wall -W -g -I/usr/local/arm-linux/qt_pc_toolchain/qwt-4.2.0/include -I/usr/local/arm-linux/sqlite-ix86-linux/include -I/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/include -o obj/cshowdatalcddialog.o cshowdatalcddialog.h
+Reading specs from /usr/lib/gcc-lib/i386-redhat-linux/3.2.2/specs
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --enable-shared --enable-threads=posix --disable-checking --with-system-zlib --enable-__cxa_atexit --host=i386-redhat-linux
+Thread model: posix
+gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5)
+g++: compilation of header file requested
+make: *** [obj/cshowdatalcddialog.o] Error 1
+
+
+							2006/06/06
+这两天，由于在不同的类中定义了CDatabase类，导致程序运行死机，
+后来找到一个办法，我并在CShowDataLCDDialog类定义了CDatabase类实例，而是在它中定义一个
+函数调用	CDatabase类 的实例，
+void CShowDataLCDDialog::getDataFromDB(CDatabase* mpCDatabase)
+{
+	for ( int i=0;i<CURVE_PIX_NUMBER;i++ )	
+		for( int j=0;j<WorkspaceNumber;j++ )	
+		{
+	  		this->mdyOxygen[j][i] = mpCDatabase->mdyOxygen[j][i] ;
+			this->mdyFiredamp[j][i] = mpCDatabase->mdyFiredamp[j][i] ;
+    		this->mdyAirSpeed[j][i] = mpCDatabase->mdyAirSpeed[j][i] ;
+    		this->mdyCarbonicOxide[j][i] = mpCDatabase->mdyCarbonicOxide[j][i];
+		}		
+}
+这样就需要在CMainInterfaceWidget类中显示的调用		
+void CShowDataLCDDialog::getDataFromDB(CDatabase* mpCDatabase)这个函数。
+
+							
+							2006/06/09
+用gdb调试程序时打印的错误信息：
+						
+ mpCPlotTab = new CPlotTab( curveTab ,"Sensor Data Curve !");
+(gdb)
+2643            mpCPlotTab->setGeometry(0,0,520,300);
+(gdb)
+2644            mpCPlotTab->insertPlotCurve( 1+2+4+8 , 1023 , "Sensor Data",mpCDatabase);
+(gdb)
+ 
+Program received signal SIGSEGV, Segmentation fault.
+0x40077e69 in QwtCPointerData::boundingRect() const () from /lib/libqwt.so.4
+(gdb)
+Single stepping until exit from function _ZNK15QwtCPointerData12boundingRectEv,
+which has no line number information.
+Couldn't get registers: 没有那个进程.
+							
+最后发现		2644            mpCPlotTab->insertPlotCurve( 1+2+4+8 , 1023 , "Sensor Data",mpCDatabase);
+这条语句中	mpCDatabase 没有初始化，mpCDatabase的初始化语句在这条语句后面。而编译的时候居然没有错误。				
+
+
+The mouse clicked x=165,y=188
+******Entering into mousePressEventSlot`():
+******Entering into CShowDataLCDDialog::getDataFromDB():
+******Entering into CShowDataLCDDialog::showSensorData():
+******Entering into eventFilter():
+段错误
+
+					2006/06/15
+b 168
+Breakpoint 2 at 0x80902f1: file chistorydatadialog.cpp, line 168.
+(gdb) cont
+Continuing.
+ 
+Breakpoint 2, CHistoryDataDialog::showHistoryData(int, int, CDatabase*) (
+    this=0x8110c08, sensorKey=16, workspaceNum=32, mpCDatabase=0x80d3c50)
+    at chistorydatadialog.cpp:168
+168             mpCDatabase->readSensorDataFromDB( workspaceNum , sensorKey , va
+lue , time);
+(gdb) n
+Enter into CDatabase::readSensorDataFromDB(int,int,double,QString ),reading data
+ from DB!!
+Program received signal SIGABRT, Aborted.
+0xffffe002 in ?? ()
+(gdb) bt
+#0  0xffffe002 in ?? ()
+#1  0x42028a73 in abort () from /lib/tls/libc.so.6
+#2  0x404d2b57 in __cxa_call_unexpected () from /usr/lib/libstdc++.so.5
+#3  0x404d2ba4 in std::terminate() () from /usr/lib/libstdc++.so.5
+#4  0x404d2d16 in __cxa_throw () from /usr/lib/libstdc++.so.5
+#5  0x40116e71 in dbiplus::Dataset::get_field_value(char const*) ()
+   from /usr/lib/libsqlitedataset.so.0
+#6  0x0805216e in dbiplus::Dataset::fv(char const*) (this=0x80d3140,
+    f=0x8092b7b "Time") at dataset.h:339
+#7  0x080515da in CDatabase::readSensorDataFromDB(int, int, double*, QString*)
+    (this=0x80d3c50, workspaceNum=32, SensorKey=16, value=0xbfffc860,
+    time=0xbfffc090) at cdatabase.cpp:234
+#8  0x08090310 in CHistoryDataDialog::showHistoryData(int, int, CDatabase*) (
+    this=0x8110c08, sensorKey=16, workspaceNum=32, mpCDatabase=0x80d3c50)
+    at chistorydatadialog.cpp:168
+#9  0x08061242 in CMainInterfaceWidget::showSensorHistoryDataSlot(int, int) (
+    this=0x80ba128, sensorKey=16, siteNum=32) at cmaininterfacewidget.cpp:2141
+#10 0x080924fd in CShowDataLCDDialog::showSensorHistoryDataSignal(int, int) (
+    this=0x80fdb68, t0=16, t1=32) at moc/moc_cshowdatalcddialog.cpp:178
+#11 0x0808daf4 in CShowDataLCDDialog::showFiredampHistoryDataSlot() (
+    this=0x80fdb68) at cshowdatalcddialog.cpp:973
+#12 0x40300dca in QObject::activate_signal(char const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+					
+					
+
+
+
+
+
+
+# gdb ix86.out
+GNU gdb Red Hat Linux (5.3post-0.20021129.18rh)
+Copyright 2003 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i386-redhat-linux-gnu"...
+(gdb) break cdatabase.cpp:215
+Breakpoint 1 at 0x80512e7: file cdatabase.cpp, line 215.
+(gdb) run -qws
+Starting program: /home/work/collieryMainSrc/ix86.out -qws
+[New Thread 1079191424 (LWP 4854)]
+Connected to VFB server: 640 x 480 x 32
+******Enter widget manager!
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+MouseButtonPress,mNationalCollieryMap,this event has been caught!
+ 
+The mouse clicked x=316,y=119
+******Entering into mousePressEventSlot`():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+MouseButtonPress,mLocalCollieryMap,this event has been caught!
+ 
+The mouse clicked x=25,y=159
+******Entering into mousePressEventSlot`():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+MouseButtonPress,mLocalCollieryMap,this event has been caught!
+ 
+The mouse clicked x=52,y=155
+******Entering into mousePressEventSlot`():
+******Entering into CShowDataLCDDialog::getDataFromDB():
+ 
+******leaving CShowDataLCDDialog::getDataFromDB():
+ 
+******Entering into CShowDataLCDDialog::showSensorData():
+ 
+******leaving CShowDataLCDDialog::showSensorData():
+ 
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into eventFilter():
+******Entering into CShowDataLCDDialog::showFiredampHistoryDataSlot():
+ 
+******Entering into CHistoryDataDialog::showHistoryData():
+have changed the caption!
+[Switching to Thread 1079191424 (LWP 4854)]
+ 
+Breakpoint 1, CDatabase::readSensorDataFromDB(int, int, double*, QString*) (this=0x80d38f0, workspaceNum=1,
+    SensorKey=16, value=0xbfffd5e0, time=0xbfffce10) at cdatabase.cpp:216
+216             qDebug( "Enter into CDatabase::readSensorDataFromDB(int,int,double,QString ),reading data from
+DB!!" );
+(gdb) n
+Enter into CDatabase::readSensorDataFromDB(int,int,double,QString ),reading data from DB!!
+218             QString string;
+(gdb) n
+222             string.sprintf( "SELECT SensorParameter FROM %s WHERE SensorID == %d and SiteNum==%d","SensorData", binaryRoot( SensorKey ) ,binaryRoot( workspaceNum ) );
+(gdb) n
+223         mpDataset->query( string.latin1() );
+(gdb) n
+228             num = mpDataset->num_rows();
+(gdb) n
+229             num = num<HISTORYDATANUMBER ? num : HISTORYDATANUMBER ;   //get the small
+(gdb) p num
+$1 = 13
+(gdb) n
+230             for ( int i=0; i<num ; i++)
+(gdb) n
+232                     str = mpDataset->fv("SensorParameter").get_asString( ).c_str();
+(gdb) n
+233                     value[i]= stringToDouble(str);
+(gdb) p str
+$2 = 0x80d28d4 "0.8"
+(gdb) n
+234                     str = mpDataset->fv("Time").get_asString( ).c_str();
+(gdb) p value[i]
+$3 = 0.80000000000000004
+(gdb) n
+ 
+Program received signal SIGABRT, Aborted.
+0xffffe002 in ?? ()
+(gdb) bt
+#0  0xffffe002 in ?? ()
+#1  0x42028a73 in abort () from /lib/tls/libc.so.6
+#2  0x404d2b57 in __cxa_call_unexpected () from /usr/lib/libstdc++.so.5
+#3  0x404d2ba4 in std::terminate() () from /usr/lib/libstdc++.so.5
+#4  0x404d2d16 in __cxa_throw () from /usr/lib/libstdc++.so.5
+#5  0x40116e71 in dbiplus::Dataset::get_field_value(char const*) () from /usr/lib/libsqlitedataset.so.0
+#6  0x08051fee in dbiplus::Dataset::fv(char const*) (this=0x80d2de0, f=0x809283b "Time") at dataset.h:339
+#7  0x0805145a in CDatabase::readSensorDataFromDB(int, int, double*, QString*) (this=0x80d38f0,
+    workspaceNum=1, SensorKey=16, value=0xbfffd5e0, time=0xbfffce10) at cdatabase.cpp:234
+#8  0x0808ffbc in CHistoryDataDialog::showHistoryData(int, int, CDatabase*) (this=0x81108a8, sensorKey=16,
+    workspaceNum=1, mpCDatabase=0x80d38f0) at chistorydatadialog.cpp:168
+#9  0x080610c2 in CMainInterfaceWidget::showSensorHistoryDataSlot(int, int) (this=0x80b9da8, sensorKey=16,
+    siteNum=1) at cmaininterfacewidget.cpp:2141
+#10 0x080921a9 in CShowDataLCDDialog::showSensorHistoryDataSignal(int, int) (this=0x80fd7f8, t0=16, t1=1)
+    at moc/moc_cshowdatalcddialog.cpp:178
+#11 0x0808d7a0 in CShowDataLCDDialog::showFiredampHistoryDataSlot() (this=0x80fd7f8)
+    at cshowdatalcddialog.cpp:973
+#12 0x40300dca in QObject::activate_signal(char const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#13 0x40203bfa in QButton::clicked() () from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#14 0x4033e24e in QButton::mouseReleaseEvent(QMouseEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#15 0x4032ea18 in QWidget::event(QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#16 0x402c52a9 in QApplication::notify(QObject*, QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#17 0x40286b2b in QETWidget::dispatchMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#18 0x4028642e in QETWidget::translateMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#19 0x40284894 in QApplication::qwsProcessEvent(QWSEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#20 0x40284759 in QApplication::processNextEvent(bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#21 0x402c70a7 in QApplication::enter_loop() ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+   
+   
+   
+   		str = mpDataset->fv("Time").get_asString( ).c_str();
+		//iTime = mpDataset->fv("Time").get_asLong( );
+		//string = string.setNum( iTime , 10 );
+		time[i]=(QString)str;
+		//time[i] = string ;
+		mpDataset->next();
+		
+		
+		
+		
+						2006/06/16
+						
+						
+去掉cdatabase.cpp中str = mpDataset->fv("Time").get_asString( ).c_str();这一句还是出错：
+						
+#0  0x40228c43 in QGListIterator::operator++() ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#1  0x40280c86 in QWidget::allocatedRegion() const ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#2  0x40280d3b in QWidget::paintableRegion() const ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#3  0x402813a8 in QWidget::updateGraphicsContext(QGfx*, bool) const ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#4  0x4028123a in QWidget::graphicsContext(bool) const ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#5  0x40278492 in QPainter::begin(QPaintDevice const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#6  0x402e4be8 in QPainter::QPainter(QPaintDevice const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#7  0x4027fa0a in QWidget::erase(QRegion const&) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#8  0x4026a59a in QETWidget::repaintHierarchy(QRegion, bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#9  0x4026a56d in QETWidget::repaintHierarchy(QRegion, bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#10 0x4026a56d in QETWidget::repaintHierarchy(QRegion, bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#11 0x4026ac91 in QETWidget::translateRegionModifiedEvent(QWSRegionModifiedEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#12 0x40267aa6 in QApplication::qwsProcessEvent(QWSEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#13 0x40267759 in QApplication::processNextEvent(bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#14 0x402aa0a7 in QApplication::enter_loop() ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#15 0x402adac5 in QDialog::exec() () from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#16 0x08061042 in CMainInterfaceWidget::showSensorHistoryDataSlot(int, int) (this=0x80b9d30, sensorKey=8,
+    siteNum=4) at cmaininterfacewidget.cpp:2142
+#17 0x08092115 in CShowDataLCDDialog::showSensorHistoryDataSignal(int, int) (this=0x80fdd70, t0=8, t1=4)
+    at moc/moc_cshowdatalcddialog.cpp:178
+---Type <return> to continue, or q <return> to quit---
+#18 0x0808d684 in CShowDataLCDDialog::showCarbonicOxideHistoryDataSlot() (this=0x80fdd70)
+    at cshowdatalcddialog.cpp:961
+#19 0x402e3dca in QObject::activate_signal(char const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#20 0x401e6bfa in QButton::clicked() () from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#21 0x4032124e in QButton::mouseReleaseEvent(QMouseEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#22 0x40311a18 in QWidget::event(QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#23 0x402a82a9 in QApplication::notify(QObject*, QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#24 0x40269b2b in QETWidget::dispatchMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#25 0x4026942e in QETWidget::translateMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#26 0x40267894 in QApplication::qwsProcessEvent(QWSEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#27 0x40267759 in QApplication::processNextEvent(bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#28 0x402aa0a7 in QApplication::enter_loop() ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#29 0x402adac5 in QDialog::exec() () from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#30 0x08060d63 in CMainInterfaceWidget::mousePressEventSlot(int) (this=0x80b9d30, siteNum=5)
+    at cmaininterfacewidget.cpp:2033
+#31 0x402e3f92 in QObject::activate_signal(char const*, int) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#32 0x08090925 in CMainInterfaceWidget::mouseclickedOnLocalCollieryMapSignal(int) (this=0x80b9d30, t0=5)
+    at moc/moc_cmaininterfacewidget.cpp:152
+#33 0x0805fedc in CMainInterfaceWidget::eventFilter(QObject*, QEvent*) (this=0x80b9d30, obj=0x80cc288,
+    ev=0xbfffecd0) at cmaininterfacewidget.cpp:1862
+#34 0x402e2588 in QObject::activate_filters(QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#35 0x402e24e6 in QObject::event(QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#36 0x403119b1 in QWidget::event(QEvent*) ()
+---Type <return> to continue, or q <return> to quit---
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#37 0x402a82a9 in QApplication::notify(QObject*, QEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#38 0x40269b2b in QETWidget::dispatchMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#39 0x4026942e in QETWidget::translateMouseEvent(QWSMouseEvent const*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#40 0x40267894 in QApplication::qwsProcessEvent(QWSEvent*) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#41 0x40267759 in QApplication::processNextEvent(bool) ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#42 0x402aa0a7 in QApplication::enter_loop() ()
+   from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#43 0x40267380 in QApplication::exec() () from /usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7/lib/libqte.so.2
+#44 0x0804ed21 in main (argc=1, argv=0xbffff0e4) at main.cpp:34
+#45 0x42015574 in __libc_start_main () from /lib/tls/libc.so.6
+
+
+
+导出数据库：
+echo '.dump' | sqlite3 colliery.db  >colliery.dump
+
+
+
+
+
+						2006/06/17
+将数据库中time这一项改为  REAL 类型：
+CREATE TABLE SensorData(
+        ID   INTEGER PRIMARY KEY,
+    SensorID    INTEGER,
+    SiteNum     INTEGER,
+    Time        REAL,
+    SensorParameter   REAL
+    );
+    
+    数据形式如下：
+20060501.0606
+20060501.0706
+20060501.0806
+20060501.0906
+20060501.1006
+20060501.1106
+20060501.1206
+20060501.1306
+20060501.1406
+20060501.1506
+
+可是运行到str = mpDataset->fv("Time").get_asString( ).c_str();这一行还时出错。
+
+str = mpDataset->fv("SensorParameter").get_asString( ).c_str();
+		value[i]= stringToDouble(str);
+		str = mpDataset->fv("Time").get_asString( ).c_str();
+		dTime= stringToDouble(str);
+		string = string.setNum(dTime,'g',6);
+		time[i] = string;
+
+
+
+将出错的这一行换到前面还是出错：
+		str = "Time";
+		str = mpDataset->fv( str ).get_asString( ).c_str();
+		dTime= stringToDouble(str);
+		string = string.setNum(dTime,'g',6);
+		time[i] = string;
+
+		str = mpDataset->fv("SensorParameter").get_asString( ).c_str();
+		value[i]= stringToDouble(str);
+		
+改为如下 get_asDouble( ) 也出错。		
+		str = "Time";
+		dTime = mpDataset->fv( str ).get_asDouble( );
+		string = string.setNum(dTime,'g',6);
+		time[i] = string;		
+
+改数据库为
+CREATE TABLE SensorData(
+   	ID   INTEGER PRIMARY KEY,
+    SensorID    INTEGER,
+    SiteNum     INTEGER,
+    Data        INTEGER,
+    Time		INTEGER,
+    SensorParameter   REAL
+    );
+		iData = mpDataset->fv("Data").get_asInteger( );
+		iTime = mpDataset->fv("Time").get_asInteger( );    
+    
+
+
+							2006/06/28
+在Liod板上运行直接点击关闭按钮，出现段错误		
+Segmentation fault
+
+
+ 							2006/07/03
+在arm板上现的错误。 							
+QDialog::exec: Calling this function for a modeless dialog makes no sense
+Segmentation fault
+ 
+在选择第6个工作区的时候出现的，如下：
+******Entering into CShowDataLCDDialog::selectWorkspaceSlot():
+Segmentation fault
+
+直接用uic生成的代码，编译的时候也出现一下问题，这个问题可能是由于某些库不支持的问题。
+obj/calertdialog.o(.text+0x640):/home/work/collieryMainSrc/calertdialog.cpp:82: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0xd0c):/home/work/collieryMainSrc/calertdialog.cpp:133: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0xd54):/home/work/collieryMainSrc/calertdialog.cpp:134: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0xdf4):/home/work/collieryMainSrc/calertdialog.cpp:138: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0xedc):/home/work/collieryMainSrc/calertdialog.cpp:143: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0xf68):/home/work/collieryMainSrc/calertdialog.cpp:146: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0xf6c):/home/work/collieryMainSrc/calertdialog.cpp:146: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x1044):/home/work/collieryMainSrc/calertdialog.cpp:148: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x1104):/home/work/collieryMainSrc/calertdialog.cpp:152: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x11d4):/home/work/collieryMainSrc/calertdialog.cpp:157: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x1248):/home/work/collieryMainSrc/calertdialog.cpp:160: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x127c):/home/work/collieryMainSrc/calertdialog.cpp:161: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x12b0):/home/work/collieryMainSrc/calertdialog.cpp:162: more undefined references to
+`CAlertDialog::tr(char const*)' follow
+obj/calertdialog.o(.text+0x466c):/home/work/collieryMainSrc/calertdialog.cpp:146: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x4670):/home/work/collieryMainSrc/calertdialog.cpp:146: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x4748):/home/work/collieryMainSrc/calertdialog.cpp:148: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x4808):/home/work/collieryMainSrc/calertdialog.cpp:152: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x48d8):/home/work/collieryMainSrc/calertdialog.cpp:157: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x494c):/home/work/collieryMainSrc/calertdialog.cpp:160: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x4980):/home/work/collieryMainSrc/calertdialog.cpp:161: undefined reference to `CAlertDialog::tr(char const*)'
+obj/calertdialog.o(.text+0x49b4):/home/work/collieryMainSrc/calertdialog.cpp:162: more undefined references to
+`CAlertDialog::tr(char const*)' follow
+obj/calertdialog.o(.text+0x6e60):/home/work/collieryMainSrc/calertdialog.cpp:439: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x6e64):/home/work/collieryMainSrc/calertdialog.cpp:439: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x6ec4):/home/work/collieryMainSrc/calertdialog.cpp:439: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x6ec8):/home/work/collieryMainSrc/calertdialog.cpp:439: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x6f28):/home/work/collieryMainSrc/calertdialog.cpp:439: undefined reference to `vtable for CAlertDialog'
+obj/calertdialog.o(.text+0x6f2c):/home/work/collieryMainSrc/calertdialog.cpp:439: more undefined references to
+`vtable for CAlertDialog' follow
+collect2: ld returned 1 exit status
+make: *** [arm.out] Error 1
+
+
+上面 tr 错误在加了 QObject:: 之后就好了。
+但是undefined reference to `vtable for CAlertDialog' 这类的错误没有解决。
+尝试1：把所有的obj文件和uic文件删除,重新编译.仍然失败.
+似乎找到原因了，CAlertDialog的头文件应该是calertdialog.h
+而在我的 pro文件中写成了calertdialo.h
+
+这里给些这方面的解决方法(在网上找到的)：
+
+预编译器打开宏Q_OBJECT，声明若干个由moc处理(implement)的成员函数。如果得到类似于“undefined reference to vtable for LcdNumber”的编译错误(if you get compiler errors along the lines of "undefined reference to vtable for LcdNumber")，你可能是忘记了执行moc，或者忘记了将moc输出加入到link命令里。
+
+某一个类中如果加入Q_OBJECT后,则link时提示:undefined reference to vtable for "xxx::xxx".删掉它则没有任何问题.
+
+解决:尝试(1):把所有的obj文件和uic文件删除,重新编译.仍然失败.
+
+去trolltech的mail lists找到原因: 因为qmake生成Makefile的时候,这个类的头文件中并没有Q_OBJECT,所以在相应的Makefile里面并没有用moc xxx.h命令,最终导致链接失败.重新运行qmake,问题解决.
+在查找解决方法的时候,附带发现一点:
+qmake不会处理.cpp文件里的Q_OBJECT,所以,如果在.cpp文件中有它的话,也会产生undefined reference to vtable for "xxx::xxx". 这时,需要先用moc xxxx.cpp生成相应的moc文件,再包含到.cpp里面去,才能解决这个问题.
+
+这里可以发现问题的出现是因为没有moc生成相应的moc文件，之后连接就出问题。
+我找了好多源码之类的问题，就是没有找pro的错误，后来想到qt中moc我们是有make做的
+qt的make编译是根据Makefile来的，而Makefile是由pro文件来的。这才想到了找pro文件的错误。
+
+
+
+c程序中调用其他应用程序的方法
+#include<unistd.h>
+main()
+{
+	execl("/usr/qpe/bin/mpegplayer","mpegplayer","/usr/qpe/bin/aa.mpg","-qws",(char * )0 );
+}
+
+
+#include<unistd.h>
+main()
+{
+	execl("/home/programfiles/mplayer/bin/gmplayer","gmplayer","/mnt/happy/movie/wanlengyaosi/a.avi",(char * )0);
+}
+
+
+						2006/07/04
+信息中心号码是：
++861380XXXX500
+XXXX是你所在省份的省会的电话区号！						
+
+
+
+Data is available now.
+0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.
+read data Length ： 250
+ The data is :6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.6c.1.a.ff.45.The data buff[4] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[5] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[14] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[15] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[24] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[25] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[34] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[35] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[44] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[45] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[54] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[55] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[64] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[65] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[74] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[75] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[84] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[85] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[94] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[95] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[104] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[105] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[114] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[115] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[124] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[125] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[134] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[135] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[144] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[145] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[154] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[155] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[164] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[165] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[174] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[175] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[184] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[185] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[194] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[195] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[204] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[205] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[214] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[215] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[224] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[225] is : 6c
+The raw value is :364
+the converted value is :15.82
+The data buff[234] is : 45
+workspaceNum = 16
+sensorKey = 32
+The data buff[235] is : 6c
+The raw value is :364
+the converted value is :15.82
+氧气浓度计算有问题。
+
+这个是由于电源电压
+
+
+
+
+							2006/07/06
+添加线程就出问题。即使不加线程而仅仅在pro文件中添加了CONFIG  +=thread等，也不行。
+ 
+ 
+read data from com0
+******Entering into CMainInterfaceWidget::sendDataSlot()
+begin to send data to control ZigBee node.
+The data send to ZigBee is 13.The data send to ZigBee is :.13
+******leaving CMainInterfaceWidget::sendDataSlot()
+******Entering into timerEvent():
+******Entering into CMainInterfaceWidget::reveiveDataSlot()
+Data is available now.
+Segmentation fault
+ 
+ 
+ 
+ 								2006/07/07
+ 								
+串口非阻塞方式读数据
+//select函数准备
+	fd_set readset;
+    struct timeval tv;
+    int retval;
+//   Watch stdin (fd 0) to see when it has input.
+    FD_ZERO(&readset);
+    FD_SET(fd0, &readset);
+//   Wait no time 
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;  
+	retval = select(fd0+1, &readset, NULL, NULL, &tv);    
+	
+   	int nread = 0;
+	int nread2 = 0;
+	
+    if (retval)
+	//if(1)
+    {
+		#ifdef _DEBUG_
+			qDebug("Ready to receive data .");
+		#endif 
+       	
+        nread = read(fd0,buff,250);
+		#ifdef _DEBUG_
+			qDebug("Have received data.");
+		#endif 
+
+	
+        while(nread>0)
+		{
+			#ifdef _DEBUG_
+				qDebug("continue to recerve data.");
+			#endif
+        	nread2+=nread;
+			retval = select(fd0+1, &readset, NULL, NULL, NULL);   
+			nread = 0;
+			if(retval)
+            	nread = read(fd0,&buff[nread2],50);
+		}
+	}
+	
+	
+
+远程调试不用run，只需打断点，然后continue	
+
+
+
+
+sensorKey = 16
+The data buff[23] is : 1f
+The raw value is :287
+the converted value is :0.45747
+The data buff[32] is : 34
+workspaceNum = 8
+sensorKey = 16
+The data buff[33] is : 1d
+The raw value is :285
+the converted value is :0.44785
+The data buff[42] is : 34
+workspaceNum = 8
+sensorKey = 16
+The data buff[43] is : 19
+The raw value is :281
+the converted value is :0.42861
+The data buff[52] is : 34
+workspaceNum = 8
+sensorKey = 16
+The data buff[53] is : 1e
+The raw value is :286
+the converted value is :0.45266
+read data from com0
+******Entering into CShowDataLCDDialog::selectWorkspaceSlot():
+ 
+******leaving CShowDataLCDDialog::selectWorkspaceSlot():
+ 
+******Entering into CShowDataLCDDialog::showFiredampHistoryDataSlot():
+ 
+******Entering into CHistoryDataDialog::showHistoryData():
+beforeTime is :
+Enter into CDatabase::readSensorDataFromDB(int,int,double,QString ),reading data from DB!!
+Leave off CDatabase::readSensorDataFromDB(int,int,double,QString ),reading data from DB!!
+2006/07/07 18:42   0.45266
+2006/07/07 18:42   0.42861
+2006/07/07 18:42   0.44785
+2006/07/07 18:42   0.45747
+
+2006/07/07 18:16   0.55367
+2006/07/07 18:16   0.55367
+Segmentation fault
+
+
+
+
+sensorKey = 16
+The data buff[7] is : 78
+The raw value is :376
+the converted value is :0.88556
+Segmentation fault
+
+
+
+
+read data Length ： 271
+ The data is :ff.12.cd.5.a.a.ff.12.e3.5.a.a.ff.12.b7.5.a.a.ff.12.c6.5.a.a.ff.12.d3.5.a.a.ff.12.b6.5.a.ff.12.c7.5.a.ff.12.ac.5.a.a.ff.12.ca.5.a.a.ff.12.f7.5.a.a.ff.12.b9.5.a.a.ff.12.b1.5.a.a.ff.12.c6.5.a.a.ff.12.be.5.a.a.ff.12.e2.5.a.a.ff.12.d6.5.a.a.ff.12.ad.5.a.ff.12.e6.5.a.a.ff.12.de.5.a.a.ff.12.de.5.a.ff.12.ae.5.a.a.ff.12.b0.5.a.a.ff.12.db.5.a.a.ff.12.b8.5.a.a.ff.12.c8.5.a.a.ff.12.f1.5.a.a.ff.12.bc.5.a.a.ff.12.b8.5.a.ff.12.e1.5.a.a.ff.12.f0.5.a.a.ff.12.9a.5.a.a.ff.12.b3.5.a.a.ff.12.cd.5.a.a.ff.12.aa.5.a.a.ff.12.bb.5.a.a.ff.12.dc.5.a.a.ff.12.ac.5.a.a.ff.12.ab.5.a.a.ff.12.e8.5.a.a.ff.12.c9.5.a.a.ff.12.e1.5.a.a.ff.12.c0.5.a.a.ff.12.c8.5.a.a.ff.12.de.5.a.a.ff.12.bd.5.a.a.ff.12.fe.5.a.a.
+The data buff[7] is : 12
+workspaceNum = 2
+sensorKey = 4
+The data buff[8] is : e3
+The raw value is :1507
+*******Entering dataConvert()
+the converted value is :47.4106
+The data buff[13] is : 12
+workspaceNum = 2
+sensorKey = 4
+The data buff[14] is : b7
+The raw value is :1463
+*******Entering dataConvert()
+Segmentation fault
+
+
+
+
+
+read data from com0
+******Entering into CShowDataLCDDialog::selectWorkspaceSlot():
+******leaving CShowDataLCDDialog::selectWorkspaceSlot():
+******Entering into CShowDataLCDDialog::selectWorkspaceSlot():
+******leaving CShowDataLCDDialog::selectWorkspaceSlot():
+Segmentation fault
+
+这个段错误可能是由于QComboBox没有初始化值，可以用 setCurrentItem(0) ;
+不过后面还是出现类似错误，后来发现 humanTextLabel->setText(tr("Nobody")) 执行过去之后没有改变，
+将其换成：QTimer::singleShot( 100, humanTextLabel, SLOT(humanTextLabel->setText(tr("Nobody"))) );就可以了。
+而且前面的错误也解决了
+
+
+
+gftp 升级到2.0.18就可以读写中文文件了 
+
+
+
+
+the converted value is :9.622
+The data buff[12] is : 34
+workspaceNum = 8
+sensorKey = 16
+The data buff[13] is : 27
+The raw value is :295
+*******Entering dataConvert()
+the converted value is :0.49595
+The data buff[22] is : 12
+workspaceNum = 2
+sensorKey = 4
+The data buff[23] is : 79
+The raw value is :1657
+*******Entering dataConvert()
+the converted value is :55.4421
+The data buff[32] is : 34
+workspaceNum = 8
+sensorKey = 16
+The data buff[33] is : 2d
+The raw value is :301
+*******Entering dataConvert()
+the converted value is :0.52481
+read data from com0
+Replot curves
+mainTabWidget->currentPageIndex () = 1
+isTopLevel() = 0
+Replot curves
+Segmentation fault
+
+
+				2006/07/09
+当一个cpp文件代码行数太大时，比如大过3000多了，很可能会编译错误，这时就应该将部分代码写到另一个cpp文件中，
+然后	将其包含到这个原来过大的cpp文件里
+
+
+gdb调试
+查看断点：
+info breakpoints
+
+关闭和打开断点
+Enable <breakpoints number>
+Disable <breakpoints number>
+
+查看运行时数据
+———————
+   
+    在你调试程序时，当程序被停住时，你可以使用print命令（简写命令为p），或是同义命令inspect来查看当前程序的运行数据。print命令的格式是：
+   
+    print <expr>
+    print /<f> <expr>
+        <expr>是表达式，是你所调试的程序的语言的表达式（GDB可以调试多种编程语言），<f>是输出的格式，比如，如果要把表达式按16进制的格式输出，那么就是/x。
+       
+   
+一、表达式
+
+    print和许多GDB的命令一样，可以接受一个表达式，GDB会根据当前的程序运行的数据来计算这个表达式，既然是表达式，那么就可以是当前程序运行中的const常量、变量、函数等内容。可惜的是GDB不能使用你在程序中所定义的宏。
+   
+    表达式的语法应该是当前所调试的语言的语法，由于C/C++是一种大众型的语言，所以，本文中的例子都是关于C/C++的。（而关于用GDB调试其它语言的章节，我将在后面介绍）
+   
+    在表达式中，有几种GDB所支持的操作符，它们可以用在任何一种语言中。
+   
+    @
+        是一个和数组有关的操作符，在后面会有更详细的说明。
+       
+    ::
+        指定一个在文件或是一个函数中的变量。
+       
+    {<type>} <addr>
+        表示一个指向内存地址<addr>的类型为type的一个对象。
+       
+       
+二、程序变量
+
+    在GDB中，你可以随时查看以下三种变量的值：
+        1、全局变量（所有文件可见的）
+        2、静态全局变量（当前文件可见的）
+        3、局部变量（当前Scope可见的）
+       
+    如果你的局部变量和全局变量发生冲突（也就是重名），一般情况下是局部变量会隐藏全局变量，也就是说，如果一个全局变量和一个函数中的局部变量同名时，如果当前停止点在函数中，用print显示出的变量的值会是函数中的局部变量的值。如果此时你想查看全局变量的值时，你可以使用“::”操作符：
+   
+        file::variable
+    function::variable
+    可以通过这种形式指定你所想查看的变量，是哪个文件中的或是哪个函数中的。例如，查看文件f2.c中的全局变量x的值：
+   
+    gdb) p 'f2.c'::x
+   
+    当然，“::”操作符会和C++中的发生冲突，GDB能自动识别“::” 是否C++的操作符，所以你不必担心在调试C++程序时会出现异常。
+   
+    另外，需要注意的是，如果你的程序编译时开启了优化选项，那么在用GDB调试被优化过的程序时，可能会发生某些变量不能访问，或是取值错误码的情况。这个是很正常的，因为优化程序会删改你的程序，整理你程序的语句顺序，剔除一些无意义的变量等，所以在GDB调试这种程序时，运行时的指令和你所编写指令就有不一样，也就会出现你所想象不到的结果。对付这种情况时，需要在编译程序时关闭编译优化。一般来说，几乎所有的编译器都支持编译优化的开关，例如，GNU 的C/C++编译器GCC，你可以使用“-gstabs”选项来解决这个问题。关于编译器的参数，还请查看编译器的使用说明文档。
+   
+
+三、数组
+
+    有时候，你需要查看一段连续的内存空间的值。比如数组的一段，或是动态分配的数据的大小。你可以使用GDB的“@”操作符，“@”的左边是第一个内存的地址的值，“@”的右边则你你想查看内存的长度。例如，你的程序中有这样的语句：
+    
+        int *array = (int *) malloc (len * sizeof (int));
+       
+    于是，在GDB调试过程中，你可以以如下命令显示出这个动态数组的取值：
+
+        p *array@len
+
+    @的左边是数组的首地址的值，也就是变量array所指向的内容，右边则是数据的长度，其保存在变量len中，其输出结果，大约是下面这个样子的：
+   
+        (gdb) p *array@len
+        $1 = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40}
+
+    如果是静态数组的话，可以直接用print数组名，就可以显示数组中所有数据的内容了。
+
+   
+四、输出格式
+
+    一般来说，GDB会根据变量的类型输出变量的值。但你也可以自定义GDB的输出的格式。例如，你想输出一个整数的十六进制，或是二进制来查看这个整型变量的中的位的情况。要做到这样，你可以使用GDB的数据显示格式：
+   
+    x  按十六进制格式显示变量。
+    d  按十进制格式显示变量。
+    u  按十六进制格式显示无符号整型。
+    o  按八进制格式显示变量。
+    t  按二进制格式显示变量。
+    a  按十六进制格式显示变量。
+    c  按字符格式显示变量。
+    f  按浮点数格式显示变量。
+
+        (gdb) p i
+        $21 = 101   
+       
+        (gdb) p/a i
+        $22 = 0x65
+       
+        (gdb) p/c i
+        $23 = 101 'e'
+       
+        (gdb) p/f i
+        $24 = 1.41531145e-43
+       
+        (gdb) p/x i
+        $25 = 0x65
+       
+        (gdb) p/t i
+        $26 = 1100101
+
+
+五、查看内存
+
+    你可以使用examine命令（简写是x）来查看内存地址中的值。x命令的语法如下所示：
+   
+    x/<n/f/u> <addr>
+   
+    n、f、u是可选的参数。
+   
+    n 是一个正整数，表示显示内存的长度，也就是说从当前地址向后显示几个地址的内容。
+    f 表示显示的格式，参见上面。如果地址所指的是字符串，那么格式可以是s，如果地十是指令地址，那么格式可以是i。
+    u 表示从当前地址往后请求的字节数，如果不指定的话，GDB默认是4个bytes。u参数可以用下面的字符来代替，b表示单字节，h表示双字节，w表示四字节，g表示八字节。当我们指定了字节长度后，GDB会从指内存定的内存地址开始，读写指定字节，并把其当作一个值取出来。
+   
+    <addr>表示一个内存地址。
+
+    n/f/u三个参数可以一起使用。例如：
+   
+    命令：x/3uh 0x54320 表示，从内存地址0x54320读取内容，h表示以双字节为一个单位，3表示三个单位，u表示按十六进制显示。
+   
+   
+六、自动显示
+
+    你可以设置一些自动显示的变量，当程序停住时，或是在你单步跟踪时，这些变量会自动显示。相关的GDB命令是display。
+   
+    display <expr>
+    display/<fmt> <expr>
+    display/<fmt> <addr>
+   
+    expr是一个表达式，fmt表示显示的格式，addr表示内存地址，当你用display设定好了一个或多个表达式后，只要你的程序被停下来，GDB会自动显示你所设置的这些表达式的值。
+   
+    格式i和s同样被display支持，一个非常有用的命令是：
+   
+        display/i $pc
+   
+    $pc是GDB的环境变量，表示着指令的地址，/i则表示输出格式为机器指令码，也就是汇编。于是当程序停下后，就会出现源代码和机器指令码相对应的情形，这是一个很有意思的功能。
+   
+    下面是一些和display相关的GDB命令：
+   
+    undisplay <dnums...>
+    delete display <dnums...>
+    删除自动显示，dnums意为所设置好了的自动显式的编号。如果要同时删除几个，编号可以用空格分隔，如果要删除一个范围内的编号，可以用减号表示（如：2-5）
+   
+    disable display <dnums...>
+    enable display <dnums...>
+    disable和enalbe不删除自动显示的设置，而只是让其失效和恢复。
+   
+    info display
+    查看display设置的自动显示的信息。GDB会打出一张表格，向你报告当然调试中设置了多少个自动显示设置，其中包括，设置的编号，表达式，是否enable。
+
+七、设置显示选项
+
+    GDB中关于显示的选项比较多，这里我只例举大多数常用的选项。
+
+    set print address
+    set print address on
+        打开地址输出，当程序显示函数信息时，GDB会显出函数的参数地址。系统默认为打开的，如：
+       
+        (gdb) f
+        #0  set_quotes (lq=0x34c78 "<<", rq=0x34c88 ">>")
+            at input.c:530
+        530         if (lquote != def_lquote)
+
+
+    set print address off
+        关闭函数的参数地址显示，如：
+       
+        (gdb) set print addr off
+        (gdb) f
+        #0  set_quotes (lq="<<", rq=">>") at input.c:530
+        530         if (lquote != def_lquote)
+
+    show print address
+        查看当前地址显示选项是否打开。
+       
+    set print array
+    set print array on
+        打开数组显示，打开后当数组显示时，每个元素占一行，如果不打开的话，每个元素则以逗号分隔。这个选项默认是关闭的。与之相关的两个命令如下，我就不再多说了。
+       
+    set print array off
+    show print array
+
+    set print elements <number-of-elements>
+        这个选项主要是设置数组的，如果你的数组太大了，那么就可以指定一个<number-of-elements>来指定数据显示的最大长度，当到达这个长度时，GDB就不再往下显示了。如果设置为0，则表示不限制。
+       
+    show print elements
+        查看print elements的选项信息。
+       
+    set print null-stop <on/off>
+        如果打开了这个选项，那么当显示字符串时，遇到结束符则停止显示。这个选项默认为off。
+       
+    set print pretty on
+        如果打开printf pretty这个选项，那么当GDB显示结构体时会比较漂亮。如：
+
+            $1 = {
+              next = 0x0,
+              flags = {
+                sweet = 1,
+                sour = 1
+              },
+              meat = 0x54 "Pork"
+            }
+
+    set print pretty off
+        关闭printf pretty这个选项，GDB显示结构体时会如下显示：
+       
+            $1 = {next = 0x0, flags = {sweet = 1, sour = 1}, meat = 0x54 "Pork"}
+           
+    show print pretty
+        查看GDB是如何显示结构体的。
+       
+   
+    set print sevenbit-strings <on/off>
+        设置字符显示，是否按“\nnn”的格式显示，如果打开，则字符串或字符数据按\nnn显示，如“65”。
+   
+    show print sevenbit-strings
+        查看字符显示开关是否打开。
+       
+    set print union <on/off>
+        设置显示结构体时，是否显式其内的联合体数据。例如有以下数据结构：
+       
+        typedef enum {Tree, Bug} Species;
+        typedef enum {Big_tree, Acorn, Seedling} Tree_forms;
+        typedef enum {Caterpillar, Cocoon, Butterfly}
+                      Bug_forms;
+       
+        struct thing {
+          Species it;
+          union {
+            Tree_forms tree;
+            Bug_forms bug;
+          } form;
+        };
+       
+        struct thing foo = {Tree, {Acorn}};
+
+        当打开这个开关时，执行 p foo 命令后，会如下显示：
+            $1 = {it = Tree, form = {tree = Acorn, bug = Cocoon}}
+       
+        当关闭这个开关时，执行 p foo 命令后，会如下显示：
+            $1 = {it = Tree, form = {...}}
+
+    show print union
+        查看联合体数据的显示方式
+       
+    set print object <on/off>
+        在C++中，如果一个对象指针指向其派生类，如果打开这个选项，GDB会自动按照虚方法调用的规则显示输出，如果关闭这个选项的话，GDB就不管虚函数表了。这个选项默认是off。
+   
+    show print object
+        查看对象选项的设置。
+       
+    set print static-members <on/off>
+        这个选项表示，当显示一个C++对象中的内容是，是否显示其中的静态数据成员。默认是on。
+   
+    show print static-members
+        查看静态数据成员选项设置。
+       
+    set print vtbl <on/off>
+        当此选项打开时，GDB将用比较规整的格式来显示虚函数表时。其默认是关闭的。
+       
+    show print vtbl
+        查看虚函数显示格式的选项。
+       
+       
+八、历史记录
+
+    当你用GDB的print查看程序运行时的数据时，你每一个print都会被GDB记录下来。GDB会以$1, $2, $3 .....这样的方式为你每一个print命令编上号。于是，你可以使用这个编号访问以前的表达式，如$1。这个功能所带来的好处是，如果你先前输入了一个比较长的表达式，如果你还想查看这个表达式的值，你可以使用历史记录来访问，省去了重复输入。
+   
+   
+九、GDB环境变量
+
+    你可以在GDB的调试环境中定义自己的变量，用来保存一些调试程序中的运行数据。要定义一个GDB的变量很简单只需。使用GDB的set命令。GDB的环境变量和UNIX一样，也是以$起头。如：
+   
+    set $foo = *object_ptr
+   
+    使用环境变量时，GDB会在你第一次使用时创建这个变量，而在以后的使用中，则直接对其賦值。环境变量没有类型，你可以给环境变量定义任一的类型。包括结构体和数组。
+   
+    show convenience
+        该命令查看当前所设置的所有的环境变量。
+       
+    这是一个比较强大的功能，环境变量和程序变量的交互使用，将使得程序调试更为灵活便捷。例如：
+   
+        set $i = 0
+        print bar[$i++]->contents
+   
+    于是，当你就不必，print bar[0]->contents, print bar[1]->contents地输入命令了。输入这样的命令后，只用敲回车，重复执行上一条语句，环境变量会自动累加，从而完成逐个输出的功能。
+   
+   
+十、查看寄存器
+
+    要查看寄存器的值，很简单，可以使用如下命令：
+   
+    info registers
+        查看寄存器的情况。（除了浮点寄存器）
+   
+    info all-registers
+        查看所有寄存器的情况。（包括浮点寄存器）
+   
+    info registers <regname ...>
+        查看所指定的寄存器的情况。
+       
+    寄存器中放置了程序运行时的数据，比如程序当前运行的指令地址（ip），程序的当前堆栈地址（sp）等等。你同样可以使用print命令来访问寄存器的情况，只需要在寄存器名字前加一个$符号就可以了。如：p $eip。
+
+
+
+
+						2006/07/10
+						
+{static null = {static null = <same as static member of an already seen type>, d = 0x78240, static shared_null = 0x78240}, d = 0xf6eb8, static shared_null = 0x78240}) at cdatabase.cpp:271
+							
+		
+		
+						2006/07/10
+网络还是爱停。 2：33
+有时候10分钟就停了。
+
+发短信调试
+
+(gdb) n
+621             mpCMessageThread->messageMultiLineEdit->insertLine(message,0);
+(gdb) n
+622             mpCMessageThread->phoneNumberMultiLineEdit = this->phoneNumberMultiLineEdit;
+(gdb) s
+623             if( mpCMessageThread->miSendState!=0 )
+(gdb) s
+625                     mpCMessageThread->start();
+(gdb) s
+ 
+Program received signal ?, Unknown signal.
+0x40a5eb74 in __strtoul_internal () from /lib/libc.so.6
+(gdb) s
+Single stepping until exit from function __strtoul_internal,
+which has no line number information.
+ 
+ 
+ 
+ 				2006/07/14
+查询历史数据时出现错误。 				
+
+
+ 移动硬盘有时候挂不上去。今晚就是如此。
+				
+				
+
+
+
+				2008/5/2
+
+在FC7环境下编译一个qvfb中运行的qt2程序：
+
+设置环境变量：
+export QTDIR=/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_pc_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-x86-g++				
+
+编写源程序：main.cpp
+/****************************************************************
+**
+** Qt tutorial 1
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    QPushButton hello( "Hello world!", 0 );
+    hello.resize( 100, 30 );
+
+    a.setMainWidget( &hello );
+    hello.show();
+    return a.exec();
+}
+
+
+
+
+编写tmake的pro文件：
+
+TEMPLATE     = app
+
+CONFIG       = qte ix86
+#CONFIG     = qt arm 
+
+CONFIG      += thread
+CONFIG      += warn_on
+CONFIG      += release
+
+MOC_DIR      = moc
+OBJECTS_DIR  = obj
+
+ix86:QTDIR=/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7
+arm:QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+
+INCLUDEPATH += $$QTDIR/include 
+DEPENDPATH  += $$QTDIR/include
+
+LIBS += -L$$QTDIR/lib 
+LIBS += -lqte
+
+TMAKE_CXXFLAGS += -fno-exceptions 
+
+SOURCES = main.cpp
+ix86:TARGET  = ix86-out
+arm:TARGET  = arm-out
+
+
+
+这个pro文件与原来的写法有些许不同，这里需要注明qt头文件的位置和qt库文件的位置，以及添加  -lqte等
+
+编译：
+[root@localhost t1]# tmake -o makefile *.pro
+[root@localhost t1]# make
+运行：
+
+[root@localhost t1]# qvfb -width 640 -height 480 &
+[root@localhost t1]# ./ix86-out  -qws &
+
+
+
+
+在FC7下交叉编译同一个程序的 ARM 
+
+设置环境变量：
+
+
+export QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+export TMAKEDIR=/usr/local/arm-linux/qt_toolchain/tmake-1.11
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-arm-g++
+
+修改pro文件：
+TEMPLATE     = app
+
+#CONFIG       = qte ix86
+CONFIG     = qt arm 
+
+CONFIG      += thread
+CONFIG      += warn_on
+CONFIG      += release
+
+MOC_DIR      = moc
+OBJECTS_DIR  = obj
+
+ix86:QTDIR=/usr/local/arm-linux/qt_pc_toolchain/qt-2.3.7
+arm:QTDIR=/usr/local/arm-linux/qt_toolchain/qt-2.3.7
+
+INCLUDEPATH += $$QTDIR/include 
+DEPENDPATH  += $$QTDIR/include
+
+LIBS += -L$$QTDIR/lib 
+LIBS += -lqte
+
+TMAKE_CXXFLAGS += -fno-exceptions 
+
+SOURCES = main.cpp
+ix86:TARGET  = ix86-out
+arm:TARGET  = arm-out
+
+
+编译：
+[root@localhost t1]# tmake -o makefile t1.pro 
+[root@localhost t1]# make
+arm-linux-g++  -o arm-out obj/main.o   -L/usr/local/arm-linux/qt_toolchain/qt-2.3.7/lib -lm -lts -L/usr/local/arm-linux/qt_toolchain/qt-2.3.7/lib -lqte -lqte-mt -lpthread
+[root@localhost t1]# file arm-out 
+arm-out: ELF 32-bit LSB executable, ARM, version 1, dynamically linked (uses shared libs), for GNU/Linux 2.0.0, not stripped
+
+
+
+
+
+
+
+
+
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   A1200/E6的交叉编译环境建立
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+[root@localhost t1]# cd /home/
+[root@localhost home]# mkdir mkezx
+[root@localhost home]# cd mkezx/
+[root@localhost mkezx]# mkdir myfile
+[root@localhost mkezx]# cp -rf /mnt/study/qt_qte/tools/Release_yan0/* .
+[root@localhost mkezx]# tar zxvf xscale-gcc-vfp-3.3.tar.gz 
+
+
+
+Linux下操作： －－注意linux下的操作，字母有大小写的区分！
+
+  1、用root登录。
+
+  2、在图形窗口操作：
+
+  a. 在桌面上打开“我的电脑”，依次打开根目录，home，在home目录里建立一个新目录，取名为mkezx。在mkezx目录里，建立myfile目录，用来保存自己的源程序
+  
+[root@localhost t1]# cd /home/
+[root@localhost home]# mkdir mkezx
+[root@localhost home]# cd mkezx/
+[root@localhost mkezx]# mkdir myfile
+
+  b. 把usr_lib.gz，ezx-sdk.tar.gz，Other_lib_headers.gz，qt-2.3.gz，tmake-1.8.tar.gz，xscale-gcc-vfp-3.3.tar.gz 都拷贝到mkezx目录里。
+  
+[root@localhost mkezx]# cp -rf /mnt/study/qt_qte/tools/Release_yan0/* .  
+
+  3、以下在系统终端（开始－应用程序－附件－系统终端）下操作：
+
+  c. 进入mkezx目录：cd /home/mkezx
+ 解压xscale-gcc-vfp-3.3.tar.gz：
+
+[root@localhost mkezx]# tar zxvf xscale-gcc-vfp-3.3.tar.gz 
+
+
+    解压以下文件：
+
+  tar xvzf qt-2.3.gz
+  tar xvzf ezx-sdk.tar.gz
+  tar xvzf Other_lib_headers.gz
+  tar xvzf tmake-1.8.tar.gz
+  tar xvzf usr_lib.gz    
+  lib.gz
+  
+[root@localhost mkezx]# tar zxvf qt-2.3.gz 
+[root@localhost mkezx]# tar zxvf ezx-sdk.tar.gz 
+[root@localhost mkezx]# tar zxvf Other_lib_headers.gz 
+[root@localhost mkezx]# tar zvxf tmake-1.8.tar.gz 
+[root@localhost mkezx]# tar zxvf A1200_lib/usr_lib.gz -C .
+[root@localhost mkezx]# tar zxvf A1200_lib/lib.gz -C .
+
+
+
+  完成后生成了以下目录（在/home/mkezx目录下）：qt-2.3.6，ezx，other，tmake-1.8，lib，usr。 所有上述的以gz为后缀的文件现在可以删除。
+
+  4、在图形窗口操作：
+
+    a. 把ezx中include目录里的所有文件拷贝到qt-2.3.6中include目录里
+
+    b. 把other中include目录里的所有文件拷贝到qt-2.3.6中include目录里
+
+    c. 把usr/lib/目录下libezx打头的文件复制到qt-2.3.6的lib目录下
+
+    d. 把usr/lib/ezx/lib/目录下的所有文件，包括子目录复制到qt-2.3.6的lib目录里
+    
+[root@localhost mkezx]# cp usr/lib/libezx* qt-2.3.6/lib/
+[root@localhost mkezx]# cp -rf ezx/include/* qt-2.3.6/include/
+[root@localhost mkezx]# cp -rf other/include/* qt-2.3.6/include/
+[root@localhost mkezx]# cp usr/lib/libezx* qt-2.3.6/lib/
+[root@localhost mkezx]# cp -rf usr/lib/ezx/lib/* qt-2.3.6/lib/
+cp：是否覆盖“qt-2.3.6/lib/fonts/fontdir”? y
+这里选择覆盖，输入：y
+
+  5、设置tmake:
+
+    a. 在tmake-1.8/lib/qws里，把linux-arm-g++复制出一份，命名为linux-e680-g++（操作方法：选中linux- arm-g++，按住鼠标左键，往边上移动，放开鼠标左键，选复制到当前位置，取名为linux-e680-g++后点继续）。
+    
+[root@localhost mkezx]# cd tmake-1.8/lib/qws
+[root@localhost qws]# cp -rf linux-arm-g++ linux-e680-g++
+
+    b. linux-e680-g++目录里，打开tmake.conf 文件，修改第53行
+
+    原来的内容为：TMAKE_LIBS_QT = -lqte
+
+    修改为：
+
+#TMAKE_LIBS_QT = -lezxappsdk -lipp-jp -lezxopenwindow -lipp-miscGen -lezxappbase -lqte-mt -lezxjpeg -lezxpm
+TMAKE_LIBS_QT = -lezxappsdk -lipp-jp -lezxopenwindow -lipp-miscGen -lezxappbase -lqte-mt -lezxjpeg -lezxpm
+
+
+[root@localhost mkezx]# cd tmake-1.8/lib/qws
+[root@localhost qws]# cp -rf linux-arm-g++ linux-e680-g++
+[root@localhost qws]# cd linux-e680-g++/
+[root@localhost linux-e680-g++]# ls
+app.t  lib.t  subdirs.t  tmake.conf
+[root@localhost linux-e680-g++]# vi tmake.conf           
+
+至此，配置都搞定。以上过程，yan0重新操作了一遍，没有问题，可以完成以下源程序的编译
+
+编译程序
+
+  在开始编译程序前，需要先设定环境参数：
+
+		  export PATH=/usr/local/arm/bin:/home/mkezx/tmake-1.8/bin:$PATH
+		  export QTDIR=/home/mkezx/qt-2.3.6
+		  export TMAKEPATH=/home/mkezx/tmake-1.8/lib/qws/linux-e680-g++
+		  export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+
+#!/bin/bash
+#qt
+export QTDIR=/home/mkezx/qt-2.3.6
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+#tmake
+export TMAKEDIR=/home/mkezx/tmake-1.8
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-e680-g++
+
+
+
+  可以把以上内容保存为一个文件，如path，保存在myfike目录里。每次要编译程序前，打开系统终端，切换到myfile目录里：cd /home/mkezx/myfile 
+
+  运行该环境配置文件，注意有2个"."，之间有空格： . ./path
+
+
+[root@localhost linux-e680-g++]# cd /home/mkezx/myfile/
+[root@localhost myfile]# mkdir firstezxprog
+[root@localhost myfile]# cd firstezxprog/
+[root@localhost firstezxprog]# vi main.cpp
+#include <zmessagebox.h>
+#include <zapplication.h>
+#include <qwidget.h>
+#include <qlabel.h>
+#include <zglobal.h>
+#include <ezxres.h>
+#include <qbutton.h>
+#include <qnamespace.h>
+
+int main(int argc, char** argv)
+{
+    ZApplication app (argc, argv);
+    QString const *myString = new QString("Samuel' Label ");
+    ZMessageBox::timerMessage(
+        app.desktop(), NULL,
+        *myString,30,1);
+
+    return app.exec();
+}
+
+
+
+b、编辑一个工程文件( 可以用gedit或vim)： testezx.pro
+            文件内容：
+            
+TEMPLATE = app
+CONFIG += qt thread release warn_off
+TARGET = testezx
+
+HEADERS +=
+
+SOURCES += main.cpp
+LIBS +=
+             
+a、设置环境变量（这个很重要），输入命令：
+#qt
+export QTDIR=/home/mkezx/qt-2.3.6
+export PATH=$QTDIR/bin:$PATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+#tmake
+export TMAKEDIR=/home/mkezx/tmake-1.8
+export PATH=$TMAKEDIR/bin:$PATH
+export TMAKEPATH=$TMAKEDIR/lib/qws/linux-e680-g++
+#arm-linux-gcc
+PATH=/home/mkezx/usr/local/arm/bin:$PATH
+
+          b、编译程序：在testezx目录下输入命令：
+[root@localhost firstezxprog]# tmake -o makefile testezx.pro 
+[root@localhost firstezxprog]# make
+arm-linux-g++ -c -pipe -DQWS -fno-exceptions -fno-rtti -O2 -D_REENTRANT -DQT_THREAD_SUPPORT -DNO_DEBUG -I/home/mkezx/qt-2.3.6/include -o main.o main.cpp
+main.cpp:1:25: zmessagebox.h: No such file or directory
+main.cpp:2:26: zapplication.h: No such file or directory
+main.cpp:5:21: zglobal.h: No such file or directory
+main.cpp:6:20: ezxres.h: No such file or directory
+main.cpp: In function `int main(int, char**)':
+main.cpp:13: error: `ZApplication' undeclared (first use this function)
+main.cpp:13: error: (Each undeclared identifier is reported only once for each 
+   function it appears in.)
+main.cpp:13: error: parse error before `(' token
+main.cpp:15: error: `ZMessageBox' undeclared (first use this function)
+main.cpp:15: error: parse error before `::' token
+main.cpp:19: error: `app' undeclared (first use this function)
+make: *** [main.o] 错误 1
+
+修改下pro文件如下：
+
+TEMPLATE = app
+CONFIG += qte thread release warn_off
+HEADERS +=
+
+SOURCES += main.cpp
+
+QTDIR=/home/mkezx/qt-2.3.6
+INCLUDEPATH += $$QTDIR/include 
+DEPENDPATH  += $$QTDIR/include
+
+LIBS += -L$$QTDIR/lib 
+LIBS += -L/home/mkezx/usr/local/arm/lib
+TARGET = testezx
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX到此了
+  为方便熟悉编译的过程，yan0提供了一个实例，请先下载该文件：
+yan0_file1.rar
+
+用WINRAR解压后得到path，test1.cpp，test1。其中path为环境配置文件，test1.cpp为程序源码，test1为编译好的程序，可以拷贝到手机上在手机上直接运行。
+
+  把path， test1.cpp拷贝到Linux的myfile目录里。
+
+  系统终端切换到myfile目录：cd /home/mkezx/myfile
+
+  运行环境配置，注意有2个"."，之间有空格：. ./path
+
+  然后按照编译的步骤来编译程序
+
+    progen test1.cpp >test1.pro
+
+    tmake test1.pro >Makefile
+
+    make
+
+  编译成功，将生成test1，该文件可以拷贝到手机上去运行。
+
+  如果修改了test1.cpp的内容，只要输入make命令即可重新编译。
+
+ 
+
+  yan0提供的test1.cpp完成3个功能：提供中文字符的显示，在手机上显示一个带3个按键的对话框，根据不同的选择，返回所按的按键代码，如果选Yes，显示一个倒计时的对话框。 
+
+  在源程序里yan0写了较详细的说明。如果把第37行的"//"注释去掉，当选择Yes，手机将重新启动。大家可以自己试试，修改后重新编译，把生成的test1拷贝到手机上运行，选择Yes，看看手机的反应
+
+此图为test1运行后，手机上的显示
+
+在手机上运行编译好的程序：
+
+手机以USB网连接电脑
+
+  在电脑上通过 \\192.168.16.2\system，打开TF/SD卡，mmc－mmca1，建立新的目录，命名为test。把编译好的文件拷贝到test目录里。
+
+  在电脑上Telnet到手机，登录时输入用户名root
+
+  切换到test目录：cd /mmc/mmca1/test
+
+  设置运行软件的环境：. /home/native/.profile   注意，命令行里的第一个"."和后面的字符之间有空格
+
+  运行文件，如程序为test1，则输入 ./test1 这里的"."和后面没有空格
+
+  发布编译好的程序，请参照yan0的A1200的MPKG安装软件，PKG系列软件 里的“A1200 MPKG制作方法”来打包PKG。
+
+4/15 在对话框里显示手机系统的图标
+
+请先下载文件:test2.rar
+
+解压后得到3个文件：test2.cpp， test2，ezxres.h。test2可以拷贝到手机里在Telnet下运行。
+
+yan0在程序里已经写详细的说明。自行编译时，请先把ezxres.h拷贝到linux 的qt-2.3.6/include里。然后按照上述的编译过程编译test2.cpp
+
+progen test2.cpp >test2.pro
+
+tamke test2.pro >Makefile
+
+make
+
+为了减少生成的文件的大小，可以使用以下命令：
+
+arm-linux-strip test2
+
+test2将从177334字节减少到7028字节。
+
+以下为运行test2后手机显示的2个对话框
+
+如何获取手机系统图标的名称: 可以在手机上/usr/data_resource/icon找到iconres.ezx，或者从下载的主题里得到这个文件。用写字板打开浏览，在“ID table”之后的都为系统图标的名称，其中Dialog开头的为对话图标。如"Dialog_Complete.g"，加上完整的后缀，得到 "Dialog_Complete.gif"
+
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   A1200/E6的交叉编译环境建立			
+＊＊＊＊＊＊＊＊＊＊   
+＊＊＊＊＊＊＊＊＊＊   														结束
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊

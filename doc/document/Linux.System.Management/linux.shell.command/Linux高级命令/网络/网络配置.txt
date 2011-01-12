@@ -1,0 +1,135 @@
+
+新手入门 Linux操作系统下配置静态IP上网
+
+
+1 配置网卡
+
+PCI的可以自动检测到,我就不多说如何加载驱动了,直接说如何配置IP
+
+vi /etc/sysconfig/network,按照你的情况修改
+
+DEVICE=eth0<--设备
+
+ONBOOT=yes<--是否自动启动
+
+BOOTPROTO=static<--是否使用静态IP
+
+IPADDR=xxx.xxx.xxx.xx<--你的IP
+
+NETMASK=255.255.255.224<--你的子网掩码
+
+GATEWAY=218.99.1.17<--你的网关
+
+2 配置dns解析
+
+echo "nameserver 211.98.1.28">> /etc/resolv.conf
+
+3 启动网络
+
+/etc/init.d/network restart
+
+4 测试
+
+ping www.sina.com.cm
+
+64 bytes from 202.106.184.200: icmp_seq=0 ttl=249 time=1.881 msec
+
+64 bytes from 202.106.184.200: icmp_seq=0 ttl=249 time=1.881 msec
+
+64 bytes from 202.106.184.200: icmp_seq=0 ttl=249 time=1.881 msec
+
+64 bytes from 202.106.184.200: icmp_seq=0 ttl=249 time=1.881 msec
+
+...
+
+...
+
+
+OK
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================================
+
+
+静态IP设置：
+bjcl:~# vi /etc/network/interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+#auto lo
+#iface lo inet loopback
+
+# The primary network interface
+auto eth0
+#allow-hotplug eth0
+iface eth0 inet static
+address 192.168.1.10
+netmask 255.255.255.0
+gateway 192.168.1.1
+bjcl:~# /etc/init.d/networking restart
+Reconfiguring network interfaces...done.
+
+DNS服务器设置：
+bjcl:~# vi /etc/resolv.conf
+nameserver 192.168.1.10
+nameserver 202.106.46.151
+
+
+
+
+
+======================================================================================
+ubuntu:
+/etc/network/interfaces
+
+里面应该有类似如下配置：
+
+iface eth0 inet static
+address 192.168.1.2
+netmask 255.255.255.0
+gateway 192.168.1.1
+
+然后使用如下命令重启网络：
+
+$sudo /etc/init.d/networking restart
+
+
+
+
+======================================================================================
+
+
+
+
+
+
+这个是可以工作的：：good good good good good good good 
+=======================================================================================
+配置文件位于：
+/etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0 
+ONBOOT=yes 
+BOOTPROTO=static 
+IPADDR=192.168.0.3
+NETMASK=255.255.255.0
+GATEWAY=192.168.0.1 
+
+使IP地址生效：
+/sbin/ifdown eth0
+/sbin/ifup eth0
+ 
+通知网关更新信息：
+/etc/init.d/network restart 
+ 

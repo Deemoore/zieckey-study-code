@@ -1,0 +1,41 @@
+ubuntu完美QQ，EVA的安装，支持收发文件，群等
+作者：    来源：    点击：41    日期：2007-02-14    
+　
+ ubuntu完美QQ，EVA的安装，支持收发文件，群等，全中文，不会死机。
+
+
+最新的svc的EVA下载：   更新日期2006.10.5
+httpbbs.xsui.netsanfanlingattachmentsmonth_0610eva-0.4.1.tar.bz2.txt
+下载后给用 mv命令更换文件名
+#mv  eva-0.4.1.tar.bz2.txt eva-0.4.1.tar.bz2
+
+
+下面是安装
+1.安装g++,gcc,make,auto make,perl等编译安装要用到的工具
+$sudo apt-get install g++ gcc make automake perl
+2.安装要用到的KDE库
+$sudo apt-get update 
+$sudo apt-get install kdelibs4-dev kdelibs4c2a 
+3.编译安装
+$tar -jvxf eva-0.4.1.tar.bz2
+$cd eva 
+$.configure --prefix=`kde-config --prefix` 
+$make ( 这一步也许要等十分钟以上，就看你部机的配置了） 
+$sudo make install
+4.测试安装是不正常
+$eva & 
+5.创建启动菜单
+sudo gedit usrshareapplicationsEva.desktop 
+COPY下面的到这个中
+[Desktop Entry] 
+Name=Eva 
+Comment=QQ Client 
+Exec=usrbineva 
+Icon=usrshareappsevaimagethemeeva.png 
+Terminal=false 
+Type=Application 
+Categories=Application;Network; 
+
+
+注：如果中文输入有问题
+$sudo apt-get install scim-qtimm . 

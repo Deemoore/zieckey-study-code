@@ -1,0 +1,157 @@
+exec用被执行的程序完全替换调用它的程序的影像。fork创建一个新的进程就产生了一个新的PID，
+exec启动一个新程序，替换原有的进程，因此这个新的被exec执行的进程的PID不会改变，
+和调用exec函数的进程一样。
+
+int   exec…装入和运行其它程序：
+int   execl(  char *pathname,char *arg0,char *arg1,...,char *argn,NULL)
+int   execle( char *pathname,char *arg0,char *arg1,...,char *argn,NULL,char *envp[])
+int   execlp( char *pathname,char *arg0,char *arg1,...,NULL)
+int   execlpe(char *pathname,char *arg0,char *arg1,...,NULL,char *envp[])
+int   execv(  char *pathname,char *argv[])
+int   execve( char *pathname,char *argv[],char *envp[])
+int   execvp( char *pathname,char *argv[])
+int   execvpe(char *pathname,char *argv[],char *envp[])
+         exec函数族装入并运行程序pathname，并将参数
+          arg0(arg1,arg2,argv[],envp[])传递给子程序,出错返回-1
+       在exec函数族中,后缀l、v、p、e添加到exec后，
+       所指定的函数将具有某种操作能力
+      有后缀  p时，函数可以利用DOS的PATH变量查找子程序文件。
+假如你希望执行命令 /bin/cat /etc/passwd /etc/group,
+	l时，希望接收以逗号分隔的参数列表，列表以NULL指针作为结束标志
+		execl( "/bin/cat","/etc/passed","/etc/group",NULL);
+	v时，希望接收到一个以NULL结尾的字符串数组的指针
+		char* argv[] = {"/bin/cat","/etc/passed","/etc/group",NULL}
+		execv( "/bin/cat", argv );
+	e时，函数传递指定参数envp，允许改变子进程的环境，无后缀e时，子进程使用当前程序的环境。
+		envp也是一个以NULL结尾的字符串数组指针
+		
+	
+execl（执行文件）
+相关函数
+	fork，execle，execlp，execv，execve，execvp
+表头文件
+	#include<unistd.h>
+定义函数
+	int execl(const char * path,const char * arg,....);
+函数说明
+	execl()用来执行参数path字符串所代表的文件路径，接下来的参数代表执行该文件时传递过去的argv(0)、argv[1]……，最后一个参数必须用空指针(NULL)作结束。
+返回值
+	如果执行成功则函数不会返回，执行失败则直接返回-1，失败原因存于errno中。
+范例
+	#include<unistd.h>
+main()
+{
+execl(“/bin/ls”,”ls”,”-al”,”/etc/passwd”,(char * )0);
+}
+执行
+	/*执行/bin/ls -al /etc/passwd */
+-rw-r--r-- 1 root root 705 Sep 3 13 :52 /etc/passwd
+　
+
+
+	
+execlp（从PATH 环境变量中查找文件并执行）
+相关函数
+	fork，execl，execle，execv，execve，execvp
+表头文件
+	#include<unistd.h>
+定义函数
+	int execlp(const char * file,const char * arg,……)；
+函数说明
+	execlp()会从PATH 环境变量所指的目录中查找符合参数file的文件名，找到后便执行该文件，然后将第二个以后的参数当做该文件的argv[0]、argv[1]……，最后一个参数必须用空指针(NULL)作结束。
+返回值
+	如果执行成功则函数不会返回，执行失败则直接返回-1，失败原因存于errno 中。
+错误代码
+	参考execve()。
+范例
+	/* 执行ls -al /etc/passwd execlp()会依PATH 变量中的/bin找到/bin/ls */
+#include<unistd.h>
+main()
+{
+execlp(“ls”,”ls”,”-al”,”/etc/passwd”,(char *)0);
+}
+执行
+	-rw-r--r-- 1 root root 705 Sep 3 13 :52 /etc/passwd
+　
+
+
+	
+execv（执行文件）
+相关函数
+	fork，execl，execle，execlp，execve，execvp
+表头文件
+	#include<unistd.h>
+定义函数
+	int execv (const char * path, char * const argv[ ]);
+函数说明
+	execv()用来执行参数path字符串所代表的文件路径，与execl()不同的地方在于execve()只需两个参数，第二个参数利用数组指针来传递给执行文件。
+返回值
+	如果执行成功则函数不会返回，执行失败则直接返回-1，失败原因存于errno 中。
+错误代码
+	请参考execve（）。
+范例
+	/* 执行/bin/ls -al /etc/passwd */
+#include<unistd.h>
+main()
+{
+char * argv[ ]={“ls”,”-al”,”/etc/passwd”,(char*) }};
+execv(“/bin/ls”,argv);
+}
+执行
+	-rw-r--r-- 1 root root 705 Sep 3 13 :52 /etc/passwd
+　
+
+
+	
+execve（执行文件）
+相关函数
+	fork，execl，execle，execlp，execv，execvp
+表头文件
+	#include<unistd.h>
+定义函数
+	int execve(const char * filename,char * const argv[ ],char * const envp[ ]);
+函数说明
+	execve()用来执行参数filename字符串所代表的文件路径，第二个参数系利用数组指针来传递给执行文件，
+	argv要传递给程序的完整参数列表，包括argv［0］，它一般是执行程序的名字；最后一个参数则为传递给执行文件的新环境变量数组。
+返回值
+	如果执行成功则函数不会返回，执行失败则直接返回-1，失败原因存于errno 中。
+错误代码
+	EACCES
+1. 欲执行的文件不具有用户可执行的权限。
+2. 欲执行的文件所属的文件系统是以noexec 方式挂上。
+3.欲执行的文件或script翻译器非一般文件。
+EPERM
+1.进程处于被追踪模式，执行者并不具有root权限，欲执行的文件具有SUID 或SGID 位。
+2.欲执行的文件所属的文件系统是以nosuid方式挂上，欲执行的文件具有SUID 或SGID 位元，但执行者并不具有root权限
+
+/****************************************************************************
+**
+**	execve.c--Illustrate the usage of execve
+**
+*****************************************************************************/
+
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int main( void )
+{
+	char* args[] = { "/bin/ls", NULL };
+
+	if ( -1 == (execve("/bin/ls", args, NULL)) )
+	{
+		perror( "execve" );
+		exit( EXIT_FAILURE);
+	}
+	
+	puts( "shouldn't get here" );
+	exit( EXIT_SUCCESS );
+}
+
+[root@localhost src]# gcc execve.c 
+[root@localhost src]# ./a.out 
+a.out  child_fork.c  execve.c  fork.c  getpid.c
+
+
+
+

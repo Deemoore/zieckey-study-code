@@ -1,0 +1,299 @@
+http://forums.gentoo.org/viewtopic.php?t=55659&highlight=cvs+pserver
+
+Sorry if it looks a duplicate post. This post is a personal effort and contains also security issues using pserver connections :)
+
+Three days ago, I had to set up a secure cvs pserver. After spending many hour reading the doc at the excellent site www.cvshome.org, I successfully set it up running it with inetd.
+
+I know that the most secure is to use SSH connection since in pserver authentication passwords are sent in clear, but i tried to focus on the state of art of doing it. Today, I tried to set it up with xinetd but some security issues raised that i didn't solve it yet, but this setting should work very fine if u're not paranoid with security :lol:
+
+Here are the steps I used to setup my cvs server :
+
+1) Login as root and create a user/group cvs/cvs. Note: The repository is inside the user's home and not the user's home, this would allow you later to create many repositories as u want in the user's home ( Easier to manage )
+
+代码:
+
+    # groupadd cvs
+    # mkdir -p /var/home/cvs
+    # useradd -d /var/home/cvs -g cvs -s /bin/bash -p <cvs_passwd> cvs
+    # chown -R cvs:cvs /var/home/cvs
+    # su - cvs
+    /> cvs -d /var/home/cvs/repository init
+    /> chmod g+rwx /var/home/cvs/repository
+    /> exit
+
+
+2) Create users anoncvs and usercvs. anoncvs will be allowed to read repository but cannot write. usercvs will be allowed to read/write in repository
+
+代码:
+
+    # useradd -d /var/home/cvs -g cvs -s /bin/false usercvs
+    # usermod -L usercvs        ( Lock user password )
+    # useradd -d /var/home/cvs -g cvs -s /bin/false anoncvs
+    # usermod -L anoncvs       ( Lock user password )
+
+
+3) We want to use pserver authentication and don't want cvs to fallback to system authentication when user doesn't exist. Doing this, we are trying to secure at maximum access to cvs :). Here are the steps:
+
+We have to store users and encrypted passwords in /var/home/cvs/repository/CVSROOT/passwd
+
+Using ur favourite editor, add entries of this form in /var/home/cvs/repository/CVSROOT/passwd:
+
+<cvs_user>:<encrypted_password>:<unix_user>
+
+We encrypt cvs user's password using this well known perl script:
+
+代码:
+
+#!/usr/bin/perl
+ 
+srand (time());
+my $randletter = "(int (rand (26)) + (int (rand (1) + .5) % 2 ? 65 : 97))";
+my $salt = sprintf ("%c%c", eval $randletter, eval $randletter);
+my $plaintext = shift;
+my $crypttext = crypt ($plaintext, $salt);
+ 
+print "${crypttext}\n";
+
+
+You can create for example a bin directory in cvs home, copy and paste the script to file cryptout in that directory. Then chmod +x cryptout and add $HOME/bin to PATH variable in file .bash_profile. Syntax of cryptout is:
+
+cryptout <clear_text_password>
+
+it'll produce an encrypted password as the ones stored in /etc/passwd.
+
+Here an example of passwd file:
+
+
+james:qPd3FRr4r3ln2:usercvs
+dreambox:AGJaHG3LxpYoA:usercvs
+anoncvs::anoncvs
+
+
+Typical scenario, users james and dreambox would have read/write access to the repository, and anoncvs would have only read access without having to enter a password.
+
+Note: In practice james and dreambox don't exist in the system as unix users, they are virtual cvs users.
+
+To disable cvs to fallback into system authentication when user doesn't exist we have to modify the file under /var/home/cvs/CVSROOT/config.
+
+To set read/write permissions in repository we have to create 2 files ( readers and writers ) also under /var/home/cvs/CVSROOT. Users in readers file are only allowed to read repository. Users in writers are allowed to read/write in repository.
+
+config, readers, writers have to be versionned, so first we checkout module CVSROOT :
+
+代码:
+
+/> cvs -d /var/home/cvs/repository co CVSROOT
+
+cvs server: Updating CVSROOT
+U CVSROOT/checkoutlist
+U CVSROOT/commitinfo
+U CVSROOT/config
+U CVSROOT/cvswrappers
+U CVSROOT/editinfo
+U CVSROOT/loginfo
+U CVSROOT/modules
+U CVSROOT/notify
+U CVSROOT/rcsinfo
+U CVSROOT/taginfo
+U CVSROOT/verifymsg
+
+
+In the file "config", Uncomment line #SystemAuth=no . This will inform cvs to not check in /etc/passwd when user doesn't exist in CVSROOT/passwd
+
+代码:
+
+/> echo james > writers
+/> echo dreambox >> writers
+/> echo >> writers        ( We have to add new line after adding last user )
+
+/> echo anoncvs > readers
+/> echo >> readers       ( We have to add new line after adding last user )
+
+/> cvs -d /var/home/cvs/repository add readers writers
+cvs server: scheduling file `readers' for addition
+cvs server: scheduling file `writers' for addition
+cvs server: use 'cvs commit' to add these files permanently
+
+/> cvs -d /var/home/cvs/repository ci -m "Updated administration files"
+cvs commit: Examining .
+Checking in config;
+/var/home/cvs/repo/CVSROOT/config,v  <--  config
+new revision: 1.2; previous revision: 1.1
+done
+RCS file: /var/home/cvs/repo/CVSROOT/readers,v
+done
+Checking in readers;
+/var/home/cvs/repo/CVSROOT/readers,v  <--  readers
+initial revision: 1.1
+done
+RCS file: /var/home/cvs/repo/CVSROOT/writers,v
+done
+Checking in writers;
+/var/home/cvs/repo/CVSROOT/writers,v  <--  writers
+initial revision: 1.1
+done
+cvs commit: Rebuilding administrative file database
+
+
+Now, we setup xinetd :
+
+Edit as root file /etc/xinetd.d/cvspserver. Mine looks like this :
+
+代码:
+
+service cvspserver
+{
+        disable            = no
+        socket_type        = stream
+        wait               = no
+        user               = root
+        log_type           = FILE /var/log/cvspserver
+        protocol           = tcp
+        env                = '$HOME=/var/home/cvs'
+        log_on_failure     += USERID
+        port               = 2401
+        server             = /usr/bin/cvs
+        server_args        = -f --allow-root=/var/home/cvs/repository pserver
+}
+
+
+Save modification to file end execute the following to start xinetd at boot time ( If it is not set yet ):
+代码:
+
+# rc-update add xinetd boot
+
+
+Congratulations if u arrived here :D , now it should work fine after a reboot or ( /etc/init.d/xinetd start for those who are in a hurry to test ) :
+
+Your can start testing security by trying to import a directory as anoncvs for example ( cvs will not allow u ) :
+
+代码:
+
+/> mkdir project
+/> cd project
+/> touch dreambox
+/> cvs -d :pserver:anoncvs@localhost/var/home/cvs/repository login  ( Press return when asked a password )
+/> cvs -d :pserver:anoncvs@localhost/var/home/cvs/repository import -m "Trying to import" myproject vendor start
+
+
+You should see something like this on ur screen :
+代码:
+
+cvs server: cannot open /var/home/cvs/repository/CVSROOT/readers: Permission denied
+cvs [server aborted]: "import" requires write access to the repository
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////打住就到这里，下面的有问题
+OK, know, I'd like to discuss another security issue which is giving me headaches :
+
+The files CVSROOT/*info can be used to execute programs such as sendmail to notify some users of an update, commit,... The thing is that one malicious guy ( such as james or dreambox ) who has write access to repository can checkout CVSROOT and add entries in that files to execute a malicious program and gain access to private ressources in the system !!! :twisted:. So, I decided to re-enforce security by creating another unix group ( admincvs ). All users in that group and only that users have read/write access to CVSROOT ( Of course these users should be trustable in their intentions :roll: ). Users in the group admincvs should only read and update CVSROOT module. Allowing them to import other modules that are intented to be shared would forbid other users ( running as usercvs ) to update those modules...
+
+OK, here it is:
+
+We create admincvs group and admincvs user :
+代码:
+
+# groupadd admincvs
+# useradd -d /var/home/cvs -g cvs -s /bin/false admincvs
+# usermod -L admincvs        ( Lock user password )
+
+
+
+We change the group owner of CVSROOT directory and disable
+read/write/exec access to that directory to other users
+代码:
+
+# cd /var/home/cvs/cvsrepository
+# chgrp -R admincvs CVSROOT
+# chmod o-rwx CVSROOT
+
+
+add the following entry to CVSROOT/passwd ( using bin/cryptout perl program to crypt password ):
+代码:
+
+admincvs:<crypted_passwd>:admincvs
+
+
+Lets test it. Try to checkout CVSROOT as a normal user who has read/write access to repository but not to CVSROOT :
+
+代码:
+
+/> cvs -d :pserver:dreambox@localhost/var/home/cvs/repository login  ( Enter password when asked )
+/> cvs -d :pserver:dreambox@localhost/var/home/cvs/repository co CVSROOT
+
+
+You should get the following message:
+代码:
+
+Cannot access /var/home/cvs/repo/CVSROOT
+Permission denied
+
+
+Now try with admincvs:
+代码:
+
+/> cvs -d :pserver:admincvs@localhost/var/home/cvs/repository login  ( Enter password when asked )
+/> cvs -d :pserver:admincvs@localhost/var/home/cvs/repository co CVSROOT
+
+
+You should get this:
+代码:
+
+cvs server: Updating CVSROOT
+U CVSROOT/checkoutlist
+U CVSROOT/commitinfo
+U CVSROOT/config
+U CVSROOT/cvswrappers
+U CVSROOT/editinfo
+U CVSROOT/loginfo
+U CVSROOT/modules
+U CVSROOT/notify
+U CVSROOT/rcsinfo
+U CVSROOT/readers
+U CVSROOT/taginfo
+U CVSROOT/verifymsg
+U CVSROOT/writers
+
+
+Then, you would ask me: What's ur problem dreambox, everything is working fine :lol:, but then I would ask u to try to import a directory as user who has read/write access to repository ( james o dreambox ) :
+代码:
+
+/> mkdir test
+/> cd test
+/> touch test.file
+/> cvs -d :pserver:dreambox@localhost/var/home/cvs/repository login  ( Enter password when asked )
+/> cvs -d :pserver:dreambox@localhost/var/home/cvs/repository import -m "I want to import" test vendor start
+
+
+You should get the following:
+代码:
+
+Cannot access /var/home/cvs/repo/CVSROOT
+Permission denied
+
+
+Now, I would ask what the hell I did wrong ?
+
+代码:
+
+/> ls -l repository
+drwxrwx---    3 cvs      admincvs     1224 May 22 20:21 CVSROOT
+
+
+
+Something I don't understand : xinetd is running as root. When xinetd receives a login request it creates a cvs process with usercvs uid, right?
+Since usercvs user is the owner of CVSROOT, it should normally have access to that directory!
+
+
+Thanks for reading all this :D, I know, It was long and maybe redundunt :oops:
+
+I would appreciate any feedback :idea:
+
+Regards
+dreambox
+_________________
+Toshiba Tecra 8200
+PIII 750Mhz 512Mb 20Gb Hdd
+Trident CyberBladeXP 16Mb
+
+Windows Where do you want to go today? MacOS Where do you want to be tomorrow? Linux Are you coming...

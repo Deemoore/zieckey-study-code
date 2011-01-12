@@ -1,0 +1,12 @@
+﻿apache新建一个虚拟映射目录：
+
+<IfModule alias_module>
+	Alias /filewebserver "F:/workspace/v2/web/trunk/filewebserver/src/"
+ 	<Directory "F:/workspace/v2/web/trunk/filewebserver/src/">
+          Options Indexes FollowSymLinks symLinksifOwnerMatch ExecCGI MultiViews
+          AllowOverride all
+          Order allow,deny
+          Allow from all
+          DirectoryIndex index.html
+    </Directory>
+</IfModule>

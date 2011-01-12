@@ -1,0 +1,1007 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head id="Head"><title>
+	C＋＋模板的特化 - so true - BlogJava
+</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta id="metaKeywords" name="keywords" content="C＋＋模板的特化" /><link id="MainCss" type="text/css" rel="stylesheet" href="http://www.blogjava.net/Skins/AnotherEon001/style.css" /><link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://www.blogjava.net/bacoo/rss.aspx" /></head>
+<body>
+    <form name="Form1" method="post" action="283480.html" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="
+__VIEWSTATE" value="" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=PyW-m2hLmppJ9byT1bYEqw2&amp;t=633740135971222506" type="text/javascript"></script>
+
+<script language=JavaScript>
+									function ctlent(evt,id)
+											{
+												if(evt.ctrlKey && evt.keyCode == 13)
+												{	
+													try
+													{
+														TempSave(id);
+													}
+													catch(ex)
+													{
+													}
+													finally
+													{
+													    __doPostBack('AjaxHolder$PostComment$btnSubmit','')
+													}
+												}
+		
+												}</script>
+												<script language=JavaScript>function SetReplyAuhor(author){document.getElementById('AjaxHolder_PostComment_tbComment').value+="@"+author+"\n";document.getElementById('AjaxHolder_PostComment_tbComment').focus();return false}</script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHVyf9RpZLpA94PR0yylGVrHR75KduCbtx9Wbjv2jQEzXmeH0no0z7nxVOXJo-onw_3WI2pcwKr3w2&amp;t=633740135971222506" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHysvkgwLW9yk7rUGj5M-geQRTOmI9WMPaWNcTLoZx7IpNZpIR4LFVQ0&amp;t=633065726440000000" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=Io4r5Qx-zmHysvkgwLW9yk7rUGj5M-geQRTOmI9WMPaVSfXvXlH0xWaTv3M_TRDPzVKh75E08VU1&amp;t=633065726440000000" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+        
+<table width="100%" class="Framework" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+			
+<div id="top">
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.blogjava.net/bacoo/">so true</a></h1>
+<div id="subtitle">心怀未来，开创未来！</div>
+</div>
+<div id="sub">
+<div class="BlogStats">随笔 - 94, 文章 - 0, 评论 - 21, 引用 - 0</div>
+</div>
+
+
+</td>
+	</tr>
+</table>
+<table width="100%" class="Framework" cellspacing="0" cellpadding="0">
+	<tr>
+		<td rowspan="2" class="LeftCell" >
+			<div id="leftmenu">
+				数据加载中……
+			</div>
+		</td>
+		<td class="MainCell">
+			<div id="main">
+				
+					
+	<div class="post">
+		<h2>
+			<a id="viewpost1_TitleUrl" href="http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html">C＋＋模板的特化</a>
+		</h2>
+		<div class="postbody">
+		对模板特化的理解：<br />
+特化整体上分为全特化和偏特化，这一点大家都没有什么置疑，但是细分它们各包括哪几种状态就很难界定了，而且很多权威的书上都不一致，管它呢，反正我们能会用各种特化就可以了。<br />
+下面就谈谈我个人对特化的划分和定义：<br />
+所谓特化，就是将泛型的东东搞得具体化一些，从字面上来解释，就是为已有的模板参数进行一些使其特殊化的指定，使得以前不受任何约束的模板参数，或受到特定的修饰（例如const或者摇身一变成为了指针之类的东东，甚至是经过别的模板类包装之后的模板类型）或完全被指定了下来。<br />
+<br />
+这是网上某个人的一些看法：<br />
+模板有两种特化，全特化和偏特化（局部特化）<br />
+模板函数只能全特化，没有偏特化（以后可能有）。<br />
+模板类是可以全特化和偏特化的。<br />
+全特化，就是模板中模板参数全被指定为确定的类型。<br />
+全特化也就是定义了一个全新的类型，全特化的类中的函数可以与模板类不一样。<br />
+偏特化，就是模板中的模板参数没有被全部确定，需要编译器在编译时进行确定。<br />
+在类型上加上const、&amp;、*（ cosnt int、int&amp;、int*、等等）并没有产生新的类型。只是类型被修饰了。模板在编译时，可以得到这些修饰信息。<br />
+<br />
+我个人也比较赞同这位仁兄的划分，全特化的标志就是产生出完全确定的东西，而不是还需要在编译期间去搜寻适合的特化实现，貌似在我的这种理解下，全特化的东西不论是类还是函数都有这样的特点，template &lt;&gt;然后是完全和模板类型没有一点关系的类实现或者函数定义，如果你要说，都完全确定下来了，那还搞什么模板呀，直接定义不就完事了？但是很多时候，我们既需要一个模板能应对各种情形，又需要它对于某个特定的类型（比如bool）有着特别的处理，这中情形下就是需要的了。<br />
+<br />
+既然刚才提到了全特化的标志，那么再说说其他一些共性的东西：<br />
+一个特化的模板类的标志：在定义类实现时加上了&lt;&gt;，比如class A&lt;int, T&gt;；而在定义一个模板类的时候，class A后面是没有&lt;&gt;的<br />
+全特化的标志：template &lt;&gt;然后是完全和模板类型没有一点关系的类实现或者函数定义<br />
+偏特化的标志：template &lt;typename T.....&gt;，就是说还剩下点东西，不像全特化&lt;&gt;整得那么彻底<br />
+<br />
+<br />
+首先推荐两个不错的网址：<br />
+http://www.cnblogs.com/cutepig/archive/2009/02/12/1389479.html<br />
+http://read.newbooks.com.cn/info/175115.html<br />
+<br />
+先说类模板的特化吧：<br />
+谁都没的说的全特化：<br />
+// general version<br />
+template&lt;class T&gt;<br />
+class Compare<br />
+{<br />
+public:<br />
+&nbsp;&nbsp;&nbsp; static bool IsEqual(const T&amp; lh, const T&amp; rh)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return lh == rh;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+};<br />
+<br />
+// specialize for float<br />
+template&lt;&gt;<br />
+class Compare&lt;float&gt;<br />
+{<br />
+public:<br />
+&nbsp;&nbsp;&nbsp; static bool IsEqual(const float&amp; lh, const float&amp; rh)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return abs(lh - rh) &lt; 10e-3;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+};<br />
+谁都没的说的偏特化：<br />
+template&lt;class T1, class T2&gt;<br />
+class A<br />
+{<br />
+}<br />
+<br />
+template&lt;class T1&gt;<br />
+class A&lt;T1, int&gt;<br />
+{<br />
+} <br />
+接下来的特化种类，到底划归到全特化还是偏特化，你自己看着办吧，不过大致就以下这些了，逃不出我们的手掌心了：<br />
+特化为引用，指针类型：<br />
+// specialize for T*<br />
+template&lt;class T&gt;<br />
+class Compare&lt;T*&gt;<br />
+{<br />
+public:<br />
+&nbsp;&nbsp;&nbsp; static bool IsEqual(const T* lh, const T* rh)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return Compare&lt;T&gt;::IsEqual(*lh, *rh);<br />
+&nbsp;&nbsp;&nbsp; }<br />
+};<br />
+特化为另外一个类模板：<br />
+// specialize for vector&lt;T&gt;<br />
+template&lt;class T&gt;<br />
+class Compare&lt;vector&lt;T&gt; &gt;<br />
+{<br />
+public:<br />
+&nbsp;&nbsp;&nbsp; static bool IsEqual(const vector&lt;T&gt;&amp; lh, const vector&lt;T&gt;&amp; rh)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(lh.size() != rh.size()) return false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(int i = 0; i &lt; lh.size(); ++i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(lh[i] != rh[i]) return false;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return true;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+};<br />
+混合型的：<br />
+template&lt;typename T1, typename T2&gt;<br />
+class X {...}; <br />
+template&lt;typename T&gt;<br />
+class X&lt;vector&lt;T&gt;, int&amp;&gt; {...}; //至于这里怎么都把T2搞没了变成只依赖一个模板参数T了的问题，大家别着急，我来告诉你个本质的东西，把我这么三点就可以了：1.模板参数个数一致；2.只要template &lt;...&gt;里面有东西不是&lt;&gt;，比如typename T，那么特化时就得用到T；3.不进行任何对模板参数的修饰也是不行的，比如template&lt;typename T&gt; class&lt;T&gt;{...}，至少你也得搞个const T之类的吧，呵呵。下面是我搞出来的几种特殊情况，它们都是正确的：<br />
+template&lt;typename T1, typename T2&gt;<br />
+class X {};<br />
+template&lt;typename T&gt;<br />
+class X&lt;vector&lt;T&gt;, T&amp;&gt; {};<br />
+template&lt;typename T&gt;<br />
+class X&lt;vector&lt;T&gt;, int&amp;&gt; {};<br />
+template&lt;&gt;<br />
+class X&lt;vector&lt;double&gt;, int&amp;&gt; {};<br />
+template&lt;typename T1, typename T2, typename T3&gt;<br />
+class X&lt;map&lt;T1,T2&gt;, T3&amp;&gt; {};<br />
+最后，还有一种超级牛X的，在tr1里面用以实现function的，以前我都没见过还可以这么玩的：<br />
+template&lt;typename T&gt;<br />
+class Y;//这是在声明一个类模板，既然声明了，以后就得按这个规矩来，在我们之前的编程经验里，可以重复声明一个东西没问题，但是为同一个东东重复声明出不同的东西就不可以了，因此你就不能再声明诸如template&lt;typename T1, typename T2&gt; class Y;这样的声明了；其实没有什么是不能声明的，既然我们可以声明变量，声明函数，声明类，那么当然我们也可以声明函数模板或者类模板的。<br />
+template&lt;typename R, typename P1, typename P2&gt;<br />
+class Y&lt;R (P1, P2)&gt; {...};//针对带两个参数，有返回值的函数类型特化，这里R (P1,P2)是定义了一种类型，该类型是一个隐式的函数指针，返回R，参数为P1和P2，这种对函数指针的定义完全等同于R (*)(P1,P2)，但是前一种定义很不常见，大家一般是不会注意到这个地方的。<br />
+<br />
+好了，说了不少关于类模板的特化了，下面再简要说说函数模板的特化：<br />
+函数模板的特化只能是全特化，而不能是偏特化，因此对于函数的特化就比较简单了，就是重新搞一遍就可以了，举几个例子如下：<br />
+template &lt;class T&gt;<br />
+T mymax(const T t1, const T t2)<br />
+{<br />
+&nbsp;&nbsp; return t1 &lt; t2 ? t2 : t1;<br />
+}<br />
+<br />
+template &lt;&gt;<br />
+const char* mymax(const char* t1,const char* t2)<br />
+{<br />
+&nbsp;&nbsp; return (strcmp(t1,t2) &lt; 0) ? t2 : t1;<br />
+}<br />
+<br />
+但是你不能这么搞：<br />
+template &lt;&gt;<br />
+bool mymax(const char* t1,const char* t2)<br />
+{<br />
+&nbsp;&nbsp; return (strcmp(t1,t2) &lt; 0);<br />
+}<br />
+其实对于mymax这个模板函数的定义而言，是用一个模板参数控制了三个地方，那么你在特化的时候，就也需要用一个特定的类型修改那三处相应的地方，如果你非要返回bool，那么你只能再定义一个函数模板了：<br />
+template &lt;class T&gt;<br />
+bool mymax(const T t1, const T t2)<br />
+{<br />
+&nbsp;&nbsp; return t1 &lt; t2 ? t2 : t1;<br />
+}<br />
+问题又来了，大家都知道函数重载是不关心返回值的，而只关心参数个数以及类型是否不一致，不一致就是重载，但是对于模板函数而言，这个规矩不再成立，因为任何与模板相关的东西都只是个架子放在那里而已，只要它符合语法规则就可以了，这些架子只是在有人要调用它们时才会发挥效力，也就是说，在编译的时候会为你搜寻合适的模板函数或者类，只要能找到就ok了，而且还要求是只找到一个，要是找到多个也不行，呵呵。<br />
+<br />
+其实，对于函数而言，虽然不能偏特化，即不能再在函数名字后面像模板类一样搞个&lt;typename T&gt;出来，但是可以通过函数的重载（注意这里说的重载是指的模板重载，而不是普通意义的函数重载）变通的实现偏特化：<br />
+template &lt;typename T1, typename T2&gt;<br />
+bool mymax(T1 t1, T2 t2)<br />
+{<br />
+&nbsp;&nbsp; return t1 &lt; t2 ? t2 : t1;<br />
+}<br />
+<br />
+template &lt;typename T1&gt;<br />
+bool mymax(T1 t1, int t2)<br />
+{<br />
+&nbsp;&nbsp; return t1 &lt; t2 ? t2 : t1;<br />
+}<br />
+<br />
+再谈谈函数模板参数的推导，大致有以下几种方法，但是不管怎么推导，都必须得保证在调用函数前能确定模板函数的各个模板参数的类型。<br />
+template &lt;typename T1, typename T2&gt;<br />
+T2 fun(T1 arg1, int arg2)<br />
+{<br />
+&nbsp;&nbsp;&nbsp; T2 t2;<br />
+&nbsp;&nbsp;&nbsp; return t2;<br />
+}<br />
+对于上面这种比较特殊的模板函数，你不能通过传递参数来自动得到所有模板参数的类型，因此你必须显示的指定T1和T2的类型，有两种方法可以实现此目的：<br />
+int (*pfun)(double,int) = fun;//借用函数指针定义<br />
+cout&lt;&lt;pfun(12.2,11)&lt;&lt;endl;<br />
+cout&lt;&lt;fun&lt;int,double&gt;(11, 3.2)&lt;&lt;endl;//直接指定类型<br />
+如果上述模板函数改为：<br />
+template &lt;typename T1, typename T2&gt;<br />
+T2 fun(T1 arg1, T2 arg2)<br />
+{<br />
+&nbsp;&nbsp;&nbsp; return arg2;<br />
+}<br />
+那么除了上述两种指定模板参数类型的方法之外，由于该模板函数参数的类型都可以借由其参数获得，因此我们省去指定模板参数这一步骤，而直接调用该模板函数：<br />
+fun(23, 2.3);<br />
+<br />
+最后，再谈谈非类型模板参数的问题，在《C++ Template》的第四章有介绍。<br />
+template&lt;typename T, int LEN&gt; struct stack {...};<br />
+template&lt;int margin&gt; int add(int x){return x+margin;}<br />
+上面两个例子分别对应了类和函数两种情形，有人说非类型的模板参数存在得毫无价值，实则不然，因为我们可以借由一个确定的数值来产生一种新的类型或者新的函数。对于上面两个例子，我觉得用非类型模板参数就很有意义，分别实现了让用户指定stack的大小以及指定需要增加的边际值，关于更多这方面的应用，大家可以在今后的开发过程中逐步发掘，此外，还很有必要强调一下对非类型模板参数的限制，不能使用浮点数、class类型的对象和内部链接对象（例如字符串常量"hello world!"）作为实参；它们可以是常整数（包括枚举值）或者指向外部链接对象的指针。<br />
+对外部链接对象的指针举个例子：<br />
+<p class="a">template &lt;char const* name&gt;</p>
+<p class="a">class MyClass {...};</p>
+<p class="a">extern char const s[] = &#8221;hello&#8221;;</p>
+<p class="a">MyClass&lt;s&gt; x;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //OK</p>
+<br />
+好了，模板这块内容我先将这么多。<br />
+<br />
+又从网上搞到点好东东，也贴在这里吧：<br />
+<p style="text-align: left;">类模板：</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 如果类模板中含有静态成员，那么用来实例化的每种类型，都会实例化这些静态成员。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 两个靠在一起的模板尖括号（ &gt; ) 之间需要留个空格，否则，编译器将会认为是在使用operator&gt;&gt;，导致语法错误。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 特化的实现可以和基本类模板的实现完全不同。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 类模板可以为模板参数定义缺省值，称为缺省模板实参，并且他们还可以引用之前的模板参数。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 成员函数模版不能被声明为虚函数。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>* 类模板不能和另外一个实体共享一个名称。</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">		</span>eg：<br />
+</p>
+<p style="text-align: left;">
+</p>
+<div class="cnblogs_code"><!--<br />
+<br />
+Code highlighting produced by Actipro CodeHighlighter (freeware)<br />
+http://www.CodeHighlighter.com/<br />
+<br />
+--><span style="color: #008080;">1</span>&nbsp;<span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">int</span><span style="color: #000000;">&nbsp;C;<br />
+</span><span style="color: #008080;">2</span>&nbsp;<span style="color: #000000;"><br />
+</span><span style="color: #008080;">3</span>&nbsp;<span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">class</span><span style="color: #000000;">&nbsp;C;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;">//</span><span style="color: #008000;">&nbsp;ok,&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;"><br />
+</span><span style="color: #008080;">4</span>&nbsp;<span style="color: #000000;"><br />
+</span><span style="color: #008080;">5</span>&nbsp;<span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">int</span><span style="color: #000000;">&nbsp;X;<br />
+</span><span style="color: #008080;">6</span>&nbsp;<span style="color: #000000;"><br />
+</span><span style="color: #008080;">7</span>&nbsp;<span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template&nbsp;</span><span style="color: #000000;">&lt;</span><span style="color: #000000;">&nbsp;typename&nbsp;T&nbsp;</span><span style="color: #000000;">&gt;</span><span style="color: #000000;"><br />
+</span><span style="color: #008080;">8</span>&nbsp;<span style="color: #000000;"><br />
+</span><span style="color: #008080;">9</span>&nbsp;<span style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000ff;">class</span><span style="color: #000000;">&nbsp;X;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #008000;">//</span><span style="color: #008000;">&nbsp;error.&nbsp;和变量X冲突</span></div>
+<p style="text-align: left;">非类型模板参数：</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>在编译期或链接期可以确定的常值。这种参数的类型必须是下面的一种：</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">		</span>a&gt; 整型或枚举</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">		</span>b&gt; 指针类型( 普通对象的指针，函数指针，成员指针 )</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">		</span>c&gt; 引用类型( 指向对象或者指向函数的引用 )</p>
+<p style="text-align: left;"><span class="Apple-tab-span" style="white-space: pre;">	</span>其他的类型目前都不允许作为非类型模板参数使用</p>
+<br />
+
+		</div>
+		<p class="postfoot">
+			posted on 2009-06-21 21:03 <a href='http://www.blogjava.net/bacoo/'>so true</a> 阅读(262) <a href='#Post'>评论(1)</a> &nbsp;<a href="http://www.blogjava.net/bacoo/admin/EditPosts.aspx?postid=283480">编辑</a> &nbsp;<a href="http://www.blogjava.net/bacoo/AddToFavorite.aspx?id=283480">收藏</a>  所属分类: <a href='http://www.blogjava.net/bacoo/category/28261.html'>C&C++</a> 
+		</p>
+	</div>
+	<img src ="http://www.blogjava.net/bacoo/aggbug/283480.html?webview=1" width = "1" height = "1" />
+	
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html"
+dc:identifier="http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html"
+dc:title="C＋＋模板的特化"
+trackback:ping="http://www.blogjava.net/bacoo/services/trackbacks/283480.aspx" />
+</rdf:RDF>
+-->
+
+	<script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('AjaxHolder$scriptmanager1', document.getElementById('Form1'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls(['tAjaxHolder$UpdatePanel1'], [], [], 90);
+//]]>
+</script>
+
+<div id="AjaxHolder_UpdatePanel1">
+	    
+    <a name="pagedcomment"></a>
+<a name = "评论" />
+<div id="comments">
+<h3>评论</h3>
+	
+	
+			<div class="post">
+				<h2>
+					<a title="permalink: re: C＋＋模板的特化[未登录]" href="/bacoo/archive/2009/06/21/283480.html#283503">#</a>&nbsp;<a name="283503"></a>re: C＋＋模板的特化[未登录]<a name="Post"></a>&nbsp;&nbsp;<a onclick="return SetReplyAuhor(&quot;tom&quot;)" href="/bacoo/archive/2009/06/21/283480.html#post">回复</a>&nbsp;&nbsp;<a title="查看该作者发表过的评论" href="http://www.blogjava.net/comment?author=tom" target="_blank">更多评论</a>
+					<a id="AjaxHolder_Comments_CommentList_ctl00_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl00$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl00_EditLink"></a>
+				</h2>
+				牛人！！！拜读~~~
+				<div class="postfoot">
+					2009-06-22 09:44 | <a id="AjaxHolder_Comments_CommentList_ctl00_NameLink" target="_blank">tom</a>
+				</div>
+			</div>
+		
+</div>
+
+<style>
+td { font-size: 12px }
+.commentTextBox 
+{ 
+    font-family : Verdana; 
+    font-size: 13px;
+ }
+</style>
+<!--Beging Temp Save-->
+<STYLE>.userData { BEHAVIOR: url(#default#userdata) }
+	</STYLE>
+<DIV class="userData" id="CommentsPersistDiv"></DIV>
+
+<script type="text/javascript">
+function pageLoad()
+{
+    Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(handleInitializeRequest);
+    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(handleEndRequest);
+}
+
+function handleInitializeRequest(sender, args)
+{
+    var prm = Sys.WebForms.PageRequestManager.getInstance();
+    var eid = args.get_postBackElement().id;
+    if (eid.indexOf("DeleteLink")>0) 
+    {
+       args.get_postBackElement().innerHTML = "<font color='red'>正在删除...</font>";         
+    }    
+    else if (eid.indexOf("btnSubmit")>0) 
+    {
+       document.getElementById("AjaxHolder_PostComment_ltSubmitMsg").innerHTML="正在提交...";
+       document.getElementById("AjaxHolder_PostComment_btnSubmit").disabled = true;       
+    }   
+    else if(eid.indexOf("refreshList")>0)
+    {
+        document.getElementById("AjaxHolder_PostComment_refreshList").innerHTML="<font color='red'>正在刷新...</font>";
+    }
+   
+}	
+
+function TempSave(ElementID)
+{
+	try
+	{
+	CommentsPersistDiv.setAttribute("CommentContent",document.getElementById(ElementID).value);
+	CommentsPersistDiv.save("CommentXMLStore");
+	}
+	catch(ex)
+	{
+	}
+	
+}
+function Restore(ElementID)
+{
+	CommentsPersistDiv.load("CommentXMLStore");
+	document.getElementById(ElementID).value=CommentsPersistDiv.getAttribute("CommentContent");
+}	
+			
+			
+</script>
+<!--Ene TempSave-->
+<div id="divRefreshComments" style="text-align:right;margin-right:10px;margin-bottom:5px;font-size:12px"><a href="http://news.cnblogs.com/">IT新闻</a>&nbsp;&nbsp;<a href="/RequireRegister.aspx">新用户注册</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_refreshList" href="javascript:__doPostBack('AjaxHolder$PostComment$refreshList','')">刷新评论列表</a>&nbsp;&nbsp;</div>
+<div class="commentform">
+<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
+</script>
+<script type="text/javascript">
+try{
+  GS_googleAddAdSenseService("ca-pub-4210569241504288");
+  GS_googleEnableAllServices();
+  } catch (e) { }
+</script>
+<script type="text/javascript">
+try{
+  GA_googleAddSlot("ca-pub-4210569241504288", "blogjava_commentbox_up");
+  GA_googleAddSlot("ca-pub-4210569241504288", "blogjava_blogpost_bottom");
+  GA_googleAddSlot("ca-pub-4210569241504288", "blogjava_blogpost_bottom1");
+  } catch (e) { }
+</script>
+<script type="text/javascript">
+try{
+  GA_googleFetchAds();
+  } catch (e) { }
+</script>
+<span id="AjaxHolder_PostComment_ltSubmitMsg" style="color:Red;"></span>
+<br />
+<a name="Feedback"></a>
+	<TABLE cellSpacing="1" cellPadding="1" border="0">
+		<TR>
+			<TD colSpan="3" height="5"></TD>
+		</TR>
+		<TR>
+			<TD width="75"></TD>
+			<TD></TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TD colSpan="2">
+			<a href="http://news.cnblogs.com" target="_blank">IT新闻</a>&nbsp;&nbsp;<a href="http://job.cnblogs.com" target="_blank">程序员招聘</a>
+			</TD>
+		</TR>
+		<TR>
+			<TD width="55">标题</TD>
+			<TD><input name="AjaxHolder$PostComment$tbTitle" type="text" value="re: C＋＋模板的特化" id="AjaxHolder_PostComment_tbTitle" class="commenttb" style="width:320" /></TD>
+			<TD><span id="AjaxHolder_PostComment_RequiredFieldValidator1" style="color:Red;visibility:hidden;">请输入标题</span></TD>
+		</TR>
+		<TR>
+			<TD>姓名</TD>
+			<TD><input name="AjaxHolder$PostComment$tbName" type="text" id="AjaxHolder_PostComment_tbName" class="commenttb" style="width:320" /></TD>
+			<TD><span id="AjaxHolder_PostComment_RequiredFieldValidator2" style="color:Red;visibility:hidden;">请输入你的姓名</span></TD>
+		</TR>
+		<TR>
+			<TD>主页</TD>
+			<TD><input name="AjaxHolder$PostComment$tbUrl" type="text" id="AjaxHolder_PostComment_tbUrl" class="commenttb" style="width:320" /></TD>
+			<TD><FONT face="宋体"></FONT></TD>
+		</TR>
+		<tr>
+			<td align="left" colSpan="3">
+				<table id="AjaxHolder_PostComment_tbCaptchaImage" class="CommentForm" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td colspan="3">
+							<span id="AjaxHolder_PostComment_Requiredfieldvalidator4" style="color:Red;display:none;">请输入验证码</span>
+							<span id="AjaxHolder_PostComment_lblImage" style="color:Red;font-weight:bold;"></span>
+						</td>
+		</tr>
+		<tr>
+			<td width="78">验证码</td>
+			<td><input name="AjaxHolder$PostComment$CodeNumberTextBox" type="text" id="AjaxHolder_PostComment_CodeNumberTextBox" />*&nbsp;&nbsp;<img src="http://www.blogjava.net/Modules/CaptchaImage/JpegImage.aspx?cacheid=20091112091138"/></td>
+			<td align="left"></td>
+		</tr>
+	</table>
+	
+			</td>
+		</tr>
+		<TR>
+			<TD colSpan="3">内容(请不要发表任何与政治相关的内容)
+				<span id="AjaxHolder_PostComment_RequiredFieldValidator3" style="color:Red;visibility:hidden;">请输入评论内容</span><BR>
+				<textarea name="AjaxHolder$PostComment$tbComment" rows="10" cols="50" id="AjaxHolder_PostComment_tbComment" class="commentTextBox" onkeydown="ctlent(event,'AjaxHolder_PostComment_tbComment')" style="Width:480;Height:220"></textarea></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3">
+		<span id="AjaxHolder_PostComment_Message" style="color:Red;"></span>
+		</td>
+		<TR>
+			<TD colSpan="3"><input id="AjaxHolder_PostComment_chkRemember" type="checkbox" name="AjaxHolder$PostComment$chkRemember" checked="checked" tabindex="-1" /><label for="AjaxHolder_PostComment_chkRemember">Remember Me?</label></TD>
+		</TR>
+		<TR>
+			<TD height="23"><input type="submit" name="AjaxHolder$PostComment$btnSubmit" value="提交" onclick="TempSave('AjaxHolder_PostComment_tbComment');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;AjaxHolder$PostComment$btnSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="AjaxHolder_PostComment_btnSubmit" class="commentButton" />
+				</TD>
+			<td colSpan="2" height="23">&nbsp;
+				<a id="AjaxHolder_PostComment_lnkLogin" href="http://www.blogjava.net/login.aspx?ReturnURL=http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html&amp;SourceURL=/bacoo/archive/2009/06/21/283480.html">登录</a>&nbsp;&nbsp;<!--<a id="AjaxHolder_PostComment_linkLoginComment" OnClick="if(document.getElementById('AjaxHolder_PostComment_tbComment').value != '') return confirm('未提交的评论内容将会丢失, 你真的要进入高级评论吗?');" href="http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html?login=1#Post">使用高级评论</a>&nbsp;&nbsp;<a href="http://www.blogjava.net/RequireRegister.aspx">新用户注册</a>&nbsp;&nbsp;<A href="#Top">返回页首</A>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_lbRestore" OnClick="Restore('AjaxHolder_PostComment_tbComment'); return false;" href="/bacoo/archive/2009/06/21/283480.html#Post">恢复上次提交</a>&nbsp;&nbsp;-->&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+		</TR>
+		<TR>
+			<TD colSpan="3"><label class="CtrlEnter">[使用Ctrl+Enter键可以直接提交]</label></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3"><a href="http://kb.cnblogs.com/zt/windows7/" target="_blank">Windows 7专题</a></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3">该文被作者在 2009-06-24 01:46 编辑过</TD>
+		</TR>
+		<!--
+		<TR>
+			<TD colSpan="3" height="5"></TD>
+		</TR>	
+		-->
+		<tr>
+		<td colspan="3">
+		<div id="itnews_block" style="line-height:180%;">IT新闻：<br/>· <a href="http://news.cnblogs.com/n/51087/" target="_blank">社交网站用户超过1亿</a><br/>· <a href="http://news.cnblogs.com/n/51086/" target="_blank">世界银行的公开数据已经出现在 Google 搜索结果中</a><br/>· <a href="http://news.cnblogs.com/n/51085/" target="_blank">Eric Schmidt 解释 Google 为什么收购 AdMob</a><br/>· <a href="http://news.cnblogs.com/n/51084/" target="_blank">微软承认Windows7的图形界面偷师苹果Mac OSX</a><br/>· <a href="http://news.cnblogs.com/n/51083/" target="_blank">假如Google进入我们的真实世界，会怎样？</a><br/>· <a href="http://news.cnblogs.com/n/51082/" target="_blank">11月安全公告发布不到一天 微软爆出0day远程攻击漏洞</a><br/>· <a href="http://news.cnblogs.com/n/51081/" target="_blank">保护下一代！Google 开始支持锁定安全搜索 Safe Search 选项</a><br/>· <a href="http://news.cnblogs.com/n/51079/" target="_blank">万蝶网将关闭：移动互联网模式盈利很困难</a><br/></div>
+		</td>
+		</tr>
+		<TR>
+			<TD colSpan="3">
+<br/>
+<script type="text/javascript">
+try{
+  GA_googleFillSlot("blogjava_blogpost_bottom");
+  } catch (e) { }
+</script>
+<br/>
+在知识库中查看：<br/><a href="http://kb.cnblogs.com/b/283480/">C＋＋模板的特化</a></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3" height="1">网站导航:<div id="blogsite">
+			<a href="http://www.cnblogs.com">博客园</a>&nbsp;&nbsp;
+			<a href="http://news.cnblogs.com">IT新闻</a>&nbsp;&nbsp;
+			<a href="http://home.cnblogs.com">个人主页</a>&nbsp;&nbsp;
+			<a href="http://www.cnweblog.com">博客生活</a>&nbsp;&nbsp;
+			<a href="http://www.cnitblog.com">IT博客网</a>&nbsp;&nbsp;
+			<a href="http://www.cppblog.com">C++博客</a>&nbsp;&nbsp;
+			<a href="http://space.cnblogs.com">博客园社区</a>
+			<a href="/bacoo/archive/2009/06/21/283480.html?opt=admin">管理</a>
+			</div>
+		</TD>
+		</TR>
+		<TR>
+			<TD colSpan="3" height="5">
+<div id="divRelativePosts">
+相关文章:
+	
+			<ul style="margin-top:0px;padding-left:0px;">
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl01_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/07/05/285588.html">构造函数与const的关系</a>
+			</li>
+		
+			<li style='list-style:none;display:none'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl02_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/06/21/283480.html">C＋＋模板的特化</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl03_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/06/13/281948.html">Linux下修改后的ps命令，很好很强大！</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl04_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/05/17/271132.html">make学习</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl05_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/12/15/246509.html">C++中临时变量的优化与产生！</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl06_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/11/19/241263.html">printf函数里面大有文章！</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl07_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/10/20/235556.html">KMP的改进算法之二</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl08_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/10/20/235549.html">KMP算法的改进之一</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl09_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/10/19/235350.html">线程&进程的同步</a>
+			</li>
+		
+			<li style='list-style:none;'>
+				<a id="AjaxHolder_PostComment_ctl07_RelativePostsList_ctl10_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/10/11/233772.html">根据先序和中序得到后序遍历的结果</a>
+			</li>
+		
+			</ul>
+		
+</div>
+</TD>
+		</TR>	
+		<TR>
+			<TD colSpan="3">&nbsp;</TD>
+		</TR>
+		<TR>
+			<TD colSpan="3" height="5"></TD>
+		</TR>
+		<TR>
+			<TD colSpan="3">
+				
+<br/>
+<br/>
+<iframe marginheight="0" marginwidth="0" frameborder="0" width="468" height="0" scrolling="no" src="/ad.htm" style="border:0px solid #666" allowTransparency="true"></iframe>
+<br/>
+
+
+</TD>
+		</TR>		
+	</TABLE>	
+</div>
+<div id="AjaxHolder_PostComment_ValidationSummary1" style="color:Red;display:none;">
+
+	</div>
+
+</div>
+
+				
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="FooterCell">
+			
+<p id="footer">
+	Powered by: 
+	<br />
+	
+	<a id="Footer1_Hyperlink3" NAME="Hyperlink1" href="http://www.blogjava.net/" style="font-family:Verdana;font-size:12px;">BlogJava</a>
+	<br />
+	Copyright &copy; so true
+</p>
+		</td>
+	</tr>
+</table>
+<div id="lefttemp" style="display:none">
+
+					
+<h3>导航</h3>
+<ul>
+	<li>
+		<a id="MyLinks1_HomeLink" href="http://www.blogjava.net/">BlogJava</a>
+	<li>
+		<a id="MyLinks1_MyHomeLink" href="http://www.blogjava.net/bacoo/">首页</a>
+	<li>
+		<a id="MyLinks1_NewPostLink" href="http://www.blogjava.net/bacoo/admin/EditPosts.aspx?opt=1">新随笔</a>
+	<li>
+		<a id="MyLinks1_ContactLink" accesskey="9" href="http://www.blogjava.net/bacoo/contact.aspx?id=1">联系</a>
+	<li>
+		<a id="MyLinks1_XMLLink" href="http://www.blogjava.net/bacoo/rss"><img src="http://www.blogjava.net/images/xml.gif" alt="RSS 2.0 Feed" style="border-width:0px;" /></a><a id="MyLinks1_Syndication" href="http://www.blogjava.net/bacoo/rss">聚合</a>
+	<li>
+		<a id="MyLinks1_Admin" href="http://www.blogjava.net/bacoo/admin/EditPosts.aspx">管理</a></li>
+
+</ul>
+
+					<table id="Calendar1_entryCal" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0" style="border-width:1px;border-style:solid;border-collapse:collapse;">
+	<tr><td colspan="7" style="background-color:Silver;"><table class="CalTitle" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">
+		<tr><td class="CalNextPrev" style="width:15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V3408')" style="color:Black" title="Go to the previous month">&lt;</a></td><td align="center" style="width:70%;">2009年6月</td><td class="CalNextPrev" align="right" style="width:15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V3469')" style="color:Black" title="Go to the next month">&gt;</a></td></tr>
+	</table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center" style="width:14%;">31</td><td align="center" style="width:14%;">1</td><td align="center" style="width:14%;">2</td><td align="center" style="width:14%;">3</td><td align="center" style="width:14%;">4</td><td align="center" style="width:14%;">5</td><td class="CalWeekendDay" align="center" style="width:14%;">6</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;">7</td><td align="center" style="width:14%;">8</td><td align="center" style="width:14%;">9</td><td align="center" style="width:14%;">10</td><td align="center" style="width:14%;">11</td><td align="center" style="width:14%;">12</td><td class="CalWeekendDay" align="center" style="width:14%;"><a href="http://www.blogjava.net/bacoo/archive/2009/06/13.html"><u>13</u></a></td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;">14</td><td align="center" style="width:14%;">15</td><td align="center" style="width:14%;"><a href="http://www.blogjava.net/bacoo/archive/2009/06/16.html"><u>16</u></a></td><td align="center" style="width:14%;">17</td><td align="center" style="width:14%;">18</td><td align="center" style="width:14%;">19</td><td class="CalWeekendDay" align="center" style="width:14%;">20</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;"><a href="http://www.blogjava.net/bacoo/archive/2009/06/21.html"><u>21</u></a></td><td align="center" style="width:14%;">22</td><td align="center" style="width:14%;">23</td><td align="center" style="width:14%;">24</td><td align="center" style="width:14%;">25</td><td align="center" style="width:14%;">26</td><td class="CalWeekendDay" align="center" style="width:14%;">27</td></tr><tr><td class="CalWeekendDay" align="center" style="width:14%;">28</td><td align="center" style="width:14%;">29</td><td align="center" style="width:14%;">30</td><td class="CalOtherMonthDay" align="center" style="width:14%;">1</td><td class="CalOtherMonthDay" align="center" style="width:14%;">2</td><td class="CalOtherMonthDay" align="center" style="width:14%;">3</td><td class="CalOtherMonthDay" align="center" style="width:14%;">4</td></tr><tr><td class="CalOtherMonthDay" align="center" style="width:14%;">5</td><td class="CalOtherMonthDay" align="center" style="width:14%;">6</td><td class="CalOtherMonthDay" align="center" style="width:14%;">7</td><td class="CalOtherMonthDay" align="center" style="width:14%;">8</td><td class="CalOtherMonthDay" align="center" style="width:14%;">9</td><td class="CalOtherMonthDay" align="center" style="width:14%;">10</td><td class="CalOtherMonthDay" align="center" style="width:14%;">11</td></tr>
+</table>
+
+					
+					
+<h3>常用链接</h3>
+<ul>
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl01_lnkLinkItem" href="http://www.blogjava.net/bacoo/MyPosts.html">我的随笔</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl02_lnkLinkItem" href="http://www.blogjava.net/bacoo/MyComments.html">我的评论</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl03_lnkLinkItem" href="http://www.blogjava.net/bacoo/OtherPosts.html">我的参与</a></li>
+	
+		<li><a id="SingleColumn1_ctl00_repeaterLinks_ctl04_lnkLinkItem" href="http://www.blogjava.net/bacoo/RecentComments.html">最新评论</a></li>
+	</ul>
+<H3>留言簿<span style="font-size:11px;font-weight:normal;">(6)</span></H3>
+<ul>
+	<li>
+		<a id="SingleColumn1_ctl01_lnkMessages" href="http://www.blogjava.net/bacoo/Contact.aspx?id=1">给我留言</a>
+	<li>
+		<a id="SingleColumn1_ctl01_lnkPublicMsgView" href="http://www.blogjava.net/bacoo/default.aspx?opt=msg">查看公开留言</a>
+	<li>
+		<a id="SingleColumn1_ctl01_lnkPrivateMsgView" href="http://www.blogjava.net/bacoo/admin/MyMessages.aspx">查看私人留言</a>
+	</li>
+</ul>
+
+		<h3>随笔分类<span style="font-size:11px;font-weight:normal">(94)</span></h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_Link" href="http://www.blogjava.net/bacoo/category/29645.html">.NET(5)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_RssLink" title="Subscribe to .NET(5)" href="http://www.blogjava.net/bacoo/category/29645.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_Link" href="http://www.blogjava.net/bacoo/category/28261.html">C&C++(33)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl02_RssLink" title="Subscribe to C&amp;C++(33)" href="http://www.blogjava.net/bacoo/category/28261.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_Link" href="http://www.blogjava.net/bacoo/category/28260.html">Entertainment(1)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl03_RssLink" title="Subscribe to Entertainment(1)" href="http://www.blogjava.net/bacoo/category/28260.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_Link" href="http://www.blogjava.net/bacoo/category/35981.html">Hadoop(2)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl04_RssLink" title="Subscribe to Hadoop(2)" href="http://www.blogjava.net/bacoo/category/35981.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl05_Link" href="http://www.blogjava.net/bacoo/category/28259.html">Java(33)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl05_RssLink" title="Subscribe to Java(33)" href="http://www.blogjava.net/bacoo/category/28259.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl06_Link" href="http://www.blogjava.net/bacoo/category/40267.html">Linux(9)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl06_RssLink" title="Subscribe to Linux(9)" href="http://www.blogjava.net/bacoo/category/40267.html/rss">(rss)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl07_Link" href="http://www.blogjava.net/bacoo/category/28262.html">Others(11)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl07_RssLink" title="Subscribe to Others(11)" href="http://www.blogjava.net/bacoo/category/28262.html/rss">(rss)</a></li>
+			
+				</ul>
+			
+	
+		<h3>随笔档案<span style="font-size:11px;font-weight:normal">(94)</span></h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl01_Link" href="http://www.blogjava.net/bacoo/archive/2009/07.html">2009年7月 (2)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl02_Link" href="http://www.blogjava.net/bacoo/archive/2009/06.html">2009年6月 (4)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl03_Link" href="http://www.blogjava.net/bacoo/archive/2009/05.html">2009年5月 (1)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl04_Link" href="http://www.blogjava.net/bacoo/archive/2009/04.html">2009年4月 (1)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl05_Link" href="http://www.blogjava.net/bacoo/archive/2009/03.html">2009年3月 (2)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl06_Link" href="http://www.blogjava.net/bacoo/archive/2009/02.html">2009年2月 (1)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl07_Link" href="http://www.blogjava.net/bacoo/archive/2009/01.html">2009年1月 (2)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl08_Link" href="http://www.blogjava.net/bacoo/archive/2008/12.html">2008年12月 (2)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl09_Link" href="http://www.blogjava.net/bacoo/archive/2008/11.html">2008年11月 (4)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl10_Link" href="http://www.blogjava.net/bacoo/archive/2008/10.html">2008年10月 (5)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl11_Link" href="http://www.blogjava.net/bacoo/archive/2008/09.html">2008年9月 (3)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl12_Link" href="http://www.blogjava.net/bacoo/archive/2008/08.html">2008年8月 (4)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl13_Link" href="http://www.blogjava.net/bacoo/archive/2008/07.html">2008年7月 (5)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl14_Link" href="http://www.blogjava.net/bacoo/archive/2008/04.html">2008年4月 (4)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl15_Link" href="http://www.blogjava.net/bacoo/archive/2008/03.html">2008年3月 (5)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl16_Link" href="http://www.blogjava.net/bacoo/archive/2008/02.html">2008年2月 (13)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl17_Link" href="http://www.blogjava.net/bacoo/archive/2008/01.html">2008年1月 (5)</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl18_Link" href="http://www.blogjava.net/bacoo/archive/2007/12.html">2007年12月 (31)</a></li>
+			
+				</ul>
+			
+	
+		<h3>牛人博客</h3>
+		
+				<ul>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_Link" href="http://www.blogjava.net/javagui/">JavaGUI</a></li>
+			
+				<li><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_Link" href="http://blog.csdn.net/unagain/">Unagain专栏</a></li>
+			
+				</ul>
+			
+	
+
+<script language="JavaScript">
+function SearchGoogle(key,evt,site)
+		{
+			if(evt.keyCode==13 || evt.keyCode==0 || evt.type =='click')
+			{
+				key.focus();
+				var keystr = encodeURIComponent(key.value);
+				url = "http://www.google.com/search?q=";
+				url = url+keystr;
+				url += "&ie=UTF-8&oe=GB2312&hl=zh-CN&domains="+site+"&sitesearch="+site;
+				window.location=url;
+				return false;
+			}
+		}
+</script>
+<H3>搜索</H3>
+<ul>
+	<li>
+		<li><input style="WIDTH: 130px" type="text" name="q" id="q" onkeydown="return SearchGoogle(document.getElementById('q'),event,'www.blogjava.net/bacoo')">&nbsp;<input onclick="SearchGoogle(document.getElementById('q'),event,'www.blogjava.net/bacoo')" type="button" value="搜索" name="sa">
+	</li>
+</ul>
+
+<h3>最新评论
+	<a id="SingleColumn1__76efc7_RSSHyperlink1" href="http://www.blogjava.net/bacoo/CommentsRSS.aspx"><img src="/images/xml.gif" style="border-width:0px;" /></a></h3>
+<div class="RecentComment">
+	
+			<ul>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__76efc7_CommentList_ctl01_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/08/06/222803.html#290094">1. re: extern和static释析</a>
+			</li>
+			<li style="word-break:break-all">
+				与extern相对的是static，大家都熟悉static代表静态的意思，却很少有人注意到它还有“内部”（即表示该变量只供本文件内部使用）的意思<br>thx
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--wyx</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__76efc7_CommentList_ctl02_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/06/22/283480.html#283503">2. re: C＋＋模板的特化[未登录]</a>
+			</li>
+			<li style="word-break:break-all">
+				牛人！！！拜读~~~
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--tom</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__76efc7_CommentList_ctl03_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/05/20/236077.html#271641">3. re: 找工作的经历！</a>
+			</li>
+			<li style="word-break:break-all">
+				朋友，你能说说日冲的笔试题吗？行吗？
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--张玲</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__76efc7_CommentList_ctl04_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/04/08/260144.html#264512">4. re: SSH端口转发的自我理解</a>
+			</li>
+			<li style="word-break:break-all">
+				楼主好强……佩服！！！
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--pig</li>
+		
+			<li style="word-break:break-all">
+				<a id="SingleColumn1__76efc7_CommentList_ctl05_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2009/01/02/249504.html#249569">5. re: 回首我的2008</a>
+			</li>
+			<li style="word-break:break-all">
+				缘分真的不易，愿好好珍惜^_^！
+			</li>
+			<li style="text-align:right;margin-right:4px">
+				--yball</li>
+		
+			</ul>
+		
+</div>
+
+<h3>阅读排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="word-break:break-all">
+		
+			<li>
+				<a id="SingleColumn1__35457bf_TopList_ctl01_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2007/12/30/171648.html">1. [改编]VB基本语法学习(3335)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__35457bf_TopList_ctl02_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2007/12/28/171345.html">2. 有关byte转char、String的一些说明(1825)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__35457bf_TopList_ctl03_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2007/12/21/169445.html">3. JTree学习笔记！(1212)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__35457bf_TopList_ctl04_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/03/11/185491.html">4. assert使用小结(1189)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__35457bf_TopList_ctl05_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/02/23/181625.html">5. MFC程序框架剖析(973)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+<h3>评论排行榜</h3>
+<div class="RecentComment">
+	
+			<ul style="word-break:break-all">
+		
+			<li>
+				<a id="SingleColumn1__3ac4b9c_TopList_ctl01_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/10/23/236077.html">1. 找工作的经历！(2)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3ac4b9c_TopList_ctl02_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/09/21/230208.html">2. 一个较为复杂的二路归并算法(2)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3ac4b9c_TopList_ctl03_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/02/23/181625.html">3. MFC程序框架剖析(2)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3ac4b9c_TopList_ctl04_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2007/12/30/171648.html">4. [改编]VB基本语法学习(2)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__3ac4b9c_TopList_ctl05_Hyperlink1" href="http://www.blogjava.net/bacoo/archive/2008/08/18/222802.html">5. C&C++编译过程理解(2)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+
+</div>
+
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("AjaxHolder_PostComment_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2"), document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var AjaxHolder_PostComment_RequiredFieldValidator1 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator1"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator1");
+AjaxHolder_PostComment_RequiredFieldValidator1.controltovalidate = "AjaxHolder_PostComment_tbTitle";
+AjaxHolder_PostComment_RequiredFieldValidator1.errormessage = "请输入标题";
+AjaxHolder_PostComment_RequiredFieldValidator1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator1.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator2 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator2"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2");
+AjaxHolder_PostComment_RequiredFieldValidator2.controltovalidate = "AjaxHolder_PostComment_tbName";
+AjaxHolder_PostComment_RequiredFieldValidator2.errormessage = "请输入你的姓名";
+AjaxHolder_PostComment_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator2.initialvalue = "";
+var AjaxHolder_PostComment_Requiredfieldvalidator4 = document.all ? document.all["AjaxHolder_PostComment_Requiredfieldvalidator4"] : document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4");
+AjaxHolder_PostComment_Requiredfieldvalidator4.controltovalidate = "AjaxHolder_PostComment_CodeNumberTextBox";
+AjaxHolder_PostComment_Requiredfieldvalidator4.errormessage = "请输入验证码";
+AjaxHolder_PostComment_Requiredfieldvalidator4.display = "Dynamic";
+AjaxHolder_PostComment_Requiredfieldvalidator4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_Requiredfieldvalidator4.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator3 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator3"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3");
+AjaxHolder_PostComment_RequiredFieldValidator3.controltovalidate = "AjaxHolder_PostComment_tbComment";
+AjaxHolder_PostComment_RequiredFieldValidator3.errormessage = "请输入评论内容";
+AjaxHolder_PostComment_RequiredFieldValidator3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator3.initialvalue = "";
+var AjaxHolder_PostComment_ValidationSummary1 = document.all ? document.all["AjaxHolder_PostComment_ValidationSummary1"] : document.getElementById("AjaxHolder_PostComment_ValidationSummary1");
+AjaxHolder_PostComment_ValidationSummary1.showmessagebox = "True";
+AjaxHolder_PostComment_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        
+document.getElementById('AjaxHolder_PostComment_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('AjaxHolder_PostComment_ValidationSummary1'));
+}
+Sys.Application.initialize();
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator1'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2'));
+}
+
+document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3'));
+}
+//]]>
+</script>
+</form>
+    <script type="text/javascript" src="/script/ShowHidden.js"></script>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-476124-3");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+</html>

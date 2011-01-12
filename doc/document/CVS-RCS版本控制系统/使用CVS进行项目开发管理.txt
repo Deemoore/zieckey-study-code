@@ -1,0 +1,285 @@
+CVS使用
+下面我们就讲一下CVS的使用和管理。
+
+1、在使用CVS之前，必须要指定CVS的根路径，不像RCS是工作在工作目录下的RCS目录下。指定
+CVS路径的方法有两种，一种是使用cvs-d 选项指定，如：
+cvs -d /home/kerberos/cvsroot 指定/home/kerberos/cvsroot为CVS仓库的路径。
+另外一种是使用CVSROOT环境变量指定(bash下)：
+export CVSROOT=/home/kerberos/cvsroot
+
+无论何种方式，每当重新开启一次终端会话，CVS仓库的路径都要重新设置，你可以把以上的
+后者加入到其实目录下的.bashrc文件中，这样开启一次终端会话后，不需要重新设置了（对
+于其他的环境变量的设置也是如此）。如果你的CVSROOT环境变量已经存在，可以使用cvs -d 
+选项来指定不同于CVSROOT所指定的CVS仓库。然后初始化CVS仓库，建立CVS维护所需要的一些
+文件和信息,CVS把这些信息存放在CVS仓库主目录的CVSROOT目录下。这些文件，除了modules ，
+其他文件都没有手动修改的必要，modules 文件定义了CVS的导出模块在CVS仓库中的位置，
+这一点在从CVS仓库中导出一个深层目录时是非常方便的。
+
+2、CVS初始化 
+cvs init
+
+3、导入项目
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+$cvs import -m "this is a cvstest project" cvstest v_0_0_1 start
+
+　　说明：import 是cvs的命令之一，表示向cvs仓库输入项目文件。 -m参数后面的字串是描述文本，随便写些有意义的东西，如果不加 -m 参数，那么cvs会自动运行一个编辑器（一般是vi，但是可以通过修改环境变量EDITOR来改成你喜欢用的编辑器。）让你输入信息，cvstest 是项目名称（实际上是仓库名，在CVS服务器上会存储在以这个名字命名的仓库里。）
+v_0_0_1是这个分支的总标记。没啥用（或曰不常用。）
+start 是每次 import 标识文件的输入层次的标记，没啥用。
+这样我们就建立了一个CVS仓库了。
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+初始化之后，我们使用cvs import来把需要进行版本维护的开发项目的目录结构导入到CVS仓
+库中，如下：
+建立好项目的目录结构以后，当前的testprj目录的结构是这样的：
+
+[kerberos@power zhyf]$ tree testprj
+testprj
+|-- admin
+|-- doc
+|-- include
+|-- libs
+|-- src
+|-- include
+|-- main
+
+7 directories, 0 files
+cvs import有三个参数：第一个是这个目录树在CVS仓库中的模块名称，第二个是发布者的一个
+标志，第三个是这个项目的版本标记（tag)。下面，我们把testprj导入到CVS仓库中，使用
+testprj 模块名称。
+[kerberos@power testprj]$cvs import testprj KERBEROS INITVER
+
+执行命令以后，CVS会调用CVSEDITOR指定的编辑器来让你输入日志，如果CVSEDITOR没有定义，
+缺省调用vi，可以使用export命令指定你自己喜欢使用的编辑器。输入日志以后，CVS把当前的
+目录结构导入CVS仓库中，并且使用testprj这个模块名称，在导出文件时，就可以使用
+cvs co testprj 来导出。
+"/tmp/cvscVxZnW" 5L, 242C written
+cvs import: Importing /home/zhyf/cvsroot/testprj/admin
+cvs import: Importing /home/zhyf/cvsroot/testprj/libs
+cvs import: Importing /home/zhyf/cvsroot/testprj/src
+cvs import: Importing /home/zhyf/cvsroot/testprj/src/include
+cvs import: Importing /home/zhyf/cvsroot/testprj/src/main
+cvs import: Importing /home/zhyf/cvsroot/testprj/doc
+cvs import: Importing /home/zhyf/cvsroot/testprj/include
+
+No conflicts created by this import
+
+看一下cvsroot目录中的结构是不是和testprj 的相同:
+
+
+../cvsroot
+|-- CVSROOT
+| |-- checkoutlist
+| |-- checkoutlist,v
+| ........................... CVS的仓库信息，省略..
+| ...........................
+|-- testprj
+|-- admin
+|-- doc
+|-- include
+|-- libs
+|-- src
+|-- include
+|-- main
+
+这里testprj 模块的结构和我们自己的testprj的目录结构是一样的。
+这样，当需要再次使用这些源代码时，就可以简单的使用cvs co模块名来导出目录树和文
+件了。导出任意具有写权限的目录下：
+[kerberos@power testprj]$ cd ..
+[kerberos@power zhyf]$ rm -rf testprj 删除testprj目录
+[kerberos@power zhyf]$ cvs co testprj 重新导出
+cvs checkout: Updating testprj
+cvs checkout: Updating testprj/admin
+cvs checkout: Updating testprj/doc
+cvs checkout: Updating testprj/include
+cvs checkout: Updating testprj/libs
+cvs checkout: Updating testprj/src
+cvs checkout: Updating testprj/src/include
+cvs checkout: Updating testprj/src/main
+[kerberos@power zhyf]$ tree testprj
+testprj
+|-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+|-- admin
+| `-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+|-- doc
+| `-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+|-- include
+| `-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+|-- libs
+| `-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+`-- src
+|-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+|-- include
+| `-- CVS
+| |-- Entries
+| |-- Repository
+| `-- Root
+`-- main
+`-- CVS
+|-- Entries
+|-- Repository
+`-- Root
+
+CVS在每个目录下面都建立了一个名叫CVS的目录，此外，目录的结构是一样的，事实上，
+CVS目录中存放的是一些关于目录结构在仓库中的信息，Entries中包含了这些目录中的子目录，
+Respository包含此目录在仓库中的相对位置，ROOT包含导出的模块主目录的绝对路径。
+
+cvs import命令只是在第一次把项目导入CVS仓库时才使用，以后如果再需要加入目录或者加入
+文件，则使用cvs add 命令加入，然后使用cvs commit提交之后，文件或者目录才会真正加入到
+CVS仓库中。我们可以把刚才编辑的hello.c文件拷贝到testprj/src/main/中，然后使用:
+[kerberos@power zhyf]$ cvs add testprj/src/main/hello.c
+cvs add: scheduling file `testprj/src/main/hello.c' for addition
+cvs add: use 'cvs commit' to add this file permanently
+
+使用cvs commit提交修改
+[kerberos@power zhyf]$ cvs commit
+cvs commit: Examining testprj
+cvs commit: Examining testprj/admin
+cvs commit: Examining testprj/doc
+cvs commit: Examining testprj/include
+cvs commit: Examining testprj/libs
+cvs commit: Examining testprj/src
+cvs commit: Examining testprj/src/include
+cvs commit: Examining testprj/src/main
+RCS file: /home/zhyf/cvsroot/testprj/src/main/hello.c,v
+done
+Checking in testprj/src/main/hello.c;
+/home/zhyf/cvsroot/testprj/src/main/hello.c,v <-- hello.c
+initial revision: 1.1
+
+使用RCS管理单个文件
+done
+
+testprj/src/main/hello.c
+
+由于CVS使用RCS管理单个文件，所以，前面我们讲的关于RCS的知识也可以用到这里，唯一不同的
+是命令之前要限定是cvs,比如cvs ci, cvs co, cvs diff, 或者在导出时使用 -r 选项指定导出的
+文件的版本。在源代码文件中，同样也可以使用RCS的关键字。
+对于非ASCII文件，如二进制可执行文件，位图等文件，我们不能直接使用cvs add
+加入到CVS仓库中，因为CVS只是基于ASCII代码比较文件的改变，所以，对于二进制文件，如果单
+纯使用cvs add 命令会破坏文件的完整，所在加入二进制文件时，要指定-kb参数。如果对已有文
+件进行了修改，使用cvs ci， cvs commit 来提交修改。
+另外一种情况是自己导出别人修改的文件，而不想覆盖自己所作的修改，可以使用cvs update命令，
+这个命令会自动比较CVS仓库中文件和当前自己文件的最后修改时间来导出最新的文件。
+
+在cvs update 和cvs ci 时，你对此的文件修改与他人发生冲突，CVS则提示你。CVS会在文件中使
+用“>>>>>>” 或者“<<<<<<<”标记标出冲突的地方，你可以与他人协商手动修改这一段代码。
+
+如果你想删除仓库中的一个文件，就要先删除本地导出的文件，然后使用cvs remove 文件名, 
+cvs commit来删除。事实上，CVS是不会真正删除这些文件的，如果你还想得到这些文件，只需要，
+使用cvs co -r 指定删除前的版本导出就可以了。
+
+有时候为了导出CVS仓库中的深层目录或者文件不得不输入很长的路径，这一点很讨厌，你可以导
+出CVS仓库中CVSROOT目录下，修改modules文件，定义这个目录或者文件为一个模块,提交修改后就
+可以直接使用cvs co 模块名 就可以导出了。
+
+CVS的版本控制功能主要体现在tag上。标记的作用如同是同时记录了做标记时所有文件的版本，需
+要的时候可以一次导出这些版本不一的文件，这常常是在项目的开发达到了一定的目标时使用的。
+cvs tag 命令的参数只有一个：标记名。例如：
+cvs tag RELEASE_1.0_BETA
+以后，如果需要这个版本，只需要使用cvs co -r RELEASE_1.0_BETA就可以导出这个版本了。或者
+使用cvs diff -r 来生成patch文件和使用cvs log -r 来查看这个版本的日志。
+
+标记的另外一个非常重要的作用是生成分支和合并分支。
+通常，我们的项目的开发到某一定的程度时，需要探索某一条开发途径是否有效，这个时候，我们
+需要做一个试验，但是这个试验的分支的开发不能影响项目的主开发分支，这样，我们就可以生成
+一个分支开发，主开发分支也可以继续进行，两者并不冲突，将来如果证明分支开发有效，还可以把
+分支合并到主开发分支中。建立一个CVS分支:
+cvs tag -b 分支标记名
+
+建立分支后，并不影响当前我们从CVS仓库中的文件，需要从CVS仓库中重新导出分支BRANCH_VER：
+cvs co -r 分支标记名 模块名 
+
+这样，我们可以进行分支开发，主分支的开发也可以照常进行，如果此分支开发成功，我们可以把它
+与主分支合并：
+cvs update -j 分支标记名
+cvs commit
+就可以把开发分支合并到主分支中去了。
+
+以上是本地CVS仓库的操作，如果使用网络CVS仓库，只需要使用CVS_RSH环境变量指定通信shell,另外
+设置CVS仓库为网络仓库就可以了。网络上的CVS仓库的服务器有两种：ext和dserver。对于后者在进行
+CVS操作时，需要先login验证用户。后者使用rlogin验证，不需要显式登陆。如：
+
+ext CVS 服务器使用
+export CVSROOT=:ext:kerberos@power:/home/repository 
+或者cvs -d :ext:kerberos@power:/home/repository
+cvs co platoon
+
+derser CVS 服务器使用
+export CVSROOT=:pserver:anonymous@anoncvs.kde.org:/home/kde
+cvs login 
+cvs co kdebase
+
+其他一些常用的cvs 命令选项
+-d 指定CVS仓库的路径
+-zn 使用gzip 压缩后传输,到本地后自动解压。n为压缩级别通常式 1～4，通常使用于服务器的传输速
+度较慢的情况下。
+-x 用于服务器的通信使用加密算法，只有在使用kerberos验证体系下有效
+
+CVS 的GUI工具
+几个常用的GUI工具:
+LinCVS(图1),是Xwindow 的CVS客户端工具,比较流行的一个,功能也很强大. 
+
+
+图1 LinCVS
+Cervisia (图2),一个基于KDE的CVS GUI工具,使用KDE的读者使用起来很容易上手. 
+
+
+图 2 cervisia 
+注:文章中的环境变量的设置是在bash下,其他shell使用不同的命令 
+
+
+
+登陆远程服务器：
+　　cvs -d :pserver:steven@192.168.211.72:/home/cvsroot login
+　　输入密码后,没有收到任何消息,即表示成功
+　　^_^ no news is a good news!!
+　　在客户端,设置环境变量如下:
+　　export CVS_RSH=ssh
+　　export CVSROOT=:pserver:username@ip:/home/cvsroot
+　　你可以
+　　echo $CVS_RSH
+　　ssh
+　　echo $CVSROOT
+　　:pserver:username@ip:/home/cvsroot
+　　这样你在客户端就可以直接输入 cvs login登陆了
+　　其它操作都可以直接cvs command 了
+　　
+　　
+　　
+　　
+　　
+　　
+　　
+　　
+　　
+　　
+错误解决：
+
+[root@localhost qt_cn]# cvs commit
+cvs [commit aborted]: 'root' is not allowed to commit files
+
+CVS缺省设置为不能用root用户commit，这个在其手册里写的很清楚，主要是为了维护用户修改记录。可以重新编译使其支持，不过不推荐。  
+  一般最好用普通用户登录，需要root权限时用su切换，这样可以避免因为疏忽造成的损失。　　
+  
+  Add "root" to a line of its own to the $CVSROOT/CVS/writers file. Create it if it doesn't exist. Read the "Cederqvist", the CVS manual and specifically read up on the part under "The repository".
+
+Håkan

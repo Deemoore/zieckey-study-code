@@ -1,0 +1,16 @@
+发信人: wks (cloverprince), 信区: Linux
+标  题: [求助]如何只改变一个程序的语言？
+发信站: 北邮人论坛 (Sat Feb 14 19:24:38 2009), 站内
+ 
+平时用中文。但是用glade的时候想切换到英文，否则控件的名字都不认识了。
+有没有办法仅仅让运行glade的时候是英文，而桌面其他部分都都保持中文呢？
+ 
+p.s. glade的执行文件是
+/usr/bin/glade-3
+或者$(which glade-3)
+-- 
+
+
+
+LANG=C glade
+或者LANG=en_US.UTF-8 glade 

@@ -1,0 +1,279 @@
+Qt教程一 —— 第七章：一个事物领导另一个
+
+原文：QT3.1的帮助文档
+翻译：zieckey (zieckey@yahoo.com.cn) 
+修改：zieckey (zieckey@yahoo.com.cn)
+
+这个例子显示了如何使用信号和槽来创建自定义窗口部件，和如何使用更加复杂的方式把它们连接起来。首先，源文件被我们分成几部分并放在放在t7目录下。
+
+    * t7/lcdrange.h包含LCDRange类定义。
+    * t7/lcdrange.cpp包含LCDRange类实现。
+    * t7/main.cpp包含MyWidget和main。 
+
+/****************************************************************
+**
+** Definition of LCDRange class, Qt tutorial 7
+**
+** lcdrange.h
+****************************************************************/
+
+#ifndef LCDRANGE_H
+#define LCDRANGE_H
+
+#include <qvbox.h>
+
+class QSlider;
+
+
+class LCDRange : public QVBox
+{
+    Q_OBJECT
+public:
+    LCDRange( QWidget *parent=0, const char *name=0 );
+
+    int value() const;
+
+public slots:
+    void setValue( int );
+
+signals:
+    void valueChanged( int );
+
+private:
+    QSlider *slider;
+};
+
+
+#endif // LCDRANGE_H
+
+
+
+
+
+/****************************************************************
+**
+** Implementation of LCDRange class, Qt tutorial 7
+**
+** lcdrange.cpp
+**
+****************************************************************/
+
+#include "lcdrange.h"
+
+#include <qslider.h>
+#include <qlcdnumber.h>
+
+LCDRange::LCDRange( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+    slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     lcd, SLOT(display(int)) );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     SIGNAL(valueChanged(int)) );
+}
+
+int LCDRange::value() const
+{
+    return slider->value();
+}
+
+void LCDRange::setValue( int value )
+{
+    slider->setValue( value );
+}
+
+
+
+/****************************************************************
+**
+** Qt tutorial 7
+**
+** main.cpp
+**
+****************************************************************/
+
+#include <qapplication.h>
+#include <qpushbutton.h>
+#include <qlcdnumber.h>
+#include <qfont.h>
+#include <qvbox.h>
+#include <qgrid.h>
+
+#include "lcdrange.h"
+
+
+class MyWidget : public QVBox
+{
+public:
+    MyWidget( QWidget *parent=0, const char *name=0 );
+};
+
+
+MyWidget::MyWidget( QWidget *parent, const char *name )
+        : QVBox( parent, name )
+{
+    QPushButton *quit = new QPushButton( "Quit", this, "quit" );
+    quit->setFont( QFont( "Times", 18, QFont::Bold ) );
+
+    connect( quit, SIGNAL(clicked()), qApp, SLOT(quit()) );
+
+    QGrid *grid = new QGrid( 4, this );
+
+    LCDRange *previous = 0;
+    for( int r = 0 ; r < 4 ; r++ ) {
+	for( int c = 0 ; c < 4 ; c++ ) {
+	    LCDRange* lr = new LCDRange( grid );
+	    if ( previous )
+		connect( lr, SIGNAL(valueChanged(int)),
+			 previous, SLOT(setValue(int)) );
+	    previous = lr;
+	}
+    }
+}
+
+
+int main( int argc, char **argv )
+{
+    QApplication a( argc, argv );
+
+    MyWidget w;
+    a.setMainWidget( &w );
+    w.show();
+    return a.exec();
+}
+
+
+
+
+
+
+
+
+
+
+一行一行地解说
+
+t7/lcdrange.h
+
+这个文件主要利用了第六章的main.cpp，在这里只是说明一下改变了哪些。
+
+    #ifndef LCDRANGE_H
+    #define LCDRANGE_H
+
+这里是一个经典的C语句，为了避免出现一个头文件被包含不止一次的情况。如果你没有使用过它，这是开发中的一个很好的习惯。#ifndef需要把这个头文件的全部都包含进去。
+
+    #include <qvbox.h>
+
+qvbox.h被包含了。LCDRange继承了QVBox，所以父类的头文件必须被包含。我们在前几章里面偷了一点懒，我们通过包含其它一些头文件，比如qpushbutton.h，这样就可以间接地包含qwidget.h。
+
+    class QSlider;
+
+这里是另外一个小技巧，但是没有前一个用的多。因为我们在类的界面中不需要QSlider，仅仅是在实现中，我们在头文件中使用一个前置的类声明，并且在.cpp文件中包含一个QSlider的头文件。
+
+这会使编译一个大的项目变得更快，因为当一个头文件改变的时候，很少的文件需要重新编译。它通常可以给大型编译加速两倍或两倍以上。
+
+    class LCDRange : public QVBox
+    {
+        Q_OBJECT
+    public:
+        LCDRange( QWidget *parent=0, const char *name=0 );
+
+注意Q_OBJECT。这个宏必须被包含到所有使用信号和/或槽的类。如果你很好奇，它定义了在元对象文件中实现的一些函数。
+
+        int value() const;
+    public slots:
+        void setValue( int );
+
+    signals:
+        void valueChanged( int );
+
+这三个成员函数构成了这个窗口部件和程序中其它组件的接口。直到现在，LCDRange根本没有一个真正的接口。
+
+value()是一个可以访问LCDRange的值的公共函数。setValue()是我们第一个自定义槽，并且valueChanged()是我们第一个自定义信号。
+
+槽必须按通常的方式实现（记住槽也是一个C++成员函数）。信号可以在元对象文件中自动实现，所以我们不用自己动手。信号也遵守C++函数的保护法则（比如，一个类只能发射它自己定义的或者继承来的信号）。
+
+当LCDRange的值发生变化时，valueChanged( int )信号就会被使用——你从这个名字中就可以猜到。
+
+t7/lcdrange.cpp
+
+这个文件主要利用了t6/main.cpp，这个代码来自LCDRange的构造函数。
+
+	QLCDNumber *lcd  = new QLCDNumber( 2, this, "lcd"  );
+
+lcd是一个QLCDNumber，一个可以按像LCD的方式显示数字的窗口部件。这个实例被设置为显示两个数字，并且是this的子窗口部件。它被命名为“lcd”。	
+	
+    slider = new QSlider( Horizontal, this, "slider" );
+    slider->setRange( 0, 99 );
+    slider->setValue( 0 );
+    
+QSlider是一个经典的滑块，用户可以通过在拖动一个东西在一定范围内调节一个整数数值的方式来使用这个窗口部件。这里我们创建了一个水平的滑块，设置它的范围是0~99（包括0和99，参见QSlider::setRange()文档）并且它的初始值是0。
+    
+    connect( slider, SIGNAL(valueChanged(int)),
+	     lcd, SLOT(display(int)) );
+    connect( slider, SIGNAL(valueChanged(int)),
+	     SIGNAL(valueChanged(int)) );
+
+第一个connect和你在上一章中看到的一样。第二个是新的，它把滑块的valueChanged()信号和这个对象的valueChanged信号连接起来了。带有三个参数的connect()函数连接到this对象的信号或槽。
+
+是的，这是正确的。信号可以被连接到其它的信号。当第一个信号被发射时，第二个信号也被发射。
+
+让我们来看看当用户操作这个滑块的时候都发生了些什么。滑块看到自己的值发生了改变，并发射了valueChanged()信号。这个信号被连接到QLCDNumber的display()槽和LCDRange的valueChanged()信号。
+
+所以，当这个信号被发射的时候，LCDRange发射它自己的valueChanged()信号。另外，QLCDNumber::display()被调用并显示新的数字。
+
+注意你并没有保证执行的任何顺序——LCDRange::valueChanged()也许在QLCDNumber::display()之前或者之后发射，这是完全任意的。
+
+    int LCDRange::value() const
+    {
+        return slider->value();
+    }
+
+value()的实现是直接了当的，它简单地返回滑块的值。
+
+    void LCDRange::setValue( int value )
+    {
+        slider->setValue( value );
+    }
+
+setValue()的实现是相当直接了当的。注意因为滑块和LCD数字是连接的，设置滑块的值就会自动的改变LCD数字的值。另外，如果滑块的值超过了合法范围，它会自动调节。
+
+t7/main.cpp
+
+        LCDRange *previous = 0;
+        for( int r = 0 ; r < 4 ; r++ ) {
+            for( int c = 0 ; c < 4 ; c++ ) {
+                LCDRange* lr = new LCDRange( grid );
+                if ( previous )
+                    connect( lr, SIGNAL(valueChanged(int)),
+                             previous, SLOT(setValue(int)) );
+                previous = lr;
+            }
+        }
+
+main.cpp中所有的部分都是上一章复制的，除了MyWidget的构造函数。当我们创建16个RCDRange对象时，我们现在使用信号/槽机制连接它们。每一个的valueChanged()信号都和前一个的setValue()槽连接起来了。因为当LCDRange的值发生改变的时候，发射一个valueChanged()信号（惊奇！），我们在这里创建了一个信号和槽的“链”。
+
+编译
+
+为一个多文件的应用程序创建一个makefile和为一个单文件的应用程序创建一个makefile是没有什么不同的。如果你已经把这个例子中的所有文件都保存到它们自己的目录中，你所要做的就是这些：
+
+qmake -project
+qmake
+
+第一个命令调用qmake来生成一个.pro（项目）文件。第二个命令根据这个项目文件来生成一个（系统相关的）makefile。你现在可以输入make（或者nmake，如果你使用Visual Studio）。
+
+行为
+
+在开始的时候，这个程序看起来和上一章里的一样。试着操作滑块到右下角……
+
+练习
+
+seven LCDs back to 50. 使用右下角的滑块并设置所有的LCD到50。然后设置通过点击这个滑块的左侧把它设置为40。现在，你可以通过把最后一个调到左边来把前七个LCD设置回50。
+
+点击右下角滑块的滑块的左边。发生了什么？为什么只是正确的行为？
+
+现在你可以进行第八章了。 

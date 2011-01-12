@@ -1,0 +1,960 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head id="Head"><title>epoll精髓 - Technologies Kingdom - 博客园</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta id="metaKeywords" name="keywords" content="epoll精髓"><meta name="description" content="在linux的网络编程中，很长的时间都在使用select来做事件触发。在linux新的内核中，有了一种替换它的机制，就是epoll。相比于select，epoll最大的好处在于它不会随着监听fd数目的增长而降低效率。因为在内核中的select实现中，它是采用轮询来处理的，轮询的fd数目越多，自然耗时"><link id="CommondCss" type="text/css" rel="stylesheet" href="epoll%E7%B2%BE%E9%AB%93_files/common.css"><link id="MainCss" type="text/css" rel="stylesheet" href="epoll%E7%B2%BE%E9%AB%93_files/style.css"><link id="CommondCss2" type="text/css" rel="stylesheet" href="epoll%E7%B2%BE%E9%AB%93_files/common2.css"><link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/OnlyXP/rss">
+    <script src="epoll%E7%B2%BE%E9%AB%93_files/common.js" type="text/javascript"></script>
+<style>
+    td
+    {
+        font-size: 12px;
+    }
+    .commentTextBox
+    {
+        font-family: Verdana;
+        font-size: 13px;
+    }
+    a.blue:visited, a.blue:active, a.blue:link, a.blue:hover
+    {
+        color: blue;
+    }
+</style><style>
+    .userData
+    {
+        behavior: url(#default#userdata);
+    }
+</style></head><body>
+    <form name="Form1" method="post" action="851222.html" onsubmit="javascript:return WebForm_OnSubmit();" id="Form1">
+<div>
+<input name="__EVENTTARGET" id="__EVENTTARGET" value="" type="hidden">
+<input name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" type="hidden">
+<input name="__VIEWSTATE" id="__VIEWSTATE" value="" type="hidden">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="epoll%E7%B2%BE%E9%AB%93_files/WebResource.js" type="text/javascript"></script>
+
+<script language="JavaScript">
+									function ctlent(evt,id)
+											{
+												if(evt.ctrlKey && evt.keyCode == 13)
+												{	
+													try
+													{
+														TempSave(id);
+													}
+													catch(ex)
+													{
+													}
+													finally
+													{
+													    __doPostBack('AjaxHolder$PostComment$btnSubmit','')
+													}
+												}
+		
+												}</script>
+												<script language="JavaScript">function SetReplyAuhor(author){document.getElementById('AjaxHolder_PostComment_tbComment').value+="@"+author+"\n";document.getElementById('AjaxHolder_PostComment_tbComment').focus();return false}</script>
+<script src="epoll%E7%B2%BE%E9%AB%93_files/ScriptResource_002.js" type="text/javascript"></script>
+<script src="epoll%E7%B2%BE%E9%AB%93_files/ScriptResource_003.js" type="text/javascript"></script>
+<script src="epoll%E7%B2%BE%E9%AB%93_files/ScriptResource.js" type="text/javascript"></script>
+<script src="epoll%E7%B2%BE%E9%AB%93_files/js.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+        
+<!--done-->
+<div id="header">
+	
+<!--done-->
+<div class="header">
+	<div class="headerText">
+		<a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/OnlyXP/">Technologies Kingdom</a><br>
+		无境界
+	</div>
+</div>
+
+</div>
+
+<div id="mytopmenu">
+	
+		<div id="mylinks">
+<!--done-->
+<a id="MyLinks1_HomeLink" class="menu" href="http://www.cnblogs.com/">博客园</a>&nbsp;&nbsp;
+<a id="MyLinks1_MyHomeLink" class="menu" href="http://www.cnblogs.com/OnlyXP/">首页</a>&nbsp;&nbsp;
+<a href="http://space.cnblogs.com/" class="menu">社区</a>&nbsp;&nbsp;
+<a id="MyLinks1_NewPostLink" class="menu" href="http://www.cnblogs.com/OnlyXP/admin/EditPosts.aspx?opt=1">新随笔</a>&nbsp;&nbsp;
+<a id="MyLinks1_ContactLink" class="menu" href="http://www.cnblogs.com/OnlyXP/contact.aspx?id=1">联系</a>&nbsp;&nbsp;
+<a id="MyLinks1_Syndication" class="menu" href="http://www.cnblogs.com/OnlyXP/rss">订阅</a><a id="MyLinks1_XMLLink" href="http://www.cnblogs.com/OnlyXP/rss"><img src="epoll%E7%B2%BE%E9%AB%93_files/xml.gif" alt="订阅" style="border-width: 0px;"></a>&nbsp;&nbsp;
+<a id="MyLinks1_Admin" class="menu" href="http://www.cnblogs.com/OnlyXP/admin/EditPosts.aspx">管理</a>
+</div>
+		<div id="mystats">
+<!--done-->
+随笔-35&nbsp;
+评论-16&nbsp;
+文章-8&nbsp;
+trackbacks-0
+</div>
+	
+</div>
+<div id="centercontent">
+	
+					<script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('AjaxHolder$scriptmanager1', document.getElementById('Form1'));
+Sys.WebForms.PageRequestManager.getInstance()._updateControls(['tAjaxHolder$UpdatePanel1'], [], [], 90);
+//]]>
+</script>
+
+<!--done-->
+<div class="post">
+	<div class="postTitle">
+		<a id="AjaxHolder_ctl01_TitleUrl" class="postTitle2" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html">epoll精髓</a>
+	</div>
+	在linux的网络编程中，很长的时间都在使用select来做事件触发。在linux新的内核中，有了一种替换它的机制，就是epoll。<br>相比于select，epoll最大的好处在于它不会随着监听fd数目的增长而降低效率。因为在内核中的select实现中，它是采用轮询来处理的，轮询的fd数目越多，自然耗时越多。并且，在linux/posix_types.h头文件有这样的声明：<br><span style="color: rgb(255, 1, 2);">#define __FD_SETSIZE&nbsp;&nbsp;&nbsp; 1024</span><br>表示select最多同时监听1024个fd，当然，可以通过修改头文件再重编译内核来扩大这个数目，但这似乎并不治本。<br><br>epoll的接口非常简单，一共就三个函数：<br><span style="color: rgb(255, 1, 2);">1. int epoll_create(int size);</span><br>创
+建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大。这个参数不同于select()中的第一个参数，给出最大监听的fd+1的值。
+需要注意的是，当创建好epoll句柄后，它就是会占用一个fd值，在linux下如果查看/proc/进程id/fd/，是能够看到这个fd的，所以在
+使用完epoll后，必须调用close()关闭，否则可能导致fd被耗尽。<br><br><br><span style="color: rgb(255, 1, 2);">2. int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);</span><br>epoll的事件注册函数，它不同与select()是在监听事件时告诉内核要监听什么类型的事件，而是在这里先注册要监听的事件类型。第一个参数是epoll_create()的返回值，第二个参数表示动作，用三个宏来表示：<br>EPOLL_CTL_ADD：注册新的fd到epfd中；<br>EPOLL_CTL_MOD：修改已经注册的fd的监听事件；<br>EPOLL_CTL_DEL：从epfd中删除一个fd；<br>第三个参数是需要监听的fd，第四个参数是告诉内核需要监听什么事，struct epoll_event结构如下：<br>struct epoll_event {<br>&nbsp; __uint32_t events;&nbsp; /* Epoll events */<br>&nbsp; epoll_data_t data;&nbsp; /* User data variable */<br>};<br><br>events可以是以下几个宏的集合：<br>EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；<br>EPOLLOUT：表示对应的文件描述符可以写；<br>EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；<br>EPOLLERR：表示对应的文件描述符发生错误；<br>EPOLLHUP：表示对应的文件描述符被挂断；<br>EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。<br>EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里<br><br><br><span style="color: rgb(255, 1, 2);">3. int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);</span><br>等
+待事件的产生，类似于select()调用。参数events用来从内核得到事件的集合，maxevents告之内核这个events有多大，这个
+maxevents的值不能大于创建epoll_create()时的size，参数timeout是超时时间（毫秒，0会立即返回，-1将不确定，也有
+说法说是永久阻塞）。该函数返回需要处理的事件数目，如返回0表示已超时。<br><br>--------------------------------------------------------------------------------------------<br><br>从man手册中，得到ET和LT的具体描述如下<br><br>EPOLL事件有两种模型：<br>Edge Triggered (ET)<br>Level Triggered (LT)<br><br>假如有这样一个例子：<br>1. 我们已经把一个用来从管道中读取数据的文件句柄(RFD)添加到epoll描述符<br>2. 这个时候从管道的另一端被写入了2KB的数据<br>3. 调用epoll_wait(2)，并且它会返回RFD，说明它已经准备好读取操作<br>4. 然后我们读取了1KB的数据<br>5. 调用epoll_wait(2)......<br><br>Edge Triggered 工作模式：<br>如
+果我们在第1步将RFD添加到epoll描述符的时候使用了EPOLLET标志，那么在第5步调用epoll_wait(2)之后将有可能会挂起，因为剩
+余的数据还存在于文件的输入缓冲区内，而且数据发出端还在等待一个针对已经发出数据的反馈信息。只有在监视的文件句柄上发生了某个事件的时候 ET
+工作模式才会汇报事件。因此在第5步的时候，调用者可能会放弃等待仍在存在于文件输入缓冲区内的剩余数据。在上面的例子中，会有一个事件产生在RFD句柄
+上，因为在第2步执行了一个写操作，然后，事件将会在第3步被销毁。因为第4步的读取操作没有读空文件输入缓冲区内的数据，因此我们在第5步调用
+epoll_wait(2)完成后，是否挂起是不确定的。epoll工作在ET模式的时候，必须使用非阻塞套接口，以避免由于一个文件句柄的阻塞读/阻塞
+写操作把处理多个文件描述符的任务饿死。最好以下面的方式调用ET模式的epoll接口，在后面会介绍避免可能的缺陷。<br>&nbsp;&nbsp; i&nbsp;&nbsp;&nbsp; 基于非阻塞文件句柄<br>&nbsp;&nbsp; ii&nbsp;&nbsp; 只有当read(2)或者write(2)返回EAGAIN时才需要挂起，等待。<span style="font-weight: bold; color: rgb(0, 1, 255);">但这并不是说每次read()时都需要循环读，直到读到产生一个EAGAIN才认为此次事件处理完成，当read()返回的读到的数据长度小于请求的数据长度时，就可以确定此时缓冲中已没有数据了，也就可以认为此事读事件已处理完成。</span><br><br>Level Triggered 工作模式<br>相
+反的，以LT方式调用epoll接口的时候，它就相当于一个速度比较快的poll(2)，并且无论后面的数据是否被使用，因此他们具有同样的职能。因为即
+使使用ET模式的epoll，在收到多个chunk的数据的时候仍然会产生多个事件。调用者可以设定EPOLLONESHOT标志，在
+epoll_wait(2)收到事件后epoll会与事件关联的文件句柄从epoll描述符中禁止掉。因此当EPOLLONESHOT设定后，使用带有
+EPOLL_CTL_MOD标志的epoll_ctl(2)处理文件句柄就成为调用者必须作的事情。<br><br><br>然后详细解释ET, LT:<br><br>LT(level
+triggered)是缺省的工作方式，并且同时支持block和no-block
+socket.在这种做法中，内核告诉你一个文件描述符是否就绪了，然后你可以对这个就绪的fd进行IO操作。如果你不作任何操作，内核还是会继续通知你
+的，所以，这种模式编程出错误可能性要小一点。传统的select/poll都是这种模型的代表．<br><br>ET(edge-triggered)
+是高速工作方式，只支持no-block
+socket。在这种模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不会再为那个文件描述
+符发送更多的就绪通知，直到你做了某些操作导致那个文件描述符不再为就绪状态了(比如，你在发送，接收或者接收请求，或者发送接收的数据少于一定量时导致
+了一个EWOULDBLOCK 错误）。但是请注意，如果一直不对这个fd作IO操作(从而导致它再次变成未就绪)，内核不会发送更多的通知(only
+once),<span style="font-weight: bold; font-style: italic;">不过在TCP协议中，ET模式的加速效用仍需要更多的benchmark确认（这句话不理解）。</span><br><br><span style="font-style: italic;">在
+许多测试中我们会看到如果没有大量的idle
+-connection或者dead-connection，epoll的效率并不会比select/poll高很多，但是当我们遇到大量的idle-
+connection(例如WAN环境中存在大量的慢速连接)，就会发现epoll的效率大大高于select/poll。（未测试）</span><br><br><br><br>另外，当使用epoll的ET模型来工作时，当产生了一个EPOLLIN事件后，<br><span style="color: rgb(255, 1, 2);">读数据的时候需要考虑的是当recv()返回的大小如果等于请求的大小，那么很有可能是缓冲区还有数据未读完，也意味着该次事件还没有处理完，所以还需要再次读取</span>：<br>while(rs)<br>{<br>&nbsp; buflen = recv(activeevents[i].data.fd, buf, sizeof(buf), 0);<br>&nbsp; if(buflen &lt; 0)<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; // 由于是非阻塞的模式,所以当errno为EAGAIN时,表示当前缓冲区已无数据可读<br>&nbsp;&nbsp;&nbsp; // 在这里就当作是该次事件已处理处.<br>&nbsp;&nbsp;&nbsp; if(errno == EAGAIN)<br>&nbsp;&nbsp;&nbsp;&nbsp; break;<br>&nbsp;&nbsp;&nbsp; else<br>&nbsp;&nbsp;&nbsp;&nbsp; return;<br>&nbsp;&nbsp; }<br>&nbsp;&nbsp; else if(buflen == 0)<br>&nbsp;&nbsp; {<br>&nbsp;&nbsp;&nbsp;&nbsp; // 这里表示对端的socket已正常关闭.<br>&nbsp;&nbsp; }<br><span style="color: rgb(255, 1, 2);">&nbsp;&nbsp; if(buflen == sizeof(buf)</span><br style="color: rgb(255, 1, 2);"><span style="color: rgb(255, 1, 2);">&nbsp;&nbsp;&nbsp;&nbsp; rs = 1;&nbsp;&nbsp; // 需要再次读取</span><br>&nbsp;&nbsp; else<br>&nbsp;&nbsp;&nbsp;&nbsp; rs = 0;<br>}<br><br><br><span style="font-weight: bold; color: rgb(255, 1, 2);">还
+有，假如发送端流量大于接收端的流量(意思是epoll所在的程序读比转发的socket要快),由于是非阻塞的socket,那么send()函数虽然
+返回,但实际缓冲区的数据并未真正发给接收端,这样不断的读和发，当缓冲区满后会产生EAGAIN错误(参考man
+send),同时,不理会这次请求发送的数据.所以,需要封装socket_send()的函数用来处理这种情况,该函数会尽量将数据写完再返回，返回-
+1表示出错。在socket_send()内部,当写缓冲已满(send()返回-1,且errno为EAGAIN),那么会等待后再重试.这种方式并不
+很完美,在理论上可能会长时间的阻塞在socket_send()内部,但暂没有更好的办法.</span><br><br>ssize_t socket_send(int sockfd, const char* buffer, size_t buflen)<br>{<br>&nbsp; ssize_t tmp;<br>&nbsp; size_t total = buflen;<br>&nbsp; const char *p = buffer;<br><br>&nbsp; while(1)<br>&nbsp; {<br>&nbsp;&nbsp;&nbsp; tmp = send(sockfd, p, total, 0);<br>&nbsp;&nbsp;&nbsp; if(tmp &lt; 0)<br>&nbsp;&nbsp;&nbsp; {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // 当send收到信号时,可以继续写,但这里返回-1.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(errno == EINTR)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return -1;<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // 当socket是非阻塞时,如返回此错误,表示写缓冲队列已满,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // 在这里做延时后再重试.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(errno == EAGAIN)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; usleep(1000);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; continue;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return -1;<br>&nbsp;&nbsp;&nbsp; }<br><br>&nbsp;&nbsp;&nbsp; if((size_t)tmp == total)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return buflen;<br><br>&nbsp;&nbsp;&nbsp; total -= tmp;<br>&nbsp;&nbsp;&nbsp; p += tmp;<br>&nbsp; }<br><br>&nbsp; return tmp;<br>}
+<p>&nbsp;</p>
+
+	<div class="postDesc">posted on 2007-08-10 20:36 <a href="http://www.cnblogs.com/OnlyXP/">彭帅</a> 阅读(3053) <a href="#Post">评论(4)</a> &nbsp;<a href="http://www.cnblogs.com/OnlyXP/admin/EditPosts.aspx?postid=851222">编辑</a> <a href="http://www.cnblogs.com/OnlyXP/AddToFavorite.aspx?id=851222">收藏</a> <a href="#" onclick="PutInWz();return false;">网摘</a>  </div>
+</div>
+<img src="epoll%E7%B2%BE%E9%AB%93_files/851222.jpg" height="1" width="1">
+
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+<rdf:Description
+rdf:about="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html"
+dc:identifier="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html"
+dc:title=""
+trackback:ping="http://www.cnblogs.com/OnlyXP/services/trackbacks/851222.aspx" />
+</rdf:RDF>
+-->
+
+
+<div id="AjaxHolder_UpdatePanel1">
+	    
+    <a name="pagedcomment"></a>
+<!--done-->
+<br>
+<b>评论:</b>
+<div class="feedbackNoItems"></div>
+	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: epoll精髓" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#1043277">#1楼</a>&nbsp;<a name="1043277"></a>
+				2008-01-17 17:36 | <a id="AjaxHolder_Comments_CommentList_ctl00_NameLink" target="_blank">123we [未注册用户]</a><br>
+				<div align="left">可以使用buffer来解决socket_send的问题，不用阻塞，只是send的buffer写满后，再检查EPOLLOUT，然后继续写剩余的buffer<br>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("123we")' href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">回复</a>&nbsp;&nbsp;<a onclick="GetQuote(1043277);return false" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">引用</a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl00_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl00$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl00_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: epoll精髓" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#1334095">#2楼</a>&nbsp;<a name="1334095"></a>
+				2008-10-07 20:49 | <a id="AjaxHolder_Comments_CommentList_ctl01_NameLink" target="_blank">jhorne [未注册用户]</a><br>
+				<div align="left">--引用--------------------------------------------------
+<br>123we: 可以使用buffer来解决socket_send的问题，不用阻塞，只是send的buffer写满后，再检查EPOLLOUT，然后继续写剩余的buffer
+<br>--------------------------------------------------------
+<br>这话是什么意思呢？ 非阻塞socket 调用一次send 然后等待EPOLLOUT事件
+<br>等到了即是发送完毕了 是这样吗
+<br>
+<br><br>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("jhorne")' href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">回复</a>&nbsp;&nbsp;<a onclick="GetQuote(1334095);return false" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">引用</a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl01_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl01$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl01_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: epoll精髓" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#1386313">#3楼</a>&nbsp;<a name="1386313"></a>
+				2008-11-30 01:26 | <a id="AjaxHolder_Comments_CommentList_ctl02_NameLink" target="_blank">qq273143236 [未注册用户]</a><br>
+				<div align="left">--引用--------------------------------------------------<br>jhorne: --引用--------------------------------------------------<br>123we: 可以使用buffer来解决socket_send的问题，不用阻塞，只是send的buffer写满后，再检查EPOLLOUT，然后继续写剩余的buffer<br>--------------------------------------------------------<br>这话是什么意思呢？ 非阻塞socket 调用一次send 然后等待EPOLLOUT事件<br>等到了即是发送完毕了 是这样吗<br><br><br>--------------------------------------------------------<br>应该是这样的：buffer写满后，当再有EPOLLOUT事件发生，就要等待(阻塞）了了 等buffer有空余空间时再处理EPOLLOUT事件<br>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("qq273143236")' href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">回复</a>&nbsp;&nbsp;<a onclick="GetQuote(1386313);return false" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">引用</a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl02_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl02$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl02_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+			<a title="permalink: re: epoll精髓" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#1386314">#4楼</a>&nbsp;<a name="1386314"></a><a name="Post"></a>
+				2008-11-30 01:30 | <a id="AjaxHolder_Comments_CommentList_ctl03_NameLink" target="_blank">qq273143235 [未注册用户]</a><br>
+				<div align="left">上面qq写错。。。 名贴留名 欢迎大家加我，一起交流网络技术<br>&nbsp;&nbsp;<a onclick='return SetReplyAuhor("qq273143235")' href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">回复</a>&nbsp;&nbsp;<a onclick="GetQuote(1386314);return false" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#post">引用</a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl03_DeleteLink" href="javascript:__doPostBack('AjaxHolder$Comments$CommentList$ctl03$DeleteLink','')"></a>&nbsp;&nbsp;<a id="AjaxHolder_Comments_CommentList_ctl03_EditLink"></a></div>
+			</div>
+			
+			
+		</div>
+	
+
+
+
+
+
+<!--Beging Temp Save-->
+
+<div class="userData" id="CommentsPersistDiv">
+</div>
+
+<script type="text/javascript">
+    function pageLoad() {
+        Sys.WebForms.PageRequestManager.getInstance().add_initializeRequest(handleInitializeRequest);
+        //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(handleEndRequest);
+    }
+
+    function handleInitializeRequest(sender, args) {
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        var eid = args.get_postBackElement().id;
+        /*if (eid.indexOf("DeleteLink")>0) 
+        {
+        args.get_postBackElement().innerHTML = "<font color='red'>正在删除...</font>";         
+        }    
+        else */
+        if (eid.indexOf("btnSubmit") > 0) {
+            document.getElementById("AjaxHolder_PostComment_ltSubmitMsg").innerHTML = "正在提交...";
+            document.getElementById("AjaxHolder_PostComment_btnSubmit").disabled = true;
+        }
+        else if (eid.indexOf("refreshList") > 0) {
+            document.getElementById("AjaxHolder_PostComment_refreshList").innerHTML = "<font color='red'>正在刷新...</font>";
+        }
+
+    }
+
+    function TempSave(ElementID) {
+        try {
+            CommentsPersistDiv.setAttribute("CommentContent", document.getElementById(ElementID).value);
+            CommentsPersistDiv.save("CommentXMLStore");
+        }
+        catch (ex) {
+        }
+
+    }
+    function Restore(ElementID) {
+        CommentsPersistDiv.load("CommentXMLStore");
+        document.getElementById(ElementID).value = CommentsPersistDiv.getAttribute("CommentContent");
+    }	
+			
+			
+</script>
+
+<!--Ene TempSave-->
+<div id="divRefreshComments" style="text-align: right; margin-right: 10px; margin-bottom: 5px; font-size: 12px;">
+    <a id="AjaxHolder_PostComment_refreshList" href="javascript:__doPostBack('AjaxHolder$PostComment$refreshList','')">刷新评论列表</a>&nbsp;&nbsp;</div>
+<div class="commentform">
+    
+    <span id="AjaxHolder_PostComment_ltSubmitMsg" style="color: Red;"></span>
+    <br>
+    <a name="Feedback"></a>
+    <div id="AjaxHolder_PostComment_panelAD">
+		
+        </div><table style="width: 600px;" border="0" cellpadding="1" cellspacing="1">
+        <tbody><tr>
+            <td colspan="3">
+                <div id="AjaxHolder_PostComment_panelADUper">
+		
+                    
+                
+	</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+        
+        <tr>
+            <td width="55">
+                姓名
+            </td>
+            <td colspan="2">
+                <input name="AjaxHolder$PostComment$tbName" id="AjaxHolder_PostComment_tbName" class="tb_comment_name" type="text"> <a href="http://passport.cnblogs.com/login.aspx?ReturnUrl=http%3a%2f%2fwww.cnblogs.com%2fOnlyXP%2farchive%2f2007%2f08%2f10%2f851222.html">[登录]</a> <a href="http://passport.cnblogs.com/register.aspx?ReturnUrl=http%3a%2f%2fwww.cnblogs.com%2fOnlyXP%2farchive%2f2007%2f08%2f10%2f851222.html%23Top">[注册]</a><span id="AjaxHolder_PostComment_RequiredFieldValidator2" style="color: Red; visibility: hidden;">请输入你的姓名</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                主页
+            </td>
+            <td>
+                <input name="AjaxHolder$PostComment$tbUrl" id="AjaxHolder_PostComment_tbUrl" class="commenttb" type="text">
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr id="AjaxHolder_PostComment_trEmail">
+		<td>
+                Email
+            </td>
+		<td colspan="2">
+                <input name="AjaxHolder$PostComment$tbEmail" id="AjaxHolder_PostComment_tbEmail" class="commenttb" type="text">(仅博主可见)<span id="AjaxHolder_PostComment_revContactMail" style="color: Red; visibility: hidden;">邮件地址无效</span>
+            </td>
+	</tr>
+	
+        <tr>
+            <td colspan="3" align="left">
+                <table id="AjaxHolder_PostComment_tbCaptchaImage" class="CommentForm" border="0" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<td colspan="3">
+                            <span id="AjaxHolder_PostComment_Requiredfieldvalidator4" style="color: Red; display: none;">请输入验证码</span>
+                            <span id="AjaxHolder_PostComment_lblImage" style="color: Red; font-weight: bold;"></span>
+                        </td>
+		</tr>
+		<tr>
+			<td>
+                            验证码
+                        </td>
+			<td colspan="2">
+                            <input name="AjaxHolder$PostComment$CodeNumberTextBox" id="AjaxHolder_PostComment_CodeNumberTextBox" style="width: 100px;" type="text">*&nbsp;&nbsp;<img src="epoll%E7%B2%BE%E9%AB%93_files/JpegImage.jpg" alt="验证码" align="absmiddle"><a id="AjaxHolder_PostComment_lkbChangeCode" href="javascript:__doPostBack('AjaxHolder$PostComment$lkbChangeCode','')">看不清,换一张</a>
+                            
+                        </td>
+		</tr>
+	</tbody></table>
+	
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: left;">
+                <div style="width: 600px;">
+                    <div class="divPostCommentBox">
+                        内容(请不要发表任何与政治相关的内容)
+                        <span id="AjaxHolder_PostComment_RequiredFieldValidator3" style="color: Red; visibility: hidden;">请输入评论内容</span><br>
+                        <textarea name="AjaxHolder$PostComment$tbComment" rows="2" cols="20" id="AjaxHolder_PostComment_tbComment" class="commentTextBox" onkeydown="ctlent(event,'AjaxHolder_PostComment_tbComment')"></textarea>
+                    </div>
+                    <div class="CommentBoxNav">
+                        
+                        <a href="http://www.cnblogs.com/" target="_blank" tabindex="-1">网站首页</a><br>
+                        <br>
+                        <a href="http://news.cnblogs.com/" target="_blank" tabindex="-1">新闻频道</a><br>
+                        <br>
+                        <a href="http://space.cnblogs.com/" target="_blank" tabindex="-1">社区</a><br>
+                        <br>
+                        <a href="http://space.cnblogs.com/group.htm" target="_blank" tabindex="-1">小组</a><br>
+                        <br>
+                        <a href="http://space.cnblogs.com/q" target="_blank" tabindex="-1">博问</a><br>
+                        <br>
+                        <a href="http://wz.cnblogs.com/" target="_blank" tabindex="-1">网摘</a><br>
+                        <br>
+                        <a href="http://job.cnblogs.com/" target="_blank" tabindex="-1">人才</a><br>
+                        <br>
+                        <a href="http://zzk.cnblogs.com/" target="_blank" tabindex="-1">找找看</a><br>
+                        <br>
+                        
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span id="AjaxHolder_PostComment_Message" style="color: Red;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input id="AjaxHolder_PostComment_chkRemember" name="AjaxHolder$PostComment$chkRemember" checked="checked" tabindex="-1" type="checkbox"><label for="AjaxHolder_PostComment_chkRemember">Remember Me?</label>
+            </td>
+        </tr>
+        <tr>
+            <td height="23">
+                <input name="AjaxHolder$PostComment$btnSubmit" value="提交" onclick="TempSave('AjaxHolder_PostComment_tbComment');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;AjaxHolder$PostComment$btnSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="AjaxHolder_PostComment_btnSubmit" class="commentButton" type="submit">
+                
+            </td>
+            <td colspan="2" height="23">
+                &nbsp;
+                <a id="AjaxHolder_PostComment_lnkLogin" href="http://passport.cnblogs.com/login.aspx?ReturnURL=http%3a%2f%2fwww.cnblogs.com%2fOnlyXP%2farchive%2f2007%2f08%2f10%2f851222.html">登录</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_linkLoginComment" onclick="if(document.getElementById('AjaxHolder_PostComment_tbComment').value != '') return confirm('未提交的评论内容将会丢失, 你真的要进入高级评论吗?');" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html?login=1#Post">使用高级评论</a>&nbsp;&nbsp;
+                    
+                    <a href="http://passport.cnblogs.com/register.aspx?ReturnUrl=http%3a%2f%2fwww.cnblogs.com%2fOnlyXP%2farchive%2f2007%2f08%2f10%2f851222.html%23Bottom">新用户注册</a>&nbsp;&nbsp;
+                    
+                    <a href="#Top">返回页首</a>&nbsp;&nbsp;<a id="AjaxHolder_PostComment_lbRestore" onclick="Restore('AjaxHolder_PostComment_tbComment'); return false;" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html#Post">恢复上次提交</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label class="CtrlEnter">
+                    [使用Ctrl+Enter键可以直接提交]</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <a href="http://zzk.cnblogs.com/" target="_blank">找找看</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+            <script type="text/javascript" src="epoll%E7%B2%BE%E9%AB%93_files/a.htm"></script>
+            <script type="text/JavaScript">show_a4_zone("S4");</script><a href="http://a4.yeshj.com/rd/23881/" target="_blank"><img src="epoll%E7%B2%BE%E9%AB%93_files/YU-D-S4P-23881_84.jpg" border="0"></a>
+            </td>
+        </tr>
+            <tr>
+                <td colspan="3" height="5">
+                    
+<script type="text/javascript"><!--
+google_ad_client = "pub-4210569241504288";
+google_ad_slot = "1397853083";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript" src="epoll%E7%B2%BE%E9%AB%93_files/show_ads.js">
+</script><script src="epoll%E7%B2%BE%E9%AB%93_files/test_domain.js"></script><script>window.google_render_ad();</script><ins style="border: medium none ; margin: 0pt; padding: 0pt; height: 60px; position: relative; visibility: visible; width: 468px;"><ins style="border: medium none ; margin: 0pt; padding: 0pt; display: block; height: 60px; position: relative; visibility: visible; width: 468px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" src="epoll%E7%B2%BE%E9%AB%93_files/ads.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" frameborder="0" height="60" scrolling="no" width="468"></iframe></ins></ins>
+<br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"> 
+                    <script type="text/JavaScript">show_a4_zone("S1");</script><a href="http://a4.yeshj.com/rd/23606/" target="_blank"><img src="epoll%E7%B2%BE%E9%AB%93_files/YU-D-S1P-23606_27.gif" border="0"></a>
+                    <br>
+                    <a href="http://www.china-pub.com/itbook/" target="_blank">China-pub 计算机图书网上专卖店！6.5万品种
+                        2-8折！</a><br>
+                    <a href="http://www.china-pub.com/static/zt_mb/zt_huodong_07_secondhandbook.asp?filename=jsj_hzold_081029" target="_blank">近千种 9-95 新二手计算图书火热销售中！</a><br>
+                </td>
+            </tr>
+        
+	
+        <tr>
+            <td colspan="3">
+                <br><div id="relative_posts"><b>相关文章:</b><br><script language="javascript" type="text/javascript" charset="utf-8" src="epoll%E7%B2%BE%E9%AB%93_files/RCS.htm"></script><a href="http://www.cnblogs.com/shiningrise/archive/2007/06/20/791130.html" target="_blank">C#精髓-- GridView 72般绝技 </a><br><a href="http://www.cnblogs.com/jiayong/archive/2007/05/31/766353.html" target="_blank">C#精髓</a></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div id="div_a4_ads">
+                    <br>
+                    <b>相关链接:</b>
+
+                    <script type="text/javascript">
+                        var title = document.title;
+                        document.write("<div id=\"a4_ads_output\">");
+                        document.write("<script type='text/javascript' src='http://a4.yeshj.com/adwords/EN017?num=7&title=" + encodeURIComponent(title) + "&tag=" + encodeURIComponent(GetMeta("keywords")) + "'></scri" + "pt>");
+                        document.write("</div>");
+                    </script><div id="a4_ads_output"><script type="text/javascript" src="epoll%E7%B2%BE%E9%AB%93_files/EN017.htm"></script><a href="http://a4.yeshj.com/rd?aid=17053&amp;zid=0&amp;url=http%3a%2f%2fspace.cnblogs.com%2fvote.aspx%3fid%3d1" target="_blank">欢迎参加博客园用户调查</a><br><a href="http://a4.yeshj.com/rd?aid=17657&amp;zid=0&amp;url=http%3a%2f%2ftr.hjenglish.com%2ftag%2f%25E6%25BC%2594%25E8%25AE%25B2%2f" target="_blank">从名人演讲中学习口译精髓</a><br><a href="http://a4.yeshj.com/rd?aid=18459&amp;zid=0&amp;url=http%3a%2f%2fwww.hjbook.net%2fproduct%2f3004" target="_blank">超越CSS:Web设计艺术精髓</a><br><a href="http://a4.yeshj.com/rd?aid=17183&amp;zid=0&amp;url=http%3a%2f%2fwww.hjbook.net%2fproduct%2f2801" target="_blank">博客园推荐:软件调试</a><br><a href="http://a4.yeshj.com/rd?aid=16232&amp;zid=0&amp;url=http%3a%2f%2fspace.cnblogs.com%2fgroup%2fPGgirl%2f" target="_blank">想知道博客园有多少美女程序员吗？</a><br><a href="http://a4.yeshj.com/rd?aid=15219&amp;zid=0&amp;url=http%3a%2f%2fwww.hjbook.net%2fproduct%2f2289" target="_blank">08年博客园纪念T恤珍藏版</a><br><a href="http://a4.yeshj.com/rd?aid=20853&amp;zid=0&amp;url=http%3a%2f%2fbook.cnblogs.com%2fzt%2f" target="_blank">博客园计算机图书专题</a><br></div>
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+
+<div class="itnews">
+<br><b>最新IT新闻:</b><br>
+
+            <a href="http://news.cnblogs.com/n/44967/" target="_blank">二代Kindle电子阅读器24日发货 贝佐斯:充满信心</a><br>
+	
+            <a href="http://news.cnblogs.com/n/44966/" target="_blank">从M1到RC:Windows 7发展历程全记录</a><br>
+	
+            <a href="http://news.cnblogs.com/n/44965/" target="_blank">浏览器之争:IE8能否受益Windows7?</a><br>
+	
+            <a href="http://news.cnblogs.com/n/44964/" target="_blank">苹果称即将在中国开第二家零售店</a><br>
+	
+            <a href="http://news.cnblogs.com/n/44961/" target="_blank">商业周刊：经济困境下更能造就成功企业</a><br>
+	
+</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" height="5">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" height="5">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" height="1">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                
+            </td>
+        </tr>
+    </tbody></table>
+</div>
+<div id="AjaxHolder_PostComment_ValidationSummary1" style="color: Red; display: none;">
+
+	</div>
+
+</div>
+<script language="javascript">
+
+function GetQuote(id)
+{
+    //www.cnblogs.com.ICommentService.GetCommentText(id,SetQuote);
+    BlogServer.WebService.AjaxWS.GetComment(id,SetQuote);
+}
+
+ function SetQuote(result)
+{
+    document.getElementById('AjaxHolder_PostComment_tbComment').value+= ("--引用--------------------------------------------------\n"+result+"\n--------------------------------------------------------\n");
+    document.getElementById('AjaxHolder_PostComment_tbComment').focus(); 
+}
+
+function Favorite(entryID,title,url,element)
+{
+    document.getElementById(element.id).innerHTML = "<span style='color:red'>正在收藏...</span>";
+    BlogServer.WebService.AjaxWS.AddToFavorites(entryID,title,url,OnFavoriteSuccess);
+    document.getElementById(element.id).removeAttribute("href");
+    document.getElementById(element.id).removeAttribute("onclick");
+}
+
+function OnFavoriteSuccess(result)
+{
+    if(result == "请先登录")
+    {
+        window.location.href = "../../../../../login.aspx?ReturnUrl=" + window.location.href;
+    }
+    else
+    {
+        var returnstr = result.split(",");
+        var id = "lnkFavorite"+returnstr[0];
+        document.getElementById(id).innerHTML = "<span style='color:red'>" + returnstr[1] + "</span>";
+    }
+}
+
+function DelComment(id,element)
+{
+    if(confirm("确认要删除该评论吗?"))
+    {
+        document.getElementById(element.id).innerHTML = "<span style='color:red'>正在删除...</span>";
+        BlogServer.WebService.AjaxWS.DelComment(id,del_comment_callback);
+    }
+    return false;
+}
+
+function del_comment_callback(response)
+{
+    __doPostBack('AjaxHolder$PostComment$refreshList','');
+}
+</script>
+
+				
+</div>
+<div id="leftcontent" style="display: inline;">
+	
+		<div id="leftcontentcontainer">
+			
+			<table id="Calendar1_entryCal" class="Cal" title="Calendar" style="border-style: solid; border-width: 1px; border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr><td colspan="7" style="background-color: Silver;"><table class="CalTitle" style="width: 100%; border-collapse: collapse;" border="0" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev" style="width: 15%;"><a href="javascript:__doPostBack('Calendar1$entryCal','V2738')" style="color: Black;" title="Go to the previous month">&lt;</a></td><td style="width: 70%;" align="center">2007年8月</td><td class="CalNextPrev" style="width: 15%;" align="right"><a href="javascript:__doPostBack('Calendar1$entryCal','V2800')" style="color: Black;" title="Go to the next month">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" abbr="日" scope="col" align="center">日</th><th class="CalDayHeader" abbr="一" scope="col" align="center">一</th><th class="CalDayHeader" abbr="二" scope="col" align="center">二</th><th class="CalDayHeader" abbr="三" scope="col" align="center">三</th><th class="CalDayHeader" abbr="四" scope="col" align="center">四</th><th class="CalDayHeader" abbr="五" scope="col" align="center">五</th><th class="CalDayHeader" abbr="六" scope="col" align="center">六</th></tr><tr><td class="CalOtherMonthDay" style="width: 14%;" align="center">29</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">30</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">31</td><td style="width: 14%;" align="center">1</td><td style="width: 14%;" align="center">2</td><td style="width: 14%;" align="center">3</td><td class="CalWeekendDay" style="width: 14%;" align="center">4</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">5</td><td style="width: 14%;" align="center">6</td><td style="width: 14%;" align="center">7</td><td style="width: 14%;" align="center">8</td><td style="width: 14%;" align="center">9</td><td style="width: 14%;" align="center"><a href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10.html"><u>10</u></a></td><td class="CalWeekendDay" style="width: 14%;" align="center">11</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">12</td><td style="width: 14%;" align="center">13</td><td style="width: 14%;" align="center">14</td><td style="width: 14%;" align="center">15</td><td style="width: 14%;" align="center">16</td><td style="width: 14%;" align="center">17</td><td class="CalWeekendDay" style="width: 14%;" align="center">18</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">19</td><td style="width: 14%;" align="center">20</td><td style="width: 14%;" align="center">21</td><td style="width: 14%;" align="center">22</td><td style="width: 14%;" align="center">23</td><td style="width: 14%;" align="center">24</td><td class="CalWeekendDay" style="width: 14%;" align="center">25</td></tr><tr><td class="CalWeekendDay" style="width: 14%;" align="center">26</td><td style="width: 14%;" align="center">27</td><td style="width: 14%;" align="center">28</td><td style="width: 14%;" align="center">29</td><td style="width: 14%;" align="center">30</td><td style="width: 14%;" align="center">31</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">1</td></tr><tr><td class="CalOtherMonthDay" style="width: 14%;" align="center">2</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">3</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">4</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">5</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">6</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">7</td><td class="CalOtherMonthDay" style="width: 14%;" align="center">8</td></tr>
+</tbody></table>
+<br>
+			
+<div class="catListInteraction">
+<h3 class="catListTitle">与我联系</h3>
+<ul>
+ <li>
+     <a id="SingleColumn1_ctl00_lnkSendMsg" class="sendMsg" href="http://space.cnblogs.com/msg/send/%e5%bd%ad%e5%b8%85">发短消息</a>
+ </li>
+</ul>
+</div>
+<script type="text/javascript">
+function zzk_go()
+{
+	var blogapp = 'OnlyXP';
+	var keystr = encodeURIComponent("blog:"+blogapp+" "+document.getElementById('q').value);
+    window.location = "http://zzk.cnblogs.com/s?w="+keystr;
+}
+function zzk_go_enter(event)
+{
+	if(event.keyCode == 13)
+	{
+	    zzk_go();
+	    return false;
+	}
+}
+</script>
+<div class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div class="div_my_zzk"><input id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk" type="text">&nbsp;<input onclick="zzk_go()" value="找找看" id="btnZzk" class="btn_my_zzk" type="button"></div>
+</div>
+<h3>常用链接</h3>
+<ul>
+
+		<li><a id="SingleColumn1_ctl02_rptMainLinks_ctl00_lnkLinkItem" href="http://www.cnblogs.com/OnlyXP/MyPosts.html">我的随笔</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_rptMainLinks_ctl01_lnkLinkItem" href="http://space.cnblogs.com/OnlyXP">我的空间</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_rptMainLinks_ctl02_lnkLinkItem" href="http://space.cnblogs.com/msg/recent">我的短信</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_rptMainLinks_ctl03_lnkLinkItem" href="http://www.cnblogs.com/OnlyXP/MyComments.html">我的评论</a></li>
+	
+<li><a id="itemListLink" onclick="this.blur();WarpClass('itemListLink', 'itemListLin_con');return false;" href="#">更多链接</a></li>
+</ul>
+<div id="itemListLin_con" style="display: none;">
+<ul>
+		<li><a id="SingleColumn1_ctl02_repeaterLinks_ctl01_lnkLinkItem" title="我发表过评论的随笔" href="http://www.cnblogs.com/OnlyXP/OtherPosts.html">我的参与</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_repeaterLinks_ctl02_lnkLinkItem" href="http://www.cnblogs.com/OnlyXP/MyNews.html">我的新闻</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_repeaterLinks_ctl03_lnkLinkItem" href="http://www.cnblogs.com/OnlyXP/RecentComments.html">最新评论</a></li>
+	
+		<li><a id="SingleColumn1_ctl02_repeaterLinks_ctl04_lnkLinkItem" href="http://www.cnblogs.com/OnlyXP/tag/">我的标签</a></li>
+	</ul>
+</div>
+<h3 class="catListTitle">留言簿<span style="font-size: 11px; font-weight: normal;">(4)</span></h3>
+<ul>
+	<li><a id="SingleColumn1_ctl03_lnkMessages" href="http://www.cnblogs.com/OnlyXP/Contact.aspx?id=1">给我留言</a></li>
+	<!--<li><a id="SingleColumn1_ctl03_lnkPublicMsgView" href="http://www.cnblogs.com/OnlyXP/default.aspx?opt=msg">查看公开留言</a></li>-->
+	<li><a id="SingleColumn1_ctl03_lnkPrivateMsgView" href="http://www.cnblogs.com/OnlyXP/admin/MyMessages.aspx">查看留言</a></li>
+</ul>
+
+
+
+<h3 class="catListTitle">我的标签</h3>
+<div id="MyTag">
+<ul>
+<li><a href="http://www.cnblogs.com/OnlyXP/tag/%e5%88%86%e5%b8%83%e5%bc%8f/">分布式</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/%e4%b8%80%e8%87%b4%e6%80%a7/">一致性</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/%e5%8d%8f%e4%bd%9c/">协作</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/linux/">linux</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/gnu/">gnu</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/hadoop/">hadoop</a>(1)</li><li><a href="http://www.cnblogs.com/OnlyXP/tag/%e4%ba%91%e8%ae%a1%e7%ae%97/">云计算</a>(1)</li>
+</ul>
+</div>
+<!--done-->
+
+		<h1 class="catListTitle">随笔分类</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/category/73419.html">.NET Framework源码剖析(ASP.NET篇)(1)</a><a id="SingleColumn1_Categories_CatList_ctl00_LinkList_ctl01_RssLink" title="Subscribe to .NET Framework源码剖析(ASP.NET篇)(1)" class="listitem" href="http://www.cnblogs.com/OnlyXP/category/73419.html/rss"><img title="Subscribe to .NET Framework源码剖析(ASP.NET篇)(1)" src="epoll%E7%B2%BE%E9%AB%93_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">随笔档案</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl01_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2009/01.html">2009年1月 (2)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl02_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2008/12.html">2008年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl03_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2008/11.html">2008年11月 (3)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl04_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/12.html">2007年12月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl05_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/10.html">2007年10月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl06_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/09.html">2007年9月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl07_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/08.html">2007年8月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl08_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/07.html">2007年7月 (4)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl09_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/06.html">2007年6月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl10_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/05.html">2007年5月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl11_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/04.html">2007年4月 (8)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl12_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/03.html">2007年3月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl13_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/02.html">2007年2月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl14_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2007/01.html">2007年1月 (1)</a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl01_LinkList_ctl15_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/archive/2006/10.html">2006年10月 (1)</a></li>
+			
+				</ul>
+			
+	
+		<h1 class="catListTitle">收藏夹</h1>
+		
+				<ul class="catList">
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/favorite/107858.html">a</a><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl01_RssLink" title="Subscribe to a" class="listitem" href="http://www.cnblogs.com/OnlyXP/favorite/107858.html/rss"><img title="Subscribe to a" src="epoll%E7%B2%BE%E9%AB%93_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				<li class="catListItem"> <a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_Link" class="listitem" href="http://www.cnblogs.com/OnlyXP/favorite/107857.html">Linux技巧集合</a><a id="SingleColumn1_Categories_CatList_ctl02_LinkList_ctl02_RssLink" title="Subscribe to Linux技巧集合" class="listitem" href="http://www.cnblogs.com/OnlyXP/favorite/107857.html/rss"><img title="Subscribe to Linux技巧集合" src="epoll%E7%B2%BE%E9%AB%93_files/xml_002.gif" style="border-width: 0px;"></a></li>
+			
+				</ul>
+			
+	
+
+
+<h3 class="catListTitle">最新评论
+	<a id="SingleColumn1__2c41605_RSSHyperlink1" href="http://www.cnblogs.com/OnlyXP/CommentsRSS.aspx"><img src="epoll%E7%B2%BE%E9%AB%93_files/xml.gif" style="border-width: 0px;"></a></h3>
+<div class="RecentComment" id="RecentComments">
+	
+			<ul>
+		
+			<li style="">
+				<a id="SingleColumn1__2c41605_CommentList_ctl01_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/23/535432.html#1437773">1.&nbsp;re: 由Atlas无刷新登录到LoginView源码分析</a>
+			</li>
+			<li style="">
+				急求下回分解~
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--薄荷脑</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2c41605_CommentList_ctl02_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/13/1374965.html#1430166">2.&nbsp;re: UserAgent的历史变迁</a>
+			</li>
+			<li style="">
+				UserAgent字符串彻底混乱了，也几乎不再发挥任何作用，每个人都宣称自己是别人，混乱充斥人间啊。
+<br>。。。。。。。。。。。。。
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--coolbeer</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2c41605_CommentList_ctl03_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/13/1374965.html#1430111">3.&nbsp;re: UserAgent的历史变迁</a>
+			</li>
+			<li style="">
+				太可怕了....
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--鳞</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2c41605_CommentList_ctl04_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/13/1374965.html#1430099">4.&nbsp;re: UserAgent的历史变迁</a>
+			</li>
+			<li style="">
+				很可爱的文章。。。。
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--虫子的一天</li>
+		
+			<li style="">
+				<a id="SingleColumn1__2c41605_CommentList_ctl05_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/04/1366805.html#1421248">5.&nbsp;re: 云计算-My Future, The IT's Future</a>
+			</li>
+			<li style="">
+				我也对这些很感兴趣，强烈关注中...
+			</li>
+			<li style="text-align: right; margin-right: 4px;">
+				--Inrie(洪小军)</li>
+		
+			</ul>
+		
+</div>
+
+<h3 class="catListTitle">阅读排行榜</h3>
+<div class="RecentComment" id="TopViewPosts"> 
+	
+			<ul style="">
+		
+			<li>
+				<a id="SingleColumn1__e0e21c_TopList_ctl01_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html">1.&nbsp;epoll精髓(3052)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__e0e21c_TopList_ctl02_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2006/10/21/535432.html">2.&nbsp;由Atlas无刷新登录到LoginView源码分析(1522)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__e0e21c_TopList_ctl03_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/02/1366805.html">3.&nbsp;云计算-My Future, The IT's Future(1459)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__e0e21c_TopList_ctl04_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2008/11/29/1343878.html">4.&nbsp;OnlyXP盘点2008下半年的学习情况(766)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__e0e21c_TopList_ctl05_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2007/09/26/906005.html">5.&nbsp;我在做Hessian(http)短连接版本转Tessian(TCP)长连接中间件的过程中翻译的hessian官方文档(464)</a>
+			</li>
+		
+			</ul>
+		
+</div>
+
+<h3 class="catListTitle">评论排行榜</h3>
+<div class="RecentComment" id="TopCommentsPosts">
+	
+			<ul style="">
+		
+			<li>
+				<a id="SingleColumn1__1de77ae_TopList_ctl01_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2007/08/10/851222.html">1.&nbsp;epoll精髓(4)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1de77ae_TopList_ctl02_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/02/1366805.html">2.&nbsp;云计算-My Future, The IT's Future(4)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1de77ae_TopList_ctl03_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2009/01/13/1374965.html">3.&nbsp;UserAgent的历史变迁(3)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1de77ae_TopList_ctl04_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2008/11/29/1343878.html">4.&nbsp;OnlyXP盘点2008下半年的学习情况(2)</a>
+			</li>
+		
+			<li>
+				<a id="SingleColumn1__1de77ae_TopList_ctl05_Hyperlink1" href="http://www.cnblogs.com/OnlyXP/archive/2006/10/21/535432.html">5.&nbsp;由Atlas无刷新登录到LoginView源码分析(1)</a>
+			</li>
+		
+			</ul>
+		
+</div></div>
+	
+</div>
+
+<!--done-->
+<div class="footer">
+	Powered by: <a href="http://www.cnblogs.com/">博客园</a>	模板提供：<a href="http://blog.hjenglish.com/">沪江博客</a>
+	Copyright ©2009 彭帅
+</div>
+
+
+
+    
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("AjaxHolder_PostComment_ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2"), document.getElementById("AjaxHolder_PostComment_revContactMail"), document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4"), document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var AjaxHolder_PostComment_RequiredFieldValidator2 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator2"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator2");
+AjaxHolder_PostComment_RequiredFieldValidator2.controltovalidate = "AjaxHolder_PostComment_tbName";
+AjaxHolder_PostComment_RequiredFieldValidator2.errormessage = "请输入你的姓名";
+AjaxHolder_PostComment_RequiredFieldValidator2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator2.initialvalue = "";
+var AjaxHolder_PostComment_revContactMail = document.all ? document.all["AjaxHolder_PostComment_revContactMail"] : document.getElementById("AjaxHolder_PostComment_revContactMail");
+AjaxHolder_PostComment_revContactMail.controltovalidate = "AjaxHolder_PostComment_tbEmail";
+AjaxHolder_PostComment_revContactMail.errormessage = "邮件地址无效";
+AjaxHolder_PostComment_revContactMail.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+AjaxHolder_PostComment_revContactMail.validationexpression = "^([0-9a-zA-Z+-._]([+-._\\w]*[0-9a-zA-Z+-._])*@([0-9a-zA-Z][-\\w]*\\.)+[a-zA-Z]{2,9})$";
+var AjaxHolder_PostComment_Requiredfieldvalidator4 = document.all ? document.all["AjaxHolder_PostComment_Requiredfieldvalidator4"] : document.getElementById("AjaxHolder_PostComment_Requiredfieldvalidator4");
+AjaxHolder_PostComment_Requiredfieldvalidator4.controltovalidate = "AjaxHolder_PostComment_CodeNumberTextBox";
+AjaxHolder_PostComment_Requiredfieldvalidator4.errormessage = "请输入验证码";
+AjaxHolder_PostComment_Requiredfieldvalidator4.display = "Dynamic";
+AjaxHolder_PostComment_Requiredfieldvalidator4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_Requiredfieldvalidator4.initialvalue = "";
+var AjaxHolder_PostComment_RequiredFieldValidator3 = document.all ? document.all["AjaxHolder_PostComment_RequiredFieldValidator3"] : document.getElementById("AjaxHolder_PostComment_RequiredFieldValidator3");
+AjaxHolder_PostComment_RequiredFieldValidator3.controltovalidate = "AjaxHolder_PostComment_tbComment";
+AjaxHolder_PostComment_RequiredFieldValidator3.errormessage = "请输入评论内容";
+AjaxHolder_PostComment_RequiredFieldValidator3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+AjaxHolder_PostComment_RequiredFieldValidator3.initialvalue = "";
+var AjaxHolder_PostComment_ValidationSummary1 = document.all ? document.all["AjaxHolder_PostComment_ValidationSummary1"] : document.getElementById("AjaxHolder_PostComment_ValidationSummary1");
+AjaxHolder_PostComment_ValidationSummary1.showmessagebox = "True";
+AjaxHolder_PostComment_ValidationSummary1.showsummary = "False";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+<!--
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+// -->
+</script>
+        
+<script type="text/javascript">
+//<![CDATA[
+
+document.getElementById('AjaxHolder_PostComment_ValidationSummary1').dispose = function() {
+    Array.remove(Page_ValidationSummaries, document.getElementById('AjaxHolder_PostComment_ValidationSummary1'));
+}
+Sys.Application.initialize();
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator2'));
+}
+
+document.getElementById('AjaxHolder_PostComment_revContactMail').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_revContactMail'));
+}
+
+document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_Requiredfieldvalidator4'));
+}
+
+document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('AjaxHolder_PostComment_RequiredFieldValidator3'));
+}
+//]]>
+</script>
+</form>
+    <script type="text/javascript" src="epoll%E7%B2%BE%E9%AB%93_files/ShowHidden.js"></script>
+	<span style="display: none;"><script language="javascript" src="epoll%E7%B2%BE%E9%AB%93_files/click.htm"></script><a href="http://count.51yes.com/index.aspx?id=47631097" target="_blank"><img src="epoll%E7%B2%BE%E9%AB%93_files/count1.gif" alt="51YES网站统计系统" border="0" height="20" hspace="0" vspace="0" width="20"></a><iframe marginwidth="0" marginheight="0" hspace="0" vspace="0" src="epoll%E7%B2%BE%E9%AB%93_files/sa.txt" frameborder="0" height="0" scrolling="no" width="0"></iframe></span>
+</body></html>

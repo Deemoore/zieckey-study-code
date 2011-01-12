@@ -1,0 +1,69 @@
+ubuntu Linux下手工安装mysql5
+
+1、下载mysql5的linux版本。
+地址:http://dev.mysql.com/get/Downloads/MySQL-5.0/mysql-5.0.20.tar.gz/from/http://mirror.vmmatrix.net/mysql/
+
+2、安装GCCt等必备的软件：
+在终端下执行(网通用户请用交大的源)：
+sudo apt-get install gcc cpp g++ libncurses5-dev
+sudo apt-get install make autoconf automake libtool
+
+3、解压:
+对于*.tar.gz的文件使用命令tar zxvf *.tar.gz来解压;
+对于*.tar.bz2的文件使用命令tar jxvf *.tar.bz2来解压.
+将mysql,php,apache以及gd安装到/opt/目录下,便于管理.
+具体过程可参考：
+把桌面上刚下的MySQL复制到/tmp下：cp Desktop/mysql-5.0.20.tar.gz /tmp
+进入/tmp目录：cd /tmp
+解压并展开：tar zxvf mysql-5.0.20.tar.gz
+
+4、编译安装MySQL:
+进入到解压后的mysql目录:
+cd mysql-5.0.20
+假设我常用用户是xcg1688,则在终端输入下面的命令:
+./configure --prefix=/opt/mysql --with-mysqld-user=xcg1688 --with-extra-charsets=all --with-unix-socket-path=/tmp/mysql.sock
+
+--prefix=/opt/mysql 把mysql-5.0.20指定安装到/opt/mysql目录中；
+--with-extra-charsets=all 对多语言的支持；
+--with-unix-socket-path=/tmp/mysql.sock 这个是指定mysql服务器启动后，联机套接字文件所处的位置和文件名，也就是说，如果mysql服务器成功启动后，就能在/tmp 目录中看到mysql.sock文件。如果看不到，肯定是mysql启动不了。
+--with-mysqld-user=xcg1688 这个是让mysql服务器也能让系统中普通用户xcg1688也能启动mysql服务器。用普通用户来启动mysql的好处是：mysql的进程会自己死掉自动退出。当然root用户也可以，不过有时mysql有些进程死了，但不会自动退出，root自己也杀不掉。所以用普通用户就有这样的好处，大多不会出现mysql进程已死，但不会退出的情况；
+当您看到“Thank you for choosing MySQL!”时，说明成功。
+
+5.安装：
+sudo make
+sudo make install
+在我的C2.66计算机上make时花了1小时15分钟。
+
+6.配置:
+sudo cp /opt/mysql/share/mysql/my-medium.cnf /etc/my.cnf
+这是将配置文件拷贝到/etc目录下成为my.cnf,大家可以根据自己的需要选择配置文件(配置文件在 /opt/mysql/share/mysql/目录下,有my-huge.cnf my-medium.cnf my-large.cnf my-small.cnf这些).
+ 运行
+sudo /opt/mysql/bin/mysql_install_db
+ 这个命令是创建MySQL的授权表.
+
+sudo chmod 755 /opt/mysql/var     //设置/opt/mysql/var的目录权限为755
+sudo chown -R xcg1688:xcg1688 /opt/mysql/var  //如果希望使用xcg1688这个用户来启动mysql的话
+sudo /opt/mysql/share/mysql/mysql.server start      //启动mysql服务
+sudo chown -R xcg1688:xcg1688 /opt/mysql/      //把/opt/mysql目录归属到xcg1688这个用户下
+sudo /opt/mysql/bin/mysqladmin -u root password 123456  //设置root用户的密码为123456
+/opt/mysql/bin/mysql -u root -p   //试试看mysql能不能登录。\q退出。
+
+7.设置MySQL的环境变量：
+cd    //回到你的用户目录。
+cp .bashrc .bashrc_bak    //备份.bashrc
+gedit ~/.bashrc
+在最后加入：export PATH=/opt/mysql/bin:$PATH:.
+然后在终端输入：source ~/.bashrc    //使刚修改的起作用
+env    //查看环境变量
+mysql
+上面的修改只针对某一用户，你还可以用另外一种办法：在/etc/profile添加PATH路径后，注销一次再echo应该就可以了。
+
+8.设置MYSQL自动启动：
+sudo cp /opt/mysql/share/mysql/mysql.server /etc/rc2.d/S20mysql
+
+9.测试：
+重新启动计算机，在终端＄下输入：mysql
+可以用了，输入：\q退出。
+
+
+Trackback: http://tb.blog.csdn.net/TrackBack.aspx?PostId=666951

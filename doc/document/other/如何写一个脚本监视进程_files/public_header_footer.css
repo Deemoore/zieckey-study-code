@@ -1,0 +1,91 @@
+/*This is CSDN Public footer style*/
+
+#pubfooter{border-top:1px solid #9BA5C9;text-align:center;margin-top:3px;padding:5px 0 0;color:#8D8D8D;font:normal 12px verdana,sans-serif;margin:0 auto;}
+#pubfooter dl,dt,dd{margin:0;padding:0;}
+#pubfooter dt{display:none;}
+#pubfooter dd{padding:2px 0;}
+#pubfooter dd.small{font-size:9px;}
+#pubfooter dd a{padding:0 5px;color:#000;}
+#pubfooter dd img{border:0;}
+
+
+/*-== public_header_footer.css == meizz == 2007-06-08 ==-*/
+
+.CSDN-PHF
+{
+    width: 770px;
+    margin: auto;
+    font-size: 12px;
+    text-align: left;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+.CSDN-PHF a,
+.CSDN-PHF a:link,
+.CSDN-PHF a:visited,
+.CSDN-PHF a:active
+{
+    color: #003366;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: normal;
+    text-decoration: none;
+    font-family: Tahoma, verdana, "Lucida Sans Unicode", sans-serif;
+}
+
+/* CSDN Public Header style */
+#CSDNPH, #CSDNPF{text-align: center;}
+/* CSDN Public Header */
+#CSDNPH table{width: 100%; height: 20px; border: none;}
+#CSDNPH_line1{height: 20px;}
+#CSDNPH dl
+{
+    padding-left: 160px;
+    border-bottom: 3px solid #4682B4;
+    background: #FFFFFF url(http://www.csdn.net/ui/styles/public_header_footer/logo_csdn.gif) no-repeat top left;
+}
+#CSDNPH dd
+{
+    height: 60px;
+    text-align: left;
+    line-height: 20px;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/bgpheadtop.gif) no-repeat top right;
+}
+#data_for_drop_menu
+{
+    position: absolute;
+    top: 18px;
+    left: 0px;
+    width: 64px;
+    border: solid 1px #4682B4;
+    border-top: none;
+    text-align: left;
+    background-color: #FFFFFF;
+}
+#data_for_drop_menu div{padding: 1px;margin: 0 1px;border-bottom: dotted 1px #D4D0C8;}
+#CSDNPHL td, #CSDNPH_line2 td{text-align: center; background-color: #4682B4;}
+#CSDNPH_line2 a:link, #CSDNPH_line2 a:visited, #CSDNPH_line2 a:hover, #CSDNPH_line2 a:active{color: #FFFFFF; padding: 0 2px;}
+#data_for_drop_menu a:link,#data_for_drop_menu a:visited,#data_for_drop_menu a:hover,#data_for_drop_menu a:active{color: #003366}
+#factoryArea{width: 66px; text-align:center;position:relative;}
+#CSDNPH_line3 a{padding: 0 1px;}
+
+/* CSDN Public Footer style */
+#CSDNPF{line-height: 120%; text-align: center; overflow: hidden;}
+#CSDNPF .CSDN-PHF{text-align: center;}
+#CSDNPF .CSDN-PHF div{padding-left: 40px;}
+* html #CSDNPF hr{clear: both; height: 1px; border-top: 1px solid #4682B4;}
+#CSDNPF a.biaoshi
+{
+    top: 20px;
+    left: -9%;
+    width: 40px;
+    height: 48px;
+    float: right;
+    display: block;
+    position: relative;
+    background: url(http://www.csdn.net/ui/styles/public_header_footer/biaoshi.gif) no-repeat center;
+}
+#CSDNPF a, #CSDNPF a:link, #CSDNPF a:visited, #CSDNPF a:active{color: #000000;}
+
+/* CSDN Public Header Single Line Style */
+#CSDNPHL{text-align: center; height: 20px;}
+#CSDNPHL a:link, #CSDNPHL a:visited, #CSDNPHL a:active, #CSDNPHL a:hover{color: #FFFFFF;padding: 0 1px;}

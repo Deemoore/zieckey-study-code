@@ -1,0 +1,74 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CFindDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CFindDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>499</width>
+            <height>323</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>lineEdit1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>120</x>
+                <y>60</y>
+                <width>121</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>findPushButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>280</x>
+                <y>60</y>
+                <width>85</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Find</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>okPpushButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>180</x>
+                <y>210</y>
+                <width>85</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>okPpushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CFindDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

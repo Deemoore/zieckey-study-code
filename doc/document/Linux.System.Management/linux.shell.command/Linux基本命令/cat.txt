@@ -1,0 +1,64 @@
+在使用 "cat > filename.txt" 创建文件时，可采用下面步骤:
+
+　　1、键入cat > filename.txt 后回车 网管论坛bbs_bitsCN_com
+
+　　2、录入文本内容； 网管u家bitscn.net
+
+　　3、键入回车；
+
+网管u家u.bitscn@com
+
+　　4、在键盘上按下Ctrl+D (或者键入Control－D)。
+网管朋友网www_bitscn_net
+
+　　文本被存盘，shell提示符重新出现
+
+
+
+AbeEnstTuv] [--help] [--version] fileName
+说明：把档案串连接后传到基本输出（萤幕或加 > fileName 到另一个档案）
+参数：
+-n 或 --number 由 1 开始对所有输出的行数编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-s 或 --squeeze-blank 当遇到有连续两行以上的空白行，就代换为一行的空白
+行
+-v 或 --show-nonprinting
+范例：
+cat -n textfile1 > textfile2 把 textfile1 的档案内容加上行号后输入
+textfile2 这个档案里
+cat -b textfile1 textfile2 >> textfile3 把 textfile1 和 textfile2 的档
+案内容加上行号（空白行不加）之后将内容附加到 textfile3
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
+
+
+cat主要有三大功能：
+1.一次显示整个文件。$ cat     filename
+2.从键盘创建一个文件。$ cat > filename
+只能创建新文件,不能编辑已有文件.
+3.将几个文件合并为一个文件。 $cat     file1     file2 > file
+参数：
+-n 或 --number 由 1 开始对所有输出的行数编号
+-b 或 --number-nonblank 和 -n 相似，只不过对于空白行不编号
+-s 或 --squeeze-blank 当遇到有连续两行以上的空白行，就代换为一行的空白行
+-v 或 --show-nonprinting
+范例：
+cat -n textfile1 > textfile2 把 textfile1 的档案内容加上行号后输入 textfile2 这个档案里
+cat -b textfile1 textfile2 >> textfile3 把 textfile1 和 textfile2 的档案内容加上行号（空白行不加）之后将内容附加到 textfile3 里。
+范例：
+把 textfile1 的档案内容加上行号后输入 textfile2 这个档案里
+cat -n textfile1 > textfile2
+把 textfile1 和 textfile2 的档案内容加上行号（空白行不加）之后将内容附加到 textfile3 里。
+cat -b textfile1 textfile2 >> textfile3
+cat /dev/null > /etc/test.txt 此为清空/etc/test.txt档案内容
+cat 也可以用来制作 image file。例如要制作软碟的 image file，将软碟放好后打
+cat /dev/fd0 > OUTFILE
+相反的，如果想把 image file 写到软碟，请打
+cat IMG_FILE > /dev/fd0
+注：
+1. OUTFILE 指输出的 image 档名。
+2. IMG_FILE 指 image file。
+3. 若从 image file 写回 device 时，device 容量需与相当。
+4. 通常用在制作开机磁片。 

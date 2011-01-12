@@ -1,0 +1,51 @@
+CVS的几个常用命令：
+
+初始化：
+cvs -d /var/home/cvs/repository init
+
+检出项目：
+cvs co CVSROOT
+cvs co textcalc
+
+登录：
+cvs -d :pserver:zieckey@localhost/var/home/cvs/repository login
+这里密码是‘zieckey‘
+
+检入项目，先登录，
+cvs -d :pserver:zieckey@localhost/var/home/cvs/repository login
+cvs import -m "Trying to import" QVideo vendor start
+或者一条语句：
+cvs -d :pserver:zieckey@localhost/var/home/cvs/repository import -m "Trying to import" myproject vendor start
+
+检入新的文件：
+cvs add newfile
+cvs commit
+
+删除文件：
+cvs remove newfile
+cvs commit
+
+检入编辑修改后的文件：
+确认修改写入到CVS库里
+cvs commit -m "write some comments here" file_name
+
+
+ 查看当前文件不同版本的区别
+cvs diff -r1.3 -r1.5 file_name
+查看当前文件（可能已经修改了）和库中相应文件的区别
+cvs diff file_name
+cvs的web界面提供了更方便的定位文件修改和比较版本区别的方法，具体安装设置请看后面的cvsweb使用
+
+
+
+为了在eclipse里检出项目不产生错误，不用登录，直接由root用户检入，例如：
+新开一个终端，输入命令：
+cvs import -m "Trying to import" QVideo vendor start
+这个项目在eclipse下检出时就不会产生错误。
+
+
+
+
+添加用户：
+
+echo dreambox >> writers

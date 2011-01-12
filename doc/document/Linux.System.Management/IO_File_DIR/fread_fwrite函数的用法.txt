@@ -1,0 +1,80 @@
+fread函数和fwrite函数的用法
+
+1.函数功能
+用来读写一个文件的数据。
+
+2.一般调用形式
+
+#include<stdio.h>
+
+size_t fread(void * ptr,size_t size,size_t nmemb,FILE * stream);
+	fread()用来从文件流中读取数据。参数 stream 为已打开的文件指针,参数 ptr 指向欲存放读取进来的数据空间,读取的字符数以参数 size*nmemb 来决定。  会返回实际读取到的 nmemb 数目,fread如果此值比参数 nmemb 来得小,则代表可能读到了文件尾或有错误发生,这时必须用 feof()或 ferror()来决定发生什么情况。	
+	
+size_t fwrite(const void * ptr,size_t size,size_t nmemb,FILE * stream);
+	fwrite()用来将数据写入文件流中。参数 stream 为已打开的文件 指针,参数 ptr 指向欲写入的数据地址,总共写入的字符数以参数 size*nmemb 来决定。fwrite()会返回实际写入的 nmemb 数目。
+     
+
+#include <stdio.h>
+#include<string.h>
+
+#define SIZE 300
+
+int main(void)
+{
+	FILE * fp= NULL;
+	char s[]="Hello";
+	char buf[SIZE];
+	memset(buf,0,SIZE);
+
+	//打开一个文件并清空文件内容，如果不存在，就建立
+	fp = fopen("records.dat", "w+");
+	fwrite(s, sizeof(s),1, fp);//向文件中写入30个 “Hello“字符串s
+	fclose(fp);
+
+	//读取文件内容
+	fp = fopen("records.dat", "r+");
+	fread(buf, sizeof(s), 1, fp);
+	printf("buf=%s", buf);
+	fclose(fp);
+
+	return 0;
+}
+
+
+表头文件
+#include<stdio.h>
+定义函数
+FILE * fopen(const char * path,const char * mode);
+函数说明
+参数path字符串包含欲打开的文件路径及文件名，参数mode字符串则代表着流形态。
+mode有下列几种形态字符串:
+r 打开只读文件，该文件必须存在。
+r+ 打开可读写的文件，该文件必须存在。
+w 打开只写文件，若文件存在则文件长度清为0，即该文件内容会消失。若文件不存在则建立该文件。
+w+ 打开可读写文件，若文件存在则文件长度清为零，即该文件内容会消失。若文件不存在则建立该文件。
+a 以附加的方式打开只写文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾，即文件原先的内容会被保留。
+a+ 以附加方式打开可读写的文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾后，即文件原先的内容会被保留。
+上述的形态字符串都可以再加一个b字符，如rb、w+b或ab＋等组合，加入b 字符用来告诉函数库打开的文件为二进制文件，而非纯文字文件。不过在POSIX系统，包含Linux都会忽略该字符。由fopen()所建立的新文件会具有S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH(0666)权限，此文件权限也会参考umask 值。
+返回值
+文件顺利打开后，指向该流的文件指针就会被返回。若果文件打开失败则返回NULL，并把错误代码存在errno 中。
+附加说明
+一般而言，开文件后会作一些文件读取或写入的动作，若开文件失败，接下来的读写动作也无法顺利进行，所以在fopen()后请作错误判断及处理。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+fp=fopen(“noexist”,”a+”);
+if(fp= =NULL) return;
+fclose(fp);
+}
+r是以正常方式读文件   
+    rb是读二进制文件
+'r' 只读方式打开，将文件指针指向文件头。
+'r+' 读写方式打开，将文件指针指向文件头。
+'w' 写入方式打开，将文件指针指向文件头并将文件大小截为零。如果文件不存在则尝试创建之。
+'w+' 读写方式打开，将文件指针指向文件头并将文件大小截为零。如果文件不存在则尝试创建之。
+'a' 写入方式打开，将文件指针指向文件末尾。如果文件不存在则尝试创建之。
+'a+' 读写方式打开，将文件指针指向文件末尾。如果文件不存在则尝试创建之。
+'x' 创建并以写入方式打开，将文件指针指向文件头。如果文件已存在，则 fopen() 调用失败并返回 FALSE
+'x+' 创建并以读写方式打开，将文件指针指向文件头。如果文件已存在，则 fopen() 调用失败并返回 FALSE 

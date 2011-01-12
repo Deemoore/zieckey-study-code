@@ -1,0 +1,646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="expires" content="0">
+    <title>  梅子老师 - 新浪BLOG  </title>
+    <script type="text/javascript">
+      var $BASE = "http://blogjs.sinajs.cn/";
+      var $LoginInfoUrl = "http://my.blog.sina.com.cn/login/checkzone4.php?uid=1342881187";
+      var $author = '%C3%B7%D7%D3%C0%CF%CA%A6'
+      var THEME   = "1";
+      var uid   = "1342881187";
+      var $UIC_url = "http://util.blog.sina.com.cn/ui?";
+    </script>
+
+  <script type="text/javascript" src="http://blogjs.sinajs.cn/js/BootStrap.js"></script>
+  <script>
+  if (scope && !scope.config) scope.config={theme: 1,isRandom : false,customTheme:{calendar:5,photo:1,bannar:10,menu:4,box_1:6,box_2:2,bg:4,music:1},isCommentAllowed : true,isMessageAllowed : true,layout:{           
+				column_1:[
+					"blog_photo",
+					"blog_zone",
+					"blog_sort",
+						"blog_visit",
+					"blog_toparticlesort" ,
+				 
+				 
+				],
+				column_2:[
+					"blog_feeds"
+				]
+			},resourceVersion : -1,cssVer : -1,jsVer : -1,imgVer : -1,isModified : false} ;
+  </script>
+  
+  <script>loadPreProcedure();loadCss();</script>
+  <script type="text/javascript">
+      
+  </script> 
+  
+</head>
+<body onload="(main_article || main)();" class="topBodyBg">
+
+
+<!--an area contains system infomation, messages, menus-->
+<div id="system">
+  <a href="http://blog.sina.com.cn"><img src="http://image2.sina.com.cn/blog/tmpl/v3/images/logo.gif" alt="" style="width:180px;height:33px;"/></a>
+
+  <div id="userInfo"></div>
+
+
+
+  <div id="shadow" style="
+    position:absolute;
+    height:20px;
+    bottom:-20px;
+    left:0;
+    /*border:1px solid #f00;*/
+    width:100%;
+  "></div>
+</div>
+<!-- removed for test only. on 07.07.22 by xp-->
+<!--
+<div id="debugToggle">switch</div>
+
+<textarea id="debug" class="small"  style="position:absolute; "></textarea>
+-->
+
+<!--scroll element and position bound, with the same size as window-->
+<div id="outBound" class="outBound">
+
+<!--contains all visual elements, it is a position helper-->
+<div id="innerBound" class="innerBound frameBG">
+
+
+
+
+<!--------------------------------------------------------------------->
+<!--
+  Belows are real content, from top down:
+    top bar
+    banner
+    main menu
+    [column_1 column_2  column_3  column_4] as column content
+    footer
+-->
+<!--------------------------------------------------------------------->
+
+<table class="layout pageLayout" id="topBarLayout">
+  <tr>
+    <td id="topBarLeft"></td>
+    <td id="topBarContent">
+      <!--sample content-->
+      <div id="sina_logo">
+        <a href="http://blog.sina.com.cn/" target="_blank">
+          <img src="http://image2.sina.com.cn/blog/tmpl/v3/images/logo.gif" border="0"/>
+        </a>
+      </div>
+      <div id="global_links">
+      </div>
+      <div id="personal_link">
+        
+      </div>
+    </td>
+    <td id="topBarRight"></td>
+  </tr>
+</table><!--topBarLayout-->
+
+
+<table class="layout pageLayout" id="bannerLayout">
+  <tr>
+    <td id="bannerLeft"></td>
+    <td id="bannerContent">
+      <div id="positionHelper" class="positionHelper">
+        <!--the following empty character is IMPORTANT-->
+        <!--DONT remove it!!.it makes position correct-->
+        &nbsp;
+        <div id="blogName">梅子老师的BLOG</div>
+        <div id="blogLink">
+          <a id="blogURL" href="http://blog.sina.com.cn/neduzhengxuemei">http://blog.sina.com.cn/neduzhengxuemei</a>
+          <a id="copyBlogURL" href="javascript:void(0)">复制</a>&nbsp;&nbsp;>
+          <a id="toFavorite" href="javascript:void(0)">收藏本页</a>
+          <a id="toFriendLink" href="javascript:void(0)">添加为友情链接</a>
+        </div>
+      </div>
+    </td>
+    <td id="bannerRight"></td>
+  </tr>
+</table><!--bannerLayout-->
+
+
+<table class="layout pageLayout" id="mainMenuLayout">
+  <tr>
+    <td id="mainMenuLeft"></td>
+    <td id="mainMenuContent">
+      <div id="mainMenuImportant">
+        <a href="http://blog.sina.com.cn">博客首页</a>
+      </div>
+
+      <div id="mainMenu_control">
+            		<a href="http://blog.sina.com.cn/neduzhengxuemei" id="main_home" target="_self">个人首页</a>┆<a href="http://my.blog.sina.com.cn" id="main_manage">管理博客</a>┆<a href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/s/alist_1342881187_0_1.html)" id="main_article" target="_self">我的文章</a>┆<!--<a href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://photo.sina.com.cn/neduzhengxuemei)" id="main_album" target="_self" style="color:#ff0000;font-weight:bold;">我的相册</a>--><a href="http://photo.sina.com.cn/neduzhengxuemei" id="main_album" target="_blank" style="color:#ff0000;font-weight:bold;">我的相册</a>┆<a href="http://q.blog.sina.com.cn/mygroup.php?uid=1342881187" id="main_circle" target="_blank">我的圈子</a>┆<a href="http://you.video.sina.com.cn/neduzhengxuemei" id="main_video" target="_blank">我的播客</a>┆<a href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/html/fl.html)" id="main_friend" target="_self">我的好友</a>┆<a href="http://mag.blog.sina.com.cn/u/1342881187" id="main_mag" target="_blank">我的杂志</a>┆<a href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/s/gbook_1342881187_1.html)" id="main_gbook" target="_self">给我留言</a>
+      </div>
+    </td>
+    <td id="mainMenuRight"></td>
+  </tr>
+<tr style="display:none;" id="Sina_TR_AD1"><td colspan=3><div style="text-align: center" id="Sina_AD1"></div></td></tr>
+</table><!--mainMenuLayout-->
+
+
+<div class="layout pageLayout contentLayout" id="contentLayout">
+  <div id="contentLeft" class="floatLeft"></div>
+  <div id="column_1" class="floatLeft">
+    <!-- add dbid attribute.		by xp 07.07.05 -->
+<!-- add adminCompButton.	chaoliang  7.7.29 -->
+<div id="blog_photo" dbid="" class="component withTitleBar">
+  <div class="componentInnderBorder">
+    <div id="componentSpecialArea" class="componentSpecialArea"></div>
+    <table id="componentBar" class="componentBar layout">
+      <tr>
+        <td id="componentTitle" class="componentTitle">
+<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">个人信息</span>
+        </td>
+        <td id="componentMenu" class="componentMenu">
+        	<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:;"> &nbsp;&nbsp;</a>
+        	<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)">管理</a><a 
+        		 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+        </td>
+      </tr>
+    </table>
+    <div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+    <div id="componentContent" class="componentContent">
+        <div id="userImage"><img id="image" alt="梅子老师" src="http://portrait4.sinaimg.cn/1342881187/blog/180" /> </div>
+        <div id="intro">
+		<input type="button" class="icon personal_card" onclick="showCard(window.scope.uid,event,'lphoto',window);return false;" alt="查看个人名片"/>
+		<a href="http://blog.sina.com.cn/neduzhengxuemei">梅子老师</a> </div>
+        <div class="contact">
+			<input type="button" class="invite_friend_button" onclick="invite_friend();" />
+			<input type="button" class="send_message_button" onclick="send_message();" />
+</div>
+<script>
+//     fixImageSize.bind(this,$("userImage").down("#image")).delayed(500);
+</script>
+
+
+    </div>
+    <!--componentContent-->
+    <div class="componentFooter"> </div>
+    <!--componentFooter-->
+  </div>
+</div>
+<!-- add dbid attribute.		by xp 07.07.05 -->
+<!-- add adminCompButton.	chaoliang  7.7.29 -->
+<div id="blog_zone" dbid="" class="component withTitleBar">
+  <div class="componentInnderBorder">
+    <div id="componentSpecialArea" class="componentSpecialArea"></div>
+    <table id="componentBar" class="componentBar layout">
+      <tr>
+        <td id="componentTitle" class="componentTitle">
+<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">活力地带</span>
+        </td>
+        <td id="componentMenu" class="componentMenu">
+        	<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:;"> &nbsp;&nbsp;</a>
+        	<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)">管理</a><a 
+        		 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+        </td>
+      </tr>
+    </table>
+    <div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+    <div id="componentContent" class="componentContent">
+        <ul>
+				<li><a class="icon textIcon homePage" id="homePage"	title="" href="http://blog.sina.com.cn/neduzhengxuemei" target="_self">个人首页</a></li>
+				<li><a class="icon textIcon controlPanel" id="controlPanel" title="" href="http://my.blog.sina.com.cn" target="_self">管理博客</a></li>
+				<li><a class="icon textIcon myArticalList" id="myArticalList" title="" href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/s/alist_1342881187_0_1.html)" target="_self">我的文章</a></li>
+				<li><!--<a class="icon textIcon myPicAlbum" id="myPicAlbum" title="" href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://photo.sina.com.cn/neduzhengxuemei)" target="_self" style="color:#ff0000;font-weight:bold;">我的相册</a>-->
+				<a class="icon textIcon myPicAlbum" id="myPicAlbum" title="" href="http://photo.sina.com.cn/neduzhengxuemei" target="_blank"  style="color:#ff0000;font-weight:bold;">我的相册</a></li>
+				<li><a class="icon textIcon myGroups" id="myGroups" title="" href="http://q.blog.sina.com.cn/mygroup.php?uid=1342881187" target="_blank">我的圈子</a></li>
+				<li><a class="icon textIcon myVBlog" id="myVBlog" title="" href="http://you.video.sina.com.cn/neduzhengxuemei" target="_blank">我的播客</a></li>
+				<li><a class="icon textIcon myFirendList" id="myFirendList" title="" href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/html/fl.html)" target="_self">我的好友</a></li>
+				
+			  <li><a class="icon textIcon myGbook" id="myGbook" title="" href="http://blog.sina.com.cn/neduzhengxuemei#cmd:asc(http://blog.sina.com.cn/s/gbook_1342881187_1.html)" target="_self">给我留言</a></li></ul>
+    </div>
+    <!--componentContent-->
+    <div class="componentFooter"> </div>
+    <!--componentFooter-->
+  </div>
+</div>
+<!-- add dbid attribute.		by xp 07.07.05 -->
+<!-- add adminCompButton.	chaoliang  7.7.29 -->
+<div id="blog_sort" dbid="" class="component withTitleBar">
+  <div class="componentInnderBorder">
+    <div id="componentSpecialArea" class="componentSpecialArea"></div>
+    <table id="componentBar" class="componentBar layout">
+      <tr>
+        <td id="componentTitle" class="componentTitle">
+<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">文章分类</span>
+        </td>
+        <td id="componentMenu" class="componentMenu">
+        	<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:;"> &nbsp;&nbsp;</a>
+        	<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)">管理</a><a 
+        		 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+        </td>
+      </tr>
+    </table>
+    <div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+    <div id="componentContent" class="componentContent">
+        <script src="http://blog.sina.com.cn/s/myarsort_1342881187.js"></script>
+    </div>
+    <!--componentContent-->
+    <div class="componentFooter"> </div>
+    <!--componentFooter-->
+  </div>
+</div>
+<!-- 2 -->
+<div id="blog_visit" class="component withTitleBar">
+	<div class="componentInnderBorder">
+		<div id="componentSpecialArea" class="componentSpecialArea"></div>
+		<table id="componentBar" class="componentBar layout">
+			<tr>
+				<td id="componentTitle" class="componentTitle">
+					<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">访客</span>
+				</td>
+				<td id="componentMenu" class="componentMenu">
+					<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:void(0)">&nbsp;&nbsp;</a>
+					<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)"></a><a
+						 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+				</td>
+			</tr>
+		</table>
+		<div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+		<div id="componentContent" class="componentContent">
+		<div class="componentDef" data="http://util.blog.sina.com.cn/rr?1342881187&n" type="dynamic"></div>
+		</div>
+		<!--componentContent-->
+		<div class="componentFooter"> </div>
+		<!--componentFooter-->
+	</div>
+</div>
+<!-- add dbid attribute.		by xp 07.07.05 -->
+<!-- add adminCompButton.	chaoliang  7.7.29 -->
+<div id="blog_toparticlesort" dbid="" class="component withTitleBar">
+  <div class="componentInnderBorder">
+    <div id="componentSpecialArea" class="componentSpecialArea"></div>
+    <table id="componentBar" class="componentBar layout">
+      <tr>
+        <td id="componentTitle" class="componentTitle">
+<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">新浪博客推荐文章</span>
+        </td>
+        <td id="componentMenu" class="componentMenu">
+        	<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:;"> &nbsp;&nbsp;</a>
+        	<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)">管理</a><a 
+        		 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+        </td>
+      </tr>
+    </table>
+    <div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+    <div id="componentContent" class="componentContent">
+        <script src="http://blog.sina.com.cn/s/toparticlesort_122.js"></script>
+    </div>
+    <!--componentContent-->
+    <div class="componentFooter"> </div>
+    <!--componentFooter-->
+  </div>
+</div>
+
+     <!-- {$box_2}-->
+  </div><!--column_1-->
+
+
+
+  <!--gap is reserved for further usage such as munipulating page layout.-->
+  <div id="gap_1" class="floatLeft"></div>
+
+  <div id="column_2" class="floatLeft">
+  <!-- add dbid attribute.		by xp 07.07.05 -->
+<!-- add adminCompButton.	chaoliang  7.7.29 -->
+<div id="blog_feeds" dbid="" class="component ">
+  <div class="componentInnderBorder">
+    <div id="componentSpecialArea" class="componentSpecialArea"></div>
+    <table id="componentBar" class="componentBar layout">
+      <tr>
+        <td id="componentTitle" class="componentTitle">
+<a id="collapseButton"  class="toggleLink collapseArraw center"
+					href="javascript:void(0)" title="展开或收缩模块"  toggle="componentContent"><input type="button" /></a><span id="titleText">内容</span>
+        </td>
+        <td id="componentMenu" class="componentMenu">
+        	<a id="refreshCompButton" class="icon refresh center invisible" href="javascript:;"> &nbsp;&nbsp;</a>
+        	<a id="adminCompButton" class="adminComp center invisible" href="javascript:void(0)">管理</a><a 
+        		 id="closeCompButton" title="隐藏模块" class="closeComp center invisible" href="javascript:void(0)"><input type="button" /></a>
+        </td>
+      </tr>
+    </table>
+    <div id="componentHead" class="componentHead"></div>
+    <div id="componentTip" class="ccomponentTip"></div>
+    <div id="componentContent" class="componentContent">
+        <div id="adminLinks"><div id="loadingText">数据加载中...</div><div id="guestPanel" class="invisible"><a href="http://my2008.sina.com.cn/blog/index.shtml" target="_blank">写博客，参与“我的2008--我记录活动”，赢现金大奖！</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="textIcon" target="_blank" href="http://my.blog.sina.com.cn/member/signup/reg_step1.php">注册</a>┆<a target="systemIframe" class="textIcon" title="" href="http://my.blog.sina.com.cn/login/login_top.php" id="login">登录</a>┆<a target="_blank" href="http://my.blog.sina.com.cn/writing/scriber/article_add.php?mode=1" class="textIcon" id="newArticle" title="发博文参加“我记录”活动，赢取大奖">发表文章</a> </div></div><script type="text/javascript">
+		var isCommentAllowedBySystem = true;
+</script>
+		<ul id="articleContainer">
+			<li>
+				&nbsp;
+				<div id="articleBar" class="toggleLink" toggle="articleContentArea">
+		<div class="article_info">
+          <a id="collapseButton"  class="toggleLink collapseArraw center"
+            href="javascript:void(0)" title="展开或收缩"  toggle="articleContentArea"><input type="button" /></a>
+					<!--Class name of articleTime specify 'sun' icon or 'moon' icon
+					in front of date-time text. Corresponding to class name 'sun' & 'moon'
+					-->
+					<div class="articleTitleW">
+						<a id="articleTitle">嵌入式工程师step&nbsp;by&nbsp;step</a>
+					</div>
+		</div>
+					<div id="articleBarButton">
+						<a id="edit" class="Link icon modify center invisible" href="javascript:void(0)" >&nbsp;</a>
+						<a id="delete" class="Link icon delete center invisible" href="javascript:void(0)" >&nbsp;</a>
+					</div>
+				</div>
+				<div id="articleContentArea">
+					<div id="articleTimeHolder">
+					<span id="articleTime" class="moon icon textIcon" style="background-position:2px 3px;" >2008-04-13 02:29:16</span>
+					</div>
+					<div id="articleContentFontSize">
+						<a href="javascript: void(0);" onclick="setArticleContentSize('b')">大</a>
+						<a href="javascript: void(0);" onclick="setArticleContentSize('m')")>中</a>
+						<a href="javascript: void(0);" onclick="setArticleContentSize('s')")>小</a>
+					</div>
+					<div id="tagsArea">
+						标签：<a href="http://search.blog.sina.com.cn/blog/search?q=%C7%B6%C8%EB%CA%BD%B9%A4%B3%CC%CA%A6&tag=n&t=tag" class="tag" target="_blank">嵌入式工程师</a> <a href="http://search.blog.sina.com.cn/blog/search?q=%C8%EB%C3%C5&tag=n&t=tag" class="tag" target="_blank">入门</a> <a href="http://search.blog.sina.com.cn/blog/search?q=%C4%DC%C1%A6&tag=n&t=tag" class="tag" target="_blank">能力</a> <a href="http://search.blog.sina.com.cn/blog/search?q=%BD%CC%D3%FD&tag=n&t=tag" class="tag" target="_blank">教育</a> 
+					</div>
+
+					<div id="articleContent" class="middleSize"><div>
+<p><font COLOR="#006400">&nbsp;
+&nbsp;</FONT> <font COLOR="#990033"><font STYLE="FONT-SIZE: 18px">近来嵌入式挺火，于是大家都往这里挤。我想提醒大家的是，嵌入式马上也会成为如今的软件业。在你进来之前请先考虑清楚。但只要我们真的学精了一样东西，不管它将来变成什么样，哪怕最后只剩下一个人，那个人也一定就是你自己。<br/>
+
+　&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;
+很多人以为搞嵌入式就是随便找本书看看，在电脑上编几个程序就完事。非也，其实嵌入式的门槛是比较高的。具体如下：　　<br/>
+
+　　1、您得有一定数量的Money。<br/>
+　　　　(1)、开发板贵<br/>
+　　　　(2)、培训费更贵<br/>
+　　　　(3)、开发平台是贵得不能再贵。（除非您只是想玩玩而已）<br/>
+　　2、需要学习的东西多。(1)、window环境编程；(2)、Linux环境编程；(3)、单片机<br/>
+
+　　3、最后也是最重要的一点，你得有坚韧不拔之志和一颗平常之心。<br/>
+
+　　　(1)、自信　坚强　积极　勤快　（注：好的自信是自觉的！）<br/>
+　　　(2)、成功其实就是成为最好的您自己　　　　　　　<br/>
+　　&nbsp;</FONT> </FONT></P>
+<p><font COLOR="#006400"><font STYLE="FONT-SIZE: 18px" COLOR="#990033">嵌入式门槛虽然较高，但也跟其他事物一样，并不是牢不可破。只要我们用心去对待，东雪终将化去，春风定会吹来。具体步骤如下：<br/>
+
+　　1、《C语言》第二版 谭浩强 ； 《C程序设计语言》第二版 徐宝文译
+机戒工业出版社<br/>
+　　你能区分开指针数组和数组指针吗？你知道函数指针吗？<br/>
+　　你能区分开定义一个变量时系统给它分配的空间与用malloc()函数给一个变量分配的空间有什么不一样吗？<br/>
+
+　　2、《数据结构》C语言版 　黄国愉、叶乃青编
+　清华大学出版社<br/>
+　　你能合上书本，用C语言实现书中的单链表、双链表数据结构吗？<br/>
+　　3、《实用C++程序设计》第二板 中国电力出版社
+Steve_Oualline著<br/>
+　　此阶段主要是学习其面向对象的编程思想，加深对C语言和数据结构的理解。<br/>
+
+　　4、学习单片机，最好能找个前辈带一带。<br/>
+&nbsp;&nbsp;
+　你能用51单片机做出一样实际的东西吗？即使它再简单！要注意加深对中断的理解。<br/>
+
+　　5、学习ARM单片机。<br/>
+　　　(1)、细读《ARM微控制器基础与实战》周立功编写　（注：即使你不用书中的开发板）<br/>
+
+　　　(2)、细读相关芯片的原版英文文档。如：arm920TE.pdf　　S3C2410_1.2.pdf<br/>
+
+　　6、学习uCOS!!操作系统。<br/>
+　　　(1)、细读《嵌入式实时操作系统uC／OS－!!》第二版　邵贝贝译<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+你能把uCOS!!移植到自己的平台上吗？<br/>
+　　　(2)、能编写在uCOS!!操作系统环境下运行的针对具体硬件的驱动程序<br/>
+
+　　7、熟悉Linux环境，学习Linux环境编程，学习交叉编程<br/>
+　　　(1)、细读《linux命令大全.pdf》<br/>
+　　　(2)、细读《GNU Make 使用手册（中译版）.pdf》<br/>
+　　　(3)、学习创建交叉编程环境．<br/>
+　　8、学习Linux操作系统。　　　　　<br/>
+　　　(1)、《UNIX环境高级编程》<br/>
+　　　(2)、细读“joyfire
+笔记”，可在“www.qianrushi.com”网站的好书下载栏目获取<br/>
+&nbsp;&nbsp;&nbsp;
+　(3)、细读《linux内核完全注释》<br/>
+　　　(4)、细读《understanding the linux kernel 2》<br/>
+　　　(5)、利用源代码阅读利器工具＂Source
+Insight＂进行真正的linux内核原码刨析<br/>
+　　　(6)、最后进行内核移植，并能编写在linux操作系统环境下运行的针对具体硬件的驱动程序<br/>
+
+&nbsp;　 9、
+学习Linux设备驱动编写。可参考《Linux设备驱动程序》<br/>
+　&nbsp; 10、复习C++，学习用QT进行图形界面编程<br/>
+　　　(1)、细读《QT编程宝典》<br/>
+　　　(2)、学会通过查看QT电子文档进行QT GUI实地编程<br/>
+　　　(3)、学习交叉编程．（其实就是把命令qmake变为tmake）<br/>
+　&nbsp;
+11、当然，你也可学习一下PCB的制作和设计一个自己的CPU（即软壳）<br/>
+
+&nbsp;　　至此，你已学完嵌入式的整流程！但谨记：一个有思想的人才真是一个力量无边的人；有容乃大，能予方强！</FONT>&nbsp;</FONT></P>
+<p>&nbsp;</P>
+</DIV>
+
+						<div id="reference" class="invisible">文章引用自：<a target="_blank" href=""></a>
+						</div>
+					</div>
+						
+					
+
+					<div id="Sina_AD2"></div>
+					<div id="articleUtil">
+ 					<div class="leftUtil">分类：<a href="http://blog.sina.com.cn/u/1342881187#cmd:asc(http://blog.sina.com.cn/s/alist_1342881187_4_1.html)"   onclick= "sendLog('articlenewone','rela_articlesort');" >学习方法</a></div>
+				 
+						<a id="comments" href="http://blog.sina.com.cn/s/comment_500abda301008suj_1.html" target="contentIframeLink">评论(<span id="commentsNum"></span>)</a>
+							<!--   <a id="quote" href="http://my.blog.sina.com.cn/writing/scriber/article_add_by_quote.php?blog_id=500abda301008suj" target="_blank">引用</a> -->
+							<a id="views" href="http://blog.sina.com.cn/s/reader_500abda301008suj.html" target="_blank">阅读(<span id="viewNum"></span>)</a>
+							
+							<a id="circle" href="http://blog.sina.com.cn/s/circleinfo_500abda301008suj_1.html" target="contentIframeLink">圈子</a>
+							<a id="edit" href="http://my.blog.sina.com.cn/writing/scriber/article_edit.php?mode=1&blog_id=500abda301008suj" class="invisible" target="_blank">编辑</a>
+							<a id="views" href="http://blog.sina.com.cn/s/print_500abda301008suj.html" target="_blank">打印</a>
+							<a id="report" class="noSplit" href="javascript:void(0);" onclick = "window.open('/advice/impeach.php?url=' + escape('http://blog.sina.com.cn/s/blog_500abda301008suj.html'), '', 'width=510,height=495,left=' + (window.screen.width-538)/2 + ',top=' + (window.screen.height-525)/2);">有奖举报</a>
+					 
+					</div>
+
+					  <div id="articleNavBtn" class="articleNavbtn"><div class='NavPrv'><a href='http://blog.sina.com.cn/s/blog_500abda301008suc.html'  onclick= "sendLog('articlenewone','rela_articleprev');">前一篇：什么是学习？为什么学习？怎么学习？（强烈推荐）</a></div><div class='NavNext'><a href='http://blog.sina.com.cn/s/blog_500abda301008uta.html' onclick= "sendLog('articlenewone','rela_articleprev');" >后一篇：热门软件发布预告--Ansoft&nbsp;Designer&nbsp;v2.2&nbsp;+&nbsp;Crack</a></div></div> 
+					
+
+				</div>
+			</li>
+
+
+		</ul>
+		<script id="hitsUrl" type="text/javascript" src="http://hits.blog.sina.com.cn/hits?act=1&aid=500abda301008suj"></script>
+    <a id="contentIframeLink" style="cursor:default;" class="disabled iframeUrlHolder" href="http://blog.sina.com.cn/s/comment_500abda301008suj_1.html" onclick="return false;"          title="...">数据加载中...</a>
+
+<script>preProcedure();</script>
+    </div>
+    <!--componentContent-->
+    <div class="componentFooter"> </div>
+    <!--componentFooter-->
+  </div>
+</div>
+
+  </div><!--column_2-->
+
+  <div id="gap_2" class="floatLeft"></div>
+
+  <div id="column_3" class="floatLeft">
+  </div><!--column_3-->
+
+  <div id="gap_3" class="floatLeft"></div>
+
+  <div id="column_4" class="floatLeft"></div><!--column_4-->
+
+
+  <div id="contentRight" class="floatLeft"></div><!--contentRight-->
+
+
+  <div id="contentBottom" class="clearBoth"></div>
+</div><!--contentLayout-->
+
+
+<table class="layout pageLayout" id="footerLayout">
+  <tr>
+    <td id="footerLeft"></td>
+    <td id="footerContent">
+    </td>
+    <td id="footerRight"></td>
+  </tr>
+</table><!--footerLayout-->
+
+</div><!--innerBound-->
+</div><!--outBound-->
+
+<!--a div for special use. such as page blocker, module dialog holder-->
+<div id="special">
+  <div id="bg"></div>
+  <div id="systemDialog" class="systemDialog">
+    <div id="systemDialogBar">
+      <div id="title" class="title">
+      </div><!--~title~-->
+      <div id="buttons">
+        <!-- <a id="close" class="icon block closeComp" href="javascript:void(0)" title="关闭对话框">&nbsp;</a> -->
+        <a id="close" href="javascript:void(0)" title="关闭对话框">&nbsp;</a>
+      </div>
+    </div>
+    <iframe id="systemIframe" name="systemIframe" class=""
+        scrolling="no"
+        src=""
+        allowTransparency="true" frameborder="0"
+        >
+    </iframe>
+    <div id="systemDialogFoot"><iframe scrolling="no" allowTransparency="true" frameborder="0" src="http://blog.sina.com.cn/lm/iframe/20/20070406/16.html" style="width: 100%; height: 30px;"></iframe></div>
+  </div><!--~systemDialog~-->
+</div>
+
+<!-- 发纸条,加好友专用的对话框组件 -->
+<div style="position:absolute; background:#000; top: 0px; left: 0px;display:none;" id="bcDialogBox" onclick="Event.stop(event);">
+  <div style="position:absolute; background:#000; top: 0px; left: 0px; filter:alpha(opacity=20);-moz-opacity:0.2;opacity: 0.2;" id="bcDialogShadow"></div>
+  <div id="bcDialogFrameBox"></iframe></div>
+</div>
+<!-- 结束标签 -->
+
+  <script>loadResource('article');</script>
+  <span name='pvcounter' pid='1' key='500abda301008suj' url='http://blog.sina.com.cn/s/blog_500abda301008suj.html' expara='' style='display:none'></span>
+    <script id='PVCOUNTER_FORIE' type='text/javascript'></script>
+    <script type='text/javascript' src='http://news.sina.com.cn/pvcounter/pvcounter.js'></script>
+</body>
+<!-- SUDA_CODE_START -->
+<script type="text/javascript" src="http://www.sinaimg.cn/unipro/pub/suda_s_v835c.js"></script>
+	<script type="text/javascript" src="http://www.sinaimg.cn/home/sinaflash.js" charset="gb2312"></script>	
+<script type="text/javascript" >
+try{
+_S_gsSID();
+_S_pSt(_S_PID_);
+}catch(e){
+}
+</script>
+<!-- SUDA_CODE_END -->
+<script>
+  var renderArticleMain;
+  renderArticleMain && renderArticleMain();
+</script>
+ 
+
+<script language="javascript" type="text/javascript" src="http://blog.sina.com.cn/lm/html/2007-08-08/1119.js"></script>
+<script type="text/javascript" >
+function viewAd(oArr) {
+	// 通栏广告
+	if(oArr.adPos == "PDPS000000004468") {
+		if(oArr.adType == "swf") {
+			var objFlash = new sinaFlash(oArr.adSrc, "", "750", "90", "7", "", false,"high");
+			objFlash.addParam("wmode", "opaque");
+			objFlash.addVariable("adlink", escape(oArr.adClickCode + oArr.adUrl));
+			objFlash.write("Sina_AD1");	
+			document.getElementById("Sina_TR_AD1").style.display="";
+		}
+		if(oArr.adType == "img") {
+			document.getElementById("Sina_TR_AD1").style.display="";
+			document.getElementById("Sina_AD1").innerHTML = '<a style="width: 750px; height: 90px;" href="' + oArr.adClickCode + oArr.adUrl + '" target="_blank"><img border=0 src="' + oArr.adSrc + '"/></a>';
+		}
+	}
+	// 正文
+	if(oArr.adPos == "PDPS000000004568") {
+		if(oArr.adType == "swf") {
+			var objFlash = new sinaFlash(oArr.adSrc, "", "468", "95", "7", "", false,"high");
+			objFlash.addParam("wmode", "opaque");
+			objFlash.addVariable("adlink", escape(oArr.adClickCode + oArr.adUrl));
+			objFlash.write("Sina_AD2");
+		}
+		if(oArr.adType == "img") {
+			document.getElementById("Sina_AD2").innerHTML = '<a style="width: 468px; height: 95px;" href="' + oArr.adClickCode + oArr.adUrl + '" target="_blank"><img border=0 src="' + oArr.adSrc + '"/></a>';
+		}
+	}
+
+	
+ }
+
+(function (){
+try{
+	var uid = window.scope.uid;
+	var pdps1 = "PDPS000000004468";
+	var pdps2 = "PDPS000000004568";
+	if(window.scope.config.ad.ad1 == true && document.getElementById("Sina_AD1")) {
+	  document.write('<script src="http://bal.blog.sina.com.cn/main/adfshow?user=SINABLOG|'+uid+'|'+pdps1+'&db=sinablog&border=0&local=yes&js=mid" charset="utf-8"><\/script>');
+	}
+	if(window.scope.config.ad.ad2 == true && document.getElementById("Sina_AD2")) {
+		document.write('<script src="http://bal.blog.sina.com.cn/main/adfshow?user=SINABLOG|'+uid+'|'+pdps2+'&db=sinablog&border=0&local=yes&js=mid" charset="utf-8"><\/script>');
+	}
+}catch(e){};
+})();
+</script>
+<script language="javascript" charset="UTF-8"> function recordVisit(){
+	var o = document.createElement("script");
+	o.defer = true;
+	o.src = "http://v.space.sina.com.cn/visitor/add.php?pid=1&uid=" + uid + "&var=newVisitRecord";
+	document.body.appendChild(o);
+}
+if(scope.AuthorUID)recordVisit();
+</script>
+<img src="http://secure-cn.imrworldwide.com/cgi-bin/m?ci=cn-sina2006&cg=0" alt=""/>
+<!-- START WRating v1.0 -->
+<script type="text/javascript" src="http://sina.wrating.com/a1.js"></script>
+<script type="text/javascript">
+try{
+var vjAcc="860010-0328010000"; 
+var wrUrl="http://sina.wrating.com/";
+vjTrack("");
+}catch(e){};
+</script>
+<noscript><img src="http://sina.wrating.com/a.gif?a=&amp;c=860010-0328010000" width="1" height="1"/></noscript>
+<!-- END WRating v1.0 -->
+<script language="javascript" type="text/javascript">document.write('<script type="text/javascript" src="http://stat.blog.sina.com.cn/b.js?'+ Math.random() +'" ><\/script>');</script>
+</html>

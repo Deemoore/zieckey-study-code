@@ -1,0 +1,7 @@
+reserve()是为vector分配预留空间，如reserve(1000)是指为vector预留1000个指定类型元素的空间，reserve()不改变size()值，并且不对预留空间进行强制性初始化。
+
+resize()是为vector重新指定空间大小，并将每个元素初始化为空，将size()的值改为新空间大小。
+
+size()返回vector的resize空间大小。
+
+capacity()返回reserve()的大小。

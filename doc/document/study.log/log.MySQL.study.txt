@@ -1,0 +1,1322 @@
+
+
+mysql> show charset;
++----------+-----------------------------+---------------------+--------+
+| Charset  | Description                 | Default collation   | Maxlen |
++----------+-----------------------------+---------------------+--------+
+| big5     | Big5 Traditional Chinese    | big5_chinese_ci     |      2 |
+| dec8     | DEC West European           | dec8_swedish_ci     |      1 |
+| cp850    | DOS West European           | cp850_general_ci    |      1 |
+| hp8      | HP West European            | hp8_english_ci      |      1 |
+| koi8r    | KOI8-R Relcom Russian       | koi8r_general_ci    |      1 |
+| latin1   | cp1252 West European        | latin1_swedish_ci   |      1 |
+| latin2   | ISO 8859-2 Central European | latin2_general_ci   |      1 |
+| swe7     | 7bit Swedish                | swe7_swedish_ci     |      1 |
+| ascii    | US ASCII                    | ascii_general_ci    |      1 |
+| ujis     | EUC-JP Japanese             | ujis_japanese_ci    |      3 |
+| sjis     | Shift-JIS Japanese          | sjis_japanese_ci    |      2 |
+| hebrew   | ISO 8859-8 Hebrew           | hebrew_general_ci   |      1 |
+| tis620   | TIS620 Thai                 | tis620_thai_ci      |      1 |
+| euckr    | EUC-KR Korean               | euckr_korean_ci     |      2 |
+| koi8u    | KOI8-U Ukrainian            | koi8u_general_ci    |      1 |
+| gb2312   | GB2312 Simplified Chinese   | gb2312_chinese_ci   |      2 |
+| greek    | ISO 8859-7 Greek            | greek_general_ci    |      1 |
+| cp1250   | Windows Central European    | cp1250_general_ci   |      1 |
+| gbk      | GBK Simplified Chinese      | gbk_chinese_ci      |      2 |
+| latin5   | ISO 8859-9 Turkish          | latin5_turkish_ci   |      1 |
+| armscii8 | ARMSCII-8 Armenian          | armscii8_general_ci |      1 |
+| utf8     | UTF-8 Unicode               | utf8_general_ci     |      3 |
+| ucs2     | UCS-2 Unicode               | ucs2_general_ci     |      2 |
+| cp866    | DOS Russian                 | cp866_general_ci    |      1 |
+| keybcs2  | DOS Kamenicky Czech-Slovak  | keybcs2_general_ci  |      1 |
+| macce    | Mac Central European        | macce_general_ci    |      1 |
+| macroman | Mac West European           | macroman_general_ci |      1 |
+| cp852    | DOS Central European        | cp852_general_ci    |      1 |
+| latin7   | ISO 8859-13 Baltic          | latin7_general_ci   |      1 |
+| cp1251   | Windows Cyrillic            | cp1251_general_ci   |      1 |
+| cp1256   | Windows Arabic              | cp1256_general_ci   |      1 |
+| cp1257   | Windows Baltic              | cp1257_general_ci   |      1 |
+| binary   | Binary pseudo charset       | binary              |      1 |
+| geostd8  | GEOSTD8 Georgian            | geostd8_general_ci  |      1 |
+| cp932    | SJIS for Windows Japanese   | cp932_japanese_ci   |      2 |
+| eucjpms  | UJIS for Windows Japanese   | eucjpms_japanese_ci |      3 |
++----------+-----------------------------+---------------------+--------+
+36 rows in set (0.00 sec)
+
+mysql>
+
+MySQL这样选择数据库字符集和数据库校对规则：
+
+·         如果指定了CHARACTER SET X和COLLATE Y，那么采用字符集X和校对规则Y。
+
+·         如果指定了CHARACTER SET X而没有指定COLLATE Y，那么采用CHARACTER SET X和CHARACTER SET X的默认校对规则。
+
+·         否则，采用服务器字符集和服务器校对规则。
+
+MySQL的CREATE DATABASE ... DEFAULT CHARACTER SET ...语法与标准SQL的CREATE SCHEMA ... CHARACTER SET ...语法类似。因此，可以在同一个MySQL服务器上创建使用不同字符集和 校对规则的数据库。
+
+如果在CREATE TABLE语句中没有指定表字符集和校对规则，则使用数据库字符集和校对规则作为默认值。它们没有其它目的。
+
+默认数据库的字符集和校对规则可以用作character_set_database和 collation_database系统变量。无论何时默认数据库更改了，服务器都设置这两个变量的值。如果没有 默认数据库，这两个变量与相应的服务器级别的变量（character_set_server和collation_server）具有相同的值。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MySQL中文字符集问题
+
+使用UTF8时为了节省空间，使用VARCHAR而不要用CHAR。否则，MySQL必须为一个CHAR(10) CHARACTER SET utf8列预备30个字节，因为这是可能的最大长度。
+
+为什么我的 Mysql 不支持中文查询
+
+Q:
+我在写一个查询条件时的问题如下：
+如我想写一个字段中包含“李”字的所有记录
+$str="李";
+select * from table where field like '%$str%' ;
+显示的记录中除了包含”李”字的记录，还有不包含“李”字的记录。为什么？
+A:
+在MySQL中，进行中文排序和查找的时候，对汉字的排序和查找结果是错误的。这种情况在MySQL的很多版本中都存在。如果这个问题不解决，那么MySQL将无法实际处理中文。
+　　出现这个问题的原因是：MySQL在查询字符串时是大小写不敏感的，在编绎MySQL时一般以ISO-8859字符集作为默认的字符集，因此在比较过程中中文编码字符大小写转换造成了这种现象。
+方法一:
+解决方法是对于包含中文的字段加上"binary"属性，使之作为二进制比较，例如将"name char(10)"改成"name char(10)binary"。
+方法二:
+　　如果你使用源码编译MySQL，可以编译MySQL时使用--with--charset=gbk 参数，这样MySQL就会直接支持中文查找和排序了。
+ 方法三:
+　　可以使用 Mysql 的 locate 函数来判断。以上述问题为例,使用方法为:
+SELECT * FROM table WHERE locate(field,'李') > 0;
+本站使用的就是这种方法，感觉还不错。:P
+
+方法四:
+把您的Select语句改成这样,SELECT * FROM TABLE WHERE FIELDS LIKE BINARY '%FIND%'即可!
+
+
+
+mysql中文查询显示完美解决方案
+
+1,#mysql -pxxxx
+>SET character_set_client='gb2312'
+>SET character_set_connection='gb2312'
+>SET character_set_results='gb2312'
+
+
+2,在创建表格时候create table xx(
+                 x1 varchar(255) not null
+                 )DEFAULT CHARSET=gb2312;
+
+3,修改my.cnf,加入default-character-set=gb2312
+然后在程序执行查询之前
+my $before="set character_set_results=gb2312";
+my $sth=$dbh->prepare($before);
+$sth->execute();
+
+$before="set character_set_connetion=gb2312";
+$sth=$dbh->prepare($before);
+$sth->execute();
+$before="set chareacter_set_client=gb2312";
+$sth=$dbh->prepare($before);
+$sth->execute();
+
+my $query="select * FORM xx";
+$sth=$dbh->prepare($query);
+$sth->execute();
+
+
+OK,大功告成
+
+
+
+
+
+getBytes(String charsetName)
+Encodes this String into a sequence of bytes using the named charset, storing the result into a new byte array.
+用指定的字符集编码到一个byte array.
+
+String(byte[] bytes, String charsetName)
+Constructs a new String by decoding the specified array of bytes using the specified charset.
+用指定的字符集解码一个字节数组到字符串。
+
+
+在linux下搭建网站的时候，乱码问题困扰了我差不多一个星期，后来终于解决了。
+    我的体会就是：应用必须和数据库的字符集（编码）相一致。
+    具体地说，就是，如果你想使用gb2312编码，那就要保证：每一个jsp文件都是以gb2312编码存储的（在保存文件的时候选择gb2312编码就可以了），另外，文件头还要定义<%@ page contentType="text/html; charset=gb2312" %>;关于数据库，创建数据库时就要定义编码，例如：create database mysql default character set gb2312 collate gb2312_chinese_ci;最后要做得就是，连接数据时，在相关文件中加入以下代码：useUnicode=true&characterEncoding=gb2312。
+    要补充说明的是，在linux下，其实不用选择gb2312，我都用的是utf8，当然也需要按照以上步骤进行设置，肯定不会出现乱码！个人喜好，大家随意！
+    之前我试了很多方法，比如在/etc/sysconfig/i18n文件中改系统字体，在/etc/my.cnf中[mysqld]字段后加入如下语句default-character-set=gb2312等等，我觉得没有必要。
+    以上步骤看似很简单，但是我的失败教训，也是我的成功心得。现在与大家分享，看后有收获的，不顶一下就是你的不厚道了！
+
+
+
+项目中碰到的乱码问题，希望对同样碰到此问题的朋友有些帮助。至少我认为是最简便的方法。
+原理：mysql默认的字符集是latin1，java中对应的就是ISO-8859-1字符集，所以存入数据时转换为ISO-8859-1,取出时再由ISO-8859-1转换为GBK就OK了。
+import java.io.UnsupportedEncodingException;
+//解决中文问题
+public class EncodingUtil {
+
+ //从数据库取出用
+ public static String latin1ToGBK(String str)
+ {
+  try {
+    String temp_p = str;
+    byte[] temp_t = temp_p.getBytes("ISO-8859-1");
+    String temp = new String(temp_t,"GBK");
+    return temp;
+  }catch (UnsupportedEncodingException ex) {
+   System.out.println(ex);
+   return "";
+  }
+
+ }
+
+ //存入中文数据时用
+ public static String GBKToLatin1(String str)
+ {
+  if(str==null)
+  {
+   str="";
+  }
+  else{
+   try{
+    str=new String(str.getBytes("GBK"),"ISO-8859-1");
+   }
+   catch(Exception ex){
+    ex.printStackTrace();
+   }
+  }
+  return str;
+ }
+}
+
+
+
+
+
+在Java中解决MySQL5.0中文字符集问题全程详细记录
+
+今天被MySQL的中文字符集问题弄得焦头烂额,最终还是解决了.下面分享一下解决过程。
+
+在网上搜索了很多，网友也有很多精彩的帖子，
+但是每个人的情况不总是一样，所以我觉得我下面的文字有存在的必要。
+
+装了MySQL5.0后，系统默认的字符集似乎是UTF8，但是不知道为什么就是不支持中文。
+下面的是我的痛苦的解决过程。
+
+将数据库用character set 和 collate指定字符集为gbk，
+mysql> create database test2  DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create table a(a text);
+Query OK, 0 rows affected (0.14 sec)
+插入的时候也用_gbk指定字符集，
+mysql> insert a values(_gbk'默认数据库的字符集和');
+Query OK, 1 row affected (0.05 sec)
+但是查询的时候还是出现乱。
+mysql> select * from a;
++--------------------------------+
+| a                              |
++--------------------------------+
+| 榛樿鏁版嵁搴撶殑瀛楃闆嗗拰           |
++--------------------------------+
+1 row in set (0.00 sec)
+mysql>
+好的，那么是不是创建表也要指定字符集呢？
+我们继续测试：
+mysql> create table b(a text) DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert b values(_gbk'默认数据库的字符集和');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from b;
++--------------------------------+
+| a                              |
++--------------------------------+
+| 榛樿鏁版嵁搴撶殑瀛楃闆嗗拰           |
++--------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
+同样出现乱码？
+我们不用_gbk指定字符集呢？
+mysql> insert b values('默认数据库的字符集和');
+ERROR 1406 (22001): Data too long for column 'a' at row 1
+mysql> insert a values('默认数据库的字符集和');
+ERROR 1406 (22001): Data too long for column 'a' at row 1
+这样发现根本就插入不进数据。
+那么到底该怎么解决呢？
+
+运行下面的这几行命令，就能看到正常的中文了：
+mysql> SET character_set_connection = gbk;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET character_set_database = gbk;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET character_set_results = gbk;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET character_set_server = gbk;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> SET collation_connection = gbk_bin;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET collation_database = gbk_bin;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET collation_server = gbk_bin;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> select * from a;
++----------------------+
+| a                    |
++----------------------+
+| 默认数据库的字符集和                  |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from b;
++----------------------+
+| a                    |
++----------------------+
+| 默认数据库的字符集和                  |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql>
+
+这样设置之后，也可以正常插入中文了：
+mysql> insert into a values('当然是联系 java ');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from a;
++----------------------+
+| a                    |
++----------------------+
+| 默认数据库的字符集和                  |
+| 当然是联系 java              |
++----------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+
+数据库客户端，那么还是不能正确显示中文，
+最彻底的方法就是更改MySQL的配置文件。
+
+在MySQL5.0的安装目录找到my.ini文件，将其中以下两行：
+default-character-set=utf8
+default-character-set=utf8
+改为：
+default-character-set=gbk
+default-character-set=gbk
+重启MySQL服务器。
+重新连接：
+mysql> select * from a;
++----------------------+
+| a                    |
++----------------------+
+| 默认数据库的字符集和 |
+| 当然是联系 java      |
++----------------------+
+2 rows in set (0.02 sec)
+
+现在好了，可以直接读取中文字符了。
+看看插入中文字符情况：
+mysql> insert b values('看看插入中文字符情况：');
+
+mysql> insert b values('看看插入中文字符情况：');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from b;
++------------------------+
+| a                      |
++------------------------+
+| 默认数据库的字符集和   |
+| 看看插入中文字符情况： |
++------------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+
+下面再看看创建表的情况：
+
+mysql> create table c(a text);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into c values();
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into c values('下面再看看创建表的情况：');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from c;
++--------------------------+
+| a                        |
++--------------------------+
+| NULL                     |
+| 下面再看看创建表的情况： |
++--------------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+
+一切正常了。
+
+下面看看程序中的情况:
+
+package test;
+
+/**
+ *	该程序用来测试JDBC和MySQL连接,然后插入中文字符到数据库中。
+ *	其中用到的表为：
+ *	CREATE TABLE MessageBoard (
+ *	  	ID 				int(10) unsigned NOT NULL default '0',
+ *	  	title 			varchar(255) NOT NULL default '',
+ *	  	content 		text NOT NULL,
+ *	  	author 			varchar(20) NOT NULL default '',
+ *	  	time 			datetime NOT NULL default '0000-00-00 00:00:00',
+ *	  	modifyTime		datetime NOT NULL default '0000-00-00 00:00:00',
+ *	  	PRIMARY KEY  (ID)
+ *	) ;
+ *
+ */
+
+import java.sql.*;
+
+public class InsertChineseCharacterJDBC
+{
+	static
+	{
+		try
+		{
+			//驱动和odbc不同
+			Class.forName ( "org.gjt.mm.mysql.Driver" );
+			System.out.println ( "success loading mysql Driver...." );
+		} catch ( Exception e )
+		{
+			System.out.println ( "Error loading mysql Driver....." );
+			e.printStackTrace ( );
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main ( String agrs[] )
+	{
+		try
+		{
+			//连接参数与Access不同
+			String url = "jdbc:mysql://localhost/BohaoDB";
+			//建立连接
+			Connection con = DriverManager.getConnection ( url, "root", "011124" );
+			//建立发送SQL命令的Statement对象
+			Statement stmt = con.createStatement ( );
+			//返回查询结果
+			int flag = stmt.executeUpdate ( "insert into MessageBoard(ID,title,content,author,time,modifyTime) values(1,'大家好！','我是新来,请多多关照!','zieckey','2007-01-28 20:03:50','2007-01-27 20:03:50');" );
+			if ( 1==flag  )
+			{
+				System.out.println ("插入中文字符到数据库成功！");
+			}else {
+				System.out.println ("插入中文字符到数据库失败！");
+			}
+
+			ResultSet rs = stmt.executeQuery ( "select * from MessageBoard" );
+
+
+			/**
+			 * 取出列属性！
+			 */
+			ResultSetMetaData md = rs.getMetaData ( );
+			int col = md.getColumnCount ( );
+			for ( int i = 1; i <= col; i++ )
+			{
+				System.out.println ( md.getColumnName ( i ) + "\t" );
+			}
+			/**
+			 * 取出列值！
+			 */
+			while ( rs.next ( ) )
+			{
+				String strData = "";
+				for ( int i = 1; i <= col; i++ )
+				{
+					strData = strData + rs.getString ( i ) + "\t";
+				}
+				System.out.println ( strData );
+			}
+			//断开Connection连接
+			rs.close();
+			stmt.close();
+			con.close ( );
+		} catch ( SQLException e )
+		{
+			e.printStackTrace ( );
+		}
+	}
+
+}
+运行输出:
+success loading mysql Driver....
+插入中文字符到数据库成功！
+ID
+title
+content
+author
+time
+modifyTime
+1	大家好！	我是新来,请多多关照!	zieckey	2007-01-28 20:03:50.0	2007-01-27 20:03:50.0
+
+
+
+
+select * from tablename limit 10,30
+从第11条到30条（共计20条）
+
+
+
+更改表定义
+
+　　在建立表后，有时候我们可能需要修改表，比如更改列的定义，更改缺省值，增加新列，删除列等等。ORACLE使用ALTER TABLE语句来更改表的定义
+
+　　1、增加列
+
+　　语法：
+
+ALTER TABLE [schema.] table_name ADD column_definition
+
+　　例：
+
+ALTER TABLE orders ADD order_date DATE;
+
+TABLE ALTER
+
+　　对于已经存在的数据行，新列的值将是NULL.
+
+　　2、更改列
+
+　　语法：
+
+ALTER TABLE [schema.] table_name MODIFY column_name new_attributes;
+
+　　例：
+
+ALTER TABLE orders MODITY (quantity number(10,3),status varchar2(15));
+
+　　这个例子中我们修改了表orders，将STATUS列的长度增加到15,将QUANTITY列减小到10,3;
+
+　　修改列的规则如下：
+
+　　　. 可以增加字符串数据类型的列的长度，数字数据类型列的精度。
+
+　　　. 减少列的长度时，该列应该不包含任何值，所有数据行都为NULL.
+
+　　　. 改变数据类型时，该列的值必须是NULL.
+
+　　　. 对于十进制数字，可以增加或减少但不能降低他的精度。
+
+　　3、删除数据列
+
+　　优化ORACLE数据库，唯一的方法是删除列，重新建立数据库。在ORACLE8i中有很多方法删除列，你可以删除未用数据列或者可以标示该列为未用数据列然后删除。
+
+　　删除数据列的语法是：
+
+ALTER TABLE [schema.] table_name DROP {COLUM column_names | (column_names)}[CASCADE CONSTRAINS]
+
+　　要注意的是在删除列时关于该列的索引和完整性约束也同时删除。注意关键字CASCADE CONSTRAINS，如果删除的列是多列约束的一部分，那么这个约束条件相对于其他列也同时删除。
+
+　　如果用户担心在大型数据库中删除列要花太多时间，可以先将他们标记为未用数据列，标记未用数据列的语法如下：
+
+ALTER TABLE [schema.] table_name SET UNUSED {COLUM column_names | (column_names)}[CASCADE CONSTRAINS]
+
+　　这个语句将一个或多个数据列标记为未用数据列，但并不删除数据列中的数据，也不释放占用的磁盘空间。但是，未用数据列在视图和数据字典中并不显示，并且该数据列的名称将被删除，新的数据列可以使用这个名称。基于该数据列的索引、约束，统计等都将被删除。
+
+　　删除未用数据列的语句是：
+
+ALTER TABLE [schema.] table_name DROP {UNUSED COLUM | COLUMN CONTINUE}
+
+
+
+
+
+
+
+mysql> select * from bohaodb.news where topic like '%余%';
++----+----------------------------+------------------------------+------+-------
+-----+-----------------------------+---------------------+-------------+
+| id | topic                      | content                      | hits | catego
+ryid | picture                     | publishtime         | publishuser |
++----+----------------------------+------------------------------+------+-------
+-----+-----------------------------+---------------------+-------------+
+|  1 | 余总一行到鄂州陈玲娟家视察 | 余总一行到鄂州陈玲娟家视察。 |    3 |
+   0 | /upload/images/陈玲娟家.jpg | 2007-02-04 00:00:00 |             |
++----+----------------------------+------------------------------+------+-------
+-----+-----------------------------+---------------------+-------------+
+1 row in set (0.00 sec)
+
+
+
+select * from bohaodb.news where topic like content like '%余%';
+
+"select * from news where topic like '%网站%'  "
+
+
+
+
+
+
+
+
+
+
+
+
+
+SQL语言快速入门之一
+--------------------------------------------------------------------------------
+日期：2005年4月15日 作者：-=不详=- 人气： 人 [ 大 中 小 ]
+  SQL是英文Structured Query Language的缩写，意思为结构化查询语言。SQL语言的主要功能就是同各种数据库建立联系，进行沟通。按照ANSI（美国国家标准协会）的规定，SQL被作为关系型数据库管理系统的标准语言。SQL语句可以用来执行各种各样的操作，例如更新数据库中的数据，从数据库中提取数据等。目前，绝大多数流行的关系型数据库管理系统，如Oracle, Sybase, Microsoft SQL Server, Access等都采用了SQL语言标准。虽然很多数据库都对SQL语句进行了再开发和扩展，但是包括Select, Insert, Update, Delete, Create, 以及Drop在内的标准的SQL命令仍然可以被用来完成几乎所有的数据库操作。下面，我们就来详细介绍一下SQL语言的基本知识。
+
+
+
+数据库表格
+
+　　一个典型的关系型数据库通常由一个或多个被称作表格的对象组成。数据库中的所有数据或信息都被保存在这些数据库表格中。数据库中的每一个表格都具有自己唯一的表格名称，都是由行和列组成，其中每一列包括了该列名称，数据类型，以及列的其它属性等信息，而行则具体包含某一列的记录或数据。以下，是一个名为天气的数据库表格的实例。
+
+城市  最高气温  最低气温
+北京  10  5
+上海  15  8
+天津  8 2
+重庆 20 13
+
+
+该表格中“城市”， “最高气温”和“最低气温”就是三个不同的列，而表格中的每一行则包含了具体的表格数据。
+
+
+数据查询
+
+　　在众多的SQL命令中，select语句应该算是使用最频繁的。Select语句主要被用来对数据库进行查询并返回符合用户查询标准的结果数据。Select语句的语法格式如下：
+
+select column1 [, column2,etc] from tablename
+
+[where condition];
+
+（[] 表示可选项）
+
+　　select语句中位于select关键词之后的列名用来决定那些列将作为查询结果返回。用户可以按照自己的需要选择任意列，还可以使用通配符“*”来设定返回表格中的所有列。
+
+select语句中位于from关键词之后的表格名称用来决定将要进行查询操作的目标表格。
+
+Select语句中的where可选从句用来规定哪些数据值或哪些行将被作为查询结果返回或显示。
+
+在where条件从句中可以使用以下一些运算符来设定查询标准：
+
+
+= 等于
+
+> 大于
+
+< 小于
+
+>= 大于等于
+
+<= 小于等于
+
+<> 不等于
+
+　　除了上面所提到的运算符外，LIKE运算符在where条件从句中也非常重要。LIKE运算符的功能非常强大，通过使用LIKE运算符可以设定只选择与用户规定格式相同的记录。此外，我们还可以使用通配符“%”用来代替任何字符串。举例如下：
+
+select firstname, lastname, city
+
+from employee
+
+where firstname LIKE ‘E%’;
+
+（注意，字符串必须被包含在单括号内）
+
+上述SQL语句将会查询所有名称以E开头的姓名。或者，通过如下语句：
+
+select * from employee
+
+where firstname = ‘May’；
+
+查询所有名称为May的行。
+
+
+
+
+
+
+SQL语言快速入门之二
+--------------------------------------------------------------------------------
+日期：2005年4月15日 作者：-=不详=- 人气： 人 [ 大 中 小 ]
+  创建表格
+
+
+SQL语言中的create table语句被用来建立新的数据库表格。Create table语句的使用格式如下：
+
+create table tablename
+
+(column1 data type,
+
+column2 data type,
+
+column3 data type);
+
+如果用户希望在建立新表格时规定列的限制条件，可以使用可选的条件选项：
+
+create table tablename
+
+(column1 data type [constraint],
+
+column2 data type [constraint],
+
+column3 data type [constraint]);
+
+举例如下：
+
+create table employee
+
+(firstname varchar(15),
+
+lastname varchar(20),
+
+age number(3),
+
+address varchar(30),
+
+city varchar(20));
+
+简单来说，创建新表格时，在关键词create table后面加入所要建立的表格的名称，然后在括号内顺次设定各列的名称，数据类型，以及可选的限制条件等。注意，所有的SQL语句在结尾处都要使用“；”符号。
+
+使用SQL语句创建的数据库表格和表格中列的名称必须以字母开头，后面可以使用字母，数字或下划线，名称的长度不能超过30个字符。注意，用户在选择表格名称时不要使用SQL语言中的保留关键词，如select, create, insert等，作为表格或列的名称。
+
+数据类型用来设定某一个具体列中数据的类型。例如，在姓名列中只能采用varchar或char的数据类型，而不能使用number的数据类型。
+
+SQL语言中较为常用的数据类型为：
+
+char(size)：固定长度字符串，其中括号中的size用来设定字符串的最大长度。Char类型的最大长度为255字节。
+
+varchar(size)：可变长度字符串，最大长度由size设定。
+
+number(size)：数字类型，其中数字的最大位数由size设定。
+
+Date：日期类型。
+
+number(size,d)：数字类型，size决定该数字总的最大位数，而d则用于设定该数字在小数点后的位数。
+
+最后，在创建新表格时需要注意的一点就是表格中列的限制条件。所谓限制条件就是当向特定列输入数据时所必须遵守的规则。例如，unique这一限制条件要求某一列中不能存在两个值相同的记录，所有记录的值都必须是唯一的。除unique之外，较为常用的列的限制条件还包括not null和primary key等。Not null用来规定表格中某一列的值不能为空。Primary key则为表格中的所有记录规定了唯一的标识符。
+
+
+向表格中插入数据
+
+SQL语言使用insert语句向数据库表格中插入或添加新的数据行。Insert语句的使用格式如下：
+
+insert into tablename
+
+(first_column,...last_column)
+
+values (first_value,...last_value);
+
+例如：
+
+insert into employee
+
+(firstname, lastname, age, address, city)
+
+values (‘Li’, ‘Ming’, 45, ‘No.77 Changan Road’, ‘Beijing”);
+
+简单来说，当向数据库表格中添加新记录时，在关键词insert into后面输入所要添加的表格名称，然后在括号中列出将要添加新值的列的名称。最后，在关键词values的后面按照前面输入的列的顺序对应的输入所有要添加的记录值。
+
+
+更新记录
+
+SQL语言使用update语句更新或修改满足规定条件的现有记录。Update语句的格式为：
+
+update tablename
+
+set columnname = newvalue [, nextcolumn = newvalue2...]
+
+
+where columnname OPERATOR value [and|or column OPERATOR value];
+
+例如：
+
+update employee
+
+set age = age+1
+
+where first_name= ‘Mary’and last_name= ‘Williams’;
+
+使用update语句时，关键一点就是要设定好用于进行判断的where条件从句。
+
+
+删除记录
+
+SQL语言使用delete语句删除数据库表格中的行或记录。Delete语句的格式为：
+
+delete from tablename
+
+where columnname OPERATOR value [and|or column OPERATOR value];
+
+例如：
+
+delete from employee
+
+where lastname = May;
+
+简单来说，当需要删除某一行或某个记录时，在delete from关键词之后输入表格名称，然后在where从句中设定删除记录的判断条件。注意，如果用户在使用delete语句时不设定where从句，则表格中的所有记录将全部被删除。
+
+
+删除数据库表格
+
+在SQL语言中使用drop table命令删除某个表格以及该表格中的所有记录。Drop table命令的使用格式为：
+
+drop table tablename；
+
+例如：
+
+drop table employee;
+
+如果用户希望将某个数据库表格完全删除，只需要在drop table命令后输入希望删除的表格名称即可。Drop table命令的作用与删除表格中的所有记录不同。删除表格中的全部记录之后，该表格仍然存在，而且表格中列的信息不会改变。而使用drop table命令则会将整个数据库表格的所有信息全部删除。
+
+
+以上，我们对SQL语言主要的命令和语句进行了较为详细的介绍。应该说SQL语句的语法结构和风格还是相当简单和直观的，只要用户结合实践多加练习，一定会在短期内迅速掌握。
+
+
+
+
+SQL语言快速入门之三
+--------------------------------------------------------------------------------
+日期：2005年4月15日 作者：-=不详=- 人气： 人 [ 大 中 小 ]
+  我们日常使用SQL语言的工作过程中，使用最多的还是从已经建立好的数据库中查询信息。下面，我们就来详细介绍一下如何使用SQL语言实现各种数据库查询操作。
+
+
+SELECT…FROM
+
+　　为方便讲解，我们在数据库中创建名为Store_Information的如下数据表。
+
+Store_Information
+
+Store_Name  	Sales  	Date
+
+Los Angeles  	$1500  	Jan-10-2000
+
+San Diego  		$250  	Jan-11-2000
+Los Angeles  	$300  	Jan-12-2000
+
+Boston 			$700  	Jan-12-2000
+
+
+
+
+　　SQL语言中用于数据库查询的最简单的命令就是SELECT…FROM，语法格式为：
+
+SELECT "column_name" FROM "table_name"
+
+例如，如果我们希望查询Store_Information数据表中所有的商店名称时，可以使用如下命令：
+
+SELECT store_name FROM Store_Information
+
+查询结果显示为：
+
+Store_Name
+
+Los Angeles
+
+San Diego
+
+Los Angeles
+
+Boston
+
+如果用户希望一次查询多个字段，可以将所要查询的字段名称依次加入SELECT关键字之后，中间用“，”隔开即可。
+
+DISTINCT
+
+　　SELECT关键字支持用户查询数据表中指定字段的所有数据，但是这样有时就会不可避免的出现重复信息。如果用户希望只查询那些具有不同记录值的信息的话，可以使用SQL语言的DISTINCT关键字。语法格式如下：
+
+SELECT DISTINCT "column_name"
+
+FROM "table_name"
+
+例如，我们可以使用以下命令查询Store_Information数据表具有不同记录值的所有记录。
+
+SELECT DISTINCT Store_Name FROM Store_Information
+
+查询结果如下：
+
+Store_Name
+
+Los Angeles
+
+San Diego
+
+Boston
+
+WHERE
+
+　　除了选择具有不同记录值的记录之外，有时我们可能还会需要根据某些条件对数据库中的数据进行查询。例如，我们可能需要查询Store_Information数据表中销售额超过1000美圆的商店。为此，我们可以使用SQL语言的WHERE关键字设定查询条件。语法格式如下：
+
+SELECT "column_name"
+
+FROM "table_name"
+
+WHERE "condition"
+
+由此，我们可以使用如下命令查询销售额超过1000美圆的商店信息：
+
+SELECT store_name FROM Store_Information WHERE Sales > 1000
+
+查询结果显示为：
+
+store_name
+
+Los Angeles
+
+运算函数
+
+　　现在，我们已经了解到在使用SQL语言进行数据库查询操作时可以通过对数值的判断设定灵活的查询条件。为了增强对运算的支持能力，SQL提供了众多实用的运算函数供广大用户使用。例如，我们可以直接在SQL命令中调用SUM或AVG这两个分别用于计算总数和平均数的函数。语法格式如下：
+
+SELECT "function type"("column_name")
+
+FROM "table_name"
+
+如果我们希望查询Store_Information数据表中所有商店的总销售额的话，可以使用如下命令：
+
+SELECT SUM(Sales) FROM Store_Information
+
+查询结果显示为：
+
+SUM(Sales)
+
+$2750
+
+COUNT
+
+　　除了SUM和AVG函数之外，COUNT函数是SQL语言中另一个较为常用的运算函数。COUNT函数可以用来计算数据表中指定字段所包含的记录数目。语法格式为：
+
+SELECT COUNT("column_name")
+
+FROM "table_name"
+
+例如，如果我们希望查询Store_Information数据表中的有关商店的记录条数时，可以使用如下命令：
+
+SELECT COUNT(store_name)
+
+FROM Store_Information
+
+查询结果显示为：
+
+Count(store_name)
+
+4
+
+COUNT函数可以和DISTINCT关键字一起使用从而可以查询数据表中指定字段中所有具有不同记录值的记录数目。例如，如果我们希望查询Store_Information数据表中不同商店的数目时，可以使用如下命令：
+
+
+SELECT COUNT(DISTINCT store_name)
+
+FROM Store_Information
+
+查询结果显示为：
+
+Count(DISTINCT store_name)
+
+3
+
+GROUP BY
+
+下面我们来进一步看一下SQL语言中的集合函数。上文中，我们曾使用SUM函数计算所有商店的销售总额，如果我们希望计算每一家商店各自的总销售额时该怎么办呢？要实现这一目的我们需要做两件事：首先，我们需要查询商店名称和销售额两个字段；然后，我们使用SQL语言的GROUP BY命令将销售额按照不同的商店进行分组，从而计算出不同商店的销售总额。GROUP BY命令的语法格式为：
+
+SELECT "column_name1", SUM("column_name2")
+
+FROM "table_name"
+
+GROUP BY "column_name1"
+
+我们可以使用如下命令实现上述查询目的：
+
+SELECT store_name, SUM(Sales)
+
+FROM Store_Information
+
+GROUP BY store_name
+
+查询结果显示为：
+
+store_name SUM(Sales)
+
+Los Angeles $1800
+
+San Diego $250
+
+Boston $700
+
+小注：
+
+GROUP BY关键字一般应用于同时查询多个字段并对字段进行算术运算的SQL命令中。
+
+HAVING
+
+用户在使用SQL语言的过程中可能希望解决的另一个问题就是对由sum或其它集合函数运算结果的输出进行限制。例如，我们可能只希望看到Store_Information数据表中销售总额超过1500美圆的商店的信息，这时我们就需要使用HAVING从句。语法格式为：
+
+SELECT "column_name1", SUM("column_name2")
+
+FROM "table_name"
+
+GROUP BY "column_name1"
+
+HAVING (arithematic function condition)
+
+（GROUP BY从句可选）
+
+由此，我们可以使用如下命令实现上述查询目的：
+
+SELECT store_name, SUM(sales)
+
+FROM Store_Information
+
+GROUP BY store_name
+
+HAVING SUM(sales) > 1500
+
+查询结果显示为：
+
+store_name SUM(Sales)
+
+Los Angeles $1800
+
+小注：
+
+SQL语言中设定集合函数的查询条件时使用HAVING从句而不是WHERE从句。通常情况下，HAVING从句被放置在SQL命令的结尾处。
+
+ALIAS
+
+下面，我们重点介绍一下如何在SQL命令中设定别名。SQL语言中一般使用两种类型的别名，分别为字段别名和数据表别名。
+
+简单的说，使用字段别名可以帮助我们有效的组织查询的输出结果。例如，上文所列举的多个实例中，当我们计算商店销售总额时，显示结果中就会出现SUM(sales)。虽然SUM(sales)并不会对我们理解查询结果带来不便，但是如果我们需要在查询中使用多项复杂运算时，显示结果就不会这么直观了。如果这时我们使用字段别名就会极大的提高查询结果的可读性。
+
+对于数据表别名，我们可以通过将别名直接放置在FROM从句中数据表名称的后面设定。数据表别名在我们下面将要讲述的连接多个数据表进行查询的操作中极为有用。
+
+字段和数据表别名的语法格式如下：
+
+SELECT "table_alias"."column_name1" "column_alias"
+
+FROM "table_name" "table_alias"
+
+即别名都直接放置在各自对应名称的后面，中间用空格分开。
+
+以Store_Information数据表为例，我们可以在GROUP BY一节中所使用的SQL命令中设置如下字段和数据表别名：
+
+SELECT A1.store_name Store, SUM(Sales) "Total Sales"
+
+FROM Store_Information A1
+
+GROUP BY A1.store_name
+
+查询结果显示为：
+
+Store Total Sales
+
+Los Angeles $1800
+
+San Diego $250
+
+Boston $700
+
+连接多个数据表
+
+最后，我们来看一下如果使用SQL语言连接多个数据表，实现对多个数据表的查询。为方便讲解，我们在数据库中分别创建了两个名为Store_Information和Region的数据表。
+
+Store_Information
+
+
+
+
+
+
+
+数据库备份：
+E:\>mysqldump bohaodb > e:\database.sql -uroot -p011124
+
+E:\>
+
+
+
+
+2007.10.31
+mysql用的是免安装版:mysql-5.1.14-beta-win32
+在C盘根目录下新建一个my.cnf的文件，
+文件内容包括两个重要参赛，一个是指定mysql的路径，
+一个是指定mysql的数据的路径，内容如下：
+[mysqld]
+# set basedir to your installation path
+basedir=D:\\softwareBackup\\database\\mysql-5.1.14-beta-win32
+# set datadir to the location of your data directory
+datadir=D:\\softwareBackup\\database\\mysql-5.1.14-beta-win32\\data
+
+#更改字符集
+#default-character-set=gbk
+
+
+用MySQL内部默认的字符集编码，也就是ISO-8859-1编码，
+看一看就知道了，latin1就是ISO-8859-1
+
+mysql> show   variables   like   'ch%';
++--------------------------+----------------------------------------------------
+----------------+
+| Variable_name            | Value
+                |
++--------------------------+----------------------------------------------------
+----------------+
+| character_set_client     | latin1
+                |
+| character_set_connection | latin1
+                |
+| character_set_database   | latin1
+                |
+| character_set_filesystem | binary
+                |
+| character_set_results    | latin1
+                |
+| character_set_server     | latin1
+                |
+| character_set_system     | utf8
+                |
+| character_sets_dir       | D:\softwareBackup\database\mysql-5.1.14-beta-win32\share\charsets\ |
++--------------------------+----------------------------------------------------
+----------------+
+8 rows in set (0.00 sec)
+
+mysql>
+
+mysql> insert into b values ( '青藏高原' );
+Query OK, 1 row affected (0.00 sec)
+
+当我们从windows命令行插入中文字符时，中文字符被windows自动编码为gbk编码，
+例如：“青藏高原”通过windows的gbk编码为“XXXXXX”的二进制数
+然后mysql对“XXXXXX”的二进制数用ISO-8859-1编码为“YYYYYYY”的二进制数存放在数据库中。
+
+当我们从数据库读取数据时，是这个过程的逆过程：
+MySQL对数据库中二进制数据“YYYYYYY”用ISO-8859-1解码后得“XXXXXX”的二进制数到传给windows系统，
+windows系统选用默认的字符集GBK对“XXXXXX”进行解码从而得到“青藏高原”在屏幕上显示出来。
+
+好了，这个过程清楚了，那么现在看看在java程序中表现：
+
+/**
+ *    该程序用来测试JDBC和MySQL连接，解决中文乱码问题
+ *	  作者：zieckey
+ */
+
+import java.sql.*;
+import java.nio.charset.*;
+import java.util.*;
+
+public class QueryJDBC
+{
+    static
+    {
+        try
+        {
+            //驱动和odbc不同
+
+            Class.forName ( "org.gjt.mm.mysql.Driver" );
+            System.out.println ( "success loading mysql Driver...." );
+        } catch ( Exception e )
+        {
+            System.out.println ( "Error loading mysql Driver....." );
+            e.printStackTrace ( );
+        }
+    }
+
+    /**
+     * @param args
+     */
+    public static void main ( String agrs[] ) throws Exception
+    {
+    	Properties pps=System.getProperties();
+		pps.put("file.encoding","ISO-8859-1");//重新设置当前字符集的编码标准
+        try
+        {
+            //建立连接
+            Connection con = DriverManager.getConnection ( "jdbc:mysql://localhost/db_birthday?user=root&password=" );
+            //建立发送SQL命令的Statement对象
+            Statement stmt = con.createStatement ( );
+            //返回查询结果
+            ResultSet rs = stmt.executeQuery ( "select * from a" );
+
+            ResultSetMetaData md = rs.getMetaData ( );
+
+            int col = md.getColumnCount ( );
+            for ( int i = 1; i <= col; i++ )
+            {
+                System.out.println ( md.getColumnName ( i ) + "\t" );
+            }
+            while ( rs.next ( ) )
+            {
+                String strData = "";
+                String strTmp;
+                for ( int i = 1; i <= col; i++ )
+                {
+                	strData = strData + rs.getString ( i ) + "\t";
+                    
+                }
+                System.out.println ( strData );
+            }
+            //断开Connection连接
+
+            rs.close();
+            stmt.close();
+            con.close ( );
+        } catch ( SQLException e )
+        {
+            e.printStackTrace ( );
+        }
+    }
+
+}
+
+
+E:\Coding\java\test>javac QueryJDBC.java
+
+E:\Coding\java\test>java QueryJDBC
+success loading mysql Driver....
+a
+????
+nihao????
+hello
+??????·×·±?????????á
+??
+出现乱码。
+分析，Java内部是使用 unicode ，而 mysql 缺省使用 iso-88859-1，
+所以 jdbc driver 从 mysql server 接受结果时，会做 unicode 的解码，
+而数据库中实际的二进制数据是两层编码:GBK编码后又进行了iso-88859-1编码.
+所以要想得到正确的数据是应该对从数据库中得到数据进行iso-88859-1解码,
+然后对此解码后的二进制数据进行gbk编码传给windows,
+然后windows用其默认的gbk编码集进行解码显示出来.
+好的,基于这样的思路,修改程序如下,只需添加刚刚所说的编解码语句就行了:
+strTmp = new String( rs.getString(i).getBytes("ISO-8859-1"), "gbk" );
+
+
+整个程序如下:
+/**
+ *    该程序用来测试JDBC和MySQL连接，解决中文乱码问题
+ *	  作者：zieckey
+ */
+
+import java.sql.*;
+import java.nio.charset.*;
+import java.util.*;
+
+public class QueryJDBC
+{
+    static
+    {
+        try
+        {
+            //驱动和odbc不同
+
+            Class.forName ( "org.gjt.mm.mysql.Driver" );
+            System.out.println ( "success loading mysql Driver...." );
+        } catch ( Exception e )
+        {
+            System.out.println ( "Error loading mysql Driver....." );
+            e.printStackTrace ( );
+        }
+    }
+
+    /**
+     * @param args
+     */
+    public static void main ( String agrs[] )
+    {
+    	Properties pps=System.getProperties();
+		pps.put("file.encoding","ISO-8859-1");//重新设置当前字符集的编码标准
+        try
+        {
+            Connection con = DriverManager.getConnection ( "jdbc:mysql://localhost/db_birthday?user=root&password=" );
+            //建立发送SQL命令的Statement对象
+            Statement stmt = con.createStatement ( );
+            //返回查询结果
+            ResultSet rs = stmt.executeQuery ( "select * from a" );
+
+            ResultSetMetaData md = rs.getMetaData ( );
+
+            int col = md.getColumnCount ( );
+            for ( int i = 1; i <= col; i++ )
+            {
+                System.out.println ( md.getColumnName ( i ) + "\t" );
+            }
+            while ( rs.next ( ) )
+            {
+                String strData = "";
+                String strTmp;
+                for ( int i = 1; i <= col; i++ )
+                {
+                	try
+					{               		
+                		strTmp = new String( rs.getString(i).getBytes("ISO-8859-1"), "gbk" );
+                	}catch ( Exception e )
+			        {
+			            e.printStackTrace ( );
+			            strTmp = "";
+			        }
+                    strData = strData + strTmp + "\t";
+                }
+                System.out.println ( strData );
+            }
+            //断开Connection连接
+
+            rs.close();
+            stmt.close();
+            con.close ( );
+        } catch ( SQLException e )
+        {
+            e.printStackTrace ( );
+        }
+    }
+
+}
+
+E:\Coding\java\test>javac QueryJDBC.java
+
+E:\Coding\java\test>java QueryJDBC
+success loading mysql Driver....
+a
+你好
+nihao你好
+hello
+在这个纷繁芜杂的社会
+你
+
+
+现在我们应该清楚了mysql和java中字符集编码的问题,
+那么后面深入的问题都不难了.
+
+
+另外,推荐一个好用的MySQL的图形界面软件:
+MySQL Control Center,
+该软件是用QT3写的,是一个功能齐全的、基于GUI的MySQL客户端程序，可以跨平台操作。
+它提供多种风格的用户界面，支持简体中文，易于操作，
+某些操作界面与SQL Server数据库系统的客户端工具——“企业管理器”非常相似。
+因此，无论在功能上还是在界面上，MySQLCC都可以与商业数据库所提供的、基于GUI的客户端程序相媲美。
+该项目的开发一直非常活跃。 因为是QT开发的,支持中文.
+不过好像只有在MySQL的字符集编码为ISO-8859-1时,
+通过MySQLCC对数据库进行中文数据的插入和查询才不会出现乱码.

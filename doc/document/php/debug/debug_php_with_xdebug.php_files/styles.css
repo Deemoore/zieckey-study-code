@@ -1,0 +1,1046 @@
+/* global element styles  */
+body{ 	
+    background: #FFF;
+    color: #222;
+    font-family: Verdana, Tahoma, Arial, Trebuchet MS, Sans-Serif, Georgia, Courier, Times New Roman, Serif;
+    font-size: 10px;
+    line-height: 135%;
+	margin: 0px;
+	padding: 0px; /* required for Opera to have 0 margin */
+	text-align: left; /* centers board in MSIE */
+}
+
+/* Set up IPB table */
+.ipbtable { width:100% }
+
+.phpcode,
+.aspcode,
+.sqlcode,
+.vbacode,
+.jscode,
+.plaincode{
+	background-color: #FAFCFE;
+	overflow: auto; 
+	white-space: nowrap; 
+	border: 1px dashed #737272;
+	color: #0C3E64;
+	margin: 0 auto 15 auto;
+	padding: 2px;
+	width: 100%;
+	font-family: Courier New, Verdana, Arial, Comic Sans MS;
+	font-size: 9pt;
+}
+
+.phpcode {background-image: url(images/php_bg.gif);}
+.aspcode {background-image: url(images/asp_bg.gif);}
+.sqlcode {background-image: url(images/sql_bg.gif);}
+.vbacode {background-image: url(images/vba_bg.gif);}
+.jscode   {background-image: url(images/javascript_bg.gif);}
+
+.phpmain,
+.aspmain,
+.sqlmain,
+.vbamain,
+.jsmain,
+.codemain{
+	background: #FAFCFE;
+	border: 1px dashed #000;
+	color: #465584;
+	margin: 0 auto 0 auto;
+	padding: 2px;
+	width: 100%;
+	font-family: Courier New, Verdana, Arial, Comic Sans MS;
+	font-size: 9pt;
+	color: #0C3E64;
+}
+
+.highlightPHP {
+ 	background: #FAFCFE url(images/php_bg.gif);
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 
+}
+.highlightASP {
+ 	background: #FAFCFE url(images/asp_bg.gif);
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 
+}
+.highlightSQL {
+ 	background: #FAFCFE url(images/sql_bg.gif);
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 
+}
+.highlightVBA {
+ 	background: #FAFCFE url(images/vba_bg.gif);
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 
+}
+.highlightJS{
+ 	background: #FAFCFE url(images/javascript_bg.gif);
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 	
+}
+.highlightCODE {
+ 	background: #FAFCFE;
+	OVERFLOW: auto; 
+	WIDTH: 750px;  
+	WHITE-SPACE: nowrap; 
+}
+
+
+/*Styles for comments*/
+
+#commentform {
+	border-width: 1px;
+	border-style: solid; 
+	border-color: #cccccc; 
+	
+	margin: 0px 0px 10px 0px;
+	width: 750px;
+}
+
+#commenthead {
+	padding: 10px;	
+	margin-bottom: 10px;
+	width: 750px;
+}
+
+.commentheadoption {
+	/*position: relative;
+	left: 550px;*/
+}
+
+.commentrss {
+	position: relative;
+	left: 650px;
+}
+
+.commentmain {
+	border-width: 1px;
+	border-style: solid; 
+	border-color: #cccccc; 
+	
+	margin: 0 0 10 0;
+	width: 750;
+}
+
+.commenterror, 
+.commentsuccess{
+	border-width: 1px;
+	border-style: solid; 
+	border-color: #cccccc; 
+	padding: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;	
+	margin: 0px 0px 10px 0px;
+	color: #336633;
+}
+
+.commenterror {color: #990000;}
+
+.commentbody {
+	padding: 10px 10px 10px 10px;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;	
+}
+
+.commentbyline {
+	border: #B8B8B8 1px;
+	border-style: dashed none none;
+	text-align: right;
+	padding: 5px 15px 5px 15px;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;	
+}
+
+.commentbyline a {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #165382;
+	text-decoration: none;
+}
+
+.comment {
+	color: #007700;
+}
+.smallfont {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:0.8em;
+	color:#666666;
+}
+
+label {
+	margin: 0;
+	padding:0.2em;
+	margin-top:0.3em;
+	text-align:right;
+	float:left;
+	font-weight: bold;
+	font-size:0.8em;
+	color:#666666;
+}
+
+/*new styles from 20.04.06*/
+
+a {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #165382;
+	text-decoration: none;
+}
+a.smallfont {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: #165382;
+	text-decoration: none;
+}
+a.smallfont:hover {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	color: #000;
+	text-decoration: none;
+}
+a.related {
+	font-size: 10pt;
+	font-family: Verdana, Arial, Comic Sans ms;
+	color: #004E99;
+	text-decoration: none;
+}
+a.related:hover {
+	text-decoration: underline;
+}
+a.link {
+	COLOR: #1C62CB; 
+	TEXT-DECORATION: underline; 
+}
+a.link:hover {
+	COLOR: #1C62CB; 
+	TEXT-DECORATION: none;
+}
+a.quote {
+	LINE-HEIGHT: 17px; 
+	TEXT-ALIGN: justify; 
+	TEXT-DECORATION: underline; 
+	COLOR: #000000;
+}
+a.quote:hover {
+	LINE-HEIGHT: 17px; 
+	TEXT-ALIGN: justify; 
+	TEXT-DECORATION: none; 
+	COLOR: #000000;
+}
+a.tablelinks{
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana;
+}
+a.backlink{
+	margin:0px;	
+	font-family:  Verdana,Arial,Helvetica,sans-serif;	
+	font-size:12px;	
+	text-decoration:none; 
+	color:#216091;
+	font-weight:normal;
+}
+a.backlink:hover{
+	margin:0px;	
+	font-family:  Verdana,Arial,Helvetica,sans-serif;	
+	font-size:12px;	
+	text-decoration:underline; 
+	color:#216091;
+	font-weight:normal;
+}
+a.insidetable {
+	font-family: Verdana,Arial,Helvetica,sans-serif;	
+	font-size:11px;	
+	text-decoration:none; 
+	color:#165382;
+	font-weight: normal;
+}
+a.insidetable:hover{
+	text-decoration:underline;
+	color:#000;
+}
+
+.menutext {
+	FONT-WEIGHT: bold; 
+	FONT-SIZE: 13px; 
+	COLOR: #996633; 
+	LINE-HEIGHT: 20px; 
+	FONT-FAMILY: Arial, Helvetica, sans-serif; 
+	LETTER-SPACING: 1px;
+}
+.verdana10 {
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0 auto 0 auto;
+}
+.tahoma10blue{
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Tahoma; 
+	MARGIN: 0cm 0cm 10pt; 
+	font-weight: bold; 
+	color: #4791D3;
+}
+.articleheader{
+	FONT-SIZE: 	 11pt; 
+	FONT-FAMILY: Arial, Verdana, Comic Sans ms, Helvetica; 
+	color:		 #165382; 
+	MARGIN: 	 0cm 0cm 10pt; 
+	font-weight: bold;
+	text-decoration:underline;
+}		
+		
+p{
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 10pt; 
+}
+p.quote {
+	LINE-HEIGHT: 17px; 
+	TEXT-ALIGN: justify;
+}
+p.sql{
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 10pt; 
+	color: #2A6D23; 
+	font-weight: bold;
+}
+p.code{
+	FONT-WEIGHT: bold; 
+	FONT-SIZE: 12px; 
+	COLOR: #3E84C3; 
+	FONT-FAMILY: Arial;
+}
+p.topicheader{
+	font-size: 11pt; 
+	font-family: Arial, Verdana, Comic Sans ms, Helvetica; 
+	color: #165382; 
+	margin: 0cm 0cm 10pt; 
+	font-weight: bold;
+	font-style: italic;
+}
+p.articleheader{
+	font-size: 11pt; 
+	font-family: Arial, Verdana, Arial, Comic Sans ms, Helvetica; 
+	color: #165382; 
+	margin: 0cm 0cm 10pt; 
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+li.square {
+	list-style:square;	
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 0cm 0cm;
+}
+li.decimal {
+	list-style:decimal; 
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 0cm 0cm;
+}
+ul.square li {
+	list-style:square;	
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 0cm 0cm;
+}
+ul.decimal li {
+	list-style:decimal;
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 0cm 0cm;
+}
+	
+/*my styles for tables*/
+td{
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 10pt;
+}
+tr .contentheading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #336799;
+  border: 1px #165382;
+  border-style: none none dashed none;
+}
+
+tr .contentheading  a{
+  font-size: 18px;
+  font-weight: bold;
+  color: #336799;
+  text-decoration: none;
+}
+
+tr .buttonheading {
+  border: 1px #165382;
+  border-style: none none dashed none;
+}
+td.smallcol{ 
+	width: 20px; 
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0 auto 0 auto;
+}
+table.tableprop { 
+	border: 1px solid #B7BCDB; 
+}
+
+table.tableprop td.tableheadprop{
+	background-color:#7391BE; 
+	font-size: 8pt; 
+	font-family: Verdana; 
+	font-weight: bold; 
+	color: #FFFFFF; 
+	padding: 5px; 
+	text-align: left;
+	vertical-align: top;
+}
+table.tableprop td{
+	background-color:#EBF2FD; 
+	font-size: 8pt; 
+	font-family: Verdana; 
+	color:#333333;
+	text-align: left;
+	padding: 5px; 
+	vertical-align: top;
+}
+table.tutorial {
+	width: 600; 
+	border: 0;
+}
+table.article {
+	border: 0;
+}
+table.tutorial p,li, td.article p, table.article p, li { 
+	text-align: justify;
+}
+	
+
+/*default template styles*/
+.smalltext, .smalltextwhite, .smalltextblack {
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size:11px; 
+	font-weight:normal;
+} /*Small text*/
+.smalltext {
+	color: #333;
+} /*Small text blue*/
+.smalltextwhite{
+	color: #6A7B9C;
+} /*Small text white*/
+.smalltextblack{
+	color: #000000;
+} /*Small text black*/
+
+.newstext, .newsdata, .newsdatab {
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size:12px; 
+	font-weight:normal; 
+	color: #7C7E7F; 
+	text-decoration:none;
+}
+.newstext {
+	color: #7C7E7F;
+}
+.newsdata {
+	color: #FF4C1E;
+}
+.newsdatab {
+	font-weight: bold; 
+	color: #FF4C1E;
+}
+
+.titletext {
+	font-family: Arial, Helvetica, sans-serif; 
+	color:#4757C4; 
+	font-size:15px; 
+	font-weight:bold; 
+	line-height: 18px;
+}/*Page title*/
+.subtitletext {
+	font-family: Arial, Helvetica, sans-serif; 
+	color:#4791D3; 
+	font-size:13px; 
+	font-weight:bold;
+}/*Subtitle*/
+
+.copy {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 11px; 
+	font-weight: normal; 
+	text-decoration: none; 
+	color: #A3A5A7;
+}
+
+ .rssbody{
+	/*background-image: url(/images/wellcomepagebody.gif) no-repeat left bottom; */
+	background-color: #F7F7F7;
+	margin: 50px 0 0 0; 
+	padding: 20px; 
+	width: 550px;
+}
+/*wellcome page styles*/
+ .wellcomepagebody{
+	background:url(http://www.webcheatsheet.com/images/wellcomepagebody.jpg) no-repeat left bottom; 
+	padding-bottom:10px; 
+	margin:0px 0 0px 0px; 
+	width: 550px;
+}
+ .wellcomepagehead{
+	background:url(http://www.webcheatsheet.com/images/wellcomepagehead.jpg) no-repeat left top;
+}
+ 
+ .wellcomepagebody a,
+ .sqltutorialbody a{
+	margin:0px;	
+	font-family: comic sans ms, Verdana,Arial,Helvetica,sans-serif;	
+	font-size:18px;	
+	text-decoration:none; 
+	color:#165382;
+	font-weight:normal;
+} 
+ .tutorialbody a{
+	margin:0px;	
+	font-weight:bold; 
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:12px;
+	text-decoration:none; 
+	color:#165382;
+} 
+ 
+ .wellcomepagebody a:hover, 
+ .sqltutorialbody a:hover{
+	margin:0px; 
+	font-family: comic sans ms, Verdana,Arial,Helvetica,sans-serif; 
+	font-size:18px; 
+	text-decoration:underline;
+	color:#000;
+}	
+ .tutorialbody a:hover{
+	margin:0px; 
+	font-family:Verdana,Arial,Helvetica,sans-serif; 
+	font-size:12px; 
+	text-decoration:underline;
+	color:#000;
+}	
+ 
+ .wellcomepagebody a.insidetable, 
+ .sqltutorialbody a.insidetable,
+ .tutorialbody a.insidetable{
+	margin:0px;	
+	font-family: Verdana,Arial,Helvetica,sans-serif;	
+	font-size:11px;	
+	text-decoration:none; 
+	color:#165382;
+	font-weight: normal;
+}
+ 
+ .wellcomepagebody a.insidetable:hover, 
+ .sqltutorialbody a.insidetable:hover,
+ .tutorialbody a.insidetable:hover {
+	margin:0px; 
+	font-family: Verdana,Arial,Helvetica,sans-serif; 
+	font-size:11px; 
+	text-decoration:underline;
+	color:#000;
+}		
+ 
+ .wellcomepagebody strong, 
+ .sqltutorialbody strong,
+ .tutorialbody strong{
+	font-size:15px; 
+	font-family: comic sans ms,arial; 
+	color:#fff; 
+	display:block; 
+	width:550px; 
+	padding:5px 0 5px 35px;
+}		
+ 
+ .wellcomepagebody p, 
+ .sqltutorialbody p,
+ .tutorialbody p{
+	background-image:none; 
+	list-style:square; 
+	padding:0; 
+	font-size:12px; 
+	margin:10px 10px 0px 2px; 
+	color:#5d5d5d; 
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana;
+}		
+
+ .wellcomepagebody  img {
+	margin: 0px 0px 0px 10px
+}
+
+  /*main inside page styles*/
+ .mainbody{
+	background:url(/images/wellcomepagebody.jpg) no-repeat left bottom; 
+	padding-bottom:10px; 
+	margin:0px 0 0px 0px; 
+	width: 299px;
+}
+ .mainbody a{
+	margin:0px;	
+	font-family: Verdana,Arial,Helvetica,sans-serif;	
+	font-size:11px;	
+	text-decoration:none; 
+	color:#165382;
+	font-weight:normal;
+}
+ .mainbody a:hover{
+	margin:0px; 
+	font-family: Verdana,Arial,Helvetica,sans-serif; 
+	font-size:11px; 
+	text-decoration:underline;
+	color:#000;
+}		
+ .mainbody strong{
+	font-size:15px; 
+	font-family: comic sans ms,arial; 
+	color:#fff; 
+	display:block; 
+	width:300px; 
+	padding:5px 0 7px 40px;
+}		
+ .mainbody p{
+	background-image:none; 
+	list-style:square; 
+	padding:0; 
+	font-size:12px; 
+	margin:10px 10px 0px 10px; 
+	color:#5d5d5d; 
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana;
+}	
+ .accesshead{
+	background:url(/images/access_head.jpg) no-repeat left top;
+}
+ .generalhead{
+	background:url(/images/general_head.jpg) no-repeat left top;
+}
+ .mysqlhead{
+	background:url(/images/mysqlhead.jpg) no-repeat left top;
+}
+
+ /*left panel*/
+.searchbody,
+ .subbody{
+	background:url(/images/searchbody.jpg) no-repeat left bottom; 
+	padding-bottom: 10px; 
+	margin: 0px 10px 0px 20px; 
+	width: 171px;
+}
+
+.subbody {background:url(/images/incbody.jpg) no-repeat left bottom;}
+.subbody p {
+	padding: 0 10 0 10;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:0.8em;
+	color:#666666;
+}
+.subbody a {
+	color: #165382;
+	text-decoration: underline;
+}
+
+.searchhead{
+	background:url(/images/searchhead.jpg) no-repeat left top;
+}
+ .subhead{
+	background:url(/images/subhead.jpg) no-repeat left top;
+}
+ .questions{
+	background:url(/images/questions.jpg) no-repeat left top;
+}
+
+ .searchbody strong,
+ .subbody strong {
+	font-size:15px; 
+	font-family:comic sans ms,arial; 
+	color:#fff; 
+	display:block; 
+	width:171px; 
+	padding:5px 0 5px 35px;
+}		
+ 
+/*additional styles*/ 
+.sqltutorialbody{
+	background:url(http://www.webcheatsheet.com/images/sqltutorialbody.jpg) no-repeat left bottom; 
+	padding-bottom:10px; 
+	margin:0px 0 0px 0px; 
+	width: 550px;
+}
+.tutorialbody{
+	background:url(http://www.webcheatsheet.com/images/tutorialbody.jpg) no-repeat left bottom; 
+	padding-bottom:10px;
+	margin:0px 0 0px 0px;
+	width: 550px;
+}
+
+ /*Include areas*/
+table.tableborders, td.tableborders {
+	border: 1px solid #B7BCDB; 
+}
+table.tableheads{
+	background-color:#EBECF3; 
+	padding: 5px;
+}
+td.tableheads{
+	background-color:#5693EE; 
+	padding: 1px; 
+	color:#FFFFFF; 
+	FONT-SIZE: 10pt; 
+	FONT-FAMILY: Verdana; 
+	MARGIN: 0cm 0cm 10pt; 
+	color: #fff; 
+	font-weight: bold;
+}
+table.tableheads .smalltext ,td.tableheads .smalltext {
+	color:#565A8A;
+}
+table.tablebodys{
+	background-color:#FFFFFF; 
+	padding: 5px;
+}
+td.tablebodys {
+	background-color:#E4EFFF; 
+	padding: 5px
+}
+table.tablebodys strong, td.tablebodys strong {
+	color:#565A8A;
+}
+
+
+ .categories{
+	background:url(/images/incbody.jpg) no-repeat left bottom; 
+	padding-bottom:10px; 
+	margin:0px 0 0px 0px; 
+	width: 171px;
+}
+ .one{
+	background:url(/images/inchead.jpg) no-repeat left top;
+}
+ .categories li a{
+	margin:0px;	
+	font-family: Verdana,Arial,Helvetica,sans-serif;	
+	font-size:11px;	
+	text-decoration:none; 
+	color:#165382; 
+	font-weight:normal;
+}
+ .categories li a:hover{
+	margin:0px;
+	font-family: Verdana,Arial,Helvetica,sans-serif;	
+	font-size:11px;
+	text-decoration:underline;
+	color:#000
+}		
+ .categories strong{
+	padding:5px 0 5px 35px; 
+	font-size:14px; 
+	font-family: comic sans ms,arial;
+	color:#fff;
+	display:block;
+	width:171px;
+}
+ .categories ul{
+	width: 160px;	
+	margin: 5px 0 0 10px;
+	padding:0;
+	list-style:square;
+	line-height:14px;
+}
+ .categories li{
+	margin:0 10px 3px 20px;	
+	background-image:none;
+	list-style:square;
+	padding:0;
+	font-size:11px;
+	color:#5d5d5d;
+	text-align: left;
+}
+
+hr {
+	color: #BDCEDE; 
+	height: 1px;
+}
+
+/* Headers */
+H1{
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size:   18px;
+	font-weight: bold;
+	color:       #336799;
+	line-height: 15px; 
+	margin:      10px 0px 15px 0px;
+}
+H2{
+	font-size:14px; 
+	color: #346BA0; 
+	font-weight:bold; 
+	font-family: Arial, Helvetica, sans-serif; 
+	margin: 10px 0px 10px 0px; 
+}
+H3{
+	font-size:16px; 
+	color: #346BA0; 
+	font-weight:bold; 
+	font-family: Arial, Helvetica, sans-serif; 
+	margin: 10px 0px 10px 50px;
+}
+H4{
+	color:#60739A; 
+	font-size:14px; 
+	font-weight:bold; 
+	line-height: 16px; 
+	margin: 10px 0px 10px 0px; 
+	font-family: comic sans ms, Arial, Helvetica, sans-serif;
+}
+
+
+/* Table colors */
+td.tableborder, table.tableborder {
+	background-color:#B7BCDB;
+}
+table.tablehead, td.tablehead {
+	background-color:#EBECF3;
+}
+table.tablebody, td.tablebody {
+	background-color:#FFFFFF;
+}
+table.tablenullbody, td.tablenullbody {
+	background-color:#FFFFFF;
+}
+
+/* Table text */
+.tablebodytext, .tablefieldtext, .tabletitletext,
+.tableheadtext, .tablebodylink {
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size:12px;
+}
+.tableheadtext {
+	color:#25639A;
+}
+a.tablebodylink {
+	text-decoration: none;
+}
+a.tablebodylink:hover {
+	text-decoration: underline;
+}
+
+/* Regular text */
+.text {
+	font-family:Arial, Helvetica, sans-serif; 
+	font-size:12px;
+}
+
+/* Some colors to highlight text */
+.errorcolor {
+	color: #990000;
+}
+.successcolor {
+	color:green;
+}
+
+/* Form elements */
+input.inputtext, textarea.inputtextarea, select.inputselect, input.inputcheckbox,
+input.inputradio, input.inputfile, input.inputbutton, input.inputbodybutton {
+	font-family:Verdana,Arial,Helvetica; 
+	font-size:11px;
+}
+
+input.inputfield, input.inputbuttonflat, input.inputbuttonS {
+	font-family:Verdana,Arial,Helvetica; 
+	font-size:11px;
+}
+input.inputfield {
+	color:black; 
+	border: solid 1px #C8C8C8;
+}
+input.inputbuttonflat, input.inputbutton { 
+	color:#929292; 
+	background-color:#EFEFEF; 
+	border: solid 1px #C8C8C8;
+}
+input.inputbuttonS {
+	font-weight:bold;
+}
+
+.mainincbg{
+	height: 18px;
+}
+.mainincline{
+	background-color:#B4BDCD;
+}
+
+.maininctitle{
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size:12px; 
+	font-weight: bold; 
+	color: #6A7B9C; 
+	text-decoration:none;
+}
+
+.tagCloudBox {padding: 12px;}
+.tagCloudDiv {margin-top: 0; padding-left: 7px; padding-right: 7px; width: 750px; border: 1px solid #EEEEEE; background-color: #F5F5F5;}
+.tagCloudDiv a { text-decoration: none; padding: 2px; }
+.tagCloudDiv a:visited { color: #0063DC; }
+.tagCloudDiv a:hover { color: #fff; background: #0063DC; }
+.tagCloudDiv a:active { color: #fff; background: #F08; }
+
+div.tagsearch h2 {
+	font-size:16px;
+	font-weight:bold;
+	padding:3px 3px 3px 0px;
+	margin:15px 0px 0px 0px;
+}
+div.tagsearch h2 a {
+	font-size:18px;
+	font-weight:bold;
+	text-decoration:none;
+	color: #4477aa;
+}
+
+/***** tabbed navigation *****/
+
+#tabnav {
+	background: url(/img/tab-line.gif) bottom repeat-x;
+	width: 750px;
+	margin: 1em 0px 0.5em 0;
+	font-size: 12pt;
+	font-weight: bold;
+	font-family: Arial, Comic Sans Ms, Verdana;	
+}
+
+#tabnav br {
+	clear: both;
+}
+
+#tabnav ul {
+	margin: 0.5em 0 0 0;
+	padding: 0 0 0 1em;
+	list-style: none;
+}
+
+#tabnav li {
+	margin: 0 1px 0 0;
+	padding: 0 5px 0 0;
+	background: url(/img/mytab.png) 100% -100px;
+	float: left;
+	border-bottom: 1px solid #bbb;
+    text-align: center;
+}
+
+#tabnav li.active {
+	border-bottom: 1px solid #fff;
+	background: url(/img/mytab.png) 100% 0;
+}
+
+#tabnav li a, #tabnav li a:visited, #tabnav li span {
+	display: block;
+	float: left;
+	padding: 5px 11px 5px 16px;
+	text-align: center;
+	white-space: nowrap;
+	background: url(/img/mytab.png) 0 -100px;
+	text-decoration: none;
+	min-height: 12pt; /* fixes FX/Mac issue */
+	color: #fff;
+	font-size: 12pt;
+	font-weight: bold;
+	font-family: Arial, Comic Sans Ms, Verdana;	
+}
+
+#tabnav li.active a, #tabnav li.active span {
+	background: url(/img/mytab.png) 0 0; 
+	color: #336799;
+}
+
+
+#tabnav li:hover {
+	background-position: 100% -200px;
+}
+
+#tabnav li:hover a {
+	background-position: 0 -200px;
+	/*color: #fff;*/
+	font-size: 12pt;
+	font-weight: bold;
+	font-family: Arial, Comic Sans Ms, Verdana;	
+}
+
+#tabnav li.active:hover {
+	background-position: 100% 0;
+}
+
+#tabnav li.active:hover a {
+	background-position: 0 0;
+	text-decoration: underline;
+}
+
+.ask
+{
+text-align:center; 
+width: 450; 
+background-color:#646669; 
+-moz-border-radius:4px; 
+-webkit-border-radius:4px; 
+-khtml-border-radius:4px;  
+border-radius:4px; 
+margin: 2px 2px 2px 2px;
+position: relative;
+top: 7px;
+bottom: 7px;
+}
+
+.ask h2 {
+color: #FFA600; font-family: "Trebuchet MS", Helvetica, sans-serif; 
+font-size: 140%; font-weight: bold;  padding-top: 5px; margin-bottom: 5px;
+
+}
+
+.ask p, .ask a {
+
+margin-top: 7px;
+font-weight: bold; padding-bottom: 5px; color: white; font-size: 105%; 
+font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.ask a, .askbanner a {
+text-decoration:underline;
+}
+
+
+
+
+
+
+.askbanner h2, .askbanner a {
+color: #AB730A; font-family: "Trebuchet MS", Helvetica, sans-serif; 
+font-size: 140%; font-weight: bold;  padding-top: 5px; margin-bottom: 5px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

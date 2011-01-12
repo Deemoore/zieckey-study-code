@@ -1,0 +1,525 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  
+  
+
+  
+
+
+  
+
+  
+    <title>
+      Howto/XDebugAndPHPEclipse – PHPEclipse
+    </title>
+        <link rel="search" href="http://www.phpeclipse.com/search">
+        <link rel="help" href="http://www.phpeclipse.com/wiki/TracGuide">
+        <link rel="alternate" 
+href="http://www.phpeclipse.com/wiki/Howto/XDebugAndPHPEclipse?format=txt"
+ type="text/x-trac-wiki" title="Plain Text">
+        <link rel="up" href="http://www.phpeclipse.com/wiki/Howto" 
+title="View parent page">
+        <link rel="start" href="http://www.phpeclipse.com/wiki">
+        <link rel="stylesheet" 
+href="XDebug%20and%20PHPEclipse_files/trac.css" type="text/css"><link 
+rel="stylesheet" href="XDebug%20and%20PHPEclipse_files/wiki.css" 
+type="text/css"><link rel="stylesheet" 
+href="XDebug%20and%20PHPEclipse_files/mentalaxis.css" type="text/css">
+        <link rel="shortcut icon" 
+href="http://www.phpeclipse.com/chrome/site/eclipseFav.ico" 
+type="image/x-icon">
+        <link rel="icon" 
+href="http://www.phpeclipse.com/chrome/site/eclipseFav.ico" 
+type="image/x-icon">
+      <link type="application/opensearchdescription+xml" rel="search" 
+href="http://www.phpeclipse.com/search/opensearch" title="Search 
+PHPEclipse">
+    <script type="text/javascript" src="XDebug%20and%20PHPEclipse_files/jquery.js"></script><script type="text/javascript" src="XDebug%20and%20PHPEclipse_files/trac.js"></script><script type="text/javascript" src="XDebug%20and%20PHPEclipse_files/search.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#content").find("h1,h2,h3,h4,h5,h6").addAnchor("Link to this section");
+      });
+    </script>
+  </head><body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.phpeclipse.com/"><img 
+src="XDebug%20and%20PHPEclipse_files/eclipsebutton_med.png" alt="" 
+width="80" height="86"></a>
+      </div>
+      <form id="search" action="/search" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input id="proj-search" name="q" size="18" type="text">
+          <input value="Search" type="submit">
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="http://www.phpeclipse.com/login">Login</a></li><li><a
+ href="http://www.phpeclipse.com/prefs">Preferences</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/TracGuide">Help/Guide</a></li><li><a
+ href="http://www.phpeclipse.com/about">About Trac</a></li><li 
+class="last"><a href="http://www.phpeclipse.com/register">Register</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first active"><a href="http://www.phpeclipse.com/wiki">Wiki</a></li><li><a
+ href="http://www.phpeclipse.com/timeline">Timeline</a></li><li><a 
+href="http://www.phpeclipse.com/roadmap">Roadmap</a></li><li><a 
+href="http://www.phpeclipse.com/browser">Browse Source</a></li><li><a 
+href="http://www.phpeclipse.com/report">View Tickets</a></li><li><a 
+href="http://www.phpeclipse.com/search">Search</a></li><li><a 
+href="https://hudson.phpeclipse.com:8443/hudson">Builds</a></li><li><a 
+href="http://www.phpeclipse.com/discussion">Discussion</a></li><li 
+class="last"><a href="http://www.phpeclipse.com/blog">Blog</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><a 
+href="http://www.phpeclipse.com/wiki/Howto">Up</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/WikiStart">Start Page</a></li><li><a
+ href="http://www.phpeclipse.com/wiki/TitleIndex">Index</a></li><li><a 
+href="http://www.phpeclipse.com/wiki/Howto/XDebugAndPHPEclipse?action=history">History</a></li><li
+ class="last"><a 
+href="http://www.phpeclipse.com/wiki/Howto/XDebugAndPHPEclipse?action=diff&amp;version=9">Last
+ Change</a></li>
+          </ul>
+        <hr>
+      </div>
+    <div id="content" class="wiki">
+      <p class="path noprint">
+        <a class="pathentry" title="View Howto" 
+href="http://www.phpeclipse.com/wiki/Howto">Howto</a><span 
+class="pathentry sep">/</span><a class="pathentry" title="View 
+Howto/XDebugAndPHPEclipse" 
+href="http://www.phpeclipse.com/wiki/Howto/XDebugAndPHPEclipse">XDebugAndPHPEclipse</a>
+        <br style="clear: both;">
+      </p>
+      <div class="wikipage searchable">
+        
+          <p>
+</p><div class="wiki-toc"><ol><li><a href="#XDebugandPHPEclipse"><span 
+class="searchword0">XDebug</span> and <span class="searchword1">PHPEclipse</span></a><ol><li><a
+ href="#Introduction">Introduction</a></li><li>
+<a href="#ProjectPaths">Project Paths</a></li><li>
+<a href="#XDebugconfig"><span class="searchword0">XDebug</span> config</a></li><li>
+<a href="#TestProject">Test Project</a></li><li>
+<a href="#DebuggingScript">Debugging Script</a></li><li>
+<a href="#LocalDebug">Local Debug</a><ol><li><a 
+href="#SpecifyingthePHPInterpreterPath">Specifying the PHP Interpreter 
+Path</a></li></ol></li><li>
+<a href="#XDebugDebugProfile"><span class="searchword0">XDebug</span> 
+Debug Profile</a></li></ol></li></ol></div><p>
+</p>
+<h1 id="XDebugandPHPEclipse"><span class="searchword0">XDebug</span> and
+ <span class="searchword1">PHPEclipse</span><a title="Link to this 
+section" href="#XDebugandPHPEclipse" class="anchor"> ¶</a></h1>
+<h2 id="Introduction">Introduction<a title="Link to this section" 
+href="#Introduction" class="anchor"> ¶</a></h2>
+<p>
+This guide will focus on using the <span class="searchword0">XDebug</span>
+ Debugger with <span class="searchword1">PHPEclipse</span>. It will 
+cover the <span class="searchword0">XDebug</span> config file for the 
+server (apache), setting up a <span class="searchword0">XDebug</span> 
+profile in <span class="searchword1">PHPEclipse</span> and starting your
+ debug session. The installation of <span class="searchword0">XDebug</span>
+ on the server is outside of the scope of this document. Please refer to
+ the <a class="ext-link" href="http://xdebug.org/docs/install"><span 
+class="icon">&nbsp;</span><span class="searchword0">XDebug</span> 
+website</a> for guidance on installing XDebug on your server. This guide
+ was written using <a class="ext-link" href="http://www.centos.org/"><span
+ class="icon">&nbsp;</span>CentOs 5</a> as it's example server and also 
+using the documentation done for <span class="searchword1">PHPEclipse</span>.
+ Your system may be different. If so please open a ticket and mention 
+the change. This guide will be updated to reflect changes for different 
+platforms.  This guide assumes that you already know the basics of 
+creating projects and PHP files using PHPEclipse. <br>
+<strong>Special Note:</strong><br>
+Before you begin insure that you have only the XDebug plugin from the 
+PHPEclipse update site installed. You can go to Help-&gt;Software 
+Updates -&gt; Manage Configuration to check for DBG plugin. If it is 
+installed, just disable it. The two debugging tools not working well 
+together is a known issue in the 1.2.0 release of PHPEclipse.
+</p>
+<p>
+<strong>Special Note 2:</strong><br>
+As of <span class="searchword1">PHPEclipse</span> 1.2.x trying to debug 
+an RSE project will not work. The src needs to be on local disk, or a 
+mapped nfs mount/ smb directory.
+</p>
+<h2 id="ProjectPaths">Project Paths<a title="Link to this section" 
+href="#ProjectPaths" class="anchor"> ¶</a></h2>
+<p>
+Getting the paths to work is a big issue with Eclipse and Debugging. I 
+am going to try to make this as clear as possible. First we have our 
+apache website path. Our apache config may look something like this
+</p>
+<pre class="wiki">&lt;VirtualHost *:80&gt;
+    ServerAdmin ed_mann@dont_spam_me.ok
+    DocumentRoot /home/ed_mann/dev30
+    ServerName dev30.arctechnologies.net
+    ErrorLog logs/dev30-error.log
+    CustomLog logs/dev30-access.log common
+&lt;/VirtualHost&gt;
+</pre><p>
+From above we can find that our Remote Src path is the DocumentRoot 
+which is set to /home/ed_mann/dev30. <br>
+Remote Path = /home/ed_mann/dev30
+You will need to replace that Remote Path with the path you get from 
+your Apache conf file, or your virtual host configuration.<br>
+</p>
+<p>
+If you are using an Alias in your apache conf
+</p>
+<pre class="wiki"> Alias /project "/var/www/workspace/project/"
+</pre><p>
+you will need to use /project as your Remote Path.
+<br>
+</p>
+<p>
+Now on our local machine where we are running Eclipse our workspace is 
+in<br>
+/home/ed_mann/workspace <br>
+and the project is called dev30 <br>
+So our total local path would be <br>
+local path = /home/ed_mann/workspace/dev30 <br>
+</p>
+<p>
+Please change "local path" to your workspace and project name path. We 
+will be using this information later, so keep it in mind or write it 
+down. <br>
+<strong>Notice</strong> how our apache path does not have workspace, but
+ our local path does. That is ok. The server that is hosting the files 
+stores it in the ed_mann directory, but you can use a nfs/smb/sftp(fuse)
+ export to mount the files into /home/ed_mann/workspace. So if the paths
+ are not the same it's ok. Eclipse only needs to know where on each end 
+is the source files.
+</p>
+<h2 id="XDebugconfig"><span class="searchword0">XDebug</span> config<a 
+title="Link to this section" href="#XDebugconfig" class="anchor"> ¶</a></h2>
+<p>
+<strong>Note:</strong> When installing precompiled <span 
+class="searchword0">XDebug</span> binaries (under Windows for example), 
+ensure that the PHP and XDebug build versions are compatible.  XDebug 
+needs to be built specifically for the PHP version in use, so if they 
+don't match, you may well find yourself chasing your own tail for some 
+time.  This tends not to be so much of an issue if you're building your 
+own XDebug libraries or are using a platform which supports package 
+management.
+</p>
+<p>
+Your server may have a /etc/php.d directory with extra configuration 
+options in it for php. If not you will need to add the following code to
+ your php.ini file. If you have a php.d directory create a new file in 
+that directory named <span class="searchword0">xdebug</span>.ini and add
+ the following code:
+</p>
+<pre class="wiki">zend_extension=/usr/lib64/php/modules/<span class="searchword0">xdebug</span>.so
+xdebug.remote_enable=On
+xdebug.remote_autostart=On
+xdebug.remote_handler=dbgp
+xdebug.remote_host=192.168.1.100
+xdebug.remote_port=9000
+xdebug.remote_mode=req
+</pre><p>
+<strong>Note</strong> you will need to change the remote_host to the ip 
+address of your local machine. If your apache server is on your local 
+machine you can change this to 127.0.0.1 or localhost. Also insure that 
+you use the zend_extension and remove any other mention of extension 
+from the file.
+<br>
+Once the code is added restart Apache. Create a php file in your 
+document root for the website you can call it whatever you want we will 
+use info.php in this document. Add the following code to the info.php 
+file.
+</p>
+<pre class="wiki">&lt;?php
+phpinfo();
+?&gt;
+</pre><p>
+When you have done this, now with your browser type in the url address 
+to get to this page. Example http://localhost/info.php <br>
+Look for the section that resembles the image below <br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/xdebug_phpinfo.png"><img
+ src="XDebug%20and%20PHPEclipse_files/xdebug_phpinfo.png" alt="xdebug 
+info ss" title="xdebug info ss"></a> <br>
+If you do not see <span class="searchword0">XDebug</span> in the section
+ like above check your settings, make any needed changes and restart 
+apache.
+</p>
+<h2 id="TestProject">Test Project<a title="Link to this section" 
+href="#TestProject" class="anchor"> ¶</a></h2>
+<p>
+Once you have <span class="searchword0">XDebug</span> installed into php
+ on the server you can now configure <span class="searchword0">XDebug</span>
+ in Eclipse. Start Eclipse and activate the <span class="searchword1">PHPEclipse</span>
+ perspective if it is not already. You will need to import a project to 
+use from your webserver or create a new project on the web server. 
+Configuring the web server for projects is out of the scope for this 
+document that exercise is left up to the reader. Once you have your 
+project established create a new file called xdebug.php. <br>
+Starting of simple we will just add the following to the xdebug.php 
+file.
+</p>
+<pre class="wiki">&lt;?php
+ print("<span class="searchword0">XDebug</span> Test");
+?&gt;
+</pre><p>
+Now with your browser connect to the page with your browser Example: 
+http://localhost/My_Project/<span class="searchword0">xdebug</span>.php.
+ <br>
+Once you have done this and verified that the text appears you are ready
+ to configure a XDebug Profile and our debug script.
+</p>
+<h2 id="DebuggingScript">Debugging Script<a title="Link to this section"
+ href="#DebuggingScript" class="anchor"> ¶</a></h2>
+<p>
+You should have verified your environment is setup to debug using the 
+steps above. Now we need to write some code that will allow us to test 
+debugging our php script. In our <span class="searchword0">xdebug</span>.php
+ file we are going to remove the print("XDebug Test"); statement with a 
+little loop that will allow us to step into the code.
+</p>
+<pre class="wiki">&lt;?php
+ 
+for ($i =1; $i &lt;= 10; $i++){
+  print (" we are at ". $i. "&lt;br /&gt;");
+}
+?&gt;
+</pre><p>
+On the line that starts our for loop toggle a breakpoint. You can do 
+this by right-clicking in the gutter and selecting Toggle Breakpoint
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debug_toggle_breakpoint.png"><img
+ src="XDebug%20and%20PHPEclipse_files/debug_toggle_breakpoint.png" 
+alt="debug toggle break point" title="debug toggle break point"></a> <br>
+<br>
+You should see a blue dot appear to signify where the breakpoint is. Now
+ change to the Debug Perspective. Window-&gt;Open Perspective -&gt; 
+Debug <br>
+Now we can configure our <span class="searchword0">XDebug</span> Debug 
+Profile. We will only need to do this once per project.
+</p>
+<h2 id="LocalDebug">Local Debug<a title="Link to this section" 
+href="#LocalDebug" class="anchor"> ¶</a></h2>
+<h3 id="SpecifyingthePHPInterpreterPath">Specifying the PHP Interpreter 
+Path<a title="Link to this section" 
+href="#SpecifyingthePHPInterpreterPath" class="anchor"> ¶</a></h3>
+<p>
+To begin, we must specify the PHP Interpreter Path. This may differ 
+depending on your system. For Windows based systems, this is a path to a
+ file called php.exe. For Linux systems, this is a path to a file simply
+ called php. For Linux systems, this is often in /usr/bin/php. To 
+specify the PHP Interpreter, select Preferences from the Window drop 
+down menu. Open up the <span class="searchword1">PHPEclipse</span> 
+selection and click on <span class="searchword0">XDebug</span>. In the 
+settings pane on the right that appears, enter your debug port and the 
+path to your PHP interpreter. The default debug port for <span 
+class="searchword0">XDebug</span> is 9000, but your system may be setup 
+differently. To verify that 9000 is the correct port, find a way to 
+access your phpinfo() page and check the value of <span 
+class="searchword0">xdebug</span>.remote_port. The value of <span 
+class="searchword0">xdebug</span>.remote_port should match the debug 
+port value.
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/xdebugsetup.png"><img
+ src="XDebug%20and%20PHPEclipse_files/xdebugsetup.png" alt="xdebug 
+setup" title="xdebug setup"></a> <br>
+When you have entered the appropriate values, click on the OK button.
+</p>
+<h2 id="XDebugDebugProfile"><span class="searchword0">XDebug</span> 
+Debug Profile<a title="Link to this section" href="#XDebugDebugProfile" 
+class="anchor"> ¶</a></h2>
+<p>
+Now that we have configured <span class="searchword0">XDebug</span>, we 
+need to create a debug configuration. This will tell Eclipse how to 
+start the debugger for your project. To do this, select 'Debug 
+Configurations...' from the Run drop down menu. You will be presented 
+with a list of items which you can debug. Double click on the entry 
+titled 'PHP <span class="searchword0">XDebug</span> Script'. This will 
+create a new configuration and allow you to specify the necessary 
+options. You can provide a name for your debug configuration, and then 
+you must specify the filename which should be executed for debugging 
+purposes. In this case, the filename is index.php.
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/open_debug_dialog.png"><img
+ src="XDebug%20and%20PHPEclipse_files/open_debug_dialog.png"></a> <br>
+<br>
+You should get the Debug Dialog Window. We will create a new PHP <span 
+class="searchword0">XDebug</span> Remote Script by double clicking on 
+the PHP <span class="searchword0">XDebug</span> Remote Script list 
+entry.This will create a new configuration and allow you to specify the 
+necessary options. You can provide a name for your debug configuration, 
+and then you must specify the Ide Identification String. You can select 
+anything you want for this string. It is recommended to keep it short 
+and memorable. Ensure that you remember this value for later. In our 
+example, we will use the string firstproject.<br>
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremote.png"><img
+ src="XDebug%20and%20PHPEclipse_files/debugconfigurationremote.png"></a>
+ <br>
+<br>
+Once you have selected a configuration name and have chosen an 
+identification string, click on the Pathmap tab. In the pathmap tab, you
+ specify how Eclipse translates local path names to remote path names. 
+To map a path, click on the New button to create a new map. If your web 
+server is located on the same system that Eclipse is running on, both of
+ these paths will be the same. In either case, under Local Path enter 
+the path to the root of your project on the machine that Eclipse is 
+running on. In Remote Path, enter the path to the root of your project 
+on the machine the web server is running on.<br>
+<br>
+<a style="padding: 0pt; border: medium none;" 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremotepathmap.png"><img
+ 
+src="XDebug%20and%20PHPEclipse_files/debugconfigurationremotepathmap.png"
+ alt="debug configuration remote map path" title="debug configuration 
+remote map path"></a> <br>
+<br>
+Once you have specified the proper pathmap, press the Debug button to 
+begin the debugger.
+</p>
+<p>
+Now in your browser you will need to start the <span class="searchword0">XDEBUG</span>_SESSION,
+ so type in the following
+</p>
+<p>
+http://localhost/My_Project/<span class="searchword0">xdebug</span>.php?XDEBUG_SESSION_START=firstProject
+</p>
+<p>
+If you have set your ide string different you will need to change 
+"firstProject" to reflect that. The default ide string is "testID".
+</p>
+<p>
+The debugger should stop at the breakpoint that we set earlier.
+</p>
+
+        
+        
+      </div>
+          <h3>Attachments</h3>
+          <ul>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/xdebug_phpinfo.png"
+ title="View attachment">xdebug_phpinfo.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/xdebug_phpinfo.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="12249 bytes">12.0 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T14%3A48%3A30-0500&amp;precision=second"
+ title="2008-06-02T14:48:30-0500 in Timeline">2 years</a> ago.
+                <q>xdebug info ss</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debug_toggle_breakpoint.png"
+ title="View attachment">debug_toggle_breakpoint.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/debug_toggle_breakpoint.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="17618 bytes">17.2 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A01%3A06-0500&amp;precision=second"
+ title="2008-06-02T15:01:06-0500 in Timeline">2 years</a> ago.
+                <q>debug toggle break point</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/xdebugsetup.png"
+ title="View attachment">xdebugsetup.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/xdebugsetup.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="41891 bytes">40.9 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A01%3A40-0500&amp;precision=second"
+ title="2008-06-02T15:01:40-0500 in Timeline">2 years</a> ago.
+                <q>xdebug setup</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremotepathmap.png"
+ title="View attachment">debugconfigurationremotepathmap.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremotepathmap.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="75039 bytes">73.3 KB</span>) - added by <em>ed_mann</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-06-02T15%3A05%3A07-0500&amp;precision=second"
+ title="2008-06-02T15:05:07-0500 in Timeline">2 years</a> ago.
+                <q>debug configuration remote map path</q>
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/open_debug_dialog.png"
+ title="View attachment">open_debug_dialog.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/open_debug_dialog.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="24435 bytes">23.9 KB</span>) - added by <em>mbowie</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-12-22T22%3A12%3A02-0600&amp;precision=second"
+ title="2008-12-22T22:12:02-0600 in Timeline">16 months</a> ago.
+              </li>
+              <li>
+      <a 
+href="http://www.phpeclipse.com/attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremote.png"
+ title="View attachment">debugconfigurationremote.png</a>
+      <a 
+href="http://www.phpeclipse.com/raw-attachment/wiki/Howto/XDebugAndPHPEclipse/debugconfigurationremote.png"
+ title="Download" class="trac-rawlink"><img 
+src="XDebug%20and%20PHPEclipse_files/download.png" alt="Download"></a>
+      (<span title="65276 bytes">63.7 KB</span>) - added by <em>mbowie</em>
+      <a class="timeline" 
+href="http://www.phpeclipse.com/timeline?from=2008-12-22T22%3A16%3A46-0600&amp;precision=second"
+ title="2008-12-22T22:16:46-0600 in Timeline">16 months</a> ago.
+              </li>
+          </ul>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="last first">
+          <a rel="nofollow" 
+href="http://www.phpeclipse.com/wiki/Howto/XDebugAndPHPEclipse?format=txt">Plain
+ Text</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" xml:lang="en" lang="en"><hr>
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img 
+src="XDebug%20and%20PHPEclipse_files/trac_logo_mini.png" alt="Trac 
+Powered" width="107" height="30"></a>
+      <p class="left">
+        Powered by <a href="http://www.phpeclipse.com/about"><strong>Trac
+ 0.11.5</strong></a><br>
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+      </p>
+      <p class="right">Visit the Trac open source project at<br><a 
+href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body></html>

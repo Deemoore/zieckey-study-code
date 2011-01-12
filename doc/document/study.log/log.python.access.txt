@@ -1,0 +1,413 @@
+
+在Eclipse中配置python开发环境
+1.下载python 安装包.python-2.4.2.msi.
+2.安装pydev插件.
+在Eclipse更新管理器中.地址:http://pydev.sf.net/updates/ .
+或者下载zip包安装:http://sourceforge.net/projects/pydev/ .
+3.配置插件Window->Preferences 在Pydev栏目下有个Interpreter-Python
+在这里指定Python的解释器,也就是安装Python时,Python.exe的位置.
+指定完以后,插件会自动导入一些包.完成以后就可以新建python工程了. 
+
+
+
+
+Python开发环境：
+
+下载eclipse下的插件pydev和Pydev extensions：http://pydev.sourceforge.net/，http://www.fabioz.com/pydev/
+
+在 Windows 上, 安装 Python 有两种选择。
+
+ActiveState 制作了一个 Windows 上的 Python 安装程序称为 ActivePython, 它包含了一个完整的 Python 发布; 一个适用于 Python 编程的 IDE 附加了一些 Python 的 Windows 扩展, 提供了全部的访问 Windows APIs 的服务, 以及 Windows 注册表的注册信息。
+
+虽然 ActivePython 不是开源软件, 但它可以自由下载。 ActivePython 是我曾经学习 Python 时使用过的 IDE, 除非有别的原因, 我建议您使用它。可能的一个原因是：ActiveState 通常要在新的Python 版本出来几个月以后来更新它的安装程序。如果您就需要Python 的最新版本, 并且 ActivePython 仍然落后于最新版本的话, 您应该直接跳到在 Windows 上安装 Python 的第二种选项。 
+
+第二种选择是使用由 Python 发布的 “官方” Python 安装程序。她是可自由下载的开源软件, 并且您总是可以获得当前 Python 的最新版本。
+
+过程 1.1. 选项 1: 安装 ActivePython
+下面描述 ActivePython 的安装过程:
+
+从 http://www.activestate.com/Products/ActivePython/ 下载 ActivePython 。
+
+如果您正在使用 Windows 95, Windows 98 或 Windows ME, 还需要在安装 ActivePython 之前下载并安装Windows Installer 2.0 。
+
+双击安装程序 ActivePython-2.2.2-224-win32-ix86.msi。
+
+按照安装程序的提示信息一步步地执行。
+
+如果磁盘空间不足, 您可以执行一个定制安装, 不选文档, 但是笔者不建议您这样做, 除非您实在是挤不出14M空间来。 
+
+在安装完后之后, 关闭安装程序, 打开 Start->Programs->ActiveState ActivePython 2.2->PythonWin IDE。 您将看到类似如下的信息:
+
+PythonWin 2.2.2 (#37, Nov 26 2002, 10:24:37) [MSC 32 bit (Intel)] on win32.
+Portions Copyright 1994-2001 Mark Hammond (mhammond@skippinet.com.au) -
+see 'Help/About PythonWin' for further copyright information.
+>>> 
+过程 1.2. 选项 2: 安装来自 Python.org 的 Python 
+从 http://www.python.org/ftp/python/选择最新的 Python Windows 安装程序, 下载 .exe 安装文件。
+
+双击安装程序 Python-2.xxx.yyy.exe。 文件名依赖于您所下载的 Python 安装程序文件。
+
+按照安装程序的提示信息一步步地执行。
+
+如果磁盘空间不足, 可以取消 HTMLHelp 文件, 实用脚本 (Tools/), 和/或 测试套件 (Lib/test/)。
+
+如果您没有机器的管理员权限, 您可以选择, Advanced Options, 然后选择 Non-Admin Install。 这只对登记注册表和开始菜单中创建的快捷方式有影响。
+
+在安装完成之后, 关闭安装程序, 打开 Start->Programs->Python 2.3->IDLE (Python GUI)。 您将看到类似如下的信息:
+
+Python 2.3.2 (#49, Oct  2 2003, 20:02:00) [MSC v.1200 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+
+    ****************************************************************
+    Personal firewall software may warn about the connection IDLE
+    makes to its subprocess using this computer's internal loopback
+    interface.  This connection is not visible on any external
+    interface and no data is sent to or received from the Internet.
+    ****************************************************************
+    
+IDLE 1.0
+>>> 
+
+添加环境变量：
+%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;C:\Program Files\MySQL\MySQL Server 5.0\bin;%JAVA_HOME%\bin;C:\Python24
+
+
+基本的类型是数和字符串，我们已经讨论过它们了。在后面的章节里面，我们会研究怎么用类创造我们自己的类型。
+
+
+
+数
+在Python中有4种类型的数——整数、长整数、浮点数和复数。
+
+	2是一个整数的例子。 
+	长整数不过是大一些的整数。 
+	3.23和52.3E-4是浮点数的例子。E标记表示10的幂。在这里，52.3E-4表示52.3 * 10-4。 
+	(-5+4j)和(2.3-4.6j)是复数的例子。 
+	>>> a = -5+4j
+	>>> print a
+	(-5+4j)
+	>>> 
+
+字符串
+	字符串是 字符的序列 。字符串基本上就是一组单词。
+	
+	我几乎可以保证你在每个Python程序中都要用到字符串，所以请特别留心下面这部分的内容。下面告诉你如何在Python中使用字符串。
+	
+	使用单引号（'） 
+	你可以用单引号指示字符串，就如同'Quote me on this'这样。所有的空白，即空格和制表符都照原样保留。
+	
+	使用双引号（"） 
+	在双引号中的字符串与单引号中的字符串的使用完全相同，例如"What's your name?"。
+	
+	使用三引号（'''或"""） 
+	利用三引号，你可以指示一个多行的字符串。你可以在三引号中自由的使用单引号和双引号。例如：
+
+如何缩进
+	不要混合使用制表符和空格来缩进，因为这在跨越不同的平台的时候，
+	无法正常工作。我 强烈建议 你在每个缩进层次使用 单个制表符 或 两个或四个空格 。
+	选择这三种缩进风格之一。更加重要的是，选择一种风格，然后一贯地使用它，即 只 使用这一种风格。 
+	
+
+
+number = 23
+guess = int(raw_input('Enter an integer : '))
+
+if guess == number:
+    print 'Congratulations, you guessed it.' # New block starts here
+    print "(but you do not win any prizes!)" # New block ends here
+elif guess < number:
+    print 'No, it is a little higher than that' # Another block
+    # You can do whatever you want in a block ...
+else:
+    print 'No, it is a little lower than that' 
+    # you must have guess > number to reach here
+
+print 'Done'
+
+
+
+
+在C/C++中，如果你想要写for (int i = 0; i < 5; i++)，那么用Python，你写成for i in range(0,5)。
+for i in range(1, 5):
+    print i
+1
+2
+3
+4    
+
+
+#!/usr/bin/env python
+# Filename: continue.py
+
+while True:
+	s=raw_input('Enter something : ')
+	if s=='quit\r':
+		break
+	if len(s)<3:
+		continue
+	print 'Input is of sufficient length'
+	# Do other kinds of processing here...
+
+
+#!/usr/bin/python
+# Filename: break.py
+
+while True:
+    s = raw_input('Enter something : ')
+    if s == 'quit\r':
+        break
+    print 'Length of the string is', len(s)
+print 'Done' 
+
+s=raw_input('Enter something : ')
+这句话从用户输入读到数据后会自动在后面加上“\r”
+
+所以程序运行效果如下：
+
+Enter something : abc
+Length of the string is 4
+Enter something : abcd
+Length of the string is 5
+Enter something : quit
+Done
+
+
+
+#!/usr/bin/env python
+# Filename: function1.py
+
+def sayHello():
+    print 'Hello World!' # block belonging to the function
+
+sayHello() # call the function
+
+
+
+
+
+
+def func(x):
+    print 'x is', x
+    x = 2
+    print 'Changed local x to', x
+
+x = 50
+func(x)
+print 'x is still', x 
+
+执行结果
+x is 50
+Changed local x to 2
+x is still 50
+
+
+
+
+#!/usr/bin/python
+# Filename: func_global.py
+
+def func():
+    global x
+
+    print 'x is', x
+    x = 2
+    print 'Changed local x to', x
+
+x = 50
+func()
+print 'Value of x is', x 
+执行结果：
+x is 50
+Changed local x to 2
+Value of x is 2
+
+
+
+
+
+
+
+
+#!/usr/bin/env python
+# Filename: using_list.py
+
+# This is my shopping list
+shoplist=['apple','mango','carrot','banana']
+
+print 'I have',len(shoplist),'items to purchase.'
+
+print 'These items are:', # Notice the comma at end of the line
+for item in shoplist:
+    print item,			#此处在最后面加上“,”，就是不换行，最后输出完后换行。
+
+print '\nI also have to buy rice.'
+shoplist.append('rice')
+print 'My shopping list is now',shoplist
+
+print 'I will sort my list now'
+shoplist.sort()
+print 'Sorted shopping list is',shoplist
+
+print 'The first item I will buy is',shoplist[0]
+olditem=shoplist[0]
+del shoplist[0]
+print 'I bought the',olditem
+print 'My shopping list is now',shoplist
+
+
+
+
+
+
+
+
+
+
+
+创建归档文件，调用外部命令
+#!/usr/bin/env python
+# Filename: backup_ver1.py
+
+import os
+import time
+
+# 1. The files and directories to be backed up are specified in a list.
+source=['E:\download\mp3','E:\zieckey_log\weeklyreport']
+# source=['E:\\download\\mp3','E:\\zieckey_log\\weeklyreport']
+# source=[r'E:\download\mp3',r'E:\zieckey_log\weeklyreport']
+# are also good
+
+# 2. The backup must be stored in a main backup directory
+target_dir='E:\\aaa\\' 
+
+# 3. The files are backed up into a zip file
+# 4. The name of the zip archive is the current date and time
+target=target_dir+time.strftime('%Y%m%d%H%M%S')+'.rar'
+
+# 5. We use the WinRAR command (in Windows) to put the files in a rar archive
+winrar_command="WinRAR.exe a -r %s %s" %(target,' '.join(source))
+
+# Run the backup
+if os.system(winrar_command)==0:
+    print 'Successful backup to',target
+else:
+    print 'Backup FAILED'
+
+
+
+
+
+
+
+
+
+
+
+类：
+
+类的方法与普通的函数只有一个特别的区别——它们必须有一个额外的第一个参数名称，但是在调用这个方法的时候你不为这个参数赋值，Python会提供这个值。这个特别的变量指对象本身，按照惯例它的名称是self。
+
+
+在Python的类中有很多方法的名字有特殊的重要意义。现在我们将学习__init__方法的意义。
+__init__方法在类的一个对象被建立时，马上运行。这个方法可以用来对你的对象做一些你希望的 初始化 。注意，这个名称的开始和结尾都是双下划线。__init__方法类似于C++、C#和Java中的 constructor 。 
+#!/usr/bin/python
+# Filename: class_init.py
+
+class Person:
+    def __init__(self, aaa):
+        self.name = aaa
+    def sayHi(self):
+        print 'Hello, my name is', self.name
+
+p = Person('Swaroop')
+p.sayHi()
+
+上面的代码等价于：
+#!/usr/bin/python
+# Filename: class_init.py
+
+class Person:
+    name = ""
+    def __init__(self, aaa):
+        Person.name = aaa
+    def sayHi(self):
+        print 'Hello, my name is', Person.name
+
+p = Person('Swaroop')
+p.sayHi()
+
+
+
+
+
+
+
+
+
+
+import sys
+def IsLeapYear(y):
+    if ((y % 4==0)and(y % 100!=0))or(y % 400==0):
+        return True
+    else:
+        return False
+
+def Days(y,m):
+    if m in [1,3,5,7,8,10,12]:
+        return 31
+    if m in [4,6,9,11]:
+        return 30
+    if m==2:
+        if IsLeapYear(y)==True:
+            return 29
+        else:
+            return 28
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2008/3/20
+MySQL和Python：http://mysql-python.sourceforge.net/         
+
+连接MySQL的例子程序：
+
+# 引入 MySQL 模组
+import MySQLdb
+ 
+# 连接到 MySQL
+db = MySQLdb.connect(host="localhost", user="root", passwd="123456", db="study")
+cursor = db.cursor()
+ 
+# 执行 SQL 语句
+cursor.execute("SELECT * FROM user")
+result = cursor.fetchall()
+ 
+# 输出结果
+for record in result:
+    print record[0]    
+    
+    
+如果要执行事务处理的话，可以：
+melodeo_db = MySQLdb.connect(host="localhost", user="root", passwd="123456", db="study")
+melodeo_db.autocommit(0)
+cursor = melodeo_db.cursor()
+cursor.execute("SELECT * FROM user")
+result = cursor.fetchall()
+melodeo_db.commit()
+melodeo_db.close()    

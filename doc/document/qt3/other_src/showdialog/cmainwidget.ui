@@ -1,0 +1,58 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CMainWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CMainWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showPushButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>140</x>
+                <y>150</y>
+                <width>85</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>show</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>showPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CMainWidget</receiver>
+        <slot>showFindDialogSlot()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in declaration">cfinddialog.h</include>
+    <include location="local" impldecl="in implementation">cmainwidget.ui.h</include>
+</includes>
+<variables>
+    <variable>CFindDialog *cfd;</variable>
+</variables>
+<slots>
+    <slot>showFindDialogSlot()</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

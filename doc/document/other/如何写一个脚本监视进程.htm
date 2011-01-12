@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN"><head><script charset="UTF-8" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/tag.js"></script><script charset="UTF-8" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/data.js"></script><script charset="UTF-8" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/core.htm"></script>
+
+
+
+<meta content="all" name="robots">
+<meta http-equiv="Content-Language" content="zh-CN">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/topic.css">
+<script type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/Topic.js"></script>
+<title>如何写一个脚本监视进程 Linux/Unix社区 / 专题技术讨论区 - CSDN社区 community.csdn.net</title>
+<meta content="simph323 进程 echo grep port app rs Linux/Unix社区 专题技术讨论区" name="Keywords">
+<meta content="比如说我想监视一个进程为gaim,每两分钟查看他是否运行,如果没有运行则开启进程." name="description">
+<link href="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/china.css" type="text/css" rel="stylesheet"></head><body><div style="border-style: none; border-width: 0px; text-align: left; display: block; position: absolute; z-index: 9999; top: 311px; right: 13px;"><table style="font-size: 12px; line-height: 18px; width: 165px; height: 117px; background-color: rgb(205, 211, 218);" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td style="height: 18px; background-color: rgb(255, 250, 220); line-height: 14px; width: 160px;" align="center"><div><strong style="float: left; margin-left: 50px;"><a href="http://community.csdn.net/HomePage.aspx" target="_blank" style="color: rgb(153, 51, 0);" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">社区焦点</a></strong><a style="text-decoration: none; color: rgb(68, 119, 170); float: right; margin-right: 5px;" href="javascript:void(0)" onclick="closeFloatBox()" title="关闭">x</a></div></td></tr><tr><td style="height: 77px; background-color: White;"><div><a href="http://topic.csdn.net/u/20090908/18/09923fa2-6ace-45dd-bac0-5551c19f21b4.html" target="_blank" style="text-decoration: none; color: rgb(68, 119, 170); margin-left: 5px;" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">最牛程序员奋斗历程</a></div><div><a href="http://topic.csdn.net/u/20090910/08/01B1FAF5-02AA-40CE-BA73-BBA959F2F59A.html" target="_blank" style="text-decoration: none; color: rgb(68, 119, 170); margin-left: 5px;" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">VFP导出excel的方法探讨</a></div><div><a href="http://topic.csdn.net/u/20090908/15/5abc2589-213e-4ee3-af6a-b52422ece78c.html" target="_blank" style="text-decoration: none; color: rgb(68, 119, 170); margin-left: 5px;" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">40岁互联网遭遇中年危机</a></div><div><a href="http://topic.csdn.net/u/20090909/11/B71C160F-18C1-417E-9B8A-FC5BDF1A65BB.html" target="_blank" style="text-decoration: none; color: rgb(68, 119, 170); margin-left: 5px;" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">海量数据库相关处理问题</a></div><div><a href="http://www.rzhh.com.cn/" target="_blank" style="text-decoration: none; color: rgb(68, 119, 170); margin-left: 5px;" onclick="if (typeof LogClickCount == 'function') LogClickCount(this, 70);">选择.Net 今年3K 明年6K</a></div></td></tr></tbody></table></div>
+<div id="wrapper">
+<div id="innerWrapper">
+<div id="logo">
+<script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/csdn_ggmm.js"></script>
+<script type="text/javascript">show_ads_zone(230);</script><script language="JavaScript" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/adjs_002.js"></script><script type="text/javascript">
+<!--
+itop_client = 876;
+itop_slotid = 1610;
+itop_width = 750;
+itop_height = 90;
+itop_textlinktype = "TDL";
+itop_titleheight = "17";
+itop_detailheight = "30";
+itop_cellwidth = "234";
+itop_celltop = "10";
+itop_cellleft = "11";
+itop_bordercolor = "#FFFFFF";
+itop_bgcolor = "#FFFFFF";
+itop_titlecolor = "#0000FF";
+itop_desccolor = "#000000";
+itop_dispurlcolor = "#008000";
+//-->
+</script>
+<script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/b.js" type="text/javascript"></script><div style="margin: 0pt; padding: 0pt; overflow: hidden; z-index: 2147483647; width: 750px; height: 90px; left: 0pt; top: 0pt;" id="ITOP_DIV_1610"><embed id="ITOP_AD_1610" name="ITOP_AD_1610" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" allowscriptaccess="always" allowfullscreen="true" quality="high" menu="false" wmode="transparent" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/b.swf" flashvars="s=http%3A%2F%2Fbs.itopnetworks.com%2Ff%2F2009%2F0916%2F0AqTIF.swf&amp;c=http%3A%2F%2Fd.itopnetworks.com%2Fb%2Frd%3Fgo%3DeJxNjttqwzAQRN_1I-6TVivJuvSllEJBlBRDSgvGUFRFxSGObWKRinx9ZUIvC8sOA3N2brZVn9J8C-CRoaCT311omI4w7McDPMBqAmrQfdPeP6n27VO64dC0G_fCnl-bYC-bd_DA734o87zE0zme6BDH6TytLBpG-FqgIjMSZ7QiDhUy4rhRzJJHRqW26xjLNaISVpJt1eVYd9mELltdtOzyh--yD4XCyW_pNM37QMOyG-kYEyTgjEkmuAKOwI3Fmlvap-NQYuJKXUmmUMU_XcixXI_Xj39-iclSl9dCyrKKJPoNLC5Zug%3D%3D&amp;asFlag=0&amp;InsName=itop_2009v10" width="750" height="90"></div><script type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/s.js" id="itop247_1610"></script><div id="beacon_3882" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/gmlog.gif" alt="" style="width: 0px; height: 0px;" width="0" height="0"></div>
+<img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/pv.xml" alt="" style="display: none;">
+<div>
+<table id="CSDNPHL" class="CSDN-PHF" border="0" cellpadding="0" cellspacing="1">
+<tbody>
+<tr>
+<td><a rel="external" href="http://www.csdn.net/">CSDN首页</a></td>
+<td><a rel="external" href="http://hi.csdn.net/">空间</a></td>
+<td><a rel="external" href="http://news.csdn.net/">新闻</a></td>
+<td><a rel="external" href="http://bbs.csdn.net/">论坛</a></td>
+<td><a rel="external" href="http://blog.csdn.net/">Blog</a></td>
+<td><a rel="external" href="http://download.csdn.net/">下载</a></td>
+<td><a rel="external" href="http://book.csdn.net/">读书</a></td>
+<td><a rel="external" href="http://wz.csdn.net/">网摘</a></td>
+<td><a rel="external" href="http://search.csdn.net/">搜索</a></td>
+<td><a rel="external" href="http://dotnet.csdn.net/">.NET</a></td>
+<td><a rel="external" href="http://java.csdn.net/">Java</a></td>
+<td><a rel="external" href="http://live.csdn.net/">视频</a></td>
+<td><a rel="external" href="http://prj.csdn.net/">接项目</a></td>
+<td><a rel="external" href="http://job.csdn.net/">求职</a></td>
+<td><a rel="external" href="http://www.itcast.net/">在线学习</a></td>
+<td><a rel="external" href="http://www.dearbook.com.cn/">买书</a></td>
+<td><a rel="external" href="http://www.programmer.com.cn/">程序员</a></td>
+<td><a href="http://hi.csdn.net/Admin/NotifyList.aspx"><span id="notifyPrompt">通知</span></a></td>
+</tr>
+</tbody>
+</table>
+<div id="logo">
+<table width="760" border="0" cellpadding="0" cellspacing="0">
+  <tbody><tr style="text-align: center;">
+  	<td style="margin: auto; background-color: rgb(2, 105, 148); vertical-align: middle;" width="380" align="center" height="36">
+  	<!--a href="http://community.csdn.net/Games/GamesList.aspx/" target="_blank"><font size="3px" color="white"><strong>可用分押宝游戏火热进行中...</strong></font></a-->
+  	<a href="http://g.csdn.net/5085044" target="_blank"><font color="white" size="3px"><strong>【经验总结】不能实施并行处理的情况</strong></font></a>
+    </td>
+    <td style="margin: auto; background-color: rgb(2, 105, 148); vertical-align: middle;" width="380" align="center" height="36">
+  	<a href="http://g.csdn.net/5085045" target="_blank"><font color="white" size="3px"><strong>浅谈并行编程中的任务分解模式</strong></font></a>
+  	</td>
+  </tr>
+  <tr id="bigFlash" style="text-align: center; display: none;">
+	<!--td colspan="2"><a href="http://community.csdn.net/" target="_blank"><img src="/t/img/topicAD.jpg" width="760" height="300" border="0" /></a></td-->
+	<td colspan="2"><a href="http://g.csdn.net/5078710" target="_blank"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/20090403.jpg" width="760" border="0" height="300"></a></td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">setTimeout("document.getElementById('bigFlash').style.display='none'", 5000);</script>
+</div>
+<table><tbody><tr>
+<td><a href="http://community.csdn.net/" rel="external"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/logo_csdn.gif" alt="CSDN社区"></a></td>
+<td><script type="text/javascript">show_ads_zone(228);</script><script language="JavaScript" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/adjs_003.js"></script><a href="http://z.csdn.net/gmclick.php?bannerid=4037&amp;zoneid=228&amp;source=&amp;dest=http%3A%2F%2Fsd2china.csdn.net%2F+" target="_blank"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/300x60_7.jpg" alt="" title="" width="300" border="0" height="60"></a><div id="beacon_4037" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/gmlog_002.gif" alt="" style="width: 0px; height: 0px;" width="0" height="0"></div>
+<!--<iframe frameborder="0" width="475" height="60" scrolling="no" src="/t/img/centerAd.htm">
+    </iframe>--></td>
+<td><script type="text/javascript">show_ads_zone(229);</script><script language="JavaScript" type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/adjs.js"></script><a href="http://z.csdn.net/gmclick.php?bannerid=3720&amp;zoneid=229&amp;source=&amp;dest=http%3A%2F%2Fbook.csdn.net%2Fprogrammer%2F%2F" target="_blank"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/290x60.gif" alt="" title="" width="290" border="0" height="60"></a><div id="beacon_3720" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/gmlog_003.gif" alt="" style="width: 0px; height: 0px;" width="0" height="0"></div></td>
+</tr></tbody></table>
+<!-- script src="http://notify.hi.csdn.net/PromptInfo.ashx?ForWhat=FullJs"></script -->
+
+<link rel="stylesheet" href="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/csdn_favbykimi.css" type="text/css" media="all">
+<div id="navigation">
+<div id="search">
+<div id="innerSearch">
+<input id="key" onfocus="value=''"><a href="#" onclick="return Search()">搜索</a>&nbsp;<cite class="fav_csdnstylebykimi"><a href="javascript:d=document;t=d.selection?(d.selection.type!='None'?d.selection.createRange().text:''):(d.getSelection?d.getSelection():'');void(saveit=window.open('http://wz.csdn.net/storeit.aspx?t='+escape(d.title)+'&amp;u='+escape(d.location.href)+'&amp;c='+escape(t),'saveit','scrollbars=no,width=590,height=300,left=75,top=20,status=no,resizable=yes'));saveit.focus();" title="收藏到我的网摘中，并分享给我的朋友">收藏</a></cite>&nbsp;<a href="#" onclick="return Print()">打印</a>&nbsp;<a href="#" onclick="return Close()">关闭</a>
+</div>
+</div>
+<div>
+<a href="http://community.csdn.net/" rel="external" class="CSDNRoom">CSDN社区</a>&nbsp;&gt;&nbsp;
+<a href="http://community.csdn.net/Expert/ForumsList.asp?typenum=1&amp;roomid=8" rel="external">
+Linux/Unix社区</a>&nbsp;&gt;&nbsp; <a href="http://community.csdn.net/Expert/ForumList.asp?typenum=1&amp;roomid=804" rel="external">专题技术讨论区</a>
+</div>
+</div>
+
+<div id="mainWrapper">
+<div id="pageContent">
+<div id="innerContent">
+<h1>如何写一个脚本监视进程</h1><div class="author">
+<a class="anchor" name="Top">楼主</a>baga（八嘎）<input class="user4" title="四级用户 该版得分小于等于2000分，大于1000分" type="button">2004-03-26 21:19:39 在  Linux/Unix社区 / 专题技术讨论区 提问</div>
+<p>
+比如说我想监视一个进程为gaim,每两分钟查看他是否运行,如果没有运行则开启进程.
+<span>问题点数：20、回复次数：4</span><a href="#">Top</a>
+</p>
+<div class="tagad">
+<iframe src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/Board.htm" frameborder="0" scrolling="no"></iframe></div>
+<h3><strong><a class="anchor" name="r_24074984">1 楼</a>baga（八嘎）<input class="user4" title="四级用户 该版得分小于等于2000分，大于1000分" type="button"></strong><span>回复于 2004-09-15 15:35:45 得分 0
+</span></h3>
+<p>哪位仁兄能顶一下吗，要揭贴了，不然扣分的，随便顶，<a href="#">Top</a></p><h3><strong><a class="anchor" name="r_24133990">2 楼</a>dchg2000（偏爱小龙女(http://www.go2linux.cn/)）<input class="user5" title="五级用户 该版得分小于等于5000分，大于2000分" type="button"></strong><span>回复于 2004-09-17 10:14:07 得分 <em>12</em></span></h3>
+<p>#!/bin/sh &nbsp; <br> &nbsp; # &nbsp; <br> &nbsp; # &nbsp; Shell &nbsp; Script &nbsp; for &nbsp; Watching &nbsp; the &nbsp; Simph323-client &nbsp; <br> &nbsp; # &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; # &nbsp; Usage &nbsp; function &nbsp; <br> &nbsp; usage() &nbsp; <br> &nbsp; { &nbsp; <br> &nbsp; 	echo &nbsp; "Usage: &nbsp; $0 &nbsp; classname &nbsp; listen-port &nbsp; log-number" &nbsp; <br> &nbsp; 	echo &nbsp; "Example:" &nbsp; <br>
+&nbsp; echo &nbsp; " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+$0 &nbsp; 2004060400006 &nbsp; 1755 &nbsp; 6" &nbsp; <br> &nbsp; 	echo &nbsp; "" &nbsp; <br> &nbsp; } &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; # &nbsp; Check &nbsp; input &nbsp; parameters &nbsp; <br> &nbsp; args=$# &nbsp; <br> &nbsp; if &nbsp; [ &nbsp; $args &nbsp; -ne &nbsp; "3" &nbsp; ] &nbsp; <br> &nbsp; then &nbsp; <br> &nbsp; 	usage &nbsp; <br> &nbsp; 	exit &nbsp; 1 &nbsp; <br> &nbsp; fi &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; # &nbsp; Watch &nbsp; the &nbsp; simph323-client &nbsp; status &nbsp; <br>
+&nbsp; app="./simph323 &nbsp; -g &nbsp; 61.159.46.62 &nbsp; -u &nbsp;
+$1 &nbsp; -u &nbsp; $1#1 &nbsp; -a &nbsp; -l &nbsp; -i &nbsp;
+61.159.46.63:$2" &nbsp; <br> &nbsp; port=$2 &nbsp; <br> &nbsp; cout=0; &nbsp; <br> &nbsp; echo &nbsp; "$app" &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; while &nbsp; [ &nbsp; 1 &nbsp; ] &nbsp; <br> &nbsp; do &nbsp; <br> &nbsp; 	# &nbsp; Inquire &nbsp; if &nbsp; the &nbsp; process &nbsp; exist &nbsp; or &nbsp; not &nbsp; <br> &nbsp; 	rs=`ps &nbsp; -x &nbsp; | &nbsp; grep &nbsp; "$app" &nbsp; | &nbsp; grep &nbsp; -v &nbsp; "grep"` &nbsp; <br> &nbsp; 	# &nbsp; echo &nbsp; "rs &nbsp; = &nbsp; $rs" &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; 	if &nbsp; [ &nbsp; -z &nbsp; "$rs" &nbsp; ] &nbsp; <br> &nbsp; 	then &nbsp; <br>
+&nbsp; echo &nbsp; "`date &nbsp; "+%Y-%m-%d &nbsp; %H:%M:%S"` The
+&nbsp; process &nbsp; is &nbsp; not &nbsp; found &nbsp; !" &nbsp; <br> &nbsp; 		 &nbsp; <br> &nbsp; 		# &nbsp; Change &nbsp; port, &nbsp; and &nbsp; restart &nbsp; ... &nbsp; 	 &nbsp; <br> &nbsp; 		if &nbsp; [ &nbsp; $port &nbsp; -eq &nbsp; $2 &nbsp; ] &nbsp; <br> &nbsp; 		then	 &nbsp; <br> &nbsp; 			port=`expr &nbsp; $port &nbsp; + &nbsp; 10` &nbsp; <br> &nbsp; 		else &nbsp; <br> &nbsp; 			port=$2 &nbsp; <br> &nbsp; 		fi &nbsp; <br> &nbsp; 		 &nbsp; <br>
+&nbsp; app="./simph323 &nbsp; -g &nbsp; 61.159.46.62 &nbsp; -u &nbsp;
+$1 &nbsp; -u &nbsp; $1#1 &nbsp; -a &nbsp; -l &nbsp; -i &nbsp;
+61.159.46.63:$port" &nbsp; <br> &nbsp; 		echo &nbsp; $app &nbsp; <br> &nbsp; 		sleep &nbsp; 1 &nbsp;  &nbsp; <br> &nbsp; 		$app &nbsp; 1&gt;&gt;$3.out &nbsp; 2&gt;&gt;$3.out &nbsp; &amp; &nbsp; <br> &nbsp; 		cout=0 &nbsp; <br> &nbsp; 		 &nbsp; <br> &nbsp; 	else &nbsp; <br> &nbsp; 		if &nbsp; [ &nbsp; $cout &nbsp; -eq &nbsp; "0" &nbsp; ] &nbsp; <br> &nbsp; 		then &nbsp; <br>
+&nbsp; echo &nbsp; "`date &nbsp; "+%Y-%m-%d &nbsp; %H:%M:%S"` The
+&nbsp; process &nbsp; is &nbsp; running &nbsp; ..." &nbsp; <br> &nbsp; 		else &nbsp; <br> &nbsp; 			if &nbsp; [ &nbsp; $cout &nbsp; -eq &nbsp; "59" &nbsp; ] &nbsp; <br> &nbsp; 			then &nbsp; <br> &nbsp; 				cout=0 &nbsp; <br> &nbsp; 				continue &nbsp; <br> &nbsp; 			fi	 &nbsp; <br> &nbsp; 		fi &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; 		cout=`expr &nbsp; $cout &nbsp; + &nbsp; 1` &nbsp; <br> &nbsp; 	fi &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; 	sleep &nbsp; 1 &nbsp;  &nbsp; <br> &nbsp; done &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp;  &nbsp; <br> &nbsp; <a href="#">Top</a></p><h3><strong><a class="anchor" name="r_24134019">3 楼</a>dchg2000（偏爱小龙女(http://www.go2linux.cn/)）<input class="user5" title="五级用户 该版得分小于等于5000分，大于2000分" type="button"></strong><span>回复于 2004-09-17 10:14:34 得分 0
+</span></h3>
+<p>你看看吧，应该有你想要的！ &nbsp; <br> &nbsp; <a href="#">Top</a></p><h3><strong><a class="anchor" name="r_24163987">4 楼</a>wti（wti）<input class="user3" title="三级用户 该版得分小于等于1000分，大于500分" type="button"></strong><span>回复于 2004-09-17 23:58:39 得分 <em>8</em></span></h3>
+<p>#! &nbsp; /usr/bin/perl &nbsp; <br> &nbsp; $app &nbsp; = &nbsp; shift; &nbsp; <br> &nbsp; while &nbsp; (1) &nbsp; { &nbsp; <br> &nbsp;  &nbsp;  &nbsp; $result &nbsp; = &nbsp; `ps &nbsp; aux|grep &nbsp; $app|grep &nbsp; -v &nbsp; grep`; &nbsp; <br> &nbsp;  &nbsp;  &nbsp; unless &nbsp; ($result) &nbsp; { &nbsp; <br> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; system &nbsp; ("$app&amp;") &nbsp; == &nbsp; 0 &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; or &nbsp; die &nbsp;
+"can &nbsp; not &nbsp; start &nbsp; $app: &nbsp; $!"; &nbsp; <br> &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; sleep &nbsp; 300; &nbsp; <br> &nbsp;  &nbsp;  &nbsp; } &nbsp; <br> &nbsp; } &nbsp; <br> &nbsp; <a href="#">Top</a></p><h4><strong>相关问题</strong></h4>
+<div class="relation">
+<ul>
+<li><a href="http://topic.csdn.net/t/20050321/14/3868316.html" rel="external">如何编写一个sh脚本杀掉另一个进程！</a></li>
+<li><a href="http://topic.csdn.net/t/20011120/21/380115.html" rel="external">监视进程的问题。</a></li>
+<li><a href="http://topic.csdn.net/t/20050912/11/4263329.html" rel="external">关于进程监视</a></li>
+<li><a href="http://topic.csdn.net/t/20050128/11/3760337.html" rel="external">UNIX下，如何写脚本来杀进程？如何在指定的时间自动运行脚本？</a></li>
+<li><a href="http://topic.csdn.net/t/20060309/19/4604183.html" rel="external">已知pid文件，实现杀死该进程的shell脚本怎么写？</a></li>
+<li><a href="http://topic.csdn.net/t/20010426/14/106077.html" rel="external">Help，关于外部进程监视！</a></li>
+<li><a href="http://topic.csdn.net/t/20050526/14/4037439.html" rel="external">关于对系统进程的监视</a></li>
+<li><a href="http://topic.csdn.net/t/20020610/18/792623.html" rel="external">请问soralis下怎么写脚本判断进程是否存在，不存在则启动？</a></li>
+<li><a href="http://topic.csdn.net/t/20050112/19/3720634.html" rel="external">【请教】win2000下如何写个简单的脚本杀掉一个系统进程？</a></li>
+<li><a href="http://topic.csdn.net/t/20050421/16/3955802.html" rel="external">shell脚本编写</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="sidebar">
+<h3>关键词</h3>
+<div>
+<ul>
+<li><a href="http://tag.csdn.net/tag/simph323/" rel="external">simph323</a></li>
+<li><a href="http://tag.csdn.net/tag/%E8%BF%9B%E7%A8%8B/" rel="external">进程</a></li>
+<li><a href="http://tag.csdn.net/tag/echo/" rel="external">echo</a></li>
+<li><a href="http://tag.csdn.net/tag/grep/" rel="external">grep</a></li>
+<li><a href="http://tag.csdn.net/tag/port/" rel="external">port</a></li>
+<li><a href="http://tag.csdn.net/tag/app/" rel="external">app</a></li>
+<li><a href="http://tag.csdn.net/tag/rs/" rel="external">rs</a></li>
+</ul>
+</div>
+<h3>得分解答快速导航</h3>
+<div>
+<ul>
+<li>帖主：<a href="#Top">baga</a></li>
+<li><a href="#r_24133990">dchg2000</a></li>
+<li><a href="#r_24163987">wti</a></li>
+</ul>
+</div>
+<h3>相关链接</h3>
+<div>
+<ul>
+
+    <li><a href="http://blog.csdn.net/" target="_blank">CSDN Blog</a></li>
+    <li><a href="http://dev.csdn.net/" target="_blank">技术文档</a></li>
+    <li><a href="http://download.csdn.net/" target="_blank">代码下载</a></li>
+    <li><a href="http://www.dearbook.com.cn/" target="_blank">第二书店</a></li>
+    <li><a href="http://book.csdn.net/" target="_blank">读书频道</a></li>
+
+</ul></div>
+<h3>广告也精彩</h3>
+<div>
+    <script type="text/javascript" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/show_ads.js"></script><script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/expansion_embed.js"></script><script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="border: medium none ; margin: 0pt; padding: 0pt; display: inline-table; height: 600px; position: relative; visibility: visible; width: 160px;"><ins style="border: medium none ; margin: 0pt; padding: 0pt; display: block; height: 600px; position: relative; visibility: visible; width: 160px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/ads.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="160" frameborder="0" height="600" scrolling="no"></iframe></ins></ins>
+</div>
+
+<h3>反馈</h3><div>请通过下述方式给我们反馈<br><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/feedback.gif" alt="反馈"></div>
+</div>
+<div class="clear"></div>
+</div>
+<div style="text-align: center;">
+    <div id="pubfooter" style="width: 770px;">
+    <div id="Float21789" style="position: absolute; z-index: 9; width: 190px; top: 111px; right: 3px;">
+        <center>
+            <div id="AD21789" style="width: 190px; height: 90px; text-align: center; float: none;">
+                <a href="http://g.csdn.net/5060169" target="_blank">
+                    <img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/questions.gif" alt="提问" style="width: 180px; height: 50px; padding-right: 3px;"></a>
+            </div>
+        </center>
+    </div>
+
+    <script type="text/javascript" language="JavaScript">
+    var csdnScrollTop=function(){
+        return document.documentElement.scrollTop?document.documentElement.scrollTop:document.body.scrollTop;
+        };
+        function mymove21789(){
+        document.getElementById("Float21789").style.top=csdnScrollTop()+100+'px';document.getElementById("Float21789").style.right=3+'px';setTimeout("mymove21789();",50);
+        }
+        mymove21789();
+    </script>
+
+    <div id="Float21790" style="position: absolute; z-index: 9; width: 190px; top: 211px; right: 3px;">
+        <center>
+            <div id="AD21790" style="width: 190px; height: 90px; text-align: center; float: none;">
+                <a href="http://vote.csdn.net/VoteList.aspx" target="_blank">
+                    <img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/hotvote.gif" alt="惹火投票。。火热进行中..." style="width: 180px; height: 30px;"></a>
+            </div>
+        </center>
+    </div>
+
+    <script type="text/javascript" language="JavaScript">
+        function mymove21790(){
+        document.getElementById("Float21790").style.top=csdnScrollTop()+200+'px';document.getElementById("Float21790").style.right=3+'px';setTimeout("mymove21790();",50);
+        }
+        mymove21790();
+    </script>
+    <script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/floatBox.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/public_header_footer.css">
+        <dl>
+            <dt></dt>
+            <dd>
+                <a href="http://www.csdn.net/help/intro.htm" target="_blank">网站简介</a>|<a href="http://www.csdn.net/help/ads.htm" target="_blank">广告服务</a>|<a href="http://www.csdn.net/help/vip.htm" target="_blank">VIP资费标准</a>|<a href="http://www.csdn.net/help/bankaccount.htm" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/help/sitemap.htm" target="_blank">网站地图</a>|<a href="http://www.csdn.net/help/help.htm" target="_blank">帮助</a>|<a href="http://www.csdn.net/help/contact.htm" target="_blank">联系方式</a>|<a href="http://job.csdn.net/Jobs/f9c75c9f2ad14404a604669b757b9ed0/viewcompany.aspx" target="_blank">诚聘英才</a>|<a href="http://www.csdn.net/help/english.htm" target="_blank">English</a>|<a href="#" onclick="window.location.href='mai'+'lto:'+'webm'+'aster@c'+'sdn.n'+'et?subject=Report To CSDN';return false">问题报告</a></dd>
+            <dd>
+                北京创新乐知广告有限公司 版权所有,&nbsp;京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd>
+            <dd>
+                世纪乐知(北京)网络技术有限公司 提供技术支持</dd>
+			<dd>
+				CSDN网站24小时值班电话：13552009689</dd>
+            <dd class="small">
+                Copyright © 2000-2009, CSDN.NET, All Rights Reserved</dd>
+            <dd>
+                <a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank">
+                    <img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/gongshang_logos.gif" alt="GongshangLogo"></a></dd>
+        </dl>
+    </div>
+</div>
+
+        <!--google   Analytics begin -->
+
+        <script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/urchin.js" type="text/javascript">
+        </script>
+
+        <script type="text/javascript">
+_uacct = "UA-2688088-7";
+urchinTracker();
+        </script>
+
+        <!--google   Analytics end -->
+
+        <script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/counter.js" type="text/javascript"></script><script type="text/javascript" charset="UTF-8" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/msg.js"></script><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/visitlog.htm" alt="" width="1" border="0" height="1"><iframe id="myframe" name="myframe" border="0" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/dd333.htm" width="0" frameborder="no" height="0" scrolling="no"></iframe>
+        <script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/clickeye.js"></script>
+
+
+
+
+
+
+
+<!-- Control Code/Caption.Yo-Focus-->
+<script language="JavaScript1.1">
+var afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 = "";
+var afp_ad_count = 0;
+var afp_keyword_lenth = 200;
+
+var _YOYI_CONTROL_ = false;
+
+if ((navigator.userAgent.indexOf("MSIE 7.0") != -1) && (navigator.userAgent.indexOf("Windows") != -1))
+{
+	afp_keyword_lenth = 273;
+}
+
+if (document.title != "")
+	afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 = document.title;
+if (window.keywords)
+	afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 += window.keywords.content;
+if (window.description)
+	afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 += window.description.content;
+
+if (document.innerTEXT)
+	afp_all_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 = document.innerTEXT;
+
+if(afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8.length > afp_keyword_lenth) 
+{
+	afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8 = afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8.substring(0,afp_keyword_lenth);
+}
+
+document.write("<scr"+"ipt src='http://server.yoyi.com.cn/afp/get/;pl_id=BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8;tp=js;sk=0;ck=0;ext_key="+afp_keyword_BDA9CBA6_5658_A4DB_7E1D_1B781AF3DEE8+";u_id=afu;ex_id=;/?'></scr"+"ipt>");
+</script><script src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/a.js"></script>
+<!-- Control Code End/No.csdn-->
+
+
+
+
+</div>
+</div>
+</div></div><div style="border: 0pt none ; position: absolute; display: none; z-index: 100000;"></div><div style="border: 0pt none ; position: absolute; display: none; z-index: 100000;"></div><link type="text/css" rel="stylesheet" href="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/message2.css"><div id="_popup_msg_container" style="display: block;"><!--2009-09-10-->
+
+<div style="display: block; height: 244px;" wistate="max" id="im_popupWindow_miniMsg" class="im_popupWindow">
+	<h6 class="wi_draggable"><a href="http://subject.csdn.net/survey/2009/" target=" _blank" style="color: rgb(0, 0, 0); display: block; text-align: left; width: 200px; font-size: 12px; font-family: '微软雅黑','宋体',Arial;">2009中国软件开发者大调查</a>           
+	<a onclick="_message_tips_pop('down');return false;" href="#"><img alt="colse" class="founctionpic3" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/csdnim080507verpic3.gif">    </a></h6>
+    <div id="im_popupWindow_miniMsgContent" class="wi_content">
+      <div class="kuai">
+<a href="http://subject.csdn.net/survey/2009/" target="_blank"><img src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/diaocha.jpg" border="0">
+</a></div></div></div></div><img style="display: none;" src="%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E8%84%9A%E6%9C%AC%E7%9B%91%E8%A7%86%E8%BF%9B%E7%A8%8B_files/count_new.htm"></body></html>
