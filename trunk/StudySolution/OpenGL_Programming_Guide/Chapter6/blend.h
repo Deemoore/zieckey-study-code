@@ -1,98 +1,73 @@
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glut.h>
+#include "common.h"
 
-#include <stdio.h>
-
-#pragma comment(lib, "OpenGL32.lib")
-#pragma comment(lib, "glu32.lib")
-#pragma comment(lib, "glut32.lib")
-
-void init()
+/* The following keys change the selected blend equation mode
+*
+* 'a' -> GL_FUNC_ADD
+* 's' -> GL_FUNC_SUBTRACT
+* 'r' -> GL_FUNC_REVERSE_SUBTRACT
+* 'm' -> GL_MIN
+* 'x' -> GL_MAX
+*/
+void init( void )
 {
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glShadeModel(GL_FLAT);
+	glClearColor( 1.0, 1.0, 0.0, 0.0 );
+	glBlendFunc( GL_ONE, GL_ONE );
+	glEnable( GL_BLEND );
 }
 
-void drawsquare( int width )
+void display( void )
 {
-    glRecti( -width/2, -width/2, width/2, width/2 );
+	glClear( GL_COLOR_BUFFER_BIT );
+	glColor3f( 0.0, 0.0, 1.0 );
+	glRectf( -0.5, -0.5, 0.5, 0.5 );
+	glFlush();
 }
-
-void display()
+void keyboard( unsigned char key, int x, int y )
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+	switch ( key )
+	{
+		case 'a':
+		case 'A':
+			/* Colors are added as: (1,1,0) + (0,0,1) = (1,1,1) which
+			* will produce a white square on a yellow background. */
+			glBlendEquation( GL_FUNC_ADD );
+			break;
+		case 's':
+		case 'S':
+			/* Colors are subtracted as: (0,0,1) - (1,1,0) = (-1,-1,1)
+			* which is clamped to (0, 0, 1), producing a blue square
+			* on a yellow background. */
+			glBlendEquation( GL_FUNC_SUBTRACT );
+			break;
+		case 'r':
+		case 'R':
+			/* Colors are subtracted as: (1,1,0) - (0,0,1) = (1,1,-1)
+			* which is clamped to (1, 1, 0). This produces yellow for
+			* both the square and the background. */
+			glBlendEquation( GL_FUNC_REVERSE_SUBTRACT );
+			break;
+		case 'm':
+		case 'M':
+			/* The minimum of each component is computed, as
+			* [min(1,0),min(1,0),min(0,1)] which equates to (0,0,0).
+			* This will produce a black square on the yellow
+			* background. */
+			glBlendEquation( GL_MIN );
+			break;
+		case 'x':
+		case 'X':
+			/* The minimum of each component is computed, as
+			* [max(1, 0), max(1, 0), max(0, 1)] which equates to
+			* (1, 1, 1). This will produce a white square on the
+			* yellow background. */
+			glBlendEquation( GL_MAX );
+			break;
+		case 27:
+            exit( 0 );
+            break;
+        default:
+            break;
+	}
 
-    //draw axis
-    {
-        const float axislen = 300.0f;
-        const float axislenh = axislen/2;
-        glBegin(GL_LINES);
-        glColor3f( 0.0f, 1.0f, 0.0f );//指定线的颜色,绿色
-        // x-axis
-        glVertex2f( -axislenh, 0.0f);
-        glVertex2f( axislenh, 0.0f);
-
-        // x-axis arrow
-        glVertex2f( axislenh, 0.0f);
-        glVertex2f( axislenh-7, 3.0f);
-        glVertex2f( axislenh, 0.0f);
-        glVertex2f( axislenh-7,-3.0f);
-
-
-        glColor3f( 1.0f, 0.0f, 0.0f );//指定线的颜色,红色
-        // y-axis
-        glVertex2f( 0.0f, -axislenh);
-        glVertex2f( 0.0f, axislenh);
-        glVertex2f( 0.0f, axislenh);
-        glVertex2f( 3.0f, axislenh-7);
-        glVertex2f( 0.0f, axislenh);
-        glVertex2f( -3.0f, axislenh-7);
-        glEnd();
-    }
-
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-
-
-    /* 一个白色的正方形，先平移再旋转 */
-    glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
-    glTranslatef( 100.0f, 0.0f, 0.0f );//沿着x轴移动
-    glRotatef( 45, 0.0f, 0.0f, 1.0f );//沿着z轴旋转
-    drawsquare(50);
-
-
-    /* 一个红色的正方形，先旋转再平移 */
-    glLoadIdentity();
-    glColor3f(1.0, 0.0, 0.0);
-    glRotatef( 45, 0.0f, 0.0f, 1.0f );//沿着z轴旋转
-    glTranslatef( 100.0f, 0.0f, 0.0f );//沿着x轴移动
-    drawsquare(50);
-
-    glPopMatrix();
-    glFlush();
-}
-
-void reshape( int w, int h )
-{
-    glViewport(0, 0, (GLsizei) w, (GLsizei) h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-(GLdouble) w/2, (GLdouble) w/2, -(GLdouble) h/2, (GLdouble) h/2);
-};
-
-int main( int argc, char* argv[] )
-{ 
-    glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH );
-    glutInitWindowSize( 800, 800 );
-    glutInitWindowPosition( 100, 100 );
-    glutCreateWindow( "Chapter2" );
-    init();
-    glutDisplayFunc( &display );
-    glutReshapeFunc( &reshape );
-    glutMainLoop();
-
-    return 0;
+	glutPostRedisplay();
 }
