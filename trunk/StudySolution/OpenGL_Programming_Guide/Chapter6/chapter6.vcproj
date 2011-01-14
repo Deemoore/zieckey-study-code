@@ -181,7 +181,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\aaindex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\aargb.h"
+				>
+			</File>
+			<File
 				RelativePath=".\alpha.h"
+				>
+			</File>
+			<File
+				RelativePath=".\alpha3D.h"
 				>
 			</File>
 			<File
