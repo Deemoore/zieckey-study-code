@@ -7,6 +7,7 @@
 #include <gl/glut.h>
 
 #include <stdio.h>
+#include <math.h>
 
 
 #pragma comment(lib, "OpenGL32.lib")

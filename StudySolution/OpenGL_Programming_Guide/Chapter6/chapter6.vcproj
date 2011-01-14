@@ -204,6 +204,18 @@
 				RelativePath=".\common.h"
 				>
 			</File>
+			<File
+				RelativePath=".\fog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fogcoord.h"
+				>
+			</File>
+			<File
+				RelativePath=".\multisamp.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
