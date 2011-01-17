@@ -1,5 +1,4 @@
 // #include "blend.h"
-// 
 // #include "alpha.h"
 // #include "alpha3D.h"
 // #include "aaindex.h"
