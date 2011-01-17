@@ -121,6 +121,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(500, 500);
     glutCreateWindow(argv[0]);
+    glewInit();
     init();
     glutReshapeFunc (reshape);
     glutKeyboardFunc (keyboard);

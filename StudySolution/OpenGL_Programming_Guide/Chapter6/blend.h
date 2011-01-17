@@ -71,3 +71,17 @@ void keyboard( unsigned char key, int x, int y )
 
 	glutPostRedisplay();
 }
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(200, 200);
+    glutCreateWindow(argv[0]);
+    glewInit();
+    init();
+    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}
