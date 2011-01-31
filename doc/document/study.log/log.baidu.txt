@@ -766,11 +766,11 @@ var_dump($val);
 假设我们需要实现的目标是：使ps30成为ps24的信任机器（让ps30登陆ps24无需输入密码）。
 （1）	进入ps30的隐藏目录.ssh：cd .ssh（当前目录为/home/work/）
 （2）	用ll命令查看是否有id_rsa.pub文件，该文件记录了本机的用户名密码等信息。如果没有，转（3）。
-（3）	生成id_rsa.pub和id_rsa文件：ssh-keygen -t rsa。回车之后输入id_rsa，提示输入密码的时候连续回车就可以了，因为该密码是对id_rsa.pub进行加密的，没有必要。
+（3）	生成id_rsa.pub和id_rsa文件： ssh-keygen -t rsa。回车之后输入id_rsa，提示输入密码的时候连续回车就可以了，因为该密码是对id_rsa.pub进行加密的，没有必要。
 （4）	然后scp id_rsa.pub work@testing-ps24.baidu.com:/home/work/.ssh/weizili.pub （注意：一定要改名，不然会把目的机器的id_rsa.pub文件覆盖）。
 （5）	进入ps24机器的.ssh目录：cat weizili.pub >>authorized_keys
 （6）	付于ps24上的authorized_keys文件以执行的权限：chmod 744 authorized_keys （744表示文件的属主有rwx的权限，而其余用户只有r的权限）
-（7）	在ps30上验证建立信任关系是否成功：ssh testing-ps24，如果不需要输入密码就进入ps24机器，证明已经成功。
+（7）	在ps30上验证建立信任关系是否成功： ssh testing-ps24，如果不需要输入密码就进入ps24机器，证明已经成功。
 
 
 
