@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="tcpechoclient"
-	ProjectGUID="{5644BA75-A807-4757-A1FC-A115B39813CF}"
-	RootNamespace="tcpechoclient"
+	Name="HP2PNegServer"
+	ProjectGUID="{DAC8548C-36EB-4B01-B4B1-A00D3EF9407E}"
+	RootNamespace="connectserver"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +21,8 @@
 			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
+			ManagedExtensions="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,15 +41,22 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200"
 				Optimization="0"
-				AdditionalIncludeDirectories="../"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				EnableIntrinsicFunctions="false"
+				AdditionalIncludeDirectories="../include;../../;../../../../../common/trunk/src/h3rdpart/include;../../../../../common/trunk/src/h3rdpart/;../../../../../common/trunk/src/h3rdpart/mono/mono;../../../../../common/trunk/src/h3rdpart/mono\mono\eglib\src\;../../../../../common/trunk/src"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;H_SYNCSERVER_EXPORTS"
+				StringPooling="true"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="4"
+				RuntimeLibrary="1"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="&quot;hp2pnegserver/include/HP2PNegServerPrerequisits.h&quot;"
+				WarningLevel="4"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4100;4189;4201"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,8 +69,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(OutDir)\"
+				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
+				AssemblyDebug="1"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -93,8 +105,6 @@
 			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
 			ConfigurationType="1"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -114,13 +124,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
+				AdditionalIncludeDirectories="../include;../../;../../../../../common/trunk/src/h3rdpart/include;../../../../../common/trunk/src/h3rdpart/;../../../../../common/trunk/src/h3rdpart/mono/mono;../../../../../common/trunk/src/h3rdpart/mono\mono\eglib\src\;../../../../../common/trunk/src"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;H_SYNCSERVER_EXPORTS"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="&quot;hsyncserver/include/HSSPrerequisits.h&quot;"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -134,12 +146,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="1"
+				AdditionalDependencies="cryptlib.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
+				Profile="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -168,30 +183,40 @@
 	</References>
 	<Files>
 		<Filter
-			Name="源文件"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="_inc"
+			Filter="h; hpp; hxx; hm; inl; inc; xsd"
+			UniqueIdentifier=" {93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\TcpEchoClient.cpp"
+				RelativePath="..\include\HP2PNegServerPrerequisits.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="头文件"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			Name="_src"
+			Filter="cpp; c; cc; cxx; def; odl; idl; hpj; bat; asm; asmx"
+			UniqueIdentifier=" {4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\socketcommon.h"
+				RelativePath=".\HMain.cpp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="资源文件"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			<File
+				RelativePath=".\HP2PNegServerPrerequisits.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HPCH.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
