@@ -1,0 +1,191 @@
+
+curl 封装：
+把 base path, header, verb,, response 都像java搞的那样封一下吧，呵呵 
+一个通用的封装。用来和web服务器之间发送消息，发送数据，下载文件
+支持post,get等常用的动词.
+
+
+没有用的ip：
+192.168.3.200, 192.168.3.201
+
+
+
+./configure --prefix=/usr/local/curl --enable-shared --enable-http --enable-file --enable-libgcc --enable-ftp --enable-thread --enable-cookies  --enable-ldap --enable-proxy --enable-dict --enable-manual --enable-debug --enable-ipv6
+
+
+--with-zlib=/usr/local/phptools/zlib  --with-ssl=/usr/local/ssl/
+
+
+HTTP Chunked Transfer Encoding ：
+Chunked Transfer Encoding is a mechanism that allows HTTP messages to be split in several parts. This can be applied to both HTTP requests (from client to server) and HTTP responses (from server to client). For example, let us consider the way in which an HTTP server may transmit data to a client application (usually a web browser). Normally, data delivered in HTTP responses is sent in one piece, whose length is indicated by the Content-Length header field.
+
+
+
+
+size_t function(char *bufptr, size_t size, size_t nitems, void *userp);
+
+Where bufptr is the pointer to a buffer we fill in with data to upload and size*nitems is the size of the buffer and therefore also the maximum amount of data we can return to libcurl in this call. The 'userp' pointer is the custom pointer we set to point to a struct of ours to pass private data between the application and the callback. 
+
+ curl_easy_setopt(easyhandle, CURLOPT_READFUNCTION, read_function); //这个函数指针的类型如上 
+ curl_easy_setopt(easyhandle, CURLOPT_READDATA, &filedata); 
+ 这里的 &filedata 就是传给 上一步 read_function 的第四个参数，用户自定义指针
+ 
+
+#ifdef WIN32
+        Sleep(L);
+#else
+        sleep(L / 1000);
+#endif
+
+
+curl 提供了 raw socket 机制，建立连接后，可以把 sockfd 取出来
+然后在此 sockfd 上与服务器通信，这个时候收发全由自己控制，http协议也得自己实现。
+
+如果不用 curl 提供的 raw socket，这个时候是否可以考虑通过新开线程实现？
+但是这样的话，每次new出一个curl对象，就会新建一个线程，开销是否过大？做成线程池方式呢？
+
+另外
+curl_multi_perform
+curl_multi_fdset
+curl_multi_timeout
+select
+curl_multi_info_read 等函数调用可以实现异步的
+
+
+
+CURLINFO_LASTSOCKET
+
+Pass a pointer to a long to receive the last socket used by this curl session. If the socket is no longer valid, -1 is returned. When you finish working with the socket, you must call curl_easy_cleanup() as usual and let libcurl close the socket and cleanup other resources associated with the handle. This is typically used in combination with CURLOPT_CONNECT_ONLY. (Added in 7.15.2) 
+
+
+
+读socket的调用关系图
+curl_multi_perform->
+multi_runsingle->Curl_readwrite	->Curl_socket_ready -> poll
+								->readwrite_data->Curl_read->Curl_read_plain->sread(recv)
+
+This function gets called by libcurl instead of the socket(2) call
+curl_opensocket_callback fopensocket; /* function for checking/translating
+                                           the address and opening the socket */							
+                                           
+
+CURL_EXTERN CURLMcode curl_multi_socket_action(CURLM *multi_handle,
+                                               curl_socket_t s,
+                                               int ev_bitmask,
+                                               int *running_handles);
+该函数的底层还是调用 curl_multi_perform ，
+（之后还会调用 update_timer， update_timer 又会调用用户设置的 CURLMOPT_TIMERFUNCTION 回调函数）
+调用关系如下：curl_multi_socket_action->multi_socket->curl_multi_perform
+
+
+#include <curl/curl.h>
+CURLMcode curl_multi_assign(CURLM *multi_handle, curl_socket_t sockfd,   void *sockptr); 
+这个函数的将用户自定义的数据 sockptr 与 sockfd 绑定在一起
+
+CURLMOPT_SOCKETFUNCTION 参数设置的回调函数 
+  int curl_socket_callback(CURL *easy,      /* easy handle */
+                            curl_socket_t s, /* socket */
+                            int action,      /* see values below */
+                            void *userp,    /* private callback pointer */
+                            void *socketp); /* private socket pointer */
+调用这个回调函数的时候，第5th个参数 socketp 等于 curl_multi_assign 中设置第三个参数
+
+
+curl_multi_add_handle(g->multi, conn->easy); 这个函数会触发multi的回调函数 multi_timer_cb 执行
+回调函数 multi_timer_cb 由下面语句设置：
+curl_multi_setopt(multi, CURLMOPT_TIMERFUNCTION, multi_timer_cb);
+
+
+源代码中：CURLMcode curl_multi_add_handle(CURLM *multi_handle, CURL *easy_handle) 
+			--> update_timer(multi) 
+			--> multi->timer_cb((CURLM*)multi, timeout_ms, multi->timer_userp);
+在函数update_timer中，timeout_ms 由 multi_timeout(multi, &timeout_ms) 计算得到的。
+timer_cb这个回调函数就是上面 curl_multi_setopt(multi, CURLMOPT_TIMERFUNCTION, multi_timer_cb); 中设置的 multi_timer_cb
+因此可以看到，curl_multi_add_handle调用之后最终会调用 multi_timer_cb 这个回调函数
+
+
+
+
+/* Initialize a new SockInfo structure */
+static void addsock(curl_socket_t s, CURL *easy, int action, GlobalInfo *g) {
+  SockInfo *fdp = calloc(sizeof(SockInfo), 1);
+
+  fdp->global = g;
+  setsock(fdp, s, easy, action, g);
+  curl_multi_assign(g->multi, s, fdp);
+}
+
+
+
+
+
+
+
+
+
+
+
+curl 例子　hiperfifo.c　的解析：
+main->init_fifo->event_set (&g->fifo_event, sockfd, EV_READ | EV_PERSIST, fifo_cb, g)->fifo_cb->new_conn->curl_multi_add_handle->multi_timer_cb->evtimer_add (&g->timer_event, &timeout);('evtimer_set (&g.timer_event, timer_cb, &g);')->timer_cb->curl_multi_socket_action->sock_cb->setsock->event_set (&f->ev, f->sockfd, kind, event_cb, g);->event_cb->curl_multi_socket_action
+
+
+
+
+
+
+线程安全：
+> The question is:
+> can I use
+> curl_multi_add_handle(multi_handle, http_handle);
+> On this thread for adding new requests to process?
+> Is it thread safe?
+
+It is thread-safe, but you can only use the single multi handle in one thread
+at a time, not simultanouesly. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+主线程初始化 curl_multi handle ， 有新的url过来，就初始化一个 UrlInfo， 
+并设置CURLMOPT_SOCKETFUNCTION sock_cb, CURLMOPT_TIMERFUNCTION multi_time_cb 回调函数。
+在 multi_time_cb 中执行一次 curl_multi_socket_action，执行完后会调用 sock_cb 回调函数，
+在 sock_cb 中取得 sockfd，赋值给对应的 UrlInfo 中，调度线程检测到给sockfd可用，加入fdset中做 select 用。
+
+每一个工作线程都有一个 curl_multi handle，
+每一个任务对应一个 UrlInfo（含有url、sockfd、httpmethod、state）
+
+
+
+
+
+
+（含有url、sockfd、httpmethod、state）
+struct _URLInfo
+{
+	char*				url;		//!	the url
+	SOCKET				sockfd;		//!	socket fd
+	int					method;		//!	HTTP method, like HTTP_POST, HTTP_GET
+	int					state;		//! the perform state
+	CURLWorkThread*		pWorkTh;	//! the curl-multi handle with this url
+	void*				data;		//! special data
+} URLInfo;
+
+
+CURLWorkThread 工作线程
+CURLWork	工作任务
+CURLService 调度线程（线程池）
+
+curl_multi_socket_action 执行一次后会调用 sock_cb 回调函数，在 sock_cb 中取得 sockfd。建立连接阶段（同步）。
+
+
+
