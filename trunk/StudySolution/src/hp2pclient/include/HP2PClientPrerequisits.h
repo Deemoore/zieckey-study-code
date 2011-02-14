@@ -1,11 +1,13 @@
 #pragma once
 
-#include "hcommon/include"
+#include "hcommon/include/HCommonLibAllExp.h"
 
+#define P2PC_NAMESPACE_BEGIN namespace P2PC{
+#define P2PC_NAMESPACE_END };
 
-namespace P2PC
-{
-    //! Module symbol export
+P2PC_NAMESPACE_BEGIN
+
+//! Module symbol export
 #ifdef H_WINDOWS_API
 #	ifndef  H_STATIC_LIB_P2PCLIENT
 #		ifdef  H_P2PCLIENT_EXPORTS
@@ -27,6 +29,7 @@ namespace P2PC
 
     //! initialize
     _EXPORT_P2PCLIENT void uninitializeP2PClient();
-};
 
+
+P2PC_NAMESPACE_END
 
