@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ch6"
-	ProjectGUID="{FBBEB230-5C02-49AA-9CC5-8786CBCF104E}"
+	Name="ch9"
+	ProjectGUID="{BDFC2CA0-3178-401F-947D-1418A0380F72}"
 	RootNamespace="Light"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -183,23 +183,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\aaindex.h"
-				>
-			</File>
-			<File
-				RelativePath=".\aargb.h"
-				>
-			</File>
-			<File
-				RelativePath=".\alpha.h"
-				>
-			</File>
-			<File
-				RelativePath=".\alpha3D.h"
-				>
-			</File>
-			<File
-				RelativePath=".\blend.h"
+				RelativePath=".\checker.h"
 				>
 			</File>
 			<File
@@ -207,15 +191,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\fog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fogcoord.h"
-				>
-			</File>
-			<File
-				RelativePath=".\multisamp.h"
+				RelativePath=".\texsub.h"
 				>
 			</File>
 		</Filter>
