@@ -152,3 +152,13 @@ FreeImage_GetHeigth 返回bitmap的象素高度
 FreeImage_GetPitch 返回bitmap的宽度的字节数，为了性能考虑，返回结果是以4字节对齐后的值
 那么 pitch 等于 pixelwidth * pixelbytes 的4字节对齐后的值。
 例如，象素宽度为10，每个像素用3字节表示，那么 pitch 的值为 10×3 再4字节对齐为 32，pitch=32
+
+
+
+
+
+
+
+
+对画面色彩没有影响,glPixelStorei (GL_UNPACK_ALIGNMENT, 1)控制的是所读取的图像数据的行对齐方式.
+默认4字节对齐,即一个行的图像数据字节数必须是4的整数倍. 即对RGB 3字节象素而言,若一行10个象素,30个字节,在4字节对齐模式下,OpenGL会读取32个字节的行数据.若不加注意,会导致glTexImage中系函数的读取越界,从而全面崩溃.

@@ -1,8 +1,7 @@
 1、上传成功之后，清楚编辑历史的标记
 2、
 
-svn co http://10.192.0.8/svn/v2/server
-svn co http://10.192.0.8/svn/v2/client
+
 
 	
 17402427859830163 大卷包小卷
@@ -2141,7 +2140,28 @@ vc2005中文版有一个文件无论如何打不上断点
 	
 	
 	
-	
+//! \brief 
+//! \param $MethodArg$ - 
+//! \return $SymbolType$ - 
+
+
+
+//************************************
+// Method:    $SymbolName$
+// FullName:  $SymbolContext$
+// Access:    $SymbolVirtual$$SymbolPrivileges$$SymbolStatic$
+// Returns:   $SymbolType$
+// Qualifier: $MethodQualifier$
+// Parameter: $MethodArg$
+//************************************	
+
+
+
+http://192.168.0.43/fws/admin/upload.html
+http://192.168.0.43/fws/admin/view.php
+http://192.168.0.43/fws/lock.php?type=aaa&uuid=d943d2c68e25b378f83a9ad734c0e1fa&userid=1003&version=1
+http://v2r.hipihi.com/fws/lock.php?type=aaaaaa&uuid=f908c0bcf8148d3eb43591b752fada4a&userid=1003&version=1
+
 	
 	
 	
