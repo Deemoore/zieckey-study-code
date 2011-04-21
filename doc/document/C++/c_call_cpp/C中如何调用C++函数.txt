@@ -1,0 +1,347 @@
+
+
+//header file : cppsayhello.h
+#ifndef SAY_HELLO_H
+#define SAY_HELLO_H
+class Say;
+extern "C" void  sayhello( Say* say );
+extern "C" void* create_say();
+extern "C" void  destroy_say( void* say );
+class Say
+{
+public:
+    void hello();
+};
+#endif
+
+
+//implematation file : cppsayhello.cpp
+#include "cppsayhello.h"
+#include <iostream>
+/**
+* compile : g++ cppsayhello.cpp -c -o cppsayhello.o
+*/
+void Say::hello()
+{
+    std::cout << "hello, from " << __PRETTY_FUNCTION__ << std::endl;
+}
+void sayhello( Say* say )
+{
+    say->hello();
+}
+void* create_say()
+{
+    Say* say = new Say();
+    return (void*)say;
+}
+void  destroy_say( void* say )
+{
+    Say* s = (Say*)say;
+    delete s;
+    s = NULL;
+}
+
+
+//main.c
+/**
+* compile : gcc -c main.c -o main.o
+* compile : gcc main.o cppsayhello.o -lstdc++ -o a.out
+*/
+struct Say;
+void sayhello( struct Say* say );
+int main( int argc, char* argv[] )
+{
+    struct Say* say = (struct Say*)create_say();
+    sayhello( say );
+    destroy_say( say );
+    return 0;
+}
+
+[weizili@build3 c_call_cpp]$ g++ -c cppsayhello.cpp -o cppsayhello.o
+[weizili@build3 c_call_cpp]$ gcc -c main.c -o main.o
+[weizili@build3 c_call_cpp]$ gcc main.o cppsayhello.o -lstdc++ -o a.out
+[weizili@build3 c_call_cpp]$ ./a.out
+hello, from void Say::hello()
+[weizili@build3 c_call_cpp]$
+
+  
+
+
+
+
+
+How do I call a C function from C++?
+Just declare the C function ``extern "C"'' (in your C++ code) and call it (from your C or C++ code). For example:
+
+     // C++ code
+
+     extern "C" void f(int);     // one way
+
+     extern "C" {     // another way
+          int g(double);
+          double h();
+     };
+
+     void code(int i, double d)
+     {
+          f(i);
+          int ii = g(d);
+          double dd = h();
+          // ...
+     }
+
+The definitions of the functions may look like this:
+
+     /* C code: */
+
+     void f(int i)
+     {
+          /* ... */
+     }
+
+     int g(double d)
+     {
+          /* ... */
+     }
+
+     double h()
+     {
+          /* ... */
+     }
+
+
+Note that C++ type rules, not C rules, are used. So you can't call function declared ``extern "C"'' with the wrong number of argument. For example:
+
+     // C++ code
+
+     void more_code(int i, double d)
+     {
+          double dd = h(i,d);     // error: unexpected arguments
+          // ...
+     }
+
+How do I call a C++ function from C?
+Just declare the C++ function ``extern "C"'' (in your C++ code) and call it (from your C or C++ code). For example:
+
+     // C++ code:
+
+     extern "C" void f(int);
+
+     void f(int i)
+     {
+          // ...
+     }
+
+Now f() can be used like this:
+
+     /* C code: */
+
+     void f(int);
+    
+     void cc(int i)
+     {
+          f(i);
+          /* ... */
+     }
+
+Naturally, this works only for non-member functions. If you want to call member functions (incl. virtual functions) from C, you need to provide a simple wrapper. For example:
+
+     // C++ code:
+
+     class C {
+          // ...
+          virtual double f(int);
+     };
+
+     extern "C" double call_C_f(C* p, int i)     // wrapper function
+     {
+          return p->f(i);
+     }
+
+Now C::f() can be used like this:
+
+     /* C code: */
+
+     double call_C_f(struct C* p, int i);
+    
+     void ccc(struct C* p, int i)
+     {
+          double d = call_C_f(p,i);
+          /* ... */
+     }
+
+If you want to call overloaded functions from C, you must provide wrappers with distinct names for the C code to use. For example:
+
+     // C++ code:
+
+     void f(int);
+     void f(double);
+
+     extern "C" void f_i(int i) { f(i); }
+     extern "C" void f_d(double d) { f(d); }
+
+Now the f() functions can be used like this:
+
+     /* C code: */
+
+     void f_i(int);
+     void f_d(double);
+    
+     void cccc(int i,double d)
+     {
+          f_i(i);
+          f_d(d);
+          /* ... */
+     }
+
+Note that these techniques can be used to call a C++ library from C code even if you cannot (or do not want to) modify the C++ headers.
+
+C中如何调用C++函数?
+来源：中国自学编程网   发布日期：2008-06-27 
+
+前阵子被问及一个在C中如何调用C++函数的问题，当时简单回答是将函数用extern "C"声明，当被问及如何将类内成员函数声明时，一时语塞，后来网上查了下，网上有一翻译C++之父的文章可以作为解答，遂拿来Mark一下。
+
+
+
+将 C++ 函数声明为``extern "C"''（在你的 C++ 代码里做这个声明），然后调用它（在你的 C 或者 C++ 代码里调用）。例如：
+
+// C++ code:
+
+extern "C" void f(int);
+
+void f(int i)
+
+{
+
+     // ...
+
+}
+
+
+
+然后，你可以这样使用 f()：
+
+/* C code: */
+
+void f(int);
+
+void cc(int i)
+
+{
+
+    f(i);
+
+   /* ... */
+
+    }
+
+
+
+当然，这招只适用于非成员函数。如果你想要在 C 里调用成员函数（包括虚函数），则需要提供一个简单的包装（wrapper）。例如：
+
+// C++ code:
+
+class C
+
+{
+
+       // ...
+
+       virtual double f(int);
+
+};
+
+
+
+extern "C" double call_C_f(C* p, int i) // wrapper function
+
+{
+
+       return p->f(i);
+
+}
+
+
+
+然后，你就可以这样调用 C::f()：
+
+/* C code: */
+
+double call_C_f(struct C* p, int i);
+
+
+
+void ccc(struct C* p, int i)
+
+{
+
+       double d = call_C_f(p,i);
+
+       /* ... */
+
+}
+
+
+
+如果你想在 C 里调用重载函数，则必须提供不同名字的包装，这样才能被 C 代码调用。例如：
+
+// C++ code:
+
+void f(int);
+
+void f(double);
+
+
+
+extern "C" void f_i(int i) { f(i); }
+
+extern "C" void f_d(double d) { f(d); }
+
+
+
+然后，你可以这样使用每个重载的 f()：
+
+/* C code: */
+
+void f_i(int);
+
+void f_d(double);
+
+
+
+void cccc(int i,double d)
+
+{
+
+       f_i(i);
+
+       f_d(d);
+
+       /* ... */
+
+}
+
+注意，这些技巧也适用于在 C 里调用 C++ 类库，即使你不能（或者不想）修改 C++ 头文件。
+
+该翻译的文档Bjarne Stroustrup的原文链接地址是http://www.research.att.com/~bs/bs_faq2.html#callCpp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
