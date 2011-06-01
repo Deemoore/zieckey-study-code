@@ -1,3 +1,7 @@
 生成密钥可以使用附件程序360KeyMgr.rar，是个命令行程序，执行：
          360KeyMgr.exe /?
 可以显示命令行参数
+
+生成密钥对命令：
+E:\workspace\googlecodesvn\doc\document\testcode\rsa-simple-code>360KeyMgr.exe/W /R /K:e:/rsakeyfile /N:keyname
+这个会生成 e:/rsakeyfile 文件
