@@ -97,14 +97,14 @@ int main(void)
 		char s[] = "Hello!\n";
 		fd = open( "zieckey_fifo", O_WRONLY );
 		write( fd, s, sizeof(s) );
-		//close( fd );
+		close( fd );
 	}
 	else
 	{
 		fd = open( "zieckey_fifo", O_RDONLY );
 		read( fd, buf, sizeof(buf) );
 		printf("The message from the pipe is:%s\n", buf );
-		//close( fd );
+		close( fd );
 	}
 	
 	return 0;
@@ -134,5 +134,43 @@ int main( int argc, char **argv )
 		return -1;
 	}
 	
+	char buf[1024] = {};
+	fd = open( argv[1], O_RDONLY );
+	read( fd, buf, sizeof(buf) );/* 这里会阻塞住，请在另一shell里输入 echo "aaa" > argv[1]  */
+	printf("The message from the pipe is:%s\n", buf );
+	close( fd );
+	
 	return 0;
 }	
+
+
+执行；
+[weizili@build7 test]$ ./a.out zzz.fifo
+
+在另一shell里执行：
+[weizili@build7 test]$ echo aaaa > zzz.fifo 
+[weizili@build7 test]$ 
+
+这时候原来的那个程序会收到信息，然后打印出来，然后退出。
+[weizili@build7 test]$ ./a.out zzz.fifo
+The message from the pipe is:aaaa
+
+
+
+
+
+
+
+
+
+命令 mkfifo 用法：
+
+一个shell
+[weizili@build7 test]$ mkfifo zieckey_fifo
+[weizili@build7 test]$ cat < zieckey_fifo
+aaa
+
+
+另一个shell
+[weizili@build7 test]$ echo "aaa" > zieckey_fifo
+
