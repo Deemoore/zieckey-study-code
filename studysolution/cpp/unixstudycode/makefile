@@ -12,8 +12,8 @@ CFLAGS=-g -O3 -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
 #-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
-objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o
-program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1
+objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o dmalloctest.o
+program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1 dmalloctest
 subpro=c_call_cpp rsa
 
     
@@ -28,44 +28,47 @@ all: $(program)
 #            for t in $(TESTS); do echo "***** Running $$t"; ./$$t || exit 1; done
 
 
-size_t : $(objs)
+size_t : size_t.o 
 	$(CC) $(LDFLAGS) size_t.o -o $@
 	
-mkfifo: $(objs)
+mkfifo: mkfifo.o 
 	$(CC) $(LDFLAGS) mkfifo.o -o $@
 	
-mkfifo2: $(objs)
+mkfifo2: mkfifo2.o
 	$(CC) $(LDFLAGS) mkfifo2.o -o $@
 	
-getpagesize: $(objs)
+getpagesize: getpagesize.o
 	$(CC) $(LDFLAGS) getpagesize.o -o $@
 	
-stat: $(objs)
+stat: stat.o
 	$(CC) $(LDFLAGS) stat.o -o $@
 	
-test: $(objs)
+test: test.o 
 	$(CC) $(LDFLAGS) test.o -o $@
 	
-cast : $(objs)
+cast : cast.o 
 	$(CC) $(LDFLAGS) cast.o -o $@
 	
-classinfunc : $(objs)
+classinfunc : classinfunc.o 
 	$(CC) $(LDFLAGS) classinfunc.o -o $@
 	
-zlib : $(objs)
+zlib : zlib.o 
 	$(CC) $(LDFLAGS) -lz zlib.o -o $@
 
-fwrspeed : $(objs)
+fwrspeed : fwrspeed.o
 	$(CC) $(LDFLAGS) fwrspeed.o -o $@
 	
-libeventtest : $(objs)
+libeventtest : libeventtest.o 
 	$(CC) $(LDFLAGS) -levent libeventtest.o -o $@
 	
-getabspath : $(objs)
+getabspath : getabspath.o 
 	$(CC) $(LDFLAGS) getabspath.o -o $@
 	
-buserror1 : $(objs)
+buserror1 : buserror1.o 
 	$(CC) $(LDFLAGS) buserror1.o -o $@
+	
+dmalloctest : dmalloctest.o 
+	$(CC) $(LDFLAGS) dmalloctest.o -o $@
 	
 clean:
 	rm -rf *.o $(program)
