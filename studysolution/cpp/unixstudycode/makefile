@@ -12,8 +12,8 @@ CFLAGS=-g -O3 -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
 #-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
-objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o
-program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath
+objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o
+program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1
 subpro=c_call_cpp rsa
 
     
@@ -63,6 +63,9 @@ libeventtest : $(objs)
 	
 getabspath : $(objs)
 	$(CC) $(LDFLAGS) getabspath.o -o $@
+	
+buserror1 : $(objs)
+	$(CC) $(LDFLAGS) buserror1.o -o $@
 	
 clean:
 	rm -rf *.o $(program)
