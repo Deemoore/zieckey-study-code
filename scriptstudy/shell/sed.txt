@@ -1,0 +1,4 @@
+replace all "scanunit" to "msv" in the files
+
+sed -in-place 's/scanunit/msv/g' *.h *.cpp
+
