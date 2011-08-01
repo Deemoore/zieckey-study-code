@@ -7,13 +7,13 @@ CC=gcc
 CXX=g++
 AR=ar
 ARFLAGS=cru
-#CFLAGS=-g -O3 -fPIC  -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall 
-CFLAGS=-g -O3 -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
+#CFLAGS=-g -fPIC  -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall 
+CFLAGS=-g -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
 #-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
-objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o dmalloctest.o
-program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1 dmalloctest
+objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o dmalloctest.o mkdir.o
+program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1 dmalloctest mkdir
 subpro=c_call_cpp rsa
 
     
@@ -69,6 +69,9 @@ buserror1 : buserror1.o
 	
 dmalloctest : dmalloctest.o 
 	$(CC) $(LDFLAGS) dmalloctest.o -o $@
+	
+mkdir: mkdir.o 
+	$(CC) $(LDFLAGS) mkdir.o -o $@
 	
 clean:
 	rm -rf *.o $(program)
