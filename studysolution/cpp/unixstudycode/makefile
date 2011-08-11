@@ -7,8 +7,8 @@ CC=gcc
 CXX=g++
 AR=ar
 ARFLAGS=cru
-#CFLAGS=-g -fPIC  -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall 
-CFLAGS=-g -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
+CFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
+CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords
 #-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
