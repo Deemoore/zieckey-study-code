@@ -12,21 +12,15 @@ CFLAGS=-g -fPIC -Wconversion -Wall -Wformat -I/usr/local/include/
 #-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
-objs=size_t.o mkfifo.o mkfifo2.o getpagesize.o stat.o test.o cast.o classinfunc.o zlib.o fwrspeed.o libeventtest.o getabspath.o buserror1.o dmalloctest.o mkdir.o
-program=size_t mkfifo mkfifo2 getpagesize stat test cast classinfunc zlib fwrspeed libeventtest getabspath buserror1 dmalloctest mkdir
+objs=libeventtest.o dmalloctest.o mkfifo.o mkfifo2.o zlib.o mkdir.o getpagesize.o stat.o test.o cast.o classinfunc.o fwrspeed.o getabspath.o buserror1.o size_t.o 
+program=libeventtest dmalloctest mkfifo mkfifo2 zlib mkdir getpagesize stat test cast classinfunc fwrspeed getabspath buserror1 size_t 
 subpro=c_call_cpp rsa
 
     
-#TOPDIR=$(shell pwd)
 TOPDIR=`pwd`
 
-all: $(program) 
+all: $(objs) $(program) 
 	for t in $(subpro); do cd $$t ; make || exit 1; cd ..; done
-
-
-#    check: $(PROGRAMS) $(TESTS)
-#            for t in $(TESTS); do echo "***** Running $$t"; ./$$t || exit 1; done
-
 
 size_t : size_t.o 
 	$(CC) $(LDFLAGS) size_t.o -o $@
