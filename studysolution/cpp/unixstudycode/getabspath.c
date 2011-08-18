@@ -17,6 +17,7 @@ int main( int argc, char* argv[] )
     mib[3] = -1;
     char buf[1024];
     size_t cb = sizeof(buf);
+    int pid = getpid();
     int ret = sysctl(mib, 4, buf, &cb, NULL, (size_t)0);
 
     if ( 0 == ret )
@@ -27,19 +28,9 @@ int main( int argc, char* argv[] )
     {
         int en = errno;
         perror( "sysctl call failed" );
-        //printf( "sysctl call failed : errno=%d %s\n", en, strerror(en) );
-        printf( "sysctl call failed : errno=%d \n", en );
+        printf( "sysctl call failed : errno=%d pid=%d\n", en, pid );
     }
-
-
-    //cannot work on FreeBSD 7.2
-    {
-        char exepath[PATH_MAX];
-        char temp[PATH_MAX];
-        snprintf(temp, sizeof(temp),"/proc/%d/file", getpid());
-        realpath(temp, exepath);
-        printf( "pid=%d binary path=%s\n", getpid(), exepath );
-    }
+    sleep( 120 );
 #endif
 
 
