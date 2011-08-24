@@ -29,30 +29,35 @@ int main( int argc, char** argv )
     try {
         transport->open();
 
-        int32_t i = 1;
+        for ( int j = 0; ; ++j )
+        {
+            int32_t i = 1;
 
-        User user;
-        user.firstname = "zili";
-        user.lastname = "wei";
-        user.user_id = i++;
-        user.sex = SexType::MALE;    
+            User user;
+            user.firstname = "zili";
+            user.lastname = "wei";
+            user.user_id = i++;
+            user.sex = SexType::MALE;    
 
-        int32_t retcode = client.add_user(user);
-        printf( "retcode=%d\n", retcode );
+            int32_t retcode = client.add_user(user);
+            printf( "retcode=%d\n", retcode );
 
-        user.firstname = "liujin";
-        user.user_id = i++;
-        client.add_user(user);
-        printf( "retcode=%d\n", retcode );
+            user.firstname = "liujin";
+            user.user_id = i++;
+            client.add_user(user);
+            printf( "retcode=%d\n", retcode );
 
-        user.firstname = "chenggang";
-        user.user_id = i++;
-        client.add_user(user);
-        printf( "retcode=%d\n", retcode );
+            user.firstname = "chenggang";
+            user.user_id = i++;
+            client.add_user(user);
+            printf( "retcode=%d\n", retcode );
 
+            sleep(1);
+        }
         transport->close();
     } catch (TException &tx) {
         printf("ERROR: %s\n", tx.what());
     }
 }
+
 
