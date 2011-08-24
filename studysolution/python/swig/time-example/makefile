@@ -16,4 +16,4 @@ example.o: example.c
 	gcc -c -fPIC example.c -I/usr/local/include/python2.5
 
 clean:
-	-rm -f *.o example_wrap.* $(so)
+	-rm -f *.o example_wrap.* example.py* $(so)
