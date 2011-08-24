@@ -8,6 +8,7 @@ sys.path.append('./gen-py')
 
 from ttypes import * 
 import UserExchange
+import thread 
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -33,9 +34,9 @@ class UserExchangeHandler:
 			raise InvalidValueException(3, 'wrong user_id')
 		if user.sex != SexType.MALE and user.sex != SexType.FEMALE:
 			raise InvalidValueException(4, 'wrong sex id')
-		print 'Processing user '+user.firstname+' '+user.lastname
+		#print "tid=" + thread.get_ident() + " Processing user " + user.firstname + " " + user.lastname
+		print "tid=%d Processing user %s %s" % (thread.get_ident(), user.firstname, user.lastname)
 		users.append(user)
-		print users
 		return 1
 
 	def get_user(self, user_id):
@@ -58,8 +59,6 @@ tfactory = TTransport.TBufferedTransportFactory()
 pfactory = TBinaryProtocol.TBinaryProtocolFactory()
 
 server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
-
-# You could do one of these for a multithreaded server
 #server = TServer.TThreadedServer(processor, transport, tfactory, pfactory)
 #server = TServer.TThreadPoolServer(processor, transport, tfactory, pfactory)
 
