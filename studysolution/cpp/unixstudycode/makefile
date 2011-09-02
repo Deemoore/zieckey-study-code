@@ -1,5 +1,8 @@
 # weizili@360.cn 
+#
 # The study test code project 
+#
+# Please use gmake but not make in FreeBSD OS
 #
 
 
@@ -8,19 +11,25 @@ CXX=g++
 AR=ar
 ARFLAGS=cru
 CFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
-CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords
-#-Wp64
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
-objs=libeventtest.o dmalloctest.o mkfifo.o mkfifo2.o zlib.o mkdir.o getpagesize.o stat.o test.o cast.o classinfunc.o fwrspeed.o getabspath.o buserror1.o size_t.o 
-program=libeventtest dmalloctest mkfifo mkfifo2 zlib mkdir getpagesize stat test cast classinfunc fwrspeed getabspath buserror1 size_t 
-subpro=c_call_cpp rsa
+
+C_SRCS=$(wildcard *.c)
+CPP_SRCS=$(wildcard *.cpp) 
+
+OBJS=$(patsubst %.c, %.o, $(C_SRCS) )		
+OBJS+=$(patsubst %.cpp, %.o, $(CPP_SRCS) )
+PROGRAMS=$(patsubst %.o, %, $(OBJS) )		
+		
+SUBDIRS=c_call_cpp rsa
 
     
 TOPDIR=`pwd`
 
-all: $(objs) $(program) 
-	for t in $(subpro); do cd $$t ; make || exit 1; cd ..; done
+all: $(OBJS) $(PROGRAMS) 
+	for t in $(SUBDIRS); do cd $$t ; make || exit 1; cd ..; done
+	echo $(OBJS)
+	echo $(PROGRAMS)
 
 size_t : size_t.o 
 	$(CC) $(LDFLAGS) size_t.o -o $@
@@ -66,8 +75,14 @@ dmalloctest : dmalloctest.o
 	
 mkdir: mkdir.o 
 	$(CC) $(LDFLAGS) mkdir.o -o $@
+
+%.o : %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 	
+%.o : %.cpp
+	$(CXX) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+
 clean:
-	rm -rf *.o $(program)
-	for t in $(subpro); do cd $$t ; make clean || exit 1; cd ..; done
+	rm -rf *.o $(PROGRAMS) $(OBJS)
+	for t in $(SUBDIRS); do cd $$t ; make clean || exit 1; cd ..; done
 
