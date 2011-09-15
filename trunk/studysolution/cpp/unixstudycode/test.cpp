@@ -59,11 +59,8 @@ public:
     }
 };//end of class Random
 
-
-
-int main()
+void test1_random()
 {
-
     //#pragma message "Compiling " __FILE__ "todo "
     struct timeval tv;
     gettimeofday( &tv, NULL );
@@ -72,7 +69,6 @@ int main()
     std::cout << "tv1.tv_sec=" << tv.tv_sec << std::endl
         << "tv1.tv_usec=" << tv.tv_usec << std::endl
         << timebuf << std::endl;
-
 
     {
         const int sz = 100;
@@ -89,5 +85,26 @@ int main()
         {
         }
     }
+}
+
+void test2_snprintf()
+{
+    const char* s = "abcdefghijklmnopqrstuvwxyz";
+
+    const size_t LEN = 6;
+    char* tmp = (char*)malloc( sizeof(char) * LEN );
+    snprintf( tmp, LEN, "%s", s );
+
+    printf( "|%s|", tmp );
+
+    free(tmp);
+}
+
+
+
+int main()
+{
+    //test1_random();
+    test2_snprintf();
     return 0;
 }
