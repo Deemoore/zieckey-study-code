@@ -1,9 +1,1 @@
-INSTUPtest.log.analyse.abstract
-E:\workspace\googlecodesvn\trunk\eclipseworkspace\python\src\test\log\analyse\abstract.py
-INFOS:&&2|1|2|0&&3|3|2|0&&3|3|2|0&&3|4|2|0&&3|5|2|0&&3|6|2|0
-startpos=3
-process=1
-subs=4
-test.log.analyse.abstract=2
-endpos=5
-ops=6
+DELSTRtest.securecrt_seesion.sessionprocess
