@@ -9,9 +9,9 @@ g_templete_hostname = 'build7.kill.corp.qihoo.net'
 
 
 #modify there three parameters
-g_leading = 'kill'
-g_host = '.safe.zwt.qihoo.net'
-g_numbers = range(16,25)
+g_leading = 'scan'
+g_host = '.safe.bjt.qihoo.net'
+g_numbers = range(1,25)
 
 def readfile(path):
     fh = open(path, encoding='utf-8')
