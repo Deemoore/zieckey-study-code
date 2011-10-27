@@ -93,9 +93,9 @@ void test2_snprintf()
 
     const size_t LEN = 6;
     char* tmp = (char*)malloc( sizeof(char) * LEN );
-    snprintf( tmp, LEN, "%s", s );
+    int n = snprintf( tmp, LEN, "%s", s );
 
-    printf( "|%s|", tmp );
+    printf( "snprintf ret=%d strlen(tmp)=%lu |%s|", n, strlen(tmp), tmp );
 
     free(tmp);
 }

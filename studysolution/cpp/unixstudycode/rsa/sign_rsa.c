@@ -12,8 +12,8 @@
 #define  MD5Final   MD5_Final
 
 
-int ibits = 1024;//1024bits
-//int ibits = 512;//512 bits
+//int ibits = 1024;//1024bits
+int ibits = 512;//512 bits
 
 
 typedef struct {
@@ -104,8 +104,17 @@ void sign_data( RSA* rsa, const unsigned char* bData, unsigned int iDatalen, mem
 
 int main ( int argc, const char * argv[] )
 {
-	char raw_data[] = "59f0aa0a1c3f65f459f0aa0a1c3f65f4";
+    if ( argc != 2 )
+    {
+        fprintf( stderr, "Usage: %s [rsa_bits]\n", argv[0] );
+        fprintf( stderr, "\te.g.: %s 512\n", argv[0] );
+        fprintf( stderr, "\te.g.: %s 1024\n", argv[0] );
+        return -1;
+    }
 
+    ibits = atoi(argv[1]);
+
+	char raw_data[] = "59f0aa0a1c3f65f459f0aa0a1c3f65f4";
 
     //generate public and private key
 	unsigned char public_key[1024] = { 0 };
@@ -122,15 +131,19 @@ int main ( int argc, const char * argv[] )
     //print public and private key
     int i = 0;
 	printf( "\npublic_key_len:%d\n", public_key_len );
-	for( i = 0; i < public_key_len; i++ )
+	for( i = 1; i <= public_key_len; i++ )
 	{
-		printf( "%d,", public_key[i] );
+		printf( "0x%0.2x, ", public_key[i] );
+        if ( i % 16 == 0 )
+          printf("\n");
 	}
 	printf( "\n" );
 	printf( "\nprivate_key_len:%d\n", private_key_len );
-	for( i = 0; i < private_key_len; i++ )
+	for( i = 1; i <= private_key_len; i++ )
 	{
-		printf( "%d,", private_key[i] );
+		printf( "0x%0.2x, ", private_key[i] );
+        if ( i % 16 == 0 )
+          printf("\n");
 	}
 	printf( "\n" );
 

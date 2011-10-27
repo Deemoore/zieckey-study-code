@@ -21,15 +21,13 @@ OBJS=$(patsubst %.c, %.o, $(C_SRCS) )
 OBJS+=$(patsubst %.cpp, %.o, $(CPP_SRCS) )
 PROGRAMS=$(patsubst %.o, %, $(OBJS) )		
 		
-SUBDIRS=c_call_cpp rsa
+SUBDIRS=c_call_cpp rsa protobuf
 
     
 TOPDIR=`pwd`
 
 all: $(OBJS) $(PROGRAMS) 
 	for t in $(SUBDIRS); do cd $$t ; make || exit 1; cd ..; done
-	echo $(OBJS)
-	echo $(PROGRAMS)
 
 size_t : size_t.o 
 	$(CC) $(LDFLAGS) size_t.o -o $@
