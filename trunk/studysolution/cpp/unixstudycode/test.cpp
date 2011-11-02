@@ -5,6 +5,8 @@
 
 #include <iomanip>
 #include <iostream>
+#include <set>
+
 using namespace std;
 
 
@@ -100,11 +102,37 @@ void test2_snprintf()
     free(tmp);
 }
 
+const size_t kLen = 64;
 
+void test3_array_const_size()
+{
+    char name[kLen] = { 0 };
+    strncpy( name, "aaaaaaaaaa", sizeof(name) );
+    std::cout << "name=" << name << std::endl;
+}
 
+void test4_pair_compare()
+{
+    typedef std::pair< std::string, int > stringintpair;
+    typedef std::set< stringintpair > myset;
+    myset set;
+
+    set.insert( stringintpair("aaa", 1) );
+    set.insert( stringintpair("bbb", 1) );
+    set.insert( stringintpair("ccc", 1) );
+    std::cout << "set count=" << set.size() << std::endl;
+    assert( set.size() == 3 );
+    set.insert( stringintpair("ccc", 1) );
+    set.insert( stringintpair("ccc", 1) );
+    set.insert( stringintpair("ccc", 1) );
+    std::cout << "set count=" << set.size() << std::endl;
+    assert( set.size() == 3 );
+}
 int main()
 {
     //test1_random();
-    test2_snprintf();
+    //test2_snprintf();
+    //test3_array_const_size();
+    test4_pair_compare();
     return 0;
 }
