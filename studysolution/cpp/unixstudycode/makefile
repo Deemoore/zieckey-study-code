@@ -28,51 +28,12 @@ TOPDIR=`pwd`
 
 all: $(OBJS) $(PROGRAMS) 
 	for t in $(SUBDIRS); do cd $$t ; make || exit 1; cd ..; done
-
-size_t : size_t.o 
-	$(CC) $(LDFLAGS) size_t.o -o $@
-	
-mkfifo: mkfifo.o 
-	$(CC) $(LDFLAGS) mkfifo.o -o $@
-	
-mkfifo2: mkfifo2.o
-	$(CC) $(LDFLAGS) mkfifo2.o -o $@
-	
-getpagesize: getpagesize.o
-	$(CC) $(LDFLAGS) getpagesize.o -o $@
-	
-stat: stat.o
-	$(CC) $(LDFLAGS) stat.o -o $@
-	
-test: test.o 
-	$(CC) $(LDFLAGS) test.o -o $@
-	
-cast : cast.o 
-	$(CC) $(LDFLAGS) cast.o -o $@
-	
-classinfunc : classinfunc.o 
-	$(CC) $(LDFLAGS) classinfunc.o -o $@
 	
 zlib : zlib.o 
-	$(CC) $(LDFLAGS) -lz zlib.o -o $@
-
-fwrspeed : fwrspeed.o
-	$(CC) $(LDFLAGS) fwrspeed.o -o $@
+	$(CC) $(LDFLAGS)  -lz zlib.o -o $@
 	
 libeventtest : libeventtest.o 
-	$(CC) $(LDFLAGS) -levent libeventtest.o -o $@
-	
-getabspath : getabspath.o 
-	$(CC) $(LDFLAGS) getabspath.o -o $@
-	
-buserror1 : buserror1.o 
-	$(CC) $(LDFLAGS) buserror1.o -o $@
-	
-dmalloctest : dmalloctest.o 
-	$(CC) $(LDFLAGS) dmalloctest.o -o $@
-	
-mkdir: mkdir.o 
-	$(CC) $(LDFLAGS) mkdir.o -o $@
+	$(CC) $(LDFLAGS)  -levent libeventtest.o -o $@
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) $< -o $@

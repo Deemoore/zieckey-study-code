@@ -119,8 +119,8 @@ int main ( int argc, const char * argv[] )
 	char raw_data[] = "59f0aa0a1c3f65f459f0aa0a1c3f65f4";
 
     //generate public and private key
-	unsigned char public_key[kMaxLen] = { 0 };
-	unsigned char private_key[kMaxLen] = { 0 };
+	unsigned char public_key[kMaxLen] = {};
+	unsigned char private_key[kMaxLen] = {};
 	BIO* bio = BIO_new( BIO_s_mem() );
 	RSA* rsa = gen_rsa( ibits );
 	int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
