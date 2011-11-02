@@ -3601,26 +3601,26 @@ inline void EnumDescriptorProto::clear_name() {
 inline const ::std::string& EnumDescriptorProto::name() const {
   return *name_;
 }
-inline void EnumDescriptorProto::set_name(const ::std::string& value) {
+inline void EnumDescriptorProto::set_name(const ::std::string& _value) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::kEmptyString) {
     name_ = new ::std::string;
   }
-  name_->assign(value);
+  name_->assign(_value);
 }
-inline void EnumDescriptorProto::set_name(const char* value) {
+inline void EnumDescriptorProto::set_name(const char* _value) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::kEmptyString) {
     name_ = new ::std::string;
   }
-  name_->assign(value);
+  name_->assign(_value);
 }
-inline void EnumDescriptorProto::set_name(const char* value, size_t size) {
+inline void EnumDescriptorProto::set_name(const char* _value, size_t size) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::kEmptyString) {
     name_ = new ::std::string;
   }
-  name_->assign(reinterpret_cast<const char*>(value), size);
+  name_->assign(reinterpret_cast<const char*>(_value), size);
 }
 inline ::std::string* EnumDescriptorProto::mutable_name() {
   set_has_name();
