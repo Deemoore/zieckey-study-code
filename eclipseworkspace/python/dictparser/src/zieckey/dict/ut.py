@@ -38,7 +38,6 @@ def crawl_words(input_words_file):
     f.close();
     
 if __name__ == '__main__':
-<<<<<<< .mine
-    crawl_words('test_data/gre_one_word_one_line.txt')=======
-    crawl_words()
->>>>>>> .r85
+    crawl_words('test_data/gre_one_word_one_line.txt')
+
+
