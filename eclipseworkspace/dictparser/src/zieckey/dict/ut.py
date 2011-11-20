@@ -4,6 +4,7 @@ Created on 2011-11-19
 @author: Administrator
 '''
 
+import time 
 import urllib
 import string
 
@@ -30,6 +31,7 @@ def crawl_words():
         f1.close()
         
         print wordname + " done."
+        time.sleep(0.05)
         
     f.close();
     
