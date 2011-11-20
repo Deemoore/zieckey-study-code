@@ -13,7 +13,7 @@ Created on 2011-11-19
 
 from sgmllib import SGMLParser
 import HTMLParser
-import glob, os, string
+import glob, os, string, sys
 from xml.dom import minidom
 from xml.etree import ElementTree
 
@@ -203,10 +203,15 @@ def test_special_word():
 if __name__ == '__main__':
     #url = 'http://www.iciba.com/abdicate/'
     #url = 'http://dict.cn/abdicate/'
-    
+    if len(sys.argv) != 2:
+        print 'Usage : %s tag_name\n' % sys.argv[0]
+        print 'For example : %s gre\n' % sys.argv[0]
+        return
+
     bad_words = ''
     
-    tagname = 'gre'    
+    tagname = sys.argv[1]
+        
     youdao_wordbook_xml = ElementTree.Element('wordbook')
     word_files = glob.glob('./%s/*.html' % tagname)
     for word_file in word_files:
