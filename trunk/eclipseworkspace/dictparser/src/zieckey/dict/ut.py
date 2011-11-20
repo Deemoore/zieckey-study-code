@@ -15,8 +15,8 @@ def test_list():
     
     print l
     
-def crawl_words():
-    f = open('test_data/gre_one_word_one_line.txt', 'r')
+def crawl_words(input_words_file):
+    f = open(input_words_file, 'r')
     while True:
         wordname = string.strip(f.readline())
         if len(wordname) == 0:
@@ -30,10 +30,15 @@ def crawl_words():
         f1.write(htmlSource)
         f1.close()
         
+        
+        
         print wordname + " done."
         time.sleep(0.05)
         
     f.close();
     
 if __name__ == '__main__':
+<<<<<<< .mine
+    crawl_words('test_data/gre_one_word_one_line.txt')=======
     crawl_words()
+>>>>>>> .r85

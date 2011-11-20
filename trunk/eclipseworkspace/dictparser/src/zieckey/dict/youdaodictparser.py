@@ -10,13 +10,12 @@ Created on 2011-11-19
 
 
 
-import urllib
-import string
+
 from sgmllib import SGMLParser
 import HTMLParser
 
+import string, urllib
 
-from ut import *
 from word import *
         
 class DictParser(SGMLParser):

@@ -5,7 +5,9 @@ Created on 2011-11-19
 
 @author: weizili
 '''
-
+from xml.dom import minidom
+from xml.etree import ElementTree
+    
 class Word:
     def __init__(self):
         self._name = ''
@@ -44,6 +46,41 @@ class Word:
                 s += '\t' + o + " " + t + '\n'
                 
         return s
+    
+    def to_youdao_dict_xml(self):
+        xmldoc = minidom.getDOMImplementation()
+        wordbook = xmldoc.createElement('wordbook')
+        word = wordbook.appendChild('word')
+        word.appencChild()
+        
+    def to_xml_element(self):
+        item = ElementTree.Element('item')
+        word = ElementTree.SubElement('word')
+        word.text = self._name
+        
+        trans = ElementTree.SubElement('trans')
+        meaning = ''
+        for m in self._meaning:
+            if len(meaning) == 0:
+                meaning = m
+            else:
+                meaning = '\n' + m
+        trans.text = '<![CDATA[%s]]>' % meaning
+        
+        phonetic = ElementTree.SubElement('phonetic')
+        phonetic.text = '<![CDATA[%s %s]]>' % (self._phonetic[0], self._phonetic[1])
+          
+#        nameE.text = name  
+#        sexE = ElementTree.SubElement(personE, 'sex')  
+#        if sex == '0':  
+#            sexE.text = '男'  
+#        elif sex == '1':  
+#            sexE.text = '女'  
+#        mobileE = ElementTree.SubElement(personE, 'mobile')  
+#        mobileE.text = mobile  
+#        rough_string = ElementTree.tostring(root, 'utf-8')  
+#        reparsed = minidom.parseString(rough_string)  
+#        return reparsed.toprettyxml(indent="  " , encoding="utf-8"); 
         
     def set_name(self, name):
         self._name = name
