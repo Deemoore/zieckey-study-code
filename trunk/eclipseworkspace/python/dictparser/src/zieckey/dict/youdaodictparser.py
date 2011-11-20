@@ -13,8 +13,9 @@ Created on 2011-11-19
 
 from sgmllib import SGMLParser
 import HTMLParser
-
-import string, urllib
+import glob, os, string
+from xml.dom import minidom
+from xml.etree import ElementTree
 
 from word import *
         
@@ -176,6 +177,9 @@ class DictParser(SGMLParser):
         s = self._word.to_string()
         print s
         return s 
+    
+    def get_word(self):
+        return self._word
 
 
 if __name__ == '__main__':
@@ -184,20 +188,26 @@ if __name__ == '__main__':
     
     #test_list()
     
-    wordnames = ['success', 'abdicate', 'perfect', 'frequently', 'abundant']
-    for wordname in wordnames:
-        url = 'http://dict.youdao.com/search?q=%s&ue=utf8' % wordname 
-        sock = urllib.urlopen(url)
-        htmlSource = sock.read()
-        sock.close()
-        #print htmlSource
+    
+    youdao_wordbook_xml = ElementTree.Element('wordbook')
+    tagname = 'gre'
+    word_files = glob.glob('./%s/*.html' % tagname)
+    for word_file in word_files:
+        filebasename = os.path.basename(word_file)
+        (wordname, ext) = os.path.splitext(filebasename)
+        
+        print word_file, wordname
+                
+        fp = open(word_file)
+        htmlSource = fp.read()
+        fp.close()
         
         parser = DictParser(wordname)
         parser.feed(htmlSource)
         parser.output()
         
-        f = open('original_word_html/' + wordname + '.html', 'w+')
-        f.write(htmlSource)
-        f.close()
-        
-        
+        youdao_wordbook_xml.append(parser.get_word().to_xml_element(tagname))
+    
+    f = open(tagname + '_youdao.xml')    
+    f.write(ElementTree.tostring(youdao_wordbook_xml, 'utf-8'))
+    f.close()

@@ -53,12 +53,12 @@ class Word:
         word = wordbook.appendChild('word')
         word.appencChild()
         
-    def to_xml_element(self):
+    def to_xml_element(self, tagname):
         item = ElementTree.Element('item')
-        word = ElementTree.SubElement('word')
+        word = ElementTree.SubElement(item, 'word')
         word.text = self._name
         
-        trans = ElementTree.SubElement('trans')
+        trans = ElementTree.SubElement(item, 'trans')
         meaning = ''
         for m in self._meaning:
             if len(meaning) == 0:
@@ -67,9 +67,15 @@ class Word:
                 meaning = '\n' + m
         trans.text = '<![CDATA[%s]]>' % meaning
         
-        phonetic = ElementTree.SubElement('phonetic')
+        phonetic = ElementTree.SubElement(item, 'phonetic')
         phonetic.text = '<![CDATA[%s %s]]>' % (self._phonetic[0], self._phonetic[1])
-          
+        
+        tags = ElementTree.SubElement(item, 'tags')
+        tags.text = tagname
+        
+        print ElementTree.tostring(item, 'utf-8')
+        return item   
+    
 #        nameE.text = name  
 #        sexE = ElementTree.SubElement(personE, 'sex')  
 #        if sex == '0':  
