@@ -20,8 +20,11 @@ def test_list():
 def crawl_words(input_words_file):
     file_base_path = os.path.basename(input_words_file)
     output_dir = './original_youdao_html/%s' % file_base_path
-    os.mkdir('./original_youdao_html/')
-    os.mkdir(output_dir)
+    try:
+        os.mkdir('./original_youdao_html/')
+        os.mkdir(output_dir)
+    except:
+        pass
     f = open(input_words_file, 'r')
     while True:
         wordname = string.strip(f.readline())
@@ -33,7 +36,7 @@ def crawl_words(input_words_file):
         htmlSource = sock.read()
         sock.close()
         
-        f1 = open('output_dir/' + wordname + '.html', 'w+')
+        f1 = open(output_dir + '/' + wordname + '.html', 'w+')
         f1.write(htmlSource)
         f1.close()
         
