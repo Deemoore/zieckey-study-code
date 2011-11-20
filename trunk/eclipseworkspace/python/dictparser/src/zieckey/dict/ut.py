@@ -30,14 +30,13 @@ def crawl_words(input_words_file):
         f1.write(htmlSource)
         f1.close()
         
-        
-        
         print wordname + " done."
-        time.sleep(0.05)
+        time.sleep(0.1)
         
     f.close();
     
 if __name__ == '__main__':
-    crawl_words('test_data/gre_one_word_one_line.txt')
+    #crawl_words('test_data/gre_one_word_one_line.txt')
+    crawl_words('test_data/gre_one_word_one_line__need_crawl_again.txt')
 
 

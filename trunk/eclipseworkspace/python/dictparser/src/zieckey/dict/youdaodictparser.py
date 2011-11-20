@@ -181,22 +181,37 @@ class DictParser(SGMLParser):
     def get_word(self):
         return self._word
 
+def test_special_word():
+    special_words = ['vertex', 'verify']
+    
+    word_files = []
+    for word in special_words:
+        word_files.append('./gre/%s.html' % word)
+    
+    for word_file in word_files:
+        filebasename = os.path.basename(word_file)
+        (wordname, ext) = os.path.splitext(filebasename)
+        
+        fp = open(word_file)
+        htmlSource = fp.read()
+        fp.close()
+        
+        parser = DictParser(wordname)
+        parser.feed(htmlSource)
+        parser.output()
 
 if __name__ == '__main__':
     #url = 'http://www.iciba.com/abdicate/'
     #url = 'http://dict.cn/abdicate/'
     
-    #test_list()
+    bad_words = ''
     
-    
+    tagname = 'gre'    
     youdao_wordbook_xml = ElementTree.Element('wordbook')
-    tagname = 'gre'
     word_files = glob.glob('./%s/*.html' % tagname)
     for word_file in word_files:
         filebasename = os.path.basename(word_file)
         (wordname, ext) = os.path.splitext(filebasename)
-        
-        print word_file, wordname
                 
         fp = open(word_file)
         htmlSource = fp.read()
@@ -206,8 +221,17 @@ if __name__ == '__main__':
         parser.feed(htmlSource)
         parser.output()
         
-        youdao_wordbook_xml.append(parser.get_word().to_xml_element(tagname))
+        if parser.get_word().is_ok():
+            youdao_wordbook_xml.append(parser.get_word().to_xml_element(tagname))
+        else:
+            bad_words += parser.get_word().get_name() + '\n'
     
-    f = open(tagname + '_youdao.xml')    
-    f.write(ElementTree.tostring(youdao_wordbook_xml, 'utf-8'))
+    f = open(tagname + '_youdao.xml', 'w+')
+    xmlstr= ElementTree.tostring(youdao_wordbook_xml, 'utf-8')
+    reparsed_xmldoc = minidom.parseString(xmlstr)
+    f.write(reparsed_xmldoc.toprettyxml(indent='    ', encoding="utf-8"))
+    f.close()
+    
+    f = open('bad_word.txt', 'w+')
+    f.write(bad_words)
     f.close()

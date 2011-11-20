@@ -18,6 +18,14 @@ class Word:
         self._antonym = [] #反义词
         self._additional = [] #动词的过去式等
         
+    def get_name(self):
+        return self._name
+    
+    def is_ok(self):
+        if len(self._phonetic[0]) == 0 or len(self._meaning) == 0:
+            return False
+        return True
+        
     def to_string(self):
         s = self._name + '\t' + self._phonetic[0] + '\t' + self._phonetic[1] + '\n'
         for m in self._meaning:
@@ -65,10 +73,14 @@ class Word:
                 meaning = m
             else:
                 meaning = '\n' + m
-        trans.text = '<![CDATA[%s]]>' % meaning
+        #trans.text = '\\<![CDATA[%s]]\\>' % meaning
+        trans.nodeType = minidom.Node.CDATA_SECTION_NODE
+        trans.text = meaning
         
         phonetic = ElementTree.SubElement(item, 'phonetic')
-        phonetic.text = '<![CDATA[%s %s]]>' % (self._phonetic[0], self._phonetic[1])
+        phonetic.nodeType = minidom.Node.CDATA_SECTION_NODE
+        phonetic.text = '%s %s' % (self._phonetic[0], self._phonetic[1])
+
         
         tags = ElementTree.SubElement(item, 'tags')
         tags.text = tagname
