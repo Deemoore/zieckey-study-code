@@ -7,6 +7,7 @@ Created on 2011-11-19
 import time 
 import urllib
 import string
+import sys 
 
 def test_list():
     l = [ 0, 1]
@@ -20,7 +21,8 @@ def crawl_words(input_words_file):
     while True:
         wordname = string.strip(f.readline())
         if len(wordname) == 0:
-            break;
+            continue
+
         url = 'http://dict.youdao.com/search?q=%s&ue=utf8' % wordname 
         sock = urllib.urlopen(url)
         htmlSource = sock.read()
@@ -31,12 +33,15 @@ def crawl_words(input_words_file):
         f1.close()
         
         print wordname + " done."
-        time.sleep(0.1)
+        time.sleep(0.2)
         
     f.close();
     
 if __name__ == '__main__':
     #crawl_words('test_data/gre_one_word_one_line.txt')
-    crawl_words('test_data/gre_one_word_one_line__need_crawl_again.txt')
+    if len(sys.argv) != 2:
+        print 'Usage : %s word_list_file\n' % sys.argv[0];
+
+    crawl_words(sys.argv[1])
 
 
