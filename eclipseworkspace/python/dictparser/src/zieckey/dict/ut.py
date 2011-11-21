@@ -49,6 +49,7 @@ if __name__ == '__main__':
     #crawl_words('test_data/gre_one_word_one_line.txt')
     if len(sys.argv) != 2:
         print 'Usage : %s word_list_file\n' % sys.argv[0];
+        sys.exit(1)
 
     crawl_words(sys.argv[1])
 
