@@ -2296,7 +2296,7 @@ fondle
 foodstuff
 foolhardy
 foolproof
-fool's
+fool
 errand
 foothold
 footle
@@ -2797,7 +2797,7 @@ horology
 horrendous
 horror
 hors
-d'oeuvre
+oeuvre
 hortative
 horticulture
 hosepipe
