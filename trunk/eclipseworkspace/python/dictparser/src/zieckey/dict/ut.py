@@ -21,10 +21,10 @@ def crawl_words(input_words_file):
     file_base_path = os.path.basename(input_words_file)
     output_dir = './original_youdao_html/%s' % file_base_path
     try:
-        os.mkdir('./original_youdao_html/')
         os.mkdir(output_dir)
     except:
         pass
+
     f = open(input_words_file, 'r')
     while True:
         wordname = string.strip(f.readline())
