@@ -167,10 +167,13 @@ class DictParser(SGMLParser):
                 self._tmp_sentence_list.pop()
                 
         elif self._examplesToggle_bilingual_p_noattrs_found:
-            if len(self._tmp_sentence) == 0:
-                self._tmp_sentence = string.strip(text)
+            if len(self._tmp_sentence_list) == 0:
+                if len(self._tmp_sentence) == 0:
+                    self._tmp_sentence = string.strip(text)
+                else:
+                    self._tmp_sentence += ' ' + string.strip(text)#The English sentence needs space between words
             else:
-                self._tmp_sentence += ' ' + string.strip(text)
+                self._tmp_sentence += string.strip(text)#The Chinese sentence does not need space between words
         
         
     def output(self):
@@ -206,7 +209,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         print 'Usage : %s tag_name\n' % sys.argv[0]
         print 'For example : %s gre\n' % sys.argv[0]
-        return
+        sys.exit(-1)
 
     bad_words = ''
     

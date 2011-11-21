@@ -7,13 +7,14 @@ Created on 2011-11-19
 '''
 from xml.dom import minidom
 from xml.etree import ElementTree
-    
+import string
+
 class Word:
     def __init__(self):
         self._name = ''
         self._phonetic = [ '', '' ] #first is British, second is US pronunciation
         self._meaning = [] #
-        self._sentence = [] #('This is a English example.', '这是一个英语例子')
+        self._sentence = [] #the element is tuple:('This is a English example.', '这是一个英语例子')
         self._synonym = [] #同义词
         self._antonym = [] #反义词
         self._additional = [] #动词的过去式等
@@ -72,8 +73,24 @@ class Word:
             if len(meaning) == 0:
                 meaning = m
             else:
-                meaning = '\n' + m
-        #trans.text = '\\<![CDATA[%s]]\\>' % meaning
+                meaning += '\n' + m
+        if len(self._synonym) > 0:
+            meaning += '\n同义词:'
+            for m in self._synonym:
+                meaning += m + ', '
+            meaning = string.strip(meaning, ', ')
+        if len(self._additional) > 0:
+            meaning += '\n'
+            for m in self._additional:
+                meaning += m + ', '
+            meaning = string.strip(meaning, ', ')
+        if len(self._antonym) > 0:
+            meaning += '\n反义词:'
+            for m in self._antonym:
+                meaning += m + ', '
+            meaning = string.strip(meaning, ', ')
+        if len(self._sentence) > 0:
+            meaning += '\n' + self._sentence[0][0] + self._sentence[0][1]
         trans.nodeType = minidom.Node.CDATA_SECTION_NODE
         trans.text = meaning
         
