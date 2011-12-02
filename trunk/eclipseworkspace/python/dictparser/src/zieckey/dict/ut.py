@@ -26,8 +26,8 @@ def crawl_words(input_words_file):
         pass
 
     f = open(input_words_file, 'r')
-    while True:
-        wordname = string.strip(f.readline())
+    for line in f:
+        wordname = string.strip(line)
         if len(wordname) == 0:
             continue
 

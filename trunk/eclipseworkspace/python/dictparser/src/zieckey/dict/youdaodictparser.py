@@ -13,7 +13,7 @@ Created on 2011-11-19
 
 from sgmllib import SGMLParser
 import HTMLParser
-import glob, os, string, sys
+import glob, os, string, sys, random
 from xml.dom import minidom
 from xml.etree import ElementTree
 
@@ -207,13 +207,16 @@ if __name__ == '__main__':
     #url = 'http://www.iciba.com/abdicate/'
     #url = 'http://dict.cn/abdicate/'
     if len(sys.argv) != 2:
-        print 'Usage : %s tag_name\n' % sys.argv[0]
-        print 'For example : %s gre\n' % sys.argv[0]
+        print 'Usage : %s tag_name' % sys.argv[0]
+        print 'For example : %s gre' % sys.argv[0]
+        print 'Note: we you the tag_name as the default directory to find the orignal html files'
         sys.exit(-1)
 
     bad_words = ''
     
     tagname = sys.argv[1]
+
+    all_words = [] # word.Word
         
     youdao_wordbook_xml = ElementTree.Element('wordbook')
     word_files = glob.glob('./%s/*.html' % tagname)
@@ -231,15 +234,45 @@ if __name__ == '__main__':
         
         if parser.get_word().is_ok():
             youdao_wordbook_xml.append(parser.get_word().to_xml_element(tagname))
+            all_words.append(parser.get_word());
         else:
             bad_words += parser.get_word().get_name() + '\n'
     
+    #the whole words
     f = open(tagname + '_youdao.xml', 'w+')
     xmlstr= ElementTree.tostring(youdao_wordbook_xml, 'utf-8')
     reparsed_xmldoc = minidom.parseString(xmlstr)
-    f.write(reparsed_xmldoc.toprettyxml(indent='    ', encoding="utf-8"))
+    f.write(reparsed_xmldoc.toprettyxml(indent='\t', encoding="utf-8"))
     f.close()
+
+    #shuffle
+    random.shuffle(all_words)
+
+    #split the whole words
+    total_words_count = len(all_words)
+    UNIT_COUNT = 600
+    count = total_words_count / UNIT_COUNT 
+    if total_words_count % UNIT_COUNT != 0:
+        count += 1
+        
+    orig_tagname = tagname
+    for i in range(0, count):
+        tagname = "%s%d" % (orig_tagname, i)
+        youdao_wordbook_xml = ElementTree.Element('wordbook')
+        f = open(tagname + '_youdao.xml', 'w+')
+        for j in range(0, UNIT_COUNT):
+            index = i * UNIT_COUNT + j
+            if index < total_words_count:
+                youdao_wordbook_xml.append(all_words[index].to_xml_element(tagname))
+            else:
+                break;
+        xmlstr= ElementTree.tostring(youdao_wordbook_xml, 'utf-8')
+        reparsed_xmldoc = minidom.parseString(xmlstr)
+        f.write(reparsed_xmldoc.toprettyxml(indent='\t', encoding="utf-8"))
+        f.close()
+
     
-    f = open('bad_word.txt', 'w+')
+    f = open(tagname + '_bad_word.txt', 'w+')
     f.write(bad_words)
     f.close()
+    
