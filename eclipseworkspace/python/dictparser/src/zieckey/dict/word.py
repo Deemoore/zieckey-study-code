@@ -23,7 +23,7 @@ class Word:
         return self._name
     
     def is_ok(self):
-        if len(self._phonetic[0]) == 0 or len(self._meaning) == 0:
+        if len(self._meaning) == 0:
             return False
         return True
         
