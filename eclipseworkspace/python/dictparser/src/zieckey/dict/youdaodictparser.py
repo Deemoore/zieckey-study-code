@@ -17,12 +17,12 @@ import glob, os, string, sys, random
 from xml.dom import minidom
 from xml.etree import ElementTree
 
-from word import *
+import word
         
 class DictParser(SGMLParser):
     
     def __init__(self, wordname):
-        self._word = Word()
+        self._word = word.Word()
         self._word.set_name(wordname)
         SGMLParser.__init__(self)
         
@@ -203,23 +203,29 @@ def test_special_word():
         parser.feed(htmlSource)
         parser.output()
 
-if __name__ == '__main__':
-    #url = 'http://www.iciba.com/abdicate/'
-    #url = 'http://dict.cn/abdicate/'
-    if len(sys.argv) != 2:
-        print 'Usage : %s tag_name' % sys.argv[0]
-        print 'For example : %s gre' % sys.argv[0]
-        print 'Note: we you the tag_name as the default directory to find the orignal html files'
-        sys.exit(-1)
+def listAllFiles( dirpath ):
+    """
+        List all the files in this directory recursively
+        and return a the file list
+    """
+    if not os.path.isdir(dirpath):
+        return []
 
-    bad_words = ''
-    
-    tagname = sys.argv[1]
+    allfiles = []
+    for root, dirs, files in os.walk(dirpath):
+        for f in files:
+            ff = os.path.join(root, f)
+            allfiles.append(ff)
 
+    return allfiles
+
+def parse_one_tag(tagname, basedir):
     all_words = [] # word.Word
+    
+    bad_words = ''
         
     youdao_wordbook_xml = ElementTree.Element('wordbook')
-    word_files = glob.glob('./%s/*.html' % tagname)
+    word_files = glob.glob('./%s/*.html' % basedir)
     for word_file in word_files:
         filebasename = os.path.basename(word_file)
         (wordname, ext) = os.path.splitext(filebasename)
@@ -274,5 +280,25 @@ if __name__ == '__main__':
     
     f = open(tagname + '_bad_word.txt', 'w+')
     f.write(bad_words)
-    f.close()
+    f.close()    
+
+if __name__ == '__main__':
+    #url = 'http://www.iciba.com/abdicate/'
+    #url = 'http://dict.cn/abdicate/'
+#    if len(sys.argv) != 2:
+#        print 'Usage : %s tag_name' % sys.argv[0]
+#        print 'For example : %s gre' % sys.argv[0]
+#        print 'Note: we you the tag_name as the default directory to find the orignal html files'
+#        sys.exit(-1)
+
+    
+    tagnames = []
+    for root, dirs, files in os.walk('./original_youdao_html'):
+        if os.path.basename(root) == 'original_youdao_html':
+            tagnames = dirs
+            break
+            
+    for tagname in tagnames:
+        parse_one_tag(tagname, './original_youdao_html/' + tagname )
+    
     
