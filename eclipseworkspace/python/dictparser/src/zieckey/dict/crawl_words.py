@@ -16,6 +16,7 @@ def test_list():
     l[1] = 101
     
     print l
+        
     
 def crawl_words(input_words_file):
     file_base_path = os.path.basename(input_words_file)
