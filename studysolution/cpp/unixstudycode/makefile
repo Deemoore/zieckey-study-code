@@ -6,11 +6,11 @@
 #
 
 
-CC=gcc
-CXX=g++
+CC=cc
+CXX=cc
 AR=ar
 ARFLAGS=cru
-CFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
+CFLAGS=-g -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
 
