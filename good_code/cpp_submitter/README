@@ -1,0 +1,9 @@
+1. This is a 'tail -f'-like processor
+
+2. dependence lib
+    libqlog 1.0.5
+    gflags-1.6
+    libdaemon
+
+3. Please make a symbol link "qmodule/lib" => "The_path_contains_all_libs"    
+

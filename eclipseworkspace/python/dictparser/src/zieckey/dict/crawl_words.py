@@ -19,7 +19,7 @@ def test_list():
         
     
 def crawl_words(input_words_file):
-    file_base_path = os.path.basename(input_words_file)
+    (file_base_path, ext) = os.path.splitext(os.path.basename(input_words_file))
     output_dir = './original_youdao_html/%s' % file_base_path
     try:
         os.mkdir(output_dir)
