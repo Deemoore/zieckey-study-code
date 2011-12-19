@@ -128,11 +128,25 @@ void test4_pair_compare()
     std::cout << "set count=" << set.size() << std::endl;
     assert( set.size() == 3 );
 }
+
+void test5_reinterpret_cast()
+{
+    double d = 1.0;
+    int i = *reinterpret_cast<int*>(&d);
+    std::cout << "d=" << d << std::endl;
+    std::cout << "i=" << i << std::endl;
+
+    i = 1;
+    d = *reinterpret_cast<double*>(&i);
+    std::cout << "d=" << d << std::endl;
+    std::cout << "i=" << i << std::endl;
+}
 int main()
 {
     //test1_random();
     //test2_snprintf();
     //test3_array_const_size();
     test4_pair_compare();
+    test5_reinterpret_cast();
     return 0;
 }

@@ -8,15 +8,27 @@ void test_c_str();
 void test_resize();
 void test_istringstream();
 void test_hex();
+void test_null_string();
+
 int main()
 {
-
+    test_null_string();
     test_c_str();
     test_resize();
     test_istringstream();
     test_hex();
     return 0;
 }
+
+void test_null_string()
+{
+    const char* a = NULL;
+    std::string s(a);
+    printf("address a=%p\n", a);
+    printf("address s.data()=%p\n", s.data());
+    printf("address s.c_str()=%p\n", s.c_str());
+}
+
 
 void test_c_str()
 {
