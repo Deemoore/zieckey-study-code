@@ -16,7 +16,7 @@ public:
 
     bool Init(FILE* fp);
 
-    bool GetLine(Slice& line)
+    bool GetLine(osl::Slice& line)
     {
         return reader_->GetLine(line);
     }

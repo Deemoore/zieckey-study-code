@@ -18,7 +18,7 @@ class CommandHandlerImpl : public CommandHandler
 public:
 
     CommandHandlerImpl();
-    virtual bool Work(Slice& command);
+    virtual bool Work(osl::Slice& command);
 
     //When finish the job, we do the last flush
     bool LastSerialize()
@@ -28,20 +28,19 @@ public:
 
 private:
 
-    bool GetMIDVer(Slice& command, Slice& mid, Slice& ver);
+    bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
 
     void Serialize()
     {
-        std::ostringstream oss;
-        oss << current_mid_;
+        AddOutput(current_mid_.c_str(), current_mid_.length());
         stringset::iterator it(ver_set_.begin());
         stringset::iterator ite(ver_set_.end());
         for (; it != ite; ++it)
         {
-            oss << "\t" << *it;
+            AddOutput("\t", 1);
+            AddOutput(it->c_str(), it->length());
         }
-        oss << "\n";
-        dump_vect_.push_back(oss.str());
+        AddOutput("\n", 1);
 
         //qLogTraces(kLogName) << "Serialize \"" << oss.str() << "\"";
         ver_set_.clear();

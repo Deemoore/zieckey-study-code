@@ -2,7 +2,8 @@
 #define _FILE_READER_H_
 
 #include <stdio.h>
-#include "slice.h"
+
+#include "qoslib/include/QOSLibAllExp.h"
 
 class FileReader
 {
@@ -17,7 +18,7 @@ public:
         fp_ = NULL; 
     }
 
-    virtual bool GetLine(Slice& line) = 0;
+    virtual bool GetLine(osl::Slice& line) = 0;
 
 protected:
     FILE* fp_;

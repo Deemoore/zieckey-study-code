@@ -5,11 +5,11 @@ CXX=g++
 AR=ar
 ARFLAGS=cru
 QMODULE=/home/weizili
-COMMONFLAGS=-g -D_MAPPING -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include
+COMMONFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include
 CFLAGS=$(COMMONFLAGS)
 CCFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords $(COMMONFLAGS) 
 LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqlog.a $(QMODULE)/lib/libqoslib.a $(QMODULE)/lib/libidea.a -lmemcached -lstdc++
-TARGET=mapper
+TARGET := $(shell basename `pwd`)
 PREFIX=../../bin
 
 SRCS := $(wildcard *.cc)
@@ -24,9 +24,10 @@ UNITTEST_TARGET=unittest
 
 
 all : $(TARGET) 
-	@cp -f $(TARGET) $(PREFIX)/map
+	@cp -f $(TARGET) $(PREFIX)
 
 t :
+	@echo $(TARGET)
 	@echo $(OBJS)
 	@echo $(UNITTEST_OBJ)
 

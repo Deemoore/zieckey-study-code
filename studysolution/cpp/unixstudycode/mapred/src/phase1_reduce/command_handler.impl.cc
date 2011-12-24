@@ -5,10 +5,10 @@ CommandHandlerImpl::CommandHandlerImpl()
 {
 }
 
-bool CommandHandlerImpl::Work(Slice& command)
+bool CommandHandlerImpl::Work(osl::Slice& command)
 {
-    Slice mid;
-    Slice ver;
+    osl::Slice mid;
+    osl::Slice ver;
     if (!GetMIDVer(command, mid, ver))
     {
         return false;
@@ -39,14 +39,14 @@ bool CommandHandlerImpl::Work(Slice& command)
     return true;
 }
 
-bool CommandHandlerImpl::GetMIDVer(Slice& command, Slice& mid, Slice& ver)
+bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
 {
     token_.reset(command.data(), command.size());
 
     token_.skipTo('\t');
     size_t _pos = token_.getCurPos();
-    mid = Slice(command.data(), _pos);
-    ver = Slice(command.data() + _pos + 1, command.size() - mid.size() - 2);
+    mid = osl::Slice(command.data(), _pos);
+    ver = osl::Slice(command.data() + _pos + 1, command.size() - mid.size() - 2);
 
     /*
 #ifdef _DEBUG

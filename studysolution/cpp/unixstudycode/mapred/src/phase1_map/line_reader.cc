@@ -5,7 +5,7 @@
 
 DEFINE_int32(buf_buffer_len, 4096, "The max buffer length of one line");
 
-bool LineReader::GetLine(Slice& line)
+bool LineReader::GetLine(osl::Slice& line)
 {
     if (0 != feof(fp_))
     {

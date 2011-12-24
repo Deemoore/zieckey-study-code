@@ -59,7 +59,7 @@ int main (int argc, char** argv)
         exit(0);
     }
 
-    Slice command;
+    osl::Slice command;
     while(!b_exit)
     {
         if (true == file_handler.GetLine(command))
