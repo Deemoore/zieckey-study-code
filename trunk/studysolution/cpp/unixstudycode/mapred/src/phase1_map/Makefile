@@ -4,11 +4,13 @@ CC=gcc
 CXX=g++
 AR=ar
 ARFLAGS=cru
-QMODULE=/home/weizili
+
+CURRENT_DIR=$(shell echo `pwd`)
+QMODULE=${CURRENT_DIR}/..
 COMMONFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include
 CFLAGS=$(COMMONFLAGS)
 CCFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords $(COMMONFLAGS) 
-LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqlog.a $(QMODULE)/lib/libqoslib.a $(QMODULE)/lib/libidea.a -lmemcached -lstdc++
+LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqlog.a $(QMODULE)/lib/libqoslib.a $(QMODULE)/lib/libidea.a -lstdc++
 TARGET := $(shell basename `pwd`)
 PREFIX=../../bin
 
@@ -27,6 +29,8 @@ all : $(TARGET)
 	@cp -f $(TARGET) $(PREFIX)
 
 t :
+	@echo $(CURRENT_DIR)
+	@echo $(QMODULE)
 	@echo $(TARGET)
 	@echo $(OBJS)
 	@echo $(UNITTEST_OBJ)
