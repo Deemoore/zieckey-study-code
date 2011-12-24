@@ -1,30 +1,29 @@
 #ifndef _FILE_HANDLER_H_
 #define _FILE_HANDLER_H_
 
-#include <string>
-#include <map>
-
-#include <boost/shared_ptr.hpp>
+#include <stdio.h>
 
 #include "constant.h"
-#include "path_reader.h"
+
+#include "file_reader.h"
 
 class FileHandler
 {
-  public:
-    FileHandler();
-    bool Init();
-    bool GetLine(std::string& line);
-    bool RecordPos();
-    bool GetLineByPath(const std::string& path, std::string& line);
-    bool GetLineByPriority(int priority, std::string& line);
+public:
+    FileHandler() : reader_(NULL) {} 
 
-  private:
-    std::string path_;
-    int priority_level_;
+    ~FileHandler(){ delete reader_; } 
 
-    std::map<std::string, boost::shared_ptr<PathReader> > reader_map_;
-    std::string cur_path_;
+    bool Init(FILE* fp);
+
+    bool GetLine(Slice& line)
+    {
+        return reader_->GetLine(line);
+    }
+
+private:
+    FileReader* reader_;
 };
 
 #endif // _FILE_HANDLER_H_
+
