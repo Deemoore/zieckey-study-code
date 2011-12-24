@@ -10,12 +10,12 @@
 #include "constant.h"
 #include "qlog.h"
 
-class MapCommandHandler : public CommandHandler
+class CommandHandlerImpl : public CommandHandler
 {
 public:
-    MapCommandHandler();
+    CommandHandlerImpl();
     virtual bool Work(Slice& command);
-
+    void LastSerialize() {}
 private:
     /**
      * Get the mid and version from the command

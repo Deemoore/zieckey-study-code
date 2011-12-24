@@ -22,12 +22,7 @@
 #include "constant.h"
 #include "file_handler.h"
 
-#ifdef _MAPPING
-    #include "map_command_handler.h"
-#else
-    #include "reduce_command_handler.h"
-#endif
-
+#include "command_handler.impl.h"
 
 using namespace std;
 using namespace QPub;
@@ -55,11 +50,7 @@ int main (int argc, char** argv)
 
     osl::initializeOSLib();
 
-#ifdef _MAPPING
-    MapCommandHandler command_handler;
-#else
-    ReduceCommandHandler command_handler;
-#endif
+    CommandHandlerImpl command_handler;
     FileHandler file_handler;
 
     if (!command_handler.Init(stdout) || !file_handler.Init(stdin))
@@ -89,9 +80,7 @@ int main (int argc, char** argv)
         }
     }
 
-#ifndef _MAPPING
     command_handler.LastSerialize();
-#endif
 
     //after receive SIGINT
     int retry = 0;

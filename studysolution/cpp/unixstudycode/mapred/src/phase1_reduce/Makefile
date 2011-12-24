@@ -24,7 +24,6 @@ UNITTEST_TARGET=unittest
 
 
 all : $(TARGET) 
-	@cp -f $(TARGET) $(PREFIX)
 
 t :
 	@echo $(OBJS)
@@ -46,7 +45,7 @@ $(PROTOBUF_PERFORMANCE_TEST) : $(PROTOBUF_PERFORMANCE_TEST_OBJS)
 
 $(TARGET) : $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@
-	@cp $@ $(PREFIX)/lib
+	@cp -f $(TARGET) $(PREFIX)
 
 install: $(TARGET)
 	cp -f $(TARGET) $(PREFIX)
