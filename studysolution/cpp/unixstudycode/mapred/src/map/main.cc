@@ -20,8 +20,13 @@
 #include "qlog.h"
 #include "qlogtypes.h"
 #include "constant.h"
-#include "map_command_handler.h"
 #include "file_handler.h"
+
+#ifdef _MAPPING
+    #include "map_command_handler.h"
+#else
+    #include "reduce_command_handler.h"
+#endif
 
 
 using namespace std;
@@ -46,16 +51,20 @@ int main (int argc, char** argv)
     ::google::ParseCommandLineFlags(&argc, &argv, true);
 
     qLogConfig(FLAGS_qlog_config.c_str());
-    qLogInfo(LOG, "Start ... ");
+    //qLogInfo(LOG, "Start ... ");
 
     osl::initializeOSLib();
 
+#ifdef _MAPPING
     MapCommandHandler command_handler;
+#else
+    ReduceCommandHandler command_handler;
+#endif
     FileHandler file_handler;
 
     if (!command_handler.Init(stdout) || !file_handler.Init(stdin))
     {
-        qAppError(LOG, "Failed to init CommandHandler or FileHandler.");
+        //qAppError(LOG, "Failed to init CommandHandler or FileHandler.");
         exit(0);
     }
 
@@ -66,7 +75,7 @@ int main (int argc, char** argv)
         {
             if (false == command_handler.Work(command))
             {
-                qAppError(LOG, "Failed to work on the command: %s", command.data());
+                //qAppError(LOG, "Failed to work on the command: %s", command.data());
             }
         }
         else
@@ -80,17 +89,21 @@ int main (int argc, char** argv)
         }
     }
 
+#ifndef _MAPPING
+    command_handler.LastSerialize();
+#endif
+
     //after receive SIGINT
     int retry = 0;
     while(!command_handler.Flush(true) && retry < 10)
     {
         retry++;
-        qLogInfo(LOG, "Failed to flush command before exit, retry %d times.", retry);
+        //qLogInfo(LOG, "Failed to flush command before exit, retry %d times.", retry);
         usleep(10000);
     }
 
     osl::uninitializeOSLib();
-    qLogInfo(LOG, "Exit...");
+    //qLogInfo(LOG, "Exit...");
 
     return 0;
 }

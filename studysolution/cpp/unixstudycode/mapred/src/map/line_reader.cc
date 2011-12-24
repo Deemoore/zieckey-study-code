@@ -9,13 +9,13 @@ bool LineReader::GetLine(Slice& line)
 {
     if (0 != feof(fp_))
     {
-        qLogInfos(kLogName) << "file end!";
+        //qLogInfos(kLogName) << "file end!";
         return false;
     }
 
     if (NULL == fgets(buf_, FLAGS_buf_buffer_len, fp_))
     {   
-        qLogInfos(kLogName) << "fgets return NULL!";
+        //qLogInfos(kLogName) << "fgets return NULL!";
         return false;
     }
 

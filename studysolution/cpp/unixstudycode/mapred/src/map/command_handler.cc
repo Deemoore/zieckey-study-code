@@ -53,7 +53,7 @@ bool CommandHandler::Flush(bool force)
         }
         else
         {
-            qLogInfos(kLogName) << "No data to dump.";
+            //qLogInfos(kLogName) << "No data to dump.";
         }
 
         last_update_ = time(0);

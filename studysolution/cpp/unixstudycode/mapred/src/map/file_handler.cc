@@ -16,9 +16,9 @@ bool FileHandler::Init(FILE* fp)
     }
     else
     {
-        qAppErrors(kLogName) << "No such Reader : " << FLAGS_file_reader_type;
+        //qAppErrors(kLogName) << "No such Reader : " << FLAGS_file_reader_type;
     }
 
-    return NULL;
+    return false;
 }
 
