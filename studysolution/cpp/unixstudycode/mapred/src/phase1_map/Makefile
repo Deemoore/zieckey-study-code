@@ -47,7 +47,6 @@ $(PROTOBUF_PERFORMANCE_TEST) : $(PROTOBUF_PERFORMANCE_TEST_OBJS)
 
 $(TARGET) : $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@
-	@cp $@ $(PREFIX)/lib
 
 install: $(TARGET)
 	cp -f $(TARGET) $(PREFIX)
