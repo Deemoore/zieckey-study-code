@@ -10,14 +10,14 @@
 #include "constant.h"
 #include "qlog.h"
 
-class ReduceCommandHandler : public CommandHandler
+class CommandHandlerImpl : public CommandHandler
 {
     typedef std::set<std::string> stringset;
     typedef std::map<std::string, stringset> string_stringset_map;
 
 public:
 
-    ReduceCommandHandler();
+    CommandHandlerImpl();
     virtual bool Work(Slice& command);
 
     //When finish the job, we do the last flush

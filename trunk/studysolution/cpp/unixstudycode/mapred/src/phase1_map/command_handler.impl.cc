@@ -1,11 +1,11 @@
-#include "map_command_handler.h"
+#include "command_handler.impl.h"
 
 
-MapCommandHandler::MapCommandHandler()
+CommandHandlerImpl::CommandHandlerImpl()
 {
 }
 
-bool MapCommandHandler::Work(Slice& command)
+bool CommandHandlerImpl::Work(Slice& command)
 {
     Slice mid;
     Slice ver;
@@ -17,7 +17,7 @@ bool MapCommandHandler::Work(Slice& command)
     return true;
 }
 
-bool MapCommandHandler::GetMIDVer(Slice& command, Slice& mid, Slice& ver)
+bool CommandHandlerImpl::GetMIDVer(Slice& command, Slice& mid, Slice& ver)
 {
     token_.reset(command.data(), command.size());
     char ch = 0;

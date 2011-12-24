@@ -6,7 +6,8 @@
 #
 
 		
-SUBDIRS=src/map src/reduce
+SUBDIRS=src/phase1_map src/phase1_reduce src/phase2_map src/phase2_reduce
+
 
     
 TOPDIR=`pwd`

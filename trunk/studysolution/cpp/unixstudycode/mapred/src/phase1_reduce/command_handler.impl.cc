@@ -1,11 +1,11 @@
-#include "reduce_command_handler.h"
+#include "command_handler.impl.h"
 
 
-ReduceCommandHandler::ReduceCommandHandler()
+CommandHandlerImpl::CommandHandlerImpl()
 {
 }
 
-bool ReduceCommandHandler::Work(Slice& command)
+bool CommandHandlerImpl::Work(Slice& command)
 {
     Slice mid;
     Slice ver;
@@ -39,7 +39,7 @@ bool ReduceCommandHandler::Work(Slice& command)
     return true;
 }
 
-bool ReduceCommandHandler::GetMIDVer(Slice& command, Slice& mid, Slice& ver)
+bool CommandHandlerImpl::GetMIDVer(Slice& command, Slice& mid, Slice& ver)
 {
     token_.reset(command.data(), command.size());
 
