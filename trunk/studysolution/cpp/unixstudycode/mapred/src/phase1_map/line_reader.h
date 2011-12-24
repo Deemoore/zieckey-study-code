@@ -20,7 +20,7 @@ public:
         buf_ = NULL;
     }
 
-    virtual bool GetLine(Slice& line);
+    virtual bool GetLine(osl::Slice& line);
 
 private:
     char* buf_;

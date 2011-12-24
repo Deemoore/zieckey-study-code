@@ -13,10 +13,10 @@
 #include <gflags/gflags.h>
 
 DEFINE_int32(dump_time, 30, "The max interval between twice dump, measured by second.");
-DEFINE_int32(dump_count, 1000, "The max count of log in one message");
+DEFINE_int32(dump_buffer, 8*1024*1024, "The max buffer size of the output buffer size");
 
 CommandHandler::CommandHandler()
-: dump_time_interval_(0), dump_count_max_(0), last_update_(time(0))
+: dump_time_interval_(0), last_update_(time(0)), dump_buffer_max_(0)
 {
 }
 
@@ -28,8 +28,8 @@ CommandHandler::~CommandHandler()
 bool CommandHandler::Init(FILE* fp)
 {
     dump_time_interval_ = FLAGS_dump_time;
-    dump_count_max_ = FLAGS_dump_count;
-    dump_vect_.reserve(dump_count_max_);
+    dump_buffer_max_ = FLAGS_dump_buffer;
+    output_buf_.setBufferSize(FLAGS_dump_buffer);
     fp_ = fp;
     return true;
 }
@@ -41,19 +41,9 @@ bool CommandHandler::Flush(bool force)
                 || CheckDumpTime()
                 || force)
     {
-        if (dump_vect_.size() > 0)
+        if (!Dump())
         {
-            if (!Dump())
-            {
-                return false;  
-            }
-
-            dump_vect_.clear();
-            dump_vect_.reserve(dump_count_max_);
-        }
-        else
-        {
-            //qLogInfos(kLogName) << "No data to dump.";
+            return false;  
         }
 
         last_update_ = time(0);
@@ -68,24 +58,39 @@ bool CommandHandler::Dump()
     {
         static int64_t newid = 0;
         std::string outfile_tmp = GetTempOutputFilePath(newid++);
-        std::fstream ofp(outfile_tmp.c_str(), std::ios::out|std::ios::binary);
-        stringvector::iterator it(dump_vect_.begin());
-        stringvector::iterator ite(dump_vect_.end());
-        for (; it != ite; ++it)
-        {
-            ofp << *it;
-        }
+        std::fstream ofp(outfile_tmp.c_str(), std::ios::out|std::ios::binary|std::ios::app);
+        ofp.write((char*)output_buf_.getCache(), output_buf_.getSize());
         ofp.flush();
         ofp.close();
     }
 #endif
-    stringvector::iterator it(dump_vect_.begin());
-    stringvector::iterator ite(dump_vect_.end());
-    for (; it != ite; ++it)
-    {
-        fwrite((*it).c_str(), (*it).length(), 1, fp_);
-    }
+
+    fwrite(output_buf_.getCache(), output_buf_.getSize(), 1, fp_);
+    output_buf_.reset();
+
     return true;
+    //#ifdef _DEBUG
+//    {
+//        static int64_t newid = 0;
+//        std::string outfile_tmp = GetTempOutputFilePath(newid++);
+//        std::fstream ofp(outfile_tmp.c_str(), std::ios::out|std::ios::binary);
+//        stringvector::iterator it(dump_vect_.begin());
+//        stringvector::iterator ite(dump_vect_.end());
+//        for (; it != ite; ++it)
+//        {
+//            ofp << *it;
+//        }
+//        ofp.flush();
+//        ofp.close();
+//    }
+//#endif
+//    stringvector::iterator it(dump_vect_.begin());
+//    stringvector::iterator ite(dump_vect_.end());
+//    for (; it != ite; ++it)
+//    {
+//        fwrite((*it).c_str(), (*it).length(), 1, fp_);
+//    }
+//    return true;
 }//}}}
 
 bool CommandHandler::CheckDumpTime()
@@ -95,7 +100,7 @@ bool CommandHandler::CheckDumpTime()
 
 bool CommandHandler::CheckDumpCount()
 {
-    return dump_vect_.size() >= dump_count_max_; 
+    return false; 
 }
 
 
@@ -139,8 +144,8 @@ namespace
 std::string CommandHandler::GetTempOutputFilePath(int64_t file_id)
 {
     char buf[512] = {};
-    snprintf(buf, sizeof(buf), "Inc_%ld_%s_%lu.tmp", 
-                file_id, GetUTimeString().c_str(), dump_vect_.size() );	
+    snprintf(buf, sizeof(buf), "Inc_%ld_%s_%u.tmp", 
+                file_id, GetUTimeString().c_str(), output_buf_.getSize() );	
 
     return buf;
 }

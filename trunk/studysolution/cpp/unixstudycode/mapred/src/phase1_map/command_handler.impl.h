@@ -14,7 +14,7 @@ class CommandHandlerImpl : public CommandHandler
 {
 public:
     CommandHandlerImpl();
-    virtual bool Work(Slice& command);
+    virtual bool Work(osl::Slice& command);
     void LastSerialize() {}
 private:
     /**
@@ -24,9 +24,9 @@ private:
      * @param[out] ver 
      * @return true if get successfully
      */
-    bool GetMIDVer(Slice& command, Slice& mid, Slice& ver);
+    bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
 
-    void GetMID(Slice& command, Slice& mid)
+    void GetMID(osl::Slice& command, osl::Slice& mid)
     {
 
         static const unsigned char valid_md5_chs[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -40,7 +40,7 @@ private:
         token_.back();
 
         size_t end_pos = token_.getCurPos();
-        mid = Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
+        mid = osl::Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
 
 #ifdef _DEBUG
         std::string st(command.data() + curr_pos, end_pos - curr_pos);
@@ -48,7 +48,7 @@ private:
 #endif
     }
 
-    void GetVer(Slice& command, Slice& ver)
+    void GetVer(osl::Slice& command, osl::Slice& ver)
     {
 
         static const char valid_ver_chs[] = {
@@ -63,7 +63,7 @@ private:
         token_.back();
 
         size_t end_pos = token_.getCurPos();
-        ver = Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
+        ver = osl::Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
 
 #ifdef _DEBUG
         std::string st(command.data() + curr_pos, end_pos - curr_pos);
@@ -72,17 +72,15 @@ private:
     }
 
 
-    void Serialize(const Slice& mid, const Slice& ver)
+    void Serialize(const osl::Slice& mid, const osl::Slice& ver)
     {
         //mid\tver\t1\n
         //54cfa66d45acfd4fdafdeb077f7d1038\t7.0.0.1000\n
-        dump_vect_.push_back(std::string());
-        std::string& s = *dump_vect_.rbegin();
-        s.resize(mid.size() + ver.size() + 2);// \t \n
-        memcpy(&s[0], mid.data(), mid.size());
-        s[mid.size()] = '\t';
-        memcpy(&s[0] + mid.size() + 1, ver.data(), ver.size());
-        s[mid.size() + ver.size() + 1] = '\n';
+
+        AddOutput(mid.data(), mid.size());
+        AddOutput("\t", 1);
+        AddOutput(ver.data(), ver.size());
+        AddOutput("\n", 1);
     }
 
 private:
