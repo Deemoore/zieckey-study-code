@@ -21,7 +21,7 @@ public:
     virtual bool Work(osl::Slice& command);
 
     //When finish the job, we do the last flush
-    bool LastSerialize()
+    void LastSerialize()
     {
         Serialize();
     }
