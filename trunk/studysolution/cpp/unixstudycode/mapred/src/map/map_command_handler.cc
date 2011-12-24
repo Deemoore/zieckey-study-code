@@ -13,15 +13,7 @@ bool MapCommandHandler::Work(Slice& command)
     {
         return false;
     }
-
-    //7.3.0.2001_825f8c7953542947e7ee7c31a4362320\t1\n
-    dump_vect_.push_back(std::string());
-    std::string& s = *dump_vect_.rbegin();
-    s.resize(mid.size() + ver.size() + 4);// _ \t 1 \n
-    memcpy(&s[0], ver.data(), ver.size());
-    s[ver.size()] = '_';
-    memcpy(&s[0] + ver.size() + 1, mid.data(), mid.size());
-    memcpy(&s[0] + ver.size() + mid.size() + 1, "\t1\n", 3);
+    Serialize(mid, ver);
     return true;
 }
 

@@ -71,6 +71,20 @@ private:
 #endif
     }
 
+
+    void Serialize(const Slice& mid, const Slice& ver)
+    {
+        //mid\tver\t1\n
+        //54cfa66d45acfd4fdafdeb077f7d1038\t7.0.0.1000\n
+        dump_vect_.push_back(std::string());
+        std::string& s = *dump_vect_.rbegin();
+        s.resize(mid.size() + ver.size() + 2);// \t \n
+        memcpy(&s[0], mid.data(), mid.size());
+        s[mid.size()] = '\t';
+        memcpy(&s[0] + mid.size() + 1, ver.data(), ver.size());
+        s[mid.size() + ver.size() + 1] = '\n';
+    }
+
 private:
     osl::Tokener token_;
 };
