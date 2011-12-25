@@ -18,6 +18,8 @@ public:
         fp_ = NULL; 
     }
 
+    virtual bool Init() { return true; }
+
     virtual bool GetLine(osl::Slice& line) = 0;
 
 protected:
