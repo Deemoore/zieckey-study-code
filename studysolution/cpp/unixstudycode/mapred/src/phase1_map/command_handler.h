@@ -29,13 +29,8 @@ class CommandHandler
         writer_->Write(data, len);
     }
 
-  private:
-    bool CheckDumpTime();
-    bool CheckDumpCount();
 
   private:
-    time_t dump_time_interval_;
-    time_t last_update_;
 
     FileWriter* writer_;
 };
