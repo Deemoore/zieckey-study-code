@@ -16,8 +16,9 @@ public:
     BufferReader(FILE* fp)
         : FileReader(fp)
         , buf_size_(FLAGS_input_buffer_size)
-        , data_buf_(buf_size_)
-    {}
+    {
+        data_buf_.reserve(FLAGS_input_buffer_size);
+    }
 
     ~BufferReader()
     {
