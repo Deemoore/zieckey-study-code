@@ -27,7 +27,7 @@ SUBDIRS=c_call_cpp rsa protobuf mapred
 TOPDIR=`pwd`
 
 all: $(OBJS) $(PROGRAMS) 
-	for t in $(SUBDIRS); do cd $$t ; make || exit 1; cd ..; done
+	for t in $(SUBDIRS); do $(MAKE) -C $$t || exit 1; done
 	
 zlib : zlib.o 
 	$(CC) $(LDFLAGS)  -lz zlib.o -o $@
@@ -43,5 +43,5 @@ libeventtest : libeventtest.o
 
 clean:
 	rm -rf *.o $(PROGRAMS) $(OBJS)
-	for t in $(SUBDIRS); do cd $$t ; make clean || exit 1; cd ..; done
+	for t in $(SUBDIRS); do $(MAKE) clean -C $$t || exit 1; done
 
