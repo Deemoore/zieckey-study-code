@@ -25,9 +25,8 @@ UNITTEST_LIBS= -lcppunit -lboost_filesystem
 UNITTEST_TARGET=unittest 
 
 
-all : $(TARGET) 
-	@cp -f $(TARGET) $(PREFIX)
-
+all : $(OBJS) $(TARGET) 
+	$(MAKE) install
 t :
 	@echo $(CURRENT_DIR)
 	@echo $(QMODULE)
@@ -53,7 +52,7 @@ $(TARGET) : $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@
 
 install: $(TARGET)
-	cp -f $(TARGET) $(PREFIX)
+	@cp -f $(TARGET) $(PREFIX)
 
 %.o : %.cc %.h
 	$(CXX) -c $(CFLAGS) $(CCFLAGS) $< -o $@
@@ -61,16 +60,13 @@ install: $(TARGET)
 %.o : %.cc 
 	$(CXX) -c $(CFLAGS) $(CCFLAGS) $< -o $@
 
-t/%.o : t/%.cc
-	$(CXX) -c $(UNITTEST_CFLAGS) $(CFLAGS) -o $@ $<
-
 ut/%.o : ut/%.cc
 	$(CXX) -c $(UNITTEST_CFLAGS) $(CFLAGS) $(CCFLAGS) -o $@ $<
 
 clean:
-	rm -rf *.o ut/*.o $(TARGET) $(TEST_DATA_BUILDER) $(PROTOBUF_PERFORMANCE_TEST) $(UNITTEST_TARGET)
+	rm -rf *.o ut/*.o $(TARGET) 
 
 distclean:
 	$(MAKE) clean
-	rm -rf *.o $(TARGET) $(TEST_DATA_BUILDER)
+	rm -rf *.o $(TARGET) $(TEST_DATA_BUILDER) $(PROTOBUF_PERFORMANCE_TEST) $(UNITTEST_TARGET)
 
