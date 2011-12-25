@@ -20,7 +20,11 @@ bool LineReader::GetLine(osl::Slice& line)
     }
 
     //qLogInfos(kLogName) << buf_;
-    line = buf_;
+    size_t len = strlen(buf_);
+    if (len > 1)
+    {
+        line = osl::Slice(buf_, len - 1);// not include the ending '\n'
+    }
     return true;
 }
 

@@ -45,13 +45,15 @@ public:
 #ifdef _DEBUG
 #define PrintDebugString() \
     {\
+        std::string s((char*)data_buf_.getCurReadBuffer(), 64);\
         data_buf_.toText();\
         qLogTraces(kLogName) \
             << "\n\tbuf_size=" << buf_size_\
             << "\n\tread_pos=" << data_buf_.tellg()\
             << "\n\twrite_pos=" << data_buf_.tellp()\
             << "\n\tcontent---------------------\n" \
-            << (char*)data_buf_.getCache()\
+            << "\n-------------------------------\n"\
+            << "next string being:" << s\
             << "\n-------------------------------\n";\
     }
 #endif

@@ -46,9 +46,8 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
     token_.skipTo('\t');
     size_t _pos = token_.getCurPos();
     mid = osl::Slice(command.data(), _pos);
-    ver = osl::Slice(command.data() + _pos + 1, command.size() - mid.size() - 2);
+    ver = osl::Slice(command.data() + _pos + 1, command.size() - mid.size() - 1);
 
-    /*
 #ifdef _DEBUG
     std::string a(mid.data(), mid.size());
     std::string b(ver.data(), ver.size());
@@ -56,7 +55,6 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
     qLogTrace(kLogName, "command  %s", c.data());
     qLogTrace(kLogName, "mid ver '%s'%s'", a.data(), b.data());
 #endif
-    */
     return true;
 }
 
