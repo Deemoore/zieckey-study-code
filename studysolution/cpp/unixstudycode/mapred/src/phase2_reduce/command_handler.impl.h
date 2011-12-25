@@ -42,7 +42,6 @@ private:
 private:
     osl::Tokener token_;
     stringmap    string_map_;
-    std::string  all_version_;
     std::string  cache_string_; //only for cache
 };
 
