@@ -1,6 +1,6 @@
 #include "command_handler.impl.h"
 
-CommandHandlerImpl::CommandHandlerImpl(): all_version_("-1")
+CommandHandlerImpl::CommandHandlerImpl(): all_version_("0.0")
 {
     string_map_[all_version_] = 0;
     cache_string_.resize(128);//only for cache
