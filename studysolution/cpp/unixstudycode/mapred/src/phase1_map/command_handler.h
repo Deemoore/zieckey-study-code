@@ -5,14 +5,10 @@
 
 #include <string>
 #include <vector>
-#include <gflags/gflags.h>
-#include "qoslib/include/QOSLibAllExp.h"
-#include "qoslib/include/QFileUtil.h"
-#include "qoslib/include/QTimer.h"
-#include "qoslib/include/QMD5.h"
-#include "qoslib/include/QDataStream.h"
 
-DECLARE_int32(dump_buffer);
+#include "qoslib/include/QOSLibAllExp.h"
+
+#include "file_writer.h"
 
 class CommandHandler
 {
@@ -30,29 +26,18 @@ class CommandHandler
 
     void AddOutput(const void* data, size_t len)
     {
-        if (output_buf_.getSize() + len + 256 >= dump_buffer_max_)
-        {
-            Dump();
-        }
-        output_buf_.write(data, len);
+        writer_->Write(data, len);
     }
 
   private:
     bool CheckDumpTime();
     bool CheckDumpCount();
-    bool Dump();
-
-    std::string GetTempOutputFilePath(int64_t file_id);
 
   private:
     time_t dump_time_interval_;
     time_t last_update_;
 
-    size_t dump_buffer_max_;
-
-    FILE* fp_;
-
-    osl::MemoryDataStream output_buf_;
+    FileWriter* writer_;
 };
 
 #endif //_COMMAND_HANDLER_H_
