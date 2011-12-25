@@ -64,19 +64,11 @@ int main (int argc, char** argv)
     {
         if (true == file_handler.GetLine(command))
         {
-            if (false == command_handler.Work(command))
-            {
-                //qAppError(LOG, "Failed to work on the command: %s", command.data());
-            }
+            command_handler.Work(command);
         }
         else
         {
             b_exit = true; 
-        }
-
-        if (true == command_handler.Flush(false))
-        {
-            //file_handler.RecordPos();
         }
     }
 

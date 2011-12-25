@@ -19,7 +19,7 @@ public:
     CommandHandlerImpl();
     virtual bool Work(osl::Slice& command);
 
-    void LastSerialize() 
+    virtual void LastSerialize() 
     {
         stringmap::iterator it(string_map_.begin());
         stringmap::iterator ite(string_map_.end());
