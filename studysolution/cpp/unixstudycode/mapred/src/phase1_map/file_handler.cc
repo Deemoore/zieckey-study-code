@@ -4,21 +4,26 @@
 #include <qlog.h>
 
 #include "line_reader.h"
+#include "buffer_reader.h"
 
-DEFINE_string(file_reader_type, "LineReader", "The file reader type, options : LineReader , BufferReader");
+DEFINE_string(file_reader_type, "BufferReader", "The file reader type, options : LineReader , BufferReader");
 
 bool FileHandler::Init(FILE* fp)
 {
     if (FLAGS_file_reader_type == "LineReader")
     {
         reader_ = new LineReader(fp);
-        return true;
+    }
+    else if (FLAGS_file_reader_type == "BufferReader")
+    {
+        reader_ = new BufferReader(fp);
     }
     else
     {
+        return false;
         //qAppErrors(kLogName) << "No such Reader : " << FLAGS_file_reader_type;
     }
 
-    return false;
+    return reader_->Init();
 }
 

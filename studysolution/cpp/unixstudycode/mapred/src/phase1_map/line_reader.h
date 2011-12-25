@@ -5,13 +5,13 @@
 
 #include "file_reader.h"
 
-DECLARE_int32(buf_buffer_len);
+DECLARE_int32(line_buffer_len);
 
 class LineReader : public FileReader
 {
 public:
     LineReader(FILE* fp)
-        : FileReader(fp), buf_(new char[FLAGS_buf_buffer_len])
+        : FileReader(fp), buf_(new char[FLAGS_line_buffer_len])
     {}
 
     ~LineReader()

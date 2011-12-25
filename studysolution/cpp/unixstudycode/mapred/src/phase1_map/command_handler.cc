@@ -65,7 +65,7 @@ bool CommandHandler::Dump()
     }
 #endif
 
-    fwrite(output_buf_.getCache(), output_buf_.getSize(), 1, fp_);
+    fwrite(output_buf_.getCache(), 1, output_buf_.getSize(), fp_);
     output_buf_.reset();
 
     return true;

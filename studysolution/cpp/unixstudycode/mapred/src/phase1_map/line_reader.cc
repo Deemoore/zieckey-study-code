@@ -3,7 +3,7 @@
 #include "qlog.h"
 #include "constant.h"
 
-DEFINE_int32(buf_buffer_len, 4096, "The max buffer length of one line");
+DEFINE_int32(line_buffer_len, 4096, "The max buffer length of one line");
 
 bool LineReader::GetLine(osl::Slice& line)
 {
@@ -13,7 +13,7 @@ bool LineReader::GetLine(osl::Slice& line)
         return false;
     }
 
-    if (NULL == fgets(buf_, FLAGS_buf_buffer_len, fp_))
+    if (NULL == fgets(buf_, FLAGS_line_buffer_len, fp_))
     {   
         //qLogInfos(kLogName) << "fgets return NULL!";
         return false;
