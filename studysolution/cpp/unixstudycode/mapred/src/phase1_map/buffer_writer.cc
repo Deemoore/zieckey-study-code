@@ -3,13 +3,13 @@
 #include <gflags/gflags.h>
 #include "qoslib/include/QTimer.h"
 
-DEFINE_int32(dump_buffer, 16*1024*1024, "The max buffer size of the output buffer size");
+DEFINE_int32(dump_buffer_size, 16*1024*1024, "The max buffer size of the output buffer size");
 
 BufferWriter::BufferWriter(FILE* fp) 
     : FileWriter(fp) 
-    , dump_buffer_max_(FLAGS_dump_buffer)
+    , dump_buffer_max_(FLAGS_dump_buffer_size)
 {
-    output_buf_.reserve(FLAGS_dump_buffer);
+    output_buf_.reserve(FLAGS_dump_buffer_size);
 }
 
 bool BufferWriter::Write(const void* data, size_t len)
