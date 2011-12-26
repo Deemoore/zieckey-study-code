@@ -35,9 +35,7 @@ bool CommandHandler::Init(FILE* fp)
     }
     else if (FLAGS_file_writer_type == "ThreadWriter")
     {
-        ThreadWriter* th = new ThreadWriter(fp);
-        th->start();//start the writing thread
-        writer_ = th;
+        writer_ = new ThreadWriter(fp);
         return writer_->Init();
     }
     else
