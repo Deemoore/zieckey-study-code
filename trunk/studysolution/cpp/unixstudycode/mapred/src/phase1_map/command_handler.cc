@@ -24,6 +24,11 @@ CommandHandler::CommandHandler()
 
 CommandHandler::~CommandHandler()
 {
+    if (writer_)
+    {
+        delete writer_;
+        writer_ = NULL;
+    }
 }
 
 bool CommandHandler::Init(FILE* fp)

@@ -14,7 +14,7 @@ class CommandHandler
 {
   public:
     CommandHandler();
-    ~CommandHandler();
+    virtual ~CommandHandler();
 
     bool Init(FILE* fp);
 
