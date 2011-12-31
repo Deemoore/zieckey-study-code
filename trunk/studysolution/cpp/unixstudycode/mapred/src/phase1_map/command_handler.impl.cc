@@ -79,7 +79,7 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
         }
     }//end of while
 
-    if (mid.size() > 0 || ver.size() > 0)
+    if (mid.size() > 0)
     {
         return true;
     }
