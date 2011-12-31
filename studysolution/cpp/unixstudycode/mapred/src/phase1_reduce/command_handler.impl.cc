@@ -16,8 +16,11 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
 
     if (strncmp(current_mid_.c_str(), mid.data(), mid.size()) == 0)
     {
-        ver_set_.insert(std::string(ver.data(), ver.size()));
-        //qLogTraces(kLogName) << "equals mid=" << current_mid_ << " insert ver=" << std::string(ver.data(), ver.size()) << " ver_set_.size()=" << ver_set_.size();
+        if (ver.size() > 0)
+        {
+            ver_set_.insert(std::string(ver.data(), ver.size()));
+            //qLogTraces(kLogName) << "equals mid=" << current_mid_ << " insert ver=" << std::string(ver.data(), ver.size()) << " ver_set_.size()=" << ver_set_.size();
+        }
     }
     else
     {
