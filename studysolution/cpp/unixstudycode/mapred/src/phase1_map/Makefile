@@ -7,16 +7,17 @@ ARFLAGS=cru
 
 CURRENT_DIR=$(shell echo `pwd`)
 QMODULE=${CURRENT_DIR}/..
-COMMONFLAGS=-g -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include
-#COMMONFLAGS=-g -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include
+#COMMONFLAGS=-g -D_DEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD
+COMMONFLAGS=-g -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD
 CFLAGS=$(COMMONFLAGS)
 CCFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords $(COMMONFLAGS) 
-LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqlog.a $(QMODULE)/lib/libqoslib.a $(QMODULE)/lib/libidea.a -lstdc++ -lpthread
+LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqlogThread.a $(QMODULE)/lib/libqoslib.a $(QMODULE)/lib/libidea.a -lstdc++ -lpthread
 TARGET := $(shell basename `pwd`)
 PREFIX=../../bin
 
 SRCS := $(wildcard *.cc)
 OBJS := $(patsubst %.cc, %.o, $(SRCS))
+DEPS := $(patsubst %.o, %.d, $(OBJS))
 
 UNITTEST_SRC = $(wildcard ut/*.cc)
 UNITTEST_OBJ = $(patsubst %.cc, %.o, $(UNITTEST_SRC)) $(filter-out main.o,$(OBJS))
@@ -26,8 +27,11 @@ UNITTEST_LIBS= -lcppunit -lboost_filesystem
 UNITTEST_TARGET=unittest 
 
 
-all : $(OBJS) $(TARGET) 
+all : $(TARGET) 
 	$(MAKE) install
+
+-include $(DEPS)	
+
 t :
 	@echo $(CURRENT_DIR)
 	@echo $(QMODULE)
@@ -65,7 +69,7 @@ ut/%.o : ut/%.cc
 	$(CXX) -c $(UNITTEST_CFLAGS) $(CFLAGS) $(CCFLAGS) -o $@ $<
 
 clean:
-	rm -rf *.o ut/*.o $(TARGET) Inc_*.tmp
+	rm -rf *.o ut/*.o $(TARGET) Inc_*.tmp $(DEPS)
 
 distclean:
 	$(MAKE) clean

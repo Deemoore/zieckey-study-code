@@ -53,7 +53,7 @@ int main (int argc, char** argv)
     CommandHandlerImpl command_handler;
     FileHandler file_handler;
 
-    if (!command_handler.Init(stdout) || !file_handler.Init(stdin))
+    if (!file_handler.Init(stdin) || !command_handler.Init(stdout))
     {
         //qAppError(LOG, "Failed to init CommandHandler or FileHandler.");
         exit(0);
@@ -83,7 +83,6 @@ int main (int argc, char** argv)
         usleep(10000);
     }
 
-    osl::uninitializeOSLib();
     //qLogInfo(LOG, "Exit...");
 
     return 0;

@@ -13,18 +13,20 @@ class ThreadWriter : public FileWriter
     class WThread;
 
 public:
-
+#ifdef _DEBUG
+    ThreadWriter(FILE* fp, const std::string& output_path = "Inc_result.tmp");
+#else
     ThreadWriter(FILE* fp);
+#endif
 
-    virtual ~ThreadWriter() 
-    { 
-    }
+    virtual ~ThreadWriter();
 
     virtual bool Init(); 
 
     virtual bool Write(const void* data, size_t len);
 
     //called from main thread
+    //This will stop the data writing thread
     virtual bool Flush();
 
 protected:

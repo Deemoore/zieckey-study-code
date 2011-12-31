@@ -35,17 +35,31 @@ namespace
 class ThreadWriter::WThread : public osl::Thread
 {//{{{
     public:
+#ifdef _DEBUG
+        WThread(FILE* fp, const std::string& path)
+#else
         WThread(FILE* fp)
+#endif
             : fp_(fp)
         {
             running_ = false;
+#ifdef _DEBUG
+            output_path_ = path;
+#endif
         }
 
         ~WThread()
         { 
+            Flush();
             fp_ = NULL; 
+#ifdef _DEBUG
+            qLogTraces(kLogName) << "ThreadWriter::WThread::~WThread() called! data_buf_list_.size()=" << data_buf_list_.size();
+            all_data_buf_.toText();
+            qLogTraces(kLogName) << "--------------\n" << (char*)all_data_buf_.getCache();
+#endif
         }
 
+        //called from main thread
         void Push(osl::MemoryDataStreamPtr& data_buf)
         {        
             if (data_buf->getSize() == 0)
@@ -56,18 +70,23 @@ class ThreadWriter::WThread : public osl::Thread
             {
                 H_AUTOLOCK(data_buf_list_lock_);
                 data_buf_list_.push_back(data_buf);
+                data_buf_list_changed_event_.signal();
 #ifdef _DEBUG
                 qLogTraces(kLogName) 
-                    << "Add data to write, size=" << data_buf->getSize()
-                    << " data_buf_list_.size()=" << data_buf_list_.size();
+                    << __PRETTY_FUNCTION__ << " Add data to write, size=" << data_buf->getSize()
+                    << " data_buf_list_.size()=" << data_buf_list_.size() << " running_=" << running_
+                    << " data=\n" << (char*)data_buf->getCache() << "\n-----------end";
 #endif
             }
-            data_buf_list_changed_event_.signal();
         }
 
         void Flush()
         {
+#ifdef _DEBUG
+            all_data_buf_.saveToFile(output_path_);
+#else
             fflush(fp_);
+#endif
         }
 
         virtual void stop()
@@ -76,6 +95,7 @@ class ThreadWriter::WThread : public osl::Thread
             data_buf_list_changed_event_.signal();
             osl::Thread::stop();
         }
+
     private:
         FILE* fp_;
 
@@ -86,6 +106,10 @@ class ThreadWriter::WThread : public osl::Thread
 
         bool    running_;
 
+#ifdef _DEBUG
+        osl::MemoryDataStream all_data_buf_;
+        std::string output_path_;
+#endif
     private:
 
         std::string GetTempOutputFilePath(int64_t file_id)
@@ -103,9 +127,12 @@ class ThreadWriter::WThread : public osl::Thread
 
             osl::MemoryDataStreamPtr ptr_data_buf;
 
-            while (running_)
+            while (running_ || !data_buf_list_.empty())
             {
-                data_buf_list_changed_event_.wait();
+                if (data_buf_list_.empty())
+                {
+                    data_buf_list_changed_event_.wait();
+                }
 
                 while(!data_buf_list_.empty())
                 {
@@ -115,9 +142,9 @@ class ThreadWriter::WThread : public osl::Thread
                         data_buf_list_.pop_front();
 
 #ifdef _DEBUG
-                qLogTraces(kLogName) 
-                    << "Pop data to write, size=" << ptr_data_buf->getSize()
-                    << " data_buf_list_ remain count=" << data_buf_list_.size();
+                        qLogTraces(kLogName) 
+                            << __PRETTY_FUNCTION__ << " Pop data to write, size=" << ptr_data_buf->getSize()
+                            << " data_buf_list_ remain count=" << data_buf_list_.size();
 #endif
 
                     }
@@ -132,27 +159,51 @@ class ThreadWriter::WThread : public osl::Thread
                     }
 #endif//}}}
 
+#ifdef _DEBUG
+                    all_data_buf_.write(ptr_data_buf->getCache(), ptr_data_buf->getSize());
+#else
                     fwrite(ptr_data_buf->getCache(), 1, ptr_data_buf->getSize(), fp_);
+#endif
                 }
             }//end of while
-        }
 
-        
+            Flush();
+        }
 };//}}}
 
+#ifdef _DEBUG
+ThreadWriter::ThreadWriter(FILE* fp, const std::string& path) 
+#else
 ThreadWriter::ThreadWriter(FILE* fp) 
+#endif
     : FileWriter(fp) 
     , dump_buffer_max_(FLAGS_dump_buffer_size)
     , output_buf_(new osl::MemoryDataStream(FLAGS_dump_buffer_size))
 {
+#ifdef _DEBUG
+    thread_ = new WThread(fp, path);
+#else
     thread_ = new WThread(fp);
+#endif
+    thread_->ref();
+}
+
+ThreadWriter::~ThreadWriter() 
+{ 
+    Flush();
+    thread_->unref();
+    thread_ = NULL;
+
+#ifdef _DEBUG
+    qLogTraces(kLogName) << "output_buf_->size()=" << output_buf_->getSize();
+#endif
 }
 
 bool ThreadWriter::Write(const void* data, size_t len)
 {
 #ifdef _DEBUG
     qLogTraces(kLogName) 
-        << "write data size=" << len
+        << "write data=" << (len == 32 ? std::string((char*)data, len).c_str() : "") << " size=" << len 
         << " before this write, data_buf_ current size=" << output_buf_->getSize();
 #endif
 
@@ -175,8 +226,15 @@ bool ThreadWriter::Write(const void* data, size_t len)
 
 bool ThreadWriter::Flush()
 {//{{{
-    thread_->Push(output_buf_);
-    //thread_->Flush();
+#ifdef _DEBUG
+    output_buf_->toText();
+    qLogTraces(kLogName) << __func__ << " called: output_buf_->size()=" << output_buf_->getSize() << " contents:\n" << (output_buf_->getSize() > 0 ? (char*)output_buf_->getCache() : "") << "\n----------------";
+#endif
+    if (output_buf_->getSize() > 0)
+    {
+        thread_->Push(output_buf_);
+        output_buf_ = (new osl::MemoryDataStream(dump_buffer_max_));
+    }
 
     //waiting for the thread to write all the data and stop
     while(thread_->isRunning())
@@ -184,8 +242,6 @@ bool ThreadWriter::Flush()
         thread_->stop();
         usleep(1000);
     }
-
-    thread_->Flush();
 
     return true;
 }//}}}
