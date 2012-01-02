@@ -9,6 +9,7 @@
 #include "qoslib/include/QEvent.h"
 
 #include "constant.h"
+#include "common.h"
 #include "qlog.h"
 
 DECLARE_int32(dump_buffer_size);
@@ -50,6 +51,7 @@ class ThreadWriter::WThread : public osl::Thread
 
         ~WThread()
         { 
+            TRACE("entering ... ref=%d", getRef());
             Flush();
             fp_ = NULL; 
 #ifdef _DEBUG
@@ -71,12 +73,6 @@ class ThreadWriter::WThread : public osl::Thread
                 H_AUTOLOCK(data_buf_list_lock_);
                 data_buf_list_.push_back(data_buf);
                 data_buf_list_changed_event_.signal();
-#ifdef _DEBUG
-                qLogTraces(kLogName) 
-                    << __PRETTY_FUNCTION__ << " Add data to write, size=" << data_buf->getSize()
-                    << " data_buf_list_.size()=" << data_buf_list_.size() << " running_=" << running_
-                    << " data=\n" << (char*)data_buf->getCache() << "\n-----------end";
-#endif
             }
         }
 
@@ -138,6 +134,7 @@ class ThreadWriter::WThread : public osl::Thread
                 {
                     {
                         H_AUTOLOCK(data_buf_list_lock_);   
+                        TRACE("pop a data_buf");
                         ptr_data_buf = data_buf_list_.front();
                         data_buf_list_.pop_front();
 
@@ -162,7 +159,30 @@ class ThreadWriter::WThread : public osl::Thread
 #ifdef _DEBUG
                     all_data_buf_.write(ptr_data_buf->getCache(), ptr_data_buf->getSize());
 #else
-                    fwrite(ptr_data_buf->getCache(), 1, ptr_data_buf->getSize(), fp_);
+                    int wn = fwrite(ptr_data_buf->getCache(), 1, ptr_data_buf->getSize(), fp_);
+                    if (wn < 0)
+                    {
+                        int myerr = errno;
+                        INFO("fwrite error, errno=%d:%s", myerr, strerror(myerr));
+                        wn = fwrite(ptr_data_buf->getCache(), 1, ptr_data_buf->getSize(), fp_);
+                        if (wn < 0)
+                        {
+                            myerr = errno;
+                            INFO("fwrite error, errno=%d:%s \t exiting... ", myerr, strerror(myerr));
+                            exit(-1);
+                        }
+                    }
+                    else if ((long)ptr_data_buf->getSize() > wn)
+                    {
+                        INFO("fwrite ret=%d, continue to fwrite", wn);
+                        int ret = fwrite(ptr_data_buf->data() + wn, 1, ptr_data_buf->size() - wn, fp_);
+                        if (ret != (long)ptr_data_buf->size() - wn)
+                        {
+                            int myerr = errno;
+                            INFO("fwrite error, errno=%d:%s \t exiting... ", myerr, strerror(myerr));
+                            exit(-1);
+                        }
+                    }
 #endif
                 }
             }//end of while
@@ -190,6 +210,8 @@ ThreadWriter::ThreadWriter(FILE* fp)
 
 ThreadWriter::~ThreadWriter() 
 { 
+    TRACE("entering ...");
+
     Flush();
     thread_->unref();
     thread_ = NULL;
@@ -197,6 +219,7 @@ ThreadWriter::~ThreadWriter()
 #ifdef _DEBUG
     qLogTraces(kLogName) << "output_buf_->size()=" << output_buf_->getSize();
 #endif
+    TRACE("leaving ...");
 }
 
 bool ThreadWriter::Write(const void* data, size_t len)
@@ -216,6 +239,7 @@ bool ThreadWriter::Write(const void* data, size_t len)
 #endif
 
         thread_->Push(output_buf_);
+        TRACE("Push a output to TWriter, data len=%lu", output_buf_->size());
         output_buf_ = (new osl::MemoryDataStream(dump_buffer_max_));
     }
 
@@ -226,13 +250,17 @@ bool ThreadWriter::Write(const void* data, size_t len)
 
 bool ThreadWriter::Flush()
 {//{{{
+    TRACE("entering ...");
+
 #ifdef _DEBUG
     output_buf_->toText();
     qLogTraces(kLogName) << __func__ << " called: output_buf_->size()=" << output_buf_->getSize() << " contents:\n" << (output_buf_->getSize() > 0 ? (char*)output_buf_->getCache() : "") << "\n----------------";
 #endif
+
     if (output_buf_->getSize() > 0)
     {
         thread_->Push(output_buf_);
+        TRACE("Push a output to TWriter, data len=%lu", output_buf_->size());
         output_buf_ = (new osl::MemoryDataStream(dump_buffer_max_));
     }
 
@@ -250,3 +278,5 @@ bool ThreadWriter::Init()
 { 
     return thread_->start(); 
 }
+
+
