@@ -45,8 +45,10 @@ int main (int argc, char** argv)
 
     ::google::ParseCommandLineFlags(&argc, &argv, true);
 
+#ifdef _DEBUG
     qLogConfig(FLAGS_qlog_config.c_str());
-    //qLogInfo(LOG, "Start ... ");
+    qLogInfo(LOG, "Start ... ");
+#endif
 
     osl::initializeOSLib();
 
