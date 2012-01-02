@@ -261,7 +261,7 @@ bool ThreadWriter::Flush()
     {
         thread_->Push(output_buf_);
         TRACE("Push a output to TWriter, data len=%lu", output_buf_->size());
-        output_buf_ = (new osl::MemoryDataStream(dump_buffer_max_));
+        output_buf_ = new osl::MemoryDataStream(1);
     }
 
     //waiting for the thread to write all the data and stop
