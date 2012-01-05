@@ -23,9 +23,10 @@ public:
     void LastSerialize();
 
 private:
-
+    //{{{
     //bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
 
+    /*
     void Serialize()
     {
         AddOutput(current_mid_.c_str(), current_mid_.length());
@@ -41,7 +42,7 @@ private:
         //qLogTraces(kLogName) << "Serialize \"" << oss.str() << "\"";
         ver_set_.clear();
     }
-
+    *///}}}
 
 private:
     osl::Tokener token_;

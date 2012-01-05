@@ -41,10 +41,14 @@ private:
 
 private:
     osl::Tokener token_;
-    slicevector  slice_vector_;
+    slicevector  ver_vector_;
+    //stringvector  ver_vector_;
     stringmap    string_map_;
     std::string  all_version_;
     std::string  cache_string_; //only for cache
+
+    osl::Slice   current_mid_; //
+    std::string  last_mid_; //
 };
 
 #endif //_COMMAND_HANDLER_H_

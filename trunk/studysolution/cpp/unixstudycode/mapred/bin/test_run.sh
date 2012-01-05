@@ -25,8 +25,8 @@ _phase2_reduce_tasks=2
 #_reader=LineReader
 _reader=BufferReader
 
-#_writer=BufferWriter
-_writer=ThreadWriter
+_writer=BufferWriter
+#_writer=ThreadWriter
 
 ~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
         -mapper "./phase1_map  --file_reader_type=${_reader} --file_writer_type=${_writer}" \
