@@ -224,11 +224,7 @@ ThreadWriter::~ThreadWriter()
 
 bool ThreadWriter::Write(const void* data, size_t len)
 {
-#ifdef _DEBUG
-    qLogTraces(kLogName) 
-        << "write data=" << (len == 32 ? std::string((char*)data, len).c_str() : "") << " size=" << len 
-        << " before this write, data_buf_ current size=" << output_buf_->getSize();
-#endif
+    TRACE("Entering, data=%s len=%lu", (len == 32 ? std::string((char*)data, len).c_str() : "..."), len);
 
     if (output_buf_->getSize() + len >= dump_buffer_max_)
     {
