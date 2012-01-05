@@ -8,12 +8,11 @@
 #include "qoslib/include/QMD5.h"
 
 #include "constant.h"
+#include "common.h"
 #include "qlog.h"
 
 class CommandHandlerImpl : public CommandHandler
 {
-    typedef std::set<std::string> stringset;
-    typedef std::map<std::string, stringset> string_stringset_map;
 
 public:
 
@@ -21,14 +20,11 @@ public:
     virtual bool Work(osl::Slice& command);
 
     //When finish the job, we do the last flush
-    void LastSerialize()
-    {
-        Serialize();
-    }
+    void LastSerialize();
 
 private:
 
-    bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
+    //bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
 
     void Serialize()
     {
@@ -53,7 +49,36 @@ private:
 
     std::string current_mid_;
     stringset   ver_set_;
+
+    string_stringset_map mid_verset_map;//mid/version_set map
 };
+
+
+inline void CommandHandlerImpl::LastSerialize()
+{
+    string_stringset_map::iterator it(mid_verset_map.begin());
+    string_stringset_map::iterator ite(mid_verset_map.end());
+    for (; it != ite; ++it)
+    {
+        AddOutput(it->first.data(), it->first.size());
+
+        stringset& verset = it->second;
+        stringset::iterator itset(verset.begin());
+        stringset::iterator itendset(verset.end());
+        for (; itset != itendset; ++itset)
+        {
+            if ((*itset).size() > 0)
+            {
+                AddOutput("\t", 1);
+                AddOutput((*itset).data(), (*itset).size());
+            }
+        }
+
+        AddOutput("\n", 1);
+    }
+}
+
+
 
 #endif //_COMMAND_HANDLER_H_
 

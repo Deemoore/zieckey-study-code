@@ -7,41 +7,25 @@ CommandHandlerImpl::CommandHandlerImpl()
 
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {
-    osl::Slice mid;
-    osl::Slice ver;
-    if (!GetMIDVer(command, mid, ver))
+    token_.reset(command.data(), command.size());
+    current_mid_ = token_.nextString();
+    TRACE("mid=%s", current_mid_.c_str());
+    stringset& ver_set = mid_verset_map[current_mid_];
+    while (!token_.isEnd())
     {
-        return false;
-    }
-
-    if (strncmp(current_mid_.c_str(), mid.data(), mid.size()) == 0)
-    {
-        if (ver.size() > 0)
-        {
-            ver_set_.insert(std::string(ver.data(), ver.size()));
-            //qLogTraces(kLogName) << "equals mid=" << current_mid_ << " insert ver=" << std::string(ver.data(), ver.size()) << " ver_set_.size()=" << ver_set_.size();
-        }
-    }
-    else
-    {
-        if (current_mid_.length() == 0)//the first time
-        {
-            //qLogTraces(kLogName) << "first mid=" << current_mid_ << " insert ver=" << std::string(ver.data(), ver.size());
-            current_mid_ = std::string(mid.data(), mid.size());
-            ver_set_.insert(std::string(ver.data(), ver.size()));
-        }
-        else
-        {
-            Serialize();
-            ver_set_.insert(std::string(ver.data(), ver.size()));
-            //qLogTraces(kLogName) << "Change from " << current_mid_ << " to " << std::string(mid.data(), mid.size()) << " insert ver=" << std::string(ver.data(), ver.size());
-            current_mid_ = std::string(mid.data(), mid.size());
-        }
+#ifdef _TRACE
+        std::string ver = token_.nextString();
+        ver_set.insert(ver);
+        TRACE("\tver=%s", ver.c_str());
+#else
+        ver_set.insert(token_.nextString());
+#endif
     }
 
     return true;
 }
 
+/*
 bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
 {
     token_.reset(command.data(), command.size());
@@ -60,4 +44,4 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
 #endif
     return true;
 }
-
+*/

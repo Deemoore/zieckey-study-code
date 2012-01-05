@@ -13,7 +13,8 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     {
         return false;
     }
-    Serialize(mid, ver);
+    //Serialize(mid, ver);
+    mid_verset_map[std::string(mid.data(), mid.size())].insert(std::string(ver.data(), ver.size()));
     return true;
 }
 
