@@ -25,56 +25,64 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
     bool ver_found = false;
     while (!token_.isEnd())
     {
-        ch = token_.next();
+        ch = tolower(token_.next());
         if ('?' == ch || '&' == ch) //beginning of the keyword
         {
             //qLogTraces(kLogName) << "find " << ch;
-            ch = token_.next(); 
-            if ('m' == ch) // try to get mid
+            ch = tolower(token_.next()); 
+            if ('m' == ch && !mid_found) // try to get mid
             {
                 //qLogTraces(kLogName) << "find " << ch;
-                ch = token_.next();
+                ch = tolower(token_.next());
                 if ('=' == ch)//OK find a mid
                 {
                     //qLogTraces(kLogName) << "find " << ch << " we try ot get mid";
                     GetMID(command, mid);
-                    mid_found = true;
-                    if (ver_found)
+                    if (mid.size() > 0)
                     {
-                        //qLogTraces(kLogName) << "ver_found=true, break";
-                        break;
+                        mid_found = true;
+                        if (ver_found)
+                        {
+                            //qLogTraces(kLogName) << "ver_found=true, break";
+                            break;
+                        }
                     }
                 }
                 else if ('i' == ch && 
-                          token_.next() == 'd' &&
+                          tolower(token_.next()) == 'd' &&
                           token_.next() == '=')
                 {
                     //qLogTraces(kLogName) << "find " << ch << " we try ot get mid";
                     GetMID(command, mid);
-                    mid_found = true;
-                    if (ver_found)
+                    if (mid.size() > 0)
                     {
-                        //qLogTraces(kLogName) << "ver_found=true, break";
-                        break;
+                        mid_found = true;
+                        if (ver_found)
+                        {
+                            //qLogTraces(kLogName) << "ver_found=true, break";
+                            break;
+                        }
                     }
                 }
             }
-            else if ('v' == ch) // try to get ver
+            else if ('v' == ch && !ver_found) // try to get ver
             {
-                if (token_.next() == 'e' &&
-                    token_.next() == 'r' &&
+                if (tolower(token_.next()) == 'e' &&
+                    tolower(token_.next()) == 'r' &&
                     token_.next() == '=')
                 {
                     //qLogTraces(kLogName) << "find " << ch << " we try ot get ver";
                     GetVer(command, ver);
-                    ver_found = true;
-                    if (mid_found)
+                    if (ver.size() > 0)
                     {
-                        //qLogTraces(kLogName) << "mid_found=true, break";
-                        break;
+                        ver_found = true;
+                        if (mid_found)
+                        {
+                            //qLogTraces(kLogName) << "mid_found=true, break";
+                            break;
+                        }
                     }
                 }
-
             }
         }
     }//end of while

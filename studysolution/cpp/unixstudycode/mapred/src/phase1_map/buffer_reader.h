@@ -44,7 +44,7 @@ public:
 
     
 #ifdef _DEBUG
-#define PrintDebugString() \
+    #define PrintDebugString() \
     {\
         std::string s((char*)data_buf_.getCurReadBuffer(), 64);\
         data_buf_.toText();\
@@ -57,6 +57,8 @@ public:
             << "next string being:" << s\
             << "\n-------------------------------\n";\
     }
+#else
+    #define PrintDebugString() {}    
 #endif
 
     virtual bool GetLine(osl::Slice& line);
