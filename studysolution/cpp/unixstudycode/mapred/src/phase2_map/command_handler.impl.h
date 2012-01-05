@@ -36,11 +36,6 @@ public:
     }
 
 private:
-    void Serialize(const osl::Slice& mid, const osl::Slice& ver)
-    {
-    }
-
-private:
     osl::Tokener token_;
     slicevector  ver_vector_;
     //stringvector  ver_vector_;
