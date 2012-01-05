@@ -1,41 +1,48 @@
 #include "command_handler.impl.h"
 
-CommandHandlerImpl::CommandHandlerImpl(): all_version_("-1")
+CommandHandlerImpl::CommandHandlerImpl()
+        : all_version_("-1"),
+          current_mid_("", 0)
 {
     string_map_[all_version_] = 0;
     cache_string_.resize(128);//only for cache
-    slice_vector_.reserve(20);
+    ver_vector_.reserve(20);
+    
 }
 
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {        
-    string_map_[all_version_] += 1;//represents all mids in any versions
-
-    slice_vector_.clear();
+    ver_vector_.clear();
 #ifdef _DEBUG
     qLogTraces(kLogName) << "line:" << command.toString();
 #endif
     token_.reset(command.data(), command.size());
-    token_.skipTo('\t');
-    token_.next();
+    current_mid_ = token_.nextSlice();
+    if (strncmp(current_mid_.data(), last_mid_.data(), last_mid_.size()) != 0)
+    {
+        //represents all mids in any versions
+        string_map_[all_version_] += 1;
+    }
+
+    last_mid_ = std::string(current_mid_.data(), current_mid_.size());
     while (!token_.isEnd())
     {
-        slice_vector_.push_back(token_.nextSlice());
+        ver_vector_.push_back(token_.nextSlice());
 #ifdef _DEBUG
-        qLogTrace(kLogName, "Get a version:'%s'", slice_vector_.rbegin()->toString().c_str());
+        qLogTrace(kLogName, "Get a version:'%s'", ver_vector_.rbegin()->toString().c_str());
 #endif
     }
 
 #ifdef _DEBUG
-    //osl::Slice& last_slice = slice_vector_[slice_vector_.size() - 1];
+    //osl::Slice& last_slice = ver_vector_[ver_vector_.size() - 1];
     //last_slice = osl::Slice(last_slice.data(), last_slice.size() - 1);
     //qLogTrace(kLogName, "The last version modify to:'%s'", last_slice.toString().c_str());
 #endif
 
     stringmap::iterator itmap = string_map_.end();
     stringmap::iterator itemap = string_map_.end();
-    slicevector::iterator it(slice_vector_.begin());
-    slicevector::iterator ite(slice_vector_.end());
+    slicevector::iterator it(ver_vector_.begin());
+    slicevector::iterator ite(ver_vector_.end());
     for (; it != ite; ++it)
     {
         if (it->size() == 0)
