@@ -13,6 +13,9 @@
 class CommandHandler
 {
   public:
+    typedef std::set<std::string> stringset;
+    typedef std::map<std::string, stringset> string_stringset_map;
+  public:
     CommandHandler();
     virtual ~CommandHandler();
 

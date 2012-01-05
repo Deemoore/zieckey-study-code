@@ -29,7 +29,11 @@ inline void logAll(const char* filename, const char* funcname, int lineno, const
     (void)len;
     va_end(ap);
 
+#ifdef _DEBUG
+    fprintf(stdout, "%s\n", s);
+#else
     fprintf(stderr, "%s\n", s);
+#endif
 }
 
 #ifdef _TRACE

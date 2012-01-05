@@ -16,7 +16,8 @@ class CommandHandlerImpl : public CommandHandler
 public:
     CommandHandlerImpl();
     virtual bool Work(osl::Slice& command);
-    void LastSerialize() {}
+    void LastSerialize();
+
 private:
     /**
      * Get the mid and version from the command
@@ -87,7 +88,35 @@ private:
 
 private:
     osl::Tokener token_;
+
+    string_stringset_map mid_verset_map;//mid/version_set map
 };
+
+inline void CommandHandlerImpl::LastSerialize()
+{
+    string_stringset_map::iterator it(mid_verset_map.begin());
+    string_stringset_map::iterator ite(mid_verset_map.end());
+    for (; it != ite; ++it)
+    {
+        AddOutput(it->first.data(), it->first.size());
+
+        stringset& verset = it->second;
+        stringset::iterator itset(verset.begin());
+        stringset::iterator itendset(verset.end());
+        for (; itset != itendset; ++itset)
+        {
+            if ((*itset).size() > 0)
+            {
+                AddOutput("\t", 1);
+                AddOutput((*itset).data(), (*itset).size());
+            }
+        }
+
+        AddOutput("\n", 1);
+    }
+}
+
+
 
 #endif //_COMMAND_HANDLER_H_
 
