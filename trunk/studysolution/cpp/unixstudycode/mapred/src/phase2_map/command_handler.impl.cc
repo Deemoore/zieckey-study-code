@@ -18,10 +18,15 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
 #endif
     token_.reset(command.data(), command.size());
     current_mid_ = token_.nextSlice();
-    if (strncmp(current_mid_.data(), last_mid_.data(), last_mid_.size()) != 0)
+    if (strncmp(current_mid_.data(), last_mid_.data(), current_mid_.size()) != 0)
     {
         //represents all mids in any versions
         string_map_[all_version_] += 1;
+        TRACE("current_mid=%s last_mid=%s diff +1", std::string(current_mid_.data(), current_mid_.size()).c_str(), last_mid_.c_str());
+    }
+    else
+    {
+        TRACE("current_mid=%s last_mid=%s equals!", std::string(current_mid_.data(), current_mid_.size()).c_str(), last_mid_.c_str());
     }
 
     last_mid_ = std::string(current_mid_.data(), current_mid_.size());

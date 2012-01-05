@@ -8,6 +8,7 @@
 #include "qoslib/include/QMD5.h"
 
 #include "constant.h"
+#include "common.h"
 #include "qlog.h"
 
 class CommandHandlerImpl : public CommandHandler
