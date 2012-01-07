@@ -6,6 +6,7 @@
 #include "osl/include/QUUID.h"
 #endif 
 
+#include "osl/include/no_copy.h"
 
 namespace json
 {

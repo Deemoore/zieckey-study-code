@@ -3,119 +3,11 @@
 #define _H_OSLIB_OS_
 
 
-#ifdef H_OS_WINDOWS
-#	include <emmintrin.h>
-#   ifdef __MINGW32__
-#       include <basetyps.h>
-#       include <io.h>
-#   endif
-#elif defined(H_OS_LINUX)
-#	include <stdint.h>
-#endif
 
 
-#ifdef H_OS_WINDOWS
-#define ThreadID DWORD
-#else
-#define ThreadID pthread_t
-#endif
 
 namespace osl
 {
-    class _EXPORT_OSLIB Byteswap
-    {
-    public:
-        static u16 byteswap( u16 num );
-        static s16 byteswap( s16 num );
-        static u32 byteswap( u32 num );
-        static s32 byteswap( s32 num );
-        static f32 byteswap( f32 num );
-    };
-
-    class _EXPORT_OSLIB Randomizer
-    {
-    public:
-        static void reset();	//!< reset seed
-        static s32 rand();		//!< generate a rand number
-
-        static s32 getRandInRange( s32 minv, s32 maxv );//!< get a number in the range [minv,maxv) 
-    private:
-        static s32 seed;
-    };
-
-
-
-#ifdef H_OS_WINDOWS
-
-#		define InterlockedCmpXchng32              InterlockedCompareExchange
-#		define InterlockedXchng32	              InterlockedExchange
-#		define InterlockedInc32		              InterlockedIncrement
-#		define InterlockedDec32		              InterlockedDecrement
-#		define InterlockedExchangeAdd32( x, y )   InterlockedExchangeAdd( (volatile LONG*)x, (LONG)y )
-
-
-#ifdef H_ARCH_64
-#		define InterlockedCmpXchng64              InterlockedCompareExchange64
-#		define InterlockedXchng64	              InterlockedExchange64
-#		define InterlockedInc64		              InterlockedIncrement64
-#		define InterlockedDec64		              InterlockedDecrement64
-#		define InterlockedExchangeAdd64( x, y )   InterlockedExchangeAdd64( (volatile LONG64*)x, (LONG64)y )
-#endif
-
-#elif defined(H_OS_LINUX)
-
-	    s32 __cmpxchg32( volatile ::osl::s32* ptr, s32 old, s32 n );
-		    s32 __xchg32( volatile ::osl::s32* ptr, s32 x );
-			    s32 __xadd32( volatile ::osl::s32* ptr, s32 i );
-
-#		define InterlockedCmpXchng32(ptr,n,o)     ::osl::__cmpxchg32(ptr,o,n)
-#		define InterlockedXchng32(ptr,v)          ::osl::__xchg32(ptr,v)
-#		define InterlockedInc32(ptr)              ::osl::__xadd32(ptr,(::osl::s32)(1))
-#		define InterlockedDec32(ptr)              ::osl::__xadd32(ptr,-1)
-#		define InterlockedExchangeAdd32( x, y )   ::osl::__xadd32( (volatile ::osl::s32*)x, (::osl::s32)y )
-
-
-#ifdef H_ARCH_64
-				    long __cmpxchg64( volatile long* ptr, long old, long n );
-					    long __xchg64( volatile long* ptr, long x );
-						    long __xadd64( volatile long* ptr, long i );
-
-#		define InterlockedCmpXchng64(ptr,n,o)     ::osl::__cmpxchg64( (volatile long*)ptr,o,n)
-#		define InterlockedXchng64(ptr,v)          ::osl::__xchg64( (volatile long*)ptr,(long)v )
-#		define InterlockedInc64(ptr)              ::osl::__xadd64( (volatile long*)ptr, (long)(1) )
-#		define InterlockedDec64(ptr)              ::osl::__xadd64( (volatile long*)ptr,(long)-1 )
-#		define InterlockedExchangeAdd64( x, y )   ::osl::__xadd64( (volatile long*)x, (long)y )
-#endif
-
-
-#endif // end if linux
-
-
-#ifdef H_ARCH_32
-#		define InterlockedCmpXchng                InterlockedCmpXchng32
-#		define InterlockedXchng	                  InterlockedXchng32
-#		define InterlockedInc		              InterlockedInc32
-#		define InterlockedDec		              InterlockedDec32
-#		define InterlockedXAdd( x, y )            InterlockedExchangeAdd32( x, y )
-
-#elif defined(H_ARCH_64)
-
-#		define InterlockedCmpXchng                InterlockedCmpXchng64
-#		define InterlockedXchng	                  InterlockedXchng64
-#		define InterlockedInc		              InterlockedInc64
-#		define InterlockedDec		              InterlockedDec64
-#		define InterlockedXAdd( x, y )            InterlockedExchangeAdd64( x, y )
-#endif
-
-
-//! Memory barrier.
-#ifdef H_OS_WINDOWS
-#	define mb()   _mm_mfence()
-#elif defined(H_OS_LINUX)
-#	define mb()  __sync_synchronize()
-#else
-#endif
-
 
 
 #define SYSINFO_BUF_LEN	512
@@ -412,48 +304,11 @@ namespace osl
     };
 
 
-#	ifdef H_DEBUG_MODE
-#		ifdef H_OS_WINDOWS
-    inline int trace( const char* pFmt , ... )
-    {
-        static __declspec( thread ) char g_trace_str_array[1024] = {0};
-        va_list args;
-        va_start( args, pFmt );
-        const int length = _vsnprintf( g_trace_str_array , 1023 , pFmt , args );
-        OutputDebugStringA( g_trace_str_array );
-        return length;
-    }
-#		else
-    inline int trace( const char* pFmt , ... )
-    {
-        return 0;
-    }
-#		endif
-#else
-    inline int trace( const char* pFmt , ... )
-    {
-        return 0;
-    }
-#	endif
-
 };//namespace
-
-/*
-#	ifdef TRACE
-#		undef TRACE
-#	endif
-
-#	define TRACE osl::trace
-*/
-
-
 
 #define DEBUG_FILE_LINE_2_P(x,y) ( x " " #y )
 #define DEBUG_FILE_LINE_2(x,y) DEBUG_FILE_LINE_2_P(x,y)
 #define DEBUG_FILE_LINE DEBUG_FILE_LINE_2( __FILE__ , __LINE__ )
-
-
-
 
 #endif
 

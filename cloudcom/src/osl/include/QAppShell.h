@@ -6,7 +6,7 @@
 #include "osl/include/QObject.h"
 #include "osl/include/QString.h"
 #include "osl/include/QStringUtil.h"
-#include "osl/include/QFunction.h"
+#include "osl/include/function.h"
 
 namespace osl
 {

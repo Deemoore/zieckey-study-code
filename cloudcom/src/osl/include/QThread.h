@@ -15,6 +15,8 @@ namespace osl
     class _EXPORT_OSLIB Thread : public Object
     {
         H_ALLOC_OBJECT( Thread )
+    public:
+
 
     public:
 

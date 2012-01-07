@@ -217,25 +217,6 @@ namespace osl
 // #define H_LOG_NAME_FATAL( strName, message )  
 
 
-    //! Module symbol export
-#ifdef H_WINDOWS_API
-#   ifndef  H_STATIC_LIB_OSLIB
-#       ifdef  H_OSLIB_EXPORTS
-#           define _EXPORT_OSLIB __declspec(dllexport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllexport)
-#		else
-#           define _EXPORT_OSLIB __declspec(dllimport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllimport)
-#       endif
-#	else
-#       define _EXPORT_OSLIB
-#       define _EXPORT_OSLIB_C
-#   endif
-#else
-#   define _EXPORT_OSLIB
-#endif // H_STATIC_LIB_
-
-
     //! Initialize the library. It should be called before call any thing from the library.
     _EXPORT_OSLIB bool isOSLibInitialized();
 

@@ -8,7 +8,7 @@
 
 
 
-#include "osl/include/QSingleton.h"
+#include "osl/include/singleton.h"
 #include "osl/include/QLog.h"
 
 namespace osl
