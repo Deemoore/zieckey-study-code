@@ -73,19 +73,6 @@ private:
 #endif
     }//}}}
 
-    void Serialize(const osl::Slice& mid, const osl::Slice& ver)
-    {
-        //mid\tver\t1\n
-        //54cfa66d45acfd4fdafdeb077f7d1038\t7.0.0.1000\n
-
-        AddOutput(mid.data(), mid.size());
-        AddOutput("\t", 1);
-        AddOutput(ver.data(), ver.size());
-        AddOutput("\n", 1);
-
-        //TRACE("mid=\"%s\"  ver=\"%s\"\n", std::string(mid.data(), mid.size()).c_str(), std::string(ver.data(), ver.size()).c_str());
-    }
-
 private:
     osl::Tokener token_;
 
@@ -115,8 +102,6 @@ inline void CommandHandlerImpl::LastSerialize()
         AddOutput("\n", 1);
     }
 }
-
-
 
 #endif //_COMMAND_HANDLER_H_
 

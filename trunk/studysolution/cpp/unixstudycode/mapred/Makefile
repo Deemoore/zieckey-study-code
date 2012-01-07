@@ -11,7 +11,8 @@ SUBDIRS=src/phase1_map src/phase1_reduce src/phase2_map src/phase2_reduce
 TOPDIR=$(shell echo `pwd`)
 _datenow=$(shell echo `date +%Y%m%d`)
 _timenow=$(shell echo `date +%H%M%S`)
-PACKAGE_DIR=weizili_mapred_v$(_datenow)$(_timenow)
+_ver=1.5
+PACKAGE_DIR=weizili_mapred_v$(_ver)_$(_datenow)$(_timenow)
 PACKAGE=$(PACKAGE_DIR).tar.gz
 
 all:
@@ -24,7 +25,6 @@ deploy:
 	rm -rf $(PACKAGE_DIR)/*
 	cp ./bin/phase* ./bin/run.sh $(PACKAGE_DIR)
 	tar zcvf $(PACKAGE) $(PACKAGE_DIR)
-	rm -rf $(PACKAGE_DIR)
 
 t:	
 	echo $(PACKAGE_DIR)
