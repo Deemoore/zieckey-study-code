@@ -1,0 +1,52 @@
+
+#ifndef OSLIB_CONFIG_H_
+#define OSLIB_CONFIG_H_
+
+//Define to 1 if you want to use memory pool
+#define H_PROVIDE_MEMORY_POOL 0
+
+//Define to 1 if you want to use JSON parser
+#define H_PROVIDE_JSON 1
+
+//Define to 1 if you want to use XML parser
+#define H_PROVIDE_XML_TINY 0
+
+//Define to 1 if you want to use INI parser
+#define H_PROVIDE_INI_PARSER 1 
+
+//Define to 1 if you want to use multi-thread
+#define H_PROVIDE_THREAD_EVENT_LOCK 1
+
+//Define to 1 if you want to use log4cxx as your log system
+#define H_PROVIDE_LOG_SYSTEM 1
+
+//Define to 1 if you want to parse command line parameters
+#define H_PROVIDE_APPSHELL 1
+
+//Define to 1 if you want to use MD5 algorithm
+#define H_PROVIDE_MD5 1
+
+//Define to 1 if you want to use RSA algorithm, using openssl
+#define H_PROVIDE_RSA 0
+
+//Define to 1 if you want to use CRC32 algorithm
+#define H_PROVIDE_CRC32 1
+
+//Define to 1 if you want to use BASE64 algorithm
+#define H_PROVIDE_BASE64 1
+
+//Define to 1 if you want to use IDEA encrypt wrapper helpers
+#define H_PROVIDE_IDEA_ENCRYPT 1
+
+//Define to 1 if you want to use UUID algorithm
+#define H_PROVIDE_UUID 0
+
+//Define to 1 if you want to use a management of DLL
+#define H_PROVIDE_DLL_MANAGER 1
+
+//Define to 1 if you want to use Timer
+#define H_PROVIDE_TIMER 1
+
+
+#endif
+
