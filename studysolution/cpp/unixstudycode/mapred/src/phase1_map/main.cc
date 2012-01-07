@@ -32,6 +32,8 @@ DEFINE_string(qlog_config, "/home/weizili/bin/etc/qlog.conf", "The path of the q
 DEFINE_string(fin_path, "", "The path of the input file, if it is empty, we use the stdin as the input");
 DEFINE_string(fout_path, "", "The path of the output file, if it is empty, we use the stdout the input");
 
+DEFINE_bool(enable_thread_worker, true, "Enable the threading command handler worker");
+
 static bool b_exit =false;
 
 void exitHandler(int _i)
@@ -77,9 +79,6 @@ int main (int argc, char** argv)
         }
     }
 
-    
-    
-
     CommandHandlerImpl command_handler;
     FileHandler file_handler;
 
@@ -89,16 +88,35 @@ int main (int argc, char** argv)
         exit(0);
     }
 
-    osl::Slice command;
-    while(!b_exit)
+    if (FLAGS_enable_thread_worker)
     {
-        if (true == file_handler.GetLine(command))
+        while(!b_exit)
         {
-            command_handler.Work(command);
+            osl::MemoryDataStreamPtr data = file_handler.Read();
+            if (data != NULL)
+            {
+                command_handler.WorkBuffer(data);
+            }
+            else
+            {
+                b_exit = true; 
+            }
         }
-        else
+
+    }
+    else
+    {
+        osl::Slice command;
+        while(!b_exit)
         {
-            b_exit = true; 
+            if (true == file_handler.GetLine(command))
+            {
+                command_handler.Work(command);
+            }
+            else
+            {
+                b_exit = true; 
+            }
         }
     }
 

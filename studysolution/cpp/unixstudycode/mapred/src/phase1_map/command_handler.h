@@ -10,6 +10,7 @@
 
 #include "file_writer.h"
 
+
 class CommandHandler
 {
   public:
@@ -24,6 +25,8 @@ class CommandHandler
 
     virtual bool Work(osl::Slice& command) = 0;
 
+    bool WorkBuffer(osl::MemoryDataStreamPtr& buf);
+
     bool Flush(bool force = false);
 
   protected:
@@ -33,10 +36,12 @@ class CommandHandler
         writer_->Write(data, len);
     }
 
-
   private:
 
     FileWriter* writer_;
+
+    class ThreadHandler;
+    ThreadHandler* thread_handler_;
 };
 
 #endif //_COMMAND_HANDLER_H_

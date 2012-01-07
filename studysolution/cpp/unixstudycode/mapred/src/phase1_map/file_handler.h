@@ -7,12 +7,14 @@
 
 #include "file_reader.h"
 
+#include "qoslib/include/QOSLibAllExp.h" 
+
 class FileHandler
 {
 public:
-    FileHandler() : reader_(NULL) {} 
+    FileHandler() : reader_(NULL){} 
 
-    ~FileHandler(){ delete reader_; } 
+    ~FileHandler(){ delete reader_; reader_ = NULL; } 
 
     bool Init(FILE* fp);
 
@@ -20,6 +22,8 @@ public:
     {
         return reader_->GetLine(line);
     }
+
+    osl::MemoryDataStreamPtr Read();
 
 private:
     FileReader* reader_;
