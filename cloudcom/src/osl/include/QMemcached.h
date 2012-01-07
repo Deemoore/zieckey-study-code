@@ -8,8 +8,9 @@
 #endif
 
 
-#include "qoslib/include/QString.h"
-#include "qoslib/include/QStringUtil.h"
+#include "osl/include/auto_delete.h"
+#include "osl/include/QString.h"
+#include "osl/include/QStringUtil.h"
 
 #ifdef H_PROVIDE_LIBMEMCACHED 
 
@@ -100,20 +101,20 @@ namespace osl
     };
 
 
-}//end of namespace osl
-
-namespace stdext
-{
-    template<> inline 
-    auto_delete < memcached_result_st >::~auto_delete()
-    {    
-        if ( pointerToBeAutoDeleted )
-        {
-            memcached_result_free( pointerToBeAutoDeleted );
-            pointerToBeAutoDeleted = NULL;
-        }
+    namespace ext
+    {
+        template<> inline 
+            auto_delete < memcached_result_st >::~auto_delete()
+            {    
+                if ( ptr_ref_to_be_deleted_ )
+                {
+                    memcached_result_free( ptr_ref_to_be_deleted_ );
+                    ptr_ref_to_be_deleted_ = NULL;
+                }
+            }
     }
-}
+
+}//end of namespace osl
 
 #endif //end #if LIBMEMCACHED_API
 

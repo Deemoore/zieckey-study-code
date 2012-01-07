@@ -6,7 +6,7 @@
 #
 
 		
-SUBDIRS=src/slrsa src/idea src/qoslib src/qnetworklib src/qapputillib src/qlibtest
+SUBDIRS=src/slrsa src/idea src/osl src/net src/apputil src/libtest
 
 TOPDIR=`pwd`
 
