@@ -101,6 +101,7 @@ inline void CommandHandlerImpl::LastSerialize()
 
         AddOutput("\n", 1);
     }
+    mid_verset_map.clear();
 }
 
 #endif //_COMMAND_HANDLER_H_
