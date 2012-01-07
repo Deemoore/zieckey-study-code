@@ -8,12 +8,12 @@ ARFLAGS=cru
 CURRENT_DIR=$(shell echo `pwd`)
 QMODULE=${CURRENT_DIR}/..
 #TEST_FLAGS=-D_DEBUG -D_TRACE 
-TEST_FLAGS=-D_TRACE 
-COMMONFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD $(TEST_FLAGS)
-#COMMONFLAGS=-g -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD $(TEST_FLAGS)
+#TEST_FLAGS=-D_TRACE 
+#COMMONFLAGS=-g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD $(TEST_FLAGS)
+COMMONFLAGS=-g -O3 -DNDEBUG -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wfloat-equal -Wextra -Wall -Wno-unused-parameter -Wno-unused-function -Wunused-variable -Wunused-value -I$(QMODULE)/include -I/usr/local/include -I.. -I. -I include $(QMODULE)/include -MMD $(TEST_FLAGS)
 CFLAGS=$(COMMONFLAGS)
 CCFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords $(COMMONFLAGS) 
-LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libqlogThread.a $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqoslib.a -lstdc++  -lpthread
+LDFLAGS=-L $(QMODULE)/lib -L/usr/local/lib $(QMODULE)/lib/libgflags.a $(QMODULE)/lib/libqoslib.a -lstdc++  -lpthread
 TARGET := $(shell basename `pwd`)
 PREFIX=../../bin
 
@@ -62,10 +62,10 @@ install: $(TARGET)
 	@cp -f $(TARGET) $(PREFIX)
 
 %.o : %.cc %.h
-	$(CXX) -c $(CFLAGS) $(CCFLAGS) $< -o $@
+	$(CXX) -c $(CCFLAGS) $< -o $@
 
 %.o : %.cc 
-	$(CXX) -c $(CFLAGS) $(CCFLAGS) $< -o $@
+	$(CXX) -c $(CCFLAGS) $< -o $@
 
 ut/%.o : ut/%.cc
 	$(CXX) -c $(UNITTEST_CFLAGS) $(CFLAGS) $(CCFLAGS) -o $@ $<

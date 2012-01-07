@@ -20,30 +20,23 @@ if [ $0 -ne 0 ];then
 fi    
 
 _phase1_reduce_tasks=70
-_phase2_reduce_tasks=4
+_phase2_reduce_tasks=2
 
 ~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
         -mapper "./phase1_map" \
         -reducer "./phase1_reduce" \
         -numReduceTasks ${_phase1_reduce_tasks} \
         -jobconf mapred.compress.map.output=true \
-        -jobconf mapred.output.compress=true\
         -input /hadoop_game/data/  \
         -output ${_phase1_output} \
         -file phase1_map -file phase1_reduce
 
-
-~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
-        -mapper "./phase2_map" \
-        -reducer "./phase2_reduce" \
-        -numReduceTasks ${_phase2_reduce_tasks} \
-        -input ${_phase1_output}  \
-        -output ${_phase2_output} \
-        -file phase2_map -file phase2_reduce
+#-jobconf mapred.output.compress=true\
 
 _result="./result.sort.txt"
 _result_temp="./result.temp.txt"
-rm -rf ${_result_temp}
-~/software/hadoop/bin/hadoop fs -getmerge ${_phase2_output} ${_result_temp}
-sort ${_result_temp} > ${_result}
+rm -rf $(_result) ${_result_temp}
+~/software/hadoop/bin/hadoop fs -getmerge ${_phase1_output} ${_result_temp}
+./phase2_reduce --fin_path=${_result_temp} --fout_path=${_result}
+
 

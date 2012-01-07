@@ -21,6 +21,9 @@ public:
 
     void LastSerialize() 
     {
+        std::string cache_str;//only for cache
+        cache_str.resize(32);
+
         stringmap::iterator it(string_map_.begin());
         stringmap::iterator ite(string_map_.end());
         for (; it != ite; ++it)
@@ -28,21 +31,15 @@ public:
             //qLogTrace(kLogName, "version=\"%s\" count=%u", it->first.c_str(), it->second);
             AddOutput(it->first.c_str(), it->first.length());
             AddOutput("\t", 1);
-            cache_string_ = osl::StringUtil::valueOf(it->second);
-            AddOutput(cache_string_.c_str(), cache_string_.length());
+            cache_str = osl::StringUtil::valueOf(it->second);
+            AddOutput(cache_str.c_str(), cache_str.length());
             AddOutput("\n", 1);
         }
     }
 
 private:
-    void Serialize(const osl::Slice& mid, const osl::Slice& ver)
-    {
-    }
-
-private:
     osl::Tokener token_;
     stringmap    string_map_;
-    std::string  cache_string_; //only for cache
 };
 
 #endif //_COMMAND_HANDLER_H_

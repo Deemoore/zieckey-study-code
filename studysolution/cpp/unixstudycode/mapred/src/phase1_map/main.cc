@@ -69,7 +69,7 @@ int main (int argc, char** argv)
 
     if (FLAGS_fout_path.size())
     {
-        fout = fopen(FLAGS_fout_path.c_str(), "r");
+        fout = fopen(FLAGS_fout_path.c_str(), "w");
         if (!fout)
         {
             fprintf(stderr, "cannot open file : %s\n", FLAGS_fout_path.c_str());

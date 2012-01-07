@@ -13,7 +13,7 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     {
         return false;
     }
-    //Serialize(mid, ver);
+
     mid_verset_map[std::string(mid.data(), mid.size())].insert(std::string(ver.data(), ver.size()));
     return true;
 }
@@ -65,7 +65,7 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
                         }
                     }
                 }
-            }
+            } //end if ('m' == ch && !mid_found)
             else if ('v' == ch && !ver_found) // try to get ver
             {
                 if (tolower(token_.next()) == 'e' &&
@@ -85,7 +85,7 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
                     }
                 }
             }
-        }
+        }// end if ('?' == ch || '&' == ch) //beginning of the keyword
     }//end of while
 
     if (mid.size() > 0)
