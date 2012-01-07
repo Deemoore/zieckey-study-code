@@ -3,7 +3,6 @@
 DEFINE_int32(input_buffer_size, 16*1024*1024, "The max buffer size of the input buffer");
 
 
-
 bool BufferReader::GetLine(osl::Slice& line)
 {
 #ifdef _DEBUG
@@ -11,7 +10,7 @@ bool BufferReader::GetLine(osl::Slice& line)
     PrintDebugString();
 #endif
 
-    if (data_buf_.getReadableSize() == 0)
+    if (data_buf_->getReadableSize() == 0)
     {
         if (0 != feof(fp_))
         {
@@ -25,16 +24,16 @@ bool BufferReader::GetLine(osl::Slice& line)
 #ifdef _DEBUG
     PrintDebugString();
 #endif
-    size_t readable_size = data_buf_.getReadableSize();
+    size_t readable_size = data_buf_->getReadableSize();
 #ifdef _DEBUG
     qLogTraces(kLogName) << "step 2 : try to read one line";
 #endif
-    const char* line_begin = (char*)data_buf_.getCurReadBuffer();
+    const char* line_begin = (char*)data_buf_->getCurReadBuffer();
     const char* line_end = (char*)memchr(line_begin, '\n', readable_size);
     if (line_end)
     {
         line = osl::Slice(line_begin, line_end - line_begin);
-        data_buf_.seekg(line.size() + 1);
+        data_buf_->seekg(line.size() + 1);
 #ifdef _DEBUG
         qLogTraces(kLogName) 
             << "step 2 result: successfully read one line, readable_size="
@@ -53,7 +52,7 @@ bool BufferReader::GetLine(osl::Slice& line)
     if (0 != feof(fp_))
     {   
         line = osl::Slice(line_begin, readable_size);
-        data_buf_.reset(); //no more data to read
+        data_buf_->reset(); //no more data to read
 #ifdef _DEBUG
         qLogTraces(kLogName) << "step 3 result: no more data to read, return all the readable data: " << line.toString();
     PrintDebugString();
@@ -64,13 +63,13 @@ bool BufferReader::GetLine(osl::Slice& line)
 #ifdef _DEBUG
     qLogTraces(kLogName) << "step 4 : check whether it is need to expand the buffer.";
 #endif
-    if (data_buf_.tellg() < buf_size_ / 2)
+    if (data_buf_->tellg() < FLAGS_input_buffer_size / 2)
     {
-        buf_size_ *= 2;
-        data_buf_.reserve(buf_size_);
-        line_begin = (char*)data_buf_.getCurReadBuffer();
+        FLAGS_input_buffer_size *= 2;
+        data_buf_->reserve(FLAGS_input_buffer_size);
+        line_begin = (char*)data_buf_->getCurReadBuffer();
 #ifdef _DEBUG
-        qLogTraces(kLogName) << "step 4 result : expand buffer size to " << buf_size_; 
+        qLogTraces(kLogName) << "step 4 result : expand buffer size to " << FLAGS_input_buffer_size; 
     PrintDebugString();
 #endif
     }
@@ -79,11 +78,11 @@ bool BufferReader::GetLine(osl::Slice& line)
     qLogTraces(kLogName) << "step 5 : move the readable data to the buffer's beginning. Before move data";
     PrintDebugString();
 #endif
-    data_buf_.reset();//no change to the data which data_buf_ holds
+    data_buf_->reset();//no change to the data which data_buf_->holds
 #ifdef _DEBUG
     PrintDebugString();
 #endif
-    data_buf_.write(line_begin, readable_size);//move to the buf's beginning
+    data_buf_->write(line_begin, readable_size);//move to the buf's beginning
 #ifdef _DEBUG
     PrintDebugString();
 #endif
@@ -91,7 +90,7 @@ bool BufferReader::GetLine(osl::Slice& line)
 #ifdef _DEBUG
     qLogTraces(kLogName) << "step 6 : try to read more data. After step 5 move data";
 #endif
-    int readn = fread((char*)data_buf_.getCache() + readable_size, 1, buf_size_ - readable_size, fp_);
+    int readn = fread((char*)data_buf_->getCache() + readable_size, 1, FLAGS_input_buffer_size - readable_size, fp_);
     if (readn <= 0)
     {
 #ifdef _DEBUG
@@ -99,16 +98,43 @@ bool BufferReader::GetLine(osl::Slice& line)
         qLogTraces(kLogName) << "step 6 no more data to read ";
 #endif
         line = osl::Slice(line_begin, readable_size);
-        data_buf_.reset(); //no more data to read
+        data_buf_->reset(); //no more data to read
         return true;
     }
-    data_buf_.seekp(readn);
+    data_buf_->seekp(readn);
 #ifdef _DEBUG
     PrintDebugString();
-    qLogTraces(kLogName) << "step 7 : try to read one line data recursively. After step 6 read data, data_buf:\n" << (char*)data_buf_.getCache();
+    qLogTraces(kLogName) << "step 7 : try to read one line data recursively. After step 6 read data, data_buf:\n" << (char*)data_buf_->getCache();
 #endif
 
     return GetLine(line);
 }
 
+osl::MemoryDataStreamPtr BufferReader::Read()
+{
+    if (data_buf_  && data_buf_->getReadableSize() > 0)
+    {
+        osl::MemoryDataStreamPtr p = data_buf_;
+        data_buf_ = NULL;
+        return p;
+    }
+
+    if (0 != feof(fp_))
+    {
+        DEBUG("step 1 result : no more data to read");
+        return NULL;
+    }
+
+    osl::MemoryDataStreamPtr buf = new osl::MemoryDataStream(FLAGS_input_buffer_size);
+
+    int readn = fread((char*)buf->getCache(), 1, FLAGS_input_buffer_size, fp_);
+    if (readn <= 0)
+    {
+        DEBUG("step 1 no more data to read ");
+        return NULL;
+    }
+
+    buf->seekp(readn);
+    return buf;
+}
 

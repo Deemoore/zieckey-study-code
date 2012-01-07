@@ -27,3 +27,16 @@ bool FileHandler::Init(FILE* fp)
     return reader_->Init();
 }
 
+osl::MemoryDataStreamPtr FileHandler::Read()
+{
+    BufferReader* buffer_reader = dynamic_cast<BufferReader*>(reader_);
+    if (buffer_reader)
+    {
+        return buffer_reader->Read();
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
