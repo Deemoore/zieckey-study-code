@@ -14,6 +14,8 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
         return false;
     }
 
+    TRACE("mid='%s' ver='%s'", mid.toString().c_str(), ver.toString().c_str());
+
     mid_verset_map[std::string(mid.data(), mid.size())].insert(std::string(ver.data(), ver.size()));
     return true;
 }

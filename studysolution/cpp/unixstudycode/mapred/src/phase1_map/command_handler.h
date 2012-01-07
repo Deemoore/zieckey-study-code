@@ -25,6 +25,8 @@ class CommandHandler
 
     virtual bool Work(osl::Slice& command) = 0;
 
+    virtual void LastSerialize() = 0;
+
     bool WorkBuffer(osl::MemoryDataStreamPtr& buf);
 
     bool Flush(bool force = false);

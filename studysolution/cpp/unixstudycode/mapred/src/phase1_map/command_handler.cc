@@ -61,7 +61,8 @@ public:
     {
         while (processing_)
         {
-            usleep(1000);
+            TRACE("Waiting process finished!");
+            usleep(10000);
         }
 
         osl::Thread::stop();
@@ -69,7 +70,7 @@ public:
         while (!isStopped())
         {
             event_.signal();
-            usleep(1000);
+            usleep(10000);
         }
     }
 
@@ -105,7 +106,6 @@ private:
 
             if (data_buf_list_.empty())
             {
-                TRACE("LOGIC ERROR, rouse this thread when no data.");
                 continue;
             }
 
@@ -246,6 +246,11 @@ bool CommandHandler::Init(FILE* fp)
             fprintf(stderr, "Cannot start command handler thread.\n");
             return false;
         }
+
+        while(!thread_handler_->isRunning())
+        {
+            usleep(1000);
+        }
     }
 
     if (FLAGS_file_writer_type == "BufferWriter")
@@ -275,6 +280,7 @@ bool CommandHandler::Flush(bool force)
             thread_handler_->stop();
         }
 
+        LastSerialize();
         writer_->Flush();
     }
     
