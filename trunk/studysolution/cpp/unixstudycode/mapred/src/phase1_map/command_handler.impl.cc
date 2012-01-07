@@ -19,7 +19,7 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
 }
 
 bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
-{
+{//{{{
     token_.reset(command.data(), command.size());
     char ch = 0;
     bool mid_found = false;
@@ -94,5 +94,5 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
     }
 
     return false;
-}
+}//}}}
 

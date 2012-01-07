@@ -10,7 +10,7 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     token_.reset(command.data(), command.size());
     current_mid_ = token_.nextString();
     TRACE("mid=%s", current_mid_.c_str());
-    stringset& ver_set = mid_verset_map[current_mid_];
+    stringset& ver_set = mid_verset_map_[current_mid_];
     while (!token_.isEnd())
     {
 #ifdef _TRACE

@@ -20,7 +20,11 @@ public:
     virtual bool Work(osl::Slice& command);
 
     //When finish the job, we do the last flush
-    void LastSerialize();
+    void LastSerialize()
+    {
+        //LastSerialize_output();
+        LastSerialize_aggregate();
+    }
 
 private:
     //{{{
@@ -44,21 +48,77 @@ private:
     }
     *///}}}
 
+    void LastSerialize_output();
+    void LastSerialize_aggregate();
+
 private:
     osl::Tokener token_;
-    size_t mid_total_count_;
 
     std::string current_mid_;
-    stringset   ver_set_;
 
-    string_stringset_map mid_verset_map;//mid/version_set map
+    string_stringset_map mid_verset_map_;//mid/version_set map
 };
 
-
-inline void CommandHandlerImpl::LastSerialize()
+inline void CommandHandlerImpl::LastSerialize_aggregate()
 {
-    string_stringset_map::iterator it(mid_verset_map.begin());
-    string_stringset_map::iterator ite(mid_verset_map.end());
+    //step 1 : represents all mids in any versions
+    stringu32map ver_count_map;
+    ver_count_map["-1"] = mid_verset_map_.size();
+
+    //step 2 : aggregate now in memory
+    {
+        string_stringset_map::iterator it(mid_verset_map_.begin());
+        string_stringset_map::iterator ite(mid_verset_map_.end());
+        stringu32map::iterator vc_it = ver_count_map.end();
+        for (; it != ite; ++it)
+        {
+            stringset& verset = it->second;
+            stringset::iterator itset(verset.begin());
+            stringset::iterator itendset(verset.end());
+            for (; itset != itendset; ++itset)
+            {
+                if ((*itset).size() == 0)
+                {
+                    continue;
+                }
+                vc_it = ver_count_map.find(*itset);
+                if (vc_it == ver_count_map.end())
+                {
+                    ver_count_map[*itset] = 1;
+                }
+                else
+                {
+                    vc_it->second += 1;
+                }
+            }
+        }
+
+        mid_verset_map_.clear();
+    }
+
+    //step 3 : output
+    {
+        stringu32map::iterator it = ver_count_map.begin();
+        stringu32map::iterator ite = ver_count_map.end();
+        std::string cache_string;
+        cache_string.reserve(12);
+        for (; it != ite; ++it)
+        {
+            //qLogTrace(kLogName, "version=\"%s\" count=%u", it->first.c_str(), it->second);
+            AddOutput(it->first.c_str(), it->first.length());
+            AddOutput("\t", 1);
+            cache_string = osl::StringUtil::valueOf(it->second);
+            AddOutput(cache_string.c_str(), cache_string.length());
+            AddOutput("\n", 1);
+        }
+    }
+}
+
+inline void CommandHandlerImpl::LastSerialize_output()
+{
+    //---------------------------------------------
+    string_stringset_map::iterator it(mid_verset_map_.begin());
+    string_stringset_map::iterator ite(mid_verset_map_.end());
     for (; it != ite; ++it)
     {
         AddOutput(it->first.data(), it->first.size());
@@ -78,6 +138,7 @@ inline void CommandHandlerImpl::LastSerialize()
         AddOutput("\n", 1);
     }
 }
+
 
 
 

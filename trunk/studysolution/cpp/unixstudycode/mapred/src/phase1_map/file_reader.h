@@ -20,6 +20,7 @@ public:
 
     virtual bool Init() { return true; }
 
+    //get a line : without '\n'
     virtual bool GetLine(osl::Slice& line) = 0;
 
 protected:
