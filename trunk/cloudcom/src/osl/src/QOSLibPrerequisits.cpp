@@ -3,7 +3,7 @@
 
 // force to be compiled.
 
-#include "osl/include/QMemAlloc.h"
+#include "osl/include/mem_alloc.h"
 
 #include "osl/include/QObject.h"
 #include "osl/include/QString.h"

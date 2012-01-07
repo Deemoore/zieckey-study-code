@@ -1,6 +1,6 @@
 #include "osl/include/QOSLibPrerequisits.h"
 
-#include "osl/include/QMemAlloc.h"
+#include "osl/include/mem_alloc.h"
 #include "osl/include/QString.h"
 #include "osl/include/QStringUtil.h"
 #include "osl/include/QFileUtil.h"
