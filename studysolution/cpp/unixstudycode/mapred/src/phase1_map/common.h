@@ -32,7 +32,7 @@ inline void logAll(const char* filename, const char* funcname, int lineno, const
 #ifdef _DEBUG
     fprintf(stdout, "%s\n", s);
 #else
-    fprintf(stderr, "%s\n", s);
+    fprintf(stdout, "%s\n", s);
 #endif
 }
 
@@ -40,6 +40,12 @@ inline void logAll(const char* filename, const char* funcname, int lineno, const
     #define TRACE(fmt, args...) logAll(__FILE__, __func__, __LINE__, fmt, ##args )
 #else
     #define TRACE(fmt, args...) {}
+#endif 
+
+#ifdef _DEBUG
+    #define DEBUG(fmt, args...) logAll(__FILE__, __func__, __LINE__, fmt, ##args )
+#else
+    #define DEBUG(fmt, args...) {}
 #endif 
 
     #define INFO(fmt, args...) logAll(__FILE__, __func__, __LINE__, fmt, ##args )

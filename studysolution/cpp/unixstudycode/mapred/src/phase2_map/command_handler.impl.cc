@@ -1,10 +1,16 @@
 #include "command_handler.impl.h"
 
+#define MY_STAT
+
 CommandHandlerImpl::CommandHandlerImpl()
         : all_version_("-1"),
           current_mid_("", 0)
 {
+#ifdef MY_STAT
+    string_map_[all_version_] = 0;
+#else
     string_map_[all_version_] = 1;
+#endif
     cache_string_.resize(128);//only for cache
     ver_vector_.reserve(20);
     
@@ -13,16 +19,25 @@ CommandHandlerImpl::CommandHandlerImpl()
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {        
     ver_vector_.clear();
-#ifdef _DEBUG
-    qLogTraces(kLogName) << "line:" << command.toString();
-#endif
+    DEBUG("line:%s", command.toString().c_str());
     token_.reset(command.data(), command.size());
     current_mid_ = token_.nextSlice();
-    //if (last_mid_.size() != current_mid_.size() || strncmp(current_mid_.data(), last_mid_.data(), last_mid_.size()) != 0)
+
+    TRACE("line:'%s' current_mid='%s'", command.toString().c_str(), current_mid_.toString().c_str());
+
+#ifdef MY_STAT
+    if (last_mid_.size() != current_mid_.size() || strncmp(current_mid_.data(), last_mid_.data(), last_mid_.size()) != 0)
+#else
     if (strncmp(current_mid_.data(), last_mid_.data(), last_mid_.size()) != 0)
+#endif
     {
         //represents all mids in any versions
         string_map_[all_version_] += 1;
+        TRACE("Not Equals last_mid='%s' current_mid='%s'", last_mid_.data(), current_mid_.toString().c_str());
+    }
+    else
+    {
+        TRACE("The same last_mid='%s' current_mid='%s'", last_mid_.data(), current_mid_.toString().c_str());
     }
 
     last_mid_ = std::string(current_mid_.data(), current_mid_.size());

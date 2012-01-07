@@ -29,6 +29,8 @@ using namespace QPub;
 
 
 DEFINE_string(qlog_config, "/home/weizili/bin/etc/qlog.conf", "The path of the qlog config file.");
+DEFINE_string(fin_path, "", "The path of the input file, if it is empty, we use the stdin as the input");
+DEFINE_string(fout_path, "", "The path of the output file, if it is empty, we use the stdout the input");
 
 static bool b_exit =false;
 
@@ -52,10 +54,36 @@ int main (int argc, char** argv)
 
     osl::initializeOSLib();
 
+    FILE* fin = stdin;
+    FILE* fout = stdout;
+
+    if (FLAGS_fin_path.size())
+    {
+        fin = fopen(FLAGS_fin_path.c_str(), "r");
+        if (!fin)
+        {
+            fprintf(stderr, "cannot open file : %s\n", FLAGS_fin_path.c_str());
+            return -1;
+        }
+    }
+
+    if (FLAGS_fout_path.size())
+    {
+        fout = fopen(FLAGS_fout_path.c_str(), "r");
+        if (!fout)
+        {
+            fprintf(stderr, "cannot open file : %s\n", FLAGS_fout_path.c_str());
+            return -1;
+        }
+    }
+
+    
+    
+
     CommandHandlerImpl command_handler;
     FileHandler file_handler;
 
-    if (!file_handler.Init(stdin) || !command_handler.Init(stdout))
+    if (!file_handler.Init(fin) || !command_handler.Init(fout))
     {
         //qAppError(LOG, "Failed to init CommandHandler or FileHandler.");
         exit(0);
