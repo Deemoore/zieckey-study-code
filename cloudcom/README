@@ -1,0 +1,63 @@
+1. init
+Run init_projects.sh first.
+
+2. build and install
+
+There are tow shell script: autoconf.sh and build_and_install.sh.
+autoconf.sh: used to run the autoconf tool-chain. This script will create all Makefiles.
+build_and_install.sh: used to compile all the subproject and install them.
+So you can execute autoconf.sh firstly and then build_and_install.sh secondly.
+
+At last, you can execute clean_all.sh to clean all the object files.
+
+Anytime, you can use run_autoconf_and_build_install.sh to build and install this common library.
+This script will execute autoconf.sh firstly and then build_and_install.sh secondly.
+
+
+FAQ:
+1. error happen:
+
+../../../libtool: line 863: X--tag=CXX: command not found
+../../../libtool: line 896: libtool: ignoring unknown tag : command not found
+../../../libtool: line 863: X--mode=compile: command not found
+../../../libtool: line 1029: *** Warning: inferring the mode of operation is deprecated.: command not found
+../../../libtool: line 1030: *** Future versions of Libtool will require --mode=MODE be specified.: command not found
+../../../libtool: line 1173: Xg++: command not found
+../../../libtool: line 1173: X-DHAVE_CONFIG_H: command not found
+../../../libtool: line 1173: X-I.: command not found
+../../../libtool: line 1173: X-I../../..: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/src/qoslib/src/../include: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/debug/include: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/debug/include: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/src/qoslib/src/../..: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/src/qoslib/src/../../q3rdparty/include: No such file or directory
+../../../libtool: line 1173: X-I/data1/weizili/qdev/CloudQueryEngine/trunk/CloudSrvNG/storage_cluster/libcommon/src/qoslib/src/../../q3rdparty/unixinclude: No such file or directory
+../../../libtool: line 1173: X-I/usr/include/glib-2.0: No such file or directory
+../../../libtool: line 1173: X-I/usr/local/include: No such file or directory
+../../../libtool: line 1173: X-I/usr/lib/glib-2.0/include: No such file or directory
+../../../libtool: line 1173: X-Wshadow: command not found
+../../../libtool: line 1173: X-Wcast-qual: command not found
+../../../libtool: line 1173: X-Wcast-align: command not found
+../../../libtool: line 1173: X-Wwrite-strings: command not found
+../../../libtool: line 1173: X-Woverloaded-virtual: command not found
+../../../libtool: line 1173: X-Wsign-promo: command not found
+../../../libtool: line 1173: X-Wsign-compare: command not found
+../../../libtool: line 1173: X-Winvalid-pch: command not found
+../../../libtool: line 1173: X-fms-extensions: command not found
+../../../libtool: line 1173: X-Wall: command not found
+../../../libtool: line 1173: X-fPIC: command not found
+../../../libtool: line 1173: X-g: command not found
+../../../libtool: line 1173: X-O3: command not found
+../../../libtool: line 1173: X-DNDEBUG: command not found
+../../../libtool: line 1173: X-fno-gnu-keywords: command not found
+../../../libtool: line 1173: X-g: command not found
+../../../libtool: line 1173: X-c: command not found
+../../../libtool: line 1225: XQMemcached.lo: command not found
+../../../libtool: line 1230: libtool: compile: cannot determine name of library object from `': command not found
+
+
+
+FIX method:
+    change all "$echo" to "$ECHO" in libtool
+
+
