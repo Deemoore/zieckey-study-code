@@ -484,6 +484,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QMemcached.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\QMemcached.h"
+				>
+			</File>
+			<File
 				RelativePath=".\QRSA.cpp"
 				>
 			</File>
@@ -548,23 +556,23 @@
 			Name="memalloc"
 			>
 			<File
-				RelativePath=".\QMemAlloc.cpp"
+				RelativePath=".\mem_alloc.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QMemAlloc.h"
+				RelativePath="..\include\mem_alloc.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QMemAlloc_Pool.h"
+				RelativePath=".\mem_alloc_pool.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QMemAlloc_Pool.inl.h"
+				RelativePath=".\mem_alloc_pool.inl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QMemAlloc_SysHeap.h"
+				RelativePath=".\mem_alloc_sys_heap.h"
 				>
 			</File>
 		</Filter>

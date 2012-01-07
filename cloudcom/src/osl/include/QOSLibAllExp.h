@@ -10,7 +10,7 @@
 H_LINK_LIB( "osl");
 #endif
 
-#include "osl/include/QMemAlloc.h"
+#include "osl/include/mem_alloc.h"
 #include "osl/include/QSTLAllocator.h"
 #include "osl/include/QSTLContainers.h"
 #include "osl/include/QString.h"

@@ -3,7 +3,7 @@
 
 #include "osl/include/atomic_op.h"
 
-#include "osl/include/QMemAlloc.h"
+#include "osl/include/mem_alloc.h"
 
 namespace osl
 {

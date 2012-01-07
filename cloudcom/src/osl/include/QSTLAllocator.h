@@ -3,7 +3,7 @@
 #ifndef QOSLIB_STLALLOCATOR_
 #define QOSLIB_STLALLOCATOR_
 
-#include "osl/include/QMemAlloc.h"
+#include "osl/include/mem_alloc.h"
 
 namespace osl
 {
