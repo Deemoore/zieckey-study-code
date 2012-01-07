@@ -35,8 +35,9 @@ _phase2_reduce_tasks=2
 
 _result="./result.sort.txt"
 _result_temp="./result.temp.txt"
-rm -rf $(_result) ${_result_temp}
+rm -rf ${_result} ${_result_temp}
 ~/software/hadoop/bin/hadoop fs -getmerge ${_phase1_output} ${_result_temp}
 ./phase2_reduce --fin_path=${_result_temp} --fout_path=${_result}
+rm -rf ${_result_temp}
 
 
