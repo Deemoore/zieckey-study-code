@@ -14,7 +14,7 @@ libso=libslrsa.so
 testbin=rsatest
 
 all : $(testbin) $(liba) $(libso)
-	cp -f $(liba) $(libso) ../../debug/lib
+	$(MAKE) install
 
 $(testbin) : $(objs)
 	$(CC) $(objs) $(LDFLAGS) -o $@
@@ -33,8 +33,8 @@ $(libso) : $(libobjs)
 	$(CXX) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 install:  $(liba) $(libso) $(testbin)	
-	(cp -f $(liba) $(libso) ../../debug/lib)
-	(cp -f $(testbin) ../../debug/bin)
+	cp -f $(liba) $(libso) ../../install/lib
+	cp -f $(testbin) ../../install/bin
 
 clean:
 	rm -rf *.o

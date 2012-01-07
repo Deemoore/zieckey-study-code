@@ -4,7 +4,7 @@ CC=gcc
 CXX=g++
 AR=ar
 ARFLAGS=cru
-CFLAGS=-g -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I../q3rdparty/unixinclude -I.
+CFLAGS=-g -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I../3rdparty/unixinclude -I.
 CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=
 LIBSRC=i_cbc.c i_cfb64.c i_ofb64.c i_ecb.c i_skey.c
@@ -15,7 +15,7 @@ libso=libidea.so
 testbin=ideatest
 
 all : $(liba) $(libso)
-	cp -f $(liba) $(libso) ../../debug/lib
+	$(MAKE) install 
 
 $(testbin) : $(objs)
 	$(CC) $(objs) $(LDFLAGS) -o $@
@@ -34,8 +34,7 @@ $(libso) : $(libobjs)
 	$(CXX) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 install:  $(liba) $(libso) $(testbin)	
-	(cp -f $(liba) $(libso) ../../debug/lib)
-	(cp -f $(testbin) ../../debug/bin)
+	(cp -f $(liba) $(libso) ../../install/lib)
 
 clean:
 	rm -rf *.o $(testbin)

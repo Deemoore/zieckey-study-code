@@ -1,6 +1,7 @@
-#include "qoslib/include/QOSLibPrerequisits.h"
+#include "osl/include/QOSLibPrerequisits.h"
 
-#include "qoslib/include/QMemcached.h"
+#include "osl/include/QMemcached.h"
+#include "osl/include/auto_delete.h"
 
 #ifdef H_PROVIDE_LIBMEMCACHED
 
@@ -124,8 +125,8 @@ namespace osl
 
         //auto delete the memory allocated above when this function finished
         char* keys_help_to_delete = reinterpret_cast<char*>(keys);
-        stdext::auto_delete<char> keys_auto_deleted(keys_help_to_delete);
-        stdext::auto_delete<size_t> keylens_auto_deleted(keylens);
+        ext::auto_delete<char> keys_auto_deleted(keys_help_to_delete);
+        ext::auto_delete<size_t> keylens_auto_deleted(keylens);
         (void)keys_auto_deleted;
         (void)keylens_auto_deleted;
 
@@ -170,7 +171,7 @@ namespace osl
 
         /*this will automatically call memcached_result_free( presultobj ) 
          * to free the memcached created objects */
-        stdext::auto_delete< memcached_result_st > result_obj_autofree( presultobj );
+        ext::auto_delete< memcached_result_st > result_obj_autofree( presultobj );
 
         int goodresultcount = 0;
         while ( memcached_fetch_result(mc_, result, &rc) != NULL)
@@ -237,7 +238,7 @@ namespace osl
             memcached_return_t rc = MEMCACHED_SUCCESS;
             char* value = memcached_get( mc_, key, keylen,
                         &value_len, &flags, &rc ); //remember to free this returned value
-            stdext::auto_delete<char> value_autofree(value);
+            ext::auto_delete<char> value_autofree(value);
 
             if ( rc == MEMCACHED_SUCCESS )
             {
