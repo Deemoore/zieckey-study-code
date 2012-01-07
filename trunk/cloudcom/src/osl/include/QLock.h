@@ -3,6 +3,8 @@
 
 #if H_PROVIDE_THREAD_EVENT_LOCK
 
+#include "osl/include/atomic_op.h"
+
 #ifdef H_DEBUG_MODE
 //#	define H_STAT_LOCK
 #endif

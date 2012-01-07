@@ -3,7 +3,7 @@
 
 #include "osl/include/QOSLibAllExp.h"
 
-#include "osl/include/QSingleton.h"
+#include "osl/include/singleton.h"
 
 #include "osl/include/QEvent.h"
 #include "osl/include/QMyOS.h"

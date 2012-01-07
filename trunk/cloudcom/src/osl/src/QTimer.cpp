@@ -4,7 +4,7 @@
 
 #if H_PROVIDE_TIMER
 
-#include "osl/include/QSingleton.h"
+#include "osl/include/singleton.h"
 #include "osl/include/QString.h"
 #include "osl/include/QTimer.h"
 

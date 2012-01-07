@@ -5,7 +5,7 @@
 #if H_PROVIDE_TIMER
 
 #include "osl/include/QObject.h"
-#include "osl/include/QFunction.h"
+#include "osl/include/function.h"
 #include "osl/include/QMyOS.h"
 #include "osl/include/QLock.h"
 

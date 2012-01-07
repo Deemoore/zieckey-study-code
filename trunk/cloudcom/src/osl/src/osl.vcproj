@@ -192,7 +192,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\atomic_op.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\auto_delete.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\byte_swap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\function.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\no_copy.h"
 				>
 			</File>
 			<File
@@ -201,10 +217,6 @@
 			</File>
 			<File
 				RelativePath="..\include\platform_micros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QFunction.h"
 				>
 			</File>
 			<File
@@ -224,7 +236,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\QSingleton.h"
+				RelativePath="..\include\singleton.h"
 				>
 			</File>
 			<File
@@ -485,6 +497,10 @@
 			</File>
 			<File
 				RelativePath="..\include\QUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\random.h"
 				>
 			</File>
 		</Filter>

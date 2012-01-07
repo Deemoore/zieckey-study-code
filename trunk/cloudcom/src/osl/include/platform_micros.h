@@ -212,6 +212,18 @@ typedef char     HCHAR;
 
 #include <wchar.h>
 
+
+#ifdef H_OS_WINDOWS
+#	include <emmintrin.h>
+#   ifdef __MINGW32__
+#       include <basetyps.h>
+#       include <io.h>
+#   endif
+#elif defined(H_OS_LINUX)
+#	include <stdint.h>
+#endif
+
+
 #ifdef H_COMPILER_MSVC
 
 //! Defines for s{w,n}printf because these methods do not match the ISO C
@@ -484,9 +496,11 @@ typedef char               int8_t;
 // 
 
 
-
-
-
+#ifdef H_OS_WINDOWS
+    typedef unsigned int ThreadID;
+#else
+    typedef pthread_t ThreadID;
+#endif
 
 
 #ifndef H_ATTRIBUTE_ALWAYS_INLINE
@@ -500,6 +514,25 @@ typedef char               int8_t;
 #endif
 #endif
 
+
+
+    //! Module symbol export
+#ifdef H_WINDOWS_API
+#   ifndef  H_STATIC_LIB_OSLIB
+#       ifdef  H_OSLIB_EXPORTS
+#           define _EXPORT_OSLIB __declspec(dllexport)
+#           define _EXPORT_OSLIB_C extern "C" __declspec(dllexport)
+#		else
+#           define _EXPORT_OSLIB __declspec(dllimport)
+#           define _EXPORT_OSLIB_C extern "C" __declspec(dllimport)
+#       endif
+#	else
+#       define _EXPORT_OSLIB
+#       define _EXPORT_OSLIB_C
+#   endif
+#else
+#   define _EXPORT_OSLIB
+#endif // H_STATIC_LIB_
 
 
 

@@ -1,20 +1,13 @@
 #ifndef QOSLIB_HObject_H
 #define QOSLIB_HObject_H
 
+#include "osl/include/atomic_op.h"
+
 #include "osl/include/QMemAlloc.h"
 
 namespace osl
 {
-	//! The derived class from NoCopy has no ability 
-	//! to copy construct and assign construct
-	class NoCopy
-	{
-	protected:
-		NoCopy() {};
-	private:
-		NoCopy( const NoCopy& );
-		NoCopy&operator=( const NoCopy& );
-	};
+
 
     /** Interface provides referencing counted function. It can be generalized
     *  by Object derived object or general object.
