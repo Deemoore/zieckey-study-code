@@ -24,8 +24,6 @@
 DECLARE_bool(enable_thread_worker);
 DECLARE_int32(input_buffer_size);
 
-#define USING_RINGBUFFER
-
 class CommandHandler::ThreadHandler : public osl::Thread
 {
     typedef std::vector < osl::MemoryDataStreamPtr > MemoryDataStreamPtrList;
@@ -41,7 +39,7 @@ public:
         bool ok = true;
 #ifdef USING_RINGBUFFER
         assert(buf && buf->getReadableSize() > 0);
-        TRACE("Push back,buf:ref=%d ReadableSize=%lu size=%lu", buf->getRef(), buf->getReadableSize(), buf->size());
+        TRACE("Push back,buf:ref=%d ReadableSize=%u tellg=%u size=%u", buf->getRef(), buf->getReadableSize(), buf->tellg(), buf->size());
         buf->ref();
         ok = ring_buffer_.push_back(static_cast<void*>(buf.getPointer()));
 #else
