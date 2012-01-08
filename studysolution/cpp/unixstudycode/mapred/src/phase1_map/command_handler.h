@@ -29,7 +29,7 @@ class CommandHandler
 
     bool WorkBuffer(osl::MemoryDataStreamPtr& buf);
 
-    bool Flush(bool force = false);
+    bool Flush();
 
   protected:
 

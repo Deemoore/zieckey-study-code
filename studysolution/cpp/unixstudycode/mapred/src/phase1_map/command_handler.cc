@@ -59,8 +59,12 @@ public:
 
     void stop()
     {
-        while (processing_)
+        while (data_buf_list_.size() > 0 || data_buf_cache_list_.size() > 0)
         {
+            if (processing_ == false)
+            {
+                event_.signal();
+            }
             TRACE("Waiting process finished!");
             usleep(10000);
         }
@@ -271,19 +275,16 @@ bool CommandHandler::Init(FILE* fp)
 
 }
 
-bool CommandHandler::Flush(bool force)
+bool CommandHandler::Flush()
 {
-    if (force)
+    if (FLAGS_enable_thread_worker)
     {
-        if (FLAGS_enable_thread_worker)
-        {
-            thread_handler_->stop();
-        }
-
-        LastSerialize();
-        writer_->Flush();
+        thread_handler_->stop();
     }
-    
+
+    LastSerialize();
+    writer_->Flush();
+
     return true;
 }
 

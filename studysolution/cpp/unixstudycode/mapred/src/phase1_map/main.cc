@@ -122,7 +122,7 @@ int main (int argc, char** argv)
 
     //after receive SIGINT
     int retry = 0;
-    while(!command_handler.Flush(true) && retry < 10)
+    while(!command_handler.Flush() && retry < 10)
     {
         retry++;
         //qLogInfo(LOG, "Failed to flush command before exit, retry %d times.", retry);
