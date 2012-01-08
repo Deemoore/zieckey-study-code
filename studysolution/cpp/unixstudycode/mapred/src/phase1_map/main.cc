@@ -32,7 +32,7 @@ DEFINE_string(qlog_config, "/home/weizili/bin/etc/qlog.conf", "The path of the q
 DEFINE_string(fin_path, "", "The path of the input file, if it is empty, we use the stdin as the input");
 DEFINE_string(fout_path, "", "The path of the output file, if it is empty, we use the stdout the input");
 
-DEFINE_bool(enable_thread_worker, false, "Enable the threading command handler worker");
+DEFINE_bool(enable_thread_worker, true, "Enable the threading command handler worker");
 
 static bool b_exit =false;
 
