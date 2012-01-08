@@ -29,7 +29,9 @@ private:
     void LastSerialize_aggregate_opt();
 
 private:
+#ifdef USING_TOKENER
     osl::Tokener token_;
+#endif
 
     std::string current_mid_;
 
