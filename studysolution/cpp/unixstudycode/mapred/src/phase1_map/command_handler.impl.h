@@ -76,13 +76,13 @@ private:
 private:
     osl::Tokener token_;
 
-    string_stringset_map mid_verset_map;//mid/version_set map
+    string_stringset_map mid_verset_map_;//mid/version_set map
 };
 
 inline void CommandHandlerImpl::LastSerialize()
 {
-    string_stringset_map::iterator it(mid_verset_map.begin());
-    string_stringset_map::iterator ite(mid_verset_map.end());
+    string_stringset_map::iterator it(mid_verset_map_.begin());
+    string_stringset_map::iterator ite(mid_verset_map_.end());
     for (; it != ite; ++it)
     {
         AddOutput(it->first.data(), it->first.size());
@@ -101,7 +101,7 @@ inline void CommandHandlerImpl::LastSerialize()
 
         AddOutput("\n", 1);
     }
-    mid_verset_map.clear();
+    //mid_verset_map_.clear();
 }
 
 #endif //_COMMAND_HANDLER_H_

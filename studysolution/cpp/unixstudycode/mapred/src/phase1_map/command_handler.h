@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <tr1/unordered_set>
+#include <tr1/unordered_map>
 
 #include "qoslib/include/QOSLibAllExp.h"
 
@@ -15,9 +17,15 @@
 class CommandHandler
 {
   public:
+#ifdef USING_HASH_MAP
+    typedef std::tr1::unordered_set<std::string> stringset; //sizeof=48
+    typedef std::tr1::unordered_map<std::string, stringset> string_stringset_map;
+    typedef std::tr1::unordered_map<std::string, osl::u32> stringu32map;
+#else
     typedef std::set<std::string> stringset;
     typedef std::map<std::string, stringset> string_stringset_map;
     typedef std::map<std::string, osl::u32> stringu32map;
+#endif
   public:
     CommandHandler();
     virtual ~CommandHandler();

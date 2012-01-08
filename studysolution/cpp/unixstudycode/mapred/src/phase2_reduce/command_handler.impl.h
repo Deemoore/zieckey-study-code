@@ -12,7 +12,6 @@
 
 class CommandHandlerImpl : public CommandHandler
 {
-    typedef std::vector<osl::Slice> slicevector;
     typedef std::map<std::string, osl::u32> stringmap;
 
 public:
