@@ -3,6 +3,9 @@
 
 CommandHandlerImpl::CommandHandlerImpl()
 {
+#ifdef USING_HASH_MAP
+    mid_verset_map_.rehash(4400000);
+#endif
 }
 
 bool CommandHandlerImpl::Work(osl::Slice& command)
@@ -15,8 +18,16 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     }
 
     TRACE("mid='%s' ver='%s'", mid.toString().c_str(), ver.toString().c_str());
-
-    mid_verset_map[std::string(mid.data(), mid.size())].insert(std::string(ver.data(), ver.size()));
+    stringset& verset = mid_verset_map_[std::string(mid.data(), mid.size())];
+#ifdef USING_HASH_MAP
+    if (verset.size() == 0)
+    {
+        //first time
+        verset.rehash(32);
+        TRACE("version_set rehash");
+    }
+#endif
+    verset.insert(std::string(ver.data(), ver.size()));
     return true;
 }
 
