@@ -28,12 +28,12 @@ private:
      */
     bool GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver);
 
+#ifdef USING_TOKENER 
     void GetMID(osl::Slice& command, osl::Slice& mid)
     {//{{{
-
         static const unsigned char valid_md5_chs[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-        size_t curr_pos = token_.getCurPos();
+        size_t current_pos = token_.getCurPos();
         while (1 == valid_md5_chs[(int)token_.next()]) //TODO if (token_.next() > 0)
         {
             ;
@@ -42,10 +42,10 @@ private:
         token_.back();
 
         size_t end_pos = token_.getCurPos();
-        mid = osl::Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
+        mid = osl::Slice(command.data() + current_pos, end_pos - current_pos);//TODO if (end_pos - current_pos) > 0)
 
 #ifdef _DEBUG
-        std::string st(command.data() + curr_pos, end_pos - curr_pos);
+        std::string st(command.data() + current_pos, end_pos - current_pos);
         qLogTraces(kLogName) << "find mid='" << st << "'";
 #endif
     }//}}}
@@ -57,7 +57,7 @@ private:
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         };
 
-        size_t curr_pos = token_.getCurPos();
+        size_t current_pos = token_.getCurPos();
         while (1 == valid_ver_chs[(int)token_.next()]) //TODO if (token_.next() > 0)
         {
             ;
@@ -65,17 +65,18 @@ private:
         token_.back();
 
         size_t end_pos = token_.getCurPos();
-        ver = osl::Slice(command.data() + curr_pos, end_pos - curr_pos);//TODO if (end_pos - curr_pos) > 0)
+        ver = osl::Slice(command.data() + current_pos, end_pos - current_pos);//TODO if (end_pos - current_pos) > 0)
 
 #ifdef _DEBUG
-        std::string st(command.data() + curr_pos, end_pos - curr_pos);
+        std::string st(command.data() + current_pos, end_pos - current_pos);
         qLogTraces(kLogName) << "find ver='" << st << "'";
 #endif
     }//}}}
-
 private:
     osl::Tokener token_;
+#endif
 
+private:
     string_stringset_map mid_verset_map_;//mid/version_set map
 };
 

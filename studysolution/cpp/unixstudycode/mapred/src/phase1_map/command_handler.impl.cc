@@ -31,6 +31,7 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     return true;
 }
 
+#ifdef USING_TOKENER
 bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
 {//{{{
     token_.reset(command.data(), command.size());
@@ -108,4 +109,93 @@ bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Sl
 
     return false;
 }//}}}
+#else
+bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
+{//{{{
+
+#define get_char() (sz[current_pos++])
+
+    size_t current_pos = 0;
+    const char* sz = command.data();
+    char ch = 0;
+    bool mid_found = false;
+    bool ver_found = false;
+    while (current_pos < command.size())
+    {
+        ch = sz[current_pos++];
+        if ('?' == ch || '&' == ch) //beginning of the keyword
+        {
+            //qLogTraces(kLogName) << "find " << ch;
+            ch = tolower(get_char()); 
+            if ('m' == ch && !mid_found) // try to get mid
+            {
+                //qLogTraces(kLogName) << "find " << ch;
+                ch = tolower(get_char());
+                if ('=' == ch)//OK find a mid
+                {
+                    //qLogTraces(kLogName) << "find " << ch << " we try ot get mid";
+                    size_t len = GetMIDLen(sz + current_pos);
+                    mid.reset(sz + current_pos, len);
+                    current_pos += len;
+                    if (mid.size() > 0)
+                    {
+                        mid_found = true;
+                        if (ver_found)
+                        {
+                            //qLogTraces(kLogName) << "ver_found=true, break";
+                            break;
+                        }
+                    }
+                }
+                else if ('i' == ch && 
+                          tolower(get_char()) == 'd' &&
+                          get_char() == '=')
+                {
+                    //qLogTraces(kLogName) << "find " << ch << " we try ot get mid";
+                    size_t len = GetMIDLen(sz + current_pos);
+                    mid.reset(sz + current_pos, len);
+                    current_pos += len;
+                    if (mid.size() > 0)
+                    {
+                        mid_found = true;
+                        if (ver_found)
+                        {
+                            //qLogTraces(kLogName) << "ver_found=true, break";
+                            break;
+                        }
+                    }
+                }
+            } //end if ('m' == ch && !mid_found)
+            else if ('v' == ch && !ver_found) // try to get ver
+            {
+                if (tolower(get_char()) == 'e' &&
+                    tolower(get_char()) == 'r' &&
+                    get_char() == '=')
+                {
+                    //qLogTraces(kLogName) << "find " << ch << " we try ot get ver";
+                    size_t len = GetVerLen(sz + current_pos);
+                    ver.reset(sz + current_pos, len);
+                    current_pos += len;
+                    if (ver.size() > 0)
+                    {
+                        ver_found = true;
+                        if (mid_found)
+                        {
+                            //qLogTraces(kLogName) << "mid_found=true, break";
+                            break;
+                        }
+                    }
+                }
+            }
+        }// end if ('?' == ch || '&' == ch) //beginning of the keyword
+    }//end of while
+
+    if (mid.size() > 0)
+    {
+        return true;
+    }
+
+    return false;
+}//}}}
+#endif
 
