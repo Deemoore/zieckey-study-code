@@ -521,9 +521,9 @@ typedef char               int8_t;
 
 
 #ifdef H_OS_WINDOWS
-    typedef unsigned int ThreadID;
+    #define ThreadID DWORD
 #else
-    typedef pthread_t ThreadID;
+    #define ThreadID pthread_t
 #endif
 
 

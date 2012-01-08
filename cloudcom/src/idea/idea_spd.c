@@ -64,6 +64,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <openssl/e_os2.h>
 #include OPENSSL_UNISTD_IO
