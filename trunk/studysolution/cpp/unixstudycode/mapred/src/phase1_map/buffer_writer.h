@@ -16,6 +16,8 @@ public:
     virtual ~BufferWriter() 
     { 
         fp_ = NULL; 
+        delete output_buf_;
+        output_buf_ = NULL;
     }
 
     /*virtual*/ bool Init() { return true; }
@@ -27,7 +29,9 @@ public:
 
 protected:
     FILE* fp_;
-    osl::MemoryDataStream output_buf_;
+
+    char* output_buf_;
+    size_t write_pos_;//the current write position of the output buffer
 
 private:
     std::string GetTempOutputFilePath(int64_t file_id);
