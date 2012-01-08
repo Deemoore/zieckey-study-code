@@ -67,7 +67,7 @@ public:
                 event_.signal();
             }
             TRACE("Waiting process finished!");
-            usleep(10000);
+            usleep(10);
         }
 
         osl::Thread::stop();
@@ -75,7 +75,7 @@ public:
         while (!isStopped())
         {
             event_.signal();
-            usleep(10000);
+            usleep(10);
         }
     }
 
