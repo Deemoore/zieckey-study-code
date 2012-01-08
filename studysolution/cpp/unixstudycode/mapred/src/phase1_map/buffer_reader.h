@@ -11,11 +11,12 @@
 
 DECLARE_int32(input_buffer_size);
 
-class BufferReader : public FileReader
+class BufferReader //: public FileReader
 {
 public:
     BufferReader(FILE* fp)
-        : FileReader(fp)
+        //: FileReader(fp)
+        : fp_(fp)
         , data_buf_(new osl::MemoryDataStream(FLAGS_input_buffer_size))
     {
     }
@@ -24,7 +25,7 @@ public:
     {
     }
 
-    virtual bool Init()
+    /*virtual*/ bool Init()
     {
         if (0 != feof(fp_))
         {
@@ -60,10 +61,12 @@ public:
     #define PrintDebugString() {}    
 #endif
 
-    virtual bool GetLine(osl::Slice& line);
+    /*virtual*/ bool GetLine(osl::Slice& line);
 
     osl::MemoryDataStreamPtr Read();
+
 private:
+    FILE* fp_;
     osl::MemoryDataStreamPtr data_buf_;
 };
 

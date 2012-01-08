@@ -6,7 +6,8 @@
 DEFINE_int32(dump_buffer_size, 16*1024*1024, "The max buffer size of the output buffer size");
 
 BufferWriter::BufferWriter(FILE* fp) 
-    : FileWriter(fp) 
+    //: FileWriter(fp) 
+    : fp_(fp) 
     , output_buf_(FLAGS_dump_buffer_size)
 {
 }

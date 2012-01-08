@@ -9,6 +9,7 @@
 #include "qoslib/include/QOSLibAllExp.h"
 
 #include "file_writer.h"
+#include "buffer_writer.h"
 
 
 class CommandHandler
@@ -40,7 +41,7 @@ class CommandHandler
 
   private:
 
-    FileWriter* writer_;
+    BufferWriter* writer_;
 
     class ThreadHandler;
     ThreadHandler* thread_handler_;
