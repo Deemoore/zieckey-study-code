@@ -97,9 +97,18 @@ int main( int argc, char* argv[] )
     uint64_t hash_map_traverse_us = 0;
     uint64_t unordered_map_traverse_us = 0;
 
+    uint64_t map_find_us = 0;
+    uint64_t hash_map_find_us = 0;
+    uint64_t unordered_map_find_us = 0;
+
+    uint64_t map_delete_us = 0;
+    uint64_t hash_map_delete_us = 0;
+    uint64_t unordered_map_delete_us = 0;
+
+
 
     // Insert test
-    {
+    {//{{{
         string_list::iterator it(slist.begin());
         string_list::iterator ite(slist.end());
 
@@ -131,19 +140,18 @@ int main( int argc, char* argv[] )
         }
         end = current_usec();
         unordered_map_insert_us = end - start;
-    }
-
+    }//}}}
 
     // Traverse test
-    {
+    {//{{{
         //map traverse 
         {
             string_map::iterator it(smap.begin());
             string_map::iterator ite(smap.end());
             start = current_usec();
-            for (; it != ite; ++it)
+            for (int i = 0; it != ite; ++it)
             {
-                ;
+                i++;
             }
             end = current_usec();
             map_traverse_us = end - start;
@@ -154,9 +162,9 @@ int main( int argc, char* argv[] )
             string_hash_map::iterator it(shash_map.begin());
             string_hash_map::iterator ite(shash_map.end());
             start = current_usec();
-            for (; it != ite; ++it)
+            for (int i = 0; it != ite; ++it)
             {
-                ;
+                i++;
             }
             end = current_usec();
             hash_map_traverse_us = end - start;
@@ -167,14 +175,84 @@ int main( int argc, char* argv[] )
             string_unordered_map::iterator it(sunordered_map.begin());
             string_unordered_map::iterator ite(sunordered_map.end());
             start = current_usec();
-            for (; it != ite; ++it)
+            for (int i = 0; it != ite; ++it)
             {
-                ;
+                i++;
             }
             end = current_usec();
             unordered_map_traverse_us = end - start;
         }
-    }
+    }//}}}
+
+    // Find test
+    {//{{{
+        string_list::iterator it(slist.begin());
+        string_list::iterator ite(slist.end());
+
+        //map find
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            smap[*it] = i;
+        }
+        end = current_usec();
+        map_find_us = end - start;
+
+        //hash_map find
+        it = slist.begin();
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            shash_map[*it] = i;
+        }
+        end = current_usec();
+        hash_map_find_us = end - start;
+
+        //unordered_map find
+        it = slist.begin();
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            shash_map[*it] = i;
+        }
+        end = current_usec();
+        unordered_map_find_us = end - start;
+    }//}}}
+
+    // Delete test
+    {//{{{
+        string_list::iterator it(slist.begin());
+        string_list::iterator ite(slist.end());
+
+        //map delete
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            smap.erase(*it);
+        }
+        end = current_usec();
+        map_delete_us = end - start;
+
+        //hash_map delete
+        it = slist.begin();
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            shash_map.erase(*it);
+        }
+        end = current_usec();
+        hash_map_delete_us = end - start;
+
+        //unordered_map delete
+        it = slist.begin();
+        start = current_usec();
+        for (int i = 0; it != ite; ++it, ++i)
+        {
+            shash_map.erase(*it);
+        }
+        end = current_usec();
+        unordered_map_delete_us = end - start;
+    }//}}}
 
     //stat output
     std::cout << "          insert, count " << count << std::endl;
@@ -182,11 +260,23 @@ int main( int argc, char* argv[] )
     std::cout << "      std::ext/hash_map " << hash_map_insert_us << " us\n";
     std::cout << "std::tr1::unordered_map " << unordered_map_insert_us << " us\n";
 
-    std::cout << "\n\n";
+    std::cout << "\n";
     std::cout << "        traverse, count " << count << std::endl;
     std::cout << "               std::map " << map_traverse_us << " us\n";
     std::cout << "      std::ext/hash_map " << hash_map_traverse_us << " us\n";
     std::cout << "std::tr1::unordered_map " << unordered_map_traverse_us << " us\n";
+
+    std::cout << "\n";
+    std::cout << "            find, count " << count << std::endl;
+    std::cout << "               std::map " << map_find_us << " us\n";
+    std::cout << "      std::ext/hash_map " << hash_map_find_us << " us\n";
+    std::cout << "std::tr1::unordered_map " << unordered_map_find_us << " us\n";
+
+    std::cout << "\n";
+    std::cout << "          delete, count " << count << std::endl;
+    std::cout << "               std::map " << map_delete_us << " us\n";
+    std::cout << "      std::ext/hash_map " << hash_map_delete_us << " us\n";
+    std::cout << "std::tr1::unordered_map " << unordered_map_delete_us << " us\n";
 
      
     return 0;
@@ -198,8 +288,8 @@ void fill_list(string_list& slist, size_t count)
     {
         std::ostringstream oss;
         oss << i;
-        slist.push_back(osl::MD5::getHexMD5(oss.str().c_str(), oss.str().length()));
-        //std::cout << "string:" << *slist.rbegin() << std::endl;
+        //slist.push_back(MD5::getHexMD5(oss.str().c_str(), oss.str().length()));
+        slist.push_back(oss.str());//
     }
 }
 
