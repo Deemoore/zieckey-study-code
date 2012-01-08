@@ -13,13 +13,6 @@
 #endif
 #endif
 
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
-
 // STL containers
 #include <vector>
 #include <map>
@@ -50,24 +43,6 @@
 //#include <iostream>
 #include <sstream>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <float.h>
-
-
-#ifdef H_OS_WINDOWS
-#include <process.h>
-#elif defined(H_OS_LINUX)
-#include <unistd.h>
-#include <errno.h>
-#endif
-
-#ifdef __BORLANDC__
-namespace irr
-{
-    using namespace std;
-}
-#endif
 
 // extern "C"
 // {

@@ -499,7 +499,7 @@ namespace LibTest
 //
 //             osl::MemoryDataStreamPtr pFile = H_NEW osl::MemoryDataStream();
 //
-//             if ( !pFile->openRawFile( osl::OS::getConfDir() + "/" + "networklibconf.xml" ) )
+//             if ( !pFile->openRawFile( osl::Process::getConfDir() + "/" + "networklibconf.xml" ) )
 //             {
 //                 *pFile << "test file";
 //             }
@@ -516,7 +516,7 @@ namespace LibTest
 // 		{
 // 			osl::QUUID id( true );
 // 			printf( "uuid=%s\n", id.toStringA().c_str() );
-// 			net::UploadFileWork* pWork = new net::UploadFileWork( "http://192.168.0.43/filewebserver/post.php", osl::OS::getConfDir() + "/" + "networklibconf.xml" );
+// 			net::UploadFileWork* pWork = new net::UploadFileWork( "http://192.168.0.43/filewebserver/post.php", osl::Process::getConfDir() + "/" + "networklibconf.xml" );
 // 			pWork->addParameter( "uuid", id.toStringA() );
 // 			pWork->addParameter( "type", "aa/aa/aaa" );
 // 			pWork->addListener( this );
@@ -563,7 +563,7 @@ namespace LibTest
 //
 //          while ( m_pFileServiceListener->m_vFilesToLoad.size() != m_pFileServiceListener->m_vFilesReturn.size() )
 //          {
-//              osl::OS::msSleep( 100 );
+//              osl::Process::msSleep( 100 );
 //          }
 	}
 
@@ -725,7 +725,7 @@ namespace LibTest
 // 
 // 			osl::MemoryDataStreamPtr pFile = H_NEW osl::MemoryDataStream();
 // 
-// 			if ( !pFile->openRawFile( osl::OS::getConfDir() + "/" + "networklibconf.xml" ) )
+// 			if ( !pFile->openRawFile( osl::Process::getConfDir() + "/" + "networklibconf.xml" ) )
 // 			{
 // 				*pFile << "test file";
 // 			}
@@ -952,7 +952,7 @@ namespace LibTest
 
 	void TCurl::processCURLAutoTest( osl::AppShell::Command* pCmd )
 	{
-        osl::StringA strConfigFileName = osl::OS::getBinDir(true) + "curlconf.json";
+        osl::StringA strConfigFileName = osl::Process::getBinDir(true) + "curlconf.json";
 		osl::AppShell::Command::Param* pParam = pCmd->getParam( "cfgfile" );
 
 		if ( pParam )
@@ -1065,7 +1065,7 @@ namespace LibTest
 	{
 
 
-		osl::StringA strFileName = osl::OS::getConfDir() + "/" + "networklibconf.xml";
+		osl::StringA strFileName = osl::Process::getConfDir() + "/" + "networklibconf.xml";
 		osl::MemoryDataStreamPtr pSrcData = H_NEW osl::MemoryDataStream( 10240 );
 		pSrcData->readRawFile( strFileName );
 		//const char* ptype = "zipfiles_aaaaaaaaaaa";
@@ -1099,13 +1099,13 @@ namespace LibTest
 // 
 // 			if ( i % 30 == 0 )
 // 			{
-// 				osl::OS::msSleep( 5000 );
+// 				osl::Process::msSleep( 5000 );
 // 			}
 		} // end of for
 	}
 	void TCurl::testHttpHeaderParser()
 	{
-// 		osl::StringA strTestDataDirPath = osl::OS::getBinDir() + "/../testdata/hlibtest_data/httphead/";
+// 		osl::StringA strTestDataDirPath = osl::Process::getBinDir() + "/../testdata/hlibtest_data/httphead/";
 // 		osl::StringAList files;
 // 		osl::Util::getFiles( strTestDataDirPath, files, false, "*.txt" );
 // 		osl::StringAList::iterator it( files.begin() ), ite( files.end() );

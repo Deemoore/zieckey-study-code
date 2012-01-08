@@ -5,7 +5,7 @@
 #include "osl/include/QObject.h"
 #include "osl/include/QString.h"
 #include "osl/include/QThread.h"
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QLock.h"
 
 #include "net/include/QCURLService.h"
@@ -27,7 +27,7 @@ namespace net
         m_nNumThreads = nNumThreads > 0 ? nNumThreads : 2/*s_pNetRunConfig->getCURLThreadCount()*/;
         if ( m_nNumThreads <= 0 )
         {
-            m_nNumThreads = osl::OS::getNumProcessor();
+            m_nNumThreads = osl::Process::getNumProcessor();
         }
 
 		m_strName = "CURLService";
@@ -89,7 +89,7 @@ namespace net
 
             while ( !( m_vWorkThread[ i ]->isRunning() ) )
             {
-                osl::OS::msSleep( 5 );
+                osl::Process::msSleep( 5 );
             }
         }
 

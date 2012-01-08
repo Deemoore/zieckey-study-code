@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "osl/include/QLogManager.h"
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QFileUtil.h"
 
 namespace osl
@@ -76,35 +76,35 @@ namespace osl
         //----------------------------------------------
         StringA getLogDir()
         {
-            StringA logdir = OS::getBinDir( false ) + "/../logs";
+            StringA logdir = Process::getBinDir( false ) + "/../logs";
             if ( FileUtil::isFSFileExist(logdir) )
             {
                 return logdir;
             }
 
-            logdir = OS::getBinDir( false ) + "/../log";
+            logdir = Process::getBinDir( false ) + "/../log";
             if ( FileUtil::isFSFileExist(m_strLogFile) )
             {
                 return logdir;
             }
 
-            logdir = OS::getBinDir( false ) + "/log";
+            logdir = Process::getBinDir( false ) + "/log";
             if ( FileUtil::isFSFileExist(m_strLogFile) )
             {
                 return logdir;
             }
 
-            logdir = OS::getBinDir( false ) + "/logs";
+            logdir = Process::getBinDir( false ) + "/logs";
             if ( FileUtil::isFSFileExist(m_strLogFile) )
             {
                 return logdir;
             }
 
-            logdir = OS::getBinDir( false ) + "/log";
+            logdir = Process::getBinDir( false ) + "/log";
             if ( !FileUtil::makeFSDir( logdir ) )
             {
                 fprintf( stderr, "mkdir failed : %s\n", logdir.c_str() );
-                return OS::getBinDir( false );
+                return Process::getBinDir( false );
             }
 
             return logdir;

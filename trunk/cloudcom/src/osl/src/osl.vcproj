@@ -308,6 +308,26 @@
 				>
 			</File>
 			<File
+				RelativePath=".\process_ext.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\process_ext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\process_ext_impl.linux.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\process_ext_impl.mac.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\process_ext_impl.win.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\QEvent.cpp"
 				>
 			</File>
@@ -317,26 +337,6 @@
 			</File>
 			<File
 				RelativePath="..\include\QLock.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QMyOS.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QOS.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QOS_LinuxImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QOS_MACImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\QOS_NTImpl.cpp"
 				>
 			</File>
 			<File

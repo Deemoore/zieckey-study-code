@@ -115,7 +115,7 @@ namespace LibTest
 /*
         while ( !isRunning() )
         {
-            osl::OS::msSleep( 5 );
+            osl::Process::msSleep( 5 );
         }
         */
 
@@ -144,7 +144,7 @@ namespace LibTest
             m_pShell->processCommand( cmd );
         }
 
-        osl::OS::msSleep( 5 );
+        osl::Process::msSleep( 5 );
     }
 
     void TLibTest::onShellCommand( osl::AppShell::Command* pCmd, osl::AppShell* pShell )

@@ -144,7 +144,7 @@ namespace aut
                 logInfo( "CACenter", "getEncryptKeyFromCACenter failed."
                             "%ust to retry, CACenter %s", 
                             i + 1, strHttpData.c_str() );
-                osl::OS::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
+                osl::Process::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
             }
             else
             {
@@ -198,7 +198,7 @@ namespace aut
                 logInfo( "CACenter", "getDecryptKeyFromCACenter failed, "
                             "%ust to retry, CACenter resp:%s", 
                             i + 1, strHttpData.c_str() );
-                osl::OS::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
+                osl::Process::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
             }
             else
             {
@@ -239,7 +239,7 @@ namespace aut
                     logInfo( "CACenter", "sendOperateDoneACK failed, "
                                 "%ust to retry, CACenter resp:%s", 
                                 i + 1, strHttpData.c_str() );
-                    osl::OS::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
+                    osl::Process::msSleep( (osl::s32)(m_fRetryInterval * 1000) );
                 }
                 else
                 {

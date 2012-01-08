@@ -1,7 +1,7 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
 #include "osl/include/QFileUtil.h"
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QMD5.h"
 #include "osl/include/QRSA.h"
 #include "osl/include/QJSONObject.h"
@@ -653,7 +653,7 @@ namespace LibTest
 //         }
 //
 //
-//         osl::OS::msSleep( 1111111 );
+//         osl::Process::msSleep( 1111111 );
     }
 
 
@@ -666,11 +666,11 @@ namespace LibTest
             osl::ThreadPtr pThread = new SelectThread;
             pThread->start();
 
-            osl::OS::msSleep( 1000 );
+            osl::Process::msSleep( 1000 );
 
             static_cast<SelectThread*>( pThread.getPointer() )->clear();
 
-            osl::OS::msSleep( 10000 );
+            osl::Process::msSleep( 10000 );
         }
 #endif
     }
@@ -775,7 +775,7 @@ namespace LibTest
     {
 //         for ( size_t i = 10; i < 5000; i++ )
 //         {
-//             osl::StringA strFilePath = osl::OS::getConfDir() + "/" + "networklibconf.xml";
+//             osl::StringA strFilePath = osl::Process::getConfDir() + "/" + "networklibconf.xml";
 //             osl::MemoryDataStream databuf_src;
 //             databuf_src.readRawFile( strFilePath );
 // 

@@ -35,8 +35,8 @@ namespace LibTest
     void TBase64::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
     {
         //"test_base64 --in=input.file.name --out=encoded.output.file.name"
-		osl::StringA infilename  = osl::OS::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/base64.test.inputfile.txt";
-		osl::StringA outfilename = osl::OS::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/outputfile.txt";
+		osl::StringA infilename  = osl::Process::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/base64.test.inputfile.txt";
+		osl::StringA outfilename = osl::Process::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/outputfile.txt";
 
 
         osl::AppShell::Command::Param* pParam = pCmd->getParam( "in" );
@@ -86,8 +86,8 @@ namespace LibTest
 		test4();
         testEfficiency();
 
-        osl::StringA infilename  = osl::OS::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/base64.test.inputfile.txt";
-        osl::StringA outfilename = osl::OS::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/outputfile.txt";
+        osl::StringA infilename  = osl::Process::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/base64.test.inputfile.txt";
+        osl::StringA outfilename = osl::Process::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/outputfile.txt";
 
         if ( !testBase64( infilename, outfilename ) )
         {
@@ -293,7 +293,7 @@ namespace LibTest
 	void TBase64::test4()
 	{
 		osl::MemoryDataStream dssrc;
-		if ( !dssrc.readRawFile( osl::OS::getBinDir( false ) + "/QOSLib_d.dll" ) )
+		if ( !dssrc.readRawFile( osl::Process::getBinDir( false ) + "/QOSLib_d.dll" ) )
 		{
 			return;
 		}

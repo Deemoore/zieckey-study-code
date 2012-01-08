@@ -8,7 +8,7 @@
 #include "osl/include/QString.h"
 #include "osl/include/QStringUtil.h"
 #include "osl/include/QThread.h"
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QScopedIntegerCounter.h"
 
 #include "osl/include/QLock.h"
@@ -232,7 +232,7 @@ namespace osl
 	//----------------------------------------------
 	void Thread::setThreadAffinity( osl::u32 nMask )
 	{
-		osl::u32 nProcessMask = OS::getProcessAffinity();
+		osl::u32 nProcessMask = Process::getProcessAffinity();
 
 		if( ( nMask & nProcessMask ) == 0 )
 		{
@@ -245,7 +245,7 @@ namespace osl
 
 #elif defined(H_OS_LINUX)
 
-		OS::setProcessAffinity( nMask );
+		Process::setProcessAffinity( nMask );
 
 		// TODO: I cannot make sure whether the way is right. Please correct it if wrong.
 // 		cpu_set_t st;
@@ -340,7 +340,7 @@ namespace osl
 
 		while ( m_nState != S_NULL )
 		{
-			OS::msSleep( msSpan );
+			Process::msSleep( msSpan );
 
 			if ( msWait < msSpan )
 			{

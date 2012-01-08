@@ -6,7 +6,7 @@
 
 #include "osl/include/QObject.h"
 #include "osl/include/function.h"
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QLock.h"
 
 namespace osl

@@ -52,7 +52,7 @@ namespace osl
     LogManager::LogManager()
     {
 #if defined(H_LOG_SYSTEM_USE_LOG4CXX) 
-        std::string strProperties = ( OS::getConfDir() + "/log4cxx.properties" ).c_str();
+        std::string strProperties = ( Process::getConfDir() + "/log4cxx.properties" ).c_str();
         struct stat vStat;
 
         if ( stat( strProperties.c_str(), &vStat ) == 0 )

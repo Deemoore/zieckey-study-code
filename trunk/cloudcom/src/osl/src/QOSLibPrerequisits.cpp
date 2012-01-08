@@ -24,7 +24,7 @@
     #include "osl/include/QTimer.h"
 #endif
 
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 
 #include "../../../config.h"
 
@@ -127,7 +127,8 @@ namespace osl
         Timer::createInstance();
 #endif//#if H_PROVIDE_TIMER
 
-        OS::getBinDir();
+        Process::initialize();
+        Process::getBinDir();
 
         s_bInitialized = true;
 
@@ -142,6 +143,8 @@ namespace osl
         }
 
         s_bInitialized = false;
+
+        Process::uninitialize();
 
 #if H_PROVIDE_TIMER
         Timer::destroyInstance();

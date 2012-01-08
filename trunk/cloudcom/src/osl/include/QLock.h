@@ -142,7 +142,7 @@ namespace osl
                         // if can not wait to enter,just sleep for a while
                         if( i >= nNumSpin )
                         {
-                            OS::msSleep( 0 );
+                            Process::msSleep( 0 );
                         }
                     }
 
@@ -263,7 +263,7 @@ namespace osl
                         // if can not wait to enter,just sleep for a while
                         if( i >= nNumSpin )
                         {
-                            OS::msSleep( 0 );
+                            Process::msSleep( 0 );
                         }
                     }
 

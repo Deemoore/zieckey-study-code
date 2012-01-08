@@ -44,7 +44,7 @@ namespace osl
 		// wait for start.
 		while ( !isRunning() )
 		{
-			osl::OS::msSleep( 5 );
+			osl::Process::msSleep( 5 );
 		}
 
 		return true;
@@ -58,7 +58,7 @@ namespace osl
 		// wait for exit.
 		while ( !isStopped() )
 		{
-			osl::OS::msSleep( 5 );
+			osl::Process::msSleep( 5 );
 			m_eventWait.signal();
 		}
 
