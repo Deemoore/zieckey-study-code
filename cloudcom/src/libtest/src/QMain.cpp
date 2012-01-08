@@ -43,7 +43,7 @@ int main( int argc, char* argv[] )
     pLibTest->processCommand( tmp.str() );
     while ( pLibTest->isRunning() )
     {
-        osl::OS::msSleep( 100 );
+        osl::Process::msSleep( 100 );
     }
 
     return 0;
@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
             std::cin.clear();
             std::cout << "Error, Command string length CAN NOT larger than 255." << std::endl;
             std::cin.clear( std::ios_base::goodbit );
-            osl::OS::msSleep( 1000 );
+            osl::Process::msSleep( 1000 );
             continue;
         }
 
@@ -134,7 +134,7 @@ int main( int argc, char* argv[] )
         }
         else
         {
-            osl::OS::msSleep( 5 );
+            osl::Process::msSleep( 5 );
         }
     }
 

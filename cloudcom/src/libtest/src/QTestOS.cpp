@@ -63,16 +63,16 @@ namespace LibTest
         }
 
 		{
-			u32 nNumProcessor = osl::OS::getNumProcessor();
+			u32 nNumProcessor = osl::Process::getNumProcessor();
 
 			if ( nNumProcessor == 0 )
 			{
-				H_LOG_ERROR( pShell->getErrorOut(), "OS getNumProcessor" );
+				H_LOG_ERROR( pShell->getErrorOut(), "Process getNumProcessor" );
 			}
 			else
 			{
 				osl::StringStreamA strTip;
-				strTip << "OS getNumProcessor:" <<  nNumProcessor;
+				strTip << "Process getNumProcessor:" <<  nNumProcessor;
 				H_LOG_ERROR( pShell->getStdOut(), strTip.str() );
 			}
 		}
@@ -80,22 +80,22 @@ namespace LibTest
 
 		//
 		{
-			String strOSVersion =  osl::OS::getOperationSystemVersion();
+			String strOSVersion =  osl::Process::getOperationSystemVersion();
 			H_LOG_INFO( pShell->getStdOut(), strOSVersion );
 		}
 
 
 		{
-			u32 nTotalMemory = osl::OS::getTotalMemoryMB();
+			u32 nTotalMemory = osl::Process::getTotalMemoryMB();
 
 			if ( nTotalMemory < ( 1 << 9 ) )
 			{
-				H_LOG_ERROR( pShell->getErrorOut(), "OS getTotalMemoryMB" );
+				H_LOG_ERROR( pShell->getErrorOut(), "Process getTotalMemoryMB" );
 			}
 			else
 			{
 				osl::StringStreamA strTip;
-				strTip << "OS getTotalMemoryMB:" <<  nTotalMemory;
+				strTip << "Process getTotalMemoryMB:" <<  nTotalMemory;
 				H_LOG_ERROR( pShell->getStdOut(), strTip.str() );
 			}
 		}
@@ -125,10 +125,10 @@ namespace LibTest
 			{
 				u32 nTotalMemory = 0;
 				u32 nAvailable   = 0;
-				osl::OS::getSystemMemoryMB( &nTotalMemory, &nAvailable );
+				osl::Process::getSystemMemoryMB( &nTotalMemory, &nAvailable );
 				{
 					osl::StringStreamA strTip;
-					strTip << "Eat mem: " << ( nMemEat >> 20 ) << " OS getTotalMemoryMB:" <<  nTotalMemory << "  Available; " << nAvailable;
+					strTip << "Eat mem: " << ( nMemEat >> 20 ) << " Process getTotalMemoryMB:" <<  nTotalMemory << "  Available; " << nAvailable;
 					H_LOG_INFO( pShell->getStdOut(), strTip.str() );
 				}
 			}
@@ -147,10 +147,10 @@ namespace LibTest
 			{
 				u32 nTotalMemory = 0;
 				u32 nAvailable   = 0;
-				osl::OS::getSystemMemoryMB( &nTotalMemory, &nAvailable );
+				osl::Process::getSystemMemoryMB( &nTotalMemory, &nAvailable );
 				{
 					osl::StringStreamA strTip;
-					strTip << "Return mem: " << ( nMemEat >> 20 ) << " OS getTotalMemoryMB:" <<  nTotalMemory << "  Available; " << nAvailable;
+					strTip << "Return mem: " << ( nMemEat >> 20 ) << " Process getTotalMemoryMB:" <<  nTotalMemory << "  Available; " << nAvailable;
 					H_LOG_INFO( pShell->getStdOut(), strTip.str() );
 				}
 			}
@@ -160,28 +160,28 @@ namespace LibTest
 
     void TOS::test_getFullPathDir()
     {
-        osl::StringA strv2path = osl::OS::getFullPathDir( "v2", 10 );
+        osl::StringA strv2path = osl::Process::getFullPathDir( "v2", 10 );
         std::cout << "v2 path=" << strv2path.c_str() << std::endl;
 
-        osl::StringA strconfpath = osl::OS::getConfDir();
+        osl::StringA strconfpath = osl::Process::getConfDir();
         std::cout << "conf path=" << strconfpath.c_str() << std::endl;
 
-        osl::StringA strserverpath = osl::OS::getFullPathDir( "server", 10 );
+        osl::StringA strserverpath = osl::Process::getFullPathDir( "server", 10 );
         std::cout << "server path=" << strserverpath.c_str() << std::endl;
 
-        strconfpath = osl::OS::getConfDir();
+        strconfpath = osl::Process::getConfDir();
         std::cout << "conf path=" << strconfpath.c_str() << std::endl;
 
-        osl::StringA strbinpath = osl::OS::getFullPathDir( "bin", 10 );
+        osl::StringA strbinpath = osl::Process::getFullPathDir( "bin", 10 );
         std::cout << "bin path=" << strbinpath.c_str() << std::endl;
 
-        strconfpath = osl::OS::getConfDir();
+        strconfpath = osl::Process::getConfDir();
         std::cout << "conf path=" << strconfpath.c_str() << std::endl;
 
-        osl::StringA strtrunkpath = osl::OS::getFullPathDir( "trunk", 10 );
+        osl::StringA strtrunkpath = osl::Process::getFullPathDir( "trunk", 10 );
         std::cout << "trunk path=" << strtrunkpath.c_str() << std::endl;
 
-        strconfpath = osl::OS::getConfDir();
+        strconfpath = osl::Process::getConfDir();
         std::cout << "conf path=" << strconfpath.c_str() << std::endl;
     }
 }

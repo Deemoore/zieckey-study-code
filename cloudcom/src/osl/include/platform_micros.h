@@ -2,6 +2,20 @@
 #ifndef OSLIB_PLATFROM_MICROS_H_
 #define OSLIB_PLATFROM_MICROS_H_
 
+
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <float.h>
+
+
+
+
 //! Whether is debug mode
 #ifdef _DEBUG
 #	ifndef H_DEBUG_MODE
@@ -494,6 +508,16 @@ typedef char               int8_t;
 // 	msg[bool(expr) ? 1 : -1]
 // } // namespace osl 
 // 
+
+#ifdef H_OS_WINDOWS
+    #include <direct.h>
+    #include <process.h>
+#elif defined( H_OS_FREEBSD )
+    #include <sys/sysctl.h>
+#elif defined( H_OS_LINUX )
+    #include <unistd.h>
+    #include <errno.h>
+#endif
 
 
 #ifdef H_OS_WINDOWS

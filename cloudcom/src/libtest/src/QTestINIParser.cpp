@@ -49,7 +49,7 @@ namespace
 
     void TINIParser::test_1()
     {
-        osl::StringA strTestDataDirPath = osl::OS::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
+        osl::StringA strTestDataDirPath = osl::Process::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
         osl::StringAList files;
         osl::FileUtil::getFiles( strTestDataDirPath, files, false );
         osl::StringAList::iterator it( files.begin() );
@@ -104,7 +104,7 @@ namespace
 
     void TINIParser::test_2()
     {
-        osl::StringA strTestDataDirPath = osl::OS::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
+        osl::StringA strTestDataDirPath = osl::Process::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
         osl::StringAList files;
         osl::FileUtil::getFiles( strTestDataDirPath, files, false );
         osl::StringAList::iterator it( files.begin() );

@@ -414,9 +414,9 @@ namespace
                     }
 
 #ifdef H_OS_WINDOWS
-                    osl::StringA strConfPath = osl::OS::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser/auth.ini";
+                    osl::StringA strConfPath = osl::Process::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser/auth.ini";
 #else
-                    osl::StringA strConfPath = osl::OS::getBinDir( true ) + "../etc/auth.ini";
+                    osl::StringA strConfPath = osl::Process::getBinDir( true ) + "../etc/auth.ini";
 #endif
                     if ( !m_INIParser.parse( strConfPath ) )
                     {
@@ -849,7 +849,7 @@ namespace
 
 	void TCACenter::test_dataloader()
 	{
-// 		osl::StringA strDataPath = osl::OS::getBinDir( true ) + "../data/libtestdata/memcached/v7.db";
+// 		osl::StringA strDataPath = osl::Process::getBinDir( true ) + "../data/libtestdata/memcached/v7.db";
 // 		const char* usr = "weizili";
 // 		const char* pwd = "english";
 // 		const char* op  = "load"; (void)op;
@@ -865,7 +865,7 @@ namespace
 	void TCACenter::test_3_fwrite()
 	{
 		const char* s1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		FILE* fp = ::fopen( ( osl::OS::getBinDir( true ) + "test.txt" ).c_str(), "w+" );
+		FILE* fp = ::fopen( ( osl::Process::getBinDir( true ) + "test.txt" ).c_str(), "w+" );
 		::fwrite( s1, 1, strlen( s1 ), fp );
 		::fflush( fp );
 

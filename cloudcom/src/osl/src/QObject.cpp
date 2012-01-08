@@ -7,7 +7,7 @@
 #include "osl/include/QStringUtil.h"
 #include "osl/include/QFileUtil.h"
 
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QObject.h"
 
 namespace osl

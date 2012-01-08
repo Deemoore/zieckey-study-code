@@ -277,7 +277,7 @@ namespace osl
 		if (m_tmCPUUsageTime>1.0f)
 		{
 #ifdef H_OS_WINDOWS
-			OS::updataCpuUsage();
+			Process::updataCpuUsage();
 #endif
 			m_tmCPUUsageTime = 0;
 		}

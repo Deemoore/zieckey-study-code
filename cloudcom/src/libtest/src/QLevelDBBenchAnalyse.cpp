@@ -103,8 +103,8 @@ namespace
             }
         }
         
-        filterlogbuf.saveToFile( osl::OS::getBinDir(true) + "../log/filter.log" );
-        diffopsbuf.saveToFile( osl::OS::getBinDir(true) + "../log/diffops.txt" );
+        filterlogbuf.saveToFile( osl::Process::getBinDir(true) + "../log/filter.log" );
+        diffopsbuf.saveToFile( osl::Process::getBinDir(true) + "../log/diffops.txt" );
     }
 
     bool TLevelDBBenchAnalyse::parse( const osl::StringA& onerecord, Op& op )

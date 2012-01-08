@@ -76,7 +76,7 @@ namespace LibTest
         }
 
 
-        osl::OS::msSleep( 10 );
+        osl::Process::msSleep( 10 );
 
         for ( int i = 0; i < 4; ++i )
         {

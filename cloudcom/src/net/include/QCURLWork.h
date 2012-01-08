@@ -7,7 +7,7 @@
 #if H_PROVIDE_CURL
 
 
-#include "osl/include/QMyOS.h"
+#include "osl/include/process_ext.h"
 #include "osl/include/QLock.h"
 
 
