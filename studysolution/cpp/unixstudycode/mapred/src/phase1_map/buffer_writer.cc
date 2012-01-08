@@ -7,18 +7,21 @@ DEFINE_int32(dump_buffer_size, 16*1024*1024, "The max buffer size of the output 
 
 BufferWriter::BufferWriter(FILE* fp) 
     //: FileWriter(fp) 
-    : fp_(fp) 
-    , output_buf_(FLAGS_dump_buffer_size)
+    : fp_(fp),
+    output_buf_(new char[FLAGS_dump_buffer_size]),
+    write_pos_(0)
 {
+
 }
 
 bool BufferWriter::Write(const void* data, size_t len)
 {
-    if (output_buf_.getSize() + len >= (size_t)FLAGS_dump_buffer_size)
+    if (write_pos_ + len > (size_t)FLAGS_dump_buffer_size)
     {
         Flush();
     }
-    output_buf_.write(data, len);
+    memcpy(output_buf_ + write_pos_, data, len);
+    write_pos_ += len;
 
     return true;
 }
@@ -30,14 +33,14 @@ bool BufferWriter::Flush()
         static int64_t newid = 0;
         std::string outfile_tmp = GetTempOutputFilePath(newid++);
         std::fstream ofp(outfile_tmp.c_str(), std::ios::out|std::ios::binary|std::ios::app);
-        ofp.write((char*)output_buf_.getCache(), output_buf_.getSize());
+        ofp.write((char*)output_buf_, write_pos_);
         ofp.flush();
         ofp.close();
     }
 #endif
 
-    fwrite(output_buf_.getCache(), 1, output_buf_.getSize(), fp_);
-    output_buf_.reset();
+    fwrite(output_buf_, 1, write_pos_, fp_);
+    write_pos_ = 0;
     return true;
 }//}}}
 
@@ -81,8 +84,8 @@ namespace
 std::string BufferWriter::GetTempOutputFilePath(int64_t file_id)
 {
     char buf[512] = {};
-    snprintf(buf, sizeof(buf), "Inc_%ld_%s_%u.tmp", 
-                file_id, GetUTimeString().c_str(), output_buf_.getSize() );	
+    snprintf(buf, sizeof(buf), "Inc_%ld_%s_%lu.tmp", 
+                file_id, GetUTimeString().c_str(), write_pos_);	
 
     return buf;
 }
