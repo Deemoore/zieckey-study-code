@@ -7,14 +7,13 @@ DEFINE_int32(dump_buffer_size, 16*1024*1024, "The max buffer size of the output 
 
 BufferWriter::BufferWriter(FILE* fp) 
     : FileWriter(fp) 
-    , dump_buffer_max_(FLAGS_dump_buffer_size)
+    , output_buf_(FLAGS_dump_buffer_size)
 {
-    output_buf_.reserve(FLAGS_dump_buffer_size);
 }
 
 bool BufferWriter::Write(const void* data, size_t len)
 {
-    if (output_buf_.getSize() + len >= dump_buffer_max_)
+    if (output_buf_.getSize() + len >= (size_t)FLAGS_dump_buffer_size)
     {
         Flush();
     }

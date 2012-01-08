@@ -26,8 +26,6 @@ public:
 
 
 protected:
-    size_t dump_buffer_max_;
-
     osl::MemoryDataStream output_buf_;
 
 private:
