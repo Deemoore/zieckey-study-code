@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1.12-streaming.jar -mapper "php map.php" -reducer "php reduce.php" -input /hadoop_game/data/  -output /hadoop_game/output/weizili  -file map.php -file reduce.php
 
@@ -12,24 +12,12 @@ _weizili_dir=/hadoop_game/weizili
 _phase1_output=${_weizili_dir}/phase1_output_${_time}
 _phase2_output=${_weizili_dir}/phase2_output_${_time}
 
-~/software/hadoop/bin/hadoop fs -test ${_weizili_dir}
-if [ $0 -ne 0 ];then
-    ~/software/hadoop/bin/hadoop fs -mkdir ${_weizili_dir}
-else    
-    echo "${_weizili_dir} exist in hadoop!"
-fi    
-
 _phase1_reduce_tasks=2
-
-#_reader=LineReader
-_reader=BufferReader
-
-_writer=BufferWriter
-#_writer=ThreadWriter
+_enable_thread_worker=false
 
 ~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
-        -mapper "./phase1_map  --file_reader_type=${_reader} --file_writer_type=${_writer}" \
-        -reducer "./phase1_reduce  --file_reader_type=${_reader} --file_writer_type=${_writer}" \
+        -mapper "./phase1_map --enable_thread_worker=${_enable_thread_worker}" \
+        -reducer "./phase1_reduce --enable_thread_worker=${_enable_thread_worker}" \
         -numReduceTasks ${_phase1_reduce_tasks} \
         -input /hadoop_game/data/  -output ${_phase1_output} -file phase1_map -file phase1_reduce
 

@@ -20,7 +20,6 @@ if [ $0 -ne 0 ];then
 fi    
 
 _phase1_reduce_tasks=70
-_phase2_reduce_tasks=2
 
 ~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
         -mapper "./phase1_map" \
@@ -34,10 +33,9 @@ _phase2_reduce_tasks=2
 #-jobconf mapred.output.compress=true\
 
 _result="./result.sort.txt"
-_result_temp="./result.temp.txt"
+_result_temp="./temp.txt"
 rm -rf ${_result} ${_result_temp}
 ~/software/hadoop/bin/hadoop fs -getmerge ${_phase1_output} ${_result_temp}
 ./phase2_reduce --fin_path=${_result_temp} --fout_path=${_result}
-rm -rf ${_result_temp}
 
 

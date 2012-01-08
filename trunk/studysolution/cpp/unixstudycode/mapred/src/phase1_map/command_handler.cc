@@ -19,7 +19,8 @@
 #include "buffer_writer.h"
 #include "thread_writer.h"
 
-DEFINE_string(file_writer_type, "BufferWriter", "The actually output writer type, options : BufferWriter, ThreadWriter");
+//DEFINE_string(file_writer_type, "BufferWriter", "The actually output writer type, options : BufferWriter, ThreadWriter");
+
 DECLARE_bool(enable_thread_worker);
 DECLARE_int32(input_buffer_size);
 
@@ -257,6 +258,10 @@ bool CommandHandler::Init(FILE* fp)
         }
     }
 
+    writer_ = new BufferWriter(fp);
+    return writer_->Init();
+
+    /*
     if (FLAGS_file_writer_type == "BufferWriter")
     {
         writer_ = new BufferWriter(fp);
@@ -272,6 +277,7 @@ bool CommandHandler::Init(FILE* fp)
         fprintf(stderr, "Not supported writer! %s\n", FLAGS_file_writer_type.c_str());
         return false;
     }
+    */
 
 }
 

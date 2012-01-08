@@ -5,9 +5,10 @@
 
 #include "constant.h"
 
-#include "file_reader.h"
-
 #include "qoslib/include/QOSLibAllExp.h" 
+
+//#include "file_reader.h"
+#include "buffer_reader.h"
 
 class FileHandler
 {
@@ -26,7 +27,8 @@ public:
     osl::MemoryDataStreamPtr Read();
 
 private:
-    FileReader* reader_;
+    BufferReader* reader_;
+    //FileReader* reader_;
 };
 
 #endif // _FILE_HANDLER_H_

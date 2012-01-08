@@ -63,7 +63,7 @@ bool BufferReader::GetLine(osl::Slice& line)
 #ifdef _DEBUG
     qLogTraces(kLogName) << "step 4 : check whether it is need to expand the buffer.";
 #endif
-    if (data_buf_->tellg() < FLAGS_input_buffer_size / 2)
+    if (data_buf_->tellg() < (size_t)(FLAGS_input_buffer_size >> 1))
     {
         FLAGS_input_buffer_size *= 2;
         data_buf_->reserve(FLAGS_input_buffer_size);

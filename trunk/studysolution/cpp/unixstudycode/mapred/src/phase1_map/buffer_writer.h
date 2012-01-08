@@ -8,7 +8,7 @@
 
 #include "file_writer.h"
 
-class BufferWriter : public FileWriter
+class BufferWriter //: public FileWriter
 {
 public:
     BufferWriter(FILE* fp);
@@ -18,14 +18,15 @@ public:
         fp_ = NULL; 
     }
 
-    virtual bool Init() { return true; }
+    /*virtual*/ bool Init() { return true; }
 
-    virtual bool Write(const void* data, size_t len);
+    /*virtual*/ bool Write(const void* data, size_t len);
 
-    virtual bool Flush();
+    /*virtual*/ bool Flush();
 
 
 protected:
+    FILE* fp_;
     osl::MemoryDataStream output_buf_;
 
 private:
