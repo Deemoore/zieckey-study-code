@@ -112,21 +112,14 @@ bool BufferReader::GetLine(osl::Slice& line)
 
 osl::MemoryDataStreamPtr BufferReader::Read()
 {
-    if (data_buf_  && data_buf_->getReadableSize() > 0)
-    {
-        osl::MemoryDataStreamPtr p = data_buf_;
-        data_buf_ = NULL;
-        return p;
-    }
-
     if (0 != feof(fp_))
     {
         DEBUG("step 1 result : no more data to read");
         return NULL;
     }
 
-    osl::MemoryDataStreamPtr buf = new osl::MemoryDataStream(FLAGS_input_buffer_size);
-
+    osl::MemoryDataStreamPtr buf = GetFreeDataStream();
+    buf->reset();
     int readn = fread((char*)buf->getCache(), 1, FLAGS_input_buffer_size, fp_);
     if (readn <= 0)
     {
