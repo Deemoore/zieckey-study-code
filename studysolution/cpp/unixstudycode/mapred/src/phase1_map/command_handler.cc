@@ -24,6 +24,8 @@
 DECLARE_bool(enable_thread_worker);
 DECLARE_int32(input_buffer_size);
 
+#define USING_RINGBUFFER
+
 class CommandHandler::ThreadHandler : public osl::Thread
 {
     typedef std::vector < osl::MemoryDataStreamPtr > MemoryDataStreamPtrList;
@@ -60,7 +62,11 @@ public:
 
     void stop()
     {
+#ifdef USING_RINGBUFFER 
+        while (ring_buffer_.size() > 0)
+#else
         while (data_buf_list_.size() > 0 || data_buf_cache_list_.size() > 0)
+#endif
         {
             if (processing_ == false)
             {
