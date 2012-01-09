@@ -10,6 +10,7 @@
 #include "constant.h"
 #include "common.h"
 #include "qlog.h"
+#include "mid.h"
 
 class CommandHandlerImpl : public CommandHandler
 {
@@ -34,8 +35,15 @@ private:
 #endif
 
     std::string current_mid_;
-
+private:
+#ifdef COMPACT_MEMORY
+    mid_stringset_map mid_verset_map_;//mid/version_set map
+    std::string current_mid_slice_;
+    zl::MID mid_;
+    size_t mid_len_;
+#else
     string_stringset_map mid_verset_map_;//mid/version_set map
+#endif
 };
 namespace qh { namespace str { //{{{ 
     struct less { 
@@ -85,8 +93,13 @@ inline void CommandHandlerImpl::LastSerialize_aggregate_opt()
 
     //step 2 : aggregate now in memory
     {
+#ifdef COMPACT_MEMORY
+        mid_stringset_map::iterator it(mid_verset_map_.begin());
+        mid_stringset_map::iterator ite(mid_verset_map_.end());
+#else
         string_stringset_map::iterator it(mid_verset_map_.begin());
         string_stringset_map::iterator ite(mid_verset_map_.end());
+#endif
         charptru32map::iterator vc_it = ver_count_map.end();
         for (; it != ite; ++it)
         {
