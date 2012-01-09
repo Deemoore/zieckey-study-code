@@ -36,6 +36,27 @@ namespace zl
         }*/
     };
 
+    struct Version
+    {
+        union
+        {
+            //7.6.0.2011
+            uint64_t i_;
+            struct 
+            {
+                uint16_t d12_; //2011
+                uint8_t  d3_;  //0
+                uint8_t  d4_;  //6
+                uint8_t  d5_;  //7
+            };
+        };
+
+        bool has_d12_;
+        bool has_d3_;
+        bool has_d4_;
+        bool has_d5_;
+    };
+
     struct hash_mid
         : public std::unary_function<MID, std::size_t>
         {
