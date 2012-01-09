@@ -101,6 +101,7 @@ namespace osl
             return false;
         }
 
+        m_bSelfCreate = true;
         m_nSize = st.st_size;
         m_nSizeBuffer = m_nSize;
 
