@@ -77,9 +77,45 @@ private:
 #endif
 
 private:
+#ifdef COMPACT_MEMORY
+    mid_stringset_map mid_verset_map_;//mid/version_set map
+#else
     string_stringset_map mid_verset_map_;//mid/version_set map
+#endif
 };
 
+#ifdef COMPACT_MEMORY
+inline void CommandHandlerImpl::LastSerialize()
+{
+    char base64s[24] = {};
+    mid_stringset_map::iterator it(mid_verset_map_.begin());
+    mid_stringset_map::iterator ite(mid_verset_map_.end());
+    for (; it != ite; ++it)
+    {
+        zl::Convert(it->first, base64s);
+        AddOutput(base64s, sizeof(base64s) - 2);//omit 2 byte "=="
+
+#ifdef _TRACE
+        TRACE("\"%s\"", std::string(base64s, sizeof(base64s)).c_str());
+#endif
+
+        stringset& verset = it->second;
+        stringset::iterator itset(verset.begin());
+        stringset::iterator itendset(verset.end());
+        for (; itset != itendset; ++itset)
+        {
+            if ((*itset).size() > 0)
+            {
+                AddOutput("\t", 1);
+                AddOutput((*itset).data(), (*itset).size());
+            }
+        }
+
+        AddOutput("\n", 1);
+    }
+    //mid_verset_map_.clear();
+}
+#else
 inline void CommandHandlerImpl::LastSerialize()
 {
     string_stringset_map::iterator it(mid_verset_map_.begin());
@@ -104,6 +140,7 @@ inline void CommandHandlerImpl::LastSerialize()
     }
     //mid_verset_map_.clear();
 }
+#endif
 
 #endif //_COMMAND_HANDLER_H_
 

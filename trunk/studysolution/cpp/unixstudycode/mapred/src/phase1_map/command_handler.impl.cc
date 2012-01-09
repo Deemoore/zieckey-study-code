@@ -8,8 +8,32 @@ CommandHandlerImpl::CommandHandlerImpl()
 #endif
 }
 
+#ifdef COMPACT_MEMORY
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {
+    osl::Slice mid;
+    osl::Slice ver;
+    if (!GetMIDVer(command, mid, ver))
+    {
+        return false;
+    }
+
+    TRACE("mid='%s' ver='%s'", mid.toString().c_str(), ver.toString().c_str());
+    stringset& verset = mid_verset_map_[zl::Convert(mid.data(), mid.size())];
+#ifdef USING_HASH_MAP
+    if (verset.size() == 0)
+    {
+        //first time
+        verset.rehash(32);
+        TRACE("version_set rehash");
+    }
+#endif
+    verset.insert(std::string(ver.data(), ver.size()));
+    return true;
+}
+#else//
+bool CommandHandlerImpl::Work(osl::Slice& command)
+{//{{{
     osl::Slice mid;
     osl::Slice ver;
     if (!GetMIDVer(command, mid, ver))
@@ -29,7 +53,10 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
 #endif
     verset.insert(std::string(ver.data(), ver.size()));
     return true;
-}
+}//}}}
+#endif
+
+
 
 #ifdef USING_TOKENER
 bool CommandHandlerImpl::GetMIDVer(osl::Slice& command, osl::Slice& mid, osl::Slice& ver)
