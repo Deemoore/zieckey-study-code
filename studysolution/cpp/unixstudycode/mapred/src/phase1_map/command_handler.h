@@ -13,6 +13,7 @@
 #include "file_writer.h"
 #include "buffer_writer.h"
 #include "common.h"
+#include "mid.h"
 
 
 class CommandHandler
@@ -27,6 +28,16 @@ class CommandHandler
     typedef std::map<std::string, stringset> string_stringset_map;
     typedef std::map<std::string, osl::u32> stringu32map;
 #endif
+
+
+#ifdef USING_HASH_MAP
+    typedef std::tr1::unordered_map<zl::MID, stringset, zl::hash_mid, zl::equal_to> mid_stringset_map;
+    typedef std::tr1::unordered_map<zl::MID, osl::u32> midu32map;
+#else
+    typedef std::map<zl::MID, stringset, zl::less> mid_stringset_map;
+    typedef std::map<zl::MID, osl::u32> midu32map;
+#endif
+
   public:
     CommandHandler();
     virtual ~CommandHandler();
