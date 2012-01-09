@@ -61,7 +61,7 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
     size_t current_pos = 22;
     memcpy(&current_mid_[0], sz, current_pos);
     mid_len_ = 18;
-    assert(osl::Base64::decode(current_mid_.data(), 24, mid_.d_, mid_len_));
+    osl::Base64::decode(current_mid_.data(), 24, mid_.d_, mid_len_);
     assert(mid_len_ == 16);
     TRACE("mid=%s l=%lu h=%lu", current_mid_.c_str(), mid_.l_, mid_.h_);
     stringset& verset = mid_verset_map_[mid_];
