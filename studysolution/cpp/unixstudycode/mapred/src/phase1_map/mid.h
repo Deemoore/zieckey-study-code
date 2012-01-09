@@ -9,7 +9,6 @@
 #include "qoslib/include/QBase64.h"
 
 
-
 namespace zl
 {
     struct MID
@@ -79,20 +78,31 @@ namespace zl
 
     inline void Convert(const char* s, size_t len, MID& m)
     {
-        if (len != 32)
+        if (len < 32)
         {
             memset(m.d_, 0, sizeof(m.d_));
+        }
+        if (len > 32)
+        {
+            len = 32;
         }
         osl::MD5::convertHex32ToBinary16(s, len, m.d_);
     }
 
     inline void Convert(const std::string& s, MID& m)
     {
-        if (s.length() != 32)
+        if (s.length() < 32)
         {
             memset(m.d_, 0, sizeof(m.d_));
         }
-        osl::MD5::convertHex32ToBinary16(s.c_str(), s.size(), m.d_);
+        if (s.length() > 32)
+        {
+            osl::MD5::convertHex32ToBinary16(s.c_str(), 32, m.d_);
+        }
+        else
+        {
+            osl::MD5::convertHex32ToBinary16(s.c_str(), s.size(), m.d_);
+        }
     }
 
     inline MID Convert(const char* s, size_t len)

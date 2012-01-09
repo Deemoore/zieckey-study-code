@@ -13,7 +13,7 @@ _phase1_output=${_weizili_dir}/phase1_output_${_time}
 _phase2_output=${_weizili_dir}/phase2_output_${_time}
 
 _phase1_reduce_tasks=2
-_enable_thread_worker=true
+_enable_thread_worker=false
 
 ~/software/hadoop/bin/hadoop jar ~/software/hadoop/contrib/streaming/hadoop-0.20.1_v2-streaming.jar \
         -mapper "./phase1_map --enable_thread_worker=${_enable_thread_worker}" \
