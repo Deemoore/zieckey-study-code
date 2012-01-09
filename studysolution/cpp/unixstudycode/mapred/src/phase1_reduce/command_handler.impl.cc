@@ -6,15 +6,32 @@ CommandHandlerImpl::CommandHandlerImpl()
 #ifdef USING_HASH_MAP
     mid_verset_map_.rehash(2473640);
 #endif
+
+#ifdef COMPACT_MEMORY
+    current_mid_.resize(24);
+    current_mid_[22] = '=';
+    current_mid_[23] = '=';
+    mid_len_ = sizeof(mid_.d_);
+#endif
 }
 
 #ifdef USING_TOKENER
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {//{{{
     token_.reset(command.data(), command.size());
+    #ifdef COMPACT_MEMORY
+    current_mid_slice_ = token_.nextSlice();
+    memcpy(&current_mid_[0], current_mid_slice_.data(), current_mid_slice_.size());
+    mid_len_ = 18;
+    osl::Base64::decode(current_mid_.data(), current_mid_.size(), mid_.d_, mid_len_);
+    assert(mid_len_ == 16);
+    TRACE("mid=%s", current_mid_.c_str());
+    stringset& verset = mid_verset_map_[mid_];
+    #else
     current_mid_ = token_.nextString();
     TRACE("mid=%s", current_mid_.c_str());
     stringset& verset = mid_verset_map_[current_mid_];
+    #endif
 #ifdef USING_HASH_MAP
     if (verset.size() == 0)
     {
@@ -40,10 +57,20 @@ bool CommandHandlerImpl::Work(osl::Slice& command)
 bool CommandHandlerImpl::Work(osl::Slice& command)
 {//{{{
     const char* sz = command.data();
+    #ifdef COMPACT_MEMORY
+    size_t current_pos = 22;
+    memcpy(&current_mid_[0], sz, current_pos);
+    mid_len_ = 18;
+    assert(osl::Base64::decode(current_mid_.data(), 24, mid_.d_, mid_len_));
+    assert(mid_len_ == 16);
+    TRACE("mid=%s l=%lu h=%lu", current_mid_.c_str(), mid_.l_, mid_.h_);
+    stringset& verset = mid_verset_map_[mid_];
+    #else
     size_t current_pos = GetMIDLen(sz);
     current_mid_ = std::string(sz, current_pos);
     TRACE("mid=%s", current_mid_.c_str());
     stringset& verset = mid_verset_map_[current_mid_];
+    #endif
 #ifdef USING_HASH_MAP
     if (verset.size() == 0)
     {
