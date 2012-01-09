@@ -11,7 +11,7 @@ SUBDIRS=src/phase1_map src/phase1_reduce src/phase2_map src/phase2_reduce
 TOPDIR=$(shell echo `pwd`)
 _datenow=$(shell echo `date +%Y%m%d`)
 _timenow=$(shell echo `date +%H%M%S`)
-_ver=1.8
+_ver=1.5.1_map_thread
 PACKAGE_DIR=weizili_mapred_v$(_ver)_$(_datenow)$(_timenow)
 PACKAGE=$(PACKAGE_DIR).tar.gz
 
