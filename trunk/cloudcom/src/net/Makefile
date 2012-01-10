@@ -6,19 +6,23 @@ AR=ar
 ARFLAGS=cru
 CURRENT_DIR=$(shell echo `pwd`)
 SOURCE_DIR=$(CURRENT_DIR)/src
-PREFIX=${CURRENT_DIR}/../../debug
+PREFIX=${CURRENT_DIR}/../../install
 CFLAGS=-g -O3 -c -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../q3rdparty/unixinclude -I .. -I/usr/local/include 
 CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-L/usr/local/lib $(PREFIX)/lib/libqoslib.a $(PREFIX)/lib/libidea.a -lpthread 
+LDFLAGS=-L/usr/local/lib -L$(PREFIX)/lib -losl -lpthread -lcurl
 LIBNAME=$(shell basename `pwd`)
 
 SRCS := $(wildcard src/*.cpp)
 OBJS := $(patsubst src/%.cpp, src/%.o, $(SRCS))
+DEPS := $(patsubst %.o, %.d, $(OBJS))
 
 TARGET_SO=lib$(LIBNAME).so
 TARGET_A=lib$(LIBNAME).a
 
 all : $(TARGET_SO) $(TARGET_A)
+	$(MAKE) install
+
+install :  $(TARGET_SO) $(TARGET_A)
 	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
 
 $(TARGET_A) : $(OBJS)
@@ -35,6 +39,8 @@ src/%.o : src/%.cpp
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 
+-include $(DEPS)
+
 
 t:
 	@echo "LIBNAME:" $(LIBNAME)
@@ -42,9 +48,6 @@ t:
 	@echo "OBJS:" $(OBJS)
 	@echo "CFLAGS:" $(CFLAGS)
 	@echo "CPPFLAGS:" $(CPPFLAGS)
-
-install: $(TARGET_A) $(TARGET_SO) 
-	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
 
 clean:
 	rm -rf src/*.o $(OBJS) $(DEPS) $(TARGET_SO) $(TARGET_A)

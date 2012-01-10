@@ -19,7 +19,7 @@
 #include "net/include/QCURLService.h"
 
 
-#include "apputil/include/QApputilLibAllExp.h"
+#include "apputil/include/QAppUtilLibAllExp.h"
 
 #include <iostream>
 

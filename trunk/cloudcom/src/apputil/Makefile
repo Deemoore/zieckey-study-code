@@ -6,10 +6,10 @@ AR=ar
 ARFLAGS=cru
 CURRENT_DIR=$(shell echo `pwd`)
 SOURCE_DIR=$(CURRENT_DIR)/src
-PREFIX=${CURRENT_DIR}/../../debug
+PREFIX=${CURRENT_DIR}/../../install
 CFLAGS=-g -O3 -c -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../q3rdparty/unixinclude -I .. -I/usr/local/include 
 CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-L/usr/local/lib $(PREFIX)/lib/libqnetworklib.a $(PREFIX)/lib/libqoslib.a $(PREFIX)/lib/libidea.a -lpthread 
+LDFLAGS=-L/usr/local/lib -L $(PREFIX)/lib -lnet -losl -lpthread 
 LIBNAME=$(shell basename `pwd`)
 
 SRCS := $(wildcard src/*.cpp)
@@ -19,7 +19,7 @@ TARGET_SO=lib$(LIBNAME).so
 TARGET_A=lib$(LIBNAME).a
 
 all : $(TARGET_SO) $(TARGET_A)
-	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
+	$(MAKE) install
 
 $(TARGET_A) : $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS) 
