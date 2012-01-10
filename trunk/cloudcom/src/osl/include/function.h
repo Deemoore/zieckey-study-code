@@ -2,7 +2,7 @@
 #ifndef _QOSLIB_FUNCTION_
 #define _QOSLIB_FUNCTION_
 
-#include "osl/include/QObject.h"
+#include "osl/include/object.h"
 
 namespace osl
 {

@@ -1,7 +1,7 @@
 #include "net/include/QNetPrerequisits.h"
 
 
-#include "osl/include/QObject.h"
+#include "osl/include/object.h"
 #include "osl/include/QString.h"
 #include "osl/include/QThread.h"
 #include "osl/include/process_ext.h"
