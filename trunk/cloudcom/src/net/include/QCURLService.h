@@ -4,7 +4,7 @@
 #if H_PROVIDE_CURL
 
 #include "osl/include/assert_ext.h"
-#include "osl/include/QThread.h"
+#include "osl/include/thread.h"
 
 namespace net
 {

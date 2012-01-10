@@ -1,10 +1,10 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
-#include "osl/include/QFileUtil.h"
+#include "osl/include/file_util.h"
 #include "osl/include/process_ext.h"
-#include "osl/include/QMD5.h"
-#include "osl/include/QRSA.h"
-#include "osl/include/QJSONObject.h"
+#include "osl/include/md5.h"
+#include "osl/include/rsa_wrapper.h"
+#include "osl/include/json.h"
 
 #include "libtest/include/QLibTest.h"
 

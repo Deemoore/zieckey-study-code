@@ -1,7 +1,7 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
 #include "libtest/include/QTestObject.h"
-#include "osl/include/QTimer.h"
+#include "osl/include/timer.h"
 
 namespace LibTest
 {

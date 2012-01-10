@@ -2,9 +2,9 @@
 #pragma once
 
 #include "osl/include/mem_alloc.h"
-#include "osl/include/QString.h"
+#include "osl/include/string_ext.h"
 #include "osl/include/process_ext.h"
-#include "osl/include/QLock.h"
+#include "osl/include/lock.h"
 
 #include "mem_alloc_pool.inl.h"
 #include <fstream>

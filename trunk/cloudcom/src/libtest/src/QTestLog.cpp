@@ -1,8 +1,8 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
 #include "libtest/include/QTestObject.h"
-#include "osl/include/QLog.h"
-#include "osl/include/QLogManager.h"
+#include "osl/include/log.h"
+#include "osl/include/log_manager.h"
 
 namespace
 {

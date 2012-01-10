@@ -9,7 +9,7 @@
 #define OSLIB_ASSERT_EXT_H_
 
 #include "osl/include/platform_micros.h"
-#include "osl/include/QStringUtil.h"
+#include "osl/include/string_util.h"
 
 #include <string>
 #include <iosfwd>

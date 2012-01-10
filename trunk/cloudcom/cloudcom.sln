@@ -8,9 +8,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "slrsa", "src\slrsa\libslrsa.vcproj", "{95A2D8A7-497C-4B00-B84A-0498B3EEE093}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{06E81E78-0EAD-4F56-9700-DD505EC6EEF3}"
-	ProjectSection(SolutionItems) = preProject
-		src\wraputil\src\wraputil.vcproj = src\wraputil\src\wraputil.vcproj
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osl", "src\osl\src\osl.vcproj", "{280D398D-DBE0-4484-B9AF-3164D50AF20B}"
 EndProject

@@ -1,8 +1,8 @@
 
 
-#include "qlibtest/include/QLibTestPrerequisits.h"
-#include "qlibtest/include/QLibTest.h"
-#include "qoslib/include/QTokener.h"
+#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/QLibTest.h"
+#include "osl/include/tokener.h"
 namespace
 {
 	void test_0()

@@ -1,7 +1,7 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
-#include "osl/include/QFileUtil.h"
-#include "osl/include/QMD5.h"
+#include "osl/include/file_util.h"
+#include "osl/include/md5.h"
 
 #include "net/include/QHttpPostWork.h"
 
@@ -10,7 +10,7 @@
 
 #include "libtest/include/QTestObject.h"
 
-#include "osl/include/QEvent.h"
+#include "osl/include/event.h"
 #include "net/include/QCURLService.h"
 #include "net/include/QCURLWork.h"
 

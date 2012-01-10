@@ -1,6 +1,6 @@
 #pragma once
 
-#include "osl/include/QAppShell.h"
+#include "osl/include/shell.h"
 
 namespace LibTest
 {

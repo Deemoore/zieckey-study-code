@@ -1,10 +1,10 @@
-#include "osl/include/QOSLibPrerequisits.h"
+#include "osl/include/osl_inner_pre.h"
 
 
 #include "osl/include/mem_alloc.h"
-#include "osl/include/QString.h"
-#include "osl/include/QStringUtil.h"
-#include "osl/include/QFileUtil.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/string_util.h"
+#include "osl/include/file_util.h"
 #include "osl/include/process_ext.h"
 
 #ifdef H_OS_WINDOWS

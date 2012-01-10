@@ -2,10 +2,10 @@
 
 #include "libtest/include/QTestObject.h"
 
-#include "osl/include/QIDEA.h"
-#include "osl/include/QFileUtil.h"
-#include "osl/include/QINIParser.h"
-#include "osl/include/QCRC32.h"
+#include "osl/include/idea_wrapper.h"
+#include "osl/include/file_util.h"
+#include "osl/include/ini_parser.h"
+#include "osl/include/crc32.h"
 
 #include "apputil/include/QCACenter.h"
 

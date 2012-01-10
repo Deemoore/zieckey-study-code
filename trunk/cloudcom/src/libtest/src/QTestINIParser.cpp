@@ -1,8 +1,8 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 
 #include "libtest/include/QTestObject.h"
-#include "osl/include/QFileUtil.h"
-#include "osl/include/QINIParser.h"
+#include "osl/include/file_util.h"
+#include "osl/include/ini_parser.h"
 
 namespace
 {

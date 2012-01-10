@@ -205,10 +205,10 @@
 				RelativePath=".\memcached.cc"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="curl"
-			>
+			<File
+				RelativePath=".\wraputil_inner_pre.cc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -8,7 +8,7 @@
 
 
 #include "osl/include/process_ext.h"
-#include "osl/include/QLock.h"
+#include "osl/include/lock.h"
 
 
 #include <sys/types.h>

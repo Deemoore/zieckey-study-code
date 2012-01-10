@@ -9,8 +9,8 @@
 
 
 #include "osl/include/auto_delete.h"
-#include "osl/include/QString.h"
-#include "osl/include/QStringUtil.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/string_util.h"
 
 #ifdef H_PROVIDE_LIBMEMCACHED 
 

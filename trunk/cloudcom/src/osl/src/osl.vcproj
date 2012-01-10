@@ -50,7 +50,7 @@
 				TreatWChar_tAsBuiltInType="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;osl/include/QOSLibPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;osl/include/osl_inner_pre.h&quot;"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -130,7 +130,7 @@
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;osl/include/QOSLibPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;osl/include/osl_inner_pre.h&quot;"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -220,19 +220,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\osl_exp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\osl_inner_pre.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\platform_micros.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QOSLibAllExp.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QOSLibPrerequisits.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QScopedIntegerCounter.h"
+				RelativePath="..\include\scoped_int_counter.h"
 				>
 			</File>
 			<File
@@ -250,11 +250,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\QOSLibPrerequisits.cpp"
+				RelativePath=".\osl_inner_pre.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QPCH.cpp"
+				RelativePath=".\pch.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -263,7 +263,7 @@
 						Name="VCCLCompilerTool"
 						GeneratePreprocessedFile="0"
 						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;osl/include/QOSLibPrerequisits.h&quot;"
+						PrecompiledHeaderThrough="&quot;osl/include/osl_inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -272,6 +272,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						PrecompiledHeaderThrough="&quot;osl/include/osl_inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -296,11 +297,23 @@
 			Name="multithread"
 			>
 			<File
+				RelativePath=".\event.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\event.h"
+				>
+			</File>
+			<File
 				RelativePath=".\hw.asm"
 				>
 			</File>
 			<File
 				RelativePath=".\kmutex.asm"
+				>
+			</File>
+			<File
+				RelativePath="..\include\lock.h"
 				>
 			</File>
 			<File
@@ -324,31 +337,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\QEvent.cpp"
+				RelativePath=".\thread.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QEvent.h"
+				RelativePath="..\include\thread.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLock.h"
+				RelativePath=".\timer.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QThread.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QThread.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QTimer.h"
+				RelativePath="..\include\timer.h"
 				>
 			</File>
 		</Filter>
@@ -356,27 +357,27 @@
 			Name="io"
 			>
 			<File
-				RelativePath=".\QDataStream.cpp"
+				RelativePath=".\data_stream.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QDataStream.h"
+				RelativePath="..\include\data_stream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QDataStream.inl.h"
+				RelativePath="..\include\data_stream.inl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QFileUtil.cpp"
+				RelativePath=".\file_util.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QFileUtil.h"
+				RelativePath="..\include\file_util.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QFileUtil.inl.h"
+				RelativePath="..\include\file_util.inl.h"
 				>
 			</File>
 		</Filter>
@@ -384,39 +385,39 @@
 			Name="stl"
 			>
 			<File
-				RelativePath="..\include\QLinuxList.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QStdStream.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QSTLAllocator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QSTLContainers.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QSTLEx.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QString.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QStringUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QStringUtil.h"
+				RelativePath="..\include\list_impl.linux.h"
 				>
 			</File>
 			<File
 				RelativePath="..\include\std_headers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\std_stream.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\stl_allocator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\stl_container.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\stl_ext.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\string_ext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\string_util.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\string_util.h"
 				>
 			</File>
 		</Filter>
@@ -424,15 +425,15 @@
 			Name="appshell"
 			>
 			<File
-				RelativePath=".\QAppShell.cpp"
+				RelativePath=".\shell.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QAppShell.h"
+				RelativePath="..\include\shell.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QTokener.h"
+				RelativePath="..\include\tokener.h"
 				>
 			</File>
 		</Filter>
@@ -440,63 +441,63 @@
 			Name="misc"
 			>
 			<File
-				RelativePath=".\QBase64.cpp"
+				RelativePath=".\base64.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QBase64.h"
+				RelativePath="..\include\base64.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QCRC32.cpp"
+				RelativePath=".\crc32.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QCRC32.h"
+				RelativePath="..\include\crc32.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QIDEA.cpp"
+				RelativePath=".\idea_wrapper.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QIDEA.h"
+				RelativePath="..\include\idea_wrapper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QINIParser.cpp"
+				RelativePath=".\ini_parser.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QINIParser.h"
+				RelativePath="..\include\ini_parser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QMD5.cpp"
+				RelativePath=".\md5.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QMD5.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QRSA.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QRSA.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QUtil.h"
+				RelativePath="..\include\md5.h"
 				>
 			</File>
 			<File
 				RelativePath="..\include\random.h"
+				>
+			</File>
+			<File
+				RelativePath=".\rsa_wrapper.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\rsa_wrapper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\utility.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\utility.h"
 				>
 			</File>
 		</Filter>
@@ -504,39 +505,39 @@
 			Name="log"
 			>
 			<File
-				RelativePath=".\QLog.cpp"
+				RelativePath=".\log.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLog.h"
+				RelativePath="..\include\log.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QLog_LinuxImpl.h"
+				RelativePath=".\log_impl.log4cxx.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QLog_NTImpl.h"
+				RelativePath=".\log_impl.std.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QLogManager.cpp"
+				RelativePath=".\log_manager.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLogManager.h"
+				RelativePath="..\include\log_manager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLogManager.inl.h"
+				RelativePath="..\include\log_manager.inl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QLogProcessThread.cpp"
+				RelativePath=".\log_process_thread.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLogProcessThread.h"
+				RelativePath="..\include\log_process_thread.h"
 				>
 			</File>
 		</Filter>
@@ -568,27 +569,23 @@
 			Name="json"
 			>
 			<File
-				RelativePath=".\QJSONArray.cpp"
+				RelativePath="..\include\json.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QJSONObject.cpp"
+				RelativePath=".\json_array.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QJSONObject.h"
+				RelativePath=".\json_object.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QJSONTokener.cpp"
+				RelativePath=".\json_tokener.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QJSONTokener.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QJSONValue.cpp"
+				RelativePath=".\json_value.cc"
 				>
 			</File>
 		</Filter>
@@ -596,11 +593,11 @@
 			Name="dll"
 			>
 			<File
-				RelativePath=".\QDynLib.cpp"
+				RelativePath=".\dynlib.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QDynLib.h"
+				RelativePath="..\include\dynlib.h"
 				>
 			</File>
 		</Filter>

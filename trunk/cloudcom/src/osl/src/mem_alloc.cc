@@ -1,4 +1,4 @@
-#include "osl/include/QOSLibPrerequisits.h"
+#include "osl/include/osl_inner_pre.h"
 
 
 //! Include configuration memory pool.
