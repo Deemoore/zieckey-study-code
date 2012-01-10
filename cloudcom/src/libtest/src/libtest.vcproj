@@ -238,7 +238,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="QOSLib"
+			Name="osl"
 			>
 			<File
 				RelativePath="..\src\QTestAppShell.cpp"
@@ -324,9 +324,13 @@
 				RelativePath="..\include\QTestThreads.h"
 				>
 			</File>
+			<File
+				RelativePath=".\QTestTokener.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="QNetworkLib"
+			Name="net"
 			>
 			<Filter
 				Name="curl"
@@ -338,7 +342,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="QAppUtilLlib"
+			Name="apputil"
 			>
 			<File
 				RelativePath=".\QTestCACenter.cpp"
@@ -346,7 +350,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Tools"
+			Name="tools"
 			>
 			<File
 				RelativePath=".\QLevelDBBenchAnalyse.cpp"

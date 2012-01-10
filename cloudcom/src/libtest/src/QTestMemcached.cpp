@@ -1,9 +1,9 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 #include "libtest/include/QLibTest.h"
-#include "osl/include/QThread.h"
-#include "osl/include/QFileUtil.h"
-#include "osl/include/QUtil.h"
-#include "osl/include/QTimer.h"
+#include "osl/include/thread.h"
+#include "osl/include/file_util.h"
+#include "osl/include/utility.h"
+#include "osl/include/timer.h"
 #include "osl/include/random.h"
 
 #include "wraputil/include/memcached.h"

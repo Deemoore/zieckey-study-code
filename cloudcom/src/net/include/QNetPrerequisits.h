@@ -4,16 +4,16 @@
 
 
 //! Most commonly used headers.
-#include "osl/include/QOSLibAllExp.h"
+#include "osl/include/osl_exp.h"
 
 #include "net/include/QNetConfig.h"
 
 #include "osl/include/object.h"
-#include "osl/include/QString.h"
-#include "osl/include/QThread.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/thread.h"
 #include "osl/include/process_ext.h"
-#include "osl/include/QLock.h"
-#include "osl/include/QEvent.h"
+#include "osl/include/lock.h"
+#include "osl/include/event.h"
 
 namespace net
 {

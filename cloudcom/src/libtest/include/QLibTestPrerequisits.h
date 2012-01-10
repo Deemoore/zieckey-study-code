@@ -1,14 +1,14 @@
 #pragma once
 #include <iostream>
 
-#include "osl/include/QOSLibAllExp.h"
+#include "osl/include/osl_exp.h"
 
 #include "osl/include/singleton.h"
 
-#include "osl/include/QEvent.h"
+#include "osl/include/event.h"
 #include "osl/include/process_ext.h"
-#include "osl/include/QLock.h"
-#include "osl/include/QThread.h"
+#include "osl/include/lock.h"
+#include "osl/include/thread.h"
 
 
 #include "net/include/QNetworkLibAllExp.h"

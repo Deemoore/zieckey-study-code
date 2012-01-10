@@ -1,10 +1,10 @@
-#include "osl/include/QOSLibPrerequisits.h"
+#include "osl/include/osl_inner_pre.h"
 
 
 
 #include "osl/include/process_ext.h"
 
-#include "osl/include/QFileUtil.h"
+#include "osl/include/file_util.h"
 
 
 

@@ -2,7 +2,7 @@
 #define QNETWORKLIB_ALL_EXPORT_H_
 
 
-#include "osl/include/QOSLibAllExp.h"
+#include "osl/include/osl_exp.h"
 
 #include "net/include/QNetConfig.h"
 

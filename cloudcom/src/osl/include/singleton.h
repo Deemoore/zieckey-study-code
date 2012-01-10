@@ -9,6 +9,7 @@
 #ifndef OSLIB_SINGLETON_H_
 #define OSLIB_SINGLETON_H_
 
+#include <assert.h>
 
 namespace osl
 {

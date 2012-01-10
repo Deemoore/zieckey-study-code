@@ -3,8 +3,8 @@
 
 #include "apputil/include/QCACenter.h"
 
-#include "osl/include/QIDEA.h"
-#include "osl/include/QMD5.h"
+#include "osl/include/idea_wrapper.h"
+#include "osl/include/md5.h"
 
 
 #include "net/include/QCURLService.h"

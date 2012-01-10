@@ -4,8 +4,8 @@
 
 
 #include "osl/include/mem_alloc.h"
-#include "osl/include/QString.h"
-#include "osl/include/QStringUtil.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/string_util.h"
 
 namespace osl
 {

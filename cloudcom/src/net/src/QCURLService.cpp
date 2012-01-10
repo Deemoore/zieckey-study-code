@@ -3,10 +3,10 @@
 #if H_PROVIDE_CURL
 
 #include "osl/include/object.h"
-#include "osl/include/QString.h"
-#include "osl/include/QThread.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/thread.h"
 #include "osl/include/process_ext.h"
-#include "osl/include/QLock.h"
+#include "osl/include/lock.h"
 
 #include "net/include/QCURLService.h"
 #include "net/include/QCURLWork.h"

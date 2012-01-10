@@ -1,5 +1,5 @@
 #include "libtest/include/QLibTestPrerequisits.h"
-#include "osl/include/QBase64.h"
+#include "osl/include/base64.h"
 #include "libtest/include/QTestObject.h"
 
 namespace LibTest
