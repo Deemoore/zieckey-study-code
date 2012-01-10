@@ -37,7 +37,7 @@ extern "C" {
      *  a given message digest m of size m_len. publickey is the signer's
      *  public key.
      *
-     *  lsrsa_sign() returns 1 on success, 0 otherwise.  
+     *  slrsa_sign() returns 1 on success, 0 otherwise.  
      *  slrsa_verify() returns 1 on successful verification, 0 otherwise.
      */
     int slrsa_sign( const unsigned char* m, 
