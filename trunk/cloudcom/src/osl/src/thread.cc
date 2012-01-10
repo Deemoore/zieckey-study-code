@@ -1,4 +1,4 @@
-#include "osl/include/osl_inner_pre.h"
+#include "osl/include/inner_pre.h"
 
 
 #if H_PROVIDE_THREAD_EVENT_LOCK

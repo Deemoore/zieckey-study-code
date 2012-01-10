@@ -1,4 +1,4 @@
-#include "wraputil/include/wraputil_inner_pre.h"
+#include "wraputil/include/inner_pre.h"
 
 namespace wu
 {

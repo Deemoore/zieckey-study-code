@@ -1,4 +1,4 @@
-#include "osl/include/osl_inner_pre.h"
+#include "osl/include/inner_pre.h"
 
 
 //! Include configuration memory pool.
