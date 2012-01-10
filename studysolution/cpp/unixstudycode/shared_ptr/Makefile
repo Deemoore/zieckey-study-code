@@ -10,9 +10,9 @@ CC=cc
 CXX=cc
 AR=ar
 ARFLAGS=cru
-CFLAGS=-g -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
+CFLAGS=-g -DNDEBUG -D_TRACE -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I. -I ~/include 
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-lstdc++ -L/usr/local/lib
+LDFLAGS=-lstdc++ -L/usr/local/lib -lqoslib -lmemcached -L ~/lib -Wl,-rpath=~/lib
 
 C_SRCS=$(wildcard *.c)
 CPP_SRCS=$(wildcard *.cpp) 
@@ -21,19 +21,10 @@ OBJS=$(patsubst %.c, %.o, $(C_SRCS) )
 OBJS+=$(patsubst %.cpp, %.o, $(CPP_SRCS) )
 PROGRAMS=$(patsubst %.o, %, $(OBJS) )		
 		
-SUBDIRS=c_call_cpp rsa protobuf mapred shared_ptr
-
-    
 TOPDIR=`pwd`
 
 all: $(OBJS) $(PROGRAMS) 
 	for t in $(SUBDIRS); do $(MAKE) -C $$t || exit 1; done
-	
-zlib : zlib.o 
-	$(CC) $(LDFLAGS)  -lz zlib.o -o $@
-	
-libeventtest : libeventtest.o 
-	$(CC) $(LDFLAGS)  -levent libeventtest.o -o $@
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) $< -o $@
