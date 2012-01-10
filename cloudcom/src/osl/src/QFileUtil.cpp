@@ -4,7 +4,7 @@
 #include "osl/include/QString.h"
 #include "osl/include/QStringUtil.h"
 #include "osl/include/QFileUtil.h"
-#include "osl/include/QObject.h"
+#include "osl/include/object.h"
 #include "osl/include/QDataStream.h"
 
 #include <sys/types.h>

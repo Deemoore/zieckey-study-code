@@ -212,15 +212,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\object.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\osl_config.h"
 				>
 			</File>
 			<File
 				RelativePath="..\include\platform_micros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QObject.h"
 				>
 			</File>
 			<File
@@ -249,10 +249,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath=".\QObject.cpp"
-				>
-			</File>
 			<File
 				RelativePath=".\QOSLibPrerequisits.cpp"
 				>
@@ -481,14 +477,6 @@
 			</File>
 			<File
 				RelativePath="..\include\QMD5.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QMemcached.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QMemcached.h"
 				>
 			</File>
 			<File

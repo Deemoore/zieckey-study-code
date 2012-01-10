@@ -1,4 +1,4 @@
-#include "osl/include/QOSLibPrerequisits.h"
+#include "wraputil/include/wraputil_inner_pre.h"
 
 #include "osl/include/QMemcached.h"
 #include "osl/include/auto_delete.h"

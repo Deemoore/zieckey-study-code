@@ -8,6 +8,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "slrsa", "src\slrsa\libslrsa.vcproj", "{95A2D8A7-497C-4B00-B84A-0498B3EEE093}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{06E81E78-0EAD-4F56-9700-DD505EC6EEF3}"
+	ProjectSection(SolutionItems) = preProject
+		src\wraputil\src\wraputil.vcproj = src\wraputil\src\wraputil.vcproj
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osl", "src\osl\src\osl.vcproj", "{280D398D-DBE0-4484-B9AF-3164D50AF20B}"
 EndProject
@@ -27,6 +30,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtest", "src\libtest\src\
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FEE62F5D-9FAC-4B8B-A082-486ADFA8AA4D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wraputil", "src\wraputil\src\wraputil.vcproj", "{4935AB35-2C8A-4154-A03B-BCCC8155E90F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{280D398D-DBE0-4484-B9AF-3164D50AF20B} = {280D398D-DBE0-4484-B9AF-3164D50AF20B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +100,14 @@ Global
 		{95DD7727-165E-4957-96C6-59DD087C1C4F}.Release|Win32.Build.0 = Release|Win32
 		{95DD7727-165E-4957-96C6-59DD087C1C4F}.ReleaseDev|Win32.ActiveCfg = Release|Win32
 		{95DD7727-165E-4957-96C6-59DD087C1C4F}.ReleaseDev|Win32.Build.0 = Release|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.Debug|Win32.Build.0 = Debug|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.DebugDev|Win32.ActiveCfg = Debug|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.DebugDev|Win32.Build.0 = Debug|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.Release|Win32.ActiveCfg = Release|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.Release|Win32.Build.0 = Release|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.ReleaseDev|Win32.ActiveCfg = Release|Win32
+		{4935AB35-2C8A-4154-A03B-BCCC8155E90F}.ReleaseDev|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
