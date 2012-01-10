@@ -25,7 +25,7 @@ TARGET_SO=lib$(LIBNAME).so
 TARGET_A=lib$(LIBNAME).a
 
 all : $(TARGET_SO) $(TARGET_A)
-	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
+	$(MAKE) install
 
 $(TARGET_A) : $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS) 

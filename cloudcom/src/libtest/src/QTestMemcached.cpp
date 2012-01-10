@@ -1,10 +1,11 @@
-#include "qlibtest/include/QLibTestPrerequisits.h"
-#include "qlibtest/include/QLibTest.h"
-#include "qoslib/include/QMemcached.h"
-#include "qoslib/include/QThread.h"
-#include "qoslib/include/QFileUtil.h"
-#include "qoslib/include/QUtil.h"
-#include "qoslib/include/QTimer.h"
+#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/QLibTest.h"
+#include "osl/include/QMemcached.h"
+#include "osl/include/QThread.h"
+#include "osl/include/QFileUtil.h"
+#include "osl/include/QUtil.h"
+#include "osl/include/QTimer.h"
+#include "osl/include/random.h"
 
 #include <fstream>
 
