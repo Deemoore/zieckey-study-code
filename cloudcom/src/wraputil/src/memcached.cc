@@ -1,7 +1,6 @@
 #include "wraputil/include/wraputil_inner_pre.h"
 
-#include "osl/include/QMemcached.h"
-#include "osl/include/auto_delete.h"
+#include "wraputil/include/memcached.h"
 
 #ifdef H_PROVIDE_LIBMEMCACHED
 

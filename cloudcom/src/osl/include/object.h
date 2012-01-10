@@ -314,6 +314,41 @@ public:                                                                         
     typedef RefPtr<RefTarget>   RefPointer;
     typedef RefPtr<Object>      ObjectPtr;
 
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    // inline method
+    template<class Base>
+    inline void osl::RefTargetImpl<Base>::ref() const
+    {
+        InterlockedInc32( &m_nRefCount );
+    }
+
+
+    template<class Base>
+    inline void osl::RefTargetImpl<Base>::unref() const
+    {
+        if ( InterlockedDec32( &m_nRefCount ) <= 0 )
+        {
+            delete this;
+        }
+    }
+
+    //----------------------------------------------
+    inline void Object::ref()const
+    {
+        InterlockedInc32( &m_nRefCount );
+    }
+
+    //----------------------------------------------
+    inline void Object::unref() const
+    {
+        if ( InterlockedDec32( &m_nRefCount ) <= 0 )
+        {
+            delete this;
+        }
+    }
+   
 
 //////////////////////////////////////////////////////////////////////////
 //  Helper Macros for object derived from Object And RefTarget

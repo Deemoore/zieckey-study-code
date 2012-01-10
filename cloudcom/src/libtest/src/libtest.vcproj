@@ -285,6 +285,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QTestMemcached.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\QTestMemoryDataStream.cpp"
 				>
 			</File>
