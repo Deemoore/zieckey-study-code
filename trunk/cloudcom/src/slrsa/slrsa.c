@@ -18,7 +18,7 @@ int slrsa_sign( const unsigned char *m, const unsigned int m_len,
             unsigned char *sigret, unsigned int *siglen )
 {
     int ret = !RSAPrivateEncrypt( sigret, siglen, 
-                const_cast<unsigned char*>(m), m_len, 
+                (unsigned char*)(m), m_len, 
                 (R_RSA_PRIVATE_KEY*)privatekey );    
     return ret;
 }
@@ -31,12 +31,12 @@ int slrsa_verify( const unsigned char *m, const unsigned int m_len,
     unsigned char* vm = (unsigned char*)malloc( m_len );
     unsigned int vm_len = m_len;
     int ret = !RSAPublicDecrypt( vm, &vm_len, 
-                const_cast<unsigned char*>(sigbuf), siglen, 
+                (unsigned char*)(sigbuf), siglen, 
                 ( R_RSA_PUBLIC_KEY * )publickey );    
     
     if ( 0 == ret )
     {
-        printf("vm_len=%d, m_len=%d, RSAPublicDecrypt ret=%d\n", (int)vm_len, (int)m_len, (int)ret );
+        fprintf(stderr, "vm_len=%d, m_len=%d, RSAPublicDecrypt ret=%d\n", (int)vm_len, (int)m_len, (int)ret );
         return 0;
     }
 
