@@ -19,7 +19,7 @@ namespace wu
 #		define _EXPORT_WRAPUTIL
 #	endif
 #else
-#	define _EXPORT_NET
+#	define _EXPORT_WRAPUTIL
 #endif // H_STATIC_LIB_
 
 
