@@ -3,7 +3,7 @@
 
 
 //! Most commonly used headers.
-#include "osl/include/osl_exp.h"
+#include "osl/include/exp.h"
 
 namespace wu
 {

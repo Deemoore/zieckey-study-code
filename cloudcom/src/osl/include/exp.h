@@ -3,7 +3,7 @@
 #define QOSLIB_ALL_EXPORT_H_
 
 
-#include "osl/include/osl_inner_pre.h"
+#include "osl/include/inner_pre.h"
 
 #ifdef H_OS_WINDOWS
 //! Define import lib macro. Add it in ANY CPP file in target host module.

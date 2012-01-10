@@ -50,7 +50,7 @@
 				TreatWChar_tAsBuiltInType="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="&quot;wraputil/include/wraputil_pre.h&quot;"
+				PrecompiledHeaderThrough="&quot;wraputil/include/inner_pre.h&quot;"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -130,7 +130,7 @@
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;net/include/QNetPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;wraputil/include/inner_pre.h&quot;"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -188,11 +188,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\memcached.h"
+				RelativePath="..\include\inner_pre.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\wraputil_inner_pre.h"
+				RelativePath="..\include\memcached.h"
 				>
 			</File>
 		</Filter>
