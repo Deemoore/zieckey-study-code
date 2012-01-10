@@ -1,11 +1,12 @@
 #include "libtest/include/QLibTestPrerequisits.h"
 #include "libtest/include/QLibTest.h"
-#include "osl/include/QMemcached.h"
 #include "osl/include/QThread.h"
 #include "osl/include/QFileUtil.h"
 #include "osl/include/QUtil.h"
 #include "osl/include/QTimer.h"
 #include "osl/include/random.h"
+
+#include "wraputil/include/memcached.h"
 
 #include <fstream>
 
