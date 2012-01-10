@@ -9,47 +9,6 @@
 namespace osl
 {
 
-//     class _EXPORT_OSLIB HMD5
-//     {
-//     public:
-//         HMD5( void );
-//         /** Constructor that encode plain data directly. */
-//         HMD5( const u8* pData, u32 nSize );
-//         ~HMD5( void );
-// 
-//         /** Sets plain data. The input data will be encoded here without extra buffer.. */
-//         void setPlainData( const u8* pData, u32 nSize );
-// 
-//         //! Gets encoded digest.
-//         //! \remark Gets md5 result as 16 bytes.
-//         //! \param pResult buffer at least 16 char.
-//         void getDigest( u8* pResult );
-// 
-//         void getRawDigest( u8* pResult /*16 bytes*/ )// digest as a 16-byte binary array
-//         {
-//             getDigest( pResult );
-//         }
-// 
-//         void getHexDigest( u8* pResult /*33 bytes*/ );// digest as a 33-byte ascii-hex string, with the terminating null-character
-// 
-//     private:
-//         u32            m_States[4];      // encrypted message
-//         u32            m_Counts[2];      // bits of plain text
-//         u8            m_Buffer[64];      //
-//         bool          m_bFinalized;      // Whether digest data has been updated.
-// 
-//     private:
-// 
-//         /** Initialize the md5 object */
-//         void initialize();
-// 
-//         /** Do transform for a 64 byte data.
-//          *  @param pBlock Source data with 64 length.
-//          */
-//         void transform( const u8* pBlock );
-// 
-//     };
-
 
 
     // MD5.CC - source code for the C++/object oriented translation and 
@@ -388,6 +347,47 @@ namespace osl
             a += I(b, c, d) + x + ac;
             a = rotate_left (a, s) +b;
     }
+
+//     class _EXPORT_OSLIB HMD5
+//     {
+//     public:
+//         HMD5( void );
+//         /** Constructor that encode plain data directly. */
+//         HMD5( const u8* pData, u32 nSize );
+//         ~HMD5( void );
+// 
+//         /** Sets plain data. The input data will be encoded here without extra buffer.. */
+//         void setPlainData( const u8* pData, u32 nSize );
+// 
+//         //! Gets encoded digest.
+//         //! \remark Gets md5 result as 16 bytes.
+//         //! \param pResult buffer at least 16 char.
+//         void getDigest( u8* pResult );
+// 
+//         void getRawDigest( u8* pResult /*16 bytes*/ )// digest as a 16-byte binary array
+//         {
+//             getDigest( pResult );
+//         }
+// 
+//         void getHexDigest( u8* pResult /*33 bytes*/ );// digest as a 33-byte ascii-hex string, with the terminating null-character
+// 
+//     private:
+//         u32            m_States[4];      // encrypted message
+//         u32            m_Counts[2];      // bits of plain text
+//         u8            m_Buffer[64];      //
+//         bool          m_bFinalized;      // Whether digest data has been updated.
+// 
+//     private:
+// 
+//         /** Initialize the md5 object */
+//         void initialize();
+// 
+//         /** Do transform for a 64 byte data.
+//          *  @param pBlock Source data with 64 length.
+//          */
+//         void transform( const u8* pBlock );
+// 
+//     };
 
 
 };//namespace
