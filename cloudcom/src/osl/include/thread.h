@@ -1,6 +1,10 @@
 #ifndef __H_OSLIB_THREAD_H__
 #define __H_OSLIB_THREAD_H__
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/object.h"
+#include "osl/include/string_ext.h"
+
 #if H_PROVIDE_THREAD_EVENT_LOCK
 
 #ifdef H_OS_WINDOWS

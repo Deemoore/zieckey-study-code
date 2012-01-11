@@ -2,10 +2,12 @@
 #define _QOSLIB_LOG_H_
 
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/object.h"
+#include "osl/include/string_ext.h"
+#include "osl/include/string_util.h"
 
 #if H_PROVIDE_LOG_SYSTEM
-
-
 
 
 //#define H_LOG_SYSTEM_USE_LOG4CXX

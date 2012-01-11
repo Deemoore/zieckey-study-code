@@ -54,7 +54,7 @@ namespace osl
                 if ( ptr_ref_to_be_deleted_ )
                 {
                     delete ptr_ref_to_be_deleted_;
-                    ptr_ref_to_be_deleted_ = NULL;
+                    ptr_ref_to_be_deleted_ = 0;
                 }
             }
 

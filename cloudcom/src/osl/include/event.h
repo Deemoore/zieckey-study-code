@@ -1,6 +1,8 @@
 #ifndef _EVENTWAIT_H
 #define _EVENTWAIT_H
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_THREAD_EVENT_LOCK
 
 #ifdef H_OS_WINDOWS

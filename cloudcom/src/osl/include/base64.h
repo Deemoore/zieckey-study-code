@@ -1,6 +1,10 @@
 #ifndef _BASE64_H_
 #define _BASE64_H_
 
+#include "osl/include/osl_config.h"
+#include "osl/include/platform_micros.h"
+#include "osl/include/data_stream.h"
+
 #if H_PROVIDE_BASE64
 
 #include "assert_ext.h"

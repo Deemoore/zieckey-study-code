@@ -99,7 +99,7 @@ namespace osl
 #elif defined(H_OS_LINUX )
 
 		pthread_mutex_lock( &m_hMutex );
-		b = 1;
+		signaled_ = true;
 		pthread_cond_signal( &m_hCond );
 		pthread_mutex_unlock( &m_hMutex );
 #endif

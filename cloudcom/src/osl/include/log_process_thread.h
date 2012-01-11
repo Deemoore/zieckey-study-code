@@ -1,6 +1,7 @@
 #ifndef	H_LOG_PROCESS_THREAD_H
 #define	H_LOG_PROCESS_THREAD_H
 
+#include "osl/include/log.h"
 
 #if H_PROVIDE_LOG_SYSTEM
 

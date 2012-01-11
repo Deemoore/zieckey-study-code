@@ -1,6 +1,7 @@
 #ifndef QOSLIB_CRC32_H
 #define QOSLIB_CRC32_H
 
+#include "osl/include/inner_pre.h"
 
 #if H_PROVIDE_CRC32
 

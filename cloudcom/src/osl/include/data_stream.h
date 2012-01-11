@@ -1,8 +1,9 @@
+#ifndef _OSLIB_DATASTREAM_H_
+#define _OSLIB_DATASTREAM_H_
 
-#ifndef QOSLIB_DATASTREAM_H_
-#define QOSLIB_DATASTREAM_H_
-
-
+#include "osl/include/platform_micros.h"
+#include "osl/include/object.h"
+#include "osl/include/string_ext.h"
 
 namespace osl
 {

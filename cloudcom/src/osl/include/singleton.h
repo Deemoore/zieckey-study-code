@@ -42,8 +42,7 @@ namespace osl
     protected:
         Singleton( void )
         {
-            assert( NULL == ms_Singleton );
-
+            assert(0 == ms_Singleton);
             ms_Singleton = static_cast< T* >( this );
 
         }
