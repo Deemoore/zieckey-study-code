@@ -18,7 +18,7 @@ OBJS := $(patsubst src/%.cpp, src/%.o, $(SRCS))
 TARGET=$(LIBNAME)
 
 all : $(TARGET) 
-	cp -f $(TARGET) $(PREFIX)/bin
+	$(MAKE) install
 
 $(TARGET) : $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) -o $@
@@ -39,7 +39,7 @@ t:
 	@echo "CPPFLAGS:" $(CPPFLAGS)
 
 install: $(TARGET) 
-	cp -f $(TARGET) $(PREFIX)/lib
+	cp -f $(TARGET) $(PREFIX)/bin
 
 clean:
 	rm -rf src/*.o  $(OBJS) $(DEPS)  $(TARGET_SO) $(TARGET_A)
