@@ -14,12 +14,12 @@
 #include "osl/include/log_process_thread.h"
 
 // #if ( defined(H_LOG_SYSTEM_USE_LOG4CXX) || defined(H_OS_LINUX) )
-// #	include "log_impl.log4cxx.h"
+// #	include "log_impl_log4cxx.h"
 // #else
-// #	include "log_impl.h"
+// #	include "log_impl_std.h"
 // #endif
 
-#include "log_impl.std.h"
+#include "log_impl_std.h"
 
 namespace osl
 {

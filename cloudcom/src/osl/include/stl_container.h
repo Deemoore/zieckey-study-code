@@ -647,7 +647,7 @@ namespace osl
 };//namespace osl;
 
 
-#include "osl/include/list_impl.linux.h"
+#include "osl/include/list_impl_linux.h"
 #include "osl/include/stl_ext.h"
 
 
