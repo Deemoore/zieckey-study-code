@@ -1,6 +1,8 @@
 #ifndef _QOSLIB_MD5_H_
 #define _QOSLIB_MD5_H_
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_MD5
 
 #include <fstream>

@@ -1,7 +1,8 @@
-
 #ifndef QOSLIB_STD_STREAM_
 #define QOSLIB_STD_STREAM_
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/data_stream.h"
 
 namespace osl
 {

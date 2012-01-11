@@ -1,6 +1,7 @@
-#pragma once
+#ifndef _OSLIB_FILE_UTIL_H_
+#define _OSLIB_FILE_UTIL_H_
 
-
+#include "osl/include/string_ext.h"
 
 #ifdef H_OS_WINDOWS
 #   include <direct.h>
@@ -223,6 +224,6 @@ namespace osl
 
 #include "osl/include/file_util.inl.h"
 
-
+#endif //#ifndef _OSLIB_FILE_UTIL_H_
 
 

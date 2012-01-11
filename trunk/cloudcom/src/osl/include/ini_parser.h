@@ -1,6 +1,8 @@
 #ifndef _QOSLIB_INI_PARSER_H_
 #define _QOSLIB_INI_PARSER_H_
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_INI_PARSER
 
 #include "osl/include/string_ext.h"

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/object.h"
+#include "osl/include/string_ext.h"
 
 #if H_PROVIDE_DLL_MANAGER
 

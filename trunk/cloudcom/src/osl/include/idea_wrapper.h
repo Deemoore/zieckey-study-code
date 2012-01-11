@@ -2,9 +2,10 @@
 #define QOSLIB_ENCRYPT_UTILITY_H_
 
 #include "osl/include/osl_config.h"
+#include "osl/include/platform_micros.h"
+#include "osl/include/data_stream.h"
 
 #if H_PROVIDE_IDEA_ENCRYPT
-
 
 #ifdef H_OS_WINDOWS
 #include <idea/idea.h>

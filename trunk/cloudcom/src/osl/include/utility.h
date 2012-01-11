@@ -1,5 +1,8 @@
-#pragma once
+#ifndef _OSLIB_UTILITY_H_
+#define _OSLIB_UTILITY_H_
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/string_ext.h"
 
 namespace osl
 {
@@ -140,5 +143,5 @@ namespace osl
 
 }//end of namespace osl
 
-
+#endif
 

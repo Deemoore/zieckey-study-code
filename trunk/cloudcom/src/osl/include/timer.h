@@ -1,9 +1,11 @@
-
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_TIMER
 
+#include "osl/include/singleton.h"
 #include "osl/include/object.h"
 #include "osl/include/function.h"
 #include "osl/include/process_ext.h"
