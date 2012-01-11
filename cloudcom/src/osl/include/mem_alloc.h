@@ -1,7 +1,7 @@
 #ifndef _H_OSLIB_MEMALLOC_H
 #define _H_OSLIB_MEMALLOC_H
 
-#include "osl/include/platform_micros.h"
+#include "osl/include/inner_pre.h"
 
 //! Whether use minimum memory.
 //! Comment out H_MINI_MEM_USE if want to debug memroy
@@ -175,8 +175,8 @@ namespace osl
         static void freeObjectReferenceList( ObjectNode** pReferences );
 
     private:
-        friend bool osl::initializeOSLib();
-        friend void osl::uninitializeOSLib();
+        friend bool ::osl::initializeOSLib();
+        friend void ::osl::uninitializeOSLib();
 
         //! Hide constructor.
         MemAlloc();

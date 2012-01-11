@@ -69,64 +69,8 @@ typedef unsigned int	DWORD_PTR;
 #endif
 
 
-
 namespace osl
 {
-
-#ifdef H_ARC_64
-    typedef unsigned long      u64;
-    typedef long               s64;
-#else
-    typedef unsigned long long u64;
-    typedef long long          s64;
-#endif
-    typedef unsigned int       u32;
-    typedef int                s32;
-    typedef unsigned short     u16;
-    typedef short              s16;
-    typedef unsigned char       u8;
-    typedef char                s8;
-    typedef float              f32;
-    typedef double             f64;
-
-
-#ifdef H_OS_WINDOWS
-    typedef long                 AtomicInt32;
-    typedef __int64              AtomicInt64;
-
-#   ifdef H_ARCH_32
-    typedef AtomicInt32            AtomicInt;
-#   else
-    typedef AtomicInt64            AtomicInt;
-#   endif
-
-#elif defined(H_OS_LINUX)
-
-    typedef s32                  AtomicInt32;
-    typedef long                 AtomicInt64;
-
-#   ifdef H_ARCH_32
-    typedef AtomicInt32            AtomicInt;
-#   else
-    typedef AtomicInt64            AtomicInt;
-#		endif
-#endif
-
-
-    //! Platform pointer.
-#   ifdef H_ARCH_32
-    typedef u32              PointerInt;
-#   else
-    typedef u64              PointerInt;
-#   endif
-
-
-#define H_S32_MAX	0x7fffffff  //! signed 32 bit long int max number
-#define H_U32_MAX	0xffffffff  //! unsigned 32 bit long int max number
-
-#define H_S64_MAX	0x7fffffffffffffff  //! signed 64 bit long int max number
-#define H_U64_MAX	0xffffffffffffffff  //! unsigned 64 bit long int max number
-
 
 
     //useful macros
