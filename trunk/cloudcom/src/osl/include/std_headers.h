@@ -40,7 +40,7 @@
 
 // C++ Stream stuff
 //#include <fstream>
-//#include <iostream>
+#include <iostream>
 #include <sstream>
 
 

@@ -14,8 +14,6 @@
 #include <float.h>
 
 
-
-
 //! Whether is debug mode
 #ifdef _DEBUG
 #	ifndef H_DEBUG_MODE
@@ -398,54 +396,6 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 #endif
 
 
-
-
-
-#ifdef H_OS_WINDOWS
-
-#define __func__            __FUNCTION__
-#define __PRETTY_FUNCTION__ __FUNCTION__
-
-#if defined(__x86_64__) || defined(__amd_64__) || defined(_M_X64)
-typedef unsigned long      uint64_t;
-typedef long               int64_t;
-#else
-typedef unsigned long long uint64_t;
-typedef long long          int64_t;
-#endif
-typedef unsigned int       uint32_t;
-typedef int                int32_t;
-typedef unsigned short     uint16_t;
-typedef short              int16_t;
-typedef unsigned char      uint8_t;
-typedef char               int8_t;
-
-#endif /* #ifdef H_OS_WINDOWS */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //-------------------------------------------------------------
 //-------------------------------------------------------------
 //-------------------------------------------------------------
@@ -557,6 +507,96 @@ typedef char               int8_t;
 #else
 #   define _EXPORT_OSLIB
 #endif // H_STATIC_LIB_
+
+
+
+
+
+#ifdef H_OS_WINDOWS
+    #define __func__            __FUNCTION__
+    #define __PRETTY_FUNCTION__ __FUNCTION__
+
+    #ifdef H_ARCH_64
+    typedef unsigned long      uint64_t;
+    typedef long               int64_t;
+    #else
+    typedef unsigned long long uint64_t;
+    typedef long long          int64_t;
+    #endif //end of H_ARCH_64
+    typedef unsigned int       uint32_t;
+    typedef int                int32_t;
+    typedef unsigned short     uint16_t;
+    typedef short              int16_t;
+    typedef unsigned char      uint8_t;
+    typedef char               int8_t;
+#endif /* #ifdef H_OS_WINDOWS */
+
+
+
+
+
+
+
+
+
+
+namespace osl
+{
+
+#ifdef H_ARCH_64
+    typedef unsigned long      u64;
+    typedef long               s64;
+#else
+    typedef unsigned long long u64;
+    typedef long long          s64;
+#endif
+    typedef unsigned int       u32;
+    typedef int                s32;
+    typedef unsigned short     u16;
+    typedef short              s16;
+    typedef unsigned char       u8;
+    typedef char                s8;
+    typedef float              f32;
+    typedef double             f64;
+
+
+#ifdef H_OS_WINDOWS
+    typedef long                 AtomicInt32;
+    typedef __int64              AtomicInt64;
+
+#   ifdef H_ARCH_32
+    typedef AtomicInt32            AtomicInt;
+#   else
+    typedef AtomicInt64            AtomicInt;
+#   endif
+
+#elif defined(H_OS_LINUX)
+
+    typedef s32                  AtomicInt32;
+    typedef long                 AtomicInt64;
+
+#   ifdef H_ARCH_32
+    typedef AtomicInt32            AtomicInt;
+#   else
+    typedef AtomicInt64            AtomicInt;
+#		endif
+#endif
+
+
+    //! Platform pointer.
+#   ifdef H_ARCH_32
+    typedef u32              PointerInt;
+#   else
+    typedef u64              PointerInt;
+#   endif
+
+
+#define H_S32_MAX	0x7fffffff  //! signed 32 bit long int max number
+#define H_U32_MAX	0xffffffff  //! unsigned 32 bit long int max number
+
+#define H_S64_MAX	0x7fffffffffffffff  //! signed 64 bit long int max number
+#define H_U64_MAX	0xffffffffffffffff  //! unsigned 64 bit long int max number
+}
 
 
 
