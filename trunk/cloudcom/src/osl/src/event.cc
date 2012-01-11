@@ -26,9 +26,9 @@ namespace osl
 		m_hEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
 
 #elif defined(H_OS_LINUX )
-
 		pthread_mutex_init( &m_hMutex, NULL );
 		pthread_cond_init( &m_hCond, NULL );
+        signaled_ = false;
 #endif
 
 	}
@@ -43,6 +43,7 @@ namespace osl
 
 		pthread_mutex_destroy( &m_hMutex );
 		pthread_cond_destroy( &m_hCond );
+
 #endif
 
 	}
@@ -75,19 +76,19 @@ namespace osl
 			int rc = 1;
 			pthread_mutex_lock( &m_hMutex );
 
-			if ( b == 0 )
+			if (!signaled_)
 			{
 				rc = ( pthread_cond_timedwait( &m_hCond, &m_hMutex, &ts ) == 0 );
 			}
 
-			b = 0;
+			signaled_ = false;
 			pthread_mutex_unlock( &m_hMutex );
 
 			return rc == 0 ? true : false;
 		}
 #endif
-
 	}
+
 	//----------------------------------------------
 	void Event::signal()
 	{
