@@ -42,7 +42,7 @@ namespace osl
 
         pthread_mutex_t   m_hMutex;
         pthread_cond_t     m_hCond;
-        int                      b;
+        bool             signaled_;
 #endif
 
     private:
