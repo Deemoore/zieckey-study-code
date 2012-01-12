@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OSLIB_DYNLIB_H_
+#define OSLIB_DYNLIB_H_
 
 #include "osl/include/inner_pre.h"
 #include "osl/include/object.h"
@@ -81,3 +82,4 @@ namespace osl
 };//namespace
 #endif //#if H_PROVIDE_DLL_MANAGER
 
+#endif //#ifndef OSLIB_DYNLIB_H_

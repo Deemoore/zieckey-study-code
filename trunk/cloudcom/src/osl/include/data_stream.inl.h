@@ -1,9 +1,5 @@
-//! \file   HDataStream.inl
-//!	\date   2010:5:31
-//! \brief  MemoryDataStreamµÄ inlineº¯Êý
-//!	\author Han Weiping
-
-#pragma once
+#ifndef _OSLIB_DATASTREAM_INL_H_
+#define _OSLIB_DATASTREAM_INL_H_
 
 namespace osl
 {
@@ -1084,4 +1080,5 @@ namespace std
     }
 }
 
+#endif // #ifndef _OSLIB_DATASTREAM_INL_H_
 

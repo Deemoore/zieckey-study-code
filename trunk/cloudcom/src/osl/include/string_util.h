@@ -1,7 +1,7 @@
 //! \file   HStringUtil.h
 //! \brief  StringUtilºÍStringUtilW
-
-#pragma once
+#ifndef OSLIB_STRING_UTIL_H_
+#define OSLIB_STRING_UTIL_H_
 
 #include "osl/include/string_ext.h"
 
@@ -399,4 +399,5 @@ namespace osl
 
 } // namespace
 
+#endif
 
