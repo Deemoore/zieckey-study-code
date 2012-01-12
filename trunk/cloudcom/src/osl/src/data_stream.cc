@@ -138,7 +138,8 @@ namespace osl
 
     void createDir( const StringA& strFileName )
     {
-        StringA strPathName = StringUtil::utf8ToMbs(strFileName);
+        //StringA strPathName = StringUtil::utf8ToMbs(strFileName);
+        StringA strPathName = strFileName;
 
         std::replace( strPathName.begin(), strPathName.end(), '\\', '/' );
 
@@ -181,7 +182,7 @@ namespace osl
 		StringA strPathName = strFileName;
         
         // open file.
-        FILE* pF = fopen( strPathName.c_str(), ( "wb+" ) );
+        FILE* pF = fopen( strPathName.c_str(), ( "w+" ) );
 
         if ( !pF )
         {
