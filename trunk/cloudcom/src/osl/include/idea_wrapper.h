@@ -7,15 +7,17 @@
 
 #if H_PROVIDE_IDEA_ENCRYPT
 
-#ifdef H_OS_WINDOWS
 #include <idea/idea.h>
-#elif defined( H_OS_FREEBSD )
-#include <idea.h>
-#elif defined( H_OS_LINUX )
-#include <openssl/idea.h>
-#else
-#include <idea.h>
-#endif
+
+//#ifdef H_OS_WINDOWS
+//#include <idea/idea.h>
+//#elif defined( H_OS_FREEBSD )
+//#include <idea.h>
+//#elif defined( H_OS_LINUX )
+//#include <openssl/idea.h>
+//#else
+//#include <idea.h>
+//#endif
 
 
 namespace osl

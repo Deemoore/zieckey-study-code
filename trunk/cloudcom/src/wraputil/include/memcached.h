@@ -16,13 +16,13 @@
 
 #include <libmemcached/memcached.h>
 
-namespace osl
+namespace wu
 {
     //! The wrapper class of libmemcached-0.43
-    class _EXPORT_OSLIB Memcached 
+    class _EXPORT_WRAPUTIL Memcached 
     {
     public:
-        typedef Map<StringA, StringA> StringAStringAMap;
+        typedef osl::Map<osl::StringA, osl::StringA> StringAStringAMap;
 
     public:
         Memcached( const char* domainsock, 
@@ -32,7 +32,7 @@ namespace osl
         ~Memcached();
 
         bool setBehavior( const memcached_behavior_t& option, 
-                          const uint64_t value, StringA& errmsg );
+                          const uint64_t value, osl::StringA& errmsg );
         
         /**
          * @brief Select multiple keys at once from memcached
@@ -45,7 +45,7 @@ namespace osl
          *           0, when donnot match any keys
          *         > 0, when matches n count of keys, n MUST BE <= keyvalues.size() 
          */
-        int mget( const size_t retrytimes, StringAStringAMap& keyvalues, StringA& errmsg );
+        int mget( const size_t retrytimes, StringAStringAMap& keyvalues, osl::StringA& errmsg );
 
         /**
          * @brief Query a key's value from memcached
@@ -60,8 +60,8 @@ namespace osl
          * @return false, when something error happened
          *         true, if get the valuesuccessfully
          */
-        bool get( const char* key, const size_t keylen, const size_t retrytimes, StringA& value, StringA& errmsg );
-        bool get( const StringA& key, const size_t retrytimes, StringA& value, StringA& errmsg );
+        bool get( const char* key, const size_t keylen, const size_t retrytimes, osl::StringA& value, osl::StringA& errmsg );
+        bool get( const osl::StringA& key, const size_t retrytimes, osl::StringA& value, osl::StringA& errmsg );
 
         /**
          * @brief Set a key/value pair to memcached
@@ -74,13 +74,13 @@ namespace osl
          *         true, if set the valuesuccessfully
          */
         bool set( const char* key,   const size_t keylen, 
-                  const void* value, const size_t valuelen, StringA& errmsg );
-        bool set( const StringA& key, const void* value, const size_t valuelen, StringA& errmsg );
-        bool set( const StringA& key, const StringA& value, StringA& errmsg );
+                  const void* value, const size_t valuelen, osl::StringA& errmsg );
+        bool set( const osl::StringA& key, const void* value, const size_t valuelen, osl::StringA& errmsg );
+        bool set( const osl::StringA& key, const osl::StringA& value, osl::StringA& errmsg );
 
         bool set( const char* key,   const size_t keylen, 
                   const void* value, const size_t valuelen, 
-                  const size_t retrytimes, StringA& errmsg );
+                  const size_t retrytimes, osl::StringA& errmsg );
 
         /**
          * @brief Delete a key/value pair from memcached
@@ -89,32 +89,31 @@ namespace osl
          * @return false, when something error happened
          *         true, if set the valuesuccessfully
          */
-        bool erase( const StringA& key, StringA& errmsg );
-        bool erase( const char* key, const size_t keylen, StringA& errmsg );
+        bool erase( const osl::StringA& key, osl::StringA& errmsg );
+        bool erase( const char* key, const size_t keylen, osl::StringA& errmsg );
 
     private:
-        StringA domainsock_;
-        StringA hostname_;
-        StringA port_;
+        osl::StringA domainsock_;
+        osl::StringA hostname_;
+        osl::StringA port_;
 
         memcached_st* mc_;//a long-connect to memcached handler
     };
-
-
-    namespace ext
-    {
-        template<> inline 
-            auto_delete < memcached_result_st >::~auto_delete()
-            {    
-                if ( ptr_ref_to_be_deleted_ )
-                {
-                    memcached_result_free( ptr_ref_to_be_deleted_ );
-                    ptr_ref_to_be_deleted_ = NULL;
-                }
-            }
-    }
-
 }//end of namespace osl
+
+
+namespace osl { namespace ext {
+    template<> inline 
+        auto_delete < memcached_result_st >::~auto_delete()
+        {    
+            if ( ptr_ref_to_be_deleted_ )
+            {
+                memcached_result_free( ptr_ref_to_be_deleted_ );
+                ptr_ref_to_be_deleted_ = NULL;
+            }
+        }
+} }
+
 
 #endif //end #if LIBMEMCACHED_API
 

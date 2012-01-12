@@ -4,7 +4,7 @@
 
 #ifdef H_PROVIDE_LIBMEMCACHED
 
-namespace osl
+namespace wu
 {
     namespace 
     {//{{{
@@ -68,7 +68,7 @@ namespace osl
         }
         
 
-        StringA errmsg;
+        osl::StringA errmsg;
         setBehavior( MEMCACHED_BEHAVIOR_POLL_TIMEOUT, 1000, errmsg );
         setBehavior( MEMCACHED_BEHAVIOR_CACHE_LOOKUPS, 1, errmsg );
         setBehavior( MEMCACHED_BEHAVIOR_POLL_TIMEOUT, 1000, errmsg );
@@ -87,7 +87,7 @@ namespace osl
     }
 
     bool Memcached::setBehavior( const memcached_behavior_t& option, 
-                const uint64_t value, StringA& errmsg )
+                const uint64_t value, osl::StringA& errmsg )
     {
         assert( mc_ && "memcached not initialized!" );
         memcached_return_t rc = memcached_behavior_set( mc_, option, value );
@@ -101,15 +101,15 @@ namespace osl
         return true;
     }
 
-    int Memcached::mget( const size_t retrytimes, StringAStringAMap& keyvalues, StringA& errmsg )
+    int Memcached::mget( const size_t retrytimes, osl::StringAStringAMap& keyvalues, osl::StringA& errmsg )
     {
         if ( keyvalues.empty() )
         {
             return 0;
         }
 
-        StringAStringAMap::iterator it(keyvalues.begin());
-        StringAStringAMap::iterator ite(keyvalues.end());
+        osl::StringAStringAMap::iterator it(keyvalues.begin());
+        osl::StringAStringAMap::iterator ite(keyvalues.end());
 
         char**  keys    = new char*[keyvalues.size()];
         size_t* keylens = new size_t[keyvalues.size()];
@@ -148,7 +148,7 @@ namespace osl
 
         if ( rc != MEMCACHED_SUCCESS ) 
         {
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "memcached_mget failed. "
                 << "ret=" << (int)rc << ", "
                 << memcached_strerror(mc_, rc);
@@ -169,8 +169,8 @@ namespace osl
         memcached_result_st* presultobj = &resultobj;
         memcached_result_st* result     = memcached_result_create( mc_, presultobj );
 
-        /*this will automatically call memcached_result_free( presultobj ) 
-         * to free the memcached created objects */
+        //this will automatically call memcached_result_free( presultobj ) 
+        // to free the memcached created objects 
         osl::ext::auto_delete< memcached_result_st > result_obj_autofree( presultobj );
 
         while ( memcached_fetch_result(mc_, result, &rc) != NULL)
@@ -183,7 +183,7 @@ namespace osl
                 rvalue    = memcached_result_value( result );
                 rvaluelen = memcached_result_length( result );
 
-                StringA strkey(rkey, rkeylen);
+                osl::StringA strkey(rkey, rkeylen);
                 it = keyvalues.find( strkey );
                 if ( it == keyvalues.end() )
                 {
@@ -191,7 +191,7 @@ namespace osl
                     continue;
                 }
 
-                it->second = StringA(rvalue, rvaluelen);
+                it->second = osl::StringA(rvalue, rvaluelen);
 
                 ++goodresultcount;
 
@@ -202,7 +202,7 @@ namespace osl
             }
             else
             {
-                OStringStream oss;
+                osl::OStringStreamA oss;
                 oss << "memcached_fetch_result failed. ret=" 
                     << (int)rc << ", "
                     << memcached_strerror(mc_, rc);
@@ -216,7 +216,7 @@ namespace osl
 
         if ( rc != MEMCACHED_SUCCESS && rc != MEMCACHED_END )
         {   
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "after memcached_fetch_result failed, ret="
                 << (int)rc << ", "
                 << memcached_strerror(mc_, rc);
@@ -238,15 +238,15 @@ namespace osl
     }
     
     /*
-    int Memcached::mget( const size_t retrytimes, StringAStringAMap& keyvalues, StringA& errmsg )
+    int Memcached::mget( const size_t retrytimes, osl::StringAStringAMap& keyvalues, osl::StringA& errmsg )
     {
         if ( keyvalues.empty() )
         {
             return 0;
         }
 
-        StringAStringAMap::iterator it(keyvalues.begin());
-        StringAStringAMap::iterator ite(keyvalues.end());
+        osl::StringAStringAMap::iterator it(keyvalues.begin());
+        osl::StringAStringAMap::iterator ite(keyvalues.end());
 
         char**  keys    = new char*[keyvalues.size()];
         size_t* keylens = new size_t[keyvalues.size()];
@@ -286,7 +286,7 @@ namespace osl
 
         if ( rc != MEMCACHED_SUCCESS ) 
         {
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "memcached_mget failed. "
                 << "ret=" << (int)rc << ", "
                 << memcached_strerror(mc_, rc);
@@ -320,7 +320,7 @@ namespace osl
                 rvalue    = memcached_result_value( result );
                 rvaluelen = memcached_result_length( result );
 
-                StringA strkey(rkey, rkeylen);
+                osl::StringA strkey(rkey, rkeylen);
                 it = keyvalues.find( strkey );
                 if ( it == keyvalues.end() )
                 {
@@ -328,7 +328,7 @@ namespace osl
                     continue;
                 }
 
-                it->second = StringA(rvalue, rvaluelen);
+                it->second = osl::StringA(rvalue, rvaluelen);
 
                 ++goodresultcount;
 
@@ -339,7 +339,7 @@ namespace osl
             }
             else
             {
-                OStringStream oss;
+                osl::OStringStreamA oss;
                 oss << "memcached_fetch_result failed. ret=" 
                     << (int)rc << ", "
                     << memcached_strerror(mc_, rc);
@@ -351,7 +351,7 @@ namespace osl
 
         if ( rc != MEMCACHED_SUCCESS && rc != MEMCACHED_END )
         {   
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "after memcached_fetch_result failed, ret="
                 << (int)rc << ", "
                 << memcached_strerror(mc_, rc);
@@ -365,7 +365,7 @@ namespace osl
         return goodresultcount;
     }*/
 
-    bool Memcached::get( const char* key, const size_t keylen, const size_t retrytimes, StringA& rvalue, StringA& errmsg )
+    bool Memcached::get( const char* key, const size_t keylen, const size_t retrytimes, osl::StringA& rvalue, osl::StringA& errmsg )
     {
         size_t value_len = 0;
         uint32_t flags = 0;
@@ -374,19 +374,19 @@ namespace osl
             memcached_return_t rc = MEMCACHED_SUCCESS;
             char* value = memcached_get( mc_, key, keylen,
                         &value_len, &flags, &rc ); //remember to free this returned value
-            ext::auto_delete<char> value_autofree(value);
+            osl::ext::auto_delete<char> value_autofree(value);
 
             if ( rc == MEMCACHED_SUCCESS )
             {
                 if ( value )
                 {
-                    rvalue = StringA( value, value_len );
+                    rvalue = osl::StringA( value, value_len );
                 }
                 return true;
             }
             else if ( rc == MEMCACHED_NOTFOUND )
             {
-                OStringStream oss;
+                osl::OStringStreamA oss;
                 oss << "key=" << key << " "
                     << "ret=" << (int)rc << ", "
                     << memcached_strerror(mc_, rc);
@@ -395,7 +395,7 @@ namespace osl
             }
             else
             {
-                OStringStream oss;
+                osl::OStringStreamA oss;
                 oss << "key=" << key << " "
                     << "memcached_get failed, although we had retried " << retrytimes << " times. "
                     << "ret=" << (int)rc << ", "
@@ -410,19 +410,19 @@ namespace osl
     }
 
     
-    bool Memcached::get( const StringA& key, const size_t retrytimes, StringA& rvalue, StringA& errmsg )
+    bool Memcached::get( const osl::StringA& key, const size_t retrytimes, osl::StringA& rvalue, osl::StringA& errmsg )
     {
         return get( key.c_str(), key.length(), retrytimes, rvalue, errmsg );
     }
 
     bool Memcached::set( const char* key,   const size_t keylen, 
-            const void* value, const size_t valuelen, StringA& errmsg )
+            const void* value, const size_t valuelen, osl::StringA& errmsg )
     {
         memcached_return_t rc = MEMCACHED_SUCCESS;
         rc = memcached_set( mc_, key, keylen, (const char*)value, valuelen, (time_t)0, (uint32_t)0 );
         if ( rc != MEMCACHED_SUCCESS )
         {
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "memcached_set error, ret=" 
                 << (int)rc << ", " 
                 << memcached_strerror( mc_, rc );
@@ -438,7 +438,7 @@ namespace osl
 
     bool Memcached::set( const char* key,   const size_t keylen, 
                          const void* value, const size_t valuelen, 
-                         const size_t retrytimes, StringA& errmsg )
+                         const size_t retrytimes, osl::StringA& errmsg )
     {
         for ( size_t i = 0; i <= retrytimes; ++i )
         {
@@ -451,29 +451,29 @@ namespace osl
         return false;
     }
 
-    bool Memcached::set( const StringA& key, const StringA& value, StringA& errmsg )
+    bool Memcached::set( const osl::StringA& key, const osl::StringA& value, osl::StringA& errmsg )
     {
         return set( key.c_str(), key.length(), value.c_str(), value.length(), errmsg );
     }
 
-    bool Memcached::set( const StringA& key,
-            const void* value, const size_t valuelen, StringA& errmsg )
+    bool Memcached::set( const osl::StringA& key,
+            const void* value, const size_t valuelen, osl::StringA& errmsg )
     {
         return set( key.c_str(), key.length(), value, valuelen, errmsg );
     }
  
-    bool Memcached::erase( const StringA& key, StringA& errmsg )
+    bool Memcached::erase( const osl::StringA& key, osl::StringA& errmsg )
     {
         return erase( key.c_str(), key.length(), errmsg );
     }
 
-    bool Memcached::erase( const char* key, const size_t keylen, StringA& errmsg )
+    bool Memcached::erase( const char* key, const size_t keylen, osl::StringA& errmsg )
     {
         memcached_return_t rc = MEMCACHED_SUCCESS;
         rc = memcached_delete( mc_, key, keylen, (uint32_t)0 );
         if ( rc != MEMCACHED_SUCCESS )
         {
-            OStringStream oss;
+            osl::OStringStreamA oss;
             oss << "memcached_delete error, ret=" 
                 << (int)rc << ", " 
                 << memcached_strerror( mc_, rc );
