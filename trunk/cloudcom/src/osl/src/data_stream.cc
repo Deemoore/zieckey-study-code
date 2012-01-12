@@ -74,7 +74,7 @@ namespace osl
             return false;
         }
 
-        FILE* pF = fopen( strPathName.c_str(), "rb" );
+        FILE* pF = fopen( strPathName.c_str(), "r" );
         struct stat st;
 
         //////////////////////////////////////////////////////////////////////////
