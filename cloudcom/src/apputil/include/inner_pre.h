@@ -4,9 +4,9 @@
 
 
 //! Most commonly used headers.
-#include "net/include/QNetworkLibAllExp.h"
+#include "net/include/exp.h"
 
-#include "apputil/include/QAppUtilConfig.h"
+#include "apputil/include/config.h"
 
 
 namespace aut

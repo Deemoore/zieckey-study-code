@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\config.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\exp.h"
 				>
 			</File>
@@ -221,10 +225,6 @@
 			</File>
 			<File
 				RelativePath="..\include\object.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\osl_config.h"
 				>
 			</File>
 			<File
@@ -250,7 +250,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\osl_inner_pre.cc"
+				RelativePath=".\inner_pre.cc"
 				>
 			</File>
 			<File

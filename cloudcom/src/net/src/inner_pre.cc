@@ -1,4 +1,4 @@
-#include "net/include/QNetPrerequisits.h"
+#include "net/include/inner_pre.h"
 
 
 #include "osl/include/object.h"
@@ -7,11 +7,11 @@
 #include "osl/include/process_ext.h"
 #include "osl/include/lock.h"
 
-#include "net/include/QCURLWork.h"
-#include "net/include/QCURLService.h"
-#include "net/include/QHttpGetWork.h"
-#include "net/include/QHttpPostFile.h"
-#include "net/include/QHttpPostWork.h"
+#include "net/include/curl_work.h"
+#include "net/include/curl_service.h"
+#include "net/include/http_get_work.h"
+#include "net/include/http_post_file.h"
+#include "net/include/http_post_work.h"
 
 
 #ifdef H_WINDOWS_API

@@ -1,6 +1,6 @@
 
-#ifndef OSLIB_CONFIG_H_
-#define OSLIB_CONFIG_H_
+#ifndef _OSLIB_CONFIG_H_
+#define _OSLIB_CONFIG_H_
 
 //Define to 1 if you want to use memory pool
 #define H_PROVIDE_MEMORY_POOL 0

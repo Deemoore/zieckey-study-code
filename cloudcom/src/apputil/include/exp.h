@@ -3,9 +3,9 @@
 #define QAPP_UTILITY_ALL_EXPORT_H_
 
 
-#include "net/include/QNetworkLibAllExp.h"
+#include "net/include/exp.h"
 
-#include "apputil/include/QAppUtilConfig.h"
+#include "apputil/include/config.h"
 
 #ifdef H_OS_WINDOWS
 H_LINK_LIB( "apputil")

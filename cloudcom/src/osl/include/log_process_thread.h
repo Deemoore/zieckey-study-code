@@ -14,7 +14,7 @@
 
 #if H_USING_THREAD_TO_WRITE_LOG
     #if !H_PROVIDE_THREAD_EVENT_LOCK
-        #error "The log system depend on osl::Thread, please recompile osl with H_PROVIDE_THREAD_EVENT_LOCK flag on, H_PROVIDE_THREAD_EVENT_LOCK is difined in libcommon/src/osl/include/osl_config.h"
+        #error "The log system depend on osl::Thread, please recompile osl with H_PROVIDE_THREAD_EVENT_LOCK flag on, H_PROVIDE_THREAD_EVENT_LOCK is difined in libcommon/src/osl/include/config.h"
     #endif
 #endif
 

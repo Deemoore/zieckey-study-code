@@ -1,7 +1,7 @@
 #ifndef QOSLIB_LOCKER_H__
 #define QOSLIB_LOCKER_H__
 
-#include "osl/include/osl_config.h"
+#include "osl/include/config.h"
 #include "osl/include/process_ext.h"
 
 

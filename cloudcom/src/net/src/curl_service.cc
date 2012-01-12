@@ -1,4 +1,4 @@
-#include "net/include/QNetPrerequisits.h"
+#include "net/include/inner_pre.h"
 
 #if H_PROVIDE_CURL
 
@@ -8,9 +8,9 @@
 #include "osl/include/process_ext.h"
 #include "osl/include/lock.h"
 
-#include "net/include/QCURLService.h"
-#include "net/include/QCURLWork.h"
-#include "QCURLWorkThread.h"
+#include "net/include/curl_service.h"
+#include "net/include/curl_work.h"
+#include "curl_work_thread.h"
 #include "curl/curl.h"
 
 

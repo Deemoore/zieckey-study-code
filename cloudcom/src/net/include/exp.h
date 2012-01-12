@@ -1,23 +1,18 @@
+#ifndef QNETWORKLIB_ALL_EXPORT_H_
+#define QNETWORKLIB_ALL_EXPORT_H_
 
-#ifndef _QNETWORKLIB_H_NETPREREQUISITS_H__
-#define _QNETWORKLIB_H_NETPREREQUISITS_H__
 
-
-//! Most commonly used headers.
 #include "osl/include/exp.h"
 
-#include "net/include/QNetConfig.h"
+#include "net/include/config.h"
 
-#include "osl/include/object.h"
-#include "osl/include/string_ext.h"
-#include "osl/include/thread.h"
-#include "osl/include/process_ext.h"
-#include "osl/include/lock.h"
-#include "osl/include/event.h"
+#ifdef H_OS_WINDOWS
+//! Define import lib macro. Add it in ANY CPP file in target host module.
+H_LINK_LIB( "net")
+#endif // end of #ifdef H_OS_WINDOWS
 
 namespace net
 {
-
 
     //! Module symbol export
 #ifdef H_WINDOWS_API
@@ -44,6 +39,15 @@ namespace net
     //! Uninitialize the net library.
     _EXPORT_NET void uninitializeNet();
 
-};
+}
 
-#endif
+
+
+
+
+
+
+#endif // end of #ifndef QNETWORKLIB_ALL_EXPORT_H_
+
+
+

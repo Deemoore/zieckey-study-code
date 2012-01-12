@@ -1,4 +1,4 @@
-#include "apputil/include/QAppUtilPrerequisits.h"
+#include "apputil/include/inner_pre.h"
 
 
 namespace aut

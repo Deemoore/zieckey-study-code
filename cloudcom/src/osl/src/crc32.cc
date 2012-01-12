@@ -1,7 +1,7 @@
 #include "osl/include/inner_pre.h"
 #include "osl/include/crc32.h"
 
-#include "osl/include/osl_config.h"
+#include "osl/include/config.h"
 
 #if H_PROVIDE_CRC32
 

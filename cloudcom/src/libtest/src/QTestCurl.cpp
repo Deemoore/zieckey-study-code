@@ -3,7 +3,7 @@
 #include "osl/include/file_util.h"
 #include "osl/include/md5.h"
 
-#include "net/include/QHttpPostWork.h"
+#include "net/include/http_post_work.h"
 
 #include "curl/curl.h"
 
@@ -11,8 +11,8 @@
 #include "libtest/include/QTestObject.h"
 
 #include "osl/include/event.h"
-#include "net/include/QCURLService.h"
-#include "net/include/QCURLWork.h"
+#include "net/include/curl_service.h"
+#include "net/include/curl_work.h"
 
 
 namespace LibTest
