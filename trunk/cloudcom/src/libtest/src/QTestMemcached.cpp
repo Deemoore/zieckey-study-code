@@ -99,13 +99,13 @@ namespace
     }
 
 
-    void test1( osl::Memcached& mc )
+    void test1( wu::Memcached& mc )
     {//{{{
         osl::StringA value;
         osl::StringA errmsg;
         osl::StringA key[] = { "6e9ec3c3797d2e32ea8d04fba3216dc6", "49f13a2dd0a4e43959788df27ec7227a" };
         size_t keynum = sizeof(key)/sizeof(key[0]);
-        osl::Memcached::StringAStringAMap ssm;
+        wu::Memcached::StringAStringAMap ssm;
         for ( size_t i = 0; i < keynum; ++i )
         {
             ssm[key[i]] = "";
@@ -158,9 +158,9 @@ namespace
             osl::StringA errmsg;
             osl::StringA value;
             osl::StringA logname;
-            osl::Memcached& mc_;
+            wu::Memcached& mc_;
 
-            QueryMemcachedFunctor( osl::Memcached& mc ) : mc_(mc) {
+            QueryMemcachedFunctor( wu::Memcached& mc ) : mc_(mc) {
                 logname = osl::StringA("operatormd5count_") + osl::StringUtil::valueOf((u64)currenttime_);
             }
 
@@ -426,7 +426,7 @@ namespace
     }
 
     private:
-        osl::Memcached mc_;
+        wu::Memcached mc_;
         
         osl::StringAList md5list_;
 
@@ -448,7 +448,7 @@ namespace
 
 TEST( test_memcached )
 {
-    osl::Memcached mc( "xxx", "mid.kill.corp.qihoo.net", "11211" );
+    wu::Memcached mc( "xxx", "mid.kill.corp.qihoo.net", "11211" );
     test1( mc );
 
     const size_t kThreadNum = 1;

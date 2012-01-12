@@ -1,12 +1,7 @@
 #ifndef _QMEMCACHED_H__
 #define _QMEMCACHED_H__
 
-#ifdef H_OS_WINDOWS
-//
-#else
-#define H_PROVIDE_LIBMEMCACHED
-#endif
-
+#include "wraputil/include/inner_pre.h"
 
 #include "osl/include/auto_delete.h"
 #include "osl/include/string_ext.h"
