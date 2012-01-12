@@ -100,7 +100,144 @@ namespace osl
 
         return true;
     }
+
+    int Memcached::mget( const size_t retrytimes, StringAStringAMap& keyvalues, StringA& errmsg )
+    {
+        if ( keyvalues.empty() )
+        {
+            return 0;
+        }
+
+        StringAStringAMap::iterator it(keyvalues.begin());
+        StringAStringAMap::iterator ite(keyvalues.end());
+
+        char**  keys    = new char*[keyvalues.size()];
+        size_t* keylens = new size_t[keyvalues.size()];
+
+        int goodresultcount = 0;
+        size_t key_num = 0;
+        do
+        {
+        size_t i = 0;
+        for ( ; it != ite; ++it )
+        {
+            keys[i] = const_cast<char*>(it->first.c_str());
+            keylens[i] = it->first.length();
+            ++i;
+        }
+
+        key_num = i;
+
+        memcached_return_t rc = MEMCACHED_SUCCESS; 
+        for ( size_t j = 0; j <= retrytimes; ++j )
+        {
+            rc = memcached_mget(mc_, (const char* const*)keys, keylens, key_num);
+
+            if ( rc == MEMCACHED_NOTFOUND )
+            {
+                //return 0;
+                goodresultcount = 0;
+                break;
+            }
+
+            if( rc == MEMCACHED_SUCCESS )
+            {
+                break;
+            }
+        }
+
+        if ( rc != MEMCACHED_SUCCESS ) 
+        {
+            OStringStream oss;
+            oss << "memcached_mget failed. "
+                << "ret=" << (int)rc << ", "
+                << memcached_strerror(mc_, rc);
+            errmsg = oss.str();
+            //fprintf( stderr, "%s, although we have tried %lu times\n", errmsg.c_str(), retrytimes + 1 );
+            //return -1;
+            goodresultcount = -1;
+            break;
+        }
+
+        uint32_t    flags      = 0;
+        const char* rkey       = NULL;
+        size_t      rkeylen    = 0;
+        const char* rvalue     = NULL;
+        size_t      rvaluelen  = 0;
+
+        memcached_result_st  resultobj; 
+        memcached_result_st* presultobj = &resultobj;
+        memcached_result_st* result     = memcached_result_create( mc_, presultobj );
+
+        /*this will automatically call memcached_result_free( presultobj ) 
+         * to free the memcached created objects */
+        osl::ext::auto_delete< memcached_result_st > result_obj_autofree( presultobj );
+
+        while ( memcached_fetch_result(mc_, result, &rc) != NULL)
+        {
+            if ( rc == MEMCACHED_SUCCESS )
+            {   
+                flags     = memcached_result_flags( result );
+                rkey      = memcached_result_key_value( result );
+                rkeylen   = memcached_result_key_length( result );
+                rvalue    = memcached_result_value( result );
+                rvaluelen = memcached_result_length( result );
+
+                StringA strkey(rkey, rkeylen);
+                it = keyvalues.find( strkey );
+                if ( it == keyvalues.end() )
+                {
+                    //fprintf( stderr, "key=%s is not in the query keys but returned by memcached server.\n", strkey.c_str() );
+                    continue;
+                }
+
+                it->second = StringA(rvalue, rvaluelen);
+
+                ++goodresultcount;
+
+            }
+            else if ( rc == MEMCACHED_END )
+            {
+                break;
+            }
+            else
+            {
+                OStringStream oss;
+                oss << "memcached_fetch_result failed. ret=" 
+                    << (int)rc << ", "
+                    << memcached_strerror(mc_, rc);
+                errmsg = oss.str();
+                //fprintf( stderr, "%s\n", errmsg.c_str() );
+                //return -2;
+                goodresultcount = -2;
+                break;
+            }
+        }
+
+        if ( rc != MEMCACHED_SUCCESS && rc != MEMCACHED_END )
+        {   
+            OStringStream oss;
+            oss << "after memcached_fetch_result failed, ret="
+                << (int)rc << ", "
+                << memcached_strerror(mc_, rc);
+            errmsg = oss.str();
+            //fprintf( stderr, "%s\n", errmsg.c_str() );
+            //return -3;
+            goodresultcount = -3;
+            break;
+        }
+        } while (false);
+
+        delete [] keys;
+        keys = NULL;
+        delete [] keylens;
+        keylens = NULL;
+
+        assert( goodresultcount <= (int)key_num );
+        return goodresultcount;
+    }
     
+    /*
     int Memcached::mget( const size_t retrytimes, StringAStringAMap& keyvalues, StringA& errmsg )
     {
         if ( keyvalues.empty() )
@@ -168,8 +305,8 @@ namespace osl
         memcached_result_st* presultobj = &resultobj;
         memcached_result_st* result     = memcached_result_create( mc_, presultobj );
 
-        /*this will automatically call memcached_result_free( presultobj ) 
-         * to free the memcached created objects */
+        //this will automatically call memcached_result_free( presultobj ) 
+        // to free the memcached created objects 
         ext::auto_delete< memcached_result_st > result_obj_autofree( presultobj );
 
         int goodresultcount = 0;
@@ -226,7 +363,7 @@ namespace osl
 
         assert( goodresultcount <= (int)key_num );
         return goodresultcount;
-    }
+    }*/
 
     bool Memcached::get( const char* key, const size_t keylen, const size_t retrytimes, StringA& rvalue, StringA& errmsg )
     {
