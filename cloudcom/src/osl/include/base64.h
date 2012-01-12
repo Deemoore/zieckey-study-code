@@ -1,5 +1,5 @@
-#ifndef _BASE64_H_
-#define _BASE64_H_
+#ifndef OSLIB_BASE64_H_
+#define OSLIB_BASE64_H_
 
 #include "osl/include/osl_config.h"
 #include "osl/include/platform_micros.h"
