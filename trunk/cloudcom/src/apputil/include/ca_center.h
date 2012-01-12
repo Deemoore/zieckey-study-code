@@ -1,8 +1,10 @@
 #ifndef Q_APP_UTILITY_CA_CENTER_UTILITY_H_
 #define Q_APP_UTILITY_CA_CENTER_UTILITY_H_
 
-#include "apputil/include/QAppUtilConfig.h"
+#include "apputil/include/config.h"
+
 #include "osl/include/no_copy.h"
+
 #if ( H_PROVIDE_NET_CA_ENCRYPT && H_PROVIDE_IDEA_ENCRYPT )
 
 namespace aut

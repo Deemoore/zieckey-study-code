@@ -7,7 +7,7 @@
 #include "osl/include/ini_parser.h"
 #include "osl/include/crc32.h"
 
-#include "apputil/include/QCACenter.h"
+#include "apputil/include/ca_center.h"
 
 #if H_PROVIDE_IDEA_ENCRYPT
 #ifdef H_WINDOWS_API

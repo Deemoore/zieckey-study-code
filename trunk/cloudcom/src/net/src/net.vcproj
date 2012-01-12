@@ -50,7 +50,7 @@
 				TreatWChar_tAsBuiltInType="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;net/include/QNetPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;net/include/inner_pre.h&quot;"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -130,7 +130,7 @@
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;net/include/QNetPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;net/include/inner_pre.h&quot;"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -188,15 +188,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\QNetConfig.h"
+				RelativePath="..\include\config.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QNetPrerequisits.h"
+				RelativePath="..\include\exp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QNetworkLibAllExp.h"
+				RelativePath="..\include\inner_pre.h"
 				>
 			</File>
 		</Filter>
@@ -206,11 +206,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\QNetPrerequisits.cpp"
+				RelativePath=".\inner_pre.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QPCH.cpp"
+				RelativePath=".\pch.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -218,7 +218,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;net/include/QNetPrerequisits.h&quot;"
+						PrecompiledHeaderThrough="&quot;net/include/inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -227,6 +227,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
+						PrecompiledHeaderThrough="&quot;net/include/inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -235,51 +236,51 @@
 			Name="curl"
 			>
 			<File
-				RelativePath=".\QCURLService.cpp"
+				RelativePath=".\curl_service.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QCURLService.h"
+				RelativePath="..\include\curl_service.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QCURLWork.cpp"
+				RelativePath=".\curl_work.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QCURLWork.h"
+				RelativePath="..\include\curl_work.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QCURLWorkThread.cpp"
+				RelativePath=".\curl_work_thread.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QCURLWorkThread.h"
+				RelativePath=".\curl_work_thread.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QHttpGetWork.cpp"
+				RelativePath=".\http_get_work.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QHttpGetWork.h"
+				RelativePath="..\include\http_get_work.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QHttpPostFile.cpp"
+				RelativePath=".\http_post_file.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QHttpPostFile.h"
+				RelativePath="..\include\http_post_file.h"
 				>
 			</File>
 			<File
-				RelativePath=".\QHttpPostWork.cpp"
+				RelativePath=".\http_post_work.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QHttpPostWork.h"
+				RelativePath="..\include\http_post_work.h"
 				>
 			</File>
 		</Filter>

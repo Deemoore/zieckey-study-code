@@ -1,15 +1,15 @@
-#include "apputil/include/QAppUtilPrerequisits.h"
+#include "apputil/include/inner_pre.h"
 
 
-#include "apputil/include/QCACenter.h"
+#include "apputil/include/ca_center.h"
 
 #include "osl/include/idea_wrapper.h"
 #include "osl/include/md5.h"
 
 
-#include "net/include/QCURLService.h"
-#include "net/include/QCURLWork.h"
-#include "net/include/QHttpPostWork.h"
+#include "net/include/curl_service.h"
+#include "net/include/curl_work.h"
+#include "net/include/http_post_work.h"
 
 
 

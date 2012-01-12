@@ -1,4 +1,4 @@
-#include "net/include/QNetPrerequisits.h"
+#include "net/include/inner_pre.h"
 
 
 
@@ -8,10 +8,10 @@
 #include "curl/curl.h"
 
 
-#include "net/include/QCURLWork.h"
-#include "net/include/QHttpPostWork.h"
-#include "net/include/QCURLService.h"
-#include "QCURLWorkThread.h"
+#include "net/include/curl_work.h"
+#include "net/include/http_post_work.h"
+#include "net/include/curl_service.h"
+#include "curl_work_thread.h"
 
 namespace net
 {

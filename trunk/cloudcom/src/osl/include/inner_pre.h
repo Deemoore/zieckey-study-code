@@ -1,7 +1,7 @@
 #ifndef _NOSLIBPREREQUISITS_H
 #define _NOSLIBPREREQUISITS_H
 
-#include "osl/include/osl_config.h"
+#include "osl/include/config.h"
 
 //! Compile configuration.
 #include "osl/include/platform_micros.h"

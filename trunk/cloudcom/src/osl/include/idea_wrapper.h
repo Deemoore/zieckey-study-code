@@ -1,7 +1,7 @@
 #ifndef QOSLIB_ENCRYPT_UTILITY_H_
 #define QOSLIB_ENCRYPT_UTILITY_H_
 
-#include "osl/include/osl_config.h"
+#include "osl/include/config.h"
 #include "osl/include/platform_micros.h"
 #include "osl/include/data_stream.h"
 

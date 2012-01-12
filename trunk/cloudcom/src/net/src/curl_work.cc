@@ -1,12 +1,12 @@
-#include "net/include/QNetPrerequisits.h"
+#include "net/include/inner_pre.h"
 
 #if H_PROVIDE_CURL
 
 
-#include "net/include/QCURLService.h"
-#include "net/include/QCURLWork.h"
-#include "QCURLWorkThread.h"
-#include "net/include/QHttpGetWork.h"
+#include "net/include/curl_service.h"
+#include "net/include/curl_work.h"
+#include "curl_work_thread.h"
+#include "net/include/http_get_work.h"
 #include "curl/curl.h"
 
 
