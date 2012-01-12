@@ -15,10 +15,8 @@ LIBNAME=$(shell basename `pwd`)
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
 SLRSA_OBJS := ../slrsa/md5c.o ../slrsa/nn.o ../slrsa/rsa.o ../slrsa/shsc.o ../slrsa/slrsa.o
 
-CCSRCS:= $(wildcard src/*.cc)
-CCOBJS:= $(patsubst src/%.cc, src/%.o, $(CCSRCS))
-SRCS := $(wildcard src/*.cpp)
-OBJS := $(patsubst src/%.cpp, src/%.o, $(SRCS)) $(CCOBJS) $(IDEA_OBJS) $(SLRSA_OBJS)
+SRCS := $(wildcard src/*.cc)
+OBJS := $(patsubst src/%.cc, src/%.o, $(SRCS)) $(CCOBJS) $(IDEA_OBJS) $(SLRSA_OBJS)
 DEPS := $(patsubst %.o, %.d, $(OBJS))
 
 TARGET_SO=lib$(LIBNAME).so
