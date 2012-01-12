@@ -10,9 +10,9 @@ CC=cc
 CXX=cc
 AR=ar
 ARFLAGS=cru
-CFLAGS=-g -DNDEBUG -D_TRACE -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I. -I ~/include 
+CFLAGS=-g -DNDEBUG  -I/usr/local/include -I. -I ~/include 
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-lstdc++ -L/usr/local/lib -L ~/lib -Wl,-rpath=~/lib
+LDFLAGS=-lstdc++ -L/usr/local/lib -L ~/lib -Wl,-rpath=~/lib -lz -lboost_iostreams
 
 C_SRCS=$(wildcard *.c)
 CPP_SRCS=$(wildcard *.cpp) 

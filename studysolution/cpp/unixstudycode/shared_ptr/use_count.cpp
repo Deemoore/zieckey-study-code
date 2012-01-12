@@ -1,23 +1,8 @@
 
 #include <iostream> 
 #include <tr1/memory> 
-
-class Foo 
-{ 
-
-    public: 
-        void print() 
-        {
-
-            std::cout << "pointer:" << this << " foo::print" << std::endl; 
-
-        } 
-
-        ~Foo()
-        {
-            std::cout << __PRETTY_FUNCTION__ << " called\n";
-        }
-}; 
+#include "foo.h"
+ 
 
 /* When sp2 is created, sp1 increments the reference counter. 
 
@@ -40,10 +25,12 @@ int main()
     sp1->print(); 
     std::cout << "sp1 pointer: " << sp1.get() << std::endl;
 
+    std::cout << "counter sp1: " << sp1.use_count() << std::endl; 
 
     std::tr1::shared_ptr<Foo> sp2(sp1); 
     sp2->print(); 
-
+    std::cout << "counter sp1: " << sp1.use_count() << std::endl; 
+    std::cout << "counter sp2: " << sp2.use_count() << std::endl; 
 
     std::cout << "sp1 pointer: " << sp1.get() << std::endl; 
     std::cout << "sp2 pointer: " << sp2.get() << std::endl;

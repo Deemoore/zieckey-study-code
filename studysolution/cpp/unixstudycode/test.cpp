@@ -141,12 +141,18 @@ void test5_reinterpret_cast()
     std::cout << "d=" << d << std::endl;
     std::cout << "i=" << i << std::endl;
 }
+void test6_assert()
+{
+    assert(0);
+}
+
 int main()
 {
     //test1_random();
     //test2_snprintf();
     //test3_array_const_size();
-    test4_pair_compare();
-    test5_reinterpret_cast();
+    //test4_pair_compare();
+    //test5_reinterpret_cast();
+    test6_assert();
     return 0;
 }
