@@ -5,6 +5,10 @@
 //! Most commonly used headers.
 #include "osl/include/exp.h"
 
+#ifndef H_OS_WINDOWS
+    #define H_PROVIDE_LIBMEMCACHED
+#endif
+
 namespace wu
 {
     //! Module symbol export
