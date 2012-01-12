@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef OSLIB_TYPE_TRAITS_EXT_H_
+#define OSLIB_TYPE_TRAITS_EXT_H_
 
 #ifdef H_OS_WINDOWS
 //
@@ -463,6 +463,8 @@ namespace stdext
 
 };//stdext namespace
 
+
+#endif //#ifndef OSLIB_TYPE_TRAITS_EXT_H_
 
 
 

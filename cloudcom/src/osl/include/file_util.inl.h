@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef OSLIB_FILE_UTIL_INL_H_
+#define OSLIB_FILE_UTIL_INL_H_
 
 #ifdef H_OS_WINDOWS
 #   include <direct.h>
@@ -281,6 +281,7 @@ namespace osl
         return false;
     }
 
-};//namespace irr.
+};//namespace osl
 
+#endif //#ifndef OSLIB_FILE_UTIL_INL_H_
 
