@@ -708,7 +708,7 @@ namespace osl
     //----------------------------------------------------------
     void Process::msSleep( u32 nMilliseconds )
     {
-        usleep( nMilliseconds * 1000 );
+        ::usleep( nMilliseconds * 1000 );
     }
 
     //----------------------------------------------------------
@@ -721,7 +721,7 @@ namespace osl
     //----------------------------------------------------------
     void Process::usSleep( u32 nUSeconds )
     {
-        usleep( nUSeconds );
+        ::usleep( nUSeconds );
     }
     //----------------------------------------------------------
     ProcessHandle Process::getCurrentProcessHandle()

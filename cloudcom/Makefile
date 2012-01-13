@@ -10,8 +10,12 @@ SUBDIRS=src/slrsa src/idea src/osl src/wraputil src/net src/apputil src/libtest
 
 TOPDIR=`pwd`
 
+#TOP_CFLAGS="-g -O3"
+TOP_CFLAGS="-g"
+TOP_LDFLAGS=""
+
 all:
-	for t in $(SUBDIRS); do $(MAKE) -C $$t ; $(MAKE) install -C $$t; done
+	for t in $(SUBDIRS); do $(MAKE) TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; $(MAKE) install -C $$t; done
 	
 clean:
 	for t in $(SUBDIRS); do $(MAKE) clean -C $$t; done
