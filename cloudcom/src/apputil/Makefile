@@ -12,8 +12,8 @@ CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords
 LDFLAGS=-L/usr/local/lib -L $(PREFIX)/lib -lnet -losl -lpthread 
 LIBNAME=$(shell basename `pwd`)
 
-SRCS := $(wildcard src/*.cpp)
-OBJS := $(patsubst src/%.cpp, src/%.o, $(SRCS))
+SRCS := $(wildcard src/*.cc)
+OBJS := $(patsubst src/%.cc, src/%.o, $(SRCS))
 
 TARGET_SO=lib$(LIBNAME).so
 TARGET_A=lib$(LIBNAME).a
@@ -28,10 +28,10 @@ $(TARGET_A) : $(OBJS)
 $(TARGET_SO) : $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) -shared -o $@
 	
-src/%.o : src/%.cpp include/%.h
+src/%.o : src/%.cc include/%.h
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@
 	
-src/%.o : src/%.cpp
+src/%.o : src/%.cc
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 

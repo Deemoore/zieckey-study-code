@@ -32,6 +32,9 @@ $(TARGET_A) : $(OBJS)
 $(TARGET_SO) : $(OBJS)
 	$(CXX) $(LDFLAGS)  $(OBJS) -shared -o $@
 	
+check : $(TARGET_A)	$(TARGET_SO)	
+	$(MAKE) check -C test
+
 cc/%.o : cc/%.cpp include/%.h
 	$(CXX) $(CPPFLAGS) $< -o $@
 	
