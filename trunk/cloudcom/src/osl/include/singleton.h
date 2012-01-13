@@ -34,6 +34,7 @@ namespace osl
             //assert( ms_Singleton );
             return ( *ms_Singleton );
         }
+
         static T* getSingletonPtr( void )
         {
             return ms_Singleton;
@@ -44,8 +45,8 @@ namespace osl
         {
             assert(0 == ms_Singleton);
             ms_Singleton = static_cast< T* >( this );
-
         }
+
         ~Singleton( void )
         {
             //assert( ms_Singleton );

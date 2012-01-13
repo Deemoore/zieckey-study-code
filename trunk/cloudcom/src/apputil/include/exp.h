@@ -8,7 +8,7 @@
 #include "apputil/include/config.h"
 
 #ifdef H_OS_WINDOWS
-H_LINK_LIB( "apputil")
+H_LINK_LIB("apputil")
 #endif // end of #ifdef H_OS_WINDOWS
 //! Define import lib macro. Add it in ANY CPP file in target host module.
 
