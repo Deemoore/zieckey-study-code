@@ -35,6 +35,10 @@ namespace osl
 
         static void destroyInstance();
 
+        //! Constructor can only be called in initializeOSLib;
+        Timer( void );
+        ~Timer( void );
+
         //! Gets raw time in seconds.
         //! \remark Currently just do it like this. It is transient and subject to change.
         HTime_Sec getRawTimeInSeconds()
@@ -183,13 +187,8 @@ namespace osl
 
         static Lock    m_lkForInit;//! the lock for create the instance
 
-        //! Constructor can only be called in initializeUtils;
-        Timer( void );
-
         //! Hide copy constructor.
         Timer( const Timer& );
-
-        ~Timer( void );
 
         /** modify a timer.
         *  @param funcTimer Function to receive timer notification.

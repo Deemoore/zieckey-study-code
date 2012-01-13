@@ -26,9 +26,6 @@
 
 #include "osl/include/process_ext.h"
 
-#include "../../../config.h"
-
-
 //-------------------------------------------------------
 //Windows lib
 #ifdef H_WINDOWS_API
@@ -80,9 +77,9 @@ namespace osl
 {
     namespace donotuseit
     {
-        const char* _bugreport  = "bug report to=" PACKAGE_BUGREPORT;
-        const char* _packetstring  = "packet name=" PACKAGE_STRING;
-        const char* _packetversion = "version=" PACKAGE_VERSION;
+        const char* _bugreport  = "bug report to weizili";
+        const char* _packetstring  = "packet name cloudcom";
+        const char* _packetversion = "version 1.0.17";
     }
 
     namespace
@@ -143,7 +140,8 @@ namespace osl
 #endif
 
 #if H_PROVIDE_TIMER
-        Timer::createInstance();
+        //Timer::createInstance();
+        new Timer();
 #endif//#if H_PROVIDE_TIMER
 
         Process::initialize();

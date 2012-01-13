@@ -3,11 +3,12 @@
 #define _QNETWORKLIB_H_NETPREREQUISITS_H__
 
 
-//! Most commonly used headers.
-#include "net/include/exp.h"
+#include "osl/include/exp.h"
 
 #include "osl/include/lock.h"
 #include "osl/include/event.h"
+
+#include "net/include/config.h"
 
 namespace net
 {
