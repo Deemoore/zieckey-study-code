@@ -79,18 +79,19 @@ int main( int argc, char* argv[] )
     // show command description.
     pLibTest->showCommandDescriptions();
 
-    char szCommand[1024];
+    std::string szCommand;
 
-    while ( 1 )
+    for (;;)
     {
-        // get line less than 256.
-        std::cin.getline( szCommand, 1024 );
+        // get line less than 1024.
+        //std::cin.getline(szCommand, 1024);
+        std::cin.clear();
+        std::getline(std::cin, szCommand);
 
-        if ( std::cin.fail() )
+        if ( !std::cin.good() )
         {
             std::cin.clear();
             std::cout << "Error, Command string length CAN NOT larger than 255." << std::endl;
-            std::cin.clear( std::ios_base::goodbit );
             osl::Process::msSleep( 1000 );
             continue;
         }
@@ -106,12 +107,12 @@ int main( int argc, char* argv[] )
             }
 
             // quit
-            if ( strcmp( szCommand, "quit" ) == 0 || strcmp( szCommand, "q" ) == 0 )
+            if ( strcmp( szCommand.c_str(), "quit" ) == 0 || strcmp( szCommand.c_str(), "q" ) == 0 )
             {
                 break;
                 // statistics
             }
-            else if ( strcmp( szCommand, "stats" ) == 0 || strcmp( szCommand, "s" ) == 0 )
+            else if ( strcmp( szCommand.c_str(), "stats" ) == 0 || strcmp( szCommand.c_str(), "s" ) == 0 )
             {
                 // command help.
                 //printfCommandHelp();
