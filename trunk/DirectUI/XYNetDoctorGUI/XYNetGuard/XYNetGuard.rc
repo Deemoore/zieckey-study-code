@@ -1,0 +1,109 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_TRAYMENU MENU 
+BEGIN
+    POPUP "TrayMenu"
+    BEGIN
+        MENUITEM "打开主程序",                       ID_TRAYMENU_OPENMAINWND
+        MENUITEM SEPARATOR
+        MENUITEM "在线客服",                        ID_TRAYMENU_40004
+        POPUP "关注我们"
+        BEGIN
+            POPUP "加入粉丝团"
+            BEGIN
+                MENUITEM "QQ微博粉丝团",                     ID_40007
+                MENUITEM "新浪微博粉丝团",                     ID_40008
+            END
+            MENUITEM "加入邮件列表",                      ID_40009
+            MENUITEM "加入QQ讨论群",                     ID_40010
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "在线升级",                        ID_TRAYMENU_UPDATE
+        MENUITEM SEPARATOR
+        MENUITEM "退出程序",                        ID_TRAYMENU_EXIT
+    END
+END
+
+IDR_MAINMENU MENU 
+BEGIN
+    POPUP "主菜单"
+    BEGIN
+        MENUITEM "问题反馈",                        ID_MAINMENU_FEEDBACK
+        MENUITEM "检查新版本",                       ID_MAINMENU_UPDATE
+        MENUITEM SEPARATOR
+        MENUITEM "程序说明",                        ID_MAINMENU_ABOUT
+        MENUITEM "联系我们",                        ID_MAINMENU_CONTACT
+    END
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

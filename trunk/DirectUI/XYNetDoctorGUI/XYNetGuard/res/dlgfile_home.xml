@@ -1,0 +1,123 @@
+
+<dlg pos="0,2,-2,-0">
+  <dlg id="10200" pos="0,7,200,-0" >
+
+    <img  pos="0,0,-0,-0" skin="scan_itemlist_bg" />
+
+    <img id="10201" pos="10,20" skin="scan_animate" sub="0" show="0"/>
+    <img id="10202" pos="9,20" skin="scanstatus18" sub="0"/>
+    <text id="10203" pos="40,20" font="0000" crtext="000000">网络硬件</text>
+    <text id="10204" pos="-70,20" font="0000" crtext="000000">正常</text>
+
+    <img id="10205" pos="10,50" skin="scan_animate" sub="0" show="0"/>
+    <img id="10206" pos="9,50" skin="scanstatus18" sub="0"/>
+    <text id="10207" pos="40,50" font="0000" crtext="00F2E7">网络配置</text>
+    <text id="10208" pos="-70,50" font="0000" crtext="000000">正常</text>
+
+    
+    <imgbtn id="10632" skin="rediagnose" pos="|-61,-52" class="linkimage"/>
+  </dlg>
+
+  <dlg id="10640" pos="200,0,-0,-1">
+    <tabctrl id="10641" cursel="0" tabwidth="105" tabskin="tab" tabspacing="4" tabpos="10" pos="0,10,-0,-0" frameskin="panelgray" framepos="-1" crtext="000000">
+      <tab id="10642" title="诊断结果" width="full" height="full" class1="tabpage" >
+        <dlg id="10643" pos="3,3,-1,35" class="tab_header_bg">
+          <richtext id="10644" pos="10,7,-0,30" class="richtext">
+            体检共发现：<b>
+              <c  color="FB9D00">0</c>
+            </b>项问题，建议立即修复
+          </richtext>
+        </dlg>
+        
+        <!-- 诊断中 -->
+        <dlg id="10660" pos="3,35,-1,-0">
+          <img id="10661" pos="160,80" skin="diagnose_all_animate" sub="0"/>
+          <text pos="210,100" font="0204">正在进行网络诊断，请稍后。。。</text>
+        </dlg>
+        
+        <!-- 诊断有问题 -->
+        <dlg id="10680" pos="3,35,-1,-0">
+            <realwnd id="10681" pos="0,0,-0,300" ctrlid="10681" crbg1="FBFCFD" />
+          
+            <hr pos="10,320,220,320" crbg="A3BAD2"/>
+            <text pos="230,315" font1="0204" crtext="000000"> 综合分析与解决建议 </text>
+            <hr pos="-240,320,-10,320" crbg="A3BAD2"/>
+          
+            <text pos ="20,340" >主要问题：</text>
+            <richtext id="10682" pos="100,340,-0,360" class="richtext">
+              体检共发现：<b>
+                <c  color="FB9D00">0</c>
+              </b>项问题，建议立即修复
+             </richtext>
+          
+          <text pos ="20,370" >解决建议：</text>
+          <richtext id="10683" pos="100,370,-0,-10" class="richtext">
+            体检共发现：<b>
+              <c  color="FB9D00">0</c>
+            </b>项问题，建议立即修复
+          </richtext>
+        </dlg>
+        
+        <!-- 诊断无任何问题 显示网络质量数据 -->
+        <dlg id="10700" pos="3,35,-1,-0" class1="client" >
+          <!-- 网络诊断结果  -->
+          <dlg pos="0,0,-0,180">
+            <img pos="200,80" skin="diagnose_success"/>
+            <text pos="250,82" font="0204" crtext="46A214">恭喜您！</text>
+            <text pos="250,102" font="0204" crtext="46A214">您的网络一切正常！</text>
+          </dlg>
+          
+          <!-- 网络质量数据 -->
+          <hr pos="10,190,|-80,190" crbg="A3BAD2"/>
+          <text pos="|-70,185" font1="0204" crtext="000000"> 当前网络业务质量状况 </text>
+          <hr pos="350,190,-10,190" crbg="A3BAD2"/>
+          <dlg pos="0,200,-0,-0">
+            <text id="10721" pos="25,8" font1="0204" crtext="000000" >网页浏览</text>
+            <img id="10722" pos="84,5" skin="stars" sub="0"/>
+            <img id="10723" pos="101,5" skin="stars" sub="0"/>
+            <img id="10724" pos="118,5" skin="stars" sub="0"/>
+            <img id="10725" pos="135,5" skin="stars" sub="0"/>
+            <img id="10726" pos="152,5" skin="stars" sub="0"/>
+
+            
+            <richtext id="10755" pos="85,120,-0,143" class="richtext">
+              体检共发现：<b>
+                <c  color="FB9D00">0</c>
+              </b>项问题，建议立即修复
+            </richtext>
+            <img pos="84,162,442,196" skin="processtext"></img>
+            <progress id="10756" pos="84,150,444,162" min="0" max="70" value="0" bgskin="pbk1" posskin="processinfo"/>
+            
+            
+          </dlg>
+        </dlg>
+      </tab>     
+      <tab id="10770" title="网卡列表" width="full" height="full" class1="tabpage" >
+        <dlg pos="0,0,-0,-0">
+          <dlg pos="1,1,-1,33" class="tab_header_bg">
+            <img pos="20,12" skin="kwssafe" sub="0" id="10411"/>
+            <text id="10771" pos="110,9" font="0204">下面是您本机所有的网络设备及其配置和状态</text>
+            <button id="10772" pos="-82,3,-2,27" class="normalbtn">刷新</button>
+          </dlg>
+          <hr pos="0,34,-0,34" crbg="A3BAD2"/>
+          <!-- 网卡列表 -->
+          <dlg id="10773" pos="0,33,-0,-0" class="panel">
+            <realwnd id="10874" pos="0,0,-0,-0" ctrlid="10874" />
+          </dlg>
+        </dlg>
+      </tab>
+      <tab id="11000" title="标准控件" width="full" height="full" class1="tabpage" >
+        <dlg id="11001" pos="3,3,-1,35" class="tab_header_bg">
+          <text id="11002" pos="110,9" font="0204">演示标准WTL控件的事件处理方式</text>  
+        </dlg>
+        <dlg id="11003" pos="3,35,-1,-52">
+          <realwnd id="11004" pos="10,10,200,30" ctrlid="11004" crbg1="FBFCFD" />
+        </dlg>
+      </tab>   
+    </tabctrl>
+
+    <!--
+    <imgbtn id="10780" class="linkimage" skin="export_button" tip="导出诊断结果，可发在论坛或给朋友寻求帮助" pos="-92,8"/>
+    -->
+  </dlg>
+</dlg>
