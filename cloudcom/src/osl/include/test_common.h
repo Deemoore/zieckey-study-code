@@ -13,3 +13,5 @@
     };\
     CPPUNIT_TEST_SUITE_REGISTRATION(CppUnitTestObjectClass_##name);\
     void CppUnitTestObjectClass_##name::test_func_CppUnitTestObjectClass_##name ()
+
+#define H_TEST_ASSERT CPPUNIT_ASSERT

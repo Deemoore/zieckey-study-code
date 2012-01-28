@@ -67,7 +67,7 @@ namespace osl
         /// Handle to the loaded library.
         DYNLIB_HANDLE            m_hInst;
 
-        StringA            m_strLastError;   //! error string.
+        StringA           m_strLastError;   //! error string.
 
 
     private:

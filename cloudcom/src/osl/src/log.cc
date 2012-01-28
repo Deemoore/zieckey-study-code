@@ -3,8 +3,6 @@
 
 #if H_PROVIDE_LOG_SYSTEM
 
-
-
 #include "osl/include/object.h"
 #include "osl/include/string_ext.h"
 #include "osl/include/string_util.h"
@@ -13,30 +11,27 @@
 
 #include "osl/include/log_process_thread.h"
 
-// #if ( defined(H_LOG_SYSTEM_USE_LOG4CXX) || defined(H_OS_LINUX) )
-// #	include "log_impl_log4cxx.h"
-// #else
-// #	include "log_impl_std.h"
-// #endif
+#ifdef H_LOG_SYSTEM_USE_LOG4CXX
+    #include "log_impl_log4cxx.h"
+#else
+    #include "log_impl_std.h"
+#endif
 
-#include "log_impl_std.h"
 
 namespace osl
 {
     const char*  Log::m_vLevelName[LML_NUM] =
     {
         "TRACE",        //! LML_TRACE = 0,        //!
-        "DEBUG",		//! LML_DEBUG,   //! debug.
+        "DEBUG",        //! LML_DEBUG,   //! debug.
 
         "INFO ",
-        "WARN ",      //! LML_WARN,         //! General warning.
+        "WARN ",        //! LML_WARN,         //! General warning.
         "ERROR",	    //! LML_ERROR,        //! Error.
         "FATAL",        //! LML_FATAL,        //! Fatal error.
     };
     //----------------------------------------------
     
-
-
     Log::Log( const StringA& strName, u32 nOptions,
               const StringA& strLogHost, const StringA& strLogPort )
     {

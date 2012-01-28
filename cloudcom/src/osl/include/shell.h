@@ -1,6 +1,8 @@
 #ifndef _QOSLIB_APPSHELL_H
 #define _QOSLIB_APPSHELL_H
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_APPSHELL
 
 #include "osl/include/object.h"
@@ -10,7 +12,6 @@
 
 namespace osl
 {
-
     class Tokener;
 	class Log;
 
@@ -18,24 +19,33 @@ namespace osl
     //! \par It can serve as register of command processor.
     //! \note command with name "help" is reserved by the shell.
     //! \par  "move -ofi", "move --fix=value targetparameter", "mov -o --fix=434"
-    class _EXPORT_OSLIB AppShell : public osl::Object
+    class _EXPORT_OSLIB AppShell : public Object
     {
         H_ALLOC_OBJECT( AppShell );
     public:
 
+        //! Param in command. 
+        struct Param
+        {
+            StringA  strName;
+            StringA   strVal;
+
+            const StringA& name() const { return strName;}
+            const StringA& value() const { return strVal;}
+        };
+
+        H_DEF_LIST( Param,  ParamList );
+        H_DEF_VECTOR( StringA, TargetList );
+
         //! Command object parsed from text.
+        //! "--fixed=434"   ==> name is "fixed", value is "434"
+        //! "-o"            ==> name is "o", value is ""
+        //! "-a 1"          ==> name is "a", value is "1"
+        //! "-aux"          ==> 3 params, name is "a", "u", "x", and their values are ""
+        //! "--help"        ==> name is "help", value is ""
+        //! "--help target" ==> 1 param:name is "help", value is ""; 1 target: "target"
         class _EXPORT_OSLIB Command
         {
-        public:
-            //! Param in command. "--fixed=434"---- name is "fixed", value is"434"
-            struct Param
-            {
-                StringA  strName;
-                StringA   strVal;
-            };
-
-            H_DEF_LIST( Param,  ParamList );
-            H_DEF_VECTOR( StringA, TargetList );
         public:
             //! Gets command name.
             const StringA& getName() const
@@ -214,15 +224,13 @@ namespace osl
         //! \param cmd[out]
         static void parseSingleCharParam( Tokener& token, Command& pcmd );
 
+        static void addParam(const osl::StringA& name, const osl::StringA& value, AppShell::Command& cmd );
 
         //! Execute the command. This will call the function binded to this command
         void processCommand( Command* pCmd  );
 
 
         void recordHistoryCommand( const StringA& strText );
-
-
-
 
         //! Show help information
         void processHelpCommand( const StringA &strText );
@@ -232,7 +240,7 @@ namespace osl
         //! Parse the command text and return command object.
         //! \note Returned object should be deleted by caller method.
         //Command* parseCommand( const StringA& strCmdText );
-
+        
     };
 
     typedef RefPtr< AppShell > AppShellPtr;
@@ -241,7 +249,7 @@ namespace osl
     template<class T>
     T getShellParam( AppShell::Command* pCmd , const char* pParamName )
     {
-        AppShell::Command::Param* pParam = pCmd->getParam( pParamName );
+        AppShell::Param* pParam = pCmd->getParam( pParamName );
 
         if ( pParam && pParam->strVal.length() )
         {
@@ -283,7 +291,7 @@ namespace osl
         return m_vHistory;
     }
 
-    inline bool operator==( const AppShell::Command::Param& lhs, const AppShell::Command::Param& rhs )
+    inline bool operator==( const AppShell::Param& lhs, const AppShell::Param& rhs )
     {
         return rhs.strName == lhs.strName && rhs.strVal == lhs.strVal;
     }

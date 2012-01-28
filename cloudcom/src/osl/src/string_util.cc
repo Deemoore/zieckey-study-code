@@ -516,9 +516,9 @@ namespace osl
     const String  StringUtil::BLANK;
     const StringW StringUtil::BLANKW;
     const StringA StringUtil::BLANKA;
-    const StringA& StringUtil::true_String = private_true_String;   //! "true"
+    const StringA& StringUtil::true_String  = private_true_String;   //! "true"
     const StringA& StringUtil::false_String = private_false_String;  //! "false"
-    const StringA& StringUtil::zero_String = private_zero_String;   //! "0"
+    const StringA& StringUtil::zero_String  = private_zero_String;   //! "0"
 
 
 #ifdef __CONVERT__LOCALE__

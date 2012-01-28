@@ -9,7 +9,7 @@
 #if H_PROVIDE_JSON
 
 #if H_PROVIDE_UUID
-#include "osl/include/QUUID.h"
+#include "osl/include/uuid.h"
 #endif 
 
 #include "osl/include/no_copy.h"
@@ -35,8 +35,7 @@ namespace json
 	class JSONArray;
 	class JSONObject;
 
-	template<typename _Type>
-	struct TypeToJsonType;
+	template<typename _Type> struct TypeToJsonType;
 
 	template<>
 	struct TypeToJsonType<bool>
@@ -172,37 +171,43 @@ namespace json
 
 
     template<class ValueType>
-        class JSONValueObjectImpl : public Object
+    class JSONValueObjectImpl : public Object
     {
-
     public:
-            JSONValueObjectImpl()
-                : Object( static_cast<ObjectType>( TypeToJsonType<ValueType>::enum_type ) )
-                  , m_value( ValueType() )
+        JSONValueObjectImpl()
+            : Object( static_cast<ObjectType>( TypeToJsonType<ValueType>::enum_type ) )
+            , m_value( ValueType() )
         {
         }
-            JSONValueObjectImpl( const ValueType& value ) 
-                : Object( static_cast<ObjectType>( TypeToJsonType<ValueType>::enum_type )  ) 
-                  , m_value( value )
+        JSONValueObjectImpl( const ValueType& value ) 
+            : Object( static_cast<ObjectType>( TypeToJsonType<ValueType>::enum_type )  ) 
+            , m_value( value )
         {
         }
-            ValueType& getRealValue()
-            {
-                return m_value;
-            }
-            void setValue( const ValueType& newvalue )
-            {
-                m_value = newvalue;
-            }
 
-            operator ValueType()
-            {
-                return m_value;
-            }
+        const ValueType& getRealValue() const
+        {
+            return m_value;
+        }
+
+        ValueType& getRealValue()
+        {
+            return m_value;
+        }
+
+        void setValue( const ValueType& newvalue )
+        {
+            m_value = newvalue;
+        }
+
+        operator ValueType()
+        {
+            return m_value;
+        }
+
     protected:
-            ValueType m_value;
+        ValueType m_value;
     };
-
 
 
     //-------------------------------------------------------------------------

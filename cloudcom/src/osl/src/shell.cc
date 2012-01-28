@@ -19,7 +19,7 @@ namespace osl
     //////////////////////////////////////////////////////////////////////////
     //
     //////////////////////////////////////////////////////////////////////////
-    AppShell::Command::Param* AppShell::Command::getParam( const StringA& strParam )
+    AppShell::Param* AppShell::Command::getParam( const StringA& strParam )
     {
         ParamList::iterator it( m_vParams.begin() ), ite( m_vParams.end() );
 
@@ -40,7 +40,7 @@ namespace osl
     }
 
     //-------------------------------------------------------------------
-    bool AppShell::Command::hasParam( const Command::Param& param/*, bool bCaseSensitive = true*/ ) const
+    bool AppShell::Command::hasParam( const Param& param/*, bool bCaseSensitive = true*/ ) const
     {
         return osl::is_contain( m_vParams, param );
     }
@@ -131,7 +131,7 @@ namespace osl
 // 		osl::s32     nRefDepth = 0;
 // 		// strClass
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("class");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("class");
 // 			if( pParam )
 // 			{
 // 				strClass = pParam->strVal;
@@ -140,7 +140,7 @@ namespace osl
 // 
 // 		// nClassSize
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("size");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("size");
 // 			if( pParam )
 // 			{
 // 				nClassSize = atoi( pParam->strVal.c_str() );
@@ -149,7 +149,7 @@ namespace osl
 // 
 // 		// nIndex
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("index");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("index");
 // 			if( pParam )
 // 			{
 // 				nIndex = atoi( pParam->strVal.c_str() );
@@ -158,7 +158,7 @@ namespace osl
 // 
 // 		// nRefDepth
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("rd");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("rd");
 // 			if( pParam )
 // 			{
 // 				nRefDepth = atoi( pParam->strVal.c_str() );
@@ -252,7 +252,7 @@ namespace osl
 // 
 // 		// strClass
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("class");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("class");
 // 			if( pParam )
 // 			{
 // 				strClass = pParam->strVal;
@@ -261,7 +261,7 @@ namespace osl
 // 
 // 		// nClassSize
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("size");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("size");
 // 			if( pParam )
 // 			{
 // 				nClassSize = atoi( pParam->strVal.c_str() );
@@ -270,7 +270,7 @@ namespace osl
 // 
 // 		// nIndex
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("index");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("index");
 // 			if( pParam )
 // 			{
 // 				nIndex = atoi( pParam->strVal.c_str() );
@@ -279,7 +279,7 @@ namespace osl
 // 
 // 		// val
 // 		{
-// 			osl::AppShell::Command::Param* pParam = pCmd->getParam("val");
+// 			osl::AppShell::Param* pParam = pCmd->getParam("val");
 // 			if( pParam )
 // 			{
 // 				val = atoi( pParam->strVal.c_str() );
@@ -378,7 +378,7 @@ namespace osl
 
 			// min size
 			{
-				osl::AppShell::Command::Param* pParam = pCmd->getParam("min");
+				osl::AppShell::Param* pParam = pCmd->getParam("min");
 				if( pParam )
 				{
 					nMin = atoi( pParam->strVal.c_str() );
@@ -387,7 +387,7 @@ namespace osl
 
 			// max size
 			{
-				osl::AppShell::Command::Param* pParam = pCmd->getParam("max");
+				osl::AppShell::Param* pParam = pCmd->getParam("max");
 				if( pParam )
 				{
 					nMax = atoi( pParam->strVal.c_str() );
@@ -514,7 +514,7 @@ namespace osl
             strTip << std::endl;
         }
 
-        strTip <<  "->";
+        //strTip <<  "->";
 
         if ( m_pStdOut )
         {
@@ -544,7 +544,7 @@ namespace osl
             return showCommandDescriptions();
         }
 
-        strTip <<  "->";
+        //strTip <<  "->";
 
         if ( m_pStdOut )
         {
@@ -936,14 +936,10 @@ namespace osl
         //parse parameter name
         token.skipSpaces();
         StringA s = token.nextString();
-        Command::Param param;
 
         for ( u32 i = 0; i < s.length(); ++i )
         {
-            param.strName.resize( 1 );
-            param.strName[0] = s[i];
-            param.strVal  = "";
-            cmd.m_vParams.push_back( param );
+            addParam(osl::StringA(&s[i], 1), "", cmd);
         }
     }
 
@@ -974,14 +970,32 @@ namespace osl
             {
                     //parameter, name and value
                 case '-':
-                    if ( token.next() == '-' ) // e.g. --ParamName=value
+                    c = token.next();
+                    if ( c == '-' ) // e.g. --ParamName=value
                     {
                         parseParam( token, cmd );
                     }
                     else//e.g.  the command 'ps -aux' has 3 parameter: a,u,x
                     {
-                        token.back();
-                        parseSingleCharParam( token, cmd );
+                        if ( token.next() <= ' ' ) 
+                        {
+                            token.skipSpaces();
+                            if (token.next() != '-') //the command 'cmd -x 1', param.name="x" param.value="1"
+                            {
+                                token.back();
+                                addParam(osl::StringA(&c, 1), token.nextString(), cmd);
+                            }
+                            else //the command 'cmd -x', param.name="x" param.value=""
+                            {
+                                token.back();
+                                addParam(osl::StringA(&c, 1), "", cmd);
+                            }
+                        }
+                        else
+                        {
+                            token.back(2);
+                            parseSingleCharParam( token, cmd );
+                        }
                     }
                     break;
                 case 0:
@@ -1037,28 +1051,30 @@ namespace osl
         }
         else
         {
-            std::cout << std::endl << "->";
+            //std::cout << std::endl << "->";
         }
     }
 
     void AppShell::parseParam( Tokener &token, AppShell::Command& cmd )
     {
         //parse parameter name
-        token.skipSpaces();
-        Command::Param param;
-        param.strName = token.nextString( '=' );
-        StringUtil::trim( param.strName, false, true );
+        //support:
+        // --help
+        // --name=value
 
-        if ( param.strName.size() == 0 ) //不太标准参数，例如：configure --help
+        token.skipSpaces();
+        Param param;
+        StringA ps = token.nextString();
+        size_t equal_index = ps.find('=');
+        if ( equal_index == StringA::npos)
         {
-            // 两个短杠 ‘--’，却没有等于号‘=’
-            param.strName = parseValue( token );
+            param.strName = ps;
         }
         else
         {
-            //标准参数，例如: configure --prefix=/usr/local
-            //parse parameter value
-            param.strVal = parseValue( token );
+            Tokener tk(ps.c_str() + equal_index + 1);
+            param.strName = ps.substr(0, equal_index);
+            param.strVal = parseValue( tk );
         }
 
         cmd.m_vParams.push_back( param );
@@ -1204,6 +1220,14 @@ namespace osl
         }
 
         return true;
+    }
+
+    void AppShell::addParam( const osl::StringA& name, const osl::StringA& value, AppShell::Command& cmd )
+    {
+        Param param;
+        param.strName = name;
+        param.strVal = value;
+        cmd.addParam(param);
     }
 
 

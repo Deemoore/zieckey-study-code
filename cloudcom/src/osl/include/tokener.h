@@ -1,6 +1,8 @@
 #ifndef _QOSLIB_TOKENER_H_
 #define _QOSLIB_TOKENER_H_
 
+#include "osl/include/inner_pre.h"
+
 #if H_PROVIDE_APPSHELL
 
 #include "osl/include/assert_ext.h"
@@ -45,6 +47,12 @@ namespace osl
         * the next number or identifier.
         */
         bool back();
+
+        /**
+        * Back up several characters.
+        * @param backstep - The count of back up steps
+        */
+        bool back(int backstep);
 
         /**
         * Get the next character in the source string.
@@ -157,6 +165,9 @@ namespace osl
             return m_len - m_iCurPos;
         }
 
+        const char* data() const { return m_pSrcString;}
+        const char* size() const { return m_pSrcString;}
+
 	protected:
 		void setCurrentPos( osl::u32 icurentpos )
 		{
@@ -211,6 +222,17 @@ namespace osl
         return true;
     }
 
+    inline bool Tokener::back(int backstep)
+    {
+        if ( m_iCurPos - backstep < 0)
+        {
+            printf( "Stepping back two steps is not supported\n" );
+            return false;
+        }
+
+        m_iCurPos -= backstep;
+        return true;
+    }
 
     //----------------------------------------------------------------------------
     inline int Tokener::dehexchar( char c )
@@ -298,13 +320,13 @@ namespace osl
 			}
         }
 
-        //H_ASSERT(false && "Logic ERROR. The rutuine SHOULD NOT come there.");
+        //H_ASSERT(false && "Logic ERROR. The routine SHOULD NOT come there.");
         //return Slice("", 0);
     }
 
     inline StringA Tokener::nextString( char quote )
     {
-        return nextSlice().toString();
+        return nextSlice(quote).toString();
     }
 
     inline Slice Tokener::nextSlice( char quote )

@@ -1005,17 +1005,17 @@ namespace osl
 
     bool FileUtil::writeToFile( const char* filepath, const void* content, const size_t len )
     {
-        FILE* infile = ::fopen( filepath, "a");
+        FILE* fp = ::fopen( filepath, "w+");
 
-        if ( infile == NULL )
+        if ( fp == NULL )
         {
-            fprintf( stderr, "%s : could not open file \"%s\" for write", __func__, filepath);
+            fprintf( stderr, "%s : could not open file \"%s\" for write\n", __func__, filepath);
             return false;
         }
 
-        ::fwrite( content, sizeof(char), len, infile);
-
-        ::fclose(infile);
+        ::fwrite(content, sizeof(char), len, fp);
+        ::fflush(fp);
+        ::fclose(fp);
 
         return true;
     }

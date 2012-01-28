@@ -1,6 +1,3 @@
-//! \file   HDataStream.cpp
-//! \brief  MemoryDataStream 实现文件
-
 #include "osl/include/inner_pre.h"
 
 #include "osl/include/object.h"

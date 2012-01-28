@@ -79,7 +79,7 @@ public:                                                                         
         /** @copydoc RefTarget::ref the reference count and returns
         *  the new value.
         */
-        virtual void ref()const;
+        virtual void ref() const;
 
         /** @copydoc RefTarget::unref
         *  @note If reference count arrive zero, the instance will be
@@ -138,16 +138,12 @@ public:                                                                         
         }
 
     protected:
-#ifdef H_OS_WINDOWS
-		mutable volatile long m_nRefCount;
-#elif defined(H_OS_LINUX)
-		mutable volatile s32    m_nRefCount;
-#endif
+		mutable volatile AtomicInt32 m_nRefCount;
     };
 
 
     //! The macro used to typedef RefPtr for a class.
-#define HRefPtr(classname)  class classname; typedef osl::RefPtr<classname>  classname##Ptr;
+#define H_REF_PTR(classname)  class classname; typedef osl::RefPtr<classname>  classname##Ptr;
 
 
     /** Pointer class. */
@@ -250,6 +246,7 @@ public:                                                                         
             assert( pRep );
             return pRep;
         }
+
         inline const object_type* get() const
         {
             return pRep;
@@ -324,7 +321,6 @@ public:                                                                         
         InterlockedInc32( &m_nRefCount );
     }
 
-
     template<class Base>
     inline void osl::RefTargetImpl<Base>::unref() const
     {
@@ -357,7 +353,7 @@ public:                                                                         
 public:                                                                  \
     virtual void ref() const          { return ConcreteClass::ref(); }       \
     virtual void unref() const        { return ConcreteClass::unref(); }     \
-    virtual osl::s32 getRef() const { return ConcreteClass::getRef(); }
+    virtual osl::s32 getRef() const   { return ConcreteClass::getRef(); }
 
 };//namespace
 

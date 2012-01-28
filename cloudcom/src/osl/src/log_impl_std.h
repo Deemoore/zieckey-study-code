@@ -51,21 +51,6 @@ namespace osl
                     fprintf( stderr, "cannot open file %s to write log\n", m_strLogFile.c_str() );
                 }
                 //char bom[2] = { char(0xff), char(0xfe)};
-                //m_fileStream.write( bom, 2 );
-
-                // header.
-                /*
-                {
-                    String strTip =
-                        "\n***************************************\n"
-                        "                Qihoo Log             \n"
-                        " Please address it to Qihoo ltd.     \n"
-                        " email: weizili@360.cn           \n"
-                        "***************************************";
-
-                    m_fileStream.write( strTip.c_str(), strTip.size() * sizeof( String::value_type ) );
-                }
-                */
             }
         }
         //----------------------------------------------
@@ -76,14 +61,8 @@ namespace osl
         //----------------------------------------------
         StringA getLogDir()
         {
-            StringA logdir = Process::getBinDir( false ) + "/../logs";
+            StringA logdir = Process::getBinDir( false ) + "/logs";
             if ( FileUtil::isFSFileExist(logdir) )
-            {
-                return logdir;
-            }
-
-            logdir = Process::getBinDir( false ) + "/../log";
-            if ( FileUtil::isFSFileExist(m_strLogFile) )
             {
                 return logdir;
             }
@@ -94,7 +73,13 @@ namespace osl
                 return logdir;
             }
 
-            logdir = Process::getBinDir( false ) + "/logs";
+            logdir = Process::getBinDir( false ) + "/../log";
+            if ( FileUtil::isFSFileExist(m_strLogFile) )
+            {
+                return logdir;
+            }
+
+            logdir = Process::getBinDir( false ) + "/../logs";
             if ( FileUtil::isFSFileExist(m_strLogFile) )
             {
                 return logdir;
@@ -266,7 +251,7 @@ namespace osl
         StringA		  	   m_strName;	//! Log
         StringA         m_strLogFile;   //! log file name
         u32               m_nOptions;   //! Options
-        bool       m_vEnable[LML_NUM];
+        bool      m_vEnable[LML_NUM];
     };
 };
 

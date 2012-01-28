@@ -188,6 +188,10 @@
 				RelativePath=".\sample_test.cc"
 				>
 			</File>
+			<File
+				RelativePath=".\shell_test.cc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
