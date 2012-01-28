@@ -1,0 +1,18 @@
+﻿<layer title="湘勇网络医生" width="800" height="570" appwin="1" resize="0">
+
+  <header class="mainhead" width="full" height="75">
+    <dlgfile pos="0,0,-0,-0" src="501" />
+  </header>
+
+
+  <footer class="mainfoot" width="full" height="23">
+    <dlgfile pos="0,0,-0,-0" src="502" />
+  </footer>
+
+  
+  <body class="mainbody" width="full" height="full">
+    <dlg pos="0,0,-0,-0">
+      <dlgfile pos="0,0,-0,-0" src="503" />
+    </dlg>    
+  </body>
+</layer>

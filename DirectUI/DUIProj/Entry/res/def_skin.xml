@@ -1,0 +1,17 @@
+﻿<skins> 
+  <png name="closebtn" src="200" subwidth="47"/>
+  <png name="minbtn" src="201" subwidth="30"/>
+  <imghorzex name="mainbghead" src="202"/>
+  <imghorzex name="mainbgfoot" src="203" left="2"/>
+
+  <!--
+  <png name="abclogo" src="204" />
+  <png name="btnabc"  src="205" subwidth="64"/>
+  <imghorzex name="body_left_dlg_bkgnd" src="206"/>
+  <imgframe name="mainbgbody" src="207" top="9" left="7" mode="mask" crbg="FBFCFD" />
+  <png name="left_link_btn" src="208" subwidth="65" />
+  -->
+  <!-- 左侧按钮 -->
+  
+  <button name="normalbtn" border="7D9EBC" bg="FBFCFD" bgup="FEFEFE" bgdown="C6E2FD" bguphover="FEFEFE" bgdownhover="DBEDFE" bguppush="C6E2FD" bgdownpush="FEFEFE"/>
+</skins>

@@ -1,0 +1,165 @@
+#pragma once
+//////////////////////////////////////////////////////////////////////////
+// 所有PNG和BMP的编号规则：
+// BMP 10000-40000
+// 系统主界面		10000 - 10200
+// 首页				10200 - 10400
+// 网络环境			10400 - 10600
+// 故障诊断			10600 - 10800
+// 网络检测			10800 - 11000
+// 网络百宝箱		20000 - 20200
+// 常见问题			20200 - 20400
+// 意见反馈			20400 - 20600
+// PNG 40000-80000
+// 系统主界面		40000 - 40200
+// 首页				40200 - 40400
+// 网络环境			40400 - 40600
+// 故障诊断			40600 - 40800
+// 网络检测			40800 - 41000
+// 网络百宝箱		50000 - 50200
+// 常见问题			50200 - 50400
+// 意见反馈			50400 - 50600
+//
+//
+//
+
+//////////////////////////////////////////////////////////////////////////
+// XML
+DEFINE_XML(IDR_BK_SKIN_DEF,								100, 					"res\\def_skin.xml")
+DEFINE_XML(IDR_BK_STYLE_DEF,							101, 					"res\\def_style.xml")
+DEFINE_XML(IDR_BK_STRING_DEF,							102, 					"res\\def_string.xml")
+DEFINE_XML(IDR_BK_MAIN_DIALOG,							103, 					"res\\dlg_main.xml")
+DEFINE_XML(IDR_BK_MESSAGEBOX,							105, 					"res\\dlg_msgbox.xml")
+DEFINE_XML(IDR_BK_MESSAGEBOX2,							150, 					"res\\dlg_msgbox2.xml")
+
+
+// dlgfile 标签里面的文件
+DEFINE_XML(IDR_BK_DLGFILE_HEADER,				 	    501, 					"res\\dlgfile_header.xml")
+DEFINE_XML(IDR_BK_DLGFILE_FOOT,					 	    502, 					"res\\dlgfile_foot.xml")
+DEFINE_XML(IDR_BK_DLGFILE_HOME,							503, 					"res\\dlgfile_home.xml")
+
+
+//////////////////////////////////////////////////////////////////////////
+// ICON
+DEFINE_ICO(IDI_BEIKESAFE,                  	 			100, 					"res\\XYNetGuard.ico")
+DEFINE_ICO(IDI_SMALL,                      	 			101, 					"res\\XYNetGuard.ico")
+DEFINE_ICO(IDI_WIRED_NETWORK,							102,					"res\\wired_network.ico")
+DEFINE_ICO(IDI_WIRELESS_NETWORK,						103,					"res\\wireless_network.ico")
+DEFINE_ICO(IDI_PPPOE_NETWORK,							104,					"res\\pppoe_network.ico")
+DEFINE_ICO(IDI_VIRTUAL_NETWORK,							105,					"res\\virtual_network.ico")
+DEFINE_ICO(IDI_UNKNOWN_NETWORK,							106,					"res\\unknown_network.ico")
+
+//////////////////////////////////////////////////////////////////////////
+// BMP 10000- 40000
+
+// 通用的元素		100-10000
+DEFINE_BMP(IDB_FRAME_PANEL_GRAY,						106,					"res\\frame_panel_gray.bmp")
+DEFINE_BMP(IDB_FRAME_PANEL,								107,					"res\\frame_panel.bmp")
+DEFINE_BMP(IDB_PROGRESS_BG,								108,					"res\\progress_bg.bmp")
+DEFINE_BMP(IDB_PROGRESS_POS,							109,					"res\\progress_pos.bmp")
+DEFINE_BMP(IDB_PROGRESS_POS_RED,						113,					"res\\progress_pos_red.bmp")
+
+// 系统主界面		10000 - 10200
+
+DEFINE_BMP(IDB_TAB_MAINBGBODY,                   		10002,   				"res\\main_bk_body.bmp")
+DEFINE_BMP(IDB_TAB_MAINBGFOOT,                   		10003,   				"res\\main_bk_foot.bmp")
+DEFINE_BMP(IDB_MSGBOX_BG,                   			10004,   				"res\\msgbox_bg.bmp")
+DEFINE_BMP(IDB_TAB_NORMAL,                  			10006,   				"res\\tab_normal.bmp")
+DEFINE_BMP(IDP_BG_MSGBOX_BODY,							10007,  				"res\\msgbox_body_bg.bmp")
+DEFINE_BMP(IDP_TAB_HEADER_BK,							10008,					"res\\tab_header_bk.bmp")
+
+DEFINE_BMP(IDB_SPLITTER_ARROW,							10011,   				"res\\splitter_arrow.bmp")
+
+
+// 首页				10200 - 10400
+DEFINE_BMP(IDB_STATUS_40,                   			10201,  				"res\\status_40.bmp")
+DEFINE_BMP(IDB_ICON_FLASH,           					10202,  				"res\\icon_flash.bmp")
+
+DEFINE_BMP(IDB_STATUS_ICON,								10204,					"res\\status_icon.bmp")
+
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_HEADER,					10210, 					"res\\listctrl_header.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_CHECK,					10211, 					"res\\listctrl_check.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_EXPAND,					10212,					"res\\listctrl_expand.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_RADIO,					10213, 					"res\\listctrl_radio.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_SELECTED_ROW,			10214,					"res\\listctrl_selected_row.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_NORMAL_ROW,				10215,					"res\\listctrl_normal_row.bmp")
+DEFINE_BMP(IDB_BITMAP_LISTCTRL_HOVER_ROW,				10216,					"res\\listctrl_hover_row.bmp")
+
+
+DEFINE_BMP(IDP_HOME_LEFTFLATTAB,						10254,					"res\\homeleftflattab.bmp")
+
+DEFINE_BMP(IDB_EXAM_TITLE_BG,							10300, 					"res\\exam_title_bg.bmp")
+DEFINE_BMP(IDB_EXAM_BG,									10301, 					"res\\exam_bg.bmp")
+DEFINE_BMP(IDB_BTN_EXAM_RIGHT_BG,						10304,					"res\\btn_exam_right_bg.bmp")
+
+DEFINE_BMP(IDB_HOME_SCAN_ITEM_LIST_BG,					10310,					"res\\scan_itemlist_bg.bmp")
+
+DEFINE_BMP(IDB_NETSPEED_PROCESS_INFO,					10320,					"res\\processinfo.bmp")
+DEFINE_BMP(IDB_NETSPEED_PROCESS_BK,						10321,					"res\\pbk.bmp")
+
+// 网络环境			10400 - 10600
+DEFINE_BMP(IDB_TAB_LEFT,                    			10401,  				"res\\tab_left.bmp")
+DEFINE_BMP(IDB_TAB_LEFT_SPLITTER,           			10402,  				"res\\tab_left_splitter.bmp")
+
+
+// 故障诊断			10600 - 10800
+// 网络检测			10800 - 11000
+// 网络百宝箱		20000 - 20200
+// 常见问题			20200 - 20400
+// 意见反馈			20400 - 20600
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// PNG 40000-80000
+// common			40000 - 40200
+DEFINE_PNG(IDP_PNG_NEW,									40006,					"res\\new.png")
+
+DEFINE_PNG(IDB_BTN_SYS_FEEDBACK,						43,						"res\\btn_sys_feedback.png")
+DEFINE_PNG(IDB_BTN_SYS_CLOSE_PNG,						44,						"res\\btn_sys_close.png")
+DEFINE_PNG(IDB_BTN_SYS_MENU,							45,						"res\\btn_sys_more.png")
+DEFINE_PNG(IDB_BTN_SYS_MAXIMIZE_PNG,					46,						"res\\btn_sys_maximize.png")
+DEFINE_PNG(IDB_BTN_SYS_MINIMIZE_PNG,					47,						"res\\btn_sys_minimize.png")
+DEFINE_PNG(IDB_BTN_SYS_RESTORE_PNG,						48,						"res\\btn_sys_restore.png")
+
+
+DEFINE_PNG(IDP_FEATURE_LIST,							350,					"res\\features.png")
+
+
+// 系统主界面		40200 - 40400
+DEFINE_PNG(IDP_MAIN_HEAD_BG,							40200,					"res\\head_bg.png")
+DEFINE_PNG(IDP_TOP_LOGO_AD,								40201,					"res\\LOGO_AD.png")
+
+
+// 首页				40400 - 40600
+
+DEFINE_PNG(IDP_EXPORT_BUTTON,							40422,					"res\\export.png")
+DEFINE_PNG(IDP_SCAN_CHECK_STATUS18,						40450,					"res\\scan_check_status18.png")
+DEFINE_PNG(IDP_SCAN_ANIMATE,							40451,					"res\\scan_animate.png")
+
+DEFINE_PNG(IDP_START_DIAGNOSE,							40460,					"res\\start_diagnose.png")
+DEFINE_PNG(IDP_STOP_DIAGNOSE,							40461,					"res\\stop_diagnose.png")
+DEFINE_PNG(IDP_REDIAGNOSE,								40462,					"res\\rediagnose.png")
+
+DEFINE_PNG(IDP_NETWORK_DEVICE_TYPE,						40481,					"res\\network_device_type.png")
+
+DEFINE_PNG(IDP_STARTS,									40500,					"res\\stars.png")
+
+DEFINE_PNG(IDP_DIAGNOSE_SUCESS,							40510,					"res\\diagnose_success.png")
+DEFINE_PNG(IDP_DIAGNOSE_LIST_EMPTY,						40511,					"res\\list_empty.png")
+
+DEFINE_PNG(IDP_DIAGNOSE_ALL_ANIMATE,					40520,					"res\\diagnose_all_animate.png")
+
+DEFINE_PNG(IDP_NETSPEED_PROECESS_TEXT,					40521,					"res\\processtext.png")
+
+// 网络环境			40600 - 40800
+// 故障诊断			40800 - 41000
+// 网络检测			41000 - 41200
+// 网络百宝箱		50000 - 50200
+// 常见问题			50200 - 50400
+// 意见反馈			50400 - 50600
+//
+// DEFINE_PNG(id,id_number,filename) 的真实意图是定义const UINT id=id_number;
+
+

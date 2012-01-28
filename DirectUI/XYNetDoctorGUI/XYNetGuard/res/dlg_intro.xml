@@ -1,0 +1,20 @@
+<layer title="湘勇网络医生简介" width="350" height="250">
+  <header class="msgboxhead" width="full" height="32">
+    <icon src="101" pos="5,9"/>
+    <text class="dlgtitle" pos="25,10">湘勇网络医生简介</text>
+    <imgbtn id="60001" class="linkimage" skin="closeonlybtn" pos="-43,0"/>
+  </header>
+  <footer class="msgboxfoot" width="full" height="45">
+    <text pos="20,14" class="linktext" href="http://bbs.ijinshan.com">了解金山开源安全卫士</text>
+    <button id="2" pos="-90,10,-10,-10" class="normalbtn">关闭</button>
+  </footer>
+  <body class="msgboxbody" width="full" height="full">
+    <dlg pos="10,10,-10,-0" class="cpanel">
+      <text pos="0,0">湘勇网络医生致力于解决您的网络问题！</text>
+      <text pos="0,40">目前的主要功能是网络故障诊断。本程序经同意</text>
+      <text pos="0,60">使用了金山开源安全卫士的部分代码及素材</text>
+      <text pos="0,80">在研发中也得到了金山安全卫士产品经理童勇的大力支持</text>
+      <text pos="0,100">在此表示感谢！</text>
+    </dlg>
+  </body>
+</layer>

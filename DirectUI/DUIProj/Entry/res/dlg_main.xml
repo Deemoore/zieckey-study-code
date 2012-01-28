@@ -1,0 +1,13 @@
+﻿<layer title="中国农业银行电子渠道交易大厅" width="800" height="544" appwin="1" resize="1">
+  <header class="mainhead" width="full" height="75">
+    <dlgfile pos="0,0,-0,-0" src="104" />
+  </header>
+
+  <footer class="mainfoot" width="full" height="23">
+    <dlgfile pos="0,0,-0,-0" src="105" />
+  </footer>
+
+  <body class="mainbody" width="full" height="446">
+    <dlgfile pos="0,0,-0,-0" src="106" />
+  </body>
+</layer>

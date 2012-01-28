@@ -1,0 +1,146 @@
+﻿<skins>
+  <!-->
+  // 所有PNG和BMP的编号规则：
+  // BMP 10000-40000
+  //
+  // 系统主界面		10000 - 10200
+  // 首页				  10200 - 10400
+  // 网络环境			10400 - 10600
+  // 故障诊断			10600 - 10800
+  // 网络检测			10800 - 11000
+  // 网络百宝箱		20000 - 20200
+  // 常见问题			20200 - 20400
+  // 意见反馈			20400 - 20600
+  //
+  //
+  // PNG 40000-80000
+  //
+  // 系统主界面		40000 - 40200
+  // 首页				  40200 - 40400
+  // 网络环境			40400 - 40600
+  // 故障诊断			40600 - 40800
+  // 网络检测			40800 - 41000
+  // 网络百宝箱		50000 - 50200
+  // 常见问题			50200 - 50400
+  // 意见反馈			50400 - 50600
+  </-->
+  
+  <!-- 通用界面元素 -->
+  <imghorzex name="progressbg" src="108" mode="mask" left="3"/>
+  <imghorzex name="progresspos" src="109" mode="mask" left="3"/>
+  <imghorzex name="progressposred" src="113" mode="mask" left="3"/>
+  <png name="logo_ad" src="40201"/>
+ 
+  <png name="new" src="40006"/>
+  <imghorzex name="tab_header_bk" src="10008" left="0" />
+  
+  <!-- 系统主界面 -->
+  <png name="closebtn" src="44" subwidth="47"/>
+  <png name="closeonlybtn" src="44" subwidth="47"/>
+  <png name="menubtn" src="45" subwidth="30"/>
+  <png name="maxbtn" src="46" subwidth="30"/>
+  <png name="minbtn" src="47" subwidth="30"/>
+  <png name="restorebtn" src="48" subwidth="30"/>
+  <png name="feedbackbtn" src="43" subwidth="21"/>
+  
+  <png name="mainbghead" src="40200"/>
+  <imgframe name="mainbgbody" src="10002" top="9" left="7" mode="mask" crbg="FBFCFD"/>
+  <imghorzex name="mainbgfoot" src="10003" left="2"/>
+  <imgframe name="msgboxhead" src="10004" top="32" left="5" crbg="FBFCFD" part="top"/>
+  <imgframe name="dlgbody" src="10004" top="32" left="5" crbg="FBFCFD" part="middle"/>
+  <imgframe name="dlgfoot" src="10004" top="32" left="5" crbg="FBFCFD" part="bottom"/>
+
+  <imghorzex name="tab" src="10006" mode="mask" subwidth="7" left="3"/>
+
+  <imgframe name="msgboxbody" src="10007" top="0" left="2" crbg="FBFCFD" part="middle"/>
+  <imgframe name="msgboxfoot" src="10007" top="0" left="2" crbg="FBFCFD" part="bottom"/>
+  
+  <imglst name="splitter_arrow" src="10011" subwidth="5"/>
+  
+  <imgframe name="panel" src="107" top="1" left="1" crbg="FBFCFD"/>
+  <imgframe name="panelwhite" src="107" top="1" left="1" crbg="FBFCFD"/>
+  <imgframe name="panelffffff" src="107" top="1" left="1" crbg="FFFFFF"/>
+  
+  <!-- 首页 -->
+
+  <png name="scanstatus18" src="40450" subwidth="18"/>
+
+  <png name="export_button" src="40422" subwidth="92"/>
+  <png name="scan_animate" src="40451" subwidth="16"/>
+
+  <png name="start_diagnose" src="40460" subwidth="122"/>
+  <png name="stop_diagnose" src="40461" subwidth="122"/>
+  <png name="rediagnose" src="40462" subwidth="122"/>
+
+  <imghorzex name="scan_itemlist_bg" src="10310"/>
+
+  <png name="network_device_type" src="40481" subwidth="32" />
+
+  <imglst name="stat40" src="10201" mode="mask" subwidth="40"/>
+  <imglst name="iconflash" src="10202"/>
+  
+  <imghorzex name="listheaderbg" src="10210" mode="mask" left="2"/>
+
+  <imghorzex name="homeleftflattab" src="10254" mode="mask" subwidth="7" left="3"/>
+  
+  <imghorzex name="exam_title_bg" src="10300"/>
+  <imghorzex name="exam_bg" src="10301"/>
+  <imghorzex name="btnexamrightbg" src="10304" mode="mask" subwidth="11" left="5"/>
+
+  <png name="stars" src="40500" subwidth="16" />
+
+  <png name="diagnose_success" src="40510" />
+  <png name="diagnose_list_empty" src="40511"/>
+  <png name="diagnose_all_animate" src="40520" subwidth="48"/>
+
+  <png name="processtext" src="40521" />
+  <imghorzex name="processinfo" src="10320"  left="3" />
+  <imghorzex name="pbk1" src="10321"  left="1" />
+
+  <!-- 网络环境 -->
+  <imghorzex name="tableft" src="10401" mode="mask" left="4" subwidth="24"/>
+  <imglst name="tableftsplitter" src="10402"/>
+  
+  
+  <!---------------------------------------------------------- png ---------------------------------------------------------------------->
+  <!-- Main -->
+  
+  <!-- HOME -->
+
+
+  
+  <!----------------------------------------------------------- 未整理的 ---------------------------------------------------------------->
+ 
+  
+
+
+ 
+  <imgframe name="tabpage" src="107" top="1" left="1" crbg="FBFCFD" part="center"/>
+  
+  
+
+  <button name="uglybtn"/>
+  <button name="normalbtn" border="7D9EBC" bg="FBFCFD" bgup="FEFEFE" bgdown="C6E2FD" bguphover="FEFEFE" bgdownhover="DBEDFE" bguppush="C6E2FD" bgdownpush="FEFEFE"/>
+  
+
+
+
+
+  
+
+
+
+  <gradation name="tipbg" from="FFFFFF" to="E4E5F0" direction="vert"/>
+
+
+  <png name="featurelist48" src="350" subwidth="48"/>
+
+  
+  
+  
+
+  <imgframe name="panelsysopt" src="107" top="1" left="1" crbg="FBFCFD"/>
+  <imgframe name="panelgray" src="106" top="1" left="1" crbg="FBFCFD"/>
+  
+ 
+</skins>

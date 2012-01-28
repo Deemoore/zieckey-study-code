@@ -1,0 +1,27 @@
+#pragma once
+//////////////////////////////////////////////////////////////////////////
+// 所有PNG和BMP的编号规则：
+
+//////////////////////////////////////////////////////////////////////////
+DEFINE_XML(IDR_BK_SKIN_DEF,								100, 					"res\\def_skin.xml")
+DEFINE_XML(IDR_BK_STYLE_DEF,							101, 					"res\\def_style.xml")
+DEFINE_XML(IDR_BK_STRING_DEF,							102, 					"res\\def_string.xml")
+DEFINE_XML(IDR_BK_MAIN_DIALOG,							103, 					"res\\dlg_main.xml")
+
+//////////////////////////////////////////////////////////////////////////
+// 子对话框
+DEFINE_XML(IDR_BK_DLGFILE_HEADER,                       104,                    "res\\dlg_header.xml")
+DEFINE_XML(IDR_BK_DLGFILE_FOOT,					 	    105, 					"res\\dlg_footer.xml")
+DEFINE_XML(IDR_BK_DLGFILE_BODY,					 	    106, 					"res\\dlg_body.xml")
+
+//////////////////////////////////////////////////////////////////////////
+// PNG图片
+DEFINE_PNG(IDB_BTN_SYS_CLOSE_PNG,						200,				"res\\btn_sys_close.png")
+DEFINE_PNG(IDB_BTN_SYS_MINIMIZE_PNG,					201,				"res\\btn_sys_minimize.png")
+DEFINE_BMP(IDP_MAIN_HEAD_BG,							202,			    "res\\head_bg.bmp")
+DEFINE_BMP(IDB_TAB_MAINBGFOOT,                   		203,   				"res\\main_bk_foot.bmp")
+//DEFINE_PNG(IDP_MAIN_HEAD_ABC_LOGO,                      204,                "res\\abc_logo.png")
+//DEFINE_PNG(IDP_MAIN_HEAD_BTN_IMG,                       205,                "res\\abc_btn.png")
+//DEFINE_BMP(IDB_BODY_DLG_LEFT_BKGND,                     206,                "res\\body_dlg_left_bg.bmp")
+//DEFINE_BMP(IDB_BODY_DLG_BKGND,                   		207,   				"res\\main_bk_body.bmp")
+//DEFINE_PNG(IDP_BODY_LEFT_LINK_BTN,                   	208,   				"res\\link_btn.png")

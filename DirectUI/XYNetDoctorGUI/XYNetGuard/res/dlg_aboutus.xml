@@ -1,0 +1,18 @@
+<layer title="联系我们" width="350" height="250">
+  <header class="msgboxhead" width="full" height="32">
+    <icon src="101" pos="5,9"/>
+    <text class="dlgtitle" pos="25,10">联系我们</text>
+    <imgbtn id="60001" class="linkimage" skin="closeonlybtn" pos="-43,0"/>
+  </header>
+  <footer class="msgboxfoot" width="full" height="45">
+    <button id="2" pos="-90,10,-10,-10" class="normalbtn">关闭</button>
+  </footer>
+  <body class="msgboxbody" width="full" height="full">
+    <dlg pos="10,10,-10,-0" class="cpanel">
+      <text pos="0,0">湘勇网络医生致力于解决您的网络问题！</text>
+      <text pos="0,40"> 邮箱：</text>
+      <text pos="40,40" class="linktext" href="mailto://jlbookworm@qq.com"> jlbookworm@qq.com</text>
+      <text pos="0,60" >QQ号码： 858804752（请注明：湘勇网络医生）</text>
+    </dlg>
+  </body>
+</layer>

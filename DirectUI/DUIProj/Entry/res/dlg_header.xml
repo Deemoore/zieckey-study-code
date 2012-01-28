@@ -1,0 +1,11 @@
+
+
+<imgbtn id="10002" class="linkimage" skin="minbtn" tip="最小化到托盘" pos="-78,1"/>
+<imgbtn id="10001" class="linkimage" skin="closebtn" tip="根据用户配置，退出程序或者最小化到托盘" pos="-48,1"/>
+<!--
+<img    id="10003" skin="abclogo" tip="中国农业银行" pos="5,5,69,67" />
+<imgbtn id="10100" skin="btnabc"  tip="测试按钮1"    pos="79,5,143,67" />
+<imgbtn id="10101" skin="btnabc"  tip="测试按钮2"    pos="143,5,207,67" />
+<imgbtn id="10102" skin="btnabc"  tip="测试按钮3"    pos="207,5,271,67" />
+<imgbtn id="10103" skin="btnabc"  tip="测试按钮4"    pos="271,5,335,67" />
+-->

@@ -1,0 +1,30 @@
+<!-- Main Body -->
+<dlg pos="0,2,-2,-0">
+  <!-- Left Side Dlg -->
+  <dlg id="10004" pos="0,7,200,-0">
+    <drawermenuctrl id="10006" pos="0,0,-0,-0">
+      <drawermenuhead id="12000" class="normalbtn" pos="0,0,-0,20" height="20">返回</drawermenuhead>
+      <drawermenu id="10011" pos="0,20,-0,-0">
+        <drawermenu id="10007" class="normalbtn" height="25" text="第一个按钮" crbkgnd="ff0000">
+          <drawermenu id="10100" class="normalbtn" height="20" text="11"></drawermenu>
+          <drawermenu id="10101" class="normalbtn" height="20" text="12"></drawermenu>
+          <drawermenu id="10102" class="normalbtn" height="20" text="13"></drawermenu>
+        </drawermenu>
+        <drawermenu id="10008" class="normalbtn" height="25" text="第二个按钮" crbkgnd="00ff00" >
+          <drawermenu id="10200" class="normalbtn" height="30" text="21"></drawermenu>
+          <drawermenu id="10201" class="normalbtn" height="30" text="22"></drawermenu>
+          <drawermenu id="10202" class="normalbtn" height="30" text="23"></drawermenu>
+        </drawermenu>
+        <drawermenu id="10009" class="normalbtn" height="25" text="第三个按钮" crbkgnd="0000ff">
+
+        </drawermenu>
+        <drawermenu id="10010" class="normalbtn" height="25" text="第四个按钮" crbkgnd="ff0000">
+
+        </drawermenu>
+      </drawermenu>
+    </drawermenuctrl>
+  </dlg>
+  <dlg id="10005" pos="201,7,-0,-0">
+    <realwnd id="10104" pos="0,0,-0,-0" ctrlid="10104" />
+  </dlg>
+</dlg>
