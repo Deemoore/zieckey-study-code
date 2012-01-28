@@ -9,10 +9,6 @@
 #define OSLIB_ASSERT_EXT_H_
 
 #include "osl/include/platform_micros.h"
-#include "osl/include/string_util.h"
-
-#include <string>
-#include <iosfwd>
 
 //only use VC
 //typedef char __error__[(expr)];
@@ -29,16 +25,29 @@ namespace osl
     //! if in release mode, it only print to default log.
     _EXPORT_OSLIB void h_trace( const char* fmt, ... );
 
+#ifdef H_OS_WINDOWS
+    // no matter use or do not use ASSERT, we define the function.
+    _EXPORT_OSLIB void h_assert( const wchar_t *expr,
+        const wchar_t *filename,
+        unsigned lineno );
+#else
+
     // no matter use or do not use ASSERT, we define the function.
     _EXPORT_OSLIB void h_assert( const char *expr,
         const char *filename,
         unsigned lineno );
 
+#endif
 }
 
     // if assert is enabled.
 #ifdef H_DEBUG_MODE
-    #define H_ASSERT( exp )  ( (exp) || (::osl::h_assert(#exp, __FILE__, __LINE__), 0) )
+    #ifdef H_OS_WINDOWS
+#define H_ASSERT( exp )  ( (exp) || (::osl::h_assert( L ## #exp, _CRT_WIDE(__FILE__), __LINE__), 0) )
+    #else
+        #define H_ASSERT( exp )  ( (exp) || (::osl::h_assert(#exp, __FILE__, __LINE__), 0) )
+    #endif
+    
 #else
     #define H_ASSERT( exp )
 #endif
@@ -62,22 +71,33 @@ namespace osl
     }
 
 
+#ifdef H_OS_WINDOWS
     //----------------------------------------------------------
-    inline void h_assert( const char *expr,
-                          const char *filename,
+    inline void h_assert( const wchar_t *expr,
+                          const wchar_t *filename,
                           unsigned lineno )
     {
 #ifdef H_DEBUG_MODE
-#	ifdef H_OS_WINDOWS
-        _wassert( StringUtil::mbsToWs(expr).c_str(), StringUtil::mbsToWs(filename).c_str(), lineno );
-#	elif defined(H_OS_FREEBSD)
-        __assert( __func__, filename, lineno, expr );
-#	elif defined(H_OS_LINUX)
-        __assert( expr, filename, lineno );
-#	endif
+    #ifdef H_OS_WINDOWS
+        _wassert( expr, filename, lineno );
+    #endif
 #endif
     }
-
+#else
+    //----------------------------------------------------------
+    inline void h_assert( const char *expr,
+        const char *filename,
+        unsigned lineno )
+    {
+#ifdef H_DEBUG_MODE
+    #ifdef H_OS_FREEBSD
+        __assert( __func__, filename, lineno, expr );
+    #elif defined(H_OS_LINUX)
+        __assert( expr, filename, lineno );
+    #endif
+#endif
+    }
+#endif
 }
 
 

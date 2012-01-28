@@ -35,7 +35,7 @@ namespace LibTest
 
     void TMemAlloc::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
     {
-        osl::AppShell::Command::Param* pParam = pCmd->getParam( "type" );
+        osl::AppShell::Param* pParam = pCmd->getParam( "type" );
         if ( pParam )
         {
             if ( pParam->strVal == "0" || pParam->strVal == "all" )
@@ -151,7 +151,9 @@ namespace LibTest
             (void)nNumInst;
             H_ASSERT( OBJ_NUMBSER == nNumInst );
 
+#ifdef H_MEMORY_POOL
             H_ASSERT( OBJ_NUMBSER == osl::MemAlloc::getNumInstancesByClassName( "TestClass1" ) );
+#endif
 
             for ( osl::u32 i = 0; i < OBJ_NUMBSER ; ++i )
             {
@@ -162,7 +164,10 @@ namespace LibTest
             (void)nNumInst2;
             H_ASSERT( 0 == nNumInst2 );
 
+#ifdef H_MEMORY_POOL
             H_ASSERT( 0 == osl::MemAlloc::getNumInstancesByClassName( "TestClass1" ) );
+#endif
+
         }
     }
 

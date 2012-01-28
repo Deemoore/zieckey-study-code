@@ -143,9 +143,10 @@ namespace osl
 
         //! Make directory hierarchy in local file system.
         //! Its behavior is similar with the command 'mkdir -p'
-        //! \param strFileName Absolute directory file name. e.g. '/home/weizili/test'
+        //! \param strDirPath Absolute directory file name. e.g. '/home/weizili/test'
         //! \return true if successfully
-        static bool makeFSDir( const StringA& strFileName );
+        static bool makeFSDir( const StringA& strDirPath );
+        static bool mkdir( const StringA& strDirPath ) { return makeFSDir(strDirPath); }
 
         static bool rmdir( const StringA& strDirName );
         static bool rmdir( const char* strDirName );
@@ -156,6 +157,7 @@ namespace osl
         /** \param filename is the string identifying the file which should be tested for existence.
         \return Returns true if file exists, and false if it does not exist or an error occurred. */
         static bool isFSFileExist( const osl::StringA& strFileName );
+        static bool exists( const osl::StringA& strFileName ) { return isFSFileExist(strFileName); }
 
 
         //! \brief copy a file to another place. This function has the same feature like DOS Command 'copy' or Linux Command 'cp'

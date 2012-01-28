@@ -675,7 +675,7 @@ namespace LibTest
 #endif
     }
 
-//     bool operator!=( const osl::AppShell::Command::Param& rhs, const osl::AppShell::Command::Param& lhs )
+//     bool operator!=( const osl::AppShell::Param& rhs, const osl::AppShell::Param& lhs )
 //     {
 //         return rhs.strName != lhs.strName || rhs.strVal != lhs.strVal;
 //     }

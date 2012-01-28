@@ -503,7 +503,7 @@ TEST_INVOKE( test_memcached1, test_memcached1 --host=localhost --port=10009 --th
     osl::StringA mdbdir = "/home/weizili/mdb";
 
     //test_memcached1 --host=localhost --port=10009 --thread=10 --method=get,set,delete
-    osl::AppShell::Command::Param* pp = pCmd->getParam("host");
+    osl::AppShell::Param* pp = pCmd->getParam("host");
     if ( pp ) hostname = pp->strVal;
 
     pp = pCmd->getParam("port");

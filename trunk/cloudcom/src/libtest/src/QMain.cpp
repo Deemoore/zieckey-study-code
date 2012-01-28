@@ -83,6 +83,8 @@ int main( int argc, char* argv[] )
 
     for (;;)
     {
+        std::cout << "--> ";
+
         // get line less than 1024.
         //std::cin.getline(szCommand, 1024);
         std::cin.clear();

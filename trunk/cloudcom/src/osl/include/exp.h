@@ -18,7 +18,6 @@ H_LINK_LIB( "osl");
 
 
 #if H_PROVIDE_LOG_SYSTEM
-#include "osl/include/log.h"
 #include "osl/include/log_manager.h"
 #endif
 

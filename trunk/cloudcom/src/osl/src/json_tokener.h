@@ -98,7 +98,7 @@ namespace json
     {
         osl::MemoryDataStream sb( DEFAULT_BUFFER_SIZE );
         char c = 0;
-        osl::u32 uuicode = 0;
+        osl::u32 unicode = 0;
 
         for ( ;; )
         {
@@ -131,13 +131,17 @@ namespace json
                     break;
                 case 'u': //! e.g. \u1524 is a unicode character
                     //TODO unicode characters
-                    if ( !decodeUnicodeEscapeSequence( uuicode ) )
+                    if ( !decodeUnicodeEscapeSequence( unicode ) )
                     {
-                        printf( "Illegal unicode escape.\n" );
+                        fprintf( stderr, "Illegal unicode escape.\n" );
                         return false;
                     }
 
-                    sb << JSONTokener::convertUnicodeToUTF8( uuicode );
+                    {
+                        osl::StringA utf8str = JSONTokener::convertUnicodeToUTF8( unicode );
+                        sb.write(utf8str.c_str(), utf8str.length());
+                    }
+
                     break;
                 case '"':
                 case '\'':

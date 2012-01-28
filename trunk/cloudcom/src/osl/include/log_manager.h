@@ -1,15 +1,11 @@
-#ifndef _QOSLIB_LOGMANAGER_
-#define _QOSLIB_LOGMANAGER_
+#ifndef _QOSLIB_LOGMANAGER_H_
+#define _QOSLIB_LOGMANAGER_H_
 
-
+#include "osl/include/log.h"
 
 #if H_PROVIDE_LOG_SYSTEM
 
-
-
-
 #include "osl/include/singleton.h"
-#include "osl/include/log.h"
 
 namespace osl
 {

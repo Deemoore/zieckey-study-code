@@ -23,7 +23,6 @@ namespace osl
     {
         LML_TRACE = 0,    //!
         LML_DEBUG,        //! debug.
-
         LML_INFO,         //! Trivial information.
         LML_WARN,         //! General warning.
         LML_ERROR,        //! Error.
@@ -44,17 +43,17 @@ namespace osl
         //! Level supported by the log.
         enum Options
         {
-            O_TRACE    = 1 << 0,
-            O_DEBUG    = 1 << 1,   //! debug
+            O_TRACE    = 1 << LML_TRACE,
+            O_DEBUG    = 1 << LML_DEBUG,   //! debug
 
-            O_INFO     = 1 << 2,   //! Information.
-            O_WARN     = 1 << 3,   //! Warning
-            O_ERROR    = 1 << 4,
-            O_FATAL    = 1 << 5,   //! Fatal.
+            O_INFO     = 1 << LML_INFO,   //! Information.
+            O_WARN     = 1 << LML_WARN,   //! Warning
+            O_ERROR    = 1 << LML_ERROR,
+            O_FATAL    = 1 << LML_FATAL,   //! Fatal.
 
-            O_STDOUT   = 1 << 6,   //! Whether out put to standard out device
-            O_TOFILE   = 1 << 7,   //! Whether out put to local file.
-            O_TOSERVER = 1 << 8,  //! Whether out put to server.
+            O_STDOUT   = 1 << (LML_FATAL + 1),   //! Whether out put to standard out device
+            O_TOFILE   = 1 << (LML_FATAL + 2),   //! Whether out put to local file.
+            O_TOSERVER = 1 << (LML_FATAL + 3),   //! Whether out put to server.
         };
 
 
@@ -80,7 +79,7 @@ namespace osl
         //! \param strLogHost Log Host if want to out put information to log server.
         //! \param strLogPort Log Host service or port of log server.
         //!
-        Log( const StringA& strName, u32 nOptions = O_DEBUG | O_INFO | O_WARN | O_FATAL | O_STDOUT | O_TOFILE,
+        Log( const StringA& strName, u32 nOptions = O_TRACE | O_DEBUG | O_INFO | O_WARN | O_FATAL | O_STDOUT | O_TOFILE,
              const StringA& strLogHost = StringUtil::BLANKA, const StringA& strLogPort = StringUtil::BLANKA  );
 
         //!Destructor

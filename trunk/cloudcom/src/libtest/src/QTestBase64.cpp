@@ -39,7 +39,7 @@ namespace LibTest
 		osl::StringA outfilename = osl::Process::getBinDir( false ) + "/../data/libtestdata/qoslib/base64/outputfile.txt";
 
 
-        osl::AppShell::Command::Param* pParam = pCmd->getParam( "in" );
+        osl::AppShell::Param* pParam = pCmd->getParam( "in" );
 
         if ( pParam )
         {

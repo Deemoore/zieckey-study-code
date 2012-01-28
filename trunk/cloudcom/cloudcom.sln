@@ -35,6 +35,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wraputil", "src\wraputil\sr
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osl-test", "src\osl\test\test.vcproj", "{2357E1F5-99F4-486F-84BF-B0D95B3E0F23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{280D398D-DBE0-4484-B9AF-3164D50AF20B} = {280D398D-DBE0-4484-B9AF-3164D50AF20B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qnetpp", "src\qnetpp\src\qnetpp.vcproj", "{787BE42B-F962-40EE-9287-8034001A4F83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +121,14 @@ Global
 		{2357E1F5-99F4-486F-84BF-B0D95B3E0F23}.Release|Win32.Build.0 = Release|Win32
 		{2357E1F5-99F4-486F-84BF-B0D95B3E0F23}.ReleaseDev|Win32.ActiveCfg = Release|Win32
 		{2357E1F5-99F4-486F-84BF-B0D95B3E0F23}.ReleaseDev|Win32.Build.0 = Release|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.Debug|Win32.ActiveCfg = Debug|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.Debug|Win32.Build.0 = Debug|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.DebugDev|Win32.ActiveCfg = Debug|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.DebugDev|Win32.Build.0 = Debug|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.Release|Win32.ActiveCfg = Release|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.Release|Win32.Build.0 = Release|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.ReleaseDev|Win32.ActiveCfg = Release|Win32
+		{787BE42B-F962-40EE-9287-8034001A4F83}.ReleaseDev|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

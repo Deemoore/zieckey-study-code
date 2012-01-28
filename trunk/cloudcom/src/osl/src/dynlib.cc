@@ -128,7 +128,7 @@ namespace osl
 
             strTip << __func__ 
                 << " : Could not get the symbol : " << strName
-                << ". System Error: " << dynlibError();
+                << ". Error Message : " << dynlibError();
 
             m_strLastError = strTip.str();
         }

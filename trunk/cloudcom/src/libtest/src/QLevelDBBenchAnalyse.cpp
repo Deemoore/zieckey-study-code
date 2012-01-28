@@ -49,7 +49,7 @@ namespace
     void TLevelDBBenchAnalyse::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
     {
         osl::StringA benchlog = "bklog";
-        osl::AppShell::Command::Param* pp = pCmd->getParam( "file" );
+        osl::AppShell::Param* pp = pCmd->getParam( "file" );
         if ( pp )
         {
             benchlog = pp->strVal;

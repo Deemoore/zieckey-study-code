@@ -68,7 +68,7 @@ namespace
 	{
 		if ( pCmd->hasTarget( "decodedumpfile" ) )
 		{
-            osl::AppShell::Command::Param* pp = pCmd->getParam("user");
+            osl::AppShell::Param* pp = pCmd->getParam("user");
             if ( !pp )
             {
                 return;

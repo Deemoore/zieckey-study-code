@@ -252,7 +252,7 @@ namespace LibTest
 	void TCurl::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
 	{
 		//"test_curl --type=1(download file)|2(upload file)|3(post http)|4(outweb, down out website url)|5(cookie)|6(sample)|0(all)"
-		osl::AppShell::Command::Param* pParam = pCmd->getParam( "type" );
+		osl::AppShell::Param* pParam = pCmd->getParam( "type" );
 
 		if ( pParam )
 		{
@@ -282,7 +282,7 @@ namespace LibTest
 			else if ( value == "5"  || osl::StringUtil::startsWith( value, "cookie" ) )
 			{
 				osl::StringA cookie = "";
-				osl::AppShell::Command::Param* pCookie = pCmd->getParam( "cookie" );
+				osl::AppShell::Param* pCookie = pCmd->getParam( "cookie" );
 
 				if ( pCookie )
 				{
@@ -953,7 +953,7 @@ namespace LibTest
 	void TCurl::processCURLAutoTest( osl::AppShell::Command* pCmd )
 	{
         osl::StringA strConfigFileName = osl::Process::getBinDir(true) + "curlconf.json";
-		osl::AppShell::Command::Param* pParam = pCmd->getParam( "cfgfile" );
+		osl::AppShell::Param* pParam = pCmd->getParam( "cfgfile" );
 
 		if ( pParam )
 		{
