@@ -173,8 +173,10 @@ namespace osl
 
     private:
 
-#ifdef H_OS_WINDOWS
         //! Thread procedure
+#ifdef H_OS_WINCE
+        static unsigned int WINAPI ThreadProc( void* pvArg );
+#elif defined(H_OS_WINDOWS)
         static unsigned int __stdcall ThreadProc( void* pvArg );
 #elif defined(H_OS_LINUX)
         static void* ThreadProc( void* pvArg );

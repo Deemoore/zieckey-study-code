@@ -72,11 +72,12 @@ namespace osl
 
 
     //! Memory barrier.
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 #	define mb()   _mm_mfence()
 #elif defined(H_OS_LINUX)
 #	define mb()  __sync_synchronize()
 #else
+#   define mb() {}
 #endif
 } //end of namespace osl
 

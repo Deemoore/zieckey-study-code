@@ -2,7 +2,6 @@
 #define OSLIB_FILE_UTIL_INL_H_
 
 #ifdef H_OS_WINDOWS
-#   include <direct.h>
 #   include <io.h>
 #else
 #   include <sys/types.h>
@@ -68,7 +67,10 @@ namespace osl
         {
             //
             char szDir[_MAX_PATH];
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+            assert(false && "Not support!");
+            (void)szDir;
+#elif defined(H_OS_WINDOWS)
             if( _getcwd( szDir, _MAX_PATH ) )
             {
                 strTmp =  StringA( szDir ) + ( "/" ) + strTmp;
@@ -169,10 +171,15 @@ namespace osl
         osl::StringA strStandardisePath = standardisePath( strFileName, false );
 
         struct stat st;
+#ifdef H_OS_WINCE
+        //TODO xxxxxx
+        assert(false && "Not support!");
+#else
         if ( 0 != stat( strStandardisePath.c_str(), &st ) )
         {
             return false;
         }
+#endif
 
 #ifdef H_OS_WINDOWS
 
@@ -267,7 +274,9 @@ namespace osl
     //-------------------------------------------------------------------
     inline bool FileUtil::rmdir( const char* strDirName )
     {
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+#elif defined(H_OS_WINDOWS)
 
         if ( ::_rmdir( strDirName ) == 0 )
 #else

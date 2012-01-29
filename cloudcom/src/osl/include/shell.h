@@ -246,20 +246,21 @@ namespace osl
     typedef RefPtr< AppShell > AppShellPtr;
 
 
-    template<class T>
-    T getShellParam( AppShell::Command* pCmd , const char* pParamName )
-    {
-        AppShell::Param* pParam = pCmd->getParam( pParamName );
-
-        if ( pParam && pParam->strVal.length() )
-        {
-            return osl::lexical_cast<T>( pParam->strVal );
-        }
-        else
-        {
-            throw std::exception();
-        }
-    }
+//     template<class T>
+//     T getShellParam( AppShell::Command* pCmd , const char* pParamName )
+//     {
+//         AppShell::Param* pParam = pCmd->getParam( pParamName );
+// 
+//         if ( pParam && pParam->strVal.length() )
+//         {
+//             return osl::lexical_cast<T>( pParam->strVal );
+//         }
+//         else
+//         {
+//             //throw std::exception();
+//             assert(false);
+//         }
+//     }
 
     inline const AppShell::CommandMap& AppShell::getCommandMap() const
     {

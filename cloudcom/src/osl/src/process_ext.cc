@@ -53,45 +53,49 @@ namespace osl
 
     StringA Process::getBinDir( bool bWithEndSlash /*= false */ )
     {
-		static char* s_szBinDirWithNoEndSlash = NULL;
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+        return "";
+#else
+        static char* s_szBinDirWithNoEndSlash = NULL;
         static char* s_szBinDirWithEndSlash = NULL;
 
-		if( !s_szBinDirWithNoEndSlash )
-		{
+        if( !s_szBinDirWithNoEndSlash )
+        {
             static char bufWithNoEndSlash[ 1024 ]={0};
             static char bufWithEndSlash[ 1024 ]={0};
 
 #ifdef H_OS_WINDOWS
-			::GetModuleFileNameA( NULL, bufWithNoEndSlash, sizeof ( bufWithNoEndSlash ) );
+            ::GetModuleFileNameA( NULL, bufWithNoEndSlash, sizeof ( bufWithNoEndSlash ) );
 #elif defined( H_OS_FREEBSD )
-			{
-				int mib[4];
-				mib[0] = CTL_KERN;
-				mib[1] = KERN_PROC;
-				mib[2] = KERN_PROC_PATHNAME;
-				mib[3] = -1;
-				size_t cb = sizeof(bufWithNoEndSlash);
-				int ret = sysctl(mib, 4, bufWithNoEndSlash, &cb, NULL, 0);
+            {
+                int mib[4];
+                mib[0] = CTL_KERN;
+                mib[1] = KERN_PROC;
+                mib[2] = KERN_PROC_PATHNAME;
+                mib[3] = -1;
+                size_t cb = sizeof(bufWithNoEndSlash);
+                int ret = sysctl(mib, 4, bufWithNoEndSlash, &cb, NULL, 0);
                 if ( 0 != ret )
                 {
                     fprintf( stderr, "sysctl called failed, errno=%d %s", errno, strerror( errno ) );
                 }
-			}
+            }
 #elif defined(H_OS_LINUX)
-			int count = readlink ( "/proc/self/exe", bufWithNoEndSlash, 1024 );
-			if ( count < 0 || count >= 1024 )
-			{
-				printf ( "Failed to %s\n", __func__ );
-				return "";
-			}
-			bufWithNoEndSlash[ count ] = '\0';
+            int count = readlink ( "/proc/self/exe", bufWithNoEndSlash, 1024 );
+            if ( count < 0 || count >= 1024 )
+            {
+                printf ( "Failed to %s\n", __func__ );
+                return "";
+            }
+            bufWithNoEndSlash[ count ] = '\0';
 
 #endif
-			osl::StringA qualifiedName = bufWithNoEndSlash;
-			osl::StringA outBasename;
-			osl::StringA outPath;
-			osl::FileUtil::splitFileName ( qualifiedName, outBasename, outPath, true );
-			//std::replace( outPath.begin(), outPath.end(), '\\', '/' );
+            osl::StringA qualifiedName = bufWithNoEndSlash;
+            osl::StringA outBasename;
+            osl::StringA outPath;
+            osl::FileUtil::splitFileName ( qualifiedName, outBasename, outPath, true );
+            //std::replace( outPath.begin(), outPath.end(), '\\', '/' );
 
             /*
             fprintf( stdout, "fullpath=%s\n", bufWithNoEndSlash );
@@ -105,25 +109,26 @@ namespace osl
                 fprintf( stderr, "getBinDir() error, we cannot get the binary directly dir: %s\n", bufWithNoEndSlash );
             }
 
-			// copy string.
-			strncpy( bufWithEndSlash, outPath.c_str(), outPath.length() );
-			bufWithEndSlash[outPath.length()] = 0;
+            // copy string.
+            strncpy( bufWithEndSlash, outPath.c_str(), outPath.length() );
+            bufWithEndSlash[outPath.length()] = 0;
 
-			strncpy( bufWithNoEndSlash, outPath.c_str(), outPath.length() - 1 );
-			bufWithNoEndSlash[outPath.length() - 1] = 0;
+            strncpy( bufWithNoEndSlash, outPath.c_str(), outPath.length() - 1 );
+            bufWithNoEndSlash[outPath.length() - 1] = 0;
 
             s_szBinDirWithNoEndSlash = bufWithNoEndSlash;
             s_szBinDirWithEndSlash   = bufWithEndSlash;
-		}
+        }
 
-		if ( bWithEndSlash )
-		{
-			return s_szBinDirWithEndSlash;
-		}
-		else
-		{
-			return s_szBinDirWithNoEndSlash;
-		}
+        if ( bWithEndSlash )
+        {
+            return s_szBinDirWithEndSlash;
+        }
+        else
+        {
+            return s_szBinDirWithNoEndSlash;
+        }
+#endif
 	}
 
 	StringA Process::getConfDir()
@@ -217,7 +222,10 @@ namespace osl
     osl::StringA Process::getCurrentUserName()
     {
 
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+        return "";
+#elif defined(H_OS_WINDOWS)
         char sz[128]={};
     	DWORD dwLen = 127;
         if( GetUserNameA( sz , &dwLen ) )

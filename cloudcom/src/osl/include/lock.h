@@ -200,9 +200,15 @@ namespace osl
         }
 
     private:
-        volatile AtomicInt32            m_nNumEnterThread;   //! Number of thread enter the lock
-        volatile AtomicInt32             m_nNumWaitThread;   //! Number of thread wait the lock.
-        volatile AtomicInt32                    m_bLocked;   //! whether is locked.
+#ifdef H_OS_WINCE
+#define H_TEMP_volatile 
+#else
+#define H_TEMP_volatile volatile
+#endif
+        H_TEMP_volatile AtomicInt32            m_nNumEnterThread;   //! Number of thread enter the lock
+        H_TEMP_volatile AtomicInt32             m_nNumWaitThread;   //! Number of thread wait the lock.
+        H_TEMP_volatile AtomicInt32                    m_bLocked;   //! whether is locked.
+#undef H_TEMP_volatile
 
     };
 
@@ -321,9 +327,17 @@ namespace osl
             InterlockedDec32( &m_bLocked );
         }
     private:
-        volatile AtomicInt32            m_nNumEnterThread;   //! Number of thread enter the lock
-        volatile AtomicInt32             m_nNumWaitThread;   //! Number of thread wait the lock.
-        volatile AtomicInt32                    m_bLocked;   //! whether is locked.
+
+#ifdef H_OS_WINCE
+#define H_TEMP_volatile 
+#else
+#define H_TEMP_volatile volatile
+#endif
+        H_TEMP_volatile AtomicInt32            m_nNumEnterThread;   //! Number of thread enter the lock
+        H_TEMP_volatile AtomicInt32             m_nNumWaitThread;   //! Number of thread wait the lock.
+        H_TEMP_volatile AtomicInt32                    m_bLocked;   //! whether is locked.
+#undef H_TEMP_volatile
+
     };
 
 
@@ -343,15 +357,21 @@ namespace osl
         Lock( u32 nSpinCount = 4000 )
             : m_nLockCount( 0 )
         {
+            (void)nSpinCount;
+            //TODO nSpinCount how to use it
+
 #ifdef H_STAT_LOCK
             nNumConflicts = 0;
 #endif
 
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
 
+            InitializeCriticalSection(&m_lockMem);
+
+#elif defined(H_OS_WINDOWS)
             if ( !::InitializeCriticalSectionAndSpinCount( &m_lockMem, nSpinCount ) )
             {
-                //H_ASSERT( false && "failed to creaet lock.");
+                //H_ASSERT( false && "failed to create lock.");
             }
 
 #elif defined(H_OS_LINUX)

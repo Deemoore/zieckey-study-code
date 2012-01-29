@@ -1,7 +1,12 @@
 #ifndef _QLOG_MANAGER_INLINE_H_
 #define _QLOG_MANAGER_INLINE_H_
 
+#ifndef H_OS_WINCE
+
+#include <errno.h>
+
 #include "osl/include/log.h"
+#include <stdio.h>
 #include <stdarg.h>
 
 namespace osl
@@ -107,6 +112,9 @@ namespace osl
 
 
 
+#endif // #ifndef H_OS_WINCE
+
 #endif // #ifndef _QLOG_MANAGER_INLINE_H_
+
 
 

@@ -420,7 +420,7 @@ namespace osl
 			}
 
 #ifdef H_OS_WINDOWS
-			::ShellExecuteA( NULL, "edit", "memstat.txt", NULL, NULL, SW_SHOWNORMAL );
+			//::ShellExecuteA( NULL, "edit", "memstat.txt", NULL, NULL, SW_SHOWNORMAL );
 #endif
 		}
 

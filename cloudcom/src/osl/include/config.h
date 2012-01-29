@@ -18,7 +18,11 @@
 #define H_PROVIDE_THREAD_EVENT_LOCK 1
 
 //Define to 1 if you want to use log4cxx as your log system
+#ifdef WINCE
+#define H_PROVIDE_LOG_SYSTEM 0
+#else
 #define H_PROVIDE_LOG_SYSTEM 1
+#endif
 
 //Define to 1 if you want to parse command line parameters
 #define H_PROVIDE_APPSHELL 1
@@ -36,17 +40,28 @@
 #define H_PROVIDE_BASE64 1
 
 //Define to 1 if you want to use IDEA encrypt wrapper helpers
+#ifdef WINCE
+#define H_PROVIDE_IDEA_ENCRYPT 0
+#else
 #define H_PROVIDE_IDEA_ENCRYPT 1
+#endif
 
 //Define to 1 if you want to use UUID algorithm
 #define H_PROVIDE_UUID 0
 
 //Define to 1 if you want to use a management of DLL
+#ifdef WINCE
+#define H_PROVIDE_DLL_MANAGER 0
+#else
 #define H_PROVIDE_DLL_MANAGER 1
+#endif
 
 //Define to 1 if you want to use Timer
+#ifdef WINCE
+#define H_PROVIDE_TIMER 0
+#else
 #define H_PROVIDE_TIMER 1
-
+#endif
 
 #endif
 

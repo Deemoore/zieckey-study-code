@@ -13,6 +13,7 @@
 #endif
 #endif
 
+
 // STL containers
 #include <vector>
 #include <map>
@@ -23,7 +24,7 @@
 // #include <queue>
 // #include <bitset>
 #include <typeinfo>
-#include <stdexcept>
+// #include <stdexcept>
 // Note - not in the original STL, but exists in SGI STL and STLport
 #if (defined(H_COMPILER_GNUC) && !defined(STLPORT))
 #   include <ext/hash_map>

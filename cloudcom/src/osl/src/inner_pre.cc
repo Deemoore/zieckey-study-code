@@ -29,7 +29,15 @@
 //-------------------------------------------------------
 //Windows lib
 #ifdef H_WINDOWS_API
-#	pragma comment(lib,"Ws2_32.lib")
+    #ifdef H_OS_WINCE
+    #	pragma comment(lib,"Ws2.lib")
+    #	pragma comment(lib,"ccrtrtti.lib")
+    //#	pragma comment(lib,"wcecompat.lib")
+    //#	pragma comment(lib,"wcecompatex.lib")
+    #else
+    #	pragma comment(lib,"Ws2_32.lib")
+    #endif
+
 
 // 	#ifdef _DEBUG // Debug mode so use debug library
 // 	#  pragma comment(lib, "libcd.lib")
@@ -61,16 +69,17 @@
 
 
 //openssl
-#if H_PROVIDE_IDEA_ENCRYPT || H_PROVIDE_RSA
+#if H_PROVIDE_RSA
 #ifdef H_WINDOWS_API
-#	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"libeay32.lib")
-#	else
-#		pragma comment(lib,"libeay32.lib")
-#	endif
 #endif
-#endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT && H_PROVIDE_IDEA_ENCRYPT )
+#endif // end of #if H_PROVIDE_IDEA_ENCRYPT )
 
+#if H_PROVIDE_IDEA_ENCRYPT
+#ifdef H_WINDOWS_API
+#		pragma comment(lib,"idea.lib")
+#endif
+#endif
 
 
 namespace osl

@@ -17,9 +17,7 @@ H_LINK_LIB( "osl");
 #include "osl/include/data_stream.h"
 
 
-#if H_PROVIDE_LOG_SYSTEM
 #include "osl/include/log_manager.h"
-#endif
 
 #endif //#ifndef QOSLIB_ALL_EXPORT_H_
 

@@ -6,7 +6,7 @@
 
 #include "osl/include/data_stream.h"
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 #include <direct.h>
 #elif defined(H_OS_LINUX)
 #include <sys/stat.h>
@@ -75,9 +75,11 @@ namespace osl
         struct stat st;
 
         //////////////////////////////////////////////////////////////////////////
-        //   I DONT KNOW WHY  _fstat( pF, &st ) cant work correctly.
+        //   I DONT KNOW WHY  _fstat( pF, &st ) can't work correctly.
         //////////////////////////////////////////////////////////////////////////
-
+#ifdef H_OS_WINCE
+        //TODO xxxxxx
+#else
         if ( !pF || 0 != stat( strPathName.c_str(), &st ) )
         {
             if ( pF )
@@ -87,6 +89,7 @@ namespace osl
 
             return false;
         }
+#endif
 
 
         // allocate memory.
@@ -135,6 +138,10 @@ namespace osl
 
     void createDir( const StringA& strFileName )
     {
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+#else
+
         //StringA strPathName = StringUtil::utf8ToMbs(strFileName);
         StringA strPathName = strFileName;
 
@@ -153,7 +160,6 @@ namespace osl
                 // current dir
 #ifdef H_OS_WINDOWS
                 _mkdir( strPathName.substr( 0, nCurSplit ).c_str() );
-
 #elif defined(H_OS_LINUX)
                 mkdir( strPathName.substr( 0, nCurSplit ).c_str(), 0777 );
 #endif
@@ -168,6 +174,7 @@ namespace osl
 
         }
         while ( nCurSplit != StringA::npos );
+#endif
     }
     //----------------------------------------------
     bool MemoryDataStream::saveToFile( const StringA& strFileName )

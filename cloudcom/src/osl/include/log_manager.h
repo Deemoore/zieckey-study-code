@@ -80,6 +80,7 @@ namespace osl
 
 
 
+#if H_PROVIDE_LOG_SYSTEM
 
 //! Logs a message to a specified logger with a specified level.
 //! \param logger the logger to be used.
@@ -96,6 +97,13 @@ namespace osl
     osl::Log* pLog_99888866_ = osl::LogManager::getSingletonPtr()->getLog( logName_99886666_ ); \
     if( pLog_99888866_ ) pLog_99888866_->logMessage( (message), (level) ); }
 
+#else
+
+#define H_LOG(logger, level, message) {}
+
+#define H_LOG_NAME( logName, level, message) {}
+
+#endif // #if H_PROVIDE_LOG_SYSTEM
 
 
 
