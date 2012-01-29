@@ -12,6 +12,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <float.h>
+#include <wchar.h>
+#include <time.h>
+#include <math.h>
 
 
 //! Whether is debug mode
@@ -29,7 +32,7 @@
 #endif
 
 //! Define Operation System.
-#if ( defined(WIN32) || defined(WIN64) )
+#if ( defined(WIN32) || defined(WIN64) || defined(WINCE))
 #	ifndef H_OS_WINDOWS
 #		define H_OS_WINDOWS
 #	endif
@@ -62,7 +65,9 @@
 #define  H_OS_FREEBSD
 #endif
 
-
+#if defined(WINCE)
+#   define H_OS_WINCE
+#endif
 
 //! Find the arch type
 #if defined(__x86_64__) || defined(__amd_64__) || defined(_M_X64)
@@ -206,6 +211,12 @@
 // will ever be actually removed from VC anyway, it would break too much code.
 #	pragma warning( disable: 4996)
 
+
+    #ifdef H_OS_WINCE
+    //TODO I am not sure the effective of disable this warning
+        //#pragma warning( disable: 4273)
+    #endif
+
 #endif // if H_COMPILER_MSVC
 
 
@@ -226,7 +237,7 @@ typedef char     HCHAR;
 
 
 #ifdef H_OS_WINDOWS
-#	include <emmintrin.h>
+//#	include <emmintrin.h>
 #   ifdef __MINGW32__
 #       include <basetyps.h>
 #       include <io.h>
@@ -379,7 +390,7 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 #define atoi32 atoi
 #define atof64 atof
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) || defined(H_OS_WINCE)
 #   define strcasecmp stricmp
 #   define strncasecmp strnicmp
 #else
@@ -460,7 +471,7 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 // 
 
 #ifdef H_OS_WINDOWS
-    #include <direct.h>
+//    #include <direct.h>
     #include <process.h>
 #elif defined( H_OS_FREEBSD )
     #include <sys/sysctl.h>
@@ -560,7 +571,7 @@ namespace osl
     typedef double             f64;
 
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) || defined(H_OS_WINCE)
     typedef long                 AtomicInt32;
     typedef __int64              AtomicInt64;
 
@@ -597,6 +608,5 @@ namespace osl
 #define H_S64_MAX	0x7fffffffffffffff  //! signed 64 bit long int max number
 #define H_U64_MAX	0xffffffffffffffff  //! unsigned 64 bit long int max number
 }
-
 
 

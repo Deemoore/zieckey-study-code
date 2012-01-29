@@ -1,7 +1,9 @@
 #ifndef OSLIB_TYPE_TRAITS_EXT_H_
 #define OSLIB_TYPE_TRAITS_EXT_H_
 
-#ifdef H_OS_WINDOWS
+#include "osl/include/platform_micros.h"
+
+#if defined(H_OS_WINDOWS ) || defined(H_OS_WINCE)
 //
 namespace stdext
 {

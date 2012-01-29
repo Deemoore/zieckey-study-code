@@ -91,6 +91,7 @@ namespace json
 
     bool JSONInteger::toString( osl::StringA& s, bool readable )const
     {
+        (void)(readable);
 		s = osl::StringUtil::valueOf( m_value );
         return true;
     }
@@ -160,6 +161,7 @@ namespace json
 
     bool JSONDouble::toString( osl::StringA& s, bool readable )const
     {
+        (void)(readable);
 		s = osl::StringUtil::valueOf( m_value );
 //		osl::StringUtil::trim( s, "0" );
 		return true;
@@ -339,6 +341,7 @@ namespace json
 
     bool JSONString::toString( osl::StringA& s, bool readable )const
     {
+        (void)(readable);
         return JSONObject::quote( m_value, s );
     }
 
@@ -384,6 +387,7 @@ namespace json
 
     bool JSONNull::toString( osl::StringA& s, bool readable )const
     {
+        (void)(readable);
         s = "null";
         return true;
     }
@@ -420,6 +424,8 @@ namespace json
     //------------------------------------------------------------
     bool JSONNull::loadFrom( osl::MemoryDataStream& ___IN file )
     {
+        (void)(file);
+        //nothing need to do
         return true;
     }
 

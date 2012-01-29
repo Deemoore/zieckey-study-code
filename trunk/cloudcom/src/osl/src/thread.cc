@@ -36,16 +36,12 @@ namespace osl
 
 #endif
 
-#ifdef H_OS_WINDOWS
-    volatile long s_nNumWorkingThread = 0;
-#elif defined(H_OS_LINUX)
-    volatile s32  s_nNumWorkingThread = 0;
-#endif
-
-#ifdef H_OS_WINDOWS
-    volatile long s_nNumThreads = 0;
-#elif defined(H_OS_LINUX)
-    volatile s32  s_nNumThreads = 0;
+#ifdef H_OS_WINCE
+    AtomicInt32 s_nNumThreads = 0;
+    AtomicInt32 s_nNumWorkingThread = 0;
+#else
+    volatile AtomicInt32 s_nNumThreads = 0;
+    volatile AtomicInt32 s_nNumWorkingThread = 0;
 #endif
 
 	Thread*   s_pMainThread = NULL;
@@ -239,7 +235,7 @@ namespace osl
 			nMask = nProcessMask;
 		}
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 
 		::SetThreadAffinityMask( NULL, (DWORD_PTR)&nMask );
 
@@ -276,8 +272,10 @@ namespace osl
 
 			// create thread and start it.
 
-#ifdef H_OS_WINDOWS
-			m_hThread = ( HANDLE )::_beginthreadex( NULL, 0, &Thread::ThreadProc, this, 0, 0 );
+#ifdef H_OS_WINCE
+			assert(false && "Not support!");
+#elif defined(H_OS_WINDOWS)
+            m_hThread = ( HANDLE )::_beginthreadex( NULL, 0, &Thread::ThreadProc, this, 0, 0 );
             if ( m_hThread )
             {
                 setPriority( m_nPriority );
@@ -467,10 +465,10 @@ namespace osl
 		SetThreadName( (DWORD)-1, m_strName.c_str());
 #endif
 		
-#ifdef H_OS_WINDOWS
-        ScopedIntCounterThreadsafe<volatile long> autocount( s_nNumWorkingThread );
-#elif defined(H_OS_LINUX)
-        ScopedIntCounterThreadsafe<volatile s32> autocount( s_nNumWorkingThread );
+#ifdef H_OS_WINCE
+        ScopedIntCounterThreadsafe<AtomicInt32> autocount( s_nNumWorkingThread );
+#else
+        ScopedIntCounterThreadsafe<volatile AtomicInt32> autocount( s_nNumWorkingThread );
 #endif
 
 #ifdef H_RECORD_LOG

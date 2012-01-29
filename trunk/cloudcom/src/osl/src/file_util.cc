@@ -456,7 +456,11 @@ namespace osl
         }
         else
         {
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+            assert(false && "Not support!");
+            return false;
+#elif defined(H_OS_WINDOWS)
+
             return ::DeleteFileA( strFileName.c_str() ) ? true : false;
 #else
             return remove( strFileName.c_str() ) == 0;
@@ -466,6 +470,11 @@ namespace osl
     //----------------------------------------------------------
     bool FileUtil::makeFSDir( const StringA& strFileName )
     {
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+        return false;
+#else
+
         size_t nCurSplit = 0, nNextSplit = 0;
 
         int iret = 0;
@@ -501,6 +510,7 @@ namespace osl
         while ( nNextSplit != StringA::npos );
 
         return true;
+#endif
     }
     //----------------------------------------------------------
     //! Find files in directory with a perl regular expression.
@@ -843,11 +853,15 @@ namespace osl
         //////////////////////////////////////////////////////////////////////////
         //   I DONT KNOW WHY  _fstat( pF, &st ) cant work correctly.
         //////////////////////////////////////////////////////////////////////////
-
+#ifdef H_OS_WINCE
+        //TODO xxxxxx
+        assert(false && "Not support!");
+#else
         if (  0 != stat( strFileName.c_str(), &st ) )
         {
             return false;
         }
+#endif
 
         return true;
     }
@@ -1023,7 +1037,9 @@ namespace osl
 
     void FileUtil::getFiles( const StringA& strDirName, StringAList& files, bool recursively/* = true*/, const StringA& filter/* = "*.*"*/ )
     {
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+#elif defined(H_OS_WINDOWS)
         struct _finddata_t finfo; //file info
 
         osl::StringA p;
@@ -1107,8 +1123,9 @@ namespace osl
         {
             return;
         }
-
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+#elif defined(H_OS_WINDOWS)
         struct _finddata_t finfo; //file info
 
         osl::StringA p;

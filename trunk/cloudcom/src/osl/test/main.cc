@@ -13,7 +13,12 @@
 #	else
 #		pragma comment(lib,"cppunit_dll.lib")
 #	endif
-#	pragma comment(lib,"Ws2_32.lib")
+    #ifdef H_OS_WINCE
+    #	pragma comment(lib,"Ws2.lib")
+    #else
+    #	pragma comment(lib,"Ws2_32.lib")
+    #endif
+
 #endif
 
 int main(int argc, char* argv[])

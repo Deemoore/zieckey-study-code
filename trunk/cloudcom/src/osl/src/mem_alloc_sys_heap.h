@@ -20,7 +20,7 @@ namespace osl
 
         c_bMemAllocInitialized = true;
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 
         ::SetEnvironmentVariableA( "_NO_DEBUG_HEAP", "1" );
 

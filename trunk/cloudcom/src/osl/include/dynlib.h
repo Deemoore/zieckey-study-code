@@ -1,12 +1,13 @@
 #ifndef OSLIB_DYNLIB_H_
 #define OSLIB_DYNLIB_H_
 
-#include "osl/include/inner_pre.h"
-#include "osl/include/object.h"
-#include "osl/include/string_ext.h"
+#include "osl/include/config.h"
 
 #if H_PROVIDE_DLL_MANAGER
 
+#include "osl/include/inner_pre.h"
+#include "osl/include/object.h"
+#include "osl/include/string_ext.h"
 
 namespace osl
 {

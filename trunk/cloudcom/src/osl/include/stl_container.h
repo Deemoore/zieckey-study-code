@@ -9,9 +9,9 @@
 namespace osl
 {
 
-	struct null_pointer : std::exception
-	{
-	};
+// 	struct null_pointer : std::exception
+// 	{
+// 	};
 
     struct Less_PChar
     {

@@ -9,6 +9,10 @@
 #	else
 #		pragma comment(lib,"libcurl_imp.lib")
 #	endif
-#	pragma comment(lib,"Ws2_32.lib")
+    #ifdef H_OS_WINCE
+    #	pragma comment(lib,"Ws2.lib")
+    #else
+    #	pragma comment(lib,"Ws2_32.lib")
+    #endif
 #endif
 

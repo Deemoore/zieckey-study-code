@@ -217,17 +217,7 @@ namespace
 
 
 
-
-
-
-#ifdef H_OS_WINDOWS
-#	include <mbctype.h>
-#elif defined(H_OS_LINUX)
-
-#endif
-
-
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 #   ifndef __MINGW32__
 #       define __CONVERT__LOCALE__
 #   endif

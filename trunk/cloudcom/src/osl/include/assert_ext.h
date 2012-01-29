@@ -56,7 +56,8 @@ namespace osl
 {
     inline void h_trace( const char* fmt, ... )
     {
-#ifdef H_DEBUG_MODE
+#if defined(H_DEBUG_MODE) && !defined(H_OS_WINCE)
+
         char out[2048] = {};
 
         va_list body;
@@ -78,7 +79,7 @@ namespace osl
                           unsigned lineno )
     {
 #ifdef H_DEBUG_MODE
-    #ifdef H_OS_WINDOWS
+    #if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
         _wassert( expr, filename, lineno );
     #endif
 #endif

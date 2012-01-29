@@ -7,27 +7,8 @@
 #include "osl/include/file_util.h"
 #include "osl/include/process_ext.h"
 
-#ifdef H_OS_WINDOWS
-#	include "emmintrin.h"
 
-#   ifdef __MINGW32__
-#		define H_IMPLEMENT_MANAGED_MARSHALLING_BUGFIX
-#       include "basetyps.h"
-#       include "io.h"
-#   endif
-
-#elif defined(H_OS_LINUX)
-
-#	include <stdint.h>
-
-#else
-
-#endif
-
-
-
-
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 
 #include "Psapi.h"
 #pragma comment( lib, "Psapi.lib")

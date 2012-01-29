@@ -138,7 +138,11 @@ public:                                                                         
         }
 
     protected:
-		mutable volatile AtomicInt32 m_nRefCount;
+#ifdef H_OS_WINCE
+        mutable AtomicInt32 m_nRefCount;
+#else
+        mutable volatile AtomicInt32 m_nRefCount;
+#endif
     };
 
 

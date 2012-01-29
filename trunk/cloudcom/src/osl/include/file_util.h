@@ -3,7 +3,7 @@
 
 #include "osl/include/string_ext.h"
 
-#ifdef H_OS_WINDOWS
+#if defined(H_OS_WINDOWS) && !defined(H_OS_WINCE)
 #   include <direct.h>
 #endif
 

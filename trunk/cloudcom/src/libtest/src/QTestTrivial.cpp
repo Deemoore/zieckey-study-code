@@ -101,7 +101,6 @@ namespace LibTest
 #ifdef H_TEST_SELECT_TIMEOUT
 #    ifdef H_OS_WINDOWS
 #        include "winsock2.h"
-#        pragma comment(lib,"Ws2_32.lib")
 #    else
 #        include <sys/select.h>
 #        include <sys/types.h>

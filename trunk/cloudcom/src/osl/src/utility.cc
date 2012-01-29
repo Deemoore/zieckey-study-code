@@ -56,7 +56,9 @@ namespace osl
 
     void Util::getFiles( const osl::StringA& strDirName, StringAList& files, bool recursively/* = true*/, const osl::StringA& filter/* = "*.*"*/ )
     {
-#ifdef H_OS_WINDOWS
+#ifdef H_OS_WINCE
+        assert(false && "Not support!");
+#elif defined(H_OS_WINDOWS)
         struct _finddata_t finfo; //file info
 
         osl::StringA p;
