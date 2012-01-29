@@ -452,7 +452,7 @@ namespace osl
         // remove self
         if ( bDir )
         {
-            return rmdir( strFileName.c_str() ) == 0;
+            return rmdir( strFileName.c_str() );
         }
         else
         {
@@ -491,7 +491,7 @@ namespace osl
             iret = _mkdir( strFileName.substr( 0, nNextSplit ).c_str() );
 #else
             // current dir
-            iret = mkdir( strFileName.substr( 0, nNextSplit ).c_str(), 0755 );
+            iret = ::mkdir( strFileName.substr( 0, nNextSplit ).c_str(), 0755 );
 #endif
             /*
             if ( iret != 0 )
