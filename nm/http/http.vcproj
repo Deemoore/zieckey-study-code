@@ -382,6 +382,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\src\tcp_pipe.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"

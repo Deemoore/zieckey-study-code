@@ -89,3 +89,4 @@ void CtesthttpDlg::Test_ParseIpAndURI()
     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
     assert((uri == "/abc") && (port == 80) && (ip == "192.168.0.11"));
 }
+
