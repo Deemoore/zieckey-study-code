@@ -1,0 +1,133 @@
+// cwctype standard header
+#pragma once
+#ifndef _CWCTYPE_
+#define _CWCTYPE_
+#include <yvals.h>
+
+#ifdef _STD_USING
+ #undef _STD_USING
+  #include <wctype.h>
+ #define _STD_USING
+
+#else /* _STD_USING */
+ #include <wctype.h>
+#endif /* _STD_USING */
+
+#ifndef RC_INVOKED
+#if defined(_WIN32_WCE)
+
+/* WinCE has these #defined instead of inline functions
+   We need to overwrite that to put them in the std namespace */
+
+#ifdef iswalnum
+#undef iswalnum
+#endif
+inline int iswalnum(wint_t _C) 
+    { return (iswctype(_C,_ALPHA|_DIGIT)); }
+
+#ifdef iswalpha
+#undef iswalpha
+#endif
+inline int iswalpha(wint_t _C)
+    { return (iswctype(_C,_ALPHA)); }
+
+#ifdef iswcntrl
+#undef iswcntrl
+#endif
+inline int iswcntrl(wint_t _C)
+    { return (iswctype(_C,_CONTROL)); }
+
+#ifdef iswdigit
+#undef iswdigit
+#endif
+inline int iswdigit(wint_t _C)
+    { return (iswctype(_C,_DIGIT)); }
+
+#ifdef iswgraph
+#undef iswgraph
+#endif
+inline int iswgraph(wint_t _C)
+        { return (iswctype(_C,_PUNCT|_ALPHA|_DIGIT)); }
+
+#ifdef iswlower
+#undef iswlower
+#endif
+inline int iswlower(wint_t _C)
+    { return (iswctype(_C,_LOWER)); }
+
+#ifdef iswprint
+#undef iswprint
+#endif
+inline int iswprint(wint_t _C)
+    { return (iswctype(_C,_BLANK|_PUNCT|_ALPHA|_DIGIT)); }
+
+#ifdef iswpunct
+#undef iswpunct
+#endif
+inline int iswpunct(wint_t _C)
+    { return (iswctype(_C,_PUNCT)); }
+
+
+#ifdef iswspace
+#undef iswspace
+#endif
+inline int iswspace(wint_t _C)
+    { return (iswctype(_C,_SPACE)); }
+
+#ifdef iswupper
+#undef iswupper
+#endif
+inline int iswupper(wint_t _C)
+    { return (iswctype(_C,_UPPER)); }
+
+#ifdef iswxdigit
+#undef iswxdigit
+#endif
+inline int iswxdigit(wint_t _C)
+    { return (iswctype(_C,_HEX)); }
+
+#endif // defined(_WIN32_WCE)
+ #if _GLOBAL_USING
+_STD_BEGIN
+#ifndef _WIN32_WCE
+// Not supported on CE
+using ::towctrans; using ::wctrans; using ::wctype;
+#endif
+
+using ::wint_t; using ::wctrans_t; using ::wctype_t;
+using ::iswalnum; using ::iswalpha; using ::iswcntrl;
+using ::iswctype; using ::iswdigit; using ::iswgraph;
+using ::iswlower; using ::iswprint; using ::iswpunct;
+using ::iswspace; using ::iswupper; using ::iswxdigit;
+using ::towlower; using ::towupper;
+
+_STD_END
+ #endif /* _GLOBAL_USING */
+#endif /* RC_INVOKED */
+
+#ifndef _WIN32_WCE // these are supplied by the platform SDK for Windows CE, so having them as defines is not innappropriate.
+        /* remove any (improper) macro overrides */
+#undef iswalnum
+#undef iswalpha
+#undef iswcntrl
+#undef iswctype
+#undef iswdigit
+#undef iswgraph
+#undef iswlower
+#undef iswprint
+#undef iswpunct
+#undef iswspace
+#undef iswupper
+#undef iswxdigit
+#undef towctrans
+#undef towlower
+#undef towupper
+#undef wctrans
+#undef wctype
+#endif /* _CWCTYPE_ */
+#endif // _WIN32_WCE
+
+/*
+ * Copyright (c) 1992-2006 by P.J. Plauger.  ALL RIGHTS RESERVED.
+ * Consult your license regarding permissions and restrictions.
+ V5.02:0009 */

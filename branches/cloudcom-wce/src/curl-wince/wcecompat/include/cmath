@@ -1,0 +1,363 @@
+// cmath standard header
+#pragma once
+#ifndef _CMATH_
+#define _CMATH_
+#include <yvals.h>
+
+
+#ifdef _STD_USING
+ #undef _STD_USING
+  #include <math.h>
+ #define _STD_USING
+
+
+#else /* _STD_USING */
+ #include <math.h>
+#endif /* _STD_USING */
+
+#ifndef RC_INVOKED
+ #if _GLOBAL_USING
+
+#if defined(_WIN32_WCE)
+
+/* WinCE has these #defined instead of inline functions
+   We need to overwrite that to put them in the std namespace */
+
+   /* Floating point version */
+#ifdef acosf
+#undef acosf
+#endif
+inline float acosf(float _X)
+        {return ((float)acos((double)_X)); }
+
+#ifdef asinf
+#undef asinf
+#endif
+inline float asinf(float _X)
+        {return ((float)asin((double)_X)); }
+
+#ifdef atanf
+#undef atanf
+#endif
+inline float atanf(float _X)
+        {return ((float)atan((double)_X)); }
+
+#ifdef atan2f
+#undef atan2f
+#endif
+inline float atan2f(float _X, float _Y)
+        {return ((float)atan2((double)_X, (double)_Y)); }
+
+// This exist in the CE headers as a function
+using ::ceilf;
+
+#ifdef cosf
+#undef cosf
+#endif
+inline float cosf(float _X)
+        {return ((float)cos((double)_X)); }
+
+#ifdef coshf
+#undef coshf
+#endif
+inline float coshf(float _X)
+        {return ((float)cosh((double)_X)); }
+
+#ifdef expf
+#undef expf
+#endif
+inline float expf(float _X)
+        {return ((float)exp((double)_X)); }
+
+// This may be an intrinsic on some OS
+#if defined(_M_ARM) || defined(_M_MRX000)
+using ::fabsf;
+#else
+#ifdef fabsf
+#undef fabsf
+#endif
+#pragma warning(push)
+#pragma warning(disable:4163)
+#pragma function(fabsf)
+#pragma warning(pop)
+inline float fabsf(float _X)
+        {return ((float)fabs((double)_X)); }
+#endif
+
+#if defined(_M_ARM) || defined(_M_SH)
+using ::floorf;
+#else
+#ifdef floorf
+#undef floorf
+#endif
+inline float floorf(float _X)
+        {return ((float)floor((double)_X)); }
+#endif
+
+#if defined(_M_ARM) || defined(_M_MRX000) || defined(_M_SH)
+using ::fmodf;
+#else
+#ifdef fmodf
+#undef fmodf
+#endif
+inline float fmodf(float _X, float _Y)
+        {return ((float)fmod((double)_X, (double)_Y)); }
+#endif
+
+#ifdef frexpf
+#undef frexpf
+#endif
+inline float frexpf(float _X, int *_Y)
+        {return ((float)frexp((double)_X, _Y)); }
+
+#ifdef ldexpf
+#undef ldexpf
+#endif
+inline float ldexpf(float _X, int _Y)
+        {return ((float)ldexp((double)_X, _Y)); }
+
+#ifdef logf
+#undef logf
+#endif
+inline float logf(float _X)
+        {return ((float)log((double)_X)); }
+
+#ifdef log10f
+#undef log10f
+#endif
+inline float log10f(float _X)
+        {return ((float)log10((double)_X)); }
+
+#ifdef modff
+#undef modff
+#endif
+inline float modff(float _X, float *_Y)
+        { double _Di, _Df = modf((double)_X, &_Di);
+        *_Y = (float)_Di;
+        return ((float)_Df); }
+
+#ifdef powf
+#undef powf
+#endif
+inline float powf(float _X, float _Y)
+        {return ((float)pow((double)_X, (double)_Y)); }
+
+#ifdef sinf
+#undef sinf
+#endif
+inline float sinf(float _X)
+        {return ((float)sin((double)_X)); }
+
+#ifdef sinhf
+#undef sinhf
+#endif
+inline float sinhf(float _X)
+        {return ((float)sinh((double)_X)); }
+
+// This may be an intrinsic on some OS
+#if defined(_M_ARM)
+using ::sqrtf;
+#else
+#ifdef sqrtf
+#undef sqrtf
+#endif
+#pragma warning(push)
+#pragma warning(disable:4163)
+#pragma function(sqrtf)
+#pragma warning(pop)
+inline float sqrtf(float _X)
+        {return ((float)sqrt((double)_X)); }
+#endif
+
+#ifdef tanf
+#undef tanf
+#endif
+inline float tanf(float _X)
+        {return ((float)tan((double)_X)); }
+
+#ifdef tanhf
+#undef tanhf
+#endif
+inline float tanhf(float _X)
+        {return ((float)tanh((double)_X)); }
+
+/* Long version */
+
+#ifdef acosl
+#undef acosl
+#endif
+inline long double acosl(long double _X)
+        {return (acos((double)_X)); }
+
+#ifdef asinl
+#undef asinl
+#endif
+inline long double asinl(long double _X)
+        {return (asin((double)_X)); }
+
+#ifdef atanl
+#undef atanl
+#endif
+inline long double atanl(long double _X)
+        {return (atan((double)_X)); }
+
+#ifdef atan2l
+#undef atan2l
+#endif
+inline long double atan2l(long double _X, long double _Y)
+        {return (atan2((double)_X, (double)_Y)); }
+
+#ifdef ceill
+#undef ceill
+#endif
+inline long double ceill(long double _X)
+        {return (ceil((double)_X)); }
+
+#ifdef cosl
+#undef cosl
+#endif
+inline long double cosl(long double _X)
+        {return (cos((double)_X)); }
+
+#ifdef coshl
+#undef coshl
+#endif
+inline long double coshl(long double _X)
+        {return (cosh((double)_X)); }
+
+#ifdef expl
+#undef expl
+#endif
+inline long double expl(long double _X)
+        {return (exp((double)_X)); }
+
+#ifdef fabsl
+#undef fabsl
+#endif
+inline long double fabsl(long double _X)
+        {return (fabs((double)_X)); }
+
+#ifdef floorl
+#undef floorl
+#endif
+inline long double floorl(long double _X)
+        {return (floor((double)_X)); }
+
+#ifdef fmodl
+#undef fmodl
+#endif
+inline long double fmodl(long double _X, long double _Y)
+        {return (fmod((double)_X, (double)_Y)); }
+
+#ifdef frexpl
+#undef frexpl
+#endif
+inline long double frexpl(long double _X, int *_Y)
+        {return (frexp((double)_X, _Y)); }
+
+#ifdef ldexpl
+#undef ldexpl
+#endif
+inline long double ldexpl(long double _X, int _Y)
+        {return (ldexp((double)_X, _Y)); }
+
+#ifdef logl
+#undef logl
+#endif
+inline long double logl(long double _X)
+        {return (log((double)_X)); }
+
+#ifdef log10l
+#undef log10l
+#endif
+inline long double log10l(long double _X)
+        {return (log10((double)_X)); }
+
+#ifdef modfl
+#undef modfl
+#endif
+inline long double modfl(long double _X, long double *_Y)
+        {double _Di, _Df = modf((double)_X, &_Di);
+        *_Y = (long double)_Di;
+        return (_Df); }
+
+#ifdef powl
+#undef powl
+#endif
+inline long double powl(long double _X, long double _Y)
+        {return (pow((double)_X, (double)_Y)); }
+
+#ifdef sinl
+#undef sinl
+#endif
+inline long double sinl(long double _X)
+        {return (sin((double)_X)); }
+
+#ifdef sinhl
+#undef sinhl
+#endif
+inline long double sinhl(long double _X)
+        {return (sinh((double)_X)); }
+
+#ifdef sqrtl
+#undef sqrtl
+#endif
+inline long double sqrtl(long double _X)
+        {return (sqrt((double)_X)); }
+
+#ifdef tanl
+#undef tanl
+#endif
+inline long double tanl(long double _X)
+        {return (tan((double)_X)); }
+
+#ifdef tanhl
+#undef tanhl
+#endif
+inline long double tanhl(long double _X)
+        {return (tanh((double)_X)); }
+
+#endif /* _WIN32_WCE */
+
+_STD_BEGIN
+using ::acosf; using ::asinf;
+using ::atanf; using ::atan2f; using ::ceilf;
+using ::cosf; using ::coshf; using ::expf;
+using ::fabsf; using ::floorf; using ::fmodf;
+using ::frexpf; using ::ldexpf; using ::logf;
+using ::log10f; using ::modff; using ::powf;
+using ::sinf; using ::sinhf; using ::sqrtf;
+using ::tanf; using ::tanhf;
+
+using ::acosl; using ::asinl;
+using ::atanl; using ::atan2l; using ::ceill;
+using ::cosl; using ::coshl; using ::expl;
+using ::fabsl; using ::floorl; using ::fmodl;
+using ::frexpl; using ::ldexpl; using ::logl;
+using ::log10l; using ::modfl; using ::powl;
+using ::sinl; using ::sinhl; using ::sqrtl;
+using ::tanl; using ::tanhl;
+
+using ::abs;
+
+using ::acos; using ::asin;
+using ::atan; using ::atan2; using ::ceil;
+using ::cos; using ::cosh; using ::exp;
+using ::fabs; using ::floor; using ::fmod;
+using ::frexp; using ::ldexp; using ::log;
+using ::log10; using ::modf; using ::pow;
+using ::sin; using ::sinh; using ::sqrt;
+using ::tan; using ::tanh;
+
+
+_STD_END
+ #endif /* _GLOBAL_USING */
+#endif /* RC_INVOKED */
+
+#endif /* _CMATH_ */
+
+
+/*
+ * Copyright (c) 1992-2006 by P.J. Plauger.  ALL RIGHTS RESERVED.
+ * Consult your license regarding permissions and restrictions.
+ V5.02:0009 */
