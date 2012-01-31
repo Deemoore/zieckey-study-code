@@ -261,15 +261,24 @@ namespace net
 		//! \param bool val -
 		//! \return void -
 		void setBlockingDoHttpRequest( bool val )
-		{
-            bool b = false;
-            b = val;
-			m_bBlockingDoHttpRequest = val;
-            bool c = b;
-            if (c)
+        {
+            if (val)
             {
-                //;;;
+                this->m_bBlockingDoHttpRequest = 1;
             }
+            else
+            {
+                this->m_bBlockingDoHttpRequest = 0;
+            }
+            
+            m_bBlockingDoHttpRequest = val;
+//             bool bbb = false;
+//             bbb = val;
+//             bool cccc = bbb;
+//             if (cccc)
+//             {
+//                 //;;;
+//             }
 		}
 
         bool isBlockingDoHttpRequest() const { return m_bBlockingDoHttpRequest; }
@@ -439,6 +448,8 @@ namespace net
 		}; // end of class URLInfo
 
 
+        bool               m_bBlockingDoHttpRequest; //! if true, we will call curl_easy_perform to do a HTTP synchronized request
+
 	protected:
 		//! Attributes for derived classes
 		long                              m_timeout;//! the upper bound time which will take. in seconds
@@ -457,7 +468,6 @@ namespace net
 
 		bool                         m_bInitialized; //! whether is Initialized
 
-		
 
 		bool           m_bCompressOperateResultFlag; //! true for successfully compress or uncompress. false for failed
 
@@ -472,9 +482,6 @@ namespace net
 		osl::MemoryDataStreamPtr m_ptrRecvHeaderMDStream; //! hold the received HTTP header data
 
 	private:
-        bool               m_bBlockingDoHttpRequest; //! if true, we will call curl_easy_perform to do a HTTP synchronized request
-
-
 
 		int                                    m_nNo;//!work number
 		static int                        m_nTotalNo;//!total works count, for stat
