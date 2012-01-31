@@ -22,13 +22,9 @@
 // #		pragma comment(lib,"libcurl_imp.lib")
 // #	endif
 
-    #ifdef H_OS_WINCE
     #	pragma comment(lib,"libcurl.lib")
     #	pragma comment(lib,"Ws2.lib")
     #	pragma comment(lib,"ccrtrtti.lib")
-    #else
-    #	pragma comment(lib,"Ws2_32.lib")
-    #endif
 
 #endif
 

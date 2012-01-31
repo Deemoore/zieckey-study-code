@@ -6,6 +6,7 @@
 #include "net-ce-testDlg.h"
 
 #pragma comment(lib, "libcurl.lib")
+#	pragma comment(lib,"ccrtrtti.lib")
 #pragma comment(lib, "ws2.lib")
 
 #include "net/include/exp.h"

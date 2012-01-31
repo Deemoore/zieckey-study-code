@@ -55,6 +55,7 @@ public:
     };
     typedef osl::RefPtr<MyListener> MyListenerPtr;
     MyListenerPtr listener_;
+    net::CURLServicePtr curl_service_;
 
 
 // й╣ож
@@ -68,6 +69,5 @@ protected:
 #endif
 	DECLARE_MESSAGE_MAP()
 
-    net::CURLServicePtr curl_service_;
 
 };

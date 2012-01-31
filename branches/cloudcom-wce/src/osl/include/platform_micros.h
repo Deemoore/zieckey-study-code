@@ -65,7 +65,7 @@
 #define  H_OS_FREEBSD
 #endif
 
-#if defined(WINCE)
+#if defined(WINCE) || defined(_WIN32_WCE)
 #   define H_OS_WINCE
 #endif
 

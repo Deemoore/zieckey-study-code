@@ -80,7 +80,7 @@
 #if !defined(WIN32) && !defined(__WATCOMC__)
 #include <sys/time.h>
 #endif
-#include <sys/types.h>
+//#include <sys/types.h>
 #endif
 
 #ifdef __BEOS__
