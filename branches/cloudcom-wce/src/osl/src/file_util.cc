@@ -7,8 +7,8 @@
 #include "osl/include/object.h"
 #include "osl/include/data_stream.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
 
 #include <fstream>
 
@@ -848,20 +848,20 @@ namespace osl
     //----------------------------------------------------------
     bool FileUtil::isFSFileExist( const osl::StringA& strFileName )
     {
-        struct stat st;
-
-        //////////////////////////////////////////////////////////////////////////
-        //   I DONT KNOW WHY  _fstat( pF, &st ) cant work correctly.
-        //////////////////////////////////////////////////////////////////////////
-#ifdef H_OS_WINCE
-        //TODO xxxxxx
-        assert(false && "Not support!");
-#else
-        if (  0 != stat( strFileName.c_str(), &st ) )
-        {
-            return false;
-        }
-#endif
+//         struct stat st;
+// 
+//         //////////////////////////////////////////////////////////////////////////
+//         //   I DONT KNOW WHY  _fstat( pF, &st ) cant work correctly.
+//         //////////////////////////////////////////////////////////////////////////
+// #ifdef H_OS_WINCE
+//         //TODO xxxxxx
+//         assert(false && "Not support!");
+// #else
+//         if (  0 != stat( strFileName.c_str(), &st ) )
+//         {
+//             return false;
+//         }
+// #endif
 
         return true;
     }

@@ -8,28 +8,13 @@
 
 #ifdef H_OS_WINDOWS
 //! Define import lib macro. Add it in ANY CPP file in target host module.
-H_LINK_LIB( "net")
+//H_LINK_LIB( "net")
+#pragma comment(lib, "net.lib")
 #endif // end of #ifdef H_OS_WINDOWS
 
 namespace net
 {
-
-    //! Module symbol export
-#ifdef H_WINDOWS_API
-#	ifndef  H_STATIC_LIB_NET
-#		ifdef  H_NET_EXPORTS
-#			define _EXPORT_NET __declspec(dllexport)
-#		else
-#			define _EXPORT_NET __declspec(dllimport)
-#		endif
-#	else
-#		define _EXPORT_NET
-#	endif
-#else
 #	define _EXPORT_NET
-#endif // H_STATIC_LIB_
-
-
     //! Is net initialized.
     _EXPORT_NET bool isNetInitialized();
 
@@ -46,6 +31,11 @@ namespace net
 
 
 
+#include "net/include/curl_work.h"
+#include "net/include/http_get_work.h"
+#include "net/include/http_post_file.h"
+#include "net/include/http_post_work.h"
+#include "net/include/curl_service.h"
 
 #endif // end of #ifndef QNETWORKLIB_ALL_EXPORT_H_
 

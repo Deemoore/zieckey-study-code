@@ -9,8 +9,8 @@
 #include <time.h>
 #include <string.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
+// #include <sys/types.h>
+// #include <sys/stat.h>
 #include <float.h>
 #include <wchar.h>
 #include <time.h>
@@ -214,7 +214,9 @@
 
     #ifdef H_OS_WINCE
     //TODO I am not sure the effective of disable this warning
-        //#pragma warning( disable: 4273)
+        #pragma warning( disable: 4100)
+        #pragma warning( disable: 4201)
+        #pragma warning( disable: 4214)
     #endif
 
 #endif // if H_COMPILER_MSVC
@@ -472,7 +474,7 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 
 #ifdef H_OS_WINDOWS
 //    #include <direct.h>
-    #include <process.h>
+//    #include <process.h>
 #elif defined( H_OS_FREEBSD )
     #include <sys/sysctl.h>
 #elif defined( H_OS_LINUX )
@@ -502,23 +504,23 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 
 
     //! Module symbol export
-#ifdef H_WINDOWS_API
-#   ifndef  H_STATIC_LIB_OSLIB
-#       ifdef  H_OSLIB_EXPORTS
-#           define _EXPORT_OSLIB __declspec(dllexport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllexport)
-#		else
-#           define _EXPORT_OSLIB __declspec(dllimport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllimport)
-#       endif
-#	else
-#       define _EXPORT_OSLIB
-#       define _EXPORT_OSLIB_C
-#   endif
-#else
+// #ifdef H_WINDOWS_API
+// #   ifndef  H_STATIC_LIB_OSLIB
+// #       ifdef  H_OSLIB_EXPORTS
+// #           define _EXPORT_OSLIB __declspec(dllexport)
+// #           define _EXPORT_OSLIB_C extern "C" __declspec(dllexport)
+// #		else
+// #           define _EXPORT_OSLIB __declspec(dllimport)
+// #           define _EXPORT_OSLIB_C extern "C" __declspec(dllimport)
+// #       endif
+// #	else
+// #       define _EXPORT_OSLIB
+// #       define _EXPORT_OSLIB_C
+// #   endif
+// #else
+// #   define _EXPORT_OSLIB
+// #endif // H_STATIC_LIB_
 #   define _EXPORT_OSLIB
-#endif // H_STATIC_LIB_
-
 
 
 

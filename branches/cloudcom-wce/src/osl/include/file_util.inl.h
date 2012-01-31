@@ -2,7 +2,7 @@
 #define OSLIB_FILE_UTIL_INL_H_
 
 #ifdef H_OS_WINDOWS
-#   include <io.h>
+//#   include <io.h>
 #else
 #   include <sys/types.h>
 //#   include <sys/dir.h>
@@ -167,33 +167,34 @@ namespace osl
     //-------------------------------------------------------------------
     inline bool FileUtil::isDirectory( const StringA& strFileName )
     {
-        //for the 'stat' API, the parameter strFileName SHOULD not contain a trailing backslash
-        osl::StringA strStandardisePath = standardisePath( strFileName, false );
-
-        struct stat st;
-#ifdef H_OS_WINCE
-        //TODO xxxxxx
-        assert(false && "Not support!");
-#else
-        if ( 0 != stat( strStandardisePath.c_str(), &st ) )
-        {
-            return false;
-        }
-#endif
-
-#ifdef H_OS_WINDOWS
-
-        if ( st.st_mode == _S_IFDIR )
-#else
-        if ( st.st_mode == S_IFDIR )
-#endif
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
+//         //for the 'stat' API, the parameter strFileName SHOULD not contain a trailing backslash
+//         osl::StringA strStandardisePath = standardisePath( strFileName, false );
+// 
+// //        struct stat st;
+// #ifdef H_OS_WINCE
+//         //TODO xxxxxx
+//         assert(false && "Not support!");
+// #else
+//         if ( 0 != stat( strStandardisePath.c_str(), &st ) )
+//         {
+//             return false;
+//         }
+// #endif
+// 
+// #ifdef H_OS_WINDOWS
+// 
+//         if ( st.st_mode == _S_IFDIR )
+// #else
+//         if ( st.st_mode == S_IFDIR )
+// #endif
+//         {
+//             return true;
+//         }
+//         else
+//         {
+//             return false;
+//         }
     }
 
     //-------------------------------------------------------------------
@@ -287,7 +288,6 @@ namespace osl
         }
 
 
-        return false;
     }
 
 };//namespace osl

@@ -20,247 +20,10 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_OSLIB_EXPORTS;H_OSLIB_TEST"
-				StringPooling="true"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				TreatWChar_tAsBuiltInType="false"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
-				DisableSpecificWarnings="4100;4189;4201"
-				EnablePREfast="false"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(OutDir)"
-				IgnoreDefaultLibraryNames="libcmtd.lib"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/$(TargetName).lib"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine=""
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|Pocket PC 2003 (ARMV4)"
+			Name="CDRelease|Pocket PC 2003 (ARMV4)"
 			OutputDirectory="$(SolutionDir)Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
 			IntermediateDirectory="Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODEL;_DEBUG;DEBUG"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				ExecutionBucket="7"
-				Optimization="0"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODEL;_DEBUG;DEBUG"
-				MinimalRebuild="true"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODEL;_DEBUG;DEBUG"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/subsystem:windowsce,$(CEVER) /machine:$(ARCHFAM)"
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				StackReserveSize="65536"
-				StackCommitSize="4096"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCCodeSignTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-			<DeploymentTool
-				ForceDirty="-1"
-				RemoteDirectory=""
-				RegisterOutput="0"
-				AdditionalFiles=""
-			/>
-			<DebuggerTool
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
 			ConfigurationType="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;H_OSLIB_EXPORTS;H_OSLIB_TEST"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				TreatWChar_tAsBuiltInType="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(OutDir)"
-				IgnoreDefaultLibraryNames="libcmt.lib"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine=""
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Pocket PC 2003 (ARMV4)"
-			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -278,14 +41,18 @@
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
+				TargetEnvironment="1"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				Optimization="2"
 				FavorSizeOrSpeed="2"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
+				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude;../../3rdparty/wcecompat/include;$(NOINHERIT)"
+				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;NDEBUG;H_OSLIB_EXPORTS;H_OSLIB_TEST;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
 				MinimalRebuild="false"
+				RuntimeLibrary="0"
+				RuntimeTypeInfo="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -301,13 +68,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/subsystem:windowsce,$(CEVER) /machine:$(ARCHFAM)"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				StackReserveSize="65536"
-				StackCommitSize="4096"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
+				AdditionalOptions=" /SUBSYSTEM:WINDOWSCE,$(CEVER) /MACHINE:$(ARCHFAM)"
+				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -338,10 +100,7 @@
 		</Configuration>
 		<Configuration
 			Name="CEDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
+			ConfigurationType="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -360,22 +119,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_OSLIB_EXPORTS;H_OSLIB_TEST"
-				StringPooling="true"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				TreatWChar_tAsBuiltInType="false"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
-				DisableSpecificWarnings="4100;4189;4201"
-				EnablePREfast="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -388,14 +131,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(OutDir)"
-				IgnoreDefaultLibraryNames="libcmtd.lib"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -417,14 +152,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="CEDebug|Pocket PC 2003 (ARMV4)"
 			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -449,10 +183,11 @@
 				Optimization="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude;../../3rdparty/wcecompat/include;$(NOINHERIT)"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;NDEBUG;H_OSLIB_EXPORTS;H_OSLIB_TEST;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
+				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);NDEBUG;UNDER_CE;$(PLATFORMDEFINES);WINCE;H_OSLIB_EXPORTS;H_OSLIB_TEST;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
+				ProgramDataBaseFileName="$(IntDir)/$(InputName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -467,7 +202,7 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 				AdditionalOptions=" /SUBSYSTEM:WINDOWSCE,$(CEVER) /MACHINE:$(ARCHFAM)"
 			/>
 			<Tool
@@ -585,7 +320,7 @@
 			Name="CERelease|Pocket PC 2003 (ARMV4)"
 			OutputDirectory="$(SolutionDir)bin/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)bin/obj/$(ConfigurationName)/$(ProjectName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -610,8 +345,8 @@
 				ExecutionBucket="7"
 				Optimization="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude;../../3rdparty/wcecompat/include;$(NOINHERIT)"
-				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;NDEBUG;H_OSLIB_EXPORTS;H_OSLIB_TEST;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
+				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude;../../3rdparty/wcecompat/include1;$(NOINHERIT)"
+				PreprocessorDefinitions="_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;_DEBUG;H_STATIC_LIB_OSLIB;H_OSLIB_EXPORTS;H_OSLIB_TEST;$(ARCHFAM);$(_ARCHFAM_);STANDARDSHELL_UI_MODELNDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
@@ -629,10 +364,8 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 				AdditionalOptions=" /SUBSYSTEM:WINDOWSCE,$(CEVER) /MACHINE:$(ARCHFAM)"
-				AdditionalLibraryDirectories="$(OutDir)"
-				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -739,35 +472,6 @@
 			<File
 				RelativePath=".\pch.cc"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						GeneratePreprocessedFile="0"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="CEDebug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						GeneratePreprocessedFile="0"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;osl/include/inner_pre.h&quot;"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="CERelease|Win32"
 					>

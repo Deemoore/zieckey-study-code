@@ -14,14 +14,16 @@
 #include "net/include/http_post_work.h"
 
 
+
 #ifdef H_WINDOWS_API
-#	ifdef H_DEBUG_MODE
-#		pragma comment(lib,"libcurld_imp.lib")
-#	else
-#		pragma comment(lib,"libcurl_imp.lib")
-#	endif
+// #	ifdef H_DEBUG_MODE
+// #		pragma comment(lib,"libcurld_imp.lib")
+// #	else
+// #		pragma comment(lib,"libcurl_imp.lib")
+// #	endif
 
     #ifdef H_OS_WINCE
+    #	pragma comment(lib,"libcurl.lib")
     #	pragma comment(lib,"Ws2.lib")
     #	pragma comment(lib,"ccrtrtti.lib")
     #else

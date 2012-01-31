@@ -15,20 +15,20 @@ namespace net
 
 
     //! Module symbol export
-#ifdef H_WINDOWS_API
-#	ifndef  H_STATIC_LIB_NET
-#		ifdef  H_NET_EXPORTS
-#			define _EXPORT_NET __declspec(dllexport)
-#		else
-#			define _EXPORT_NET __declspec(dllimport)
-#		endif
-#	else
-#		define _EXPORT_NET
-#	endif
-#else
+// #ifdef H_WINDOWS_API
+// #	ifndef  H_STATIC_LIB_NET
+// #		ifdef  H_NET_EXPORTS
+// #			define _EXPORT_NET __declspec(dllexport)
+// #		else
+// #			define _EXPORT_NET __declspec(dllimport)
+// #		endif
+// #	else
+// #		define _EXPORT_NET
+// #	endif
+// #else
+// #	define _EXPORT_NET
+// #endif // H_STATIC_LIB_
 #	define _EXPORT_NET
-#endif // H_STATIC_LIB_
-
 
     //! Is net initialized.
     _EXPORT_NET bool isNetInitialized();

@@ -46,94 +46,95 @@ namespace osl
     //----------------------------------------------
     bool MemoryDataStream::readRawFile( const StringA& strFileName )
     {
-#ifdef H_OS_WINDOWS
-		StringA strPathName = StringUtil::utf8ToMbs(strFileName);
-        std::replace( strPathName.begin(), strPathName.end(), '\\', '/' );
-#else
-        StringA strPathName = strFileName;
-#endif
-        // clear old data.
-        if ( m_bSelfCreate && m_pData )
-        {
-            MemAlloc::free( m_pData );
-            m_pData = NULL;
-            m_nSizeBuffer = 0;
-            m_bSelfCreate = true;
-        }
-
-        m_nPosWrite = 0;
-        m_nPosRead  = 0;
-        m_nSize = 0;
-
-
-        if ( strPathName.size() < 1 )
-        {
-            return false;
-        }
-
-        FILE* pF = fopen( strPathName.c_str(), "r" );
-        struct stat st;
-
-        //////////////////////////////////////////////////////////////////////////
-        //   I DONT KNOW WHY  _fstat( pF, &st ) can't work correctly.
-        //////////////////////////////////////////////////////////////////////////
-#ifdef H_OS_WINCE
-        //TODO xxxxxx
-#else
-        if ( !pF || 0 != stat( strPathName.c_str(), &st ) )
-        {
-            if ( pF )
-            {
-                fclose( pF );
-            }
-
-            return false;
-        }
-#endif
-
-
-        // allocate memory.
-        m_pData = ( u8* )H_ALLOC_NAME( st.st_size, "MemoryDataStream" );
-
-        if ( !m_pData )//st.st_size may be 0
-        {
-            fclose( pF );
-            return false;
-        }
-
-        m_bSelfCreate = true;
-        m_nSize = st.st_size;
-        m_nSizeBuffer = m_nSize;
-
-
-
-        size_t nRemainSize = m_nSize;
-
-        while ( nRemainSize > 0 && !feof( pF ) )
-        {
-
-            size_t nRead = fread( m_pData + ( m_nSize - nRemainSize ) ,
-                                  sizeof( char ), nRemainSize, pF );
-
-            nRemainSize -= nRead;
-
-            if ( ferror( pF ) )
-            {
-                if ( pF )
-                {
-                    fclose( pF );
-                }
-
-                return false;
-            }
-        }
-
-        fclose( pF );
-
-        assert( nRemainSize == 0 );
-        seekp( (s32)m_nSize );
-
-        return true;
+// #ifdef H_OS_WINDOWS
+// 		StringA strPathName = StringUtil::utf8ToMbs(strFileName);
+//         std::replace( strPathName.begin(), strPathName.end(), '\\', '/' );
+// #else
+//         StringA strPathName = strFileName;
+// #endif
+//         // clear old data.
+//         if ( m_bSelfCreate && m_pData )
+//         {
+//             MemAlloc::free( m_pData );
+//             m_pData = NULL;
+//             m_nSizeBuffer = 0;
+//             m_bSelfCreate = true;
+//         }
+// 
+//         m_nPosWrite = 0;
+//         m_nPosRead  = 0;
+//         m_nSize = 0;
+// 
+// 
+//         if ( strPathName.size() < 1 )
+//         {
+//             return false;
+//         }
+// 
+//         FILE* pF = fopen( strPathName.c_str(), "r" );
+// //        struct stat st;
+// 
+//         //////////////////////////////////////////////////////////////////////////
+//         //   I DONT KNOW WHY  _fstat( pF, &st ) can't work correctly.
+//         //////////////////////////////////////////////////////////////////////////
+// #ifdef H_OS_WINCE
+//         //TODO xxxxxx
+// #else
+//         if ( !pF || 0 != stat( strPathName.c_str(), &st ) )
+//         {
+//             if ( pF )
+//             {
+//                 fclose( pF );
+//             }
+// 
+//             return false;
+//         }
+// #endif
+// 
+// 
+//         // allocate memory.
+//         m_pData = ( u8* )H_ALLOC_NAME( st.st_size, "MemoryDataStream" );
+// 
+//         if ( !m_pData )//st.st_size may be 0
+//         {
+//             fclose( pF );
+//             return false;
+//         }
+// 
+//         m_bSelfCreate = true;
+//         m_nSize = st.st_size;
+//         m_nSizeBuffer = m_nSize;
+// 
+// 
+// 
+//         size_t nRemainSize = m_nSize;
+// 
+//         while ( nRemainSize > 0 && !feof( pF ) )
+//         {
+// 
+//             size_t nRead = fread( m_pData + ( m_nSize - nRemainSize ) ,
+//                                   sizeof( char ), nRemainSize, pF );
+// 
+//             nRemainSize -= nRead;
+// 
+//             if ( ferror( pF ) )
+//             {
+//                 if ( pF )
+//                 {
+//                     fclose( pF );
+//                 }
+// 
+//                 return false;
+//             }
+//         }
+// 
+//         fclose( pF );
+// 
+//         assert( nRemainSize == 0 );
+//         seekp( (s32)m_nSize );
+// 
+//         return true;
+        return false;
     }
 
     void createDir( const StringA& strFileName )

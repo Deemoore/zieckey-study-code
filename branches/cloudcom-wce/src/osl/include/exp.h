@@ -7,7 +7,8 @@
 
 #ifdef H_OS_WINDOWS
 //! Define import lib macro. Add it in ANY CPP file in target host module.
-H_LINK_LIB( "osl");
+//H_LINK_LIB( "osl");
+#pragma comment(lib, "osl.lib")
 #endif
 
 #include "osl/include/mem_alloc.h"

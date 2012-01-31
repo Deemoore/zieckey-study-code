@@ -85,7 +85,12 @@ namespace net
                 m_vWorkThread[ i ]->setName( strTip.str() );
             }
 
-            m_vWorkThread[ i ]->start();
+            if (!m_vWorkThread[ i ]->start())
+            {
+                return false;
+                break;
+            }
+            
 
             while ( !( m_vWorkThread[ i ]->isRunning() ) )
             {

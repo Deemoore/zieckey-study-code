@@ -21,7 +21,7 @@
 
 
 #ifdef H_OS_WINDOWS
-#	include <process.h>
+//#	include <process.h>
 #elif defined(H_OS_LINUX)
 
 #endif
@@ -114,6 +114,10 @@ namespace osl
 		{
 			H_NEW MainThread();
 		}
+
+#ifdef H_OS_WINCE
+        m_dwReadThreadID = 0;
+#endif
 
 		// set initial name.
 		m_strName = "Unknown Thread";
@@ -273,7 +277,12 @@ namespace osl
 			// create thread and start it.
 
 #ifdef H_OS_WINCE
-			assert(false && "Not support!");
+			m_hThread = CreateThread(NULL, 0, ThreadProc, this, 0, &m_dwReadThreadID);
+            if (m_hThread)
+            {
+                return true;
+            }
+            
 #elif defined(H_OS_WINDOWS)
             m_hThread = ( HANDLE )::_beginthreadex( NULL, 0, &Thread::ThreadProc, this, 0, 0 );
             if ( m_hThread )
@@ -407,32 +416,16 @@ namespace osl
 		}
 	}
 	//__declspec(thread) char threadname[256]="unknown";
-	unsigned int __stdcall Thread::ThreadProc( void* pvArg )
+	DWORD __stdcall Thread::ThreadProc( void* pvArg )
 	{
 		// maybe is stopping
 		Thread* pThis = ( Thread* )pvArg;
 		pThis->ref();
 
 		// set thread local staroge.
-		TlsSetValue( s_thread_key , pvArg );
+		//TlsSetValue( s_thread_key , pvArg );
 
-
-#ifdef H_DEBUG_MODE
-
-		((Thread*)pvArg)->doWork();
-#else
-		{
-			_try
-			{
-				((Thread*)pvArg)->doWork();
-			}
-			__except(EXCEPTION_EXECUTE_HANDLER)
-			{
-				assert( false && "Thread crashed, Please check it!!!");
-			}
-		}
-#endif
-
+		pThis->doWork();
 		// 
 		pThis->unref();
 
@@ -440,30 +433,13 @@ namespace osl
 	}
 
 	//----------------------------------------------
-#elif defined(H_OS_LINUX)
-	//__thread char threadname[256]="unknown";
-	void* Thread::ThreadProc( void* pvArg )
-	{
-		// maybe is stopping
-		ThreadPtr pThis = ( Thread* )pvArg;
 
-		// set thread local staroge.
-		pthread_setspecific( s_thread_key, pvArg );
-
-		pThis->doWork();
-
-		return 0;
-	}
 #endif
 
 
 	//----------------------------------------------
 	void Thread::doWork()
 	{
-		//strcpy(threadname,m_strName.c_str());
-#ifdef H_OS_WINDOWS
-		SetThreadName( (DWORD)-1, m_strName.c_str());
-#endif
 		
 #ifdef H_OS_WINCE
         ScopedIntCounterThreadsafe<AtomicInt32> autocount( s_nNumWorkingThread );

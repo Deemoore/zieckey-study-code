@@ -389,7 +389,7 @@ namespace net
     size_t CURLWork::writeFunc( void* ptr, size_t size, size_t nmemb, void *usrptr )
     {
         CURLWork* pWork = ( CURLWork* ) usrptr;
-        pWork->getRecvDataStream()->write( ptr, size * nmemb );
+        pWork->m_ptrRecvMDStream->write( ptr, size * nmemb );
         
         //At present, we will do it only in HttpGetWork
         if ( NULL != dynamic_cast<HttpGetWork*>(pWork) )

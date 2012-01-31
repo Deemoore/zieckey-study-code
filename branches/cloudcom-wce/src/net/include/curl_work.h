@@ -10,15 +10,15 @@
 #include "osl/include/process_ext.h"
 #include "osl/include/lock.h"
 
+// 
+// #include <sys/types.h>
+// #include <sys/stat.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#ifdef H_OS_WINDOWS
-#include <process.h>
-#elif defined(H_OS_LINUX)
-#include <unistd.h>
-#endif
+// #ifdef H_OS_WINDOWS
+// #include <process.h>
+// #elif defined(H_OS_LINUX)
+// #include <unistd.h>
+// #endif
 
 
 // FD:
@@ -235,7 +235,11 @@ namespace net
 		//! MUST call MemoryDataStream::ref() to hold the data, and when you
 		//! don't need the data, you MUST call MemoryDataStream.unref().
 		//! @return a MemoryDataStream pointer
-		osl::MemoryDataStream* getRecvDataStream() const;
+		//osl::MemoryDataStream* getRecvDataStream() const;
+        osl::MemoryDataStreamPtr getRecvDataStream() const
+        {
+            return m_ptrRecvMDStream;
+        }
 
 
 		//! \brief <b>Summary:</b>
@@ -245,7 +249,11 @@ namespace net
 		//! don't need the data, you MUST call MemoryDataStream.unref().
 		//! \remark If the withheader flag is not set, this call will return NULL.
 		//! \return a MemoryDataStream pointer
-		osl::MemoryDataStream* getRecvHeaderDataStream() const;
+		//osl::MemoryDataStream* getRecvHeaderDataStream() const;
+        osl::MemoryDataStreamPtr getRecvHeaderDataStream() const
+        {
+            return m_ptrRecvHeaderMDStream;
+        }
 
 
 		//! \brief Set whether we will call curl_easy_perform
@@ -254,7 +262,14 @@ namespace net
 		//! \return void -
 		void setBlockingDoHttpRequest( bool val )
 		{
+            bool b = false;
+            b = val;
 			m_bBlockingDoHttpRequest = val;
+            bool c = b;
+            if (c)
+            {
+                //;;;
+            }
 		}
 
         bool isBlockingDoHttpRequest() const { return m_bBlockingDoHttpRequest; }
@@ -270,7 +285,11 @@ namespace net
 
 		//! Gets url data which may include post parameters.
 		//! \note The returned object MAY not include the end '\0'.
-		osl::MemoryDataStream* getURLDataStream()const;
+		//osl::MemoryDataStream* getURLDataStream()const;
+        osl::MemoryDataStreamPtr getURLDataStream()const
+        {
+            return m_ptrURLData;
+        }
 
 		const char* getUrl() const;
 		void setUrl( const char* url );
@@ -438,9 +457,7 @@ namespace net
 
 		bool                         m_bInitialized; //! whether is Initialized
 
-		bool               m_bBlockingDoHttpRequest; //! if true, we will call curl_easy_perform to do a HTTP synchronized request
-
-
+		
 
 		bool           m_bCompressOperateResultFlag; //! true for successfully compress or uncompress. false for failed
 
@@ -455,6 +472,10 @@ namespace net
 		osl::MemoryDataStreamPtr m_ptrRecvHeaderMDStream; //! hold the received HTTP header data
 
 	private:
+        bool               m_bBlockingDoHttpRequest; //! if true, we will call curl_easy_perform to do a HTTP synchronized request
+
+
+
 		int                                    m_nNo;//!work number
 		static int                        m_nTotalNo;//!total works count, for stat
 
@@ -563,20 +584,20 @@ namespace net
 		return m_URLInfo.pWorkTh;
 	}
 
-	inline osl::MemoryDataStream* CURLWork::getRecvDataStream() const
-	{
-		return m_ptrRecvMDStream.getPointer();
-	}
-
-	inline osl::MemoryDataStream* CURLWork::getRecvHeaderDataStream() const
-	{
-		return m_ptrRecvHeaderMDStream.getPointer();
-	}
-
-	inline osl::MemoryDataStream* CURLWork::getURLDataStream()const
-	{
-		return m_ptrURLData.getPointer();
-	}
+// 	inline osl::MemoryDataStream* CURLWork::getRecvDataStream() const
+// 	{
+// 		return m_ptrRecvMDStream.getPointer();
+// 	}
+// 
+// 	inline osl::MemoryDataStream* CURLWork::getRecvHeaderDataStream() const
+// 	{
+// 		return m_ptrRecvHeaderMDStream.getPointer();
+// 	}
+// 
+// 	inline osl::MemoryDataStream* CURLWork::getURLDataStream()const
+// 	{
+// 		return m_ptrURLData.getPointer();
+// 	}
 
 	inline const char* CURLWork::getUrl() const
 	{

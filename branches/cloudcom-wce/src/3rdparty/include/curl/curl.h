@@ -48,13 +48,13 @@
 #include <limits.h>
 
 /* The include stuff here below is mainly for time_t! */
-#ifdef vms
-# include <types.h>
-# include <time.h>
-#else
-# include <sys/types.h>
-# include <time.h>
-#endif /* defined (vms) */
+// #ifdef vms
+// # include <types.h>
+// # include <time.h>
+// #else
+// # include <sys/types.h>
+// # include <time.h>
+// #endif /* defined (vms) */
 
 #if defined(WIN32) && !defined(_WIN32_WCE) && !defined(__GNUC__) && \
   !defined(__CYGWIN__) || defined(__MINGW32__)
@@ -93,31 +93,36 @@ extern "C" {
 
 typedef void CURL;
 
+//wince using curl static
+#define CURL_STATICLIB
+
 /*
  * Decorate exportable functions for Win32 and Symbian OS DLL linking.
  * This avoids using a .def file for building libcurl.dll.
- */
-#if (defined(WIN32) || defined(_WIN32) || defined(__SYMBIAN32__)) && \
-     !defined(CURL_STATICLIB)
-#if defined(BUILDING_LIBCURL)
-#define CURL_EXTERN  __declspec(dllexport)
-#else
-#define CURL_EXTERN  __declspec(dllimport)
-#endif
-#else
+ */ 
+// #if (defined(WIN32) || defined(_WIN32) || defined(__SYMBIAN32__)) && \
+//      !defined(CURL_STATICLIB)
+// #if defined(BUILDING_LIBCURL)
+// #define CURL_EXTERN  __declspec(dllexport)
+// #else
+// #define CURL_EXTERN  __declspec(dllimport)
+// #endif
+// #else
+// 
+// #ifdef CURL_HIDDEN_SYMBOLS
+// /*
+//  * This definition is used to make external definitions visible in the
+//  * shared library when symbols are hidden by default.  It makes no
+//  * difference when compiling applications whether this is set or not,
+//  * only when compiling the library.
+//  */
+// #define CURL_EXTERN CURL_EXTERN_SYMBOL
+// #else
+// #define CURL_EXTERN
+// #endif
+// #endif
 
-#ifdef CURL_HIDDEN_SYMBOLS
-/*
- * This definition is used to make external definitions visible in the
- * shared library when symbols are hidden by default.  It makes no
- * difference when compiling applications whether this is set or not,
- * only when compiling the library.
- */
-#define CURL_EXTERN CURL_EXTERN_SYMBOL
-#else
 #define CURL_EXTERN
-#endif
-#endif
 
 #ifndef curl_socket_typedef
 /* socket typedef */

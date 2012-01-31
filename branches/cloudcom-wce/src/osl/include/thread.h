@@ -175,7 +175,9 @@ namespace osl
 
         //! Thread procedure
 #ifdef H_OS_WINCE
-        static unsigned int WINAPI ThreadProc( void* pvArg );
+        //static unsigned int ThreadProc( void* pvArg );
+        static DWORD WINAPI ThreadProc(LPVOID lpvoid);
+        DWORD m_dwReadThreadID;
 #elif defined(H_OS_WINDOWS)
         static unsigned int __stdcall ThreadProc( void* pvArg );
 #elif defined(H_OS_LINUX)
