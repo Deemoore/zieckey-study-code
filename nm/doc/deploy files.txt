@@ -1,0 +1,14 @@
+http/include/*.h			-> include/http/include/*.h
+logic/include/*.h			-> include/logic/include/*.h
+net/include/*.h				-> include/net/include/*.h
+3rdparty/osl/include/*.h	-> include/osl/include/*.h
+3rdparty/curl/*.h			-> include/curl/*.h
+
+3rdparty/lib/debug/*.lib	-> lib/debug/*.lib
+3rdparty/lib/release/*.lib	-> lib/release/*.lib
+
+http\Pocket PC 2003 (ARMV4)\Debug\http.lib		-> lib/debug/
+http\Pocket PC 2003 (ARMV4)\Release\http.lib	-> lib/release/
+
+logic\Pocket PC 2003 (ARMV4)\Debug\http.lib		-> lib/debug/
+logic\Pocket PC 2003 (ARMV4)\Release\http.lib	-> lib/release/

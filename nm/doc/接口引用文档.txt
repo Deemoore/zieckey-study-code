@@ -1,0 +1,96 @@
+接口引用文档
+调用函数名称						完成与否		接口函数用途	接口返回数据类型（对象名称）	完成时间
+DeleteProducedInformation			done								bool							
+SelectConsumeByGoodsGUID			done														
+SelectMemberInfoByDynamicCode		done														
+SelectStoreTicketInfoList			done			
+GetCardPwdByCardID					done	
+SelectMemberInfoByCardID			done
+InsertCardInfo						done
+SelectGroupMembership				done	
+StoreMemberConsumption				done		
+ConsumerMember						done
+UnitedMemberConsumption				done
+ConsumerNonMember					done
+InsertCommunicationInfo				done
+GetCommunicationTypeList			
+GetCommonCustomerInfoByPhone			
+InsertApproveInfo			
+GetApproveInfoList			
+GetMemberCommunicateInfoList			
+GetCommunicateInfoList			
+GetAccordingMemberInfo			
+SelectCommonCustomerInfo			
+SelectCommonCustomerConsumeInfo			
+GetProductCategoryList			
+GetProducedInfoList			
+GetRoomTypeList			
+GetAllHousingDepartmentInfoList			
+GetMemberInfoList			
+GetShopMemberLevelList			
+GetTicketTypeList			
+GetShopTicketEntity			
+InsertShopTicket			
+UpdateShopTicket			
+GetCompanyCouponEntity			
+GetMemeberLevelList			
+InsertCompanyCoupon			
+UpdateCompanyCoupon			
+SelectConsumerSingleDetails			
+SelectMemberConsumerSingleDetails			
+QueryGroupMemberConsumptionInfo			
+SelectGroupMembershipByAccount			
+GetMemberConsumptionRecords			
+CplusLogin			
+InsertMachineInfo			
+GetBookingInformationNormalState			
+InsertMachineRunState			
+GetMemberInfoByPage			
+GetCommonCustomerInfoList			
+SelectStoreUnitedMembershipInfo			
+ReportLossMembershipCard			
+GetMemberLevelEntity			
+InsertMemberLevel			
+UpdateMemberLevel			
+DeleteMemberLevel			
+MemberRechargeStores			
+GetMemberInfo			
+InsertMemberInfo			
+UpdateMemberInfo			
+ValidateICCardIsNormal			
+SelectDictionarySearch			
+GetContactMemberLevelGuid			
+PhonePreTreatment			
+UpdateMemberScheduled			
+GetProducedInformationList			
+InsertProducedInformation			
+UpdateProducedInformation			
+GetProducedInformationEntry			
+DeleteProductCategory			
+SelectProductInfoByType			
+InsertProductCategory			
+UpdateProductCategory			
+GetProductCategoryEntry			
+MembershipCardReplacement			
+UpdateScheduledStatus			
+DeleteRoomType			
+DeleteHousingDepartmentInfo			
+SelectRoomInfoByType			
+SelectHousingDepartmentInfo			
+InsertHousingDepartmentInfo			
+UpdateHousingDepartmentInfo			
+GetHousingDepartmentInfoEntry			
+InsertRoomType			
+UpdateRoomType			
+GetViewShopTicketList			
+DeleteShopTicket			
+DeleteCompanyCoupon			
+UpdateMemberPhoneAndAddress			
+DeliveryService			
+GetStoreUnitedMembershipInfo			
+SelectStoreUnitedMembershipConsumeInfo			
+DeliveryServiceDetails			
+			
+			
+			
+
