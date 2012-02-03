@@ -88,6 +88,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy.bat"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
@@ -244,6 +245,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy.bat"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"

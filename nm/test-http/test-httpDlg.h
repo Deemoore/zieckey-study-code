@@ -28,7 +28,7 @@ public:
 
 
     //////////////////////////////////////////////////////////////////////////
-    class MyListener : public net::CURLWork::Listener, public osl::Object
+    class MyListener : public net::CURLWork::Listener
     {
     public:
         MyListener(CtesthttpDlg* dlg) : dlg_(dlg){}

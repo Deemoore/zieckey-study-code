@@ -26,12 +26,18 @@ namespace nm
     class HttpRequest : public osl::Object
     {
     public:
-        //! \brief 
+        //! \brief 构造函数
         //! \param[] - bool nonblocking
         //! \return - 
         HttpRequest(bool nonblocking = true);
 
         virtual ~HttpRequest();
+
+        //! \brief 添加参数
+        //! \param[in] - const std::string & key
+        //! \param[in] - const std::string & value
+        //! \return - void
+        void AddParameter(const std::string& key, const std::string& value);
 
         //! \brief Do the HTTP request
         //! \return - bool

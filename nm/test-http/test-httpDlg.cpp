@@ -122,43 +122,6 @@ void CtesthttpDlg::Test_ParseIpAndURI()
 //     assert((uri == "") && (port == 80) && (ip == "192.168.0.11"));
 }
 
-namespace
-{
-    class LoginListener : public nm::HttpRequest::Listener
-    {
-    public:
-        LoginListener()
-        {
-        }
-
-        //! \brief <b>Summary:</b>
-        //! 	This function is called by HTTPWork(observable) to notify
-        //! Listeners that this HTTP work is done, and the received data 
-        //! from server is preserved in m_ptrRecvMDStream
-        //! \note This function is called in another thread, you <b>MUST</b>
-        //!     be care about the multi thread-safe problem
-        //! \param  pw, the HTTPWork which is listened by this listener.
-        //! you can call HTTPWork::getRecvDataStream() to get the server response string.
-        virtual void OnFinishOKT( nm::HttpRequest* pw )
-        {
-            const std::string& recv_data = pw->GetRespData();
-            (void)recv_data;
-        }
-
-        //! \brief <b>Summary:</b>
-        //! 	This function is called by HTTPWork(observable) to notify
-        //! Listeners that the work is no done because something error.
-        //! \note This function is called in another thread, you <b>MUST</b>
-        //!     be care about the multi thread-safe problem
-        //! \param hec, error code
-        //! \param pw, the HTTPWork which is listened by this listener
-        virtual void OnFinishErrorT(nm::HttpRequest::HttpErrorCode hec, nm::HttpRequest* pw )
-        {
-            const std::string& recv_data = pw->GetRespData();
-            (void)recv_data;
-        }
-    };
-}
 
 void CtesthttpDlg::Test_Login()
 {
@@ -169,8 +132,6 @@ void CtesthttpDlg::Test_Login()
         fprintf(stderr, "login failed!\n");
     }
 }
-
-
 
 
 static size_t writeFunc( void* ptr, size_t size, size_t nmemb, void *usrptr )
