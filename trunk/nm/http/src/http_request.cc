@@ -4,17 +4,23 @@
 
 namespace nm
 {
-    nm::HttpRequest::HttpRequest(bool nonblocking /*= true*/ ) : nonblocking_(nonblocking)
+    HttpRequest::HttpRequest(bool nonblocking /*= true*/ ) : nonblocking_(nonblocking)
+    {
+    }
+
+    HttpRequest::~HttpRequest()
+    {
+    }
+
+    void HttpRequest::AddParameter( const std::string& key, const std::string& value )
+    {
+        Dictionary& param = const_cast<Dictionary&>(GetParameters());
+        param[key] = value;
+    }
+
+    bool HttpRequest::DoRequest()
     {
         post_work_ = new net::HttpPostWork(GetURL());
-    }
-
-    nm::HttpRequest::~HttpRequest()
-    {
-    }
-
-    bool nm::HttpRequest::DoRequest()
-    {
         const Dictionary& dict = GetParameters();
         Dictionary::const_iterator it(dict.begin());
         Dictionary::const_iterator ite(dict.begin());
@@ -34,7 +40,7 @@ namespace nm
         return GetModel().ParseFromJSON(osl::StringUtil::utf8ToMbs(utf8data));
     }
     
-    const std::string nm::HttpRequest::GetErrorMsg() const
+    const std::string HttpRequest::GetErrorMsg() const
     {
         return post_work_->getHttpErrorCodeStr();
     }
