@@ -105,8 +105,36 @@ namespace net
 
 		::curl_easy_setopt( m_pEasyHeandle, CURLOPT_POST, 1L );
 		
-		if( m_mapParams.size() > 0 )
-		{            
+#ifdef _WIN32_WCE
+        //李光辉公司项目，特殊要求
+        if( m_mapParams.size() > 0 )
+        {            
+            m_ptrPostData->reset();
+            m_ptrPostData->write("\"", 1);
+            bool bAlreadyHasParameters = false;
+            StringAStringAMultiMap::iterator it( m_mapParams.begin() ), ite( m_mapParams.end() );
+            for ( ; it != ite; ++it )
+            {
+                if ( bAlreadyHasParameters )
+                {
+                    m_ptrPostData->write( "&", 1 );
+                }
+                else
+                {
+                    bAlreadyHasParameters = true;
+                }
+
+                const osl::StringA& key = it->first;
+                const osl::StringA& value = it->second;
+                m_ptrPostData->write( key.c_str(), key.length() );
+                m_ptrPostData->write( "=", 1 );
+                m_ptrPostData->write( value.c_str(), value.length() );
+            }
+            m_ptrPostData->write("\"", 1);
+        }
+#else
+        if( m_mapParams.size() > 0 )
+        {            
             bool bAlreadyHasParameters = (m_ptrPostData->getSize() > 0);
             StringAStringAMultiMap::iterator it( m_mapParams.begin() ), ite( m_mapParams.end() );
             for ( ; it != ite; ++it )
@@ -126,8 +154,8 @@ namespace net
                 m_ptrPostData->write( "=", 1 );
                 m_ptrPostData->write( value.c_str(), value.length() );
             }
-		}
-
+        }
+#endif
         ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_POSTFIELDS, m_ptrPostData->getCache() );
         ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_POSTFIELDSIZE, m_ptrPostData->getSize() );
 

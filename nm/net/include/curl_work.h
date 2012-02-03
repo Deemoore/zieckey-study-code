@@ -262,23 +262,7 @@ namespace net
 		//! \return void -
 		void setBlockingDoHttpRequest( bool val )
         {
-            if (val)
-            {
-                this->m_bBlockingDoHttpRequest = 1;
-            }
-            else
-            {
-                this->m_bBlockingDoHttpRequest = 0;
-            }
-            
             m_bBlockingDoHttpRequest = val;
-//             bool bbb = false;
-//             bbb = val;
-//             bool cccc = bbb;
-//             if (cccc)
-//             {
-//                 //;;;
-//             }
 		}
 
         bool isBlockingDoHttpRequest() const { return m_bBlockingDoHttpRequest; }
