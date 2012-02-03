@@ -1,89 +1,42 @@
 
 #include "stdafx.h"
-#include "../include/tcp_pipe.h"
+#include "osl/include/string_util.h"
 
 namespace nm
 {
-    HttpRequest::HttpRequest( const char* url, unsigned int timeout, bool nonblocking /*= true*/ ) : url_(url)
-        , port_(0)
-        , timeout_(timeout)
-        , tcp_pipe_(NULL)
-        , nonblocking_(nonblocking)
+    nm::HttpRequest::HttpRequest(bool nonblocking /*= true*/ ) : nonblocking_(nonblocking)
     {
-        ParseIpAndURI(url_, ip_, port_, uri_);
+        post_work_ = new net::HttpPostWork(GetURL());
     }
 
-    HttpRequest::~HttpRequest()
+    nm::HttpRequest::~HttpRequest()
     {
-        listeners_.clear();
-        if (tcp_pipe_)
-        {
-            delete tcp_pipe_;
-            tcp_pipe_ = NULL;
-        }
     }
 
-    void HttpRequest::ParseIpAndURI(const std::string& url, std::string& ip, short& port, std::string& uri)
+    bool nm::HttpRequest::DoRequest()
     {
-        std::string http_pre = url.substr(0, 7);
-        std::transform(http_pre.begin(), http_pre.end(), http_pre.begin(), tolower);
-        size_t host_pos_begin = 0;
-        if (0 == strcmp(http_pre.c_str(), "http://"))
+        const Dictionary& dict = GetParameters();
+        Dictionary::const_iterator it(dict.begin());
+        Dictionary::const_iterator ite(dict.begin());
+        for (; it != ite; ++it)
         {
-            host_pos_begin = 7;
+            post_work_->addParameter(osl::StringUtil::mbsToUtf8(it->first), osl::StringUtil::mbsToUtf8(it->second));
         }
-
-        //Get the URI
-        char* first_sep = strchr(url.c_str() + host_pos_begin, '/');
-        if (first_sep)
+        post_work_->setBlockingDoHttpRequest(true);
+        bool ret = post_work_->doHttpBlockingRequest();
+        if (!ret)
         {
-            uri = first_sep;
-            ip = url.substr(host_pos_begin, first_sep - url.c_str() - host_pos_begin);
-        }
-        else
-        {
-            uri = "";
-            ip = url.substr(host_pos_begin);
-        }
-
-        //Get the PORT and IP
-        size_t pos = ip.find(':');
-        if (pos == std::string::npos)
-        {
-            port = 80;//the default value
-        }
-        else
-        {
-            port = atoi(ip.c_str() + pos + 1);
-            ip = ip.substr(0, pos);
-        }
-    }
-
-    bool HttpRequest::DoRequest()
-    {
-        if (!Init())
-        {
-            ListenerList::iterator it(listeners_.begin());
-            ListenerList::iterator ite(listeners_.end());
-            for (; it != ite; ++it)
-            {
-                (*it)->OnFinishErrorT(EC_FAILED_INIT, this);
-            }
-            return false;
-        }
-        return DoHttpRequest();
-    }
-
-    bool HttpRequest::Init()
-    {
-        tcp_pipe_ = new TcpPipe(nonblocking_);
-        if (!tcp_pipe_->Connect(ip_.c_str(), port_))
-        {
-            fprintf(stderr, "connect failed!\n");
             return false;
         }
 
-        return true;
+        osl::MemoryDataStream* rd = post_work_->getRecvDataStream();
+        std::string utf8data(rd->data(),  rd->size());
+        return GetModel().ParseFromJSON(osl::StringUtil::utf8ToMbs(utf8data));
+    }
+    
+    const std::string nm::HttpRequest::GetErrorMsg() const
+    {
+        return post_work_->getHttpErrorCodeStr();
     }
 }
 

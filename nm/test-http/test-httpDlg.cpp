@@ -96,30 +96,30 @@ void CtesthttpDlg::OnBnClickedButton1()
 
 void CtesthttpDlg::Test_ParseIpAndURI()
 {
-    nm::HttpPost post("", 0, false);
-    std::string url = "http://192.168.0.11:8088/abc";
-    std::string uri, ip;
-    short port;
-    nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
-    assert((uri == "/abc") && (port == 8088) && (ip == "192.168.0.11"));
-
-    url = "HTTP://192.168.0.11:8088/abc";
-    nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
-    assert((uri == "/abc") && (port == 8088) && (ip == "192.168.0.11"));
-
-    url = "HTTP://192.168.0.11/abc";
-    nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
-    assert((uri == "/abc") && (port == 80) && (ip == "192.168.0.11"));
-
-
-    url = "http://192.168.0.11";
-    nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
-    assert((uri == "") && (port == 80) && (ip == "192.168.0.11"));
-
-
-    url = "192.168.0.11";
-    nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
-    assert((uri == "") && (port == 80) && (ip == "192.168.0.11"));
+//     nm::HttpPost post("", 0, false);
+//     std::string url = "http://192.168.0.11:8088/abc";
+//     std::string uri, ip;
+//     short port;
+//     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
+//     assert((uri == "/abc") && (port == 8088) && (ip == "192.168.0.11"));
+// 
+//     url = "HTTP://192.168.0.11:8088/abc";
+//     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
+//     assert((uri == "/abc") && (port == 8088) && (ip == "192.168.0.11"));
+// 
+//     url = "HTTP://192.168.0.11/abc";
+//     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
+//     assert((uri == "/abc") && (port == 80) && (ip == "192.168.0.11"));
+// 
+// 
+//     url = "http://192.168.0.11";
+//     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
+//     assert((uri == "") && (port == 80) && (ip == "192.168.0.11"));
+// 
+// 
+//     url = "192.168.0.11";
+//     nm::HttpPost::ParseIpAndURI(url, ip, port, uri);
+//     assert((uri == "") && (port == 80) && (ip == "192.168.0.11"));
 }
 
 namespace

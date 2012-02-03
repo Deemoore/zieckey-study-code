@@ -341,10 +341,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\http_post.cc"
-				>
-			</File>
-			<File
 				RelativePath=".\src\http_request.cc"
 				>
 			</File>
@@ -464,10 +460,6 @@
 			>
 			<File
 				RelativePath=".\include\exp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\http_post.h"
 				>
 			</File>
 			<File
