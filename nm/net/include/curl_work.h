@@ -96,7 +96,7 @@ namespace net
 		*  @brief
 		*	This listener interface is used for notifying callers
 		*/
-		class _EXPORT_NET Listener : public osl::RefTarget
+		class _EXPORT_NET Listener : public osl::Object
 		{
 		public:
 			//! \brief <b>Summary:</b>
