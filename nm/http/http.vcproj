@@ -382,10 +382,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\src\tcp_pipe.cc"
-				>
-			</File>
 			<Filter
 				Name="curl"
 				>
@@ -470,10 +466,6 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\tcp_pipe.h"
 				>
 			</File>
 			<Filter
@@ -796,18 +788,6 @@
 					>
 				</File>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="common"
-			>
-			<File
-				RelativePath=".\src\string_util.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\include\string_util.h"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
