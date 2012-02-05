@@ -27,9 +27,9 @@ namespace nm
     {
     public:
         //! \brief 构造函数
-        //! \param[] - bool nonblocking
+        //! \param[] - bool sync
         //! \return - 
-        HttpRequest(bool nonblocking = true);
+        HttpRequest(bool sync = true);
 
         virtual ~HttpRequest();
 
@@ -43,18 +43,42 @@ namespace nm
         //! \return - bool
         bool DoRequest();
 
-        //如果DoRequest失败，调用这个接口得到错误信息
+        //! \brief 如果 DoRequest() 调用失败，上层调用这个接口得到错误信息
+        //! \return - const std::string
         const std::string GetErrorMsg() const;
 
+        //! \brief 得到参数列表
+        //! \return - const Dictionary&
+        const Dictionary& GetParameters() const;
+
+        //! \brief 设置登录用户名和密码
+        //! \warning 只需要在登录成功后设置一次
+        //! \param[in] - const std::string & user_name
+        //! \param[in] - const std::string & pwd
+        //! \return - void
+        static void SetUserNamePwd(const std::string& user_name, const std::string& pwd);
+
     protected:
-        virtual const Dictionary& GetParameters() = 0;
         virtual const std::string& GetURL() = 0;
         virtual TopModel& GetModel() = 0;
 
+    protected:
+        nm::Dictionary  parameters_; //请求参数的 key-value 集合
+
     private:
-        bool nonblocking_;
+        bool sync_request_;
         net::HttpPostWorkPtr post_work_;
+
+        static std::string login_name_;
+        static std::string login_pwd_;
     };
+
+
+    //////////////////////////////////////////////////////////////////////////
+    inline const Dictionary& HttpRequest::GetParameters() const 
+    {
+        return parameters_;
+    }
 
 }
 

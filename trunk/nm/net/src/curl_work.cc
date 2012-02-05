@@ -569,6 +569,7 @@ namespace net
         ::CURLcode ret = ::curl_easy_perform( m_pEasyHeandle );
         osl::StringA msg;
         m_eHttpErrorCode = getCURLErrorCode( ret, msg );
+        ::curl_easy_getinfo( m_pEasyHeandle, CURLINFO_RESPONSE_CODE, &m_nHttpCode );
         if (ret == CURLE_OK)
         {
             if ( ( 0 == m_nHttpCode ) || ( m_nHttpCode >= 200 && m_nHttpCode < 300 ) || m_nHttpCode == 304 )
