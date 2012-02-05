@@ -2,13 +2,21 @@
 #include "stdafx.h"
 #include "osl/include/string_util.h"
 #include "http/include/http_request.h"
+#include "net/include/curl_service.h"
 
 namespace nm
 {
     std::string HttpRequest::login_name_;
     std::string HttpRequest::login_pwd_;
 
-    HttpRequest::HttpRequest(bool sync /*= true*/ ) : sync_request_(sync)
+    net::CURLService* HttpRequest::curl_service_ = NULL;
+    HttpRequest::HttpRequestList HttpRequest::finished_requests_;
+
+    static osl::Lock finished_requests_lock;
+
+    HttpRequest::HttpRequest(bool sync /*= true*/ ) 
+        : sync_request_(sync)
+        , request_ok(true)
     {
     }
 
@@ -45,29 +53,104 @@ namespace nm
             bool ret = post_work_->doHttpBlockingRequest();
             if (!ret)
             {
+                request_ok = false;
+                error_msg_ = post_work_->getHttpErrorCodeStr();
                 return false;
             }
+            request_ok = true;
             osl::MemoryDataStream* rd = post_work_->getRecvDataStream();
             std::string utf8data(rd->data(),  rd->size());
             return GetModel().ParseFromJSON(osl::StringUtil::utf8ToMbs(utf8data));
         }
         else
         {
-            assert(false);
-            //TODO 等待实现异步调用
+            assert(listeners_.size() > 0 && "async call MUST has listeners!");
+            post_work_->addListener(this);
+            curl_service_->addWorkT(post_work_);
             return false;
         }
     }
     
-    const std::string HttpRequest::GetErrorMsg() const
+    const std::string& HttpRequest::GetErrorMsg() const
     {
-        return post_work_->getHttpErrorCodeStr();
+        return error_msg_;//post_work_->getHttpErrorCodeStr();
     }
 
     void HttpRequest::SetUserNamePwd( const std::string& user_name, const std::string& pwd )
     {
         login_name_ = user_name;
         login_pwd_  = pwd;
+    }
+
+    void HttpRequest::AddListener( Listener* listener )
+    {
+        listeners_.push_back(listener);
+    }
+
+    void HttpRequest::SetCURLService( net::CURLService* service )
+    {
+        curl_service_ = service;
+    }
+
+    void HttpRequest::onFinishOKT( net::CURLWork* pw )
+    {
+        osl::MemoryDataStream* rd = post_work_->getRecvDataStream();
+        std::string utf8data(rd->data(),  rd->size());
+        std::string gbkdata = osl::StringUtil::utf8ToMbs(utf8data);
+        bool parse = GetModel().ParseFromJSON(gbkdata);
+        if (!parse)
+        {
+            error_msg_.reserve(64 + gbkdata.size());
+            error_msg_.append("HTTP request OK. But JSON parse failed:\n");
+            error_msg_.append(gbkdata);
+            request_ok = false;
+        }
+
+        request_ok = true;
+
+        {
+            H_AUTOLOCK(finished_requests_lock);
+            this->ref();
+            finished_requests_.push_back(this);
+        }
+    }
+
+    void HttpRequest::onFinishErrorT( net::HttpErrorCode hec, const osl::StringA& errmsg, net::CURLWork* pw )
+    {
+        error_msg_ = errmsg;
+        request_ok = false;
+
+        {
+            H_AUTOLOCK(finished_requests_lock);
+            this->ref();
+            finished_requests_.push_back(this);
+        }
+    }
+
+    void HttpRequest::SetSyncRequest( bool sync )
+    {
+        sync_request_ = sync;
+    }
+
+    void HttpRequest::DispatchFinishedRequests()
+    {
+        HttpRequestList vect;
+
+        {
+            H_AUTOLOCK(finished_requests_lock);
+            vect.swap(finished_requests_);
+        }
+
+        for (HttpRequestList::iterator itvect(vect.begin()); itvect != vect.end(); ++itvect)
+        {
+            ListenerPtrList::iterator it((*itvect)->listeners_.begin());
+            ListenerPtrList::iterator ite((*itvect)->listeners_.end());
+            for (; it != ite; ++it)
+            {
+                (*it)->OnFinished((*itvect), (*itvect)->request_ok);
+                (*itvect)->unref();
+            }
+        }
     }
 }
 
