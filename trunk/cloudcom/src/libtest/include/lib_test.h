@@ -91,7 +91,7 @@ class TestObject##cmd : public LibTest::ITestObject\
 {\
 public:\
     virtual const char* getCommand() {return #cmd;}\
-    virtual const char* getDesc() {return #cmddesc;}\
+    virtual const char* getDesc() {return cmddesc;}\
     virtual void invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell );\
     void testAll(){}\
 };\

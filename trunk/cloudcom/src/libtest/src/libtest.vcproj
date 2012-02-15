@@ -207,10 +207,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\libmemcached_get_performance_test.cc"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cc"
 				>
 			</File>
@@ -270,10 +266,6 @@
 			</File>
 			<File
 				RelativePath=".\is_pos_test.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\libmemcached_test.cc"
 				>
 			</File>
 			<File
@@ -347,6 +339,18 @@
 						GeneratePreprocessedFile="0"
 					/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="wraputil"
+			>
+			<File
+				RelativePath=".\libmemcached_get_performance_test.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\libmemcached_test.cc"
+				>
 			</File>
 		</Filter>
 	</Files>
