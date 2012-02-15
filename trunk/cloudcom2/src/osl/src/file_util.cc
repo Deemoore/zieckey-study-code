@@ -479,20 +479,19 @@ namespace osl
 
 #ifdef H_OS_WINDOWS
             // current dir
-            iret = _mkdir( strFileName.substr( 0, nNextSplit ).c_str() );
+            iret = ::_mkdir( strFileName.substr( 0, nNextSplit ).c_str() );
 #else
             // current dir
-            iret = mkdir( strFileName.substr( 0, nNextSplit ).c_str(), 0755 );
+            iret = ::mkdir( strFileName.substr( 0, nNextSplit ).c_str(), 0755 );
 #endif
-            /*
+            
             if ( iret != 0 )
             {
                 char buf[1024] = {};
-                snprintf( buf, sizeof(buf), "%s mkdir failed. errno=%d, %s ", __func__, errno, strFileName.c_str() );
+                snprintf( buf, sizeof(buf), "%s mkdir failed. errno=%d %s [%s]", __func__, errno, strerror(errno), strFileName.c_str() );
                 perror( buf );
                 return false;
             }
-            */
 
             // next dir
             nCurSplit = nNextSplit + 1;
