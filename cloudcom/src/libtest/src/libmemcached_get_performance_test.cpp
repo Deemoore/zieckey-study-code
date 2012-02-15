@@ -43,7 +43,7 @@ namespace
     };
 }
 
-TEST_INVOKE( test_libmemcached_performance, test_libmemcached_performance --sock=/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock --host=localhost --port=10009 --thread=10 --count=1000000 )
+TEST_INVOKE( test_libmemcached_get_performance, test_libmemcached_performance --sock=/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock --host=localhost --port=10009 --thread=10 --count=1000000 )
 {
     osl::StringA sock = "/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock";
     osl::StringA hostname = "localhost";
