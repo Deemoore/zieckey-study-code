@@ -6,8 +6,7 @@
 #include "osl/include/rsa_wrapper.h"
 #include "osl/include/json.h"
 
-#include "libtest/include/libtest.h"
-
+#include "libtest/include/lib_test.h"
 
 //#include "qh_palloc.h"
 

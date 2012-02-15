@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\libmemcached_get_performance_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cc"
 				>
 			</File>
@@ -225,7 +229,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\libtest.h"
+				RelativePath="..\include\lib_test.h"
 				>
 			</File>
 			<File
