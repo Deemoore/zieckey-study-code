@@ -1,6 +1,29 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 
-#include "libtest/include/QTestAppShell.h"
+#include "libtest/include/test_object.h"
+
+
+namespace LibTest
+{
+    class TAppShell : public ITestObject
+    {
+    public:
+        virtual const char* getCommand()
+        {
+            return "test_appshell";
+        }
+        virtual const char* getDesc()
+        {
+            return "test_appshell";
+        }
+        virtual void invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell );
+        virtual void testAll();
+
+    private:
+        void test();
+    };
+} // end of namespace LibTest
+
 
 namespace LibTest
 {

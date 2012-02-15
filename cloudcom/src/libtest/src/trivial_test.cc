@@ -1,4 +1,4 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 
 #include "osl/include/file_util.h"
 #include "osl/include/process_ext.h"
@@ -6,7 +6,7 @@
 #include "osl/include/rsa_wrapper.h"
 #include "osl/include/json.h"
 
-#include "libtest/include/QLibTest.h"
+#include "libtest/include/libtest.h"
 
 
 //#include "qh_palloc.h"

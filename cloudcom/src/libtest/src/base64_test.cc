@@ -1,6 +1,6 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 #include "osl/include/base64.h"
-#include "libtest/include/QTestObject.h"
+#include "libtest/include/test_object.h"
 
 namespace LibTest
 {

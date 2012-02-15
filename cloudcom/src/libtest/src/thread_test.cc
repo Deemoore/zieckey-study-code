@@ -1,7 +1,30 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 
 
-#include "libtest/include/QTestThreads.h"
+
+#include "libtest/include/test_object.h"
+
+namespace LibTest
+{
+    class TThreads : public ITestObject
+    {
+    public:
+        virtual const char* getCommand()
+        {
+            return "test_threads";
+        }
+        virtual const char* getDesc()
+        {
+            return "test_threads";
+        }
+        virtual void invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell );
+        virtual void testAll();
+
+    private:
+        void test();
+    };
+} // end of namespace LibTest
+
 
 namespace LibTest
 {

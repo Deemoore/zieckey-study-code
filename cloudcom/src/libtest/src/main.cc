@@ -1,9 +1,9 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 // libtest.cpp :
 //
 
 /*#include "HStdHeader.h"*/
-#include "libtest/include/QLibTest.h"
+#include "libtest/include/libtest.h"
 
 //#define H_PATCH_DATA_TRANSFER_TOOLS
 //#define H_CURL_AUTO_TEST_TOOLS

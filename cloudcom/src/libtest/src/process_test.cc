@@ -1,26 +1,51 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 
 #ifdef H_OS_WINDOWS
 #include <direct.h> 
 #endif 
 
-#include "libtest/include/QTestOS.h"
+#include "libtest/include/test_object.h"
+
+
 
 namespace LibTest
 {
-    void TOS::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
+    class TProcess : public ITestObject
+    {
+    public:
+        virtual const char* getCommand()
+        {
+            return "test_os";
+        }
+        virtual const char* getDesc()
+        {
+            return "test_os";
+        }
+        virtual void invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell );
+        virtual void testAll();
+
+    private:
+        void test();
+        void test_getFullPathDir();
+    };
+} // end of namespace LibTest
+
+
+namespace LibTest
+{
+    void TProcess::invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
     {
         testAll();
     }
 
-    void TOS::testAll()
+    void TProcess::testAll()
     {
         test();
         test_getFullPathDir();
     }
 
     using namespace osl;
-    void TOS::test()
+    void TProcess::test()
     {
         osl::AppShell* pShell = new osl::AppShell;
         {
@@ -158,7 +183,7 @@ namespace LibTest
 
 	}
 
-    void TOS::test_getFullPathDir()
+    void TProcess::test_getFullPathDir()
     {
         osl::StringA strv2path = osl::Process::getFullPathDir( "v2", 10 );
         std::cout << "v2 path=" << strv2path.c_str() << std::endl;
@@ -186,4 +211,4 @@ namespace LibTest
     }
 }
 
-CREATE_FUNCTION( TOS );
+CREATE_FUNCTION( TProcess );

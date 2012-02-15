@@ -129,7 +129,7 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="&quot;wraputil/include/inner_pre.h&quot;"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
@@ -202,11 +202,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\memcached.cc"
+				RelativePath=".\inner_pre.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\wraputil_inner_pre.cc"
+				RelativePath=".\memcached.cc"
 				>
 			</File>
 		</Filter>

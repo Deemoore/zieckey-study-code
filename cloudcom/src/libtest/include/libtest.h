@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libtest/include/QTestObject.h"
+#include "libtest/include/test_object.h"
 
 
 namespace LibTest

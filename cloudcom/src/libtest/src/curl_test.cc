@@ -1,4 +1,4 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 
 #include "osl/include/file_util.h"
 #include "osl/include/md5.h"
@@ -8,7 +8,7 @@
 #include "curl/curl.h"
 
 
-#include "libtest/include/QTestObject.h"
+#include "libtest/include/test_object.h"
 
 #include "osl/include/event.h"
 #include "net/include/curl_service.h"
