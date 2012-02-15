@@ -485,6 +485,7 @@ namespace osl
             iret = ::mkdir( strFileName.substr( 0, nNextSplit ).c_str(), 0755 );
 #endif
             
+            /*
             if ( iret != 0 )
             {
                 char buf[1024] = {};
@@ -492,6 +493,7 @@ namespace osl
                 perror( buf );
                 return false;
             }
+            */
 
             // next dir
             nCurSplit = nNextSplit + 1;

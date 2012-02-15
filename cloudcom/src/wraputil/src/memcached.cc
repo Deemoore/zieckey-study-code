@@ -46,7 +46,7 @@ namespace wu
         mc_ = memcached_create(NULL);
         if ( use_socket )
         {
-            fprintf( stdout,"use unix domain socket to connect to memcached. domainsock=%s\n", domainsock_.c_str());
+            //fprintf( stdout,"use unix domain socket to connect to memcached. domainsock=%s\n", domainsock_.c_str());
             rc = memcached_server_add_unix_socket( mc_, domainsock );
             if (rc != MEMCACHED_SUCCESS)
             {
@@ -56,7 +56,7 @@ namespace wu
         }
         else
         {
-            fprintf( stdout, "use network socket to connect to memcached. host=%s port=%s\n", hostname_.c_str(), port_.c_str() );
+            //fprintf( stdout, "use network socket to connect to memcached. host=%s port=%s\n", hostname_.c_str(), port_.c_str() );
             memcached_server_st* servers = NULL;
             servers = memcached_server_list_append( servers, hostname, 
                         atoi(port), &rc);

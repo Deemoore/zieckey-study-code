@@ -25,17 +25,35 @@ namespace
             setName(osl::StringUtil::valueOf(i));
         }
 
+        virtual bool start()
+        {
+            logTrace("libtest", " call...");
+            return osl::Thread::start();
+        }
+
         virtual void run()
         {
-            fprintf(stdout, "Thread %s is running ... \n", getName().c_str());
+            logTrace("libtest", "Thread %s is running ... thread state=%d  total_count_=%lu\n", getName().c_str(), getState(), total_count_);
             osl::StringA errmsg;
             osl::StringA key;
             osl::StringA value;
             osl::Random randint( uint32_t(s_pTimer->getSeconds() * 1000000) + rand());
             for (size_t i = 0; i < total_count_; ++i)
             {
-                key = osl::StringUtil::valueOf(osl::s64(i + randint.next()));
-                mc_.get( key, 0, value, errmsg);
+                wu::Memcached::StringAStringAMap kvm;
+                for (int j = 0; j < 5; ++j)
+                {
+                    key = osl::StringUtil::valueOf(osl::s64(i + j + randint.next()));
+                    kvm[key] = "";
+                }
+                mc_.mget(1, kvm, errmsg);
+                wu::Memcached::StringAStringAMap::iterator it(kvm.begin());
+                wu::Memcached::StringAStringAMap::iterator ite(kvm.end());
+                
+                for (; it != ite; ++it)
+                {
+                    (void)(it);
+                }
             }
         }
 
@@ -77,11 +95,10 @@ TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performa
         {
             while (!pt->isRunning())
             {
-                fprintf(stdout, "waiting thread %d staring...\n", i);
+                logTrace("libtest", "waiting thread %d staring... running=%d, state=%d\n", i, pt->isRunning(), pt->getState());
                 osl::Process::msleep(1000);
             }
             threads.push_back(pt);
-
         }
     }
 

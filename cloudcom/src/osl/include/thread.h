@@ -112,15 +112,21 @@ namespace osl
 
 
         //! Query whether the thread is running.
-        bool isRunning()const
+        bool isRunning() const
         {
             return m_nState == S_RUNNING;
         }
 
         //! Query whether the thread has been stopped.
-        bool isStopped()const
+        bool isStopped() const
         {
             return m_nState == S_NULL;
+        }
+
+        //! Get the thread's state
+        ThreadState getState() const 
+        {
+            return m_nState;
         }
 
 
