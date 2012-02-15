@@ -3,7 +3,7 @@
 //
 
 /*#include "HStdHeader.h"*/
-#include "libtest/include/libtest.h"
+#include "libtest/include/lib_test.h"
 
 //#define H_PATCH_DATA_TRANSFER_TOOLS
 //#define H_CURL_AUTO_TEST_TOOLS

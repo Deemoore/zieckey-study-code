@@ -2,7 +2,6 @@
 
 #include "libtest/include/test_object.h"
 
-
 namespace LibTest
 {
 

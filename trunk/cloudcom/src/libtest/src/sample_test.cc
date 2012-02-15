@@ -1,9 +1,5 @@
-
-
 #include "libtest/include/inner_pre.h"
-#include "libtest/include/libtest.h"
-
-
+#include "libtest/include/lib_test.h"
 
 TEST( test_a )
 {
