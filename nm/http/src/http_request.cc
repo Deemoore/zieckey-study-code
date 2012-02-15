@@ -108,10 +108,11 @@ namespace nm
 
         request_ok = true;
 
+        ListenerPtrList::iterator it(listeners_.begin());
+        ListenerPtrList::iterator ite(listeners_.end());
+        for (; it != ite; ++it)
         {
-            H_AUTOLOCK(finished_requests_lock);
-            this->ref();
-            finished_requests_.push_back(this);
+            (*it)->OnFinishedT(this, this->request_ok);
         }
     }
 
@@ -120,11 +121,18 @@ namespace nm
         error_msg_ = errmsg;
         request_ok = false;
 
+        ListenerPtrList::iterator it(listeners_.begin());
+        ListenerPtrList::iterator ite(listeners_.end());
+        for (; it != ite; ++it)
         {
-            H_AUTOLOCK(finished_requests_lock);
-            this->ref();
-            finished_requests_.push_back(this);
+            (*it)->OnFinishedT(this, this->request_ok);
         }
+
+//         {
+//             H_AUTOLOCK(finished_requests_lock);
+//             this->ref();
+//             finished_requests_.push_back(this);
+//         }
     }
 
     void HttpRequest::SetSyncRequest( bool sync )
@@ -132,25 +140,29 @@ namespace nm
         sync_request_ = sync;
     }
 
-    void HttpRequest::DispatchFinishedRequests()
+    void HttpRequest::RemoveListener( Listener* listener )
     {
-        HttpRequestList vect;
-
-        {
-            H_AUTOLOCK(finished_requests_lock);
-            vect.swap(finished_requests_);
-        }
-
-        for (HttpRequestList::iterator itvect(vect.begin()); itvect != vect.end(); ++itvect)
-        {
-            ListenerPtrList::iterator it((*itvect)->listeners_.begin());
-            ListenerPtrList::iterator ite((*itvect)->listeners_.end());
-            for (; it != ite; ++it)
-            {
-                (*it)->OnFinished((*itvect), (*itvect)->request_ok);
-                (*itvect)->unref();
-            }
-        }
+        listeners_.remove(listener);
     }
+//     void HttpRequest::DispatchFinishedRequests()
+//     {
+//         HttpRequestList vect;
+// 
+//         {
+//             H_AUTOLOCK(finished_requests_lock);
+//             vect.swap(finished_requests_);
+//         }
+// 
+//         for (HttpRequestList::iterator itvect(vect.begin()); itvect != vect.end(); ++itvect)
+//         {
+//             ListenerPtrList::iterator it((*itvect)->listeners_.begin());
+//             ListenerPtrList::iterator ite((*itvect)->listeners_.end());
+//             for (; it != ite; ++it)
+//             {
+//                 (*it)->OnFinished((*itvect), (*itvect)->request_ok);
+//                 (*itvect)->unref();
+//             }
+//         }
+//     }
 }
 

@@ -31,16 +31,16 @@ namespace nm
     class HttpRequest : public net::CURLWork::Listener
     {
     public:
-        class Listener : public osl::Object
+        class Listener : public osl::RefTarget
         {
         public:
             //! \brief 异步请求的回调接口
-            //! \note 已经同步到主线程
+            //! \note 网络线程会调用这个接口，注意线程安全问题
             //! \param[in] - HttpRequest * request
             //! \param[in] - bool success - true 表面请求成功，否则失败
             //!     如果失败，可以通过 HttpRequest::GetErrorMsg 来获取失败信息
             //! \return - void
-            virtual void OnFinished(HttpRequest* request, bool success) = 0;
+            virtual void OnFinishedT(HttpRequest* request, bool success) = 0;
         };
         typedef osl::RefPtr<Listener> ListenerPtr;
         typedef std::list<ListenerPtr> ListenerPtrList;
@@ -100,6 +100,9 @@ namespace nm
         //! \return - void
         void AddListener(Listener* listener);
 
+        //! 删除监听器
+        void RemoveListener(Listener* listener);
+
     public:
         
         //! \brief 得到请求URL
@@ -134,6 +137,7 @@ namespace nm
         typedef std::list<HttpRequest*> HttpRequestList;
         static HttpRequestList finished_requests_;
     };
+    typedef osl::RefPtr<HttpRequest> HttpRequestPtr;
 
 
     //////////////////////////////////////////////////////////////////////////
