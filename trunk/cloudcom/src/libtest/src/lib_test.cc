@@ -1,5 +1,5 @@
-#include "libtest/include/QLibTestPrerequisits.h"
-#include "libtest/include/QLibTest.h"
+#include "libtest/include/inner_pre.h"
+#include "libtest/include/libtest.h"
 
 
 using namespace osl;
@@ -15,13 +15,13 @@ template<> LibTest::TLibTest* osl::Singleton<LibTest::TLibTest>::ms_Singleton = 
 
 //qoslib
 DECLARATION_TEST( TINIParser );
-DECLARATION_TEST( TOS );
+DECLARATION_TEST( TProcess );
 DECLARATION_TEST( TThreads );
 DECLARATION_TEST( TMemoryDataStream );
 DECLARATION_TEST( TThreadPool );
 DECLARATION_TEST( TAppShell );
 DECLARATION_TEST( TMemAlloc );
-DECLARATION_TEST( TOS );
+DECLARATION_TEST( TProcess );
 DECLARATION_TEST( TString );
 DECLARATION_TEST( TThreads );
 DECLARATION_TEST( TMemoryDataStream );
@@ -228,7 +228,7 @@ namespace LibTest
     void TLibTest::registerOSLibTestUnit()
     {
          REGISTER_TEST( TAppShell );
-         REGISTER_TEST( TOS );
+         REGISTER_TEST( TProcess );
          REGISTER_TEST( TLog );
          REGISTER_TEST( TString );
          REGISTER_TEST( TThreads );

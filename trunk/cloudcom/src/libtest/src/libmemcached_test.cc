@@ -1,5 +1,5 @@
-#include "libtest/include/QLibTestPrerequisits.h"
-#include "libtest/include/QLibTest.h"
+#include "libtest/include/inner_pre.h"
+#include "libtest/include/libtest.h"
 #include "osl/include/thread.h"
 #include "osl/include/file_util.h"
 #include "osl/include/utility.h"

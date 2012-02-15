@@ -1,4 +1,4 @@
-#include "libtest/include/QLibTestPrerequisits.h"
+#include "libtest/include/inner_pre.h"
 #include "osl/include/type_traits_ext.h"
 
 namespace

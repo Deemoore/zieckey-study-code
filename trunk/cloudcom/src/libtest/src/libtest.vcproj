@@ -49,7 +49,7 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;libtest/include/inner_pre.h&quot;"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -126,7 +126,7 @@
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+				PrecompiledHeaderThrough="&quot;libtest/include/inner_pre.h&quot;"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -181,11 +181,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\QLibTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\QLibTestPrerequisits.cpp"
+				RelativePath=".\inner_pre.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -193,7 +189,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+						PrecompiledHeaderThrough="&quot;libtest/include/inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -202,16 +198,20 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+						PrecompiledHeaderThrough="&quot;libtest/include/inner_pre.h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\QMain.cpp"
+				RelativePath=".\lib_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestTrivial.cpp"
+				RelativePath=".\main.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\trivial_test.cc"
 				>
 			</File>
 		</Filter>
@@ -221,19 +221,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\QLibTest.h"
+				RelativePath="..\include\inner_pre.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QLibTestPrerequisits.h"
+				RelativePath="..\include\libtest.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QStdHeader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QTestObject.h"
+				RelativePath="..\include\test_object.h"
 				>
 			</File>
 		</Filter>
@@ -241,91 +237,67 @@
 			Name="osl"
 			>
 			<File
-				RelativePath="..\src\QTestAppShell.cpp"
+				RelativePath=".\app_shell_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QTestAppShell.h"
+				RelativePath=".\base64_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestBase64.cpp"
+				RelativePath=".\compile_check_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QTestClassHelper.h"
+				RelativePath=".\data_stream_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestCompileCheck.cpp"
+				RelativePath=".\file_util_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestEditHistory.cpp"
+				RelativePath=".\history_edit_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestFileUtil.cpp"
+				RelativePath=".\ini_parser_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestINIParser.cpp"
+				RelativePath=".\is_pos_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestIsPod.cpp"
+				RelativePath=".\libmemcached_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestLog.cpp"
+				RelativePath=".\log_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestMemAlloc.cpp"
+				RelativePath=".\mem_alloc_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\QTestMemcached.cpp"
+				RelativePath=".\process_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestMemoryDataStream.cpp"
+				RelativePath=".\stl_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QTestMemoryDataStream.h"
+				RelativePath=".\string_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\src\QTestOS.cpp"
+				RelativePath=".\thread_test.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\QTestOS.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\QTestSTL.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\QTestString.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QTestString.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\QTestThreads.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\include\QTestThreads.h"
-				>
-			</File>
-			<File
-				RelativePath=".\QTestTokener.cpp"
+				RelativePath=".\tokener_test.cc"
 				>
 			</File>
 		</Filter>
@@ -336,7 +308,7 @@
 				Name="curl"
 				>
 				<File
-					RelativePath="..\src\QTestCurl.cpp"
+					RelativePath=".\curl_test.cc"
 					>
 				</File>
 			</Filter>
@@ -345,7 +317,7 @@
 			Name="apputil"
 			>
 			<File
-				RelativePath=".\QTestCACenter.cpp"
+				RelativePath=".\ca_center_test.cc"
 				>
 			</File>
 		</Filter>
@@ -353,7 +325,7 @@
 			Name="tools"
 			>
 			<File
-				RelativePath=".\QLevelDBBenchAnalyse.cpp"
+				RelativePath=".\leveldb_benchmark_analise.cc"
 				>
 			</File>
 		</Filter>
@@ -361,7 +333,7 @@
 			Name="unittest"
 			>
 			<File
-				RelativePath=".\QTestSample.cpp"
+				RelativePath=".\sample_test.cc"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
