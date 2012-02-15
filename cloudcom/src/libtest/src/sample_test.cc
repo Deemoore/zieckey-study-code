@@ -32,6 +32,11 @@ TEST( test_c )
 #endif 
 }
 
+TEST_INVOKE(test_invoke_a, "test_invoke_a the desc")
+{
+    std::cout << "test_invoke_a sample";
+}
+
 
 
 namespace

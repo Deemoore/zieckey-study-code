@@ -492,7 +492,7 @@ TEST( test_memcached )
 //
 //CREATE_FUNCTION( TMemcached );
 
-TEST_INVOKE( test_memcached1, test_memcached1 --host=localhost --port=10009 --thread=10 --method=get|set|delete --mdbdir=/tmp/mdb )
+TEST_INVOKE( test_memcached1, "test_memcached1 --host=localhost --port=10009 --thread=10 --method=get|set|delete --mdbdir=/tmp/mdb" )
         //invoke( osl::AppShell::Command* pCmd, osl::AppShell* pShell )
 {
     osl::StringA hostname = "localhost";
