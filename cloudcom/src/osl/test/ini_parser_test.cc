@@ -457,7 +457,7 @@ namespace
 
         {
             
-            if (parser.isCaseSenstive())
+            if (parser.isCaseSensitive())
             {
                 //含有中文的地方必须要case_senstive
                 osl::StringA section = "hold住";
@@ -469,7 +469,7 @@ namespace
             {
                 osl::INIParser parser_case_senstive(true);
                 parser_case_senstive.parse( rawdata, rawdatalen, "\r\n", "=" );
-                H_TEST_ASSERT(parser_case_senstive.isCaseSenstive());
+                H_TEST_ASSERT(parser_case_senstive.isCaseSensitive());
                 osl::StringA section = "hold住";
                 osl::StringA key = "有木有";
                 osl::StringA value = "不想上班的有木有!!!!";
