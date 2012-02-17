@@ -286,7 +286,8 @@ namespace osl
         {
             char c = next();
 
-            if ( c == 0 || c > ' ' )
+            /** c < 0 means This is not an ASCII character */
+            if ( c == 0 || c > ' ' || c < 0)
             {
                 return c;
             }
@@ -411,7 +412,7 @@ namespace osl
                 back();
                 return true;
             }
-            else if ( c == 0 )
+            else if ( c <= 0 )
             {
                 back();
                 return true;
