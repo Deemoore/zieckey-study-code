@@ -25,7 +25,7 @@ namespace osl
 
         //! \brief Query whether it is case sensitive
         //! \return - bool
-        bool isCaseSenstive() const { return case_sensitive_; }
+        bool isCaseSensitive() const { return case_sensitive_; }
 
         //! \brief Parse the INI file
         //! \param const StringA & filename - The INI file name
@@ -110,7 +110,7 @@ namespace osl
 
 
     private:
-        bool            case_sensitive_;
+        bool            case_sensitive_;//! case sensitive flag
         SectionMap      section_map_; //! pair<section string, key/value map>
         osl::StringA    kv_separator_;//! The key/value separator
         osl::StringA    line_separator_;//! The key/value separator
