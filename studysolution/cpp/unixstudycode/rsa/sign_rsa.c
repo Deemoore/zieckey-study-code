@@ -15,8 +15,6 @@
 //int ibits = 1024;//1024bits
 int ibits = 512;//512 bits
 
-enum { kMaxLen = 8096 };
-
 
 typedef struct {
 	unsigned char* data;
@@ -54,7 +52,7 @@ RSA* create_rsa( const u_char* key, size_t key_len, int rsa_type )
 {/*{{{*/
 
     BIO* b = BIO_new( BIO_s_mem() );
-    BIO_write( b, (void*)key, (int)key_len );
+    BIO_write( b, key, key_len );
 
     RSA* rsa = NULL;
     if( rsa_type == 1 )
@@ -77,21 +75,21 @@ void sign_data( RSA* rsa, const unsigned char* bData, unsigned int iDatalen, mem
 
 	unsigned int iSignlen = RSA_size( rsa );
 
-    printf( "\nisignlen=RSA_size(rsa)=%d\n", iSignlen );
+    //printf( "\nisignlen=RSA_size(rsa)=%d\n", iSignlen );
 
 	ret = RSA_sign( NID_sha1, bData, iDatalen, out_buf->data, &iSignlen, rsa );
 
     out_buf->data_len = iSignlen;
 	
-	printf("\nsign_len:%d\n",iSignlen);
-	for(i=0;i<iSignlen;i++)
-	    printf("%d ", out_buf->data[i]);
-	printf("\n");
+	//printf("\nsign_len:%d\n",iSignlen);
+	//for(i=0;i<iSignlen;i++)
+	    //printf("%d ", out_buf[i]);
+	//printf("\n");
 	
 	if( ret != 1 )
 	{
 		int l;
-		char s[kMaxLen];
+		char s[1024];
 		FILE* f;
 
 		f = fopen( "/dev/stdout", "w" );
@@ -118,62 +116,111 @@ int main ( int argc, const char * argv[] )
 
 	char raw_data[] = "59f0aa0a1c3f65f459f0aa0a1c3f65f4";
 
-    //generate public and private key
-	unsigned char public_key[kMaxLen] = {};
-	unsigned char private_key[kMaxLen] = {};
-	BIO* bio = BIO_new( BIO_s_mem() );
-	RSA* rsa = gen_rsa( ibits );
-	int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
-	int public_key_len = BIO_read( bio, public_key, sizeof(public_key) );//read the key data into public_key buffer
-	ret = i2d_RSAPrivateKey_bio( bio, rsa );//create a private key
-    int private_key_len = BIO_read( bio, private_key, sizeof(private_key) );//read the key data into private buffer
-	BIO_free( bio );
-    RSA_free( rsa );
+    printf( "#ifndef _RSA_SIGN_KEY_H_ \n");
+    printf( "#define _RSA_SIGN_KEY_H_ \n");
+    int jj = 0;
+    for (jj = 0; jj < 10; jj++)
+    {
+        //generate public and private key
+        unsigned char public_key[1024] = { 0 };
+        unsigned char private_key[1024] = { 0 };
+        BIO* bio = BIO_new( BIO_s_mem() );
+        RSA* rsa = gen_rsa( ibits );
+        int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
+        int public_key_len = BIO_read( bio, public_key, sizeof(public_key) );//read the key data into public_key buffer
+        ret = i2d_RSAPrivateKey_bio( bio, rsa );//create a private key
+        int private_key_len = BIO_read( bio, private_key, sizeof(private_key) );//read the key data into private buffer
+        BIO_free( bio );
+        RSA_free( rsa );
 
-    //print public and private key
-    int i = 0;
-	printf( "\npublic_key_len:%d\n", public_key_len );
-	for( i = 1; i <= public_key_len; i++ )
-	{
-		printf( "0x%.2x, ", public_key[i] );
-        if ( i % 16 == 0 )
-          printf("\n");
-	}
-	printf( "\n" );
-	printf( "\nprivate_key_len:%d\n", private_key_len );
-	for( i = 1; i <= private_key_len; i++ )
-	{
-		printf( "0x%.2x, ", private_key[i] );
-        if ( i % 16 == 0 )
-          printf("\n");
-	}
-	printf( "\n" );
+        //print public and private key
+        int i = 0;
+        printf( "\nstatic const u_char g_rsa_public_key%d[%lu] = {//{{{\n", jj, public_key_len );
+        for( i = 0; i < public_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                printf(", ");
+                if ( i % 16 == 0 )
+                  printf("\n\t");
+            }
+            else
+            {
+                printf("\t");
+            }
+            printf( "0x%0.2x", public_key[i] );
+        }
+        printf( "};//}}}\n" );
+        printf("static const size_t g_rsa_public_key%d_len = %lu;\n\n", jj, public_key_len);
+        printf( "\nstatic const u_char g_rsa_private_key%d[%lu] = {//{{{\n", jj, private_key_len );
+        for( i = 0; i < private_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                printf(", ");
+                if ( i % 16 == 0 )
+                  printf("\n\t");
+            }
+            else
+            {
+                printf("\t");
+            }
+            printf( "0x%0.2x", private_key[i] );
+        }
+        printf( "};//}}}\n" );
+        printf("static const size_t g_rsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+        printf( "\n" );
 
+    }
+
+    printf("#endif\n");
+
+    ///test
+    {
+        //generate public and private key
+        unsigned char public_key[1024] = { 0 };
+        unsigned char private_key[1024] = { 0 };
+        BIO* bio = BIO_new( BIO_s_mem() );
+        RSA* rsa = gen_rsa( ibits );
+        int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
+        int public_key_len = BIO_read( bio, public_key, sizeof(public_key) );//read the key data into public_key buffer
+        ret = i2d_RSAPrivateKey_bio( bio, rsa );//create a private key
+        int private_key_len = BIO_read( bio, private_key, sizeof(private_key) );//read the key data into private buffer
+        BIO_free( bio );
+        RSA_free( rsa );
+
+        //print public and private key
+        int i = 0;
+        //printf( "\nstatic const u_char g_rsa_public_key%d[%lu] = {\n", jj, public_key_len );
+        //printf( "};\n" );
+        //printf("static const size_t g_rsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+        //printf( "\n" );
 
 
     //using private key to sign data
     mem_data_t datasign_private;
-    datasign_private.data_len = kMaxLen;
-    datasign_private.data = (char*) malloc( kMaxLen );
+    datasign_private.data_len = 1024;
+    datasign_private.data = (char*) malloc( 1024 );
     RSA* rsa_private = create_rsa( private_key, private_key_len, 1 );
     sign_data( rsa_private, raw_data, sizeof( raw_data ), &datasign_private );
     
 
     //using public key to sign data
     mem_data_t datasign_public;
-    datasign_public.data_len = kMaxLen;
-    datasign_public.data = (char*) malloc( kMaxLen );
+    datasign_public.data_len = 1024;
+    datasign_public.data = (char*) malloc( 1024 );
     RSA* rsa_public = create_rsa( public_key, public_key_len, 2 );
     int verifyret = RSA_verify( NID_sha1, raw_data, sizeof( raw_data ), datasign_private.data, datasign_private.data_len, rsa_public );
-    if ( verifyret == 1 )
-      printf( "verify ok\n" );
-    else
-      printf( "verify failed\n" );
+    //if ( verifyret == 1 )
+      //printf( "verify ok\n" );
+      //else
+      //printf( "verify failed\n" );
 
 
     //print the data sign compare result
     RSA_free( rsa_private );
     RSA_free( rsa_public );
 
+    }
     return 0;
 }
