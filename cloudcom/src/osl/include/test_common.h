@@ -15,3 +15,4 @@
     void CppUnitTestObjectClass_##name::test_func_CppUnitTestObjectClass_##name ()
 
 #define H_TEST_ASSERT CPPUNIT_ASSERT
+

@@ -266,3 +266,5 @@ TEST_UNIT(appshell_test_10)
 
     H_TEST_ASSERT(command.hasTarget("d"));
 }
+
+
