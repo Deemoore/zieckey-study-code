@@ -9,12 +9,23 @@
 
 namespace osl
 {
-    //! \brief The class for ini format file's parsing.
+    class MemoryDataStream;
+
+    //! \brief The class for INI format file's parsing.
     //! The INI file can contains comments lines which start with '#' or '//' 
     class _EXPORT_OSLIB INIParser 
     {
     public:
-        INIParser(){}
+        typedef Map< StringA, StringA > StringAStringAMap;
+        typedef Map< StringA, StringAStringAMap > SectionMap;
+    public:
+        //! \brief 
+        //! \param[in] - bool case_sensitive
+        INIParser(bool case_sensitive = true);
+
+        //! \brief Query whether it is case sensitive
+        //! \return - bool
+        bool isCaseSenstive() const { return case_sensitive_; }
 
         //! \brief Parse the INI file
         //! \param const StringA & filename - The INI file name
@@ -41,15 +52,46 @@ namespace osl
         //! \return bool - 
         bool parse( const char* data, size_t datalen, const char* linesep, const char* keyvaluesep );
 
-        //! \brief Get the value of specified key
+        //! \brief Get the value of specified key from the default section
         //! \param const StringA & key - 
         //! \return const char* - If find return the value, or return NULL
         const char* get( const StringA& key ) const;
 
-        //! \brief 
-        //! \return const StringAStringAMap& - 
-        const StringAStringAMap& getKeyValueMap() const { return m_mapINIKeyValue; }
+        //! \brief Get the value of specified key from a certain section
+        //! \param const StringA & section - The section name
+        //! \param const StringA & key - The key
+        //! \return const char* - If find return the value, or return NULL
+        const char* get( const StringA& section, const StringA& key ) const;
 
+        //! \brief Set the value of specified key into a certain section
+        //! \param const StringA & section - The section name
+        //! \param const StringA & key - The key
+        //! \param const StringA & key - The value
+        void set( const StringA& section, const StringA& key, const StringA& value );
+
+        //! \brief Get the default key/value Map
+        //! \return const StringAStringAMap& - 
+        const StringAStringAMap& getDefaultKeyValueMap();
+
+        //! \brief Get the section full map
+        //! \return - const SectionMap&
+        const SectionMap& getSectionMap() const { return section_map_; }
+
+        //! \brief Serialize the INI to output string
+        //! \return - osl::StringA
+        StringA serialize() const;
+
+        //! \brief Serialize the INI to output string
+        //! \param[in] - StringA & output
+        //! \param[in] - MemoryDataStream & buf
+        //! \param[in] - std::ostream & os
+        //! \return - void
+        void serialize(StringA& output) const;
+        void serialize(MemoryDataStream& buf) const;
+        void serialize(std::ostream& os) const;
+
+        void setKVSeparator(const StringA& separator) { kv_separator_  = separator; }
+        void setLineSeparator(const StringA& separator) { line_separator_  = separator; }
     private:
 
         //! \brief Skip the lines which start with '#' or '//' 
@@ -63,8 +105,15 @@ namespace osl
         //! \return const char* - The pointer to the next line
         const char* skipSpaces( const char* szsrc );
 
+        template<class _stream_t>
+        void _serialize(_stream_t& os) const;
+
+
     private:
-        StringAStringAMap m_mapINIKeyValue;
+        bool            case_sensitive_;
+        SectionMap      section_map_; //! pair<section string, key/value map>
+        osl::StringA    kv_separator_;//! The key/value separator
+        osl::StringA    line_separator_;//! The key/value separator
     };
 
 };// end of namespace osl

@@ -14,6 +14,10 @@
 namespace osl
 {
 	//---------------------------------------------------------
+    INIParser::INIParser( bool case_sensitive /*= true*/ ) : case_sensitive_(case_sensitive)
+    {
+    }
+
 	bool INIParser::parse( const StringA& filename )
 	{
 		return parse( filename.c_str() );
@@ -60,7 +64,7 @@ namespace osl
 			StringUtil::trim( value, " \t\n", true, true );
             if ( key.length() && value.length() )
             {
-                m_mapINIKeyValue[key] = value;
+                section_map_[key] = value;
             }
 		}
 
@@ -72,54 +76,6 @@ namespace osl
     bool INIParser::parse( const char* data, size_t datalen )
     {
         return parse( data, datalen, "\n", "=" );
-
-        //----- OR ------
-        //{{{// old code
-
-        /*
-        const char* linebegin = data;
-        const char* lineend = NULL;
-        StringA line;
-        while ( linebegin )
-        {
-            lineend = strchr( linebegin, '\n' );
-            if ( !lineend )
-            {
-                break;
-            }
-
-
-            line = StringA( linebegin, lineend - linebegin );
-            StringA key;
-            StringA value;
-            StringUtil::split( line, key, value, "=:" );
-            StringUtil::trim( key, " \t\n", true, true );
-            StringUtil::trim( value, " \t\n", true, true );
-            if ( key.length() && value.length() )
-            {
-                m_mapINIKeyValue[key] = value;
-            }
-
-            linebegin = lineend + 1;
-        }
-
-        //the last line need special process
-        if ( (size_t)(linebegin - data) < datalen )
-        {
-            line = StringA( linebegin, data + datalen - linebegin );
-            StringA key;
-            StringA value;
-            StringUtil::split( line, key, value, "=:" );
-            StringUtil::trim( key, " \t\n", true, true );
-            StringUtil::trim( value, " \t\n", true, true );
-            if ( key.length() && value.length() )
-            {
-                m_mapINIKeyValue[key] = value;
-            }
-        }
-
-        return true;
-        */ //}}}
     }
 
     bool INIParser::parse( const char* data, size_t datalen, const char* linesep, const char* kvsep )
@@ -129,25 +85,60 @@ namespace osl
             return false;
         }
 
+        kv_separator_ = kvsep;
+        line_separator_ = linesep;
+
         const char* linebegin = data;
         const char* lineend = NULL;
         const char* kvseppos = NULL;
         size_t lineseplen = strlen( linesep );
         size_t kvseplen   = strlen( kvsep );
         StringA line;
+        StringA section = "";
+        char section_open = '[';
+        char section_end = ']';
         while ( linebegin )
         {
             linebegin = skipCommit( linebegin );
             linebegin = skipSpaces( linebegin );
             if ( !linebegin || linebegin >= data + datalen )
             {
+                //parse finished
                 break;
+            }
+
+            if (*linebegin == section_open)
+            {
+                lineend = strchr(linebegin, section_end);
+                if (!lineend || lineend <= linebegin)
+                {
+                    //fprintf(stderr, "Parse error, section format error!");
+                    return false;
+                }
+
+                section = StringA(linebegin + 1, lineend - linebegin - 1);
+                StringUtil::trim( section, " \t\r", true, true );
+                if (!case_sensitive_)
+                {
+                    std::transform( section.begin(), section.end(), section.begin(), towlower );
+                }
+                lineend = strstr( lineend, linesep );
+                if (!lineend)
+                {
+                    //parse finished
+                    break;
+                }
+                
+                linebegin = lineend + lineseplen;
+                
+                continue;
             }
             
             lineend = strstr( linebegin, linesep );
             kvseppos = strstr( linebegin, kvsep );
             if ( !kvseppos || ( lineend && kvseppos >= lineend ) )
             {
+                //parse finished
                 break;
             }
             
@@ -163,20 +154,20 @@ namespace osl
             }
 
             StringUtil::trim( key, " \t", true, true );
-            if ( StringUtil::startsWith( key, "#") || StringUtil::startsWith( key, "//") )
-            {
-                //this line is a commit
-                continue;
-            }
-
             StringUtil::trim( value, " \t\r\n", true, true );
             if ( key.length() )
             {
-                m_mapINIKeyValue[key] = value;
+                if (!case_sensitive_)
+                {
+                     std::transform( key.begin(), key.end(), key.begin(), towlower );
+                }
+                
+                section_map_[section][key] = value;
             }
 
             if ( !lineend )
             {
+                //parse finished
                 break;
             }
 
@@ -189,15 +180,48 @@ namespace osl
 	//---------------------------------------------------------
 	const char* INIParser::get( const StringA& key ) const
 	{
-		StringAStringAMap::const_iterator it = m_mapINIKeyValue.find( key );
-
-		if ( it == m_mapINIKeyValue.end() )
-		{
-			return NULL;
-		}
-
-		return ( it->second ).c_str();
+        return get("", key);
 	}
+
+    const char* INIParser::get( const StringA& section, const StringA& key ) const
+    {
+        StringA section_lower;
+        StringA key_lower;
+
+        const StringA* pkey = &key;
+        const StringA* psection = &section;
+        if (!case_sensitive_)
+        {
+            section_lower = section;
+            key_lower = key;
+            std::transform( section_lower.begin(), section_lower.end(), section_lower.begin(), towlower );
+            std::transform( key_lower.begin(), key_lower.end(), key_lower.begin(), towlower );
+            pkey = &key_lower;
+            psection = &section_lower;
+        }
+
+        SectionMap::const_iterator sectionit = section_map_.find(*psection);
+        if (sectionit == section_map_.end())
+        {
+            return NULL;
+        }
+
+        StringAStringAMap::const_iterator it = sectionit->second.find(*pkey);
+
+        if ( it == sectionit->second.end() )
+        {
+            return NULL;
+        }
+
+        return ( it->second ).c_str();
+    }
+
+
+    void INIParser::set( const StringA& section, const StringA& key, const StringA& value )
+    {
+        section_map_[section][key] = value;
+    }
+
 
     const char* INIParser::skipCommit( const char* szsrc )
     {
@@ -229,12 +253,80 @@ namespace osl
     const char* INIParser::skipSpaces( const char* szsrc )
     {
         const char* t = szsrc;
-        for ( ; t && *t != '\0' && *t <= ' '; ++t )
+        for ( ; t && *t != '\0' && *t >= 0 && *t <= ' '; ++t )
         {
             ;
         }
         return t;
     }
+
+    const INIParser::StringAStringAMap& INIParser::getDefaultKeyValueMap()
+    {
+        StringAStringAMap& ret = section_map_[""];
+        return ret;
+    }
+
+    StringA INIParser::serialize() const
+    {
+        StringA s;
+        serialize(s);
+        return s;
+    }
+
+    void INIParser::serialize( StringA& output ) const
+    {
+        MemoryDataStream stream;
+        serialize(stream);
+        output = StringA(stream.data(), stream.size());
+    }
+
+    void INIParser::serialize( MemoryDataStream& stream ) const
+    {
+        stream.reserve(4096);
+        _serialize(stream);
+    }
+
+    void INIParser::serialize( std::ostream& stream ) const
+    {
+        _serialize(stream);
+    }
+
+    template<class _stream_t>
+    void osl::INIParser::_serialize( _stream_t& stream ) const
+    {
+        assert(line_separator_.length() > 0);
+        assert(kv_separator_.length() > 0);
+        if (line_separator_.empty() || kv_separator_.empty())
+        {
+            return;
+        }
+        
+        SectionMap::const_iterator it_sectioin(section_map_.begin());
+        SectionMap::const_iterator ite_sectioin(section_map_.end());
+        for (; it_sectioin != ite_sectioin; ++it_sectioin)
+        {
+            if (it_sectioin->first.length() > 0)
+            {
+                stream.write("[", 1);
+                stream.write(it_sectioin->first.c_str(), it_sectioin->first.length());
+                stream.write("]", 1);
+                stream.write(line_separator_.c_str(), line_separator_.size());
+            }
+
+            StringAStringAMap::const_iterator it(it_sectioin->second.begin());
+            StringAStringAMap::const_iterator ite(it_sectioin->second.end());
+            for (; it != ite; ++it)
+            {
+                stream.write(it->first.c_str(), it->first.length());
+                stream.write(kv_separator_.c_str(), kv_separator_.size());
+                stream.write(it->second.c_str(), it->second.length());
+                stream.write(line_separator_.c_str(), line_separator_.size());
+            }
+            stream.write(line_separator_.c_str(), line_separator_.size());
+            stream.write(line_separator_.c_str(), line_separator_.size());
+        }
+    }
+
 }// end of namespace osl
 
 
