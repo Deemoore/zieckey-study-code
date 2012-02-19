@@ -4,6 +4,7 @@
 
 #include "osl/include/string_ext.h"
 #include "osl/include/string_util.h"
+#include "osl/include/scoped_mem.h"
 
 namespace
 {

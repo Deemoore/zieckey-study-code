@@ -13,30 +13,5 @@
 namespace osl
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                           ScopedMem
-    //////////////////////////////////////////////////////////////////////////
-    ScopedMem::ScopedMem( osl::u32 nSize )
-    {
-#ifdef H_MEMORY_DEBUG
-        pRep = ( osl::u8* )osl::MemAlloc::alloc( nSize, "ScopedMem", __FILE__, __LINE__ );
-#else
-        pRep = ( osl::u8* )osl::MemAlloc::alloc( nSize );
-#endif
-    }
-    //----------------------------------------------
-    void ScopedMem::alloc( osl::u32 nSize )
-    {
-        if ( pRep )
-        {
-            osl::MemAlloc::free( pRep );
-        }
-
-#ifdef H_MEMORY_DEBUG
-        pRep = ( osl::u8* )osl::MemAlloc::alloc( nSize, "ScopedMem" );
-#else
-        pRep = ( osl::u8* )osl::MemAlloc::alloc( nSize );
-#endif
-    }
 
 };//namespace

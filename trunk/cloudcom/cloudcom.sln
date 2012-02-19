@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "idea", "src\idea\idea.vcproj", "{70B7D498-EC2F-474E-AE52-7A56100200F7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "slrsa_test", "src\slrsa\slrsa_test.vcproj", "{AF78E351-2A6C-433C-979E-16E95EA048D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95A2D8A7-497C-4B00-B84A-0498B3EEE093} = {95A2D8A7-497C-4B00-B84A-0498B3EEE093}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "slrsa", "src\slrsa\libslrsa.vcproj", "{95A2D8A7-497C-4B00-B84A-0498B3EEE093}"
 EndProject

@@ -545,6 +545,10 @@
 			Name="memalloc"
 			>
 			<File
+				RelativePath="..\include\malloc_micro.h"
+				>
+			</File>
+			<File
 				RelativePath=".\mem_alloc.cc"
 				>
 			</File>
@@ -562,6 +566,10 @@
 			</File>
 			<File
 				RelativePath=".\mem_alloc_sys_heap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\scoped_mem.h"
 				>
 			</File>
 		</Filter>

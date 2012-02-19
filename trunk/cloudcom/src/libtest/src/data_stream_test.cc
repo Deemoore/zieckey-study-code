@@ -2,7 +2,7 @@
 
 
 #include "libtest/include/test_object.h"
-
+#include "osl/include/scoped_mem.h"
 
 namespace LibTest
 {

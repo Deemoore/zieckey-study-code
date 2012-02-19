@@ -56,7 +56,7 @@ namespace
                 osl::INIParser::StringAStringAMap::const_iterator itme( kvmap.end() );
                 for ( ; itm != itme; ++itm )
                 {
-                    std::cout << itm->first << "=" << itm->second << std::endl;
+                    //std::cout << itm->first << "=" << itm->second << std::endl;
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace
                 osl::INIParser::StringAStringAMap::const_iterator itme( kvmap.end() );
                 for ( ; itm != itme; ++itm )
                 {
-                    std::cout << itm->first << "=" << itm->second << std::endl;
+                    //std::cout << itm->first << "=" << itm->second << std::endl;
                 }
             }
         }

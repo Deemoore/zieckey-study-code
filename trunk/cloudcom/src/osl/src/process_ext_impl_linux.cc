@@ -1,7 +1,7 @@
 #include "osl/include/inner_pre.h"
 
 
-#include "osl/include/mem_alloc.h"
+#include "osl/include/malloc_micro.h"
 #include "osl/include/string_ext.h"
 #include "osl/include/string_util.h"
 #include "osl/include/file_util.h"

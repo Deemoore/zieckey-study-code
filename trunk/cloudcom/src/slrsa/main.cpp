@@ -5,7 +5,7 @@
 #include "slrsa.h"
 
 #ifdef H_OS_WINDOWS
-#	pragma comment(lib,"libslrsa.lib")
+#	pragma comment(lib,"slrsa.lib")
 #endif
 
 const unsigned char prvFileKey[706] = {

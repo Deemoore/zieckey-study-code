@@ -4,7 +4,7 @@
 #include "osl/include/inner_pre.h"
 
 //! Whether use minimum memory.
-//! Comment out H_MINI_MEM_USE if want to debug memroy
+//! Comment out H_MINI_MEM_USE if want to debug memory
 #ifdef H_DEBUG_MODE
 #else
 #	define H_MINI_MEM_USE
@@ -189,77 +189,7 @@ namespace osl
         //! Uninitialize the memory allocator.
         static void uninitialize();
     };
-
-
-
-    //! Scoped memory block. When lifetime out, memory in the object will be freed.
-    //! \warning The object SHOULD ONLY be used on stack.
-    struct _EXPORT_OSLIB ScopedMem
-    {
-        void*   pRep;
-        ScopedMem( const ScopedMem& r );    //!< 勿加实现
-    public:
-
-        ScopedMem(): pRep( 0 ) {}
-
-        ScopedMem( void* _rep )
-            :pRep( _rep )
-        {
-        }
-
-        //! Construct a sized memory.
-        ScopedMem( osl::u32 nSize );
-
-        ~ScopedMem()
-        {
-            if ( pRep )
-            {
-                osl::MemAlloc::free( pRep );
-            }
-        }
-
-        inline ScopedMem& operator=( void*pBuf )
-        {
-            if ( pRep )
-            {
-                osl::MemAlloc::free( pRep );
-            }
-
-            pRep = pBuf;
-            return *this;
-        }
-
-        operator osl::u8*()const
-        {
-            return static_cast<osl::u8*>(pRep);
-        }
-        osl::u8* get() const
-        {
-            return static_cast<osl::u8*>(pRep);
-        }
-        osl::u8* getPointer() const
-        {
-            return static_cast<osl::u8*>(pRep);
-        }
-
-        template<class T>
-        T* getPointer()const
-        {
-            return static_cast<T*>(pRep);
-        }
-
-        inline bool isNull( void ) const
-        {
-            return pRep == 0;
-        }
-
-        //! Allocate sized memory.
-        void alloc( osl::u32 nSize );
-    };
-
-};
-
-
+}//end of namespace osl
 
 //! Gets instance name by class name. It will iterator all the memory node and count instances.
 #define H_GET_CLASS_INSTANCE_NUM( myClass )     osl::MemAlloc::getNumInstancesByClassName( #myClass, sizeof(myClass) );
@@ -332,21 +262,6 @@ namespace osl
 #endif // H_ALLOCRAW_OPERATORS
 
 
-
-
-/**
-* Alignment macros
-*/
-
-/* H_ALIGN() is only to be used to align on a power of 2 boundary */
-#define H_ALIGN(size, boundary) (((size) + ((boundary) - 1)) & ~((boundary) - 1))
-
-/** Default alignment */
-#define H_ALIGN_DEFAULT(size) H_ALIGN(size, 16)
-
-
-
-
 //---------------------------------------------------
 //! 定义new 操作符的宏
 #ifdef H_NEW
@@ -375,8 +290,9 @@ namespace osl
 #	define H_ALLOC( size )               osl::MemAlloc::alloc( (size) )
 #	define H_ALLOC_NAME( size, name )    osl::MemAlloc::alloc( (size) )
 #else
-#	define H_ALLOC( size )               osl::MemAlloc::alloc( (size), __FILE__, __FILE__, __LINE__ )
-#	define H_ALLOC_NAME( size, name )    osl::MemAlloc::alloc( (size), (name), __FILE__, __LINE__ )
+#   define H_ALLOC( size )               osl::MemAlloc::alloc( (size), __FILE__, __FILE__, __LINE__ )
+#   define H_ALLOC_NAME( size, name )    osl::MemAlloc::alloc( (size), (name), __FILE__, __LINE__ )
+#   define H_ALLOC_NAME_FILE( size, name, file_name, line_no )  osl::MemAlloc::alloc( (size), (name), (file_name), (line_no) )
 #endif
 
 
@@ -384,9 +300,8 @@ namespace osl
 #	undef H_FREE
 #endif
 
-#define H_FREE( p )            osl::MemAlloc::free( (p) )
 #define H_SAFE_FREE( p )       if(p){ osl::MemAlloc::free( (p) ); p = 0;}
-
+#define H_FREE( p )            H_SAFE_FREE(p)
 
 
 //! Aligned memory allocate macros.

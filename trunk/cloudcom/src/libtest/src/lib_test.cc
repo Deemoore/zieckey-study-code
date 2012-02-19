@@ -14,7 +14,6 @@ template<> LibTest::TLibTest* osl::Singleton<LibTest::TLibTest>::ms_Singleton = 
 #define DECLARATION_TEST(x)     LibTest::ITestObject* Create_##x();     
 
 //qoslib
-DECLARATION_TEST( TINIParser );
 DECLARATION_TEST( TProcess );
 DECLARATION_TEST( TThreads );
 DECLARATION_TEST( TMemoryDataStream );
@@ -233,7 +232,6 @@ namespace LibTest
          REGISTER_TEST( TString );
          REGISTER_TEST( TThreads );
          REGISTER_TEST( TMemoryDataStream );
-         REGISTER_TEST( TINIParser );
          REGISTER_TEST( TMemAlloc );
          REGISTER_TEST( TFileUtil );
          REGISTER_TEST( TBase64 );

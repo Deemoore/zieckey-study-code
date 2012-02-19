@@ -1,6 +1,7 @@
 #include "libtest/include/inner_pre.h"
 #include "osl/include/base64.h"
 #include "libtest/include/test_object.h"
+#include "osl/include/scoped_mem.h"
 
 namespace LibTest
 {
