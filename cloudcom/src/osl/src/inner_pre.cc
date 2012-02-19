@@ -3,7 +3,7 @@
 
 // force to be compiled.
 
-#include "osl/include/mem_alloc.h"
+#include "osl/include/malloc_micro.h"
 
 #include "osl/include/object.h"
 #include "osl/include/string_ext.h"
@@ -130,8 +130,10 @@ namespace osl
             }
         }
 #endif
-        //
+
+#if H_PROVIDE_MEMORY_POOL
         MemAlloc::initialize();
+#endif
 
         StringUtil::initialize();
 
@@ -174,7 +176,9 @@ namespace osl
         StringUtil::uninitialize();
 
 
+#if H_PROVIDE_MEMORY_POOL
         MemAlloc::uninitialize();
+#endif
 
     }
 

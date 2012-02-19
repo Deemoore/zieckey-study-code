@@ -153,7 +153,7 @@ namespace osl
     {
         if ( m_pData && m_bSelfCreate )
         {
-            MemAlloc::free( m_pData );
+            H_FREE(m_pData);
         }
     }
 
@@ -548,7 +548,7 @@ namespace osl
 
             if ( m_bSelfCreate )
             {
-                MemAlloc::free( m_pData );
+                H_FREE(m_pData);
             }
 
             m_pData       = pNewBuf;
@@ -588,7 +588,7 @@ namespace osl
             if ( m_bSelfCreate )
             {
                 //means the old buffer is created by myself, we need free it
-                MemAlloc::free( m_pData );
+                H_FREE(m_pData);
             }
 
 

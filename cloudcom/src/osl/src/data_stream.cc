@@ -55,7 +55,7 @@ namespace osl
         // clear old data.
         if ( m_bSelfCreate && m_pData )
         {
-            MemAlloc::free( m_pData );
+            H_FREE(m_pData);
             m_pData = NULL;
             m_nSizeBuffer = 0;
             m_bSelfCreate = true;

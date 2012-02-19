@@ -8,6 +8,7 @@
 #include "osl/include/data_stream.h"
 #include "osl/include/json.h"
 #include "json_tokener.h"
+#include "osl/include/scoped_mem.h"
 
 
 namespace json

@@ -160,7 +160,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\slrsa.cpp"
+				RelativePath=".\slrsa.c"
 				>
 			</File>
 		</Filter>

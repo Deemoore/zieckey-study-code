@@ -3,7 +3,7 @@
 #define OSLIB_PROCESS_EXT_H_
 
 
-#include "osl/include/mem_alloc.h"
+#include "osl/include/malloc_micro.h"
 #include "osl/include/string_ext.h"
 #include "osl/include/string_util.h"
 

@@ -269,7 +269,7 @@ namespace net
         strncpy( content + keylen + 1, value, valuelen );
         content[keylen + valuelen + 1] = '\0';
         bool retv = addHeader( content );
-        osl::MemAlloc::free( content );
+        H_FREE( content );
         return retv;
     }
 

@@ -6,7 +6,7 @@
 
 #include "libtest/include/test_object.h"
 
-
+// #include "osl/include/mem_alloc.h"
 
 namespace LibTest
 {
@@ -134,7 +134,7 @@ namespace LibTest
 				while( nMemEat < ( 1 << 30 ) )
 				{
 					osl::u32 nSize = rand() * ( rand() % 1000 ) + 1;
-					void* pMem = osl::MemAlloc::alloc( nSize );
+					void* pMem = H_ALLOC( nSize );
 
 					if( !pMem )
 					{
@@ -163,7 +163,7 @@ namespace LibTest
 				std::vector<void*>::iterator it( vBufs.begin() ), ite( vBufs.end() );
 				for(; it != ite; ++it )
 				{
-					osl::MemAlloc::free( *it );
+					H_FREE( *it );
 				}
 			}
 

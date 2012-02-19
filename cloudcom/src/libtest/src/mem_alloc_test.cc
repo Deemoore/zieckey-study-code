@@ -3,6 +3,7 @@
 #include "libtest/include/test_object.h"
 #include "osl/include/timer.h"
 
+
 namespace LibTest
 {
     class TMemAlloc : public ITestObject
@@ -147,11 +148,11 @@ namespace LibTest
                 pClass[i]->b = rand();
             }
 
+#if H_PROVIDE_MEMORY_POOL
             const osl::u32 nNumInst = H_GET_CLASS_INSTANCE_NUM( TestClass1 );
             (void)nNumInst;
             H_ASSERT( OBJ_NUMBSER == nNumInst );
 
-#ifdef H_MEMORY_POOL
             H_ASSERT( OBJ_NUMBSER == osl::MemAlloc::getNumInstancesByClassName( "TestClass1" ) );
 #endif
 
@@ -160,11 +161,11 @@ namespace LibTest
                 delete pClass[i];
             }
 
+#if H_PROVIDE_MEMORY_POOL
             const osl::u32 nNumInst2 = H_GET_CLASS_INSTANCE_NUM( TestClass1 );
             (void)nNumInst2;
             H_ASSERT( 0 == nNumInst2 );
 
-#ifdef H_MEMORY_POOL
             H_ASSERT( 0 == osl::MemAlloc::getNumInstancesByClassName( "TestClass1" ) );
 #endif
 
@@ -173,6 +174,7 @@ namespace LibTest
 
     void TMemAlloc::test_alloc_free()
     {
+#if H_PROVIDE_MEMORY_POOL
         {
             void* pAlloc0 = MemAlloc::alloc( 0 );
             H_ASSERT( NULL == pAlloc0 );
@@ -184,10 +186,12 @@ namespace LibTest
             void* pAlloc1 = MemAlloc::alloc( 1 );
             MemAlloc::free( pAlloc1 );
         }
+#endif
     }
 
     void TMemAlloc::test_effective( u32 premalloccout /*= 2048*/, u32 memsizefrom /*= 1*/, u32 memsizeto /*= 1024 * 1024*/, u32 everymalloccount /*= 2*/, u32 totalcount /*= 2*/, bool bUseMemPool /*= true */ )
     {
+#if H_PROVIDE_MEMORY_POOL
         const u32 ONE_MILLION = 1048576; // 1M = 1024 * 1024
         (void)(ONE_MILLION);
 
@@ -264,7 +268,7 @@ namespace LibTest
         {                    
             free( pPreAllocArray );
         }
-                                                            
+#endif                                              
     }
 }
 

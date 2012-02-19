@@ -3,7 +3,7 @@
 
 #include "osl/include/atomic_op.h"
 
-#include "osl/include/mem_alloc.h"
+#include "osl/include/malloc_micro.h"
 
 namespace osl
 {
@@ -58,11 +58,11 @@ namespace osl
 public:                                                                                 \
 	void* operator new( size_t nSize)                                               \
 	{                                                                               \
-		return ::osl::MemAlloc::alloc( nSize , #CLASSNAME );						\
+		return H_ALLOC_NAME( nSize , #CLASSNAME );						\
 	}                                                                               \
 	void* operator new(size_t nSize,const char* pFileName,int nLine)                \
 	{                                                                               \
-		return ::osl::MemAlloc::alloc( nSize , #CLASSNAME , pFileName , nLine );    \
+		return H_ALLOC_NAME_FILE( nSize , #CLASSNAME , pFileName , nLine );    \
 	}
 
     //! The class provides memory manage and RTTI feature for derived class.
@@ -114,11 +114,11 @@ public:                                                                         
 
         void operator delete( void *ptr )
         {
-            MemAlloc::free( ptr );
+            H_FREE( ptr );
         }
         void operator delete( void *ptr, const char*, int )
         {
-            MemAlloc::free( ptr );
+            H_FREE( ptr );
         }
 
         //! Not Supported

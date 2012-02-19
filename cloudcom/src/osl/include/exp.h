@@ -1,4 +1,3 @@
-
 #ifndef QOSLIB_ALL_EXPORT_H_
 #define QOSLIB_ALL_EXPORT_H_
 
@@ -10,7 +9,7 @@
 H_LINK_LIB( "osl");
 #endif
 
-#include "osl/include/mem_alloc.h"
+#include "osl/include/malloc_micro.h"
 #include "osl/include/string_ext.h"
 #include "osl/include/object.h"
 #include "osl/include/string_util.h"
