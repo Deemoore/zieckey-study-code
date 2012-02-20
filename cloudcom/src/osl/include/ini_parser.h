@@ -73,6 +73,11 @@ namespace osl
         //! \return const StringAStringAMap& - 
         const StringAStringAMap& getDefaultKeyValueMap();
 
+        //! \brief Get the key/value Map of a certain section
+        //! \param const StringA & section - The section name
+        //! \return const StringAStringAMap& - 
+        const StringAStringAMap& getKeyValueMap(const StringA& section);
+
         //! \brief Get the section full map
         //! \return - const SectionMap&
         const SectionMap& getSectionMap() const { return section_map_; }
