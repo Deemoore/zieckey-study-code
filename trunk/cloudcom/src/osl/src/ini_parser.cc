@@ -262,9 +262,15 @@ namespace osl
 
     const INIParser::StringAStringAMap& INIParser::getDefaultKeyValueMap()
     {
-        StringAStringAMap& ret = section_map_[""];
+        return getKeyValueMap("");
+    }
+
+    const INIParser::StringAStringAMap& INIParser::getKeyValueMap(const StringA& section)
+    {
+        StringAStringAMap& ret = section_map_[section];
         return ret;
     }
+
 
     StringA INIParser::serialize() const
     {

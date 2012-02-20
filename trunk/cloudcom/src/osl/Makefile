@@ -10,7 +10,7 @@ PREFIX=${CURRENT_DIR}/../../install
 CFLAGS=$(TOP_CFLAGS) -c -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../3rdparty/unixinclude -I .. -I/usr/local/include  -MMD
 CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords $(CFLAGS)
 LDFLAGS=$(TOP_LDFLAGS) -L/usr/local/lib -lpthread 
-LIBNAME=$(shell basename `pwd`)
+LIBNAME=qoslib
 
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
 SLRSA_OBJS := ../slrsa/md5c.o ../slrsa/nn.o ../slrsa/rsa.o ../slrsa/shsc.o ../slrsa/slrsa.o
