@@ -101,7 +101,7 @@ namespace wu
         return true;
     }
 
-    int Memcached::mget( const size_t retrytimes, osl::StringAStringAMap& keyvalues, osl::StringA& errmsg )
+    int Memcached::mget( const size_t retrytimes, StringAStringAMap& keyvalues, osl::StringA& errmsg )
     {
         if ( keyvalues.empty() )
         {
