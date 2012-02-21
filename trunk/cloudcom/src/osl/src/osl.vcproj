@@ -473,6 +473,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\ini_parser_bk.h"
+				>
+			</File>
+			<File
 				RelativePath=".\md5.cc"
 				>
 			</File>
