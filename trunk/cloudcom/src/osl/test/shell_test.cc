@@ -2,47 +2,50 @@
 #include "osl/include/test_common.h"
 
 #include "osl/include/shell.h"
-
-void test1()
+namespace
 {
-    const char* cmd = "cmd";
-    osl::AppShell shell;
-    osl::AppShell::Command command;
-    shell.parseCommand(cmd, command);
 
-    H_TEST_ASSERT(command.getName() == "cmd");
-}
+    void test1()
+    {
+        const char* cmd = "cmd";
+        osl::AppShell shell;
+        osl::AppShell::Command command;
+        shell.parseCommand(cmd, command);
 
-
-void test2()
-{
-    const char* cmd = "cmd ";
-    osl::AppShell shell;
-    osl::AppShell::Command command;
-    shell.parseCommand(cmd, command);
-
-    H_TEST_ASSERT(command.getName() == "cmd");
-}
-
-void test3()
-{
-    const char* cmd = " cmd ";
-    osl::AppShell shell;
-    osl::AppShell::Command command;
-    shell.parseCommand(cmd, command);
-
-    H_TEST_ASSERT(command.getName() == "cmd");
-}
+        H_TEST_ASSERT(command.getName() == "cmd");
+    }
 
 
-void test4()
-{
-    const char* cmd = " cmd";
-    osl::AppShell shell;
-    osl::AppShell::Command command;
-    shell.parseCommand(cmd, command);
+    void test2()
+    {
+        const char* cmd = "cmd ";
+        osl::AppShell shell;
+        osl::AppShell::Command command;
+        shell.parseCommand(cmd, command);
 
-    H_TEST_ASSERT(command.getName() == "cmd");
+        H_TEST_ASSERT(command.getName() == "cmd");
+    }
+
+    void test3()
+    {
+        const char* cmd = " cmd ";
+        osl::AppShell shell;
+        osl::AppShell::Command command;
+        shell.parseCommand(cmd, command);
+
+        H_TEST_ASSERT(command.getName() == "cmd");
+    }
+
+
+    void test4()
+    {
+        const char* cmd = " cmd";
+        osl::AppShell shell;
+        osl::AppShell::Command command;
+        shell.parseCommand(cmd, command);
+
+        H_TEST_ASSERT(command.getName() == "cmd");
+    }
 }
 
 
