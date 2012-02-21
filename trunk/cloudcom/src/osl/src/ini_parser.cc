@@ -14,8 +14,15 @@
 namespace osl
 {
 	//---------------------------------------------------------
-    INIParser::INIParser( bool case_sensitive /*= true*/ ) : case_sensitive_(case_sensitive)
+    INIParser::INIParser( bool case_sensitive /*= true*/ ) 
+        : case_sensitive_(case_sensitive)
+        , stop_parsing_(false)
     {
+    }
+
+    INIParser::~INIParser()
+    {
+        listeners_.clear();
     }
 
 	bool INIParser::parse( const StringA& filename )
@@ -97,7 +104,7 @@ namespace osl
         StringA section = "";
         char section_open = '[';
         char section_end = ']';
-        while ( linebegin )
+        while ( linebegin && !stop_parsing_ )
         {
             linebegin = skipCommit( linebegin );
             linebegin = skipSpaces( linebegin );
@@ -163,6 +170,15 @@ namespace osl
                 }
                 
                 section_map_[section][key] = value;
+                if (!listeners_.empty())
+                {
+                    ListenerList::iterator it(listeners_.begin());
+                    ListenerList::iterator ite(listeners_.end());
+                    for (; it != ite; ++it)
+                    {
+                        (*it)->onValue(*this, section, key, value);
+                    }
+                }
             }
 
             if ( !lineend )
@@ -177,7 +193,16 @@ namespace osl
         return true;
     }
 
-	//---------------------------------------------------------
+    void INIParser::addListener( Listener* pl )
+    {
+        listeners_.push_back(pl);
+    }
+
+    void INIParser::removeListener( Listener* pl )
+    {
+        listeners_.remove(pl);
+    }
+
 	const char* INIParser::get( const StringA& key ) const
 	{
         return get("", key);
@@ -230,6 +255,10 @@ namespace osl
 
         char c = token.nextClean();
         if ( c == '#' )
+        {
+            commit = true;
+        }
+        else if ( c == ';' )
         {
             commit = true;
         }

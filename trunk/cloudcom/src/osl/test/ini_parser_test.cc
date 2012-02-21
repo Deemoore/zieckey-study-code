@@ -815,6 +815,56 @@ namespace
         }
     }
 
+
+    class ParserListener : public osl::INIParser::Listener
+    {
+    public:
+        virtual void onValue(osl::INIParser& parser, const osl::StringA& section, const osl::StringA& key, const osl::StringA& value)
+        {
+            parser.stopParse(true);
+        }
+    };
+
+
+    void test_stop_parse_11()
+    {
+        const char* rawdata = 
+            "             \r\n"
+            " Mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
+            " prOduct=360se\r\n"
+            "             \r\n"
+            " [360sE] \r\n"
+            "             \r\n"
+            "combo=sedl\r\n"
+            "version=4.4\r\n"
+            "             \r\n"
+            "             \r\n"
+            "[A ]  \r\n"
+            "appext=0\r\n"
+            "appext1=1\r\n"
+            "             \r\n"
+            "[B]  \r\n"
+            "             \r\n"
+            "appext=b0\r\n"
+            "appext1=b1\r\n"
+            "             \r\n"
+            "[ c]  \r\n"
+            "             \r\n"
+            "appext=c0\r\n"
+            "appext1=c1\r\n"
+            "             \r\n"
+            "             \r\n"
+            "[hold住]\r\n"
+            "有木有=不想上班的有木有!!!!\r\n";
+
+        size_t rawdatalen = strlen( rawdata );
+        osl::INIParser parser(false);
+        ParserListener listener;
+        parser.addListener(&listener);
+        parser.parse( rawdata, rawdatalen, "\r\n", "=" );
+    }
+
+
 }
 
 TEST_UNIT(ini_parser)
@@ -849,4 +899,9 @@ TEST_UNIT(test_output_9)
 TEST_UNIT(test_chinese_10)
 {
     test_chinese_10();
+}
+
+TEST_UNIT(test_stop_parse_11)
+{
+    test_stop_parse_11();
 }

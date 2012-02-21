@@ -18,14 +18,33 @@ namespace osl
     public:
         typedef Map< StringA, StringA > StringAStringAMap;
         typedef Map< StringA, StringAStringAMap > SectionMap;
+
+        class _EXPORT_OSLIB Listener
+        {
+        public:
+            //! \brief When we parse the INI file, every found of the section/key-value,
+            //!     this interface will be called!
+            //! \param const StringA & section - 
+            //! \param const StringA & key - 
+            //! \param const StringA & value - 
+            //! \return void - 
+            virtual void onValue(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value) = 0;
+        };
+
     public:
         //! \brief 
         //! \param[in] - bool case_sensitive
         INIParser(bool case_sensitive = true);
+        ~INIParser();
+
+        //! \brief Clear the section/key-value map
+        void reset();
 
         //! \brief Query whether it is case sensitive
         //! \return - bool
         bool isCaseSensitive() const { return case_sensitive_; }
+
+        void setCaseSensitive(bool case_sensitive) { case_sensitive_ = case_sensitive; }
 
         //! \brief Parse the INI file
         //! \param const StringA & filename - The INI file name
@@ -51,6 +70,16 @@ namespace osl
         //! \param const char * keyvaluesep - the key/value separator
         //! \return bool - 
         bool parse( const char* data, size_t datalen, const char* linesep, const char* keyvaluesep );
+
+        //! \brief When parsing the INI file, you can call this function to stop the parsing
+        //! \return void - 
+        void stopParse(bool stop_parsing);
+
+        //! \brief 
+        //! \param Listener * pl - 
+        //! \return void - 
+        void addListener( Listener* pl );
+        void removeListener( Listener* pl );
 
         //! \brief Get the value of specified key from the default section
         //! \param const StringA & key - 
@@ -99,7 +128,7 @@ namespace osl
         void setLineSeparator(const StringA& separator) { line_separator_  = separator; }
     private:
 
-        //! \brief Skip the lines which start with '#' or '//' 
+        //! \brief Skip the lines which start with '#' or '//' or ";"
         //! \note Lines are separated by '\n' or '\r\n'
         //! \param const char * szsrc - The source string
         //! \return const char* - The pointer to the next line
@@ -116,10 +145,25 @@ namespace osl
 
     private:
         bool            case_sensitive_;//! case sensitive flag
+        bool            stop_parsing_;  //! stop the parsing 
         SectionMap      section_map_; //! pair<section string, key/value map>
         osl::StringA    kv_separator_;//! The key/value separator
         osl::StringA    line_separator_;//! The key/value separator
+
+        typedef std::list <Listener*> ListenerList;
+        ListenerList    listeners_;
     };
+
+    //---------------------------------------------------------
+    inline void INIParser::reset()
+    {
+        section_map_.clear();
+    }
+
+    inline void INIParser::stopParse(bool stop_parsing)
+    {
+        stop_parsing_ = stop_parsing;
+    }
 
 };// end of namespace osl
 
