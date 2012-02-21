@@ -8,7 +8,7 @@
 namespace
 {
 
-    void test_1()
+    void test_ini_parser_1()
     {
         osl::StringA strTestDataDirPath = osl::Process::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
         osl::StringAList files;
@@ -62,7 +62,7 @@ namespace
         }
     }
 
-    void test_2()
+    void test_ini_parser_2()
     {
         osl::StringA strTestDataDirPath = osl::Process::getBinDir( true ) + "../data/libtestdata/qoslib/iniparser";
         osl::StringAList files;
@@ -118,7 +118,7 @@ namespace
         }
     }
 
-    void test_3()
+    void test_ini_parser_3()
     {
         const char* rawdata = "mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
             "#this is a commit\r\n"
@@ -196,7 +196,7 @@ namespace
     }
 
 
-    void test_4()
+    void test_ini_parser_4()
     {
         const char* rawdata = "mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
             "product=360se\r\n"
@@ -249,7 +249,7 @@ namespace
 
     }
 
-    void test_5()
+    void test_ini_parser_5()
     {
         osl::MemoryDataStream ds;
 #ifdef H_OS_WINDOWS
@@ -270,7 +270,7 @@ namespace
         }
     }
 
-    void test_section_6()
+    void test_ini_parser_section_6()
     {
         const char* rawdata = 
             "             \r\n"
@@ -363,7 +363,7 @@ namespace
         }
     }
 
-    void test_case_senstive_7()
+    void test_ini_parser_case_senstive_7()
     {
         const char* rawdata = 
             "             \r\n"
@@ -479,7 +479,7 @@ namespace
     }
 
 
-    void test_set_8()
+    void test_ini_parser_set_8()
     {
         osl::INIParser parser;
 
@@ -602,7 +602,7 @@ namespace
     }
 
 
-    void test_output_9()
+    void test_ini_parser_output_9()
     {
         osl::INIParser parser;
 
@@ -678,8 +678,8 @@ namespace
         parser.setKVSeparator("=");
         parser.setLineSeparator("\n");
         osl::StringA output = parser.serialize();
-        osl::INIParser test_parser;
-        H_TEST_ASSERT(test_parser.parse(output.data(), output.length()));
+        osl::INIParser test_ini_parser_parser;
+        H_TEST_ASSERT(test_ini_parser_parser.parse(output.data(), output.length()));
 
         {
             std::ostringstream oss;
@@ -750,7 +750,7 @@ namespace
 
     
 
-    void test_chinese_10()
+    void test_ini_parser_chinese_10()
     {
         const char* rawdata = 
             "             \r\n"
@@ -826,7 +826,7 @@ namespace
     };
 
 
-    void test_stop_parse_11()
+    void test_ini_parser_stop_parse_11()
     {
         const char* rawdata = 
             "             \r\n"
@@ -869,39 +869,44 @@ namespace
 
 TEST_UNIT(ini_parser)
 {
-    test_1();
-    test_2();
-    test_3();
-    test_4();
-    test_5();
+    test_ini_parser_1();
+    test_ini_parser_2();
+    test_ini_parser_3();
+    test_ini_parser_4();
+    test_ini_parser_5();
 }
 
 TEST_UNIT(ini_parser_section_6)
 {
-    test_section_6();
+    test_ini_parser_section_6();
 }
 
-TEST_UNIT(test_case_senstive_7)
+TEST_UNIT(test_ini_parser_case_senstive_7)
 {
-    test_case_senstive_7();
+    test_ini_parser_case_senstive_7();
 }
 
-TEST_UNIT(test_set_8)
+TEST_UNIT(test_ini_parser_set_8)
 {
-    test_set_8();
+    test_ini_parser_set_8();
 }
 
-TEST_UNIT(test_output_9)
+TEST_UNIT(test_ini_parser_output_9)
 {
-    test_output_9();
+    test_ini_parser_output_9();
 }
 
-TEST_UNIT(test_chinese_10)
+TEST_UNIT(test_ini_parser_chinese_10)
 {
-    test_chinese_10();
+    test_ini_parser_chinese_10();
 }
 
-TEST_UNIT(test_stop_parse_11)
+TEST_UNIT(test_ini_parser_stop_parse_11)
 {
-    test_stop_parse_11();
+    test_ini_parser_stop_parse_11();
+}
+
+TEST_UNIT(test_ini_parser_iterator_12)
+{
+
 }
