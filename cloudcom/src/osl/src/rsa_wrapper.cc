@@ -9,7 +9,7 @@
 
 namespace osl
 {
-    Rsa::Rsa( const unsigned char* key, const size_t key_len, KeyType keytype ) 
+    OpenSSLRSA::OpenSSLRSA( const unsigned char* key, const size_t key_len, KeyType keytype ) 
         : m_eKeyType( keytype )
         , m_rsa( NULL )
     {
@@ -32,7 +32,7 @@ namespace osl
         BIO_free( b );
     }
 
-    Rsa::~Rsa()
+    OpenSSLRSA::~OpenSSLRSA()
     {
         if ( m_rsa )
         {
@@ -65,7 +65,7 @@ namespace osl
         }
     }//end of anonymous namespace
 
-    bool Rsa::generateKey( const size_t keylen, 
+    bool OpenSSLRSA::generateKey( const size_t keylen, 
         unsigned char public_key[], size_t* public_key_len, 
         unsigned char private_key[] , size_t* private_key_len )
     {
@@ -93,7 +93,7 @@ namespace osl
         return (1 == ret);
     }
 
-    bool Rsa::sign( SignType type, const unsigned char* m, const size_t m_len,
+    bool OpenSSLRSA::sign( SignType type, const unsigned char* m, const size_t m_len,
                     unsigned char* sigret, size_t* siglen )
     {
         assert( m_eKeyType == KT_PRIVATE );
@@ -101,7 +101,7 @@ namespace osl
         return (1 == ret);
     }
 
-    bool Rsa::verify( SignType type, 
+    bool OpenSSLRSA::verify( SignType type, 
                       const unsigned char* m, const size_t m_len,
                       const unsigned char* sigbuf, const size_t siglen )
     {
