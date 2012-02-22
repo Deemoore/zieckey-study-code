@@ -11,7 +11,7 @@
 
 namespace npp
 {
-    class _EXPORT_OSLIB Rsa
+    class _EXPORT_OSLIB OpenSSLRSA
     {
     public:
         enum KeyType
@@ -28,8 +28,8 @@ namespace npp
         };
 
     public:
-        Rsa( const unsigned char* key, const size_t key_len, KeyType keytype );
-        ~Rsa();
+        OpenSSLRSA( const unsigned char* key, const size_t key_len, KeyType keytype );
+        ~OpenSSLRSA();
 
         //! \brief signs the message digest m of size m_len using the private
         //!     key rsa. It stores the signature in sigret
@@ -62,7 +62,7 @@ namespace npp
             const unsigned char* sigbuf, const size_t siglen );
 
 
-        npp::Rsa::KeyType getKeyType() const { return m_eKeyType; }
+        npp::OpenSSLRSA::KeyType getKeyType() const { return m_eKeyType; }
         int getSignLength() const { return RSA_size(m_rsa); }
 
         //! \brief Generate a pair of private key and public key
