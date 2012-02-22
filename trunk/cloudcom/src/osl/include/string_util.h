@@ -254,9 +254,9 @@ namespace osl
         static const String BLANK;
         static const StringW BLANKW;
         static const StringA BLANKA;
-        static const StringA& true_String;   //! "true"
-        static const StringA& false_String;  //! "false"
-        static const StringA& zero_String;   //! "0"
+//         static const StringA& true_String;   //! "true"
+//         static const StringA& false_String;  //! "false"
+//         static const StringA& zero_String;   //! "0"
 
         //! initialize / uninitialize. called by the module initialization.
         static void initialize();
