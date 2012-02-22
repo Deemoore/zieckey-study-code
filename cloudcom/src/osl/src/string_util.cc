@@ -503,12 +503,12 @@ namespace
     }
 }
 
-namespace
-{
-    osl::StringA private_true_String;   //! "true"
-    osl::StringA private_false_String;  //! "false"
-    osl::StringA private_zero_String;   //! "0"
-}
+// namespace
+// {
+//     osl::StringA private_true_String;   //! "true"
+//     osl::StringA private_false_String;  //! "false"
+//     osl::StringA private_zero_String;   //! "0"
+// }
 
 namespace osl
 {
@@ -517,9 +517,9 @@ namespace osl
     const String  StringUtil::BLANK;
     const StringW StringUtil::BLANKW;
     const StringA StringUtil::BLANKA;
-    const StringA& StringUtil::true_String  = private_true_String;   //! "true"
-    const StringA& StringUtil::false_String = private_false_String;  //! "false"
-    const StringA& StringUtil::zero_String  = private_zero_String;   //! "0"
+//     const StringA& StringUtil::true_String  = private_true_String;   //! "true"
+//     const StringA& StringUtil::false_String = private_false_String;  //! "false"
+//     const StringA& StringUtil::zero_String  = private_zero_String;   //! "0"
 
 
 #ifdef __CONVERT__LOCALE__
@@ -529,16 +529,16 @@ namespace osl
     //------------------------------------------------------
     void StringUtil::initialize()
     {
-        private_true_String  = "true";
-        private_false_String = "false";
-        private_zero_String  = "0";
+//         private_true_String  = "true";
+//         private_false_String = "false";
+//         private_zero_String  = "0";
     }
     //------------------------------------------------------
     void StringUtil::uninitialize()
     {
-        private_true_String = BLANKA;
-        private_false_String = BLANKA;
-        private_zero_String = BLANKA;
+//         private_true_String = BLANKA;
+//         private_false_String = BLANKA;
+//         private_zero_String = BLANKA;
     }
     //---------------------------------------------------
     StringW StringUtil::mbsToWs( const StringA::value_type* szVal, osl::u32 nLen )

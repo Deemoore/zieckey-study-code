@@ -142,10 +142,10 @@ namespace LibTest
         H_ASSERT( StringUtil::BLANK == "" );
         H_ASSERT( StringUtil::BLANKA == "" );
         H_ASSERT( StringUtil::BLANKW == L"" );
-
-        H_ASSERT( "true" == StringUtil::true_String );
-        H_ASSERT( "false" == StringUtil::false_String );
-        H_ASSERT( "0" == StringUtil::zero_String );
+// 
+//         H_ASSERT( "true" == StringUtil::true_String );
+//         H_ASSERT( "false" == StringUtil::false_String );
+//         H_ASSERT( "0" == StringUtil::zero_String );
 
 
 
