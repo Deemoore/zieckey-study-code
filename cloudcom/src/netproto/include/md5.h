@@ -1,5 +1,5 @@
-#ifndef _QOSLIB_MD5_H_
-#define _QOSLIB_MD5_H_
+#ifndef _NETPROTO_MD5_H_
+#define _NETPROTO_MD5_H_
 
 #include "netproto/include/inner_pre.h"
 
@@ -55,7 +55,7 @@ namespace npp
     */
 
 
-    class _EXPORT_OSLIB MD5 
+    class _EXPORT_NETPROTO MD5 
     {
     public:
         enum
@@ -350,7 +350,7 @@ namespace npp
             a = rotate_left (a, s) +b;
     }
 
-//     class _EXPORT_OSLIB HMD5
+//     class _EXPORT_NETPROTO HMD5
 //     {
 //     public:
 //         HMD5( void );
@@ -395,6 +395,6 @@ namespace npp
 };//namespace
 
 #endif // end of #if H_PROVIDE_MD5
-#endif // end of #define _QOSLIB_MD5_H_
+#endif // end of #define _NETPROTO_MD5_H_
 
 

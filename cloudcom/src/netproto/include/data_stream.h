@@ -1,5 +1,5 @@
-#ifndef _OSLIB_DATASTREAM_H_
-#define _OSLIB_DATASTREAM_H_
+#ifndef _NETPROTO_DATASTREAM_H_
+#define _NETPROTO_DATASTREAM_H_
 
 #include "netproto/include/inner_pre.h"
 
@@ -11,7 +11,7 @@ namespace npp
 #define H_FREE( p )       if(p){ ::free( (p) ); p = 0;}
 
     //! The class encapsulates data stream in memory.
-    class _EXPORT_OSLIB MemoryDataStream
+    class _EXPORT_NETPROTO MemoryDataStream
     {
     public:
         enum State

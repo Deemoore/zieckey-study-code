@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_OSLIB_EXPORTS;H_OSLIB_TEST"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS"
 				StringPooling="true"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -125,7 +125,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;H_OSLIB_EXPORTS;H_OSLIB_TEST"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
@@ -188,14 +188,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\assert_ext.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\auto_delete.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\config.h"
 				>
 			</File>
@@ -216,23 +208,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\list_impl_linux.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\md5.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\no_copy.h"
+				RelativePath="..\include\openssl_rsa.h"
 				>
 			</File>
 			<File
 				RelativePath="..\include\platform_micros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\rsa_wrapper.h"
 				>
 			</File>
 			<File
@@ -266,7 +250,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\rsa_wrapper.cc"
+				RelativePath=".\openssl_rsa.cc"
 				>
 			</File>
 		</Filter>

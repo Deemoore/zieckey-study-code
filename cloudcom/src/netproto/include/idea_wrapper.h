@@ -1,5 +1,5 @@
-#ifndef QOSLIB_ENCRYPT_UTILITY_H_
-#define QOSLIB_ENCRYPT_UTILITY_H_
+#ifndef NETPROTO_ENCRYPT_UTILITY_H_
+#define NETPROTO_ENCRYPT_UTILITY_H_
 
 #include "netproto/include/config.h"
 #include "netproto/include/platform_micros.h"
@@ -24,7 +24,7 @@ namespace npp
 {
 
 
-    class _EXPORT_OSLIB IDEA
+    class _EXPORT_NETPROTO IDEA
     {
     public:
         //! \brief IDEA encrypt

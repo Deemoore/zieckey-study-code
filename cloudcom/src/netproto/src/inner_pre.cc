@@ -6,7 +6,6 @@
 #ifdef H_WINDOWS_API
 #	pragma comment(lib,"Ws2_32.lib")
 
-
 #if H_PROVIDE_PCRE
 #   ifdef H_DEBUG_MODE
 #		pragma comment(lib, "pcre_d.lib")
@@ -32,7 +31,7 @@
 #endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT )
 
 //openssl
-#if H_PROVIDE_IDEA_ENCRYPT
+#if H_PROVIDE_IDEA_ENCRYPT && !H_PROVIDE_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"idea.lib")

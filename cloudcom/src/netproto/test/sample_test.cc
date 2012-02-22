@@ -1,5 +1,5 @@
 
-#include "osl/include/test_common.h"
+#include "netproto/include/test_common.h"
 
 #include <iostream>
 

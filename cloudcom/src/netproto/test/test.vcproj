@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="osl-test"
-	ProjectGUID="{2357E1F5-99F4-486F-84BF-B0D95B3E0F23}"
+	Name="netproto-test"
+	ProjectGUID="{DEC611A6-D17F-4886-B658-281DD8A14597}"
 	RootNamespace="libtest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -49,7 +49,7 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+				PrecompiledHeaderThrough=""
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -125,8 +125,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -181,19 +181,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ini_parser_test.cc"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\sample_test.cc"
+				RelativePath=".\openssl_rsa_test.cc"
 				>
 			</File>
 			<File
-				RelativePath=".\shell_test.cc"
+				RelativePath=".\sample_test.cc"
 				>
 			</File>
 		</Filter>

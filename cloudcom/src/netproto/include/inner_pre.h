@@ -1,5 +1,5 @@
-#ifndef _NOSLIBPREREQUISITS_H
-#define _NOSLIBPREREQUISITS_H
+#ifndef _NNETPROTOPREREQUISITS_H
+#define _NNETPROTOPREREQUISITS_H
 
 #include "netproto/include/config.h"
 
@@ -157,7 +157,7 @@ namespace npp
 
 }; // end of namespace npp
 
-#endif	//_NOSLIBPREREQUISITS_H
+#endif	//_NNETPROTOPREREQUISITS_H
 
 
 

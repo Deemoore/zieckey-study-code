@@ -4,8 +4,7 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
 
-#include "osl/include/exp.h"
-#include "osl/include/process_ext.h"
+#include "netproto/include/exp.h"
 
 #ifdef H_OS_WINDOWS
 #	ifdef H_DEBUG_MODE
@@ -33,8 +32,9 @@ int main(int argc, char* argv[])
     bool wasSucessful = runner.run();
 
 #ifdef H_OS_WINDOWS
-    osl::Process::pause();
+    system( "pause" );
 #endif
+
     // Return error code 1 if the one of test failed.
     return wasSucessful ? 0 : 1;
 } 
