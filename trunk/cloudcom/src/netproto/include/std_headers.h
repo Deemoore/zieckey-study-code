@@ -2,8 +2,8 @@
 //! \brief  stl头文件包含
 //!	\author Tian Shengcai
 
-#ifndef QOSLIB_STDHEADER_
-#define QOSLIB_STDHEADER_
+#ifndef NETPROTO_STDHEADER_
+#define NETPROTO_STDHEADER_
 
 #include "netproto/include/platform_micros.h"
 

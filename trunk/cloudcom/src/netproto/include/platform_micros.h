@@ -1,6 +1,6 @@
 
-#ifndef OSLIB_PLATFROM_MICROS_H_
-#define OSLIB_PLATFROM_MICROS_H_
+#ifndef NETPROTO_PLATFROM_MICROS_H_
+#define NETPROTO_PLATFROM_MICROS_H_
 
 
 #include <assert.h>
@@ -492,20 +492,20 @@ Compiler version defines: VC6.0 : 1200, VC7.0 : 1300, VC7.1 : 1310, VC8.0 : 1400
 
     //! Module symbol export
 #ifdef H_WINDOWS_API
-#   ifndef  H_STATIC_LIB_OSLIB
-#       ifdef  H_OSLIB_EXPORTS
-#           define _EXPORT_OSLIB __declspec(dllexport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllexport)
+#   ifndef  H_STATIC_LIB_NETPROTO
+#       ifdef  H_NETPROTO_EXPORTS
+#           define _EXPORT_NETPROTO __declspec(dllexport)
+#           define _EXPORT_NETPROTO_C extern "C" __declspec(dllexport)
 #		else
-#           define _EXPORT_OSLIB __declspec(dllimport)
-#           define _EXPORT_OSLIB_C extern "C" __declspec(dllimport)
+#           define _EXPORT_NETPROTO __declspec(dllimport)
+#           define _EXPORT_NETPROTO_C extern "C" __declspec(dllimport)
 #       endif
 #	else
-#       define _EXPORT_OSLIB
-#       define _EXPORT_OSLIB_C
+#       define _EXPORT_NETPROTO
+#       define _EXPORT_NETPROTO_C
 #   endif
 #else
-#   define _EXPORT_OSLIB
+#   define _EXPORT_NETPROTO
 #endif // H_STATIC_LIB_
 
 

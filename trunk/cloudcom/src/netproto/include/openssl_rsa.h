@@ -1,7 +1,8 @@
-#ifndef _QOSLIB_RSA_H_
-#define _QOSLIB_RSA_H_
+#ifndef _NETPROTO_RSA_H_
+#define _NETPROTO_RSA_H_
 
 
+#include "netproto/include/config.h"
 #include "netproto/include/inner_pre.h"
 
 #if H_PROVIDE_RSA
@@ -11,7 +12,7 @@
 
 namespace npp
 {
-    class _EXPORT_OSLIB OpenSSLRSA
+    class _EXPORT_NETPROTO OpenSSLRSA
     {
     public:
         enum KeyType
@@ -28,8 +29,14 @@ namespace npp
         };
 
     public:
-        OpenSSLRSA( const unsigned char* key, const size_t key_len, KeyType keytype );
+        OpenSSLRSA( KeyType keytype );
         ~OpenSSLRSA();
+
+        //! \brief Initialize the rsa
+        //! \param[in] - const unsigned char * key
+        //! \param[in] - const size_t key_len
+        //! \return - bool return true if successfully
+        bool initialize( const unsigned char* key, const size_t key_len );
 
         //! \brief signs the message digest m of size m_len using the private
         //!     key rsa. It stores the signature in sigret
@@ -38,13 +45,15 @@ namespace npp
         //! \param SignType type - denotes the message digest algorithm 
         //!     that was used to generate m. It usually is one of 
         //!     NID_sha1, NID_ripemd160 and NID_md5
-        //! \param[in] const unsigned char* m - 
+        //! \param[in] const void* m - 
         //! \param[in] const size_t m_len - 
         //! \param[out] unsigned char* sigret - 
         //! \param[out] size_t* siglen - 
         //! \return bool - 
-        bool sign( SignType type, const unsigned char* m, const size_t m_len,
+        bool sign( SignType type, const void* m, const size_t m_len,
                    unsigned char* sigret, size_t* siglen );
+        bool sign( SignType type, const void* m, const size_t m_len,
+                   std::string& sigret );
 
 
         //! \brief verifies that the signature sigbuf of size siglen matches
@@ -53,17 +62,24 @@ namespace npp
         //!     that was used to generate the signature. 
         //!     rsa is the signer's public key.
         //! \param[in] SignType type - 
-        //! \param[in] const unsigned char * m - 
+        //! \param[in] const void * m - 
         //! \param[in] const size_t m_len - 
         //! \param[in] const unsigned char * sigbuf - 
         //! \param[in] const size_t siglen - 
         //! \return bool - 
-        bool verify( SignType type, const unsigned char* m, const size_t m_len, 
-            const unsigned char* sigbuf, const size_t siglen );
+        bool verify( SignType type, const void* m, const size_t m_len, 
+                     const void* sigbuf, const size_t siglen );
 
 
-        npp::OpenSSLRSA::KeyType getKeyType() const { return m_eKeyType; }
-        int getSignLength() const { return RSA_size(m_rsa); }
+        npp::OpenSSLRSA::KeyType getKeyType() const 
+        { 
+            return m_eKeyType; 
+        }
+
+        int getSignLength() const 
+        { 
+            return RSA_size(m_rsa); 
+        }
 
         //! \brief Generate a pair of private key and public key
         //!     Key length with keylen < 1024 should be considered insecure.
@@ -78,6 +94,9 @@ namespace npp
         static bool generateKey( const size_t keylen, 
             unsigned char publickey[], size_t* publickey_len,
             unsigned char privatekey[] , size_t* privatekey_len );
+//         static bool generateKey( const size_t keylen, 
+//             std::string& publickey, 
+//             std::string& privatekey);
 
     private:
         KeyType    m_eKeyType;
@@ -89,7 +108,7 @@ namespace npp
 #endif //#if H_PROVIDE_RSA
 
 
-#endif //#ifndef _QOSLIB_RSA_H_
+#endif //#ifndef _NETPROTO_RSA_H_
 
 
 

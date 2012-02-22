@@ -1,5 +1,5 @@
-#ifndef QOSLIB_STD_STREAM_
-#define QOSLIB_STD_STREAM_
+#ifndef NETPROTO_STD_STREAM_
+#define NETPROTO_STD_STREAM_
 
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/data_stream.h"

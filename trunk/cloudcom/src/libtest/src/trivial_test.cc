@@ -948,25 +948,25 @@ namespace LibTest
         unsigned char privatekey[BUF_SIZE] = {0};
         size_t publickey_len = 0;
         size_t privatekey_len = 0;
-        bool ret = osl::Rsa::generateKey( KEY_LEN, publickey, &publickey_len, privatekey, &privatekey_len );
-        std::cout << "osl::Rsa::generateKey return="  << ret << std::endl;
+        bool ret = osl::OpenSSLRSA::generateKey( KEY_LEN, publickey, &publickey_len, privatekey, &privatekey_len );
+        std::cout << "osl::OpenSSLRSA::generateKey return="  << ret << std::endl;
         if ( !ret )
         {
             return;
         }
         
-        osl::Rsa rsa_private( privatekey, privatekey_len, osl::Rsa::KT_PRIVATE );
-        osl::Rsa rsa_public ( publickey,  publickey_len,  osl::Rsa::KT_PUBLIC );
+        osl::OpenSSLRSA rsa_private( privatekey, privatekey_len, osl::OpenSSLRSA::KT_PRIVATE );
+        osl::OpenSSLRSA rsa_public ( publickey,  publickey_len,  osl::OpenSSLRSA::KT_PUBLIC );
         const char* data = "asdfjlasjflasjdflajsdlkfjasdlkfajsdlkfjas;dlkf";
         size_t data_len = strlen(data);
 
         unsigned char sigret[2048] = {0};
         size_t siglen  = 0;
 
-        ret = rsa_private.sign( osl::Rsa::ST_NID_sha1, (unsigned char*)data, data_len, sigret, &siglen );
-        std::cout << "osl::Rsa::sign return="  << ret << std::endl;
-        ret = rsa_public.verify( osl::Rsa::ST_NID_sha1, (unsigned char*)data, data_len, sigret, siglen );
-        std::cout << "osl::Rsa::verify return="  << ret << std::endl;
+        ret = rsa_private.sign( osl::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, &siglen );
+        std::cout << "osl::OpenSSLRSA::sign return="  << ret << std::endl;
+        ret = rsa_public.verify( osl::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, siglen );
+        std::cout << "osl::OpenSSLRSA::verify return="  << ret << std::endl;
 #endif
     }
 
