@@ -307,6 +307,52 @@ namespace npp
             return ( *this );
         }
 
+        template< typename _Kt >
+        MemoryDataStream& InternalReadVector( std::vector< _Kt >& val )
+        {
+            // check whether the file is bad.
+            if ( isReadBad() )
+            {
+                return *this;
+            }
+
+            // 1. read length
+            u32 nSize = 0;
+            *this >> ( u32& )nSize;
+
+            if ( getReadableSize() < nSize )
+            {
+                setStates( S_READ_BAD );
+                return *this;
+            }
+
+            val.resize( nSize );
+
+            for ( u32 i = 0; i < nSize; ++i )
+            {
+                if ( getReadableSize() == 0 )
+                {
+                    // set bad flag.
+                    setStates( S_READ_BAD );
+
+                    //
+                    val.clear();
+                    break;
+                }
+
+                *this >> ( _Kt& )val[i];
+            }
+
+            return *this;
+        }
+
+        template< typename _Kt >
+        inline MemoryDataStream& InternalWrite( const std::vector< _Kt >& val )
+        {
+            writeSimpleVector( val );
+            return *this;
+        }
+
     private:
 
         u8*                      m_pData;   //! Buffer to hold all the data.It can
@@ -942,8 +988,8 @@ namespace npp
     inline MemoryDataStream& MemoryDataStream::operator<<( const std::vector< _Kt >& val )
     {
         // 1. write length
-        typedef  typename stdext::bool_type<stdext::is_pod<_Kt>::value>::type _Kt_type;
-        return InternalWrite( val , _Kt_type() );
+        //typedef  typename stdext::bool_type<stdext::is_pod<_Kt>::value>::type _Kt_type;
+        return InternalWrite( val );
     }
 
     template< typename _Kt >
@@ -1102,8 +1148,7 @@ namespace npp
     template< typename _Kt >
     inline MemoryDataStream& MemoryDataStream::operator>>( std::vector< _Kt >& val )
     {
-        typedef  typename stdext::bool_type<stdext::is_pod<_Kt>::value>::type _Kt_type;
-        return InternalReadVector( val , _Kt_type() );
+        return InternalReadVector( val );
     }
 
     template<class T>
