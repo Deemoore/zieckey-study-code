@@ -66,16 +66,17 @@ namespace osl
         //! Sets stats of the file.
         void setStates( unsigned int nBits );;
 
-        //! \warning 废弃的接口，请调用 readRawFile(const StringA& strFileName)
+        //! \warning deprecated interface, please use 
+        //!     <code>readRawFile(const std::string& strFileName)</code> instead
         //! Open raw file and read all the file data to this memory data stream
-        //! \note It is only a helper method. path splittor should be "/"
+        //! \note It is only a helper method. path splitter should be "/"
         bool openRawFile( const StringA& strFileName );
 
         //! Open the raw file and read all the file data to this memory data stream
-        //! \note It is only a helper method. path splittor should be "/"
+        //! \note It is only a helper method. path splitter should be "/"
         bool readRawFile( const StringA& strFileName );
 
-        //! \brief: Helper method to save data to a disk file. path splittor should be "/"
+        //! \brief: Helper method to save data to a disk file. path splitter should be "/"
         //! \param[in]: const StringA & strFilePathName, the path name of the file, it can include dir path
         //! \return: bool
         bool saveToFile( const StringA& strFilePathName );
@@ -83,14 +84,13 @@ namespace osl
 
         /** read data form data stream, the result is in buf
         *  @remark The read count is in len,it may be lesser than the buf_len,
-        *          the len will be zero if read nothing or there is an error occured
+        *          the len will be zero if read nothing or there is an error occurred
         *  @param  buf: the buffer which the result will be stored
         *  @param  buf_len: the buf length in byte
         *  @return the return value is true if read succeed, else false
         */
         bool read( void* buf, u32 buf_len );
 		
-
 
         /** Read 4 bytes from this data stream, the data in this stream is Little Endian
 		*   In little endian CPU system:
