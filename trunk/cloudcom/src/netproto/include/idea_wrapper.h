@@ -27,6 +27,25 @@ namespace npp
     class _EXPORT_NETPROTO IDEA
     {
     public:
+        IDEA();
+
+        bool initialize(unsigned char key[16]);
+        bool initialize(const std::string& key);
+
+        //! \brief IDEA encrypt
+        //! \param const unsigned char*  szSource - the input source data
+        //! \param const unsigned int nSourceLen - the source data length
+        //! \param npp::MemoryDataStream & dataEncrypted - the encrypted data is stored here
+        //! \return bool - true if encrypts successfully
+        bool encrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataEncrypted );
+
+        //! \brief IDEA decrypt
+        //! \param const unsigned char*  szSource - the input source data
+        //! \param const unsigned int nSourceLen - the source data length
+        //! \param npp::MemoryDataStream & dataDecrypted - the decrypted data is stored here
+        //! \return bool - true if decrypts successfully
+        bool decrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataDecrypted );
+    public:
         //! \brief IDEA encrypt
         //! \param const unsigned char*  szSource - the input source data
         //! \param const unsigned int nSourceLen - the source data length
@@ -59,6 +78,13 @@ namespace npp
         //!      The memory MUST BE allocated before you call this.
         static void encrypt( const unsigned char* in_buf, const unsigned int in_buf_len, const IDEA_KEY_SCHEDULE* key, mem_data_t* out_data );
         static void decrypt( const unsigned char* in_buf, const unsigned int in_buf_len, const IDEA_KEY_SCHEDULE* key, mem_data_t* out_data );
+
+
+
+    private:
+        std::string       m_original_key;
+        IDEA_KEY_SCHEDULE m_encrypt_key;
+        IDEA_KEY_SCHEDULE m_decrypt_key;
     };
 } // end of namespace ext
 

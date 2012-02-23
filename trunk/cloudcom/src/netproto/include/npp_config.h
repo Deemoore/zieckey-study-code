@@ -8,7 +8,7 @@
 
 namespace npp
 {
-    typedef std::map<int, IDEA_KEY_SCHEDULE> IDEAMap;
+    typedef std::map<int, IDEA> IDEAMap;
 #ifdef H_PROVIDE_RSA
     typedef std::map<int, OpenSSLRSA* > OpenSSLRSAMap;
 #endif
