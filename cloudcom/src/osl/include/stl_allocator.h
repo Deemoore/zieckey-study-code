@@ -4,6 +4,7 @@
 #define QOSLIB_STLALLOCATOR_
 
 #include "osl/include/malloc_micro.h"
+#include "osl/include/std_headers.h"
 
 namespace osl
 {
