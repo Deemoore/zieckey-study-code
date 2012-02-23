@@ -415,6 +415,11 @@ namespace wu
         return get( key.c_str(), key.length(), retrytimes, rvalue, errmsg );
     }
 
+    bool Memcached::get( const size_t retrytimes, const osl::StringA& key, osl::StringA& value, osl::StringA& errmsg )
+    {
+        return get(key, retrytimes, value, errmsg);
+    }
+
     bool Memcached::set( const char* key,   const size_t keylen, 
             const void* value, const size_t valuelen, osl::StringA& errmsg )
     {
