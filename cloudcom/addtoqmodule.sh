@@ -1,40 +1,39 @@
 #!/usr/local/bin/bash
 
-
 declare workdir=$(pwd)
 
 rm -rf qmodule/storage_cluster 		
 
-version=`awk -F, '{w=match($3,"weizili@360.cn"); if(w) print $2 }' configure.in`
+#version=`awk -F, '{w=match($3,"weizili@360.cn"); if(w) print $2 }' configure.in`
+version=1.0.17
 echo "packet version:$version";
 
-mkdir -p qmodule/storage_cluster/lib
-mkdir -p qmodule/storage_cluster/include
-mkdir -p qmodule/storage_cluster/include/slrsa/
-mkdir -p qmodule/storage_cluster/include/snappy/
-mkdir -p qmodule/storage_cluster/include/idea/
-mkdir -p qmodule/storage_cluster/include/qoslib/include
-mkdir -p qmodule/storage_cluster/include/qnetworklib/include
-mkdir -p qmodule/storage_cluster/include/qapputillib/include
+mkdir -p qmodule/lib
+mkdir -p qmodule/include
+mkdir -p qmodule/include/slrsa/
+mkdir -p qmodule/include/idea/
+mkdir -p qmodule/include/osl/include
+mkdir -p qmodule/include/net/include
+mkdir -p qmodule/include/apputil/include
+mkdir -p qmodule/include/wraputil/include
 
-cp -rf debug/lib/* qmodule/storage_cluster/lib
+cp -rf ./install/lib/* qmodule/lib
 
-cp -rf src/snappy/*.h							qmodule/storage_cluster/include/snappy
-cp -rf src/slrsa/*.h							qmodule/storage_cluster/include/slrsa
-cp -rf src/idea/*.h								qmodule/storage_cluster/include/idea
-cp -rf src/e_leveldb/c_src/leveldb/include/*	qmodule/storage_cluster/include/
-cp -rf src/qoslib/include/*.h					qmodule/storage_cluster/include/qoslib/include
-cp -rf src/qnetworklib/include/*.h				qmodule/storage_cluster/include/qnetworklib/include
-cp -rf src/qapputillib/include/*.h				qmodule/storage_cluster/include/qapputillib/include
-cp -rf src/q3rdparty/include/*					qmodule/storage_cluster/include
-cp -rf src/q3rdparty/unixinclude/*				qmodule/storage_cluster/include
+cp -rf src/slrsa/*.h							qmodule/include/slrsa
+cp -rf src/idea/*.h								qmodule/include/idea
+cp -rf src/osl/include/*.h					    qmodule/include/osl/include
+cp -rf src/net/include/*.h				        qmodule/include/net/include
+cp -rf src/apputil/include/*.h				    qmodule/include/apputil/include
+cp -rf src/wraputil/include/*.h				    qmodule/include/wraputil/include
+cp -rf src/3rdparty/include/*					qmodule/include
+cp -rf src/3rdparty/unixinclude/*				qmodule/include
 
-rm -rf qmodule/storage_cluster/include/qdb/src
-rm -rf qmodule/storage_cluster/lib/centeroslib
+rm -rf qmodule/include/qdb/src
+rm -rf qmodule/lib/centeroslib
 
-cd qmodule/storage_cluster
+cd qmodule
 find . -name .svn | xargs rm -rf
 find . -name *.o | xargs rm -rf
-cd ../
-qmodule_add CloudQueryEngine $version storage_cluster
+
+qmodule_add CloudQueryEngine $version .
 
