@@ -1,6 +1,9 @@
 #ifndef QOSLIB_STL_EX_
 #define QOSLIB_STL_EX_
 
+#include "osl/include/std_headers.h"
+#include "osl/include/type_traits_ext.h"
+
 //! @warning inner header file
 
 namespace osl
