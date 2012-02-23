@@ -12,6 +12,33 @@ namespace npp
 {
 #define CCWEB_ALIGN H_ALIGN
 
+    IDEA::IDEA()
+    {
+    }
+
+    bool IDEA::initialize( unsigned char key[16] )
+    {
+        return initialize(std::string((char*)key, 16));
+    }
+
+    bool IDEA::initialize( const std::string& key )
+    {
+        ::idea_set_encrypt_key( (unsigned char*)key.data(), &m_encrypt_key );
+        ::idea_set_decrypt_key( &m_encrypt_key, &m_decrypt_key);
+        m_original_key = key;
+        return true;
+    }
+
+    bool IDEA::encrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataEncrypted )
+    {
+        return IDEA::encrypt(szSource, nSourceLen, m_encrypt_key, dataEncrypted);
+    }
+
+    bool IDEA::decrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataDecrypted )
+    {
+        return IDEA::decrypt(szSource, nSourceLen, m_decrypt_key, dataDecrypted);
+    }
+
     bool IDEA::encrypt( const unsigned char* szSource, const unsigned int nSourceLen, const std::string& strEncryptKey, npp::MemoryDataStream& dataEncrypted )
     {
         if ( strEncryptKey.length() != 16 )
