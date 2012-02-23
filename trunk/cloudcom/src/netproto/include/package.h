@@ -30,10 +30,8 @@ namespace npp
     class _EXPORT_NETPROTO Pakcet
     {
     public:
-
-        /**
-        * The header information struct of the data packet 
-        */
+        //! The header information struct of the data packet 
+#pragma pack(push,1)
         struct NetHeader
         {
             uint8_t  header_len; /** in bytes */
@@ -44,7 +42,6 @@ namespace npp
             uint8_t  packet_count;
             uint16_t preserve;   /** big-endian, preserved, set to 0x0000 */
         };
-
 
         struct NppHeader
         {
@@ -68,6 +65,9 @@ namespace npp
             };
             uint8_t digest_sign_len;/** The length of the sign and digest */
         };
+#pragma pack(pop)
+
+
     };
 }
 
