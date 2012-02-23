@@ -5,6 +5,8 @@
 
 #include "osl/include/malloc_micro.h"
 
+#include <algorithm>
+
 namespace osl
 {
 
