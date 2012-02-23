@@ -269,6 +269,17 @@ namespace json
         return parse( &x );
     }
 
+
+    bool JSONObject::empty() const
+    {
+        return m_mapObjectPtr.empty();
+    }
+
+    size_t JSONObject::size() const
+    {
+        return m_mapObjectPtr.size();
+    }
+
     bool JSONObject::put( const osl::StringA& key, Object* value )
     {
         if ( !value )

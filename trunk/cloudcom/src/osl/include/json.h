@@ -521,6 +521,13 @@ namespace json
 #endif
         void  getStringArray( osl::StringAVector& vArray, const osl::StringA& valDefault = osl::StringUtil::BLANKA )const;
 
+
+        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
+        bool empty() const
+        {
+            return m_list.empty();
+        }
+
         /**
          * Get the number of elements in the JSONArray, included nulls.
          * @return The length (or size).
@@ -735,11 +742,18 @@ namespace json
         //! Load, Deserialize. load from data stream to convert it to a json object
         _EXPORT_OSLIB friend osl::MemoryDataStream& operator >> ( osl::MemoryDataStream& file, JSONObject& val );
 
-        //! Save, Serializer. save the json object in the data stream
+        //! Save, Serialize. save the json object in the data stream
         _EXPORT_OSLIB friend osl::MemoryDataStream& operator << ( osl::MemoryDataStream& ___OUT file, const JSONObject& val );
 
 
     public:
+        
+        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
+        bool empty() const;
+
+        //! Returns the number of elements in the this JSON object
+        size_t size() const;
+
         /**
          * Get the object value associated with key value.
          * @param key  the key value
