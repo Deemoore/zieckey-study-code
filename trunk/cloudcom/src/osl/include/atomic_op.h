@@ -10,6 +10,10 @@
 
 #include "osl/include/platform_micros.h"
 
+#ifdef H_OS_WINDOWS
+#include <windows.h>
+#endif
+
 namespace osl
 {
 #ifdef H_OS_WINDOWS
