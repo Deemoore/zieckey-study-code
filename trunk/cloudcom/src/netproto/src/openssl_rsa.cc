@@ -6,49 +6,49 @@
 
 namespace npp
 {
-    OpenSSLRSA::OpenSSLRSA( KeyType keytype ) 
-        : m_eKeyType( keytype )
-        , m_rsa( NULL )
+    OpenSSLRSA::OpenSSLRSA() 
+        : m_priavte_rsa( NULL ), m_public_rsa(NULL)
     {
         
     }
 
     OpenSSLRSA::~OpenSSLRSA()
     {
-        if ( m_rsa )
+        if ( m_priavte_rsa )
         {
-            RSA_free( m_rsa );
+            RSA_free( m_priavte_rsa );
+        }
+
+        if (m_public_rsa)
+        {
+            RSA_free(m_public_rsa);
         }
     }
 
-    bool OpenSSLRSA::initialize( const unsigned char* key, const size_t key_len )
+    bool OpenSSLRSA::initialize( const unsigned char* private_key, const size_t private_key_len, const unsigned char* public_key, const size_t public_key_len )
     {
-        BIO* b = BIO_new( BIO_s_mem() );
-        BIO_write( b, key, key_len );
+        assert(!m_public_rsa && !m_priavte_rsa);
 
-        if( m_eKeyType == KT_PRIVATE )  
         {
-            m_rsa = d2i_RSAPrivateKey_bio( b, NULL );
-        }
-        else if( m_eKeyType == KT_PUBLIC )
-        {
-            m_rsa = d2i_RSAPublicKey_bio( b, NULL );
-        }
-        else
-        {
-            assert( false && "key type error.\n" );
+            BIO* b = BIO_new( BIO_s_mem() );
+            BIO_write( b, private_key, private_key_len );
+            m_priavte_rsa = d2i_RSAPrivateKey_bio( b, NULL );
+            BIO_free( b );
         }
 
-        BIO_free( b );
+        {
+            BIO* b = BIO_new( BIO_s_mem() );
+            BIO_write( b, public_key, public_key_len );
+            m_public_rsa = d2i_RSAPublicKey_bio( b, NULL );
+            BIO_free( b );
+        }
 
-        if (m_rsa)
+        if (m_public_rsa && m_priavte_rsa)
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     namespace
@@ -133,8 +133,7 @@ namespace npp
     bool OpenSSLRSA::sign( SignType type, const void* m, const size_t m_len,
                     unsigned char* sigret, size_t* siglen )
     {
-        assert( m_eKeyType == KT_PRIVATE );
-        int ret = RSA_sign( type, (const unsigned char*)m, (unsigned int)m_len, sigret, (unsigned int*)siglen, m_rsa );
+        int ret = RSA_sign( type, (const unsigned char*)m, (unsigned int)m_len, sigret, (unsigned int*)siglen, m_priavte_rsa );
         return (1 == ret);
     }
 
@@ -156,8 +155,7 @@ namespace npp
                       const void* m, const size_t m_len,
                       const void* sigbuf, const size_t siglen )
     {
-        assert( m_eKeyType == KT_PUBLIC );
-        int ret = RSA_verify( type, (const unsigned char*)m, (unsigned int)m_len, (unsigned char*)(sigbuf), (unsigned int)siglen, m_rsa );
+        int ret = RSA_verify( type, (const unsigned char*)m, (unsigned int)m_len, (unsigned char*)(sigbuf), (unsigned int)siglen, m_public_rsa );
         return (1 == ret);
     }
 } //end of namespace npp

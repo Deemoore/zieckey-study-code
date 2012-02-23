@@ -21,11 +21,8 @@ namespace
             return;
         }
 
-        npp::OpenSSLRSA rsa_private( npp::OpenSSLRSA::KT_PRIVATE );
-        H_TEST_ASSERT(rsa_private.initialize(privatekey, privatekey_len));
-
-        npp::OpenSSLRSA rsa_public( npp::OpenSSLRSA::KT_PUBLIC );
-        H_TEST_ASSERT(rsa_public.initialize(publickey,  publickey_len));
+        npp::OpenSSLRSA rsa;
+        H_TEST_ASSERT(rsa.initialize(privatekey, privatekey_len, publickey,  publickey_len));
 
         const char* data = "asdfjlasjflasjdflajsdlkfjasdlkfajsdlkfjas;dlkf";
         size_t data_len = strlen(data);
@@ -33,14 +30,14 @@ namespace
         unsigned char sigret[2048] = {0};
         size_t siglen  = 0;
 
-        ret = rsa_private.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, &siglen );
+        ret = rsa.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, &siglen );
         H_TEST_ASSERT(ret);
-        ret = rsa_public.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, siglen );
+        ret = rsa.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, siglen );
         H_TEST_ASSERT(ret);
 
         std::string ss;
-        H_TEST_ASSERT(rsa_private.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss ));
-        H_TEST_ASSERT(rsa_public.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss.data(), ss.size() ));
+        H_TEST_ASSERT(rsa.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss ));
+        H_TEST_ASSERT(rsa.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss.data(), ss.size() ));
     }
 }
 

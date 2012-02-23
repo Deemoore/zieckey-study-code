@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\idea_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cc"
 				>
 			</File>
@@ -194,6 +198,10 @@
 			</File>
 			<File
 				RelativePath=".\sample_test.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\simple_rsa_test.cc"
 				>
 			</File>
 		</Filter>
