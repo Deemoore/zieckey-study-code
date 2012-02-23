@@ -200,10 +200,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\idea_wrapper.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\inner_pre.h"
 				>
 			</File>
@@ -212,19 +208,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\npp_config.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\openssl_rsa.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\platform_micros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\slrsa_wrapper.h"
 				>
 			</File>
 			<File
@@ -246,10 +230,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\idea_wrapper.cc"
-				>
-			</File>
-			<File
 				RelativePath=".\inner_pre.cc"
 				>
 			</File>
@@ -257,12 +237,36 @@
 				RelativePath=".\md5.cc"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="npp"
+			>
+			<File
+				RelativePath=".\idea_wrapper.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\idea_wrapper.h"
+				>
+			</File>
 			<File
 				RelativePath=".\npp_config.cc"
 				>
 			</File>
 			<File
+				RelativePath="..\include\npp_config.h"
+				>
+			</File>
+			<File
 				RelativePath=".\openssl_rsa.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\openssl_rsa.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\slrsa_wrapper.h"
 				>
 			</File>
 		</Filter>
