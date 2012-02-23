@@ -1212,12 +1212,12 @@ namespace json
     //------------------------------------------------------------
     bool JSONObject::loadFrom( osl::MemoryDataStream& ___IN file )
     {
-        osl::u32 size = 0;
-        file >> size;
+        osl::u32 sz = 0;
+        file >> sz;
         Object* pObject = NULL;
         osl::StringA key;
 
-        for ( osl::u32 i = 0; i < size; i++ )
+        for ( osl::u32 i = 0; i < sz; i++ )
         {
             file >> ( osl::StringA& )key; //key
 

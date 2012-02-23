@@ -18,6 +18,8 @@ TOP_LDFLAGS=""
 
 all:
 	for t in $(SUBDIRS); do $(MAKE) TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; $(MAKE) install -C $$t; done
+	cp install/lib/libwraputil.* ~/lib
+	cp install/lib/libnet.* ~/lib
 
 check: all
 	for t in $(TESTDIRS); do $(MAKE) check -C $$t ; done
