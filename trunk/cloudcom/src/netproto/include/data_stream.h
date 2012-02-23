@@ -55,9 +55,10 @@ namespace npp
         //! Sets stats of the file.
         void setStates( unsigned int nBits );;
 
-        //! \warning 废弃的接口，请调用 readRawFile(const std::string& strFileName)
+        //! \warning deprecated interface, please use 
+        //!     <code>readRawFile(const std::string& strFileName)</code> instead
         //! Open raw file and read all the file data to this memory data stream
-        //! \note It is only a helper method. path splittor should be "/"
+        //! \note It is only a helper method. path splitter should be "/"
         bool openRawFile( const std::string& strFileName );
 
         //! Open the raw file and read all the file data to this memory data stream

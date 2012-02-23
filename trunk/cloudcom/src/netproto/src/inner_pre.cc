@@ -41,7 +41,13 @@
 #endif
 #endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT )
 
-
+#ifdef H_WINDOWS_API
+#	ifdef H_DEBUG_MODE
+#		pragma comment(lib,"slrsa.lib")
+#	else
+#		pragma comment(lib,"slrsa.lib")
+#	endif
+#endif
 
 
 
