@@ -266,6 +266,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\packet.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\packet.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\slrsa_wrapper.h"
 				>
 			</File>
