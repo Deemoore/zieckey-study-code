@@ -57,6 +57,7 @@ namespace wu
          */
         bool get( const char* key, const size_t keylen, const size_t retrytimes, osl::StringA& value, osl::StringA& errmsg );
         bool get( const osl::StringA& key, const size_t retrytimes, osl::StringA& value, osl::StringA& errmsg );
+        bool get( const size_t retrytimes, const osl::StringA& key, osl::StringA& value, osl::StringA& errmsg );
 
         /**
          * @brief Set a key/value pair to memcached
@@ -66,7 +67,7 @@ namespace wu
          * @param[out] StringA& errmsg - the error message will stored here, 
          *  if there is any error happened.
          * @return false, when something error happened
-         *         true, if set the valuesuccessfully
+         *         true, if set the value successfully
          */
         bool set( const char* key,   const size_t keylen, 
                   const void* value, const size_t valuelen, osl::StringA& errmsg );
@@ -82,7 +83,7 @@ namespace wu
          * @param[out] StringA& errmsg - the error message will stored here, 
          *  if there is any error happened.
          * @return false, when something error happened
-         *         true, if set the valuesuccessfully
+         *         true, if set the value successfully
          */
         bool erase( const osl::StringA& key, osl::StringA& errmsg );
         bool erase( const char* key, const size_t keylen, osl::StringA& errmsg );

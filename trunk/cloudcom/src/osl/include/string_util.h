@@ -148,16 +148,16 @@ namespace osl
             std::transform( str.begin(), str.end(), str.begin(), towupper );
         }
 
-        //! 比较字符串
-        //! \param bCaseSensitive true 为大小写敏感,false为忽略大小写
+        //! string compare
+        //! \param bCaseSensitive true If we compare the string with case sensitively
         static bool equals( const StringA& str1, const StringA& str2, bool bCaseSensitive = true );
         
-        //! \brief 忽略大小写比较字符串
+        //! \brief string compare ignoring case sensitively
         static bool equalsIgnoreCase( const StringA& str1, const StringA& str2 );
 
-        //! \brief     数据到字符串的转换
-        //! \param[in] val 数据
-        //! \return    转换之后的字符串
+        //! \brief  Convert a bool/int/float number to a string
+        //! \param[in] the number
+        //! \return  the string
         static StringA valueOf( bool val );
         static StringA valueOf( f64 val );  //!< \copydoc StringUtil::valueOf(bool)
         static StringA valueOf( s64 val );  //!< \copydoc StringUtil::valueOf(bool)
@@ -179,8 +179,9 @@ namespace osl
         static StringA valueOf( s32* pEles, u32 nCount ); //!< \copydoc StringUtil::valueOf(f64*,u32)
         static StringA valueOf( u8* pEles, u32 nCount );  //!< \copydoc StringUtil::valueOf(f64*,u32)
 
-        //! \brief     字符串转化成指定类型
-        //! \param[in] 字符串
+        //! \brief     Parses the string val interpreting its content 
+        //!     as an bool/int/float number, which is returned 
+        //! \param[in] the string
         static bool toBool( const StringA& val );
         static s64  toS64(  const StringA& val );   //!< \copydoc StringUtil::toBool
         static s32  toS32(  const StringA& val );   //!< \copydoc StringUtil::toBool
@@ -213,18 +214,18 @@ namespace osl
         
         //! \brief     Returns whether the string begins with the pattern passed in.
         //! \param[in] pattern The pattern to compare with.
-        //! \param[in] bCaseSensitive true 为大小写敏感,false为忽略大小写
+        //! \param[in] bCaseSensitive true case sensitive, false ignore the case
         static bool startsWith( const StringA& str, const StringA& pattern, bool bCaseSensitive = true );
         static bool startsWith( const StringW& str, const StringW& pattern, bool bCaseSensitive = true );//!< \copydoc StringUtil::startsWith(const StringA,const StringA&,bool)
 
         //! \brief     Returns whether the string ends with the pattern passed in.
         //! \param[in] pattern The pattern to compare with.
-        //! \param[in] bCaseSensitive true 为大小写敏感,false为忽略大小写
+        //! \param[in] bCaseSensitive true case sensitive, false ignore the case
         static bool endsWith( const StringA& str, const StringA& pattern, bool bCaseSensitive = true );
         static bool endsWith( const StringW& str, const StringW& pattern, bool bCaseSensitive = true );//!< \copydoc StringUtil::endsWith(const StringA,const StringA&,bool)
 
 
-        /** Simple pattern-matching routine allowing a wildcard pattern.
+        /** Simple pattern-matching routine allowing a wild card pattern.
         @param str String to test
         @param pattern Pattern to match against; which can include simple '*' wildcards
         @param bCaseSensitive Whether the match is case sensitive or not
@@ -236,7 +237,7 @@ namespace osl
         //!	\brief Test whether the a string is contains another char or string.
         //!	\param motherStr, the string to test
         //!	\param pattern, the pattern string or char to find
-        //!	\param bCaseSensitive true 为大小写敏感,false为忽略大小写
+        //! \param[in] bCaseSensitive true case sensitive, false ignore the case
         //!	\return bool, return true if the occurrence of pattern within the motherStr or false
         static bool contains( const StringA& motherStr, char pattern, bool bCaseSensitive = true );
         static bool contains( const StringW& motherStr, wchar_t pattern, bool bCaseSensitive = true );//!< \copydoc StringUtil::contains(const StringA&,char,bool)
