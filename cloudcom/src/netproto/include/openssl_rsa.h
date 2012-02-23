@@ -76,9 +76,9 @@ namespace npp
             return m_eKeyType; 
         }
 
-        int getSignLength() const 
+        size_t getSignLength() const 
         { 
-            return RSA_size(m_rsa); 
+            return (size_t)RSA_size(m_rsa); 
         }
 
         //! \brief Generate a pair of private key and public key

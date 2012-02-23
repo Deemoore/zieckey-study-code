@@ -9,6 +9,7 @@
 
 //Define to 1 if you want to use RSA algorithm, using openssl
 #define H_PROVIDE_RSA 1
+#define H_USING_OPENSSL_RSA H_PROVIDE_RSA
 
 //Define to 1 if you want to use BASE64 algorithm
 #define H_PROVIDE_BASE64 1

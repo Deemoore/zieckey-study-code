@@ -212,11 +212,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\npp_config.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\openssl_rsa.h"
 				>
 			</File>
 			<File
 				RelativePath="..\include\platform_micros.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\slrsa_wrapper.h"
 				>
 			</File>
 			<File
@@ -247,6 +255,10 @@
 			</File>
 			<File
 				RelativePath=".\md5.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\npp_config.cc"
 				>
 			</File>
 			<File
