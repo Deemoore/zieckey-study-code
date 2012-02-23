@@ -266,11 +266,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\packet.cc"
+				RelativePath=".\package.cc"
 				>
 			</File>
 			<File
-				RelativePath="..\include\packet.h"
+				RelativePath="..\include\package.h"
 				>
 			</File>
 			<File
