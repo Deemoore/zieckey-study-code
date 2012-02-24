@@ -10,7 +10,7 @@ SOURCE_DIR=$(CURRENT_DIR)/src
 PREFIX=${CURRENT_DIR}/../../../install
 CFLAGS=-g -O3 -c -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../q3rdparty/unixinclude -I../.. -I/usr/local/include -MMD
 CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-L/usr/local/lib $(PREFIX)/lib/libqoslib.a -lpthread -lcppunit
+LDFLAGS=-L/usr/local/lib $(PREFIX)/lib/libnetproto.a -lpthread -lcppunit -lcrypto
 DIRNAME=$(shell basename `pwd`)
 
 SRCS := $(wildcard *.cc)
