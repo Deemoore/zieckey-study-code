@@ -70,5 +70,5 @@ install: $(TARGET_A) $(TARGET_SO)
 	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
 
 clean:
-	rm -rf src/*.o src/*.d $(OBJS) $(DEPS) $(TARGET_SO) $(TARGET_A)
+	rm -rf src/*.o src/*.d test/*.d test/*.o $(OBJS) $(DEPS) $(TARGET_SO) $(TARGET_A)
 

@@ -20,16 +20,16 @@ namespace npp
         return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
     }
 
-    bool MessagePacker::Pack( const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
+    bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
     {
         if (!message_unpacker_)
         {
-            return pack_v1(data, data_len, packed_data_buf, packed_data_buf_len);
+            return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
         }
 
         if (message_unpacker_->net_header().version() == 1)
         {
-            return pack_v1(data, data_len, packed_data_buf, packed_data_buf_len);
+            return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
         }
         else
         {
@@ -52,7 +52,7 @@ namespace npp
         return 128;
     }
 
-    bool MessagePacker::pack_v1( const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
+    bool MessagePacker::pack_v1( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
     {
         assert(packed_data_buf_len >= GetPackedTotalDataSize(data_len));
         if (packed_data_buf_len < GetPackedTotalDataSize(data_len))
@@ -87,7 +87,7 @@ namespace npp
             switch (npp_header->encrypt_method_)
             {
             case kNoEncrypt:
-                memcpy(write_pos + npp_header->digest_sign_len_, data, data_len);
+                memcpy(write_pos + npp_header->digest_sign_len_, d, data_len);
                 packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + data_len;
                 break;
             case kIDEAEncrypt:
@@ -101,7 +101,7 @@ namespace npp
                         last_error(kNotSupportIDEAKeyNumber);
                         return false;
                     }
-                    idea->encrypt(data, data_len, buf);
+                    idea->encrypt(d, data_len, buf);
                     memcpy(write_pos + npp_header->digest_sign_len_, buf.data(), buf.size());
                     packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + buf.size();
                     break;

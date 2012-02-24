@@ -14,6 +14,11 @@
 
 #define _DEBUG_TEST
 
+#ifndef H_OS_WINDOWS
+#include <arpa/inet.h>
+#endif
+
+
 namespace npp
 {
 

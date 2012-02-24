@@ -14,11 +14,11 @@ LIBNAME=$(shell basename `pwd`)
 
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
 SLRSA_OBJS := ../slrsa/md5c.o ../slrsa/nn.o ../slrsa/rsa.o ../slrsa/shsc.o ../slrsa/slrsa.o
-OSLIB_SRCS := $(wildcard ../netproto/src/*.cc)
-OSLIB_OBJS := $(patsubst ../netproto/src/%.cc, ../netproto/src/%.o, $(OSLIB_SRCS))
+NETPROTO_SRCS := $(wildcard ../netproto/src/*.cc)
+NETPROTO_OBJS := $(patsubst ../netproto/src/%.cc, ../netproto/src/%.o, $(NETPROTO_SRCS))
 
 SRCS := $(wildcard *.c)
-OBJS := $(patsubst %.c, %.o, $(SRCS)) $(SLRSA_OBJS) $(OSLIB_OBJS) $(IDEA_OBJS)
+OBJS := $(patsubst %.c, %.o, $(SRCS)) $(SLRSA_OBJS) $(NETPROTO_OBJS) $(IDEA_OBJS)
 DEPS := $(patsubst %.o, %.d, $(OBJS))
 
 TARGET_SO=lib$(LIBNAME).so
