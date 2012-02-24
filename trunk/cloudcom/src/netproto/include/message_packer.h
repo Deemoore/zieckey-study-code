@@ -22,7 +22,7 @@ namespace npp
         //! \brief Get the packed data length
         //! \param size_t data_len - The data to be packed
         //! \return size_t - 
-        size_t GetPackedDataSize(size_t data_len);
+        size_t GetPackedTotalDataSize(size_t data_len);
 
         //! \brief Pack the data
         //! \param const void * data - The original data

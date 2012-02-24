@@ -12,6 +12,8 @@
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/data_stream.h"
 
+#define _DEBUG_TEST
+
 namespace npp
 {
 

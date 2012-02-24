@@ -15,7 +15,7 @@ namespace npp
     }
 
 
-    size_t MessagePacker::GetPackedDataSize( size_t data_len )
+    size_t MessagePacker::GetPackedTotalDataSize( size_t data_len )
     {
         return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
     }
@@ -54,8 +54,8 @@ namespace npp
 
     bool MessagePacker::pack_v1( const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
     {
-        assert(packed_data_buf_len >= GetPackedDataSize(data_len));
-        if (packed_data_buf_len < GetPackedDataSize(data_len))
+        assert(packed_data_buf_len >= GetPackedTotalDataSize(data_len));
+        if (packed_data_buf_len < GetPackedTotalDataSize(data_len))
         {
             last_error(kMemoryNotEnough);
             return false;
@@ -114,7 +114,10 @@ namespace npp
             }
         }
 
-        
+        net_header->data_len_   = packed_data_buf_len - sizeof(*net_header);
+        net_header->data_len_   = htons(net_header->data_len_);
+        net_header->message_id_ = htons(net_header->message_id_);
+        net_header->preserve_   = htons(net_header->preserve_);
 
         if (!s_pNppConfig->IsSignData())
         {
@@ -136,7 +139,7 @@ namespace npp
         //Step 4: Fill the digest Sign
         if (npp_header->sign_method_ == kSimpleRSA)
         {
-            SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header->encrypt_key_no_);
+            SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header->sign_key_no_);
             if (!rsa)
             {
                 last_error(kNotSupportSimpleRSAKeyNumber);
@@ -148,10 +151,13 @@ namespace npp
                 last_error(kSimpleRSASignFailed);
                 return false;
             }
+#ifdef _DEBUG_TEST
+            assert(rsa->verify(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, siglen));
+#endif
         }
         else if (npp_header->sign_method_ == kOpenSSLRSA0 || npp_header->sign_method_ == kOpenSSLRSA2)
         {
-            OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->encrypt_key_no_);
+            OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
             if (!rsa)
             {
                 last_error(kNotSupportSimpleRSAKeyNumber);
@@ -163,6 +169,9 @@ namespace npp
                 last_error(kSimpleRSASignFailed);
                 return false;
             }
+#ifdef _DEBUG_TEST
+            assert(rsa->verify(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, siglen));
+#endif
         }
 
         assert(last_error() == kNoError);
@@ -196,7 +205,7 @@ namespace npp
                     npp_header->encrypt_key_no_ = rand() % key_count + 1; //! The old system's key number begins from 1.
                     if (npp_header->encrypt_method_ == kSimpleRSA)
                     {
-                        SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header->encrypt_key_no_);
+                        SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header->sign_key_no_);
                         if (rsa)
                         {
                             found = true;
@@ -205,7 +214,7 @@ namespace npp
                     }
                     else
                     {
-                        OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->encrypt_key_no_);
+                        OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
                         if (rsa)
                         {
                             found = true;

@@ -29,7 +29,7 @@ namespace npp
     public:
         IDEA();
 
-        bool initialize(unsigned char key[16]);
+        bool initialize(const unsigned char key[16]);
         bool initialize(const std::string& key);
 
         //! \brief IDEA encrypt
