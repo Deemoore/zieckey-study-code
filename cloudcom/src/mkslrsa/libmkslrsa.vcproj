@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="slrsa"
-	ProjectGUID="{95A2D8A7-497C-4B00-B84A-0498B3EEE093}"
+	Name="mkslrsa"
+	ProjectGUID="{0D49170C-D286-46F2-B87B-C5B2D02E72AC}"
 	RootNamespace="rsa"
 	TargetFrameworkVersion="196613"
 	>
@@ -144,23 +144,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\md5c.c"
+				RelativePath=".\prime.c"
 				>
 			</File>
 			<File
-				RelativePath=".\nn.c"
+				RelativePath=".\r_keygen.c"
 				>
 			</File>
 			<File
-				RelativePath=".\rsa.c"
-				>
-			</File>
-			<File
-				RelativePath=".\shsc.c"
-				>
-			</File>
-			<File
-				RelativePath=".\slrsa.c"
+				RelativePath=".\r_random.c"
 				>
 			</File>
 		</Filter>
@@ -170,7 +162,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\des.h"
+				>
+			</File>
+			<File
 				RelativePath=".\global.h"
+				>
+			</File>
+			<File
+				RelativePath=".\md2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\md4.h"
 				>
 			</File>
 			<File
@@ -182,15 +186,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\rsa.h"
+				RelativePath=".\prime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\r_random.h"
+				>
+			</File>
+			<File
+				RelativePath=".\rsaeuro.h"
 				>
 			</File>
 			<File
 				RelativePath=".\shs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\slrsa.h"
 				>
 			</File>
 		</Filter>
