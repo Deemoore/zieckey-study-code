@@ -26,6 +26,7 @@ install :  $(TARGET_SO) $(TARGET_A)
 	cp -f $(TARGET_A) $(TARGET_SO) $(PREFIX)/lib
 
 check : $(TARGET_A)	$(TARGET_SO)	
+	$(MAKE) install
 	$(MAKE) check -C test
 
 $(TARGET_A) : $(OBJS)

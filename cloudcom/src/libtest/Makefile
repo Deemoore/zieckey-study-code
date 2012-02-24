@@ -21,7 +21,7 @@ all : $(TARGET)
 	$(MAKE) install
 
 $(TARGET) : $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $@
+	$(CXX) $^ $(LDFLAGS) -o $@
 	
 src/%.o : src/%.cc include/%.h
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $< -o $@

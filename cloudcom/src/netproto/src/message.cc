@@ -2,6 +2,8 @@
 
 #include "netproto/include/npp_config.h"
 
+#include <arpa/inet.h>
+
 namespace npp
 {
 
