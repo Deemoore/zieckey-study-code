@@ -62,4 +62,14 @@ namespace npp
 
         return NULL;
     }
+
+    size_t NppConfig::GetOpenSSLRSAKeyCount() const
+    {
+        return rsa_map_.size();
+    }
+
+    size_t NppConfig::GetSimpleRSAKeyCount() const
+    {
+        return slrsa_map_.size();
+    }
 }

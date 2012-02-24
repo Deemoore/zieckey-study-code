@@ -151,12 +151,22 @@ namespace npp
         return ok;
     }
 
+    bool OpenSSLRSA::sign( const void* m, const size_t m_len, unsigned char* sigret, size_t* siglen )
+    {
+        return sign(ST_NID_sha1, m, m_len, sigret, siglen);
+    }
+
     bool OpenSSLRSA::verify( SignType type, 
                       const void* m, const size_t m_len,
                       const void* sigbuf, const size_t siglen )
     {
         int ret = RSA_verify( type, (const unsigned char*)m, (unsigned int)m_len, (unsigned char*)(sigbuf), (unsigned int)siglen, m_public_rsa );
         return (1 == ret);
+    }
+
+    bool OpenSSLRSA::verify( const void* m, const size_t m_len, const void* sigbuf, const size_t siglen )
+    {
+        return verify(ST_NID_sha1, m, m_len, sigbuf, siglen);
     }
 } //end of namespace npp
 

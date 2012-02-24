@@ -33,18 +33,21 @@ namespace npp
         bool initialize(const std::string& key);
 
         //! \brief IDEA encrypt
-        //! \param const unsigned char*  szSource - the input source data
-        //! \param const unsigned int nSourceLen - the source data length
-        //! \param npp::MemoryDataStream & dataEncrypted - the encrypted data is stored here
+        //! \param const void*  szSource - the input source data
+        //! \param const size_t nSourceLen - the source data length
+        //! \param[out] npp::MemoryDataStream & encrypt_data - the encrypted data is stored here
+        //! \param[out] void* encrypt_data - the encrypted data is stored here.
+        //!     Make sure the buffer size of <code>encrypt_data</code> is at least H_ALIGN(nSourceLen, 8)
         //! \return bool - true if encrypts successfully
-        bool encrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataEncrypted );
+        bool encrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& data_encrypted );
+        //bool encrypt( const void* szSource, const size_t nSourceLen, void* data_encrypted );
 
         //! \brief IDEA decrypt
-        //! \param const unsigned char*  szSource - the input source data
-        //! \param const unsigned int nSourceLen - the source data length
-        //! \param npp::MemoryDataStream & dataDecrypted - the decrypted data is stored here
+        //! \param const void*  szSource - the input source data
+        //! \param const size_t nSourceLen - the source data length
+        //! \param npp::MemoryDataStream & data_decrypted - the decrypted data is stored here
         //! \return bool - true if decrypts successfully
-        bool decrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataDecrypted );
+        bool decrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& data_decrypted );
     public:
         //! \brief IDEA encrypt
         //! \param const unsigned char*  szSource - the input source data
