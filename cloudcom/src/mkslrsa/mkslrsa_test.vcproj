@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".."
+				AdditionalIncludeDirectories="../;../3rdparty/include;../3rdparty/wininclude"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,6 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -111,7 +112,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=".."
+				AdditionalIncludeDirectories="../;../3rdparty/include;../3rdparty/wininclude"
 				PreprocessorDefinitions="WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -129,6 +130,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -167,12 +169,12 @@
 			>
 		</Filter>
 		<Filter
-			Name="Ô´ÎÄ¼þ"
+			Name="src"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath=".\main.cc"
 				>
 			</File>
 		</Filter>
