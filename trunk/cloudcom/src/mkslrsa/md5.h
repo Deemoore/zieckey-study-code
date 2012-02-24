@@ -35,6 +35,8 @@
 #ifndef _MD5_H_
 #define _MD5_H_
 
+#include "global.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
