@@ -212,6 +212,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\singleton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\std_headers.h"
 				>
 			</File>
@@ -250,6 +254,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\message.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\message.h"
+				>
+			</File>
+			<File
 				RelativePath=".\npp_config.cc"
 				>
 			</File>
@@ -263,14 +275,6 @@
 			</File>
 			<File
 				RelativePath="..\include\openssl_rsa.h"
-				>
-			</File>
-			<File
-				RelativePath=".\package.cc"
-				>
-			</File>
-			<File
-				RelativePath="..\include\package.h"
 				>
 			</File>
 			<File

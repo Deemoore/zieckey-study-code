@@ -3,6 +3,9 @@
 
 namespace npp
 {
+
+    template<> NppConfig* Singleton<NppConfig>::ms_Singleton = NULL;
+
     NppConfig::NppConfig( bool support_plain, bool sign_pack, bool verify_sign )
         : support_plain_(support_plain), sign_pack_(sign_pack), verify_sign_(verify_sign)
     {

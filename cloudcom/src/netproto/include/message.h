@@ -10,24 +10,12 @@
 #define NETPROTO_PACKET_H_
 
 #include "netproto/include/inner_pre.h"
+#include "netproto/include/data_stream.h"
 
 namespace npp
 {
 
-    /**
-    * The header information struct of the data packet 
-    */
-    struct Header{
-        uint8_t  header_len; /** in bytes */
-        uint8_t  header_ver;
-        uint16_t data_len;   /** big-endian, the length of the data */
-        uint16_t message_id; /** big-endian */ 
-        uint8_t  packet_seq;
-        uint8_t  packet_count;
-        uint16_t preserve;   /** big-endian, preserved, set to 0x0000 */
-    };
-
-    class _EXPORT_NETPROTO Pakcet
+    class _EXPORT_NETPROTO Message : public MemoryDataStream
     {
     public:
         //! The header information struct of the data packet 
@@ -67,7 +55,14 @@ namespace npp
         };
 #pragma pack(pop)
 
+    public:
+        Message();
 
+        bool Unpack(const void* data, size_t data_len);
+
+    private:
+        NetHeader net_header_;  //! The network data header
+        NppHeader npp_header_;  //! The protocol relative header
     };
 }
 
