@@ -240,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\test_common.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\type_traits_ext.h"
 				>
 			</File>
