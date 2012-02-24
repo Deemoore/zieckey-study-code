@@ -865,6 +865,13 @@ namespace
     }
 
 
+    void test_ini_parser_bug_string_1()
+    {
+        const char* data = "files=librun.dat\t1.0.1.3557|libtask.dat\t1.0.1.3557|deepscan\\cloudsec2.dll\t3.2.8.1002\r\nmodules=360hotfix\t1.0.0.100|deepscan\t2.0.2.200\r\ntags=tencent|kingsoft\r\npid=123\r\nuid=234\r\nver=3.2.8.1002\r\nsysver=6.1.7600\r\npa=32\r\ntype=updated\r\nrt=2\r\nlt=1.5\r\nue=0\r\nlang=zh_CN\r\nvdays=365\r\nuname=zhangshan\r\nrate=360hotfix\t3|deepscan\t10\r\nproduct=360safe\r\ncombo=quick\r\nmid=a16cf365149a8aed21fdd04ae2545824\r\n";
+        osl::INIParser parser(false);
+        parser.parse( data, strlen(data), "\r\n", "=" );
+        //std::cout << parser.serialize();
+    }
 }
 
 TEST_UNIT(ini_parser)
@@ -874,6 +881,7 @@ TEST_UNIT(ini_parser)
     test_ini_parser_3();
     test_ini_parser_4();
     test_ini_parser_5();
+    test_ini_parser_bug_string_1();
 }
 
 TEST_UNIT(ini_parser_section_6)
