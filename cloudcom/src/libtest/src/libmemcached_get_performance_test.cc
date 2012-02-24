@@ -18,11 +18,11 @@ namespace
     class TestLibMemcachedGetPerformance : public osl::Thread
     {
     public:
-        TestLibMemcachedGetPerformance( const osl::StringA& sock, const osl::StringA& host, const osl::StringA& port, size_t count )
-            : mc_( sock.c_str(), host.c_str(), port.c_str() ), total_count_(count)
+        TestLibMemcachedGetPerformance( const osl::StringA& sock, const osl::StringA& host, const osl::StringA& port, size_t count, bool log )
+            : mc_( sock.c_str(), host.c_str(), port.c_str() ), total_count_(count), log_enable_(log)
         {
             static int i = 0;
-            setName(osl::StringUtil::valueOf(i));
+            setName(osl::StringUtil::valueOf(i++));
         }
 
         virtual bool start()
@@ -33,11 +33,12 @@ namespace
 
         virtual void run()
         {
-            logTrace("libtest", "Thread %s is running ... thread state=%d  total_count_=%lu\n", getName().c_str(), getState(), total_count_);
+            double start = s_pTimer->getImmediateSeconds();
+            logTrace("libtest", "Thread %s is running ... thread state=%d  total_count_=%lu", getName().c_str(), getState(), total_count_);
             osl::StringA errmsg;
             osl::StringA key;
             osl::StringA value;
-            osl::Random randint( uint32_t(s_pTimer->getSeconds() * 1000000) + rand());
+            osl::Random randint( uint32_t(s_pTimer->getImmediateSeconds() * 1000000) + rand());
             for (size_t i = 0; i < total_count_; ++i)
             {
                 wu::Memcached::StringAStringAMap kvm;
@@ -49,28 +50,36 @@ namespace
                 mc_.mget(1, kvm, errmsg);
                 wu::Memcached::StringAStringAMap::iterator it(kvm.begin());
                 wu::Memcached::StringAStringAMap::iterator ite(kvm.end());
-                
                 for (; it != ite; ++it)
                 {
-                    (void)(it);
+                    if (log_enable_)
+                    {
+                        logTrace("libtest", "thread %s key=%s value=%s", getName().c_str(), it->first.c_str(), it->second.c_str());
+                    }
                 }
             }
+
+
+            double end = s_pTimer->getImmediateSeconds();
+            logTrace("libtest", "Thread %s stopped  total_count_=%lu ops=%f", getName().c_str(), total_count_, total_count_/(end - start));
         }
 
    private:
         wu::Memcached mc_;
         size_t total_count_;
+        bool log_enable_;
         
     };
 }
 
-TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performance --sock=/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock --host=localhost --port=10009 --thread=16 --count=1000000" )
+TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performance --sock=/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock --host=localhost --port=10009 --thread=16 --count=1000000 --log=true" )
 {
     osl::StringA sock = "/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock";
     osl::StringA hostname = "localhost";
     osl::StringA port = "10000";
     int threadnum = 1;
     size_t count     = 100000;
+    bool log_enable = false;
     //test_memcached1 --host=localhost --port=10009 --thread=10 --method=get,set,delete
     osl::AppShell::Param* pp = pCmd->getParam("host");
     if ( pp ) hostname = pp->strVal;
@@ -84,24 +93,40 @@ TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performa
     pp = pCmd->getParam("count");
     if ( pp ) count = atol(pp->strVal.c_str());
 
-    double start_time = s_pTimer->getSeconds();
+    pp = pCmd->getParam("log");
+    if ( pp && pp->strVal == "true") log_enable = true;
+
     typedef osl::List<osl::ThreadPtr> ThreadPtrList;
     ThreadPtrList threads;
     for ( int i = 0; i < threadnum; ++i )
     {
         fprintf(stdout, "total thread : %d, current creating index %d\n", threadnum, i);
-        TestLibMemcachedGetPerformance* pt = new TestLibMemcachedGetPerformance(sock, hostname, port, count);
-        if (pt->start())
+        TestLibMemcachedGetPerformance* pt = new TestLibMemcachedGetPerformance(sock, hostname, port, count, log_enable);
+        threads.push_back(pt);
+
+    }
+
+   
+    double start_time = s_pTimer->getImmediateSeconds();
+
+    {
+        ThreadPtrList::iterator it(threads.begin());
+        ThreadPtrList::iterator ite(threads.end());
+        for (; it != ite; ++it)
         {
-            while (!pt->isRunning())
+            osl::Thread* pt = (*it);
+            if (pt->start())
             {
-                logTrace("libtest", "waiting thread %d staring... running=%d, state=%d\n", i, pt->isRunning(), pt->getState());
-                osl::Process::msleep(1000);
+                while (!pt->isRunning())
+                {
+                    logTrace("libtest", "waiting thread %s staring... running=%d, state=%d", pt->getName().c_str(), pt->isRunning(), pt->getState());
+                    osl::Process::msleep(1);
+                }
             }
-            threads.push_back(pt);
         }
     }
 
+    /*
     bool finished = true;
     while (!finished)
     {
@@ -120,9 +145,10 @@ TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performa
         }
     }
 
-    double end = s_pTimer->getSeconds();
+    double end = s_pTimer->getImmediateSeconds();
     size_t total_count = count * threadnum;
-    fprintf(stdout, "\n\ncount=%lu ops=%f\n", total_count, total_count/(end-start_time));
+    fprintf(stdout, "\n\ncount=%lu ops=%f\n", total_count, total_count/(end - start_time));
+    */
 }
 
 
