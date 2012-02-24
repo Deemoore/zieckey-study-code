@@ -11,6 +11,7 @@
 namespace npp
 {
 
+    #define s_pNppConfig	( ::npp::NppConfig::getSingletonPtr() )
     class _EXPORT_NETPROTO NppConfig  : public Singleton<NppConfig>
     {
         typedef std::map<int, IDEA>         IDEAMap;
@@ -42,6 +43,10 @@ namespace npp
         SimpleRSA* GetSimpleRSA(int index);
 
         IDEA* GetIDEA(int index);
+
+        size_t GetOpenSSLRSAKeyCount() const;
+
+        size_t GetSimpleRSAKeyCount() const;
     private:
         bool support_plain_;
         bool sign_pack_;

@@ -48,6 +48,10 @@ namespace npp
         bool sign( SignType type, const void* m, const size_t m_len,
                    std::string& sigret );
 
+        //! using ST_NID_sha1
+        bool sign( const void* m, const size_t m_len,
+                   unsigned char* sigret, size_t* siglen );
+
 
         //! \brief verifies that the signature sigbuf of size siglen matches
         //!     a given message digest m of size m_len. 
@@ -60,6 +64,10 @@ namespace npp
         //! \param[in] const size_t siglen - 
         //! \return bool - 
         bool verify( SignType type, const void* m, const size_t m_len, 
+                     const void* sigbuf, const size_t siglen );
+
+        //! using ST_NID_sha1
+        bool verify( const void* m, const size_t m_len, 
                      const void* sigbuf, const size_t siglen );
 
 

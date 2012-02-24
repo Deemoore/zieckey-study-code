@@ -262,6 +262,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\message_packer.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\message_packer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\message_unpacker.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\message_unpacker.h"
+				>
+			</File>
+			<File
 				RelativePath=".\npp_config.cc"
 				>
 			</File>

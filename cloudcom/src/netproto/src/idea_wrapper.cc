@@ -29,14 +29,14 @@ namespace npp
         return true;
     }
 
-    bool IDEA::encrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataEncrypted )
+    bool IDEA::encrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& dataEncrypted )
     {
-        return IDEA::encrypt(szSource, nSourceLen, m_encrypt_key, dataEncrypted);
+        return IDEA::encrypt((const unsigned char*)szSource, (const unsigned int)nSourceLen, m_encrypt_key, dataEncrypted);
     }
 
-    bool IDEA::decrypt( const unsigned char* szSource, const unsigned int nSourceLen, MemoryDataStream& dataDecrypted )
+    bool IDEA::decrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& dataDecrypted )
     {
-        return IDEA::decrypt(szSource, nSourceLen, m_decrypt_key, dataDecrypted);
+        return IDEA::decrypt((const unsigned char*)szSource, (const unsigned int)nSourceLen, m_decrypt_key, dataDecrypted);
     }
 
     bool IDEA::encrypt( const unsigned char* szSource, const unsigned int nSourceLen, const std::string& strEncryptKey, npp::MemoryDataStream& dataEncrypted )

@@ -2,37 +2,45 @@
 
 #include "netproto/include/npp_config.h"
 
+#include "netproto/include/md5.h"
+
+#ifndef H_OS_WINDOWS
 #include <arpa/inet.h>
+#endif
 
 namespace npp
 {
-
     Message::Message()
+        : last_error_(kNoError)
+    {
+    }
+
+    Message::~Message()
     {
 
     }
 
-
-    bool Message::Unpack( const void* data, size_t data_len )
+    const char* Message::Data()
     {
-        if (!data || 
-            data_len <= sizeof(net_header_) + sizeof(npp_header_))
+        if (Size() == 0)
         {
-            return false;
+            return NULL;
         }
+        else
+        {
+            return data();
+        }
+    }
 
-        uint8_t header_len = ((const char*)data)[0];
-        assert(header_len > sizeof(net_header_));
-        memcpy(&net_header_, data, sizeof(net_header_)); // for the sake of NetHeader's changes
+    size_t Message::Size()
+    {
+        return size();
+    }
 
-        net_header_.data_len    = ntohs(net_header_.data_len);
-        net_header_.message_id  = ntohs(net_header_.message_id);
-        net_header_.preserve    = ntohs(net_header_.preserve);
-
-
-
-
-        return true;
+    const char* Message::strerror() const
+    {
+        //TODO
+        return "";
     }
 }
 
