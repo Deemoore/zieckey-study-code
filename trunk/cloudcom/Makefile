@@ -6,9 +6,9 @@
 #
 
 		
-SUBDIRS=src/slrsa src/idea src/osl src/wraputil src/net src/apputil src/libtest
+SUBDIRS=src/slrsa src/idea src/netproto src/osl src/wraputil src/net src/apputil src/libtest
 
-TESTDIRS=src/osl/test
+TESTDIRS=src/osl/test src/netproto/test
 
 TOPDIR=`pwd`
 
