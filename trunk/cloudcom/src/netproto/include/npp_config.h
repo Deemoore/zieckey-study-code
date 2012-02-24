@@ -6,10 +6,12 @@
 #include "netproto/include/openssl_rsa.h"
 #include "netproto/include/slrsa_wrapper.h"
 
+#include "netproto/include/singleton.h"
+
 namespace npp
 {
 
-    class _EXPORT_NETPROTO NppConfig
+    class _EXPORT_NETPROTO NppConfig  : public Singleton<NppConfig>
     {
         typedef std::map<int, IDEA>         IDEAMap;
         typedef std::map<int, SimpleRSA>    SimpleRSAMap;
