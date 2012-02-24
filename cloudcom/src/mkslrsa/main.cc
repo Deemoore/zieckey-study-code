@@ -150,9 +150,126 @@ void GenIDEAKey()
     fclose(fp_idea);
 }
 
+void GenTestKey()
+{
+    FILE* fp_test_rsa_key = fopen("rsa_test_key.h", "w+");
+    fprintf(fp_test_rsa_key, "#ifndef _RSA_SIGN_KEY_H_ \n");
+    fprintf(fp_test_rsa_key, "#define _RSA_SIGN_KEY_H_ \n");
+    int jj = 0;
+    for (jj = 1; jj <= 4; jj++)
+    {
+        //generate public and private key
+        unsigned char public_key[1024] = { 0 };
+        unsigned char private_key[1024] = { 0 };
+        BIO* bio = BIO_new( BIO_s_mem() );
+        RSA* rsa = gen_rsa( 1024 );
+        int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
+        int public_key_len = BIO_read( bio, public_key, sizeof(public_key) );//read the key data into public_key buffer
+        ret = i2d_RSAPrivateKey_bio( bio, rsa );//create a private key
+        int private_key_len = BIO_read( bio, private_key, sizeof(private_key) );//read the key data into private buffer
+        BIO_free( bio );
+        RSA_free( rsa );
+
+        //print public and private key
+        int i = 0;
+        fprintf(fp_test_rsa_key, "\nstatic const unsigned char g_rsa_public_key%d[%lu] = {//{{{\n", jj, public_key_len );
+        for( i = 0; i < public_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                fprintf(fp_test_rsa_key,", ");
+                if ( i % 16 == 0 )
+                    fprintf(fp_test_rsa_key,"\n\t");
+            }
+            else
+            {
+                fprintf(fp_test_rsa_key,"\t");
+            }
+            fprintf(fp_test_rsa_key, "0x%0.2x", public_key[i] );
+        }
+
+        fprintf(fp_test_rsa_key, "};//}}}\n" );
+        fprintf(fp_test_rsa_key,"static const size_t g_rsa_public_key%d_len = %lu;\n\n", jj, public_key_len);
+        fprintf(fp_test_rsa_key, "\nstatic const unsigned char g_rsa_private_key%d[%lu] = {//{{{\n", jj, private_key_len );
+        for( i = 0; i < private_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                fprintf(fp_test_rsa_key,", ");
+                if ( i % 16 == 0 )
+                    fprintf(fp_test_rsa_key,"\n\t");
+            }
+            else
+            {
+                fprintf(fp_test_rsa_key,"\t");
+            }
+            fprintf(fp_test_rsa_key, "0x%0.2x", private_key[i] );
+        }
+        fprintf(fp_test_rsa_key, "};//}}}\n" );
+        fprintf(fp_test_rsa_key,"static const size_t g_rsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+        fprintf(fp_test_rsa_key, "\n" );
+
+    }
+
+    for (jj = 1; jj <= 4; jj++)
+    {
+        //generate public and private key
+        unsigned char public_key[258] = { 0 };
+        unsigned char private_key[706] = { 0 };
+        size_t public_key_len = sizeof(public_key);
+        size_t private_key_len = sizeof(private_key);
+        MakeSimpleRSAKey(public_key, private_key);
+
+        //print public and private key
+        int i = 0;
+        fprintf(fp_test_rsa_key, "\nstatic const unsigned char g_slrsa_public_key%d[%lu] = {//{{{\n", jj, public_key_len );
+        for( i = 0; i < public_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                fprintf(fp_test_rsa_key,", ");
+                if ( i % 16 == 0 )
+                    fprintf(fp_test_rsa_key,"\n\t");
+            }
+            else
+            {
+                fprintf(fp_test_rsa_key,"\t");
+            }
+            fprintf(fp_test_rsa_key, "0x%0.2x", public_key[i] );
+        }
+
+        fprintf(fp_test_rsa_key, "};//}}}\n" );
+        fprintf(fp_test_rsa_key,"static const size_t g_slrsa_public_key%d_len = %lu;\n\n", jj, public_key_len);
+        fprintf(fp_test_rsa_key, "\nstatic const unsigned char g_slrsa_private_key%d[%lu] = {//{{{\n", jj, private_key_len );
+        for( i = 0; i < private_key_len; i++ )
+        {
+            if (i != 0)
+            {
+                fprintf(fp_test_rsa_key,", ");
+                if ( i % 16 == 0 )
+                    fprintf(fp_test_rsa_key,"\n\t");
+            }
+            else
+            {
+                fprintf(fp_test_rsa_key,"\t");
+            }
+            fprintf(fp_test_rsa_key, "0x%0.2x", private_key[i] );
+        }
+        fprintf(fp_test_rsa_key, "};//}}}\n" );
+        fprintf(fp_test_rsa_key,"static const size_t g_slrsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+        fprintf(fp_test_rsa_key, "\n" );
+
+    }
+
+    fprintf(fp_test_rsa_key,"#endif\n");
+}
+
 int main( int argc, char* argv[] )
 {
     GenIDEAKey();
+
+
+    GenTestKey();
 
     FILE* fp_server = fopen("server_rsa_key.h", "w+");
     FILE* fp_client = fopen("client_rsa_key.h", "w+");

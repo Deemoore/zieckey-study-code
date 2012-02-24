@@ -16,9 +16,9 @@ namespace npp
     {
     }
 
-    bool IDEA::initialize( unsigned char key[16] )
+    bool IDEA::initialize( const unsigned char key[16] )
     {
-        return initialize(std::string((char*)key, 16));
+        return initialize(std::string((const char*)key, 16));
     }
 
     bool IDEA::initialize( const std::string& key )

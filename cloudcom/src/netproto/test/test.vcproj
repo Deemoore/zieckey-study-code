@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\idea_key.h"
+				>
+			</File>
+			<File
 				RelativePath=".\idea_test.cc"
 				>
 			</File>
@@ -193,7 +197,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\message_pack_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\openssl_rsa_test.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\rsa_test_key.h"
 				>
 			</File>
 			<File

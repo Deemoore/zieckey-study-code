@@ -22,7 +22,7 @@ namespace npp
     public:
         NppConfig(bool support_plain, bool sign_pack, bool verify_sign);
 
-        bool AddIdeaKey(int key_no, unsigned char key[16]);
+        bool AddIdeaKey(int key_no, const unsigned char key[16]);
 
         bool AddOpenSSLRSAKey(int key_no, 
             const unsigned char* private_key, const size_t private_key_len,

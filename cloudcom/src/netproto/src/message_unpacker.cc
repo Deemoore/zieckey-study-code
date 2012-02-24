@@ -21,7 +21,7 @@ namespace npp
         const char* read_pos = ((const char*)d);
 
         uint8_t header_len = read_pos[0];
-        assert(header_len > sizeof(net_header_));
+        assert(header_len >= sizeof(net_header_));
         memcpy(&net_header_, read_pos, sizeof(net_header_)); // for the sake of NetHeader's changes
         net_header_.data_len_   = ntohs(net_header_.data_len_);
         net_header_.message_id_ = ntohs(net_header_.message_id_);

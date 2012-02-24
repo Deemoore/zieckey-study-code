@@ -12,7 +12,7 @@ namespace npp
 
     }
 
-    bool NppConfig::AddIdeaKey( int key_no, unsigned char key[16] )
+    bool NppConfig::AddIdeaKey( int key_no, const unsigned char key[16] )
     {
         IDEA& idea = idea_map_[key_no];
         return idea.initialize(key);
