@@ -39,7 +39,7 @@ typedef unsigned char *POINTER;
 typedef unsigned short int UINT2;
 
 /* UINT4 defines a four byte word */
-typedef unsigned long int UINT4;
+typedef unsigned int UINT4;
 
 /* BYTE defines a unsigned character */
 typedef unsigned char BYTE;
@@ -65,4 +65,26 @@ typedef signed long int signeddigit;
 #define PROTO_LIST(list) ()
 #endif
 
+
+
+
+#if ( defined(WIN32) || defined(WIN64) )
+
+#include <Windows.h>
+
+#else
+
+#define RtlEqualMemory(Destination,Source,Length) (!memcmp((Destination),(Source),(Length)))
+#define RtlMoveMemory(Destination,Source,Length) memmove((Destination),(Source),(Length))
+#define RtlCopyMemory(Destination,Source,Length) memcpy((Destination),(Source),(Length))
+#define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
+#define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
+
+#define R_memset(x, y, z) RtlFillMemory(x, z, y)		//注意2,3参数对调
+#define R_memcpy(x, y, z) RtlCopyMemory(x, y, z)
+#define R_memcmp(x, y, z) RtlCompareMemory(x, y, z)
+
+#endif
+
 #endif /* _GLOBAL_H_ */
+
