@@ -76,9 +76,9 @@ namespace npp
         struct NetHeader
         {
             uint8_t  header_len_;    //! in bytes 
-            uint8_t  version_;    //! The protocol version
+            uint8_t  version_;       //! The protocol version
             uint16_t data_len_;      //! big-endian, the length of the data 
-            uint16_t message_id_;    //! big-endian 
+            uint16_t message_id_;    //! big-endian, client generate randomly
             uint8_t  packet_seq_;
             uint8_t  packet_count_;
             uint16_t preserve_;      //! big-endian, preserved, set to 0x0000

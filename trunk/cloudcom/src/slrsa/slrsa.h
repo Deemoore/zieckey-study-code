@@ -37,7 +37,7 @@ extern "C" {
      *  a given message digest m of size m_len. publickey is the signer's
      *  public key.
      *
-     *  slrsa_sign() returns 1 on success, 0 otherwise.  
+     *  slrsa_sign() returns 1 on success, 0 otherwise.
      *  slrsa_verify() returns 1 on successful verification, 0 otherwise.
      */
     int slrsa_sign( const unsigned char* m, 
@@ -51,6 +51,36 @@ extern "C" {
                       const unsigned char* publickey,
                       const unsigned char* sigbuf, 
                       const unsigned int   siglen );
+
+
+    /**
+     * returns 1 on success, 0 otherwise.
+     */
+    int slrsa_private_encrypt( const unsigned char* m, 
+                               const unsigned int   m_len,
+                               const unsigned char* privatekey,
+                               unsigned char*       sigret, 
+                               unsigned int*        siglen );
+    int slrsa_public_decrypt( const unsigned char* m, 
+                              const unsigned int   m_len,
+                              const unsigned char* publickey,
+                              const unsigned char* sigbuf, 
+                              const unsigned int   siglen );
+
+
+    /**
+     * returns 1 on success, 0 otherwise.
+     */
+    int slrsa_public_encrypt( const unsigned char* m, 
+                              const unsigned int   m_len,
+                              const unsigned char* privatekey,
+                              unsigned char*       sigret, 
+                              unsigned int*        siglen );
+    int slrsa_private_decrypt( const unsigned char* m, 
+                               const unsigned int   m_len,
+                               const unsigned char* publickey,
+                               const unsigned char* sigbuf, 
+                               const unsigned int   siglen );
 
 #ifdef __cplusplus
 }
