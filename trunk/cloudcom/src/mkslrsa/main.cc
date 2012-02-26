@@ -11,6 +11,12 @@
 #include <openssl/rsa.h>
 #include <openssl/engine.h>
 
+#include <map>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+
 #ifdef WIN32
 #	pragma comment(lib,"mkslrsa.lib")
 #	pragma comment(lib,"slrsa.lib")
@@ -125,6 +131,11 @@ int begin_key_no = 1;
 void GenIDEAKey()
 {
     FILE* fp_idea = fopen("idea_key.h", "w+");
+
+    FILE* fp_php_idea = fopen("idea_key.php", "w+");
+    fprintf(fp_php_idea, "<?php\n\n");
+    fprintf(fp_php_idea, "$crypto_keys = array(\n");
+
     fprintf(fp_idea, "#ifndef _IDEA_ENCRYPT_KEY_H_\n");
     fprintf(fp_idea, "#define _IDEA_ENCRYPT_KEY_H_\n\n");
     srand(time(NULL));
@@ -132,22 +143,34 @@ void GenIDEAKey()
     for (jj = begin_key_no; jj < key_count + begin_key_no; jj++)
     {
         fprintf(fp_idea, "static const unsigned char idea_key%d[16] = {", jj);
+        fprintf(fp_php_idea, "\t%d => pack('C16', ", jj);
         int i = 0;
         for( i = 0; i < 16; i++ )
         {
             if (i != 0)
             {
+                fprintf(fp_php_idea, ", ");
                 fprintf(fp_idea, ", ");
                 if ( i % 16 == 0 )
+                {
+                    fprintf(fp_php_idea, "),\n");
                     fprintf(fp_idea, "\n\t");
+                }
             }
+            fprintf(fp_php_idea, "0x%0.2x", rand() % 256 );
             fprintf(fp_idea, "0x%0.2x", rand() % 256 );
         }
         fprintf(fp_idea, "};\n\n");
+        fprintf(fp_php_idea, "),\n");
     }
 
     fprintf(fp_idea, "#endif // end of #ifndef _IDEA_ENCRYPT_KEY_H_\n\n");
+    fprintf(fp_php_idea, ");");
     fclose(fp_idea);
+    fflush(fp_idea);
+    fflush(fp_php_idea);
+    fclose(fp_php_idea);
+
 }
 
 void GenTestKey()
@@ -266,13 +289,28 @@ void GenTestKey()
 
 int main( int argc, char* argv[] )
 {
-    GenIDEAKey();
+    {
+        std::stringstream oss;
+        oss << std::hex << std::setfill ('0') << std::setw(2) << 17;
+        std::string s = oss.str();
+        const char* a = s.c_str();
+        (void)a;
+    }
+    typedef std::map<int, std::stringstream* > int_sstream_map;
 
+    int_sstream_map openssl_rsa_private_client_key_map;
+    int_sstream_map simple_rsa_private_client_key_map;
+    int_sstream_map openssl_rsa_public_client_key_map;
+    int_sstream_map simple_rsa_public_client_key_map;
+    GenIDEAKey();
 
     GenTestKey();
 
     FILE* fp_server = fopen("server_rsa_key.h", "w+");
     FILE* fp_client = fopen("client_rsa_key.h", "w+");
+
+
+
 
     fprintf(fp_server, "#ifndef _SERVER_RSA_SIGN_KEY_H_ \n");
     fprintf(fp_server, "#define _SERVER_RSA_SIGN_KEY_H_ \n");
@@ -281,6 +319,7 @@ int main( int argc, char* argv[] )
     int jj = 0;
     for (jj = begin_key_no; jj < key_count + begin_key_no; jj++)
     {
+        
         FILE* fp1 = NULL;
         FILE* fp2 = NULL;
         int kk = 0;
@@ -323,6 +362,8 @@ int main( int argc, char* argv[] )
 
             fprintf(fp1, "\nstatic const unsigned char g_%s_rsa_public_key%d[%lu] = {//{{{\n", fp1_prefix, jj, public_key_len );
             int i = 0;
+            openssl_rsa_public_client_key_map[jj] = new std::stringstream;
+            std::stringstream& public_client_key_ss = *openssl_rsa_public_client_key_map[jj];
             for( i = 0; i < public_key_len; i++ )
             {
                 if (i != 0)
@@ -336,10 +377,23 @@ int main( int argc, char* argv[] )
                     fprintf(fp1, "\t");
                 }
                 fprintf(fp1, "0x%0.2x", public_key[i] );
+                if (fp1 == fp_client)
+                {
+                    if (0 == i)
+                    {
+                        public_client_key_ss << "0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)public_key[i];
+                    }
+                    else
+                    {
+                        public_client_key_ss << ", 0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)public_key[i];
+                    }
+                }
             }
             fprintf(fp1, "};//}}}\n" );
             fprintf(fp1, "static const size_t g_%s_rsa_public_key%d_len = %lu;\n\n", fp1_prefix, jj, public_key_len);
 
+            openssl_rsa_private_client_key_map[jj] = new std::stringstream;
+            std::stringstream& private_client_key_ss = *openssl_rsa_private_client_key_map[jj];
             fprintf(fp2, "static const unsigned char g_%s_rsa_private_key%d[%lu] = {//{{{\n", fp2_prefix, jj, private_key_len );
             for( i = 0; i < private_key_len; i++ )
             {
@@ -354,6 +408,18 @@ int main( int argc, char* argv[] )
                     fprintf(fp2, "\t");
                 }
                 fprintf(fp2, "0x%0.2x", private_key[i] );
+
+                if (fp2 == fp_client)
+                {
+                    if (0 == i)
+                    {
+                        private_client_key_ss << "0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)private_key[i];
+                    }
+                    else
+                    {
+                        private_client_key_ss << ", 0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)private_key[i];
+                    }
+                }
             }
 
             fprintf(fp2, "};//}}}\n" );
@@ -372,6 +438,7 @@ int main( int argc, char* argv[] )
     //rsa
     for (jj = begin_key_no; jj < key_count + begin_key_no; jj++)
     {
+
         FILE* fp1 = NULL;
         FILE* fp2 = NULL;
         int kk = 0;
@@ -404,6 +471,8 @@ int main( int argc, char* argv[] )
             //print public and private key
             fprintf(fp1, "\nstatic const unsigned char g_%s_slrsa_public_key%d[%lu] = {//{{{\n", fp1_prefix, jj, public_key_len );
             int i = 0;
+            simple_rsa_public_client_key_map[jj] = new std::stringstream;
+            std::stringstream& public_client_key_ss = *simple_rsa_public_client_key_map[jj];
             for( i = 0; i < public_key_len; i++ )
             {
                 if (i != 0)
@@ -417,10 +486,25 @@ int main( int argc, char* argv[] )
                     fprintf(fp1, "\t");
                 }
                 fprintf(fp1, "0x%0.2x", public_key[i] );
+
+
+                if (fp1 == fp_client)
+                {
+                    if (0 == i)
+                    {
+                        public_client_key_ss << "0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)public_key[i];
+                    }
+                    else
+                    {
+                        public_client_key_ss << ", 0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)public_key[i];
+                    }
+                }
             }
             fprintf(fp1, "};//}}}\n" );
             fprintf(fp1, "static const size_t g_%s_slrsa_public_key%d_len = %lu;\n\n", fp1_prefix, jj, public_key_len);
 
+            simple_rsa_private_client_key_map[jj] = new std::stringstream;
+            std::stringstream& private_client_key_ss = *simple_rsa_private_client_key_map[jj];
             fprintf(fp2, "static const unsigned char g_%s_slrsa_private_key%d[%lu] = {//{{{\n", fp2_prefix, jj, private_key_len );
             for( i = 0; i < private_key_len; i++ )
             {
@@ -435,6 +519,18 @@ int main( int argc, char* argv[] )
                     fprintf(fp2, "\t");
                 }
                 fprintf(fp2, "0x%0.2x", private_key[i] );
+
+                if (fp2 == fp_client)
+                {
+                    if (0 == i)
+                    {
+                        private_client_key_ss << "0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)private_key[i];
+                    }
+                    else
+                    {
+                        private_client_key_ss << ", 0x" << std::hex << std::setfill ('0') << std::setw(2) << (int)private_key[i];
+                    }
+                }
             }
 
 
@@ -453,6 +549,71 @@ int main( int argc, char* argv[] )
 
     fclose(fp_server);
     fclose(fp_client);
+
+    FILE* fp_php_client = fopen("client_rsa_key.php", "w+");
+    fprintf(fp_php_client, "<?php\n"
+        "$sign_private_keys = array(\n"
+        "\t//{{{ simple rsa private keys\n"
+        "\t'simple' => array(\n"
+        );
+
+    {
+        int_sstream_map::iterator it(simple_rsa_private_client_key_map.begin());
+        int_sstream_map::iterator ite(simple_rsa_private_client_key_map.end());
+        for (int i = 1; it != ite; ++it, ++i)
+        {
+            std::string s = it->second->str();
+            fprintf(fp_php_client, "\t\t%d => pack('C%lu', %s),\n", i, s.size(), s.c_str());
+            delete it->second;
+        }
+        fprintf(fp_php_client, "\t),\n//}}}\n");
+    }
+
+    {
+        fprintf(fp_php_client, "\t'openssl' => array(\n");
+        int_sstream_map::iterator it(openssl_rsa_private_client_key_map.begin());
+        int_sstream_map::iterator ite(openssl_rsa_private_client_key_map.end());
+        for (int i = 1; it != ite; ++it, ++i)
+        {
+            std::string s = it->second->str();
+            fprintf(fp_php_client, "\t\t%d => pack('C%lu', %s),\n", i, s.size(), s.c_str());
+            delete it->second;
+        }
+        fprintf(fp_php_client, "\t),\n//}}}\n);\n\n");
+    }
+
+
+    fprintf(fp_php_client, "$sign_public_keys = array(\n"
+        "\t//{{{ simple rsa public keys\n"
+        "\t'simple' => array(\n"
+        );
+    {
+        int_sstream_map::iterator it(simple_rsa_public_client_key_map.begin());
+        int_sstream_map::iterator ite(simple_rsa_public_client_key_map.end());
+        for (int i = 1; it != ite; ++it, ++i)
+        {
+            std::string s = it->second->str();
+            fprintf(fp_php_client, "\t\t%d => pack('C%lu', %s),\n", i, s.size(), s.c_str());
+            delete it->second;
+        }
+        fprintf(fp_php_client, "\t),\n//}}}\n");
+    }
+
+    {
+        fprintf(fp_php_client, "\t'openssl' => array(\n");
+        int_sstream_map::iterator it(openssl_rsa_public_client_key_map.begin());
+        int_sstream_map::iterator ite(openssl_rsa_public_client_key_map.end());
+        for (int i = 1; it != ite; ++it, ++i)
+        {
+            std::string s = it->second->str();
+            fprintf(fp_php_client, "\t\t%d => pack('C%lu', %s),\n", i, s.size(), s.c_str());
+            delete it->second;
+        }
+        fprintf(fp_php_client, "\t),\n//}}}\n);\n\n");
+    }
+
+    fflush(fp_php_client);
+    fclose(fp_php_client);
 
     printf("Generate key OK!\n");
 #ifdef WIN32
