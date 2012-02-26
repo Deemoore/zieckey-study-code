@@ -127,13 +127,10 @@ namespace npp
 
         //---------------------------------------------------------
         //Step 3: Fill the digest MD5
-        if (s_pNppConfig->IsSignData())
-        {
-            MD5 md5(write_pos + npp_header->digest_sign_len_, 
-                packed_data_buf_len - sizeof(*net_header) - sizeof(*npp_header) - npp_header->digest_sign_len_);
-            md5.getRawDigest(write_pos);
-            write_pos += MD5::MD5_RAW_BIN_DIGEST_LEN;
-        }
+        MD5 md5(write_pos + npp_header->digest_sign_len_, 
+            packed_data_buf_len - sizeof(*net_header) - sizeof(*npp_header) - npp_header->digest_sign_len_);
+        md5.getRawDigest(write_pos);
+        write_pos += MD5::MD5_RAW_BIN_DIGEST_LEN;
 
         //---------------------------------------------------------
         //Step 4: Fill the digest Sign
@@ -151,9 +148,6 @@ namespace npp
                 last_error(kSimpleRSASignFailed);
                 return false;
             }
-#ifdef _DEBUG_TEST
-            assert(rsa->verify(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, siglen));
-#endif
         }
         else if (npp_header->sign_method_ == kOpenSSLRSA0 || npp_header->sign_method_ == kOpenSSLRSA2)
         {
@@ -169,9 +163,6 @@ namespace npp
                 last_error(kSimpleRSASignFailed);
                 return false;
             }
-#ifdef _DEBUG_TEST
-            assert(rsa->verify(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, siglen));
-#endif
         }
 
         assert(last_error() == kNoError);
@@ -191,8 +182,8 @@ namespace npp
             npp_header->encrypt_key_no_ = 1;
             break;
         default:
-            //new system
-            {
+            //new system, do nothing
+            /*{
                 size_t key_count = s_pNppConfig->GetOpenSSLRSAKeyCount();
                 if (npp_header->encrypt_method_ == kSimpleRSA)
                 {
@@ -222,7 +213,7 @@ namespace npp
                         }
                     }
                 } while (!found);
-            }
+            }*/
             break;
         }
     }

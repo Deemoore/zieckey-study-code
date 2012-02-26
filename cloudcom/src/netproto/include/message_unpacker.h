@@ -39,10 +39,9 @@ namespace npp
         //! Decrypt data
         bool DecryptData(const char* encrypt_data, size_t encrypt_data_len);
 
-    private:
-        friend class MessagePacker;
 
-        //! The interface for MessagePacker
+    public:
+        //! The interface for MessagePacker, don't use it
         const NetHeader& net_header() const { return net_header_; }
         const NppHeader& npp_header() const { return npp_header_; }
 
