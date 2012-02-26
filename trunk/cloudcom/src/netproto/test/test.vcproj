@@ -185,10 +185,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\idea_key.h"
-				>
-			</File>
-			<File
 				RelativePath=".\idea_test.cc"
 				>
 			</File>
@@ -205,15 +201,31 @@
 				>
 			</File>
 			<File
-				RelativePath=".\rsa_test_key.h"
-				>
-			</File>
-			<File
 				RelativePath=".\sample_test.cc"
 				>
 			</File>
 			<File
 				RelativePath=".\simple_rsa_test.cc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="include"
+			>
+			<File
+				RelativePath=".\idea_key.h"
+				>
+			</File>
+			<File
+				RelativePath=".\test_client_rsa_key.h"
+				>
+			</File>
+			<File
+				RelativePath=".\test_rsa_self_pair_key.h"
+				>
+			</File>
+			<File
+				RelativePath=".\test_server_rsa_key.h"
 				>
 			</File>
 		</Filter>

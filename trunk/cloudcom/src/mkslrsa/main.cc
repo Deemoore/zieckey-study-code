@@ -151,7 +151,7 @@ void GenIDEAKey()
 }
 
 void GenTestKey()
-{
+{//{{{
     FILE* fp_test_rsa_key = fopen("rsa_test_key.h", "w+");
     fprintf(fp_test_rsa_key, "#ifndef _RSA_SIGN_KEY_H_ \n");
     fprintf(fp_test_rsa_key, "#define _RSA_SIGN_KEY_H_ \n");
@@ -262,7 +262,7 @@ void GenTestKey()
     }
 
     fprintf(fp_test_rsa_key,"#endif\n");
-}
+}//}}}
 
 int main( int argc, char* argv[] )
 {
@@ -286,13 +286,19 @@ int main( int argc, char* argv[] )
         int kk = 0;
         for (kk = 0; kk < 2; kk++)
         {
+            const char* fp1_prefix = "server";
+            const char* fp2_prefix = "client";
             if (kk == 0)
             {
+                fp1_prefix = "server";
+                fp2_prefix = "client";
                 fp1 = fp_server;
                 fp2 = fp_client;
             }
             else
             {
+                fp2_prefix = "server";
+                fp1_prefix = "client";
                 fp2 = fp_server;
                 fp1 = fp_client;
             }
@@ -315,7 +321,7 @@ int main( int argc, char* argv[] )
 //             BIO_free( bio );
 //             RSA_free( rsa );
 
-            fprintf(fp1, "\nstatic const unsigned char g_rsa_public_key%d[%lu] = {//{{{\n", jj, public_key_len );
+            fprintf(fp1, "\nstatic const unsigned char g_%s_rsa_public_key%d[%lu] = {//{{{\n", fp1_prefix, jj, public_key_len );
             int i = 0;
             for( i = 0; i < public_key_len; i++ )
             {
@@ -332,9 +338,9 @@ int main( int argc, char* argv[] )
                 fprintf(fp1, "0x%0.2x", public_key[i] );
             }
             fprintf(fp1, "};//}}}\n" );
-            fprintf(fp1, "static const size_t g_rsa_public_key%d_len = %lu;\n\n", jj, public_key_len);
+            fprintf(fp1, "static const size_t g_%s_rsa_public_key%d_len = %lu;\n\n", fp1_prefix, jj, public_key_len);
 
-            fprintf(fp2, "static const unsigned char g_rsa_private_key%d[%lu] = {//{{{\n", jj, private_key_len );
+            fprintf(fp2, "static const unsigned char g_%s_rsa_private_key%d[%lu] = {//{{{\n", fp2_prefix, jj, private_key_len );
             for( i = 0; i < private_key_len; i++ )
             {
                 if (i != 0)
@@ -351,7 +357,7 @@ int main( int argc, char* argv[] )
             }
 
             fprintf(fp2, "};//}}}\n" );
-            fprintf(fp2, "static const size_t g_rsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+            fprintf(fp2, "static const size_t g_%s_rsa_private_key%d_len = %lu;\n\n", fp2_prefix, jj, private_key_len);
             fprintf(fp2, "\n" );
         }
     }
@@ -363,6 +369,7 @@ int main( int argc, char* argv[] )
     fprintf(fp_server, "//----------------------------------------------------------------\n");
     fprintf(fp_client, "//----------------------------------------------------------------\n");
 
+    //rsa
     for (jj = begin_key_no; jj < key_count + begin_key_no; jj++)
     {
         FILE* fp1 = NULL;
@@ -370,13 +377,19 @@ int main( int argc, char* argv[] )
         int kk = 0;
         for (kk = 0; kk < 2; kk++)
         {
+            const char* fp1_prefix = "server";
+            const char* fp2_prefix = "client";
             if (kk == 0)
             {
+                fp1_prefix = "server";
+                fp2_prefix = "client";
                 fp1 = fp_server;
                 fp2 = fp_client;
             }
             else
             {
+                fp2_prefix = "server";
+                fp1_prefix = "client";
                 fp2 = fp_server;
                 fp1 = fp_client;
             }
@@ -389,7 +402,7 @@ int main( int argc, char* argv[] )
             MakeSimpleRSAKey(public_key, private_key);
 
             //print public and private key
-            fprintf(fp1, "\nstatic const unsigned char g_slrsa_public_key%d[%lu] = {//{{{\n", jj, public_key_len );
+            fprintf(fp1, "\nstatic const unsigned char g_%s_slrsa_public_key%d[%lu] = {//{{{\n", fp1_prefix, jj, public_key_len );
             int i = 0;
             for( i = 0; i < public_key_len; i++ )
             {
@@ -406,9 +419,9 @@ int main( int argc, char* argv[] )
                 fprintf(fp1, "0x%0.2x", public_key[i] );
             }
             fprintf(fp1, "};//}}}\n" );
-            fprintf(fp1, "static const size_t g_slrsa_public_key%d_len = %lu;\n\n", jj, public_key_len);
+            fprintf(fp1, "static const size_t g_%s_slrsa_public_key%d_len = %lu;\n\n", fp1_prefix, jj, public_key_len);
 
-            fprintf(fp2, "static const unsigned char g_slrsa_private_key%d[%lu] = {//{{{\n", jj, private_key_len );
+            fprintf(fp2, "static const unsigned char g_%s_slrsa_private_key%d[%lu] = {//{{{\n", fp2_prefix, jj, private_key_len );
             for( i = 0; i < private_key_len; i++ )
             {
                 if (i != 0)
@@ -426,7 +439,7 @@ int main( int argc, char* argv[] )
 
 
             fprintf(fp2, "};//}}}\n" );
-            fprintf(fp2, "static const size_t g_slrsa_private_key%d_len = %lu;\n\n", jj, private_key_len);
+            fprintf(fp2, "static const size_t g_%s_slrsa_private_key%d_len = %lu;\n\n", fp2_prefix, jj, private_key_len);
             fprintf(fp2, "\n" );
         }
     }
@@ -435,6 +448,13 @@ int main( int argc, char* argv[] )
     fprintf(fp_server, "\n\n#endif // end of #ifdef _SERVER_RSA_SIGN_KEY_H_\n\n\n");
     fprintf(fp_client, "\n\n#endif // endof #ifdef _CLIENT_RSA_SIGN_KEY_H_\n\n\n");
 
+    fflush(fp_server);
+    fflush(fp_client);
+
+    fclose(fp_server);
+    fclose(fp_client);
+
+    printf("Generate key OK!\n");
 #ifdef WIN32
     system( "pause" );
 #endif

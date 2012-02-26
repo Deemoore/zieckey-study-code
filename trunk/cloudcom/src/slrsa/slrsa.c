@@ -37,7 +37,7 @@ int slrsa_verify( const unsigned char *m, const unsigned int m_len,
     if ( 0 == ret )
     {
         free( vm ); vm = 0;
-        fprintf(stderr, "vm_len=%d, m_len=%d, RSAPublicDecrypt ret=%d\n", (int)vm_len, (int)m_len, (int)ret );
+        //fprintf(stderr, "vm_len=%d, m_len=%d, RSAPublicDecrypt ret=%d\n", (int)vm_len, (int)m_len, (int)ret );
         return 0;
     }
 

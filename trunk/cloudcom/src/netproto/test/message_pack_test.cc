@@ -6,7 +6,9 @@
 #include "netproto/include/message_unpacker.h"
 #include "netproto/include/idea_wrapper.h"
 
-#include "rsa_test_key.h"
+#include "test_rsa_self_pair_key.h"
+#include "test_client_rsa_key.h"
+#include "test_server_rsa_key.h"
 #include "idea_key.h"
 
 #include <iostream>
@@ -72,6 +74,46 @@ namespace
         H_ADD_KEY(3);
         H_ADD_KEY(4);
 
+#undef  H_ADD_KEY
+
+        return npp_config;
+    }
+
+    npp::NppConfig* CreateServerNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
+    {
+        npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
+#define H_ADD_KEY(no) {\
+            npp_config->AddIdeaKey(no, idea_key##no);\
+            npp_config->AddSimpleRSAKey(no, g_server_slrsa_private_key##no, g_server_slrsa_private_key##no##_len, g_server_slrsa_public_key##no, g_server_slrsa_public_key##no##_len);\
+            npp_config->AddOpenSSLRSAKey(no, g_server_rsa_private_key##no, g_server_rsa_private_key##no##_len, g_server_rsa_public_key##no, g_server_rsa_public_key##no##_len);\
+        }
+
+        H_ADD_KEY(1);
+        H_ADD_KEY(2);
+        H_ADD_KEY(3);
+        H_ADD_KEY(4);
+
+#undef  H_ADD_KEY
+
+        return npp_config;
+    }
+
+    npp::NppConfig* CreateClientNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
+    {
+        npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
+#define H_ADD_KEY(no) {\
+            npp_config->AddIdeaKey(no, idea_key##no);\
+            npp_config->AddSimpleRSAKey(no, g_client_slrsa_private_key##no, g_client_slrsa_private_key##no##_len, g_client_slrsa_public_key##no, g_client_slrsa_public_key##no##_len);\
+            npp_config->AddOpenSSLRSAKey(no, g_client_rsa_private_key##no, g_client_rsa_private_key##no##_len, g_client_rsa_public_key##no, g_client_rsa_public_key##no##_len);\
+        }
+
+        H_ADD_KEY(1);
+        H_ADD_KEY(2);
+        H_ADD_KEY(3);
+        H_ADD_KEY(4);
+
+#undef  H_ADD_KEY
+
         return npp_config;
     }
 }
@@ -119,8 +161,112 @@ TEST_UNIT(test_func_MessagePackUnitTest_self_test_0)
             H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
         }
     }
-        
 }
+
+
+TEST_UNIT(test_func_MessagePackUnitTest_self_server_client_key)
+{
+    bool support_plain = false;
+    bool sign_pack     = true;
+    bool verify_sign   = true;
+    for (int i = 1; i <= 4; i++)
+    {
+        //OpenSSL RSA
+        {
+            const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+            size_t raw_data_len = strlen(raw_data);
+            std::string sigret;
+
+            {
+                //server sign
+                {
+                    npp::NppConfig* npp_config = CreateServerNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::OpenSSLRSA* rsa = npp_config->GetOpenSSLRSA(i);
+                    H_TEST_ASSERT(rsa);
+                    H_TEST_ASSERT(rsa->sign(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret));
+                    H_TEST_ASSERT(!rsa->verify(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+
+                //client verify
+                {
+                    npp::NppConfig* npp_config = CreateClientNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::OpenSSLRSA* rsa = npp_config->GetOpenSSLRSA(i);
+                    H_TEST_ASSERT(rsa->verify(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+            }
+
+            {
+                //client sign
+                {
+                    npp::NppConfig* npp_config = CreateClientNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::OpenSSLRSA* rsa = npp_config->GetOpenSSLRSA(i);
+                    H_TEST_ASSERT(rsa);
+                    H_TEST_ASSERT(rsa->sign(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret));
+                    H_TEST_ASSERT(!rsa->verify(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+
+                //server verify
+                {
+                    npp::NppConfig* npp_config = CreateServerNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::OpenSSLRSA* rsa = npp_config->GetOpenSSLRSA(i);
+                    H_TEST_ASSERT(rsa->verify(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+            }
+        }
+
+        //Simple RSA
+        {
+            const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+            size_t raw_data_len = strlen(raw_data);
+            std::string sigret;
+
+            {
+                //server sign
+                {
+                    npp::NppConfig* npp_config = CreateServerNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::SimpleRSA* rsa = npp_config->GetSimpleRSA(i);
+                    H_TEST_ASSERT(rsa);
+                    H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                    H_TEST_ASSERT(!rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+
+                //client verify
+                {
+                    npp::NppConfig* npp_config = CreateClientNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::SimpleRSA* rsa = npp_config->GetSimpleRSA(i);
+                    H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+            }
+
+            {
+                //client sign
+                {
+                    npp::NppConfig* npp_config = CreateClientNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::SimpleRSA* rsa = npp_config->GetSimpleRSA(i);
+                    H_TEST_ASSERT(rsa);
+                    H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                    H_TEST_ASSERT(!rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+
+                //server verify
+                {
+                    npp::NppConfig* npp_config = CreateServerNppConfig(support_plain, sign_pack, verify_sign);
+                    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+                    npp::SimpleRSA* rsa = npp_config->GetSimpleRSA(i);
+                    H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                }
+            }
+        }
+    }
+}
+
 
 void test_pack_unpack_1(bool sign_pack, bool verify_sign);
 void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign );
