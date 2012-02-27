@@ -108,8 +108,8 @@ namespace npp
             {
                 struct 
                 {
-                    uint8_t sign_method_:4; /** the sign_ method */
                     uint8_t sign_key_no_:4; /** The key number of the sign_ */
+                    uint8_t sign_method_:4; /** the sign_ method */
                 };
                 uint8_t sign_;
             };
