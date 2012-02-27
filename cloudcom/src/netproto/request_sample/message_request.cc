@@ -216,7 +216,7 @@ bool do_curl_multi_part_post(const std::string& server_url, const std::string& p
 
 bool do_http_request(const std::string& server_url, const std::string& request_data, std::string& result)
 {
-    npp::NppConfig* npp_config = CreateNppConfig(false, true, true);
+    npp::NppConfig* npp_config = CreateClientNppConfig(false, true, true);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
     const char * raw_data = request_data.data();
     size_t raw_data_len = request_data.size();
@@ -651,17 +651,17 @@ static const size_t g_client_slrsa_private_key4_len = 706;
     bool support_plain = false;
     bool sign_pack     = true;
     bool verify_sign   = true;
-    npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
+    npp::NppConfig* npp_config = CreateClientNppConfig(false, true, true);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
 
-    npp_config->AddOpenSSLRSAKey(1, g_rsa_private_key1, g_rsa_private_key1_len, g_rsa_public_key1, g_rsa_public_key1_len);
-    npp_config->AddOpenSSLRSAKey(2, g_rsa_private_key2, g_rsa_private_key2_len, g_rsa_public_key2, g_rsa_public_key2_len);
-
-    npp_config->AddSimpleRSAKey(1, g_slrsa_private_key1, 706, g_slrsa_public_key1, 258);
-    npp_config->AddSimpleRSAKey(2, g_slrsa_private_key2, 706, g_slrsa_public_key2, 258);
-
-    npp_config->AddIdeaKey(1, idea_key1);
-    npp_config->AddIdeaKey(2, idea_key2);
+//     npp_config->AddOpenSSLRSAKey(1, g_rsa_private_key1, g_rsa_private_key1_len, g_rsa_public_key1, g_rsa_public_key1_len);
+//     npp_config->AddOpenSSLRSAKey(2, g_rsa_private_key2, g_rsa_private_key2_len, g_rsa_public_key2, g_rsa_public_key2_len);
+// 
+//     npp_config->AddSimpleRSAKey(1, g_slrsa_private_key1, 706, g_slrsa_public_key1, 258);
+//     npp_config->AddSimpleRSAKey(2, g_slrsa_private_key2, 706, g_slrsa_public_key2, 258);
+// 
+//     npp_config->AddIdeaKey(1, idea_key1);
+//     npp_config->AddIdeaKey(2, idea_key2);
 
     std::string request_data = 
         "mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
@@ -671,32 +671,47 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         "appext=\r\n"
         "sample_0=a05ae0fdd08f22f895c8ae84fb55e89f\ne:/the/path/to/sample1\n12635838\n1\n2d361a19246a3ebf4a043d8e31009d77|9d145f6facb9bfe90c902fb85cdbacee|bb3a1cdea67508dc89a24359c00dcdf9\n\n1\n\n\r\n";
 
-    char packed_data[1024] = {};
-    size_t packed_data_len = sizeof(packed_data);
-    npp::MessagePacker packer;
-    assert(packer.Pack(request_data.data(), request_data.length(), packed_data, packed_data_len));
-
-    std::string server_resp_encrypt_data;
-    const char* url = "http://build7.kill.corp.qihoo.net:8018/tutorial.php";
-    if (do_curl_post(url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
+    for (int k = 0; k < 10; ++k)
     {
-        npp::MessageUnpacker unpacker;
-        if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
+
+        char packed_data[1024] = {};
+        size_t packed_data_len = sizeof(packed_data);
+
         {
-            std::string result = std::string(unpacker.Data(), unpacker.Size());
-            fprintf(stdout, "request ok, response:\n%s", result.data());
-            return true;
+            npp::MessageUnpacker unpacker;
+            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
+            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
+            net_header.Init();
+            npp_header.Init();
+            npp::MessagePacker packer(&unpacker);
+            npp_header.encrypt_key_no_ = rand() % 2 + 1;
+            npp_header.sign_key_no_    = rand() % 2 + 1;
+            net_header.message_id_     = rand() % 65536;
+            assert(packer.Pack(request_data.data(), request_data.length(), packed_data, packed_data_len));
+        }
+
+        std::string server_resp_encrypt_data;
+        const char* url = "http://build7.kill.corp.qihoo.net:8018/tutorial.php";
+        if (do_curl_post(url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
+        {
+            npp::MessageUnpacker unpacker;
+            if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
+            {
+                std::string result = std::string(unpacker.Data(), unpacker.Size());
+                fprintf(stdout, "request ok, response:\n%s", result.data());
+                //return true;
+            }
+            else
+            {
+                std::string result = unpacker.strerror();
+                fprintf(stderr, "error:[%s]\n", result.data());
+                //return false;
+            }
         }
         else
         {
-            std::string result = unpacker.strerror();
-            fprintf(stderr, "error:[%s]\n", result.data());
-            return false;
+            fprintf(stderr, "http request failed! %s\n", server_resp_encrypt_data.data());
         }
-    }
-    else
-    {
-        fprintf(stderr, "http request failed! %s\n", server_resp_encrypt_data.data());
     }
 
     return true;
