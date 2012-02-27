@@ -199,7 +199,7 @@ void GenIDEAKey()
 
 void GenTestKey()
 {//{{{
-    FILE* fp_test_rsa_key = fopen("rsa_test_key.h", "w+");
+    FILE* fp_test_rsa_key = fopen("test_rsa_self_pair_key.h", "w+");
     fprintf(fp_test_rsa_key, "#ifndef _RSA_SIGN_KEY_H_ \n");
     fprintf(fp_test_rsa_key, "#define _RSA_SIGN_KEY_H_ \n");
     int jj = 0;
