@@ -51,6 +51,8 @@ namespace npp
         //! using ST_NID_sha1
         bool sign( const void* m, const size_t m_len,
                    unsigned char* sigret, size_t* siglen );
+        bool sign( const void* m, const size_t m_len,
+                   std::string& sigret  );
 
 
         //! \brief verifies that the signature sigbuf of size siglen matches

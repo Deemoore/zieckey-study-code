@@ -9,9 +9,11 @@
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"cppunitd_dll.lib")
 #		pragma comment(lib,"libcurld_imp.lib")
+#       pragma comment(lib, "zlib_d.lib")
 #	else
 #		pragma comment(lib,"cppunit_dll.lib")
 #		pragma comment(lib,"libcurl_imp.lib")
+#       pragma comment(lib, "zlib.lib")
 #	endif
 #	pragma comment(lib,"Ws2_32.lib")
 #endif
@@ -31,6 +33,7 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Error message:[%s]\n", result.data());
     }
 
+    do_tutorial_test();
     do_p2sp_key_test();
     do_msv_test();
 
