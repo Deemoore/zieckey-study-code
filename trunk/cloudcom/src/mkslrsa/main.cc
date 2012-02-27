@@ -180,8 +180,9 @@ void GenIDEAKey()
                     fprintf(fp_idea, "\n\t");
                 }
             }
-            fprintf(fp_php_idea, "0x%0.2x", rand() % 256 );
-            fprintf(fp_idea, "0x%0.2x", rand() % 256 );
+            unsigned char key = rand() % 256;
+            fprintf(fp_php_idea, "0x%0.2x",  key);
+            fprintf(fp_idea, "0x%0.2x", key);
         }
         fprintf(fp_idea, "};\n\n");
         fprintf(fp_php_idea, "),\n");
@@ -956,8 +957,9 @@ int main( int argc, char* argv[] )
             int private_key_len = outkey.private_key_len;
             fprintf(fp_php_client, "\t\t%d => pack('C%lu', %s),\n", jj, private_key_len, private_key);
         }
+        fprintf(fp_php_client, "\t),\n//}}}\n");
 
-        fprintf(fp_php_client, "\t'openssl' => array(\n");
+        fprintf(fp_php_client, "\t'openssl' => array(//{{{\n");
         for (int i = 0, jj = begin_key_no; jj < openssl_rsa_keys_vect.size()/2 + begin_key_no; jj++, i++)
         {
             OutputKeys& outkey = openssl_rsa_keys_vect[(jj - begin_key_no) * 2];
@@ -982,7 +984,7 @@ int main( int argc, char* argv[] )
         fprintf(fp_php_client, "\t),\n//}}}\n");
 
         {
-            fprintf(fp_php_client, "\t'openssl' => array(\n");
+            fprintf(fp_php_client, "\t'openssl' => array(//{{{\n");
             for (int i = 0, jj = begin_key_no; jj < openssl_rsa_keys_vect.size()/2 + begin_key_no; jj++, i++)
             {
                 OutputKeys& outkey = openssl_rsa_keys_vect[(jj - begin_key_no) * 2 + 1];
