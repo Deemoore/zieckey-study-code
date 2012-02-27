@@ -164,7 +164,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_self_test_0)
 }
 
 
-TEST_UNIT(test_func_MessagePackUnitTest_self_server_client_key)
+TEST_UNIT(test_func_MessagePackUnitTest_server_client_key)
 {
     bool support_plain = false;
     bool sign_pack     = true;
