@@ -1,5 +1,5 @@
 
-#include "netproto/include/test_common.h"
+//#include "netproto/include/test_common.h"
 
 #include "netproto/include/npp_config.h"
 #include "netproto/include/message_packer.h"
@@ -11,7 +11,12 @@
 #include "test_server_rsa_key.h"
 #include "idea_key.h"
 
+#include "message_request.h"
+
 #include <iostream>
+#include <sstream>
+
+#include "curl/curl.h"
 
 namespace npp { namespace ext {
 
@@ -118,20 +123,77 @@ namespace
     }
 }
 
-void test_pack_unpack_1( bool sign_pack, bool verify_sign )
+size_t curl_write_func( void* ptr, size_t size, size_t nmemb, void *usrptr )
 {
-    npp::NppConfig* npp_config = CreateNppConfig(false, sign_pack, verify_sign);
+    std::stringstream* ss = ( std::stringstream* ) usrptr;
+    ss->write( (char*)ptr, size * nmemb );
+    return nmemb * size;
+}
+
+bool do_curl_post(const std::string& server_url, const std::string& request_data, std::string& result)
+{
+    std::stringstream ss;
+    CURL *m_pEasyHeandle = curl_easy_init();
+
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_URL, server_url.data() );
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_NOSIGNAL, (long)1L );
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_TIMEOUT, (long)10000L );
+
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_WRITEFUNCTION, curl_write_func );
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_WRITEDATA, &ss );//this will be used in writeFunc as the usrptr
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_CONNECTTIMEOUT, (long)10000L );
+
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_POSTFIELDS, request_data.data() );
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_POSTFIELDSIZE, request_data.size() );
+    curl_slist* m_curl_slist = NULL;
+    m_curl_slist = ::curl_slist_append( m_curl_slist, "Expect:" );
+    ::curl_easy_setopt( m_pEasyHeandle, CURLOPT_HTTPHEADER, m_curl_slist );
+
+    CURLcode curl_code = ::curl_easy_perform(m_pEasyHeandle);
+    curl_slist_free_all( m_curl_slist );
+    if (CURLE_OK == curl_code)
+    {
+        result = ss.str();
+        return true;
+    }
+    else
+    {
+        result = curl_easy_strerror(curl_code);
+        fprintf(stderr, "curl_easy_perform ret=%d [%s]\n", curl_code, result.data());
+        return false;
+    }
+}
+
+bool do_http_request(const std::string& server_url, const std::string& request_data, std::string& result)
+{
+    npp::NppConfig* npp_config = CreateNppConfig(false, true, true);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
-    const char * raw_data = "1234567890";
-    size_t raw_data_len = strlen(raw_data);
+    const char * raw_data = request_data.data();
+    size_t raw_data_len = request_data.size();
 
     char packed_data[1024] = {};
     size_t packed_data_len = sizeof(packed_data);
     npp::MessagePacker packer;
-    H_TEST_ASSERT(packer.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
+    assert(packer.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
 
-    npp::MessageUnpacker unpacker;
-    H_TEST_ASSERT(unpacker.Unpack(packed_data, packed_data_len));
-    H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker.Size());
-    H_TEST_ASSERT(strncmp(raw_data, unpacker.Data(), raw_data_len) == 0);
+    std::string server_resp_encrypt_data;
+    if (do_curl_post(server_url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
+    {
+        npp::MessageUnpacker unpacker;
+        if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
+        {
+            result = std::string(unpacker.Data(), unpacker.Size());
+            return true;
+        }
+        else
+        {
+            result = unpacker.strerror();
+            return false;
+        }
+    }
+    else
+    {
+        result = std::string("Http request failed:") + result;
+        return false;
+    }
 }
