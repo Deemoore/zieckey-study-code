@@ -12,7 +12,7 @@ namespace npp
 {
     bool MessageUnpacker::Unpack( const void* d, size_t d_len )
     {
-        if (!d || d_len <= sizeof(net_header_) + sizeof(npp_header_) + 16 + 128)
+        if (!d || d_len < sizeof(net_header_) + sizeof(npp_header_) + 16 + 128)
         {
             last_error(kParameterError);
             return false;

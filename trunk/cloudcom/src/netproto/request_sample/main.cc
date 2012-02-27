@@ -31,6 +31,9 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Error message:[%s]\n", result.data());
     }
 
+    do_p2sp_key_test();
+    do_msv_test();
+
 #ifdef H_OS_WINDOWS
     system( "pause" );
 #endif

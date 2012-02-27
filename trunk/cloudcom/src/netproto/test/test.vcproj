@@ -197,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\message_pack_unpack_test_p2s_key.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\openssl_rsa_test.cc"
 				>
 			</File>
