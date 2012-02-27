@@ -268,6 +268,256 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key)
 }
 
 
+
+TEST_UNIT(test_func_MessagePackUnitTest_server_client_key1)
+{
+    //OpenSSL RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_rsa_private_key1, g_server_rsa_private_key1_len, g_client_rsa_public_key1, g_client_rsa_public_key1_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_rsa_private_key1, g_client_rsa_private_key1_len, g_server_rsa_public_key1, g_server_rsa_public_key1_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+
+    //Simple RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_slrsa_private_key1, g_server_slrsa_private_key1_len, g_client_slrsa_public_key1, g_client_slrsa_public_key1_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_slrsa_private_key1, g_client_slrsa_private_key1_len, g_server_slrsa_public_key1, g_server_slrsa_public_key1_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+}
+
+
+TEST_UNIT(test_func_MessagePackUnitTest_server_client_key2)
+{
+    //OpenSSL RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_rsa_private_key2, g_server_rsa_private_key2_len, g_client_rsa_public_key2, g_client_rsa_public_key2_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_rsa_private_key2, g_client_rsa_private_key2_len, g_server_rsa_public_key2, g_server_rsa_public_key2_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+
+    //Simple RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_slrsa_private_key2, g_server_slrsa_private_key2_len, g_client_slrsa_public_key2, g_client_slrsa_public_key2_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_slrsa_private_key2, g_client_slrsa_private_key2_len, g_server_slrsa_public_key2, g_server_slrsa_public_key2_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+}
+
+
+TEST_UNIT(test_func_MessagePackUnitTest_server_client_key3)
+{
+    //OpenSSL RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_rsa_private_key3, g_server_rsa_private_key3_len, g_client_rsa_public_key3, g_client_rsa_public_key3_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_rsa_private_key3, g_client_rsa_private_key3_len, g_server_rsa_public_key3, g_server_rsa_public_key3_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+
+    //Simple RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_slrsa_private_key3, g_server_slrsa_private_key3_len, g_client_slrsa_public_key3, g_client_slrsa_public_key3_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_slrsa_private_key3, g_client_slrsa_private_key3_len, g_server_slrsa_public_key3, g_server_slrsa_public_key3_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+}
+
+
+TEST_UNIT(test_func_MessagePackUnitTest_server_client_key4)
+{
+    //OpenSSL RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_rsa_private_key4, g_server_rsa_private_key4_len, g_client_rsa_public_key4, g_client_rsa_public_key4_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::OpenSSLRSA* rsa = new npp::OpenSSLRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_rsa_private_key4, g_client_rsa_private_key4_len, g_server_rsa_public_key4, g_server_rsa_public_key4_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+
+    //Simple RSA
+    {
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        std::string sigret;
+
+        {
+            //server sign
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_server_slrsa_private_key4, g_server_slrsa_private_key4_len, g_client_slrsa_public_key4, g_client_slrsa_public_key4_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+
+            //client verify
+            {
+                npp::SimpleRSA* rsa = new npp::SimpleRSA();
+                H_TEST_ASSERT(rsa->initialize(g_client_slrsa_private_key4, g_client_slrsa_private_key4_len, g_server_slrsa_public_key4, g_server_slrsa_public_key4_len));
+                H_TEST_ASSERT(rsa);
+                H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+                H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+                delete rsa;
+            }
+        }
+    }
+}
+
+
+
 void test_pack_unpack_1(bool sign_pack, bool verify_sign);
 void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign );
 

@@ -156,6 +156,11 @@ namespace npp
         return sign(ST_NID_sha1, m, m_len, sigret, siglen);
     }
 
+    bool OpenSSLRSA::sign( const void* m, const size_t m_len, std::string& sigret )
+    {
+        return sign(ST_NID_sha1, m, m_len, sigret);
+    }
+
     bool OpenSSLRSA::verify( SignType type, 
                       const void* m, const size_t m_len,
                       const void* sigbuf, const size_t siglen )

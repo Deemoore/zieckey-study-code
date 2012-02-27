@@ -123,7 +123,8 @@ namespace npp
                 encrypt_key_no_ = 1; //server program
 #endif
                 encrypt_method_  = kIDEAEncrypt;
-                sign_method_     = 0;
+                //sign_method_     = kSimpleRSA;
+                sign_method_     = kOpenSSLRSA0;
                 sign_key_no_     = 1;
                 digest_sign_len_ = 128 + 16;
             }
