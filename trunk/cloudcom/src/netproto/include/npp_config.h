@@ -16,7 +16,7 @@ namespace npp
     {
         typedef std::map<int, IDEA>         IDEAMap;
         typedef std::map<int, SimpleRSA>    SimpleRSAMap;
-#ifdef H_PROVIDE_RSA
+#if H_NPP_PROVIDE_RSA
         typedef std::map<int, OpenSSLRSA > OpenSSLRSAMap;
 #endif
     public:
@@ -66,7 +66,7 @@ namespace npp
 
         IDEAMap       idea_map_;
         SimpleRSAMap  slrsa_map_;
-#ifdef H_PROVIDE_RSA
+#if H_NPP_PROVIDE_RSA
         OpenSSLRSAMap rsa_map_;
 #endif
     };

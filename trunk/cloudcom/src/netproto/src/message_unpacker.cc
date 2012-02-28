@@ -75,7 +75,7 @@ namespace npp
     {
         assert(npp_header_.sign_method_ == kOpenSSLRSA0 || npp_header_.sign_method_ == kOpenSSLRSA2);
 
-#ifdef H_USING_OPENSSL_RSA
+#if H_NPP_PROVIDE_RSA
         OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header_.sign_key_no_);
         if (!rsa)
         {

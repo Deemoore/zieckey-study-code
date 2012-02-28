@@ -1,6 +1,6 @@
 #include "netproto/include/inner_pre.h"
 
-#if H_PROVIDE_RSA
+#if H_NPP_PROVIDE_RSA
 
 #include "netproto/include/openssl_rsa.h"
 
@@ -175,7 +175,7 @@ namespace npp
     }
 } //end of namespace npp
 
-#endif //#if H_PROVIDE_RSA
+#endif //#if H_NPP_PROVIDE_RSA
 
 
 
