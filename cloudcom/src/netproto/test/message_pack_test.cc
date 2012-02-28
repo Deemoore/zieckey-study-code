@@ -116,7 +116,108 @@ namespace
 
         return npp_config;
     }
+
+
+    static const size_t test_effective_count = 10000;
+
+    void test_effective_openssl()
+    {
+        const size_t BUF_SIZE = 1024;
+        const size_t KEY_LEN = 1024;
+        unsigned char publickey [BUF_SIZE] = {0};
+        unsigned char privatekey[BUF_SIZE] = {0};
+        size_t publickey_len = 0;
+        size_t privatekey_len = 0;
+        bool ret = npp::OpenSSLRSA::generateKey( KEY_LEN, publickey, &publickey_len, privatekey, &privatekey_len );
+        H_TEST_ASSERT(ret);
+        if ( !ret )
+        {
+            return;
+        }
+
+        npp::OpenSSLRSA rsa;
+        H_TEST_ASSERT(rsa.initialize(privatekey, privatekey_len, publickey,  publickey_len));
+
+        const char* data = "asdfjlasjflasjdflajsdlkfjasdlkfajsdlkfjas;dlkf";
+        size_t data_len = strlen(data);
+
+        unsigned char sigret[2048] = {0};
+        size_t siglen  = 0;
+
+        time_t start = time(NULL);
+        for (size_t i = 0; i < test_effective_count; ++i)
+        {
+            ret = rsa.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, &siglen );
+            H_TEST_ASSERT(ret);
+        }
+        time_t end = time(NULL);
+        time_t sign_cost = end - start;
+
+        start = time(NULL);
+        for (size_t i = 0; i < test_effective_count; ++i)
+        {
+            ret = rsa.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, sigret, siglen );
+            H_TEST_ASSERT(ret);
+        }
+        end = time(NULL);
+        time_t verify_cost = end - start;
+
+        std::cout << "openssl sign_cost=" << sign_cost << std::endl;
+        std::cout << "openssl verify_cost=" << verify_cost << std::endl;
+        std::cout << "openssl sign_cost/verify_cost=" << (double)sign_cost/(double)verify_cost << std::endl;
+
+        std::string ss;
+        H_TEST_ASSERT(rsa.sign( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss ));
+        H_TEST_ASSERT(rsa.verify( npp::OpenSSLRSA::ST_NID_sha1, (unsigned char*)data, data_len, ss.data(), ss.size() ));
+    }
+
+    void test_effective_slrsa()
+    {
+        bool support_plain = false;
+        bool sign_pack     = true;
+        bool verify_sign   = true;
+        npp::NppConfig* npp_config = CreateNppConfig(support_plain, sign_pack, verify_sign);
+        npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+
+        const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
+        size_t raw_data_len = strlen(raw_data);
+        npp::SimpleRSA* rsa = npp_config->GetSimpleRSA(2);
+        H_TEST_ASSERT(rsa);
+        std::string sigret;
+        H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+        H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+
+        time_t start = time(NULL);
+        for (size_t i = 0; i < test_effective_count; ++i)
+        {
+            H_TEST_ASSERT(rsa->sign(raw_data, raw_data_len, sigret));
+        }
+        time_t end = time(NULL);
+        time_t sign_cost = end - start;
+
+        start = time(NULL);
+        for (size_t i = 0; i < test_effective_count; ++i)
+        {
+            H_TEST_ASSERT(rsa->verify(raw_data, raw_data_len, sigret.data(), sigret.size()));
+        }
+        end = time(NULL);
+        time_t verify_cost = end - start;
+
+        std::cout << "slrsa sign_cost=" << sign_cost << std::endl;
+        std::cout << "slrsa verify_cost=" << verify_cost << std::endl;
+        std::cout << "slrsa sign_cost/verify_cost=" << (double)sign_cost/(double)verify_cost << std::endl;
+
+    }
 }
+
+TEST_UNIT(test_func_MessagePackUnitTest_test_effective)
+{
+#ifdef H_TEST_EFFECTIVE
+    test_effective_slrsa();
+    test_effective_openssl();
+#endif
+}
+
 
 TEST_UNIT(test_func_MessagePackUnitTest_self_test_0)
 {
