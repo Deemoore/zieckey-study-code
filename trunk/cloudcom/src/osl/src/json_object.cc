@@ -250,7 +250,7 @@ namespace json
 
     osl::u32 JSONObject::parse( const char* source, const osl::s64 source_len )
     {
-        if ( source_len == 0 )
+        if ( source_len == 0 || !source )
         {
             return 0;
         }
