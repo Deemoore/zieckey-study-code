@@ -90,6 +90,7 @@ namespace npp
                 memset(this, 0, sizeof(*this));
                 header_len_ = sizeof(*this);
                 version_ = 1;
+                packet_count_ = 1;
             }
         };
 
