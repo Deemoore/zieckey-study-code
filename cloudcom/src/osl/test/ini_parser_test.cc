@@ -124,7 +124,7 @@ namespace
             "#this is a commit\r\n"
             "#commit=this is a commit\r\n"
             "//anothercomit=this is a commit\r\n"
-            "product=360se\r\n"
+            "product=xxxxxxse\r\n"
             "combo=sedl\r\n"
             "\r\n"
             "version=4.4\r\n"
@@ -150,7 +150,7 @@ namespace
 
             {
                 osl::StringA key = "product";
-                osl::StringA value = "360se";
+                osl::StringA value = "xxxxxxse";
                 H_TEST_ASSERT( value == parser.get( key ) );
             }
 
@@ -199,7 +199,7 @@ namespace
     void test_ini_parser_4()
     {
         const char* rawdata = "mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
-            "product=360se\r\n"
+            "product=xxxxxxse\r\n"
             "combo=sedl\r\n"
             "version=4.4\r\n"
             "appext=";
@@ -216,7 +216,7 @@ namespace
 
             {
                 osl::StringA key = "product";
-                osl::StringA value = "360se";
+                osl::StringA value = "xxxxxxse";
                 H_TEST_ASSERT( value == parser.get( key ) );
             }
 
@@ -275,9 +275,9 @@ namespace
         const char* rawdata = 
             "             \r\n"
             " mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
-            " product=360se\r\n"
+            " product=xxxxxxse\r\n"
             "             \r\n"
-            " [360se] \r\n"
+            " [xxxxxxse] \r\n"
             "             \r\n"
             "combo=sedl\r\n"
             "version=4.4\r\n"
@@ -313,20 +313,20 @@ namespace
 
         {
             osl::StringA key = "product";
-            osl::StringA value = "360se";
+            osl::StringA value = "xxxxxxse";
             H_TEST_ASSERT( value == parser.get( key ) );
         }
 
         {
             osl::StringA key = "combo";
             osl::StringA value = "sedl";
-            H_TEST_ASSERT( value == parser.get( "360se", key ) );
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
         }
 
         {
             osl::StringA key = "version";
             osl::StringA value = "4.4";
-            H_TEST_ASSERT( value == parser.get( "360se", key ) );
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
         }
 
         {
@@ -368,7 +368,7 @@ namespace
         const char* rawdata = 
             "             \r\n"
             " Mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
-            " prOduct=360se\r\n"
+            " prOduct=xxxxxxse\r\n"
             "             \r\n"
             " [360sE] \r\n"
             "             \r\n"
@@ -406,20 +406,20 @@ namespace
 
         {
             osl::StringA key = "proDuct";
-            osl::StringA value = "360se";
+            osl::StringA value = "xxxxxxse";
             H_TEST_ASSERT( value == parser.get( key ) );
         }
 
         {
             osl::StringA key = "comBo";
             osl::StringA value = "sedl";
-            H_TEST_ASSERT( value == parser.get( "360se", key ) );
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
         }
 
         {
             osl::StringA key = "veRsioN";
             osl::StringA value = "4.4";
-            H_TEST_ASSERT( value == parser.get( "360se", key ) );
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
         }
 
         {
@@ -492,13 +492,13 @@ namespace
 
         {
             osl::StringA key = "product";
-            osl::StringA value = "360se";
+            osl::StringA value = "xxxxxxse";
             parser.set("", key, value);
             H_TEST_ASSERT( value == parser.get( key ) );
         }
 
         {
-            osl::StringA section = "360se";
+            osl::StringA section = "xxxxxxse";
             osl::StringA key = "combo";
             osl::StringA value = "sedl";
             parser.set(section, key, value);
@@ -506,7 +506,7 @@ namespace
         }
 
         {
-            osl::StringA section = "360se";
+            osl::StringA section = "xxxxxxse";
             osl::StringA key = "version";
             osl::StringA value = "4.4";
             parser.set(section, key, value);
@@ -615,13 +615,13 @@ namespace
 
         {
             osl::StringA key = "product";
-            osl::StringA value = "360se";
+            osl::StringA value = "xxxxxxse";
             parser.set("", key, value);
             H_TEST_ASSERT( value == parser.get( key ) );
         }
 
         {
-            osl::StringA section = "360se";
+            osl::StringA section = "xxxxxxse";
             osl::StringA key = "combo";
             osl::StringA value = "sedl";
             parser.set(section, key, value);
@@ -629,7 +629,7 @@ namespace
         }
 
         {
-            osl::StringA section = "360se";
+            osl::StringA section = "xxxxxxse";
             osl::StringA key = "version";
             osl::StringA value = "4.4";
             parser.set(section, key, value);
@@ -697,20 +697,20 @@ namespace
 
             {
                 osl::StringA key = "product";
-                osl::StringA value = "360se";
+                osl::StringA value = "xxxxxxse";
                 H_TEST_ASSERT( value == parser.get( key ) );
             }
 
             {
                 osl::StringA key = "combo";
                 osl::StringA value = "sedl";
-                H_TEST_ASSERT( value == parser.get( "360se", key ) );
+                H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
             }
 
             {
                 osl::StringA key = "version";
                 osl::StringA value = "4.4";
-                H_TEST_ASSERT( value == parser.get( "360se", key ) );
+                H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
             }
 
             {
@@ -831,7 +831,7 @@ namespace
         const char* rawdata = 
             "             \r\n"
             " Mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
-            " prOduct=360se\r\n"
+            " prOduct=xxxxxxse\r\n"
             "             \r\n"
             " [360sE] \r\n"
             "             \r\n"
