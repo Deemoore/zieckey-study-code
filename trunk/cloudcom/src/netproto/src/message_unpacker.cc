@@ -34,7 +34,7 @@ namespace npp
 
         assert(read_pos == ((const char*)d) + header_len + sizeof(npp_header_));
         size_t data_len = d_len - header_len - sizeof(npp_header_) - npp_header_.digest_sign_len_;
-        if (s_pNppConfig->IsVerifySign() && !VerifySign(read_pos, data_len))
+        if (s_pNppConfig->verify_data() && !VerifySign(read_pos, data_len))
         {
             //ErrorCode has been set by VerifySign
             return false;
@@ -157,7 +157,7 @@ namespace npp
         switch (npp_header_.encrypt_method_)
         {
         case kNoEncrypt:
-            if (!s_pNppConfig->IsSupportPlainData())
+            if (!s_pNppConfig->support_plain())
             {
                 last_error(kNotSupportPlainData);
                 return false;

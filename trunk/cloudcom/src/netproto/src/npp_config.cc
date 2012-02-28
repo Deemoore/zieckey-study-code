@@ -6,10 +6,14 @@ namespace npp
 
     template<> NppConfig* Singleton<NppConfig>::ms_Singleton = NULL;
 
-    NppConfig::NppConfig( bool support_plain, bool sign_pack, bool verify_sign )
-        : support_plain_(support_plain), sign_pack_(sign_pack), verify_sign_(verify_sign)
+    NppConfig::NppConfig()
+        : support_plain_(false), sign_data_(true), verify_data_(true)
     {
+    }
 
+    NppConfig::NppConfig( bool support_plain, bool sign_data, bool verify_data )
+        : support_plain_(support_plain), sign_data_(sign_data), verify_data_(verify_data)
+    {
     }
 
     bool NppConfig::AddIdeaKey( int key_no, const unsigned char key[16] )
@@ -63,13 +67,5 @@ namespace npp
         return NULL;
     }
 
-    size_t NppConfig::GetOpenSSLRSAKeyCount() const
-    {
-        return rsa_map_.size();
-    }
 
-    size_t NppConfig::GetSimpleRSAKeyCount() const
-    {
-        return slrsa_map_.size();
-    }
 }

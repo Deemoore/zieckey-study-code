@@ -20,7 +20,8 @@ namespace npp
         typedef std::map<int, OpenSSLRSA > OpenSSLRSAMap;
 #endif
     public:
-        NppConfig(bool support_plain, bool sign_pack, bool verify_sign);
+        NppConfig();
+        NppConfig(bool support_plain, bool sign_data, bool verify_data);
 
         bool AddIdeaKey(int key_no, const unsigned char key[16]);
 
@@ -32,11 +33,19 @@ namespace npp
             const unsigned char* private_key, const size_t private_key_len,
             const unsigned char* public_key, const size_t public_key_len );
 
-        bool IsSupportPlainData() const;
+        //Query
+    public:
+        bool support_plain() const;
 
-        bool IsSignData() const;
+        bool sign_data() const;
 
-        bool IsVerifySign() const;
+        bool verify_data() const;
+
+        void set_support_plain(bool support_plain_data);
+
+        void set_sign_data(bool sign_data);
+
+        void set_verify_data(bool verify_data);
 
         OpenSSLRSA* GetOpenSSLRSA(int index);
 
@@ -47,10 +56,13 @@ namespace npp
         size_t GetOpenSSLRSAKeyCount() const;
 
         size_t GetSimpleRSAKeyCount() const;
+
+        size_t GetIDEAKeyCount() const;
+
     private:
         bool support_plain_;
-        bool sign_pack_;
-        bool verify_sign_;
+        bool sign_data_;
+        bool verify_data_;
 
         IDEAMap       idea_map_;
         SimpleRSAMap  slrsa_map_;
@@ -59,19 +71,49 @@ namespace npp
 #endif
     };
 
-    inline bool NppConfig::IsSupportPlainData() const 
+    inline bool NppConfig::support_plain() const 
     {
         return support_plain_;
     }
 
-    inline bool NppConfig::IsSignData() const
+    inline bool NppConfig::sign_data() const
     {
-        return sign_pack_;
+        return sign_data_;
     }
 
-    inline bool NppConfig::IsVerifySign() const
+    inline bool NppConfig::verify_data() const
     {
-        return verify_sign_;
+        return verify_data_;
+    }
+
+    inline size_t NppConfig::GetOpenSSLRSAKeyCount() const
+    {
+        return rsa_map_.size();
+    }
+
+    inline size_t NppConfig::GetSimpleRSAKeyCount() const
+    {
+        return slrsa_map_.size();
+    }
+
+    inline size_t NppConfig::GetIDEAKeyCount() const
+    {
+        return idea_map_.size();
+    }
+
+    inline void NppConfig::set_support_plain( bool support_plain_data )
+    {
+        support_plain_ = support_plain_data;
+    }
+
+    inline void NppConfig::set_sign_data( bool sign )
+    {
+        sign_data_ = sign;
+    }
+
+    inline void NppConfig::set_verify_data( bool verify )
+    {
+        verify_data_ = verify;
     }
 }//end of namespace npp
 

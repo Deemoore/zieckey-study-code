@@ -43,7 +43,6 @@ namespace npp
 
     const char* Message::strerror() const
     {
-        //TODO
         H_CASE_STRING_BIGIN(last_error());
         H_CASE_STRING(kNoError);
         H_CASE_STRING(kParameterError);

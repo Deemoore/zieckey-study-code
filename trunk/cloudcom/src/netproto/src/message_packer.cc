@@ -119,7 +119,7 @@ namespace npp
         net_header->message_id_ = htons(net_header->message_id_);
         net_header->preserve_   = htons(net_header->preserve_);
 
-        if (!s_pNppConfig->IsSignData())
+        if (!s_pNppConfig->sign_data())
         {
             assert(last_error() == kNoError);
             return true;
