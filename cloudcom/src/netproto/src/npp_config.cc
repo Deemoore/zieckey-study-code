@@ -11,8 +11,8 @@ namespace npp
     {
     }
 
-    NppConfig::NppConfig( bool support_plain, bool sign_data, bool verify_data )
-        : support_plain_(support_plain), sign_data_(sign_data), verify_data_(verify_data)
+    NppConfig::NppConfig( bool plain, bool sign, bool verify )
+        : support_plain_(plain), sign_data_(sign), verify_data_(verify)
     {
     }
 
