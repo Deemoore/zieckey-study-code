@@ -370,7 +370,7 @@ namespace
             " Mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
             " prOduct=xxxxxxse\r\n"
             "             \r\n"
-            " [360sE] \r\n"
+            " [xxxxXxsE] \r\n"
             "             \r\n"
             "combo=sedl\r\n"
             "version=4.4\r\n"
