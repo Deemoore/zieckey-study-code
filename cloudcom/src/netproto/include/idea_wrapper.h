@@ -5,7 +5,7 @@
 #include "netproto/include/platform_micros.h"
 #include "netproto/include/data_stream.h"
 
-#if H_PROVIDE_IDEA_ENCRYPT
+#if H_NPP_PROVIDE_IDEA_ENCRYPT
 
 #include <idea/idea.h>
 
@@ -91,7 +91,7 @@ namespace npp
     };
 } // end of namespace ext
 
-#endif // end of #if H_PROVIDE_IDEA_ENCRYPT
+#endif // end of #if H_NPP_PROVIDE_IDEA_ENCRYPT
 
 
 

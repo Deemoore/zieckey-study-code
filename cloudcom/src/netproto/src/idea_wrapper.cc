@@ -5,7 +5,7 @@
 
 
 
-#if H_PROVIDE_IDEA_ENCRYPT
+#if H_NPP_PROVIDE_IDEA_ENCRYPT
 
 
 namespace npp
@@ -243,4 +243,4 @@ namespace npp
 
 } // end of namespace ext
 
-#endif // end of #if H_PROVIDE_IDEA_ENCRYPT
+#endif // end of #if H_NPP_PROVIDE_IDEA_ENCRYPT

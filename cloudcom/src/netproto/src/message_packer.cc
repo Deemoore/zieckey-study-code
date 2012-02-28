@@ -17,7 +17,23 @@ namespace npp
 
     size_t MessagePacker::GetPackedTotalDataSize( size_t data_len )
     {
+        if (message_unpacker_)
+        {
+            if (message_unpacker_->net_header().version() == 1)
+            {
+                return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
+            }
+            else
+            {
+                //TODO version 2
+                assert(false && "Not supported!");
+            }
+        }
+        
+        //version 1
         return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
+
+        //TODO version 2
     }
 
     bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )

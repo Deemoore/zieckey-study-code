@@ -1,6 +1,6 @@
 #include "netproto/include/inner_pre.h"
 
-#if H_PROVIDE_MD5
+#if H_NPP_PROVIDE_MD5
 
 #include "netproto/include/md5.h"
 
@@ -839,7 +839,7 @@ namespace npp
 
 
 
-#endif // end of #if H_PROVIDE_MD5
+#endif // end of #if H_NPP_PROVIDE_MD5
 
 
 

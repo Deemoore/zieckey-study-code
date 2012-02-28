@@ -2,7 +2,7 @@
 #include "netproto/include/test_common.h"
 #include "netproto/include/openssl_rsa.h"
 
-#if H_PROVIDE_RSA
+#if H_NPP_PROVIDE_RSA
 
 namespace
 {
