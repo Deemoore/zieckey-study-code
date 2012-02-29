@@ -3,9 +3,94 @@
 
 #include "rsa.h"
 #include "slrsa.h"
+#include "md5.h"
+
+#include <time.h>
+
+// #include "mkslrsa/r_random.h"
+// #include "mkslrsa/rsaeuro.h"
+
+
+void R_RandomCreate(R_RANDOM_STRUCT *random);
+void R_RandomFinal(R_RANDOM_STRUCT *random);
+
+
+int R_RandomUpdate(R_RANDOM_STRUCT *random, unsigned char *block, unsigned len)
+// R_RANDOM_STRUCT *random;        /* random structure */
+// unsigned char *block;           /* block of values to mix in */
+// unsigned int len;               /* length of block */
+{
+    MD5_CTX context;
+    BYTE digest[16];
+    unsigned int i, j;
+
+    MD5Init(&context);
+    MD5Update(&context, block, len);
+    MD5Final(digest, &context);
+
+    /* add digest to state */
+
+    for(j = 0, i = 16; i > 0; i--) {
+        j += random->state[i-1] + digest[i-1];
+        random->state[i-1] = (BYTE)j;
+        j >>= 8;
+    }
+
+    if(random->bytesNeeded < len)
+        random->bytesNeeded = 0;
+    else
+        random->bytesNeeded -= len;
+
+    /* Clear sensitive information. */
+
+    R_memset((POINTER)digest, 0, sizeof (digest));
+    j = 0;
+
+#define IDOK 0
+    return(IDOK);
+}
+
+
+void R_RandomFinal(R_RANDOM_STRUCT *random)
+{
+    R_memset((POINTER)random, 0, sizeof(R_RANDOM_STRUCT));
+}
+
+/* Create Random object, seed ready for use.
+Requires ANSI Standard time routines to provide seed data.
+*/
+
+void R_RandomCreate(R_RANDOM_STRUCT *random)/* random structure */
+{
+    clock_t cnow;
+    time_t t;
+    struct tm *gmt;
+
+    /* clear and setup object for seeding */
+    R_memset((POINTER)random->state, 0, sizeof(random->state));
+    random->outputAvailable = 0;
+    random->bytesNeeded = 512;//RANDOM_BYTES_RQINT;  /* using internal value */
+
+    /* Add data to random object */
+    while(random->bytesNeeded) {
+        t = time(NULL);                 /* use for seed data */
+        gmt = gmtime(&t);
+        cnow = clock();
+
+        R_RandomUpdate(random, (POINTER)gmt, sizeof(struct tm));
+        R_RandomUpdate(random, (unsigned char*)&cnow, sizeof(clock_t));
+    }
+
+    /* Clean Up time data */
+    R_memset((POINTER)gmt, 0, sizeof(struct tm));
+    cnow = 0;
+    t = 0;
+}
+
 
 #ifdef H_OS_WINDOWS
 #	pragma comment(lib,"slrsa.lib")
+#	pragma comment(lib,"mkslrsa.lib")
 #endif
 
 const unsigned char prvFileKey[706] = {
@@ -62,8 +147,46 @@ bool Make360SignHash( unsigned char* output, unsigned int* outputLen, unsigned c
     return ret;
 }
 
+//int RSAPublicEncrypt(output, outputLen, input, inputLen, publicKey, randomStruct)
+// unsigned char *output;          /* output block */
+// unsigned int *outputLen;        /* length of output block */
+// unsigned char *input;           /* input block */
+// unsigned int inputLen;          /* length of input block */
+// R_RSA_PUBLIC_KEY *publicKey;    /* RSA public key */
+// R_RANDOM_STRUCT *randomStruct;  /* random structure */
+
+// int RSAPublicDecrypt(output, outputLen, input, inputLen, publicKey)
+// unsigned char *output;          /* output block */
+// unsigned int *outputLen;        /* length of output block */
+// unsigned char *input;           /* input block */
+// unsigned int inputLen;          /* length of input block */
+// R_RSA_PUBLIC_KEY *publicKey;    /* RSA public key */
+static bool SimpleRSA_PublicEncrypt_PrivateDecrypt()
+{
+    //      static BYTE pbFreshOut[20];
+    R_RANDOM_STRUCT RandomStruct;
+    //R_RSA_PROTO_KEY ProtoKey;
+    int iRet;
+
+    R_RandomCreate( &RandomStruct );
+    unsigned char output[1024] = {};          /* output block */
+    unsigned int  outputLen = sizeof(output);        /* length of output block */
+    const char *input = "0123456789abcdef";           /* input block */
+    unsigned int inputLen = strlen(input);          /* length of input block */
+    int encrypt_ret = RSAPublicEncrypt(output, &outputLen, (unsigned char*)input, inputLen, (R_RSA_PUBLIC_KEY *)pubFileKey, &RandomStruct);
+    R_RandomFinal( &RandomStruct );
+
+    unsigned char decrypt_output[1024] = {};
+    unsigned int decrypt_output_len = sizeof(decrypt_output);
+    int decrypt_ret = RSAPrivateDecrypt(decrypt_output, &decrypt_output_len, (unsigned char*)output, outputLen, (R_RSA_PRIVATE_KEY *)prvFileKey);
+
+    return true;
+}
+
 int main( int argc, char* argv[] )
 {
+    SimpleRSA_PublicEncrypt_PrivateDecrypt();
+
     unsigned char* input = (unsigned char*)"8b2a649ecb880316db6a8c340b836b0c";
 
     const BYTE* g_rsa_prvFileKey = prvFileKey;

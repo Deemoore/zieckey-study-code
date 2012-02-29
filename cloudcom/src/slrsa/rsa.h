@@ -19,6 +19,8 @@
 
 	Revision 1.00 - JSAK 23/6/95, Final Release Version
 */
+#ifndef _SIMPLE_RSA_STANDAND_H_
+#define _SIMPLE_RSA_STANDAND_H_
 
 #include "global.h"
 
@@ -86,6 +88,7 @@ typedef struct {
 #define RSA_IDOK    0
 #define RSA_IDERROR 1
 
+//return RSA_IDOK when successfully
 int RSAPublicEncrypt PROTO_LIST ((unsigned char *, unsigned int *, unsigned char *, unsigned int,
     R_RSA_PUBLIC_KEY *, R_RANDOM_STRUCT *));
 int RSAPrivateEncrypt PROTO_LIST ((unsigned char *, unsigned int *, unsigned char *, unsigned int,
@@ -95,6 +98,15 @@ int RSAPublicDecrypt PROTO_LIST ((unsigned char *, unsigned int *, unsigned char
 int RSAPrivateDecrypt PROTO_LIST ((unsigned char *, unsigned int *, unsigned char *, unsigned int,
     R_RSA_PRIVATE_KEY *));
 
+#define R_memset(x, y, z) RtlFillMemory(x, z, y)		//注意2,3参数对调
+#define R_memcpy(x, y, z) RtlCopyMemory(x, y, z)
+#define R_memcmp(x, y, z) RtlCompareMemory(x, y, z)
+
+
 #ifdef __cplusplus
 }
 #endif
+
+
+#endif
+

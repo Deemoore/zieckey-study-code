@@ -2,9 +2,9 @@
 #define NETPROTO_NP_CONF_H_
 
 #include "netproto/include/inner_pre.h"
-#include "netproto/include/idea_wrapper.h"
+#include "netproto/include/idea.h"
 #include "netproto/include/openssl_rsa.h"
-#include "netproto/include/slrsa_wrapper.h"
+#include "netproto/include/slrsa.h"
 
 #include "netproto/include/singleton.h"
 

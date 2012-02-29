@@ -29,7 +29,7 @@
 #include "global.h"
 #include "nn.h"
 #include "rsa.h"
-
+#include "r_random.h"
 #include <string.h>
 
 /*
@@ -40,14 +40,11 @@
 #endif
 */
 
-#define R_memset(x, y, z) RtlFillMemory(x, z, y)		//注意2,3参数对调
-#define R_memcpy(x, y, z) RtlCopyMemory(x, y, z)
-#define R_memcmp(x, y, z) RtlCompareMemory(x, y, z)
 
 static int rsapublicfunc PROTO_LIST((unsigned char *, unsigned int *, unsigned char *, unsigned int, R_RSA_PUBLIC_KEY *));
 static int rsaprivatefunc PROTO_LIST((unsigned char *, unsigned int *, unsigned char *, unsigned int, R_RSA_PRIVATE_KEY *));
 
-#if 0
+#if 1
 /* RSA encryption, according to RSADSI's PKCS #1. */
 
 int RSAPublicEncrypt(output, outputLen, input, inputLen, publicKey, randomStruct)
@@ -229,6 +226,11 @@ R_RSA_PRIVATE_KEY *privateKey;  /* RSA private key */
 	if(i >= modulusLen)
 		return(RE_DATA);
 
+    if( *outputLen < modulusLen - i )
+    {
+        return(RE_LEN);//weizili 2012-02-29, 避免缓冲区溢出
+    }
+
 	*outputLen = modulusLen - i;
 
 	if(*outputLen + 11 > modulusLen)
@@ -268,6 +270,12 @@ R_RSA_PUBLIC_KEY *publicKey;    /* RSA public key */
 
 	if(NN_Cmp(m, n, nDigits) >= 0)
 		return(RE_DATA);
+
+    if (*outputLen < (unsigned int)((publicKey->bits + 7) / 8))
+    {
+        //weizili 2012-02-29, 避免缓冲区溢出
+        return RE_LEN;
+    }
 
 	*outputLen = (publicKey->bits + 7) / 8;
 
@@ -323,6 +331,12 @@ R_RSA_PRIVATE_KEY *privateKey;  /* RSA private key */
 
 	if(NN_Cmp(c, n, nDigits) >= 0)
 		return(RE_DATA);
+
+    if (*outputLen < (unsigned int)((privateKey->bits + 7) / 8))
+    {
+        //weizili 2012-02-29, 避免缓冲区溢出
+        return RE_LEN;
+    }
 
 	*outputLen = (privateKey->bits + 7) / 8;
 
