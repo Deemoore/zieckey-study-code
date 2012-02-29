@@ -138,12 +138,12 @@ namespace osl
         StringUtil::initialize();
 
 #if H_PROVIDE_LOG_SYSTEM
-	    new LogManager();
+        LogManager::createInstance();
 #endif
 
 #if H_PROVIDE_TIMER
-        //Timer::createInstance();
-        new Timer();
+        Timer::createInstance();
+        //new Timer();
 #endif//#if H_PROVIDE_TIMER
 
         Process::initialize();
@@ -170,7 +170,7 @@ namespace osl
 #endif//#if H_PROVIDE_TIMER
 
 #if H_PROVIDE_LOG_SYSTEM
-		delete s_pLogManager;
+		LogManager::destroyInstance();
 #endif
 
         StringUtil::uninitialize();

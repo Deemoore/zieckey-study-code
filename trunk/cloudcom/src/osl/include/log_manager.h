@@ -6,6 +6,7 @@
 #if H_PROVIDE_LOG_SYSTEM
 
 #include "osl/include/singleton.h"
+#include "osl/include/lock.h"
 
 namespace osl
 {
@@ -28,8 +29,9 @@ namespace osl
         // shared by all test log.
         static int test_verify_point_index;
     public:
-        LogManager();
-        ~LogManager();
+        static LogManager* createInstance();
+
+        static void destroyInstance();
 
         //! Creates a new log with the given name.
         //! \param strName Log name.It is also log file name.
@@ -58,6 +60,10 @@ namespace osl
 		}
 		
     protected:
+        static Lock    m_lkForInit;//! the lock for create the instance
+        LogManager();
+        ~LogManager();
+
 		class LogProcessThread* getLogProcessThread()
 		{
 			return  m_pLogProcessThread;

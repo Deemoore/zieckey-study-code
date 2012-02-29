@@ -41,12 +41,48 @@ namespace osl
     //////////////////////////////////////////////////////////////////////////
 
     MiniLock  s_lkLogManager;
-
     //-----------------------------------------------------------------
     int LogManager::test_verify_point_index = 0;
 
     //-----------------------------------------------------------------------
     template<> LogManager* Singleton<LogManager>::ms_Singleton = 0;
+
+    Lock    LogManager::m_lkForInit;//! the lock for create the instance
+    LogManager* LogManager::createInstance()
+    {
+//         if ( !ms_Singleton )
+//         {
+//             H_AUTOLOCK( m_lkForInit );
+// 
+//             if ( !ms_Singleton )
+//             {
+//                 ms_Singleton = H_NEW LogManager;
+//             }
+//         }
+// 
+//         return ms_Singleton;
+
+        if ( !ms_Singleton )
+        {
+            H_NEW LogManager;
+        }
+
+        return ms_Singleton;
+    }
+
+    void LogManager::destroyInstance()
+    {
+        if ( ms_Singleton )
+        {
+            H_AUTOLOCK( m_lkForInit );
+
+            if ( ms_Singleton )
+            {
+                delete ms_Singleton;
+                ms_Singleton = NULL;
+            }
+        }
+    }
 
     //-----------------------------------------------------------------------
     LogManager::LogManager()

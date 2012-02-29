@@ -202,14 +202,19 @@ namespace osl
 
     Timer* Timer::createInstance()
     {
+//         if ( !ms_Singleton )
+//         {
+//             H_AUTOLOCK( m_lkForInit );
+// 
+//             if ( !ms_Singleton )
+//             {
+//                 ms_Singleton = H_NEW Timer;
+//             }
+//         }
+
         if ( !ms_Singleton )
         {
-            H_AUTOLOCK( m_lkForInit );
-
-            if ( !ms_Singleton )
-            {
-                ms_Singleton = H_NEW Timer;
-            }
+            H_NEW Timer;
         }
 
         return ms_Singleton;
@@ -228,6 +233,7 @@ namespace osl
             }
         }
     }
+
     //-------------------------------------------------------------------------
     Timer::~Timer()
     {
