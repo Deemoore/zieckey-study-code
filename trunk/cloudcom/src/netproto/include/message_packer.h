@@ -41,8 +41,12 @@ namespace npp
 
         bool pack_v1(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
 
+#ifdef _NETPROTO_TEST
+    public:
+#endif
         //! We decide which sign to use 
         void CalculateSignKeyNum(NppHeader* npp_header);
+
     private:
         MessageUnpacker* message_unpacker_;
     };

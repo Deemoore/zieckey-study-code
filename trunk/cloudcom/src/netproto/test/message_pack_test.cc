@@ -706,8 +706,50 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                 }
                 H_TEST_ASSERT(strncmp(raw_data, unpacker1.Data(), raw_data_len) == 0);
                 H_TEST_ASSERT(unpacker1.net_header().message_id_ == net_header.message_id_);
+                H_TEST_ASSERT(unpacker1.npp_header().encrypt_key_no() + 1 == npp_header.encrypt_key_no() || unpacker1.npp_header().encrypt_key_no() == npp_header.encrypt_key_no() + 1);
+                H_TEST_ASSERT(unpacker1.npp_header().sign_key_no() + 1 == npp_header.sign_key_no() || unpacker1.npp_header().sign_key_no() == npp_header.sign_key_no() + 1);
             }
         }
     }
 }
 
+TEST_UNIT(test_func_MessagePackUnitTest_message_packer_CalculateSignKeyNum)
+{
+#ifdef _NETPROTO_TEST
+    npp::MessagePacker packer;
+    npp::Message::NppHeader h;
+    h.Init();
+    for (uint8_t i = 1; i < 14; i++)
+    {
+        {
+            h.set_encrypt_key_no(i);
+            uint8_t orignal = h.encrypt_key_no();
+            packer.CalculateSignKeyNum(&h);
+            H_TEST_ASSERT((orignal + 1)/2 == (h.encrypt_key_no() + 1)/2);
+            if (orignal % 2 == 0)//2,4,6,8...
+            {
+                H_TEST_ASSERT(orignal == h.encrypt_key_no() + 1);
+            }
+            else
+            {
+                H_TEST_ASSERT(orignal + 1 == h.encrypt_key_no());
+            }
+        }
+
+        {
+            h.set_sign_key_no(i);
+            uint8_t orignal = h.sign_key_no();
+            packer.CalculateSignKeyNum(&h);
+            H_TEST_ASSERT((orignal + 1)/2 == (h.sign_key_no() + 1)/2);
+            if (orignal % 2 == 0)//2,4,6,8...
+            {
+                H_TEST_ASSERT(orignal == h.sign_key_no() + 1);
+            }
+            else
+            {
+                H_TEST_ASSERT(orignal + 1 == h.sign_key_no());
+            }
+        }
+    }
+#endif//_NETPROTO_TEST
+}
