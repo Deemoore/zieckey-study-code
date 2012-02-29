@@ -20,7 +20,13 @@ namespace npp
         typedef std::map<int, OpenSSLRSA > OpenSSLRSAMap;
 #endif
     public:
-        NppConfig();
+        //! \brief Create an instance
+        //! \warning Only can be called in the main function when the program is starting
+        //!     Be careful the thread-safe problem
+        //! \return NppConfig* - 
+        static NppConfig* CreateInstance();
+
+    public:
         NppConfig(bool support_plain, bool sign_data, bool verify_data);
 
         bool AddIdeaKey(int key_no, const unsigned char key[16]);
@@ -58,6 +64,9 @@ namespace npp
         size_t GetSimpleRSAKeyCount() const;
 
         size_t GetIDEAKeyCount() const;
+
+    protected:
+        NppConfig();
 
     private:
         bool support_plain_;
