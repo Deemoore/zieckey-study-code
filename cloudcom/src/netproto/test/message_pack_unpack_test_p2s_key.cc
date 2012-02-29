@@ -121,7 +121,7 @@ namespace
 
 TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
 {
-    /** RSA key */
+    /** RSA private_key */
     /*{{{*/
     //use to sign output packet sign
     const u_char private_key1[1024] = {48,130,1,58,2,1,0,2,65,0,150,174,244,171,118,131,0,41,228,219,169,104,69,56,73,121,97,219,246,66,161,196,101,134,19,47,56,169,24,249,117,173,45,183,218,17,60,15,6,245,0,174,99,86,245,106,251,223,80,238,1,158,146,57,55,1,176,76,115,244,158,155,174,107,2,3,1,0,1,2,64,83,208,193,155,214,114,11,215,65,203,197,177,144,63,60,239,93,181,162,135,113,191,242,208,223,62,246,255,104,58,234,111,45,105,81,190,85,229,126,92,242,73,238,179,2,54,124,149,162,208,123,15,61,51,13,84,246,45,181,53,199,115,202,81,2,33,0,198,207,162,62,146,96,187,246,210,100,105,38,230,39,48,234,151,251,165,234,64,38,242,166,179,32,52,170,156,105,24,111,2,33,0,194,7,56,181,205,123,164,253,164,124,129,46,191,61,72,200,253,128,1,0,203,89,70,121,228,64,139,243,106,120,175,197,2,32,4,197,149,10,85,111,22,243,220,166,230,83,53,176,249,30,152,89,68,233,51,114,251,221,254,108,166,118,245,220,27,231,2,33,0,145,29,3,141,253,67,199,79,40,81,49,240,187,120,227,81,231,62,112,1,159,20,131,0,48,245,17,118,153,31,240,29,2,32,49,195,118,188,169,28,162,148,46,172,77,85,171,127,99,81,155,190,224,52,68,52,187,13,129,35,110,118,234,135,236,219};
@@ -259,3 +259,119 @@ TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
     }
 }
 
+
+
+
+
+
+
+
+// 
+// virtual const unsigned char* GetIDEAKey(const int keyno) = 0;
+// virtual bool GetOpenSSLRSAKey(const int keyno, std::string& private_key, std::string& public_key) = 0;
+// virtual bool GetSimpleRSAKey(const int keyno, std::string& private_key, std::string& public_key) = 0;
+// #define H_IF_IDEA_KEY_RETURN(no) {if (no == keyno) return idea_key##no;}
+// #define H_IF_OPENSSL_RSA_KEY_RETURN(no) {\
+//         if (no == keyno) {\
+//             private_key = std::string((char*)g_server_rsa_private_key##no, sizeof(g_server_rsa_private_key##no)); \
+//             public_key = std::string((char*)g_server_rsa_public_key##no, sizeof(g_server_rsa_public_key##no));\
+//             return true;\
+//         }\
+//     }
+// #define H_IF_SIMPLE_RSA_KEY_RETURN(no) {\
+//         if (no == keyno) {\
+//             private_key = std::string((char*)g_server_slrsa_private_key##no, sizeof(g_server_slrsa_private_key##no)); \
+//             public_key = std::string((char*)g_server_slrsa_public_key##no, sizeof(g_server_slrsa_public_key##no));\
+//             return true;\
+//         }\
+//     }
+// 
+// if (1 == keyno)
+// {
+//     key = std::string((char*)g_server_rsa_private_key1, sizeof(g_server_rsa_private_key1));
+//     return true;
+// }
+// const unsigned char* GetIDEAKey(const int keyno)
+// {
+//     H_IF_IDEA_KEY_RETURN(1);
+//     H_IF_IDEA_KEY_RETURN(2);
+//     H_IF_IDEA_KEY_RETURN(3);
+//     H_IF_IDEA_KEY_RETURN(4);
+//     return NULL;
+// }
+// 
+// bool GetOpenSSLRSAKey(const int keyno, std::string& private_key, std::string& pulic_key)
+// {
+//     if (1 == keyno)
+//     {
+//         private_key = std::string((char*)g_server_rsa_private_key1, sizeof(g_server_rsa_private_key1));
+//         pulic_key = std::string((char*)g_server_rsa_public_key1, sizeof(g_server_rsa_public_key1));
+//         return true;
+//     }
+//     
+//     if (2 == keyno)
+//     {
+//         private_key = std::string((char*)g_server_rsa_private_key2, sizeof(g_server_rsa_private_key2));
+//         pulic_key = std::string((char*)g_server_rsa_public_key2, sizeof(g_server_rsa_public_key2));
+//         return true;
+//     }
+// 
+//     fprintf(stderr, "%s keyno=%u error\n", __func__, keyno);
+// 
+//     return false;
+// }
+// 
+// bool GetRSAPublicKey(const int keyno, std::string& key)
+// {
+//     if (1 == keyno)
+//     {
+//         key = std::string((char*)g_server_rsa_public_key1, sizeof(g_server_rsa_public_key1));
+//         return true;
+//     }
+//     else if (2 == keyno)
+//     {
+//         key = std::string((char*)g_server_rsa_public_key2, sizeof(g_server_rsa_public_key2));
+//         return true;
+//     }
+// 
+//     fprintf(stderr, "%s keyno=%u error\n", __func__, keyno);
+// 
+//     return false;
+// }
+// 
+// 
+// bool GetSLRSAPrivateKey(const int keyno, std::string& key)
+// {
+//     if (1 == keyno)
+//     {
+//         key = std::string((char*)g_server_slrsa_private_key1, sizeof(g_server_slrsa_private_key1));
+//         return true;
+//     }
+//     else if (2 == keyno)
+//     {
+//         key = std::string((char*)g_server_slrsa_private_key2, sizeof(g_server_slrsa_private_key2));
+//         return true;
+//     }
+// 
+//     fprintf(stderr, "%s keyno=%u error\n", __func__, keyno);
+// 
+//     return false;
+// }
+// 
+// bool GetSLRSAPublicKey(const int keyno, std::string& key)
+// {
+//     if (1 == keyno)
+//     {
+//         key = std::string((char*)g_server_slrsa_public_key1, sizeof(g_server_slrsa_public_key1));
+//         return true;
+//     }
+//     else if (2 == keyno)
+//     {
+//         key = std::string((char*)g_server_slrsa_public_key2, sizeof(g_server_slrsa_public_key2));
+//         return true;
+//     }
+// 
+//     fprintf(stderr, "%s keyno=%u error\n", __func__, keyno);
+// 
+//     return false;
+// }
