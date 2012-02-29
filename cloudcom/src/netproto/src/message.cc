@@ -52,6 +52,7 @@ namespace npp
         H_CASE_STRING(kNotSupportOpenSSLRSAKeyNumber); 
         H_CASE_STRING(kNotSupportSimpleRSAKeyNumber);
         H_CASE_STRING(kNotSupportIDEAKeyNumber); 
+        H_CASE_STRING(kNppHeaderDataLengthError);
         H_CASE_STRING(kDigestVerifyFailed);
         H_CASE_STRING(kOpenSSLRSAVerifyFailed);
         H_CASE_STRING(kSimpleRSAVerifyFailed);

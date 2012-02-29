@@ -54,6 +54,7 @@ namespace npp
             kNotSupportSimpleRSAKeyNumber,  //! A Not Supported Simple RSA sign_ key number
             kNotSupportIDEAKeyNumber,       //! A Not Supported IDEA key number
 
+            kNppHeaderDataLengthError,
             kDigestVerifyFailed,
             kOpenSSLRSAVerifyFailed,
             kSimpleRSAVerifyFailed,
