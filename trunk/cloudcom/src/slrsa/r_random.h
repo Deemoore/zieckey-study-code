@@ -19,9 +19,10 @@
 
 	Revision 1.00 - JSAK 23/6/95, Final Release Version
 */
+#include "rsa.h"
 
 int R_GenerateBytes PROTO_LIST
   ((unsigned char *, unsigned int, R_RANDOM_STRUCT *));
 
-void R_RandomCreate PROTO_LIST ((R_RANDOM_STRUCT *));
-void R_RandomFinal PROTO_LIST ((R_RANDOM_STRUCT *));
+void R_RandomCreate PROTO_LIST((R_RANDOM_STRUCT *));
+

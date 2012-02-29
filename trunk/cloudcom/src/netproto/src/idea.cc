@@ -1,7 +1,7 @@
 #include "netproto/include/inner_pre.h"
 
 #include "netproto/include/data_stream.h"
-#include "netproto/include/idea_wrapper.h"
+#include "netproto/include/idea.h"
 
 
 
