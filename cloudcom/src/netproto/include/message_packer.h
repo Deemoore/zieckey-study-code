@@ -34,6 +34,7 @@ namespace npp
         //! \return bool - 
         bool Pack(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
 
+        MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
     private:
         //! Get the sign length
         size_t GetSignLength();
