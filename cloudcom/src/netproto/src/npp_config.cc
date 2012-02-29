@@ -6,6 +6,18 @@ namespace npp
 
     template<> NppConfig* Singleton<NppConfig>::ms_Singleton = NULL;
 
+    NppConfig* NppConfig::CreateInstance()
+    {
+        if (NppConfig::getSingletonPtr())
+        {
+            return static_cast<NppConfig*>(NppConfig::getSingletonPtr());
+        }
+        else
+        {
+            return new NppConfig();
+        }
+    }
+
     NppConfig::NppConfig()
         : support_plain_(false), sign_data_(true), verify_data_(true)
     {
@@ -66,6 +78,4 @@ namespace npp
 
         return NULL;
     }
-
-
 }
