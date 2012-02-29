@@ -34,10 +34,13 @@ namespace npp
 
         assert(read_pos == ((const char*)d) + header_len + sizeof(npp_header_));
         size_t data_len = d_len - header_len - sizeof(npp_header_) - npp_header_.digest_sign_len_;
-        if (s_pNppConfig->verify_data() && !VerifySign(read_pos, data_len))
+        if (s_pNppConfig->verify_data())
         {
-            //ErrorCode has been set by VerifySign
-            return false;
+            if (!VerifySign(read_pos, data_len))
+            {
+                //ErrorCode has been set by VerifySign
+                return false;
+            }
         }
 
         read_pos += npp_header_.digest_sign_len_;
@@ -75,7 +78,7 @@ namespace npp
     {
         assert(npp_header_.sign_method_ == kOpenSSLRSA0 || npp_header_.sign_method_ == kOpenSSLRSA2);
 
-#if H_NPP_PROVIDE_RSA
+#ifdef H_NPP_PROVIDE_RSA
         OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header_.sign_key_no_);
         if (!rsa)
         {

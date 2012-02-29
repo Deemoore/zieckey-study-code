@@ -49,10 +49,10 @@ namespace npp
 
             kMemoryNotEnough,
 
-            kNotSupportOpenSSLRSA,      //! Not supported OpenSSL 
+            kNotSupportOpenSSLRSA,          //! Not supported OpenSSL sign/verify method
             kNotSupportOpenSSLRSAKeyNumber, //! A Not Supported OpenSSL sign_ key number
-            kNotSupportSimpleRSAKeyNumber,
-            kNotSupportIDEAKeyNumber, //! A Not Supported OpenSSL sign_ key number
+            kNotSupportSimpleRSAKeyNumber,  //! A Not Supported Simple RSA sign_ key number
+            kNotSupportIDEAKeyNumber,       //! A Not Supported IDEA key number
 
             kDigestVerifyFailed,
             kOpenSSLRSAVerifyFailed,
