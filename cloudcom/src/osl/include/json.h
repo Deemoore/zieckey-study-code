@@ -1,13 +1,12 @@
 #ifndef _OSLIB_JSON_H_
 #define _OSLIB_JSON_H_
 
-#include "osl/include/config.h"
-#include "osl/include/platform_micros.h"
-#include "osl/include/object.h"
+#include "osl/include/inner_pre.h"
+#include "osl/include/malloc_micro.h"
 #include "osl/include/string_ext.h"
+#include "osl/include/object.h"
 #include "osl/include/string_util.h"
 #include "osl/include/data_stream.h"
-#include "osl/include/inner_pre.h"
 
 #if H_PROVIDE_JSON
 
