@@ -27,6 +27,12 @@ namespace npp
         net_header_.message_id_ = ntohs(net_header_.message_id_);
         net_header_.preserve_   = ntohs(net_header_.preserve_);
 
+        if (net_header_.data_len_ != d_len - header_len)
+        {
+            last_error(kNppHeaderDataLengthError);
+            return false;
+        }
+
         read_pos += header_len;
         memcpy(&npp_header_, read_pos, sizeof(npp_header_));
 

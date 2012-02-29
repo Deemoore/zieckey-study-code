@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS;_NETPROTO_TEST"
 				StringPooling="true"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

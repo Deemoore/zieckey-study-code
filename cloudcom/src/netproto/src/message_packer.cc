@@ -187,50 +187,32 @@ namespace npp
 
     void MessagePacker::CalculateSignKeyNum( NppHeader* npp_header )
     {
-        switch (npp_header->encrypt_key_no_)
+        //1->2 2->1
+        //3->4 4->3
+        //5->6 6->5
+        //...
         {
-        case 1:
-            //Old system compatible
-            npp_header->encrypt_key_no_ = 2;
-            break;
-        case 2:
-            //Old system compatible
-            npp_header->encrypt_key_no_ = 1;
-            break;
-        default:
-            //new system, do nothing
-            /*{
-                size_t key_count = s_pNppConfig->GetOpenSSLRSAKeyCount();
-                if (npp_header->encrypt_method_ == kSimpleRSA)
-                {
-                    key_count = s_pNppConfig->GetSimpleRSAKeyCount();
-                }
-
-                bool found = false;
-                do 
-                {
-                    npp_header->encrypt_key_no_ = rand() % key_count + 1; //! The old system's key number begins from 1.
-                    if (npp_header->encrypt_method_ == kSimpleRSA)
-                    {
-                        SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header->sign_key_no_);
-                        if (rsa)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
-                        if (rsa)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                } while (!found);
-            }*/
-            break;
+            uint8_t encrypt_key = npp_header->encrypt_key_no();
+            if (encrypt_key % 2) //1,3,5
+            {
+                npp_header->set_encrypt_key_no(encrypt_key + 1);
+            }
+            else //2, 4, 6 ...
+            {
+                npp_header->set_encrypt_key_no(encrypt_key - 1);
+            }
+        }
+        
+        {
+            uint8_t sign_key = npp_header->sign_key_no();
+            if (sign_key % 2) //1,3,5
+            {
+                npp_header->set_sign_key_no(sign_key + 1);
+            }
+            else //2, 4, 6 ...
+            {
+                npp_header->set_sign_key_no(sign_key - 1);
+            }
         }
     }
 }
