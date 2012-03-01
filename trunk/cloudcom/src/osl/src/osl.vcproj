@@ -601,6 +601,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\json_utf8_inl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\json_value.cc"
 				>
 			</File>

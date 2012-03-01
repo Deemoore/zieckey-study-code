@@ -8,6 +8,7 @@
 #include "osl/include/data_stream.h"
 #include "osl/include/json.h"
 #include "json_tokener.h"
+#include "json_utf8_inl.h"
 
 namespace json
 {
@@ -461,6 +462,101 @@ namespace json
         return false;
     }
 
+    
+//     bool JSONObject::quote( const osl::StringA& ___IN source, osl::MemoryDataStream& ___OUT sb )
+//     {
+//         if ( source.seq_len() == 0 )
+//         {
+//             sb.write( "\"\"", 2 );
+//             return true;
+//         }
+// 
+//         const char *pos, *end;
+//         int32_t codepoint;
+// 
+//         sb.write( '"' );
+// 
+//         end = pos = source.c_str();
+//         while(1)
+//         {
+//             const char *text;
+//             char seq[13];
+//             int seq_len;
+// 
+//             while(*end)
+//             {
+//                 end = utf8_iterate(pos, &codepoint);
+//                 if(!end)
+//                     return -1;
+// 
+//                 /* mandatory escape or control char */
+//                 if(codepoint == '\\' || codepoint == '"' || codepoint < 0x20)
+//                     break;
+// 
+//                 /* non-ASCII */
+//                 if(ascii && codepoint > 0x7F)
+//                     break;
+// 
+//                 pos = end;
+//             }
+// 
+//             if(pos != str) {
+//                 if(dump(str, pos - str, data))
+//                     return -1;
+//             }
+// 
+//             if(end == pos)
+//                 break;
+// 
+//             /* handle \, ", and control codes */
+//             length = 2;
+//             switch(codepoint)
+//             {
+//             case '\\': text = "\\\\"; break;
+//             case '\"': text = "\\\""; break;
+//             case '\b': text = "\\b"; break;
+//             case '\f': text = "\\f"; break;
+//             case '\n': text = "\\n"; break;
+//             case '\r': text = "\\r"; break;
+//             case '\t': text = "\\t"; break;
+//             default:
+//                 {
+//                     /* codepoint is in BMP */
+//                     if(codepoint < 0x10000)
+//                     {
+//                         sprintf(seq, "\\u%04x", codepoint);
+//                         length = 6;
+//                     }
+// 
+//                     /* not in BMP -> construct a UTF-16 surrogate pair */
+//                     else
+//                     {
+//                         int32_t first, last;
+// 
+//                         codepoint -= 0x10000;
+//                         first = 0xD800 | ((codepoint & 0xffc00) >> 10);
+//                         last = 0xDC00 | (codepoint & 0x003ff);
+// 
+//                         sprintf(seq, "\\u%04x\\u%04x", first, last);
+//                         length = 12;
+//                     }
+// 
+//                     text = seq;
+//                     break;
+//                 }
+//             }
+// 
+//             if(dump(text, length, data))
+//                 return -1;
+// 
+//             str = pos = end;
+//         }
+// 
+//         return dump("\"", 1, data);
+//         return true;
+//     }
+
+    
     bool JSONObject::quote( const osl::StringA& ___IN source, osl::MemoryDataStream& ___OUT sb )
     {
         if ( source.length() == 0 )
@@ -515,16 +611,54 @@ namespace json
                     sb.write( "\\f", 2 );
                     break;
                 default:
-                    //if (c < ' ' || (c >= '\u0080' && c < '\u00a0') ||
-                    //	(c >= '\u2000' && c < '\u2100'))
-                    //{
-                    //		//TODO xxx
-                    //		/*t = "000" + Integer.toHexString(c);
-                    //		sb.write("\\u" + t.substring(t.length() - 4));*/
-                    //} else {
-                    //	sb.write(c);
-                    //}
-                    sb.write( c );
+                    {
+                        //Reference of jansson-2.0.1 http://www.digip.org/jansson/
+                        int32_t codepoint;
+                        const char* end = utf8_iterate(source.c_str() + i, &codepoint);
+                        if (!end)
+                        {
+                            return false;
+                        }
+
+                        if (codepoint <= 0x7F)
+                        {
+                            sb.write(static_cast<char>(codepoint));
+                        }
+                        else
+                        {
+                            char seq[13] = {};
+                            int  seq_len = 0; //The length of data written into seq
+                            /* codepoint is in BMP */
+                            if(codepoint < 0x10000)
+                            {
+                                sprintf(seq, "\\u%04x", codepoint);
+                                seq_len = 6;
+                            }
+                            else/* not in BMP -> construct a UTF-16 surrogate pair */
+                            {
+                                int32_t first, last;
+
+                                codepoint -= 0x10000;
+                                first = 0xD800 | ((codepoint & 0xffc00) >> 10);
+                                last = 0xDC00 | (codepoint & 0x003ff);
+
+                                sprintf(seq, "\\u%04x\\u%04x", first, last);
+                                seq_len = 12;
+                            }
+
+                            sb.write(seq, seq_len);
+                            i = end - source.data() - 1; // -1 means for loop's third expression has a inc : i += 1
+                            //TODO how to increase i
+                        }
+                        break;
+                    }//end of default
+                    
+                    //---------------------------------------------------------
+                    //---------------------------------------------------------
+                    // --- OR --- old code , No process of UTF-8 
+                    //sb.write( c ); 
+                    //---------------------------------------------------------
+                    //---------------------------------------------------------
             }
         }
 
@@ -532,6 +666,7 @@ namespace json
         return true;
     }
 
+    
     //osl::s64 JSONObject::stringToInteger( osl::StringA& s, unsigned int radix )
     //{
     //		return 0;
@@ -539,7 +674,7 @@ namespace json
 
     Object*	JSONObject::get( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -551,7 +686,7 @@ namespace json
 
     JSONBoolean* JSONObject::getJSONBoolean( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -564,7 +699,7 @@ namespace json
 
     JSONDouble*	JSONObject::getJSONDouble( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -577,7 +712,7 @@ namespace json
 
     JSONInteger*	JSONObject::getJSONInteger( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -590,7 +725,7 @@ namespace json
 
     JSONArray*		JSONObject::getJSONArray( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -603,7 +738,7 @@ namespace json
 
     JSONObject*	JSONObject::getJSONObject( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -616,7 +751,7 @@ namespace json
 
     JSONString*	JSONObject::getJSONString( const osl::StringA& key )const
     {
-        MapConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_mapObjectPtr.find( key );
 
         if ( it != m_mapObjectPtr.end() )
         {
@@ -672,7 +807,7 @@ namespace json
             sb.write( '\n' );
         }
 
-        MapConstIterator it( m_mapObjectPtr.begin() ), ite( m_mapObjectPtr.end() );
+        ConstIterator it( m_mapObjectPtr.begin() ), ite( m_mapObjectPtr.end() );
         bool needComma = false;
 
         for ( ; it != ite; it++ )
@@ -1187,7 +1322,7 @@ namespace json
         //override
         if ( override )
         {
-            MapConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
+            ConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
             for ( ; it != ite; ++it )
             {
                 m_mapObjectPtr[it->first] = it->second;
@@ -1195,12 +1330,11 @@ namespace json
             return true;
         }
 
-
         //no override
-        MapConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
+        ConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
         for ( ; it != ite; ++it )
         {
-            MapIterator iterthis = m_mapObjectPtr.find( it->first );
+            Iterator iterthis = m_mapObjectPtr.find( it->first );
             if ( iterthis == m_mapObjectPtr.end() )
             {
                 m_mapObjectPtr[it->first] = it->second;
@@ -1266,38 +1400,24 @@ namespace json
             return false;
         }
 
-        //const size_t sz = m_mapObjectPtr.size();
-        bool bAllElementEquals = true;
         ObjectPtrMap::const_iterator itthis( m_mapObjectPtr.begin() );
         ObjectPtrMap::const_iterator itethis( m_mapObjectPtr.end() );
-        for ( ; itthis != itethis; ++itthis )
+        ObjectPtrMap::const_iterator itrhs( rhsJSONOBject.begin() );
+        ObjectPtrMap::const_iterator iterhs( rhsJSONOBject.end() );
+        for ( ; itthis != itethis && itrhs != iterhs; ++itthis, ++itrhs )
         {
-            bool bFindEqualOne = false;
-            Object* jthis = itthis->second;
-            ObjectPtrMap::const_iterator itrhs( m_mapObjectPtr.begin() );
-            ObjectPtrMap::const_iterator iterhs( m_mapObjectPtr.end() );
-            for ( ; itrhs != iterhs; ++itrhs )
+            if (itthis->first != itrhs->first)
             {
-                //TODO ��������Ż�����һ�αȽϹ�ľͲ���Ҫ�ٴαȽ���
-                if ( jthis->equals( *(itrhs->second) ) )
-                {
-                    bFindEqualOne = true;
-                    break;
-                }
+                return false;
             }
 
-            if ( bFindEqualOne )
+            if (!itthis->second->equals(*(itrhs->second)))
             {
-                continue;
-            }
-            else
-            {
-                bAllElementEquals = false;
-                break;
+                return false;
             }
         } // end of for
 
-        return bAllElementEquals;
+        return true;
     }
 
     bool JSONObject::remove( const osl::StringA& key )
@@ -1308,8 +1428,8 @@ namespace json
 
     bool JSONObject::remove( const Object* pobj )
     {
-        MapIterator it( m_mapObjectPtr.begin() );
-        MapIterator ite( m_mapObjectPtr.end() );
+        Iterator it( m_mapObjectPtr.begin() );
+        Iterator ite( m_mapObjectPtr.end() );
         for ( ; it != ite; ++it )
         {
             if ( it->second == pobj )

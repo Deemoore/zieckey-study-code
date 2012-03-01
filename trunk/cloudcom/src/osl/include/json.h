@@ -415,12 +415,12 @@ namespace json
     {
         H_ALLOC_OBJECT( JSONArray );
     public:
-        H_DEF_LIST( ObjectPtr, ObjectList );
-        typedef ObjectList::iterator        ListIterator;
-        typedef ObjectList::const_iterator  ListConstIterator;
+        typedef osl::List< ObjectPtr > ObjectPtrList;
+//         typedef ObjectPtrList::iterator        Iterator;
+//         typedef ObjectPtrList::const_iterator  ConstIterator;
 
-        typedef ObjectList::iterator        Iterator;
-        typedef ObjectList::const_iterator  ConstIterator;
+        typedef ObjectPtrList::iterator        Iterator;
+        typedef ObjectPtrList::const_iterator  ConstIterator;
     public:
         enum{ OBJECT_TYPE = OT_ARRAY };
         /**
@@ -593,7 +593,7 @@ namespace json
 
         //! Gets objects in the array.
         //! \remark Caller is responsible for identify the concrete type of object element.
-        const ObjectList&  getObjects()const
+        const ObjectPtrList&  getObjects()const
         {
             return m_list;
         }
@@ -666,7 +666,7 @@ namespace json
 
     private:
 
-        ObjectList m_list; //!The list where the JSONArray's properties are kept.
+        ObjectPtrList m_list; //!The list where the JSONArray's properties are kept.
         enum { DEFAULT_BUFFER_SIZE = 512 };
 
         template<class T>
@@ -697,9 +697,9 @@ namespace json
         typedef ObjectPtrMap::iterator Iterator;
         typedef ObjectPtrMap::const_iterator ConstIterator;
 
-        typedef std::pair<osl::StringA, Object*>            MapEntry;
-        typedef ObjectPtrMap::const_iterator        MapConstIterator;
-        typedef ObjectPtrMap::iterator                   MapIterator;
+//         typedef std::pair<osl::StringA, Object*>            MapEntry;
+//         typedef Iterator                   Iterator;
+//         typedef ConstIterator        ConstIterator;
 
     public:
         enum{ OBJECT_TYPE = OT_OBJECT };
