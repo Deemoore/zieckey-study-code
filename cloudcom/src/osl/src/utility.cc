@@ -131,5 +131,106 @@ namespace osl
         //H_ASSERT( false && "need implements." );
 #endif
     }
+
+    void Util::listAllFiles( const StringA& strDirName, StringAList& files, int depth /*= 0*/, const StringA& filter/* = "*"*/ )
+    {
+        if ( depth < 0 )
+        {
+            return;
+        }
+
+#ifdef H_OS_WINDOWS
+        struct _finddata_t finfo; //file info
+
+        osl::StringA p;
+
+        //if ( ( hFile = _findfirst( p.assign( strDirName ).append( "/*" ).append( "*" ).c_str(), &fileinfo ) ) != -1 )
+        intptr_t hFile = _findfirst( osl::FileUtil::concatenatePath( strDirName, "*" ).c_str(), &finfo );
+        if ( -1 == hFile )
+        {
+#ifdef H_RECORD_LOG
+            osl::OStringStreamA log;
+            log << "_findfirst failed. return value = -1, errno=" << errno;
+            //H_LOG_NAME_DEBUG( "FileUtil", log.str() );
+#endif		
+            return;
+        }
+
+        do
+        {
+            StringA strFileName = osl::FileUtil::concatenatePath( strDirName, finfo.name );
+            if ( ( finfo.attrib & _A_SUBDIR ) )
+            {
+                if ( strcmp( finfo.name, "." ) != 0 && strcmp( finfo.name, ".." ) != 0 )
+                {
+                    if ( StringUtil::match( strFileName, filter ) )
+                    {
+                        files.push_back( strFileName );
+                    }
+
+                    if ( depth > 0 )
+                    {
+                        listAllFiles( strFileName, files, depth - 1, filter );
+                    }
+                }
+            }
+            else
+            {
+                if ( StringUtil::match( strFileName, filter ) )
+                {
+                    files.push_back( strFileName );
+                }
+            }
+        }
+        while ( _findnext( hFile, &finfo ) == 0 );
+
+        _findclose( hFile );
+
+#else
+        struct dirent **namelist;
+        int n = scandir( strDirName.c_str(), &namelist, 0, alphasort );
+
+        if ( n < 0 )
+        {
+            osl::OStringStreamA log;
+            log << "scandir failed. return value = -1, errno=" << errno;
+            //H_LOG_NAME_DEBUG( "FileUtil", log.str() );
+            return;
+        }
+
+        for ( int i = 0; i < n; ++i )
+        {
+            StringA strFileName = osl::FileUtil::concatenatePath( strDirName, namelist[i]->d_name );
+
+            if ( namelist[i]->d_type == DT_DIR )
+            {
+                if ( strcmp( namelist[i]->d_name, "." ) != 0 && strcmp( namelist[i]->d_name, ".." ) != 0 )
+                {
+                    if ( StringUtil::match( strFileName, filter ) )
+                    {
+                        files.push_back( strFileName );
+                    }
+
+                    if ( depth > 0 )
+                    {
+                        listAllFiles( strFileName, files, depth - 1, filter );
+                    }
+                }
+            }
+            else
+            {
+                if ( StringUtil::match( strFileName, filter ) )
+                {
+                    files.push_back( strFileName );
+                }
+            }
+        }
+
+        free( namelist );
+
+#endif
+
+    }
+
 }
 
