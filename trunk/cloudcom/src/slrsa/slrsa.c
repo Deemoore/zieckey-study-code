@@ -61,7 +61,11 @@ int slrsa_verify( const unsigned char *m, const unsigned int m_len,
 int slrsa_public_encrypt( const unsigned char* m, const unsigned int m_len, const unsigned char* publickey, unsigned char* sigret, unsigned int* siglen )
 {
     R_RANDOM_STRUCT RandomStruct;
-    //R_RandomCreate( &RandomStruct );
+#ifndef WIN32
+    //TODO this sentence compile error in VS9.0,, but in Unix need this.
+    //I really don't know whether it is OK when doing Windows do this slrsa_public_encrypt and Unix do slrsa_private_decrypt
+    R_RandomCreate( &RandomStruct );
+#endif
     int encrypt_ret = RSAPublicEncrypt(sigret, siglen, (unsigned char*)m, m_len, (R_RSA_PUBLIC_KEY *)publickey, &RandomStruct);
     if (encrypt_ret == RSA_IDOK)
     {
