@@ -102,7 +102,7 @@ R_RSA_PUBLIC_KEY *publicKey;    /* RSA public key */
 {
 	int status;
 	unsigned char pkcsBlock[MAX_RSA_MODULUS_LEN];
-	unsigned int i, modulusLen, pkcsBlockLen;
+	unsigned int i, modulusLen, pkcsBlockLen = MAX_RSA_MODULUS_LEN;
 
 	modulusLen = (publicKey->bits + 7) / 8;
 
@@ -198,7 +198,7 @@ R_RSA_PRIVATE_KEY *privateKey;  /* RSA private key */
 {
 	int status;
 	unsigned char pkcsBlock[MAX_RSA_MODULUS_LEN];
-	unsigned int i, modulusLen, pkcsBlockLen;
+	unsigned int i, modulusLen, pkcsBlockLen = MAX_RSA_MODULUS_LEN;
 
 	modulusLen = (privateKey->bits + 7) / 8;
 
