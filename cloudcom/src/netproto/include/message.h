@@ -43,7 +43,8 @@ namespace npp
         {
             kNoError = 0,
 
-            kParameterError,
+            kParameterErrorNULLPointer,
+            kParameterErrorDataLengthError,
 
             kVesionError,
 
