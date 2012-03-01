@@ -22,6 +22,8 @@ namespace osl
         class _EXPORT_OSLIB Listener
         {
         public:
+            virtual ~Listener() {}
+
             //! \brief When we parse the INI file, every found of the section/key-value,
             //!     this interface will be called!
             //! \param const StringA & section - 
