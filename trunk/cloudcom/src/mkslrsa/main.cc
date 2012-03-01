@@ -755,7 +755,7 @@ bool GenSimpleRSAKeys(OutputKeysVector& key_pairs_vector)
 
 int main( int argc, char* argv[] )
 {
-    key_count = 4;
+    key_count = 2;
     begin_key_no = 1;
 
     GenTestKey();

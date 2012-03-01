@@ -1,5 +1,5 @@
 #include "netproto/include/test_common.h"
-#include "netproto/include/idea_wrapper.h"
+#include "netproto/include/idea.h"
 
 //openssl
 #if H_NPP_PROVIDE_RSA

@@ -121,7 +121,10 @@ namespace npp
 
     inline bool SimpleRSA::PublicEncrypt(const void* m, const size_t m_len, unsigned char* sigret, size_t* siglen)
     {
-        return 0 != slrsa_public_encrypt((const unsigned char *)m, m_len, (const unsigned char *)public_key_.c_str(), sigret, siglen);
+        unsigned int len = *siglen;
+        bool ret = 0 != slrsa_public_encrypt((const unsigned char *)m, m_len, (const unsigned char *)public_key_.c_str(), sigret, &len);
+        *siglen = len;
+        return ret;
     }
 
     inline bool SimpleRSA::PublicEncrypt(const void* m, const size_t m_len, std::string& sigret)
@@ -140,7 +143,10 @@ namespace npp
 
     inline bool SimpleRSA::PrivateDecrypt(const void* sig, const size_t sig_len, unsigned char* plain_data, size_t* plain_data_len)
     {
-        return 0 != slrsa_private_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)private_key_.c_str(), plain_data, plain_data_len);
+        unsigned int len = *plain_data_len;
+        bool ret = 0 != slrsa_private_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)private_key_.c_str(), plain_data, &len);
+        *plain_data_len = len;
+        return ret;
     }
 
     inline bool SimpleRSA::PrivateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data)

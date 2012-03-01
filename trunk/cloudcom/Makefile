@@ -13,12 +13,13 @@ TESTDIRS=src/osl/test src/netproto/test
 TOPDIR=`pwd`
 
 #TOP_CFLAGS="-g -O3"
-TOP_CFLAGS="-g"
+TOP_CFLAGS="-g -D_DEBUG"
 TOP_LDFLAGS=""
 
 all:
 	for t in $(SUBDIRS); do $(MAKE) TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; $(MAKE) install -C $$t; done
 	cp install/lib/libwraputil.* ~/lib
+	cp install/lib/libnetproto.* ~/lib
 	cp install/lib/libnet.* ~/lib
 
 check: all
