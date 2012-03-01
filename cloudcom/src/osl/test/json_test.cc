@@ -14,4 +14,11 @@ TEST_UNIT(json_unicode_test)
     H_TEST_ASSERT(jo.parse(json_test_str));
     json::JSONString* type = jo.getJSONString("type");
     (void)type;
+    osl::StringA serialize = jo.toString();
+    (void)serialize;
+    json::JSONObject jo1;
+    H_TEST_ASSERT(jo1.parse(serialize.data(), serialize.size()));
+    json::JSONString* type1 = jo1.getJSONString("type");
+    H_TEST_ASSERT(type1);
+    H_TEST_ASSERT(type1->getRealValue() == type->getRealValue());
 }
