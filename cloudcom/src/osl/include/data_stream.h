@@ -8,18 +8,7 @@
 namespace osl
 {
 
-    class _EXPORT_OSLIB DataStream
-    {
-    public:
-        DataStream( void );
-        ~DataStream( void );
-    };
-    class MemoryDataStream;
-
-    
-
     //! The class encapsulates data stream in memory.
-
     class _EXPORT_OSLIB MemoryDataStream : public Object
     {
         H_ALLOC_OBJECT( MemoryDataStream )
@@ -110,12 +99,23 @@ namespace osl
         */
 		bool readle( u32* pU32 );
 
-        /** write a char to data stream
-        *  @param  ch: the char which will be written
+        /** write a value to data stream
+        *  @param  v: the value which will be written
         *  @note   the return value is true if write succeed, else false
         */
-        bool write( char ch );
+        bool write( int8_t  ch );
+//         bool write( int16_t i );
+//         bool write( int32_t i );
+//         bool write( int64_t i );
+//         bool write( uint8_t  ch );
+//         bool write( uint16_t i );
+//         bool write( uint32_t i );
+//         bool write( uint64_t i );
+//         bool write( f32 f );
+//         bool write( f64 d );
 
+        template<typename _T>
+        bool append(const _T& v) { return write(v); }
 
         /** Write 4 bytes int data to this data stream, the data in this stream is Little Endian
 		*   In little endian CPU system:
@@ -136,11 +136,13 @@ namespace osl
 		bool writele( u32 i );
 
         /** write data to data stream
-        *  @param  buf: the buffer which the data will be written
+        *  @param  buf: the buffer where stored the data to be written to the stream
         *  @param  buf_len: the buf length in byte
         *  @note   the return value is true if read succeed, else false
         */
         bool write( const void* buf, u32 buf_len );
+
+        bool write( const char* str ) { return write(str, strlen(str)); }
 
         /** move the stream pointer for read
         *  @remark   after seek, the read pointer' position is at the stream buffer' base address + start + offset,

@@ -516,34 +516,9 @@ namespace json
         void  getF32Array(  osl::Vector<osl::f32>& vArray, osl::f32 valDefault = 0.0f )const;
         void  getF64Array(  osl::Vector<osl::f64>& vArray, osl::f64 valDefault = 0.0 )const;
 #if H_PROVIDE_UUID
-        void  getUUIDArray( osl::HUUIDVector& vArray, const osl::QUUID& valDefault = osl::QUUID::NULL_ID )const;
+        void  getUUIDArray( osl::UUIDVector& vArray, const osl::QUUID& valDefault = osl::QUUID::NULL_ID )const;
 #endif
         void  getStringArray( osl::StringAVector& vArray, const osl::StringA& valDefault = osl::StringUtil::BLANKA )const;
-
-
-        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
-        bool empty() const
-        {
-            return m_list.empty();
-        }
-
-        /**
-         * Get the number of elements in the JSONArray, included nulls.
-         * @return The length (or size).
-         */
-        size_t size() const
-        {
-            return m_list.size();
-        }
-
-        /**
-         * Get the number of elements in the JSONArray, included nulls.
-         * @return The length (or size).
-         */
-        size_t getSize() const
-        {
-            return size();
-        }
 
         /**
          * Append a boolean value. This increases the array's length by one.
@@ -567,13 +542,35 @@ namespace json
          */
         bool remove( int index ) ;
 
+        
+        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
+        bool empty() const { return m_list.empty(); }
+
+        //! All the elements in the list container are dropped: their destructors are called,
+        //! and then they are removed from the list container, leaving it with a size of 0.
+        void clear() { m_list.clear(); }
+
+        Iterator erase(Iterator it) { return m_list.erase(it); }
+
+        /**
+         * Get the number of elements in the JSONArray, included nulls.
+         * @return The length (or size).
+         */
+        size_t size() const { return m_list.size(); }
+
+        /**
+         * Get the number of elements in the JSONArray, included nulls.
+         * @return The length (or size).
+         */
+        size_t getSize() const { return size(); }
+
         /**
          * Make a JSON text of this JSONArray. For compactness, no
          * unnecessary whitespace is added. If it is not possible to produce a
          * syntactically correct JSON text then null will be returned instead. This
          * could occur if the array contains an invalid number.
          * <p>
-         * @warning This method assumes that the data structure is acyclical.
+         * @warning This method assumes that the data structure is a cyclical.
          * @override override method from base class json::Object
          * @return a printable, displayable, transmittable
          *  representation of the array.
@@ -691,8 +688,9 @@ namespace json
     {
         H_ALLOC_OBJECT( JSONObject );
     public:
-        //typedef osl::HMap< osl::StringA, ObjectPtr > ObjectPtrMap;
-        H_DEF_MAP( osl::StringA, ObjectPtr, ObjectPtrMap );
+        //H_DEF_MAP( osl::StringA, ObjectPtr, ObjectPtrMap );
+        typedef osl::Map< osl::StringA, ObjectPtr > ObjectPtrMap;
+        
         typedef ObjectPtrMap Map;
         typedef ObjectPtrMap::iterator Iterator;
         typedef ObjectPtrMap::const_iterator ConstIterator;
@@ -746,12 +744,6 @@ namespace json
 
 
     public:
-        
-        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
-        bool empty() const;
-
-        //! Returns the number of elements in the this JSON object
-        size_t size() const;
 
         /**
          * Get the object value associated with key value.
@@ -816,7 +808,7 @@ namespace json
         void  getF32Array(  const osl::StringA& strKey, osl::Vector<osl::f32>& vArray, osl::f32 valDefault = 0.0f )const;
         void  getF64Array(  const osl::StringA& strKey, osl::Vector<osl::f64>& vArray, osl::f64 valDefault = 0.0 )const;
 #if H_PROVIDE_UUID
-        void  getUUIDArray( const osl::StringA& strKey, osl::HUUIDVector& vArray, const osl::QUUID& valDefault = osl::QUUID::NULL_ID )const;
+        void  getUUIDArray( const osl::StringA& strKey, osl::UUIDVector& vArray, const osl::QUUID& valDefault = osl::QUUID::NULL_ID )const;
 #endif
         void  getStringArray( const osl::StringA& strKey, osl::StringAVector& vArray, const osl::StringA& valDefault = osl::StringUtil::BLANKA )const;
 
@@ -865,7 +857,19 @@ namespace json
          * @return true if remove the element success
          */
         bool remove( const osl::StringA& key );
-        bool remove( const Object* pobj );
+        bool remove( const Object* value );
+
+        void erase(Iterator it) { m_object_map.erase(it); }
+
+        //! Returns the number of elements in the this JSON object
+        size_t size() const { return m_object_map.size(); }
+
+        //! Returns whether the JSON object is empty, i.e. whether its size is 0.
+        bool empty() const { return m_object_map.empty(); }
+
+        //! All the elements in the list container are dropped: their destructors are called,
+        //! and then they are removed from the list container, leaving it with a size of 0.
+        void clear() { m_object_map.clear(); }
 
         /**
          * Merge another JSONObject to this JSONObject
@@ -890,43 +894,43 @@ namespace json
         //! Gets object map container.
         const ObjectPtrMap& getObjects() const
         {
-            return m_mapObjectPtr;
+            return m_object_map;
         }
 
         //! Gets object map container.
         ObjectPtrMap& getObjects() 
         {
-            return m_mapObjectPtr;
+            return m_object_map;
         }
 
         ConstIterator getIterator() const
         {
-            return m_mapObjectPtr.begin();
+            return m_object_map.begin();
         }
 
         Iterator getIterator()
         {
-            return m_mapObjectPtr.begin();
+            return m_object_map.begin();
         }
 
         ConstIterator begin() const
         {
-            return m_mapObjectPtr.begin();
+            return m_object_map.begin();
         }
 
         Iterator begin()
         {
-            return m_mapObjectPtr.begin();
+            return m_object_map.begin();
         }
 
         ConstIterator end() const
         {
-            return m_mapObjectPtr.end();
+            return m_object_map.end();
         }
 
         Iterator end()
         {
-            return m_mapObjectPtr.end();
+            return m_object_map.end();
         }
 
 
@@ -973,7 +977,7 @@ namespace json
         static bool quote( const osl::StringA& ___IN source, osl::MemoryDataStream& ___OUT sb ) ;
 
         template<class T>
-            bool putIntegerArray( const osl::StringA& key, const T* value,     osl::u32 nCount );
+            bool putIntegerArray( const osl::StringA& key, const T* value, osl::u32 nCount );
 
         friend class JSONTokener;
         friend class JSONArray;
@@ -982,7 +986,6 @@ namespace json
         friend class JSONInteger;
         friend class JSONBoolean;
         friend class JSONNull;
-
 
         //! Return number of characters parsed.
         osl::u32 parse( JSONTokener* token );
@@ -996,7 +999,7 @@ namespace json
         virtual void saveTo( osl::MemoryDataStream& ___OUT file ) const;
 
     private:
-        ObjectPtrMap                                  m_mapObjectPtr;
+        ObjectPtrMap  m_object_map;
         enum { DEFAULT_BUFFER_SIZE = 2048 }; //! the default size of the buffer
     };
 

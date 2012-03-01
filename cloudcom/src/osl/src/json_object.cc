@@ -270,22 +270,11 @@ namespace json
         return parse( &x );
     }
 
-
-    bool JSONObject::empty() const
-    {
-        return m_mapObjectPtr.empty();
-    }
-
-    size_t JSONObject::size() const
-    {
-        return m_mapObjectPtr.size();
-    }
-
     bool JSONObject::put( const osl::StringA& key, Object* value )
     {
         if ( !value )
         {
-            m_mapObjectPtr.erase( key );
+            m_object_map.erase( key );
             return true;
         }
 
@@ -305,7 +294,7 @@ namespace json
 //             pv = value;
 //         }
 
-        m_mapObjectPtr[key] = value;
+        m_object_map[key] = value;
         return true;
 
     }
@@ -431,7 +420,7 @@ namespace json
                     }
                     else
                     {
-                        printf( "Not a valid octal character : %c\n", s[i] );
+                        fprintf( stderr, "Not a valid octal character : %c\n", s[i] );
                         return NULL;
                     }
                 }
@@ -631,7 +620,7 @@ namespace json
                             /* codepoint is in BMP */
                             if(codepoint < 0x10000)
                             {
-                                sprintf(seq, "\\u%04x", codepoint);
+                                snprintf(seq, sizeof(seq), "\\u%04x", codepoint);
                                 seq_len = 6;
                             }
                             else/* not in BMP -> construct a UTF-16 surrogate pair */
@@ -642,13 +631,12 @@ namespace json
                                 first = 0xD800 | ((codepoint & 0xffc00) >> 10);
                                 last = 0xDC00 | (codepoint & 0x003ff);
 
-                                sprintf(seq, "\\u%04x\\u%04x", first, last);
+                                snprintf(seq, sizeof(seq), "\\u%04x\\u%04x", first, last);
                                 seq_len = 12;
                             }
 
                             sb.write(seq, seq_len);
                             i = end - source.data() - 1; // -1 means for loop's third expression has a inc : i += 1
-                            //TODO how to increase i
                         }
                         break;
                     }//end of default
@@ -674,9 +662,9 @@ namespace json
 
     Object*	JSONObject::get( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return ( it->second );
         }
@@ -686,9 +674,9 @@ namespace json
 
     JSONBoolean* JSONObject::getJSONBoolean( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONBoolean*>( ( it->second ).getPointer() );
             //return Json_Cast<JSONBoolean>(it->second);
@@ -699,9 +687,9 @@ namespace json
 
     JSONDouble*	JSONObject::getJSONDouble( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONDouble*>( ( it->second ).getPointer() );
             //return Json_Cast<JSONDouble>(it->second);
@@ -712,9 +700,9 @@ namespace json
 
     JSONInteger*	JSONObject::getJSONInteger( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONInteger*>( ( it->second ).getPointer() );
             //return Json_Cast<JSONInteger>(it->second);
@@ -725,9 +713,9 @@ namespace json
 
     JSONArray*		JSONObject::getJSONArray( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONArray*>( ( it->second ).getPointer() );
             //return Json_Cast<JSONArray>(it->second);
@@ -738,9 +726,9 @@ namespace json
 
     JSONObject*	JSONObject::getJSONObject( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONObject*>( ( it->second ).getPointer() );
             //return Json_Cast< JSONObject>(it->second);
@@ -751,9 +739,9 @@ namespace json
 
     JSONString*	JSONObject::getJSONString( const osl::StringA& key )const
     {
-        ConstIterator it = m_mapObjectPtr.find( key );
+        ConstIterator it = m_object_map.find( key );
 
-        if ( it != m_mapObjectPtr.end() )
+        if ( it != m_object_map.end() )
         {
             return dynamic_cast<JSONString*>( ( it->second ).getPointer() );
             //return Json_Cast<JSONString>(it->second);
@@ -807,7 +795,7 @@ namespace json
             sb.write( '\n' );
         }
 
-        ConstIterator it( m_mapObjectPtr.begin() ), ite( m_mapObjectPtr.end() );
+        ConstIterator it( m_object_map.begin() ), ite( m_object_map.end() );
         bool needComma = false;
 
         for ( ; it != ite; it++ )
@@ -1322,22 +1310,22 @@ namespace json
         //override
         if ( override )
         {
-            ConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
+            ConstIterator it( pOtherObject->m_object_map.begin() ), ite( pOtherObject->m_object_map.end() );
             for ( ; it != ite; ++it )
             {
-                m_mapObjectPtr[it->first] = it->second;
+                m_object_map[it->first] = it->second;
             }
             return true;
         }
 
         //no override
-        ConstIterator it( pOtherObject->m_mapObjectPtr.begin() ), ite( pOtherObject->m_mapObjectPtr.end() );
+        ConstIterator it( pOtherObject->m_object_map.begin() ), ite( pOtherObject->m_object_map.end() );
         for ( ; it != ite; ++it )
         {
-            Iterator iterthis = m_mapObjectPtr.find( it->first );
-            if ( iterthis == m_mapObjectPtr.end() )
+            Iterator iterthis = m_object_map.find( it->first );
+            if ( iterthis == m_object_map.end() )
             {
-                m_mapObjectPtr[it->first] = it->second;
+                m_object_map[it->first] = it->second;
             }
         }
         return true;
@@ -1376,8 +1364,8 @@ namespace json
     void JSONObject::saveTo( osl::MemoryDataStream& ___OUT file ) const
     {
         file << ( osl::u8 )getType()
-            << ( osl::u32 )m_mapObjectPtr.size();
-        JSONObject::ObjectPtrMap::const_iterator it( m_mapObjectPtr.begin() ), ite( m_mapObjectPtr.end() );
+            << ( osl::u32 )m_object_map.size();
+        JSONObject::ObjectPtrMap::const_iterator it( m_object_map.begin() ), ite( m_object_map.end() );
 
         for ( ; it != ite; it++ )
         {
@@ -1395,13 +1383,13 @@ namespace json
         }
 
         const JSONObject& rhsJSONOBject = dynamic_cast<const JSONObject&>(rhs);
-        if ( rhsJSONOBject.m_mapObjectPtr.size() != m_mapObjectPtr.size() )
+        if ( rhsJSONOBject.m_object_map.size() != m_object_map.size() )
         {
             return false;
         }
 
-        ObjectPtrMap::const_iterator itthis( m_mapObjectPtr.begin() );
-        ObjectPtrMap::const_iterator itethis( m_mapObjectPtr.end() );
+        ObjectPtrMap::const_iterator itthis( m_object_map.begin() );
+        ObjectPtrMap::const_iterator itethis( m_object_map.end() );
         ObjectPtrMap::const_iterator itrhs( rhsJSONOBject.begin() );
         ObjectPtrMap::const_iterator iterhs( rhsJSONOBject.end() );
         for ( ; itthis != itethis && itrhs != iterhs; ++itthis, ++itrhs )
@@ -1422,19 +1410,19 @@ namespace json
 
     bool JSONObject::remove( const osl::StringA& key )
     {
-        m_mapObjectPtr.erase( key );
+        m_object_map.erase( key );
         return true;
     }
 
     bool JSONObject::remove( const Object* pobj )
     {
-        Iterator it( m_mapObjectPtr.begin() );
-        Iterator ite( m_mapObjectPtr.end() );
+        Iterator it( m_object_map.begin() );
+        Iterator ite( m_object_map.end() );
         for ( ; it != ite; ++it )
         {
             if ( it->second == pobj )
             {
-                m_mapObjectPtr.erase( it );
+                m_object_map.erase( it );
                 return true;
             }
         }
@@ -1479,7 +1467,7 @@ namespace json
 // 	template<typename _Type>
 // 	_Type& JSONObject::getValue( const osl::StringA& key )
 // 	{
-// 		Object*& pObj = m_mapObjectPtr[key];
+// 		Object*& pObj = m_object_map[key];
 // 		if( pObj )
 // 		{
 // 			//! add this typedef is used to help compiler to know the real object type

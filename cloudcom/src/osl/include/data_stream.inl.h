@@ -197,12 +197,18 @@ namespace osl
         return true;
     }
 
-    inline bool MemoryDataStream::write( char ch )
-    {
-        return write( &ch, 1 );
-    }
-	
-	inline bool MemoryDataStream::readle( u32* pu32 )
+    inline bool MemoryDataStream::write( int8_t v )   { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( int16_t v )  { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( int32_t v )  { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( int64_t v )  { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( uint8_t  v ) { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( uint16_t v ) { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( uint32_t v ) { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( uint64_t v ) { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( f32 v )      { return write(&v, sizeof(v)); }
+//     inline bool MemoryDataStream::write( f64 v )      { return write(&v, sizeof(v)); }
+
+    inline bool MemoryDataStream::readle( u32* pu32 )
 	{
 		if ( this->getReadableSize() < 4 )
 		  return false;
