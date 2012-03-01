@@ -19,6 +19,8 @@ namespace npp
         //! \return  - 
         MessagePacker(MessageUnpacker* message_unpacker = NULL);
 
+        //MessagePacker(NppHeader&, NetHeader&); //TODO add this constructor
+
         //! \brief Pack the data
         //! \param const void * data - The original data
         //! \param size_t data_len - 
@@ -28,6 +30,12 @@ namespace npp
         //!     the packed data length will stored here
         //! \return bool - 
         bool Pack(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
+
+
+        //! \brief Get the packed data length
+        //! \param size_t data_len - The data to be packed
+        //! \return size_t - 
+        size_t GetPackedTotalDataSize(size_t data_len);
 
         MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
     private:

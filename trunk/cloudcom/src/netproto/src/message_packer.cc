@@ -14,14 +14,13 @@ namespace npp
 
     }
 
-
     size_t MessagePacker::GetPackedTotalDataSize(const NppHeader& npp_header, size_t data_len)
     {
         if (message_unpacker_)
         {
             if (message_unpacker_->net_header().version() == 1)
             {
-                return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len, 8);
+                return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
             }
             else
             {
@@ -29,11 +28,17 @@ namespace npp
                 assert(false && "Not supported!");
             }
         }
-        
+
         //version 1
         return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len, 8);
 
         //TODO version 2
+    }
+
+    size_t MessagePacker::GetPackedTotalDataSize(size_t data_len)
+    {
+        //TODO need more process GetSignLength(npp_header) instead of 128
+        return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + 128 + H_ALIGN(data_len, 8);
     }
 
     bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
