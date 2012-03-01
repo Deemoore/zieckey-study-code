@@ -136,6 +136,13 @@ namespace osl
             return getFiles( strDirName, files, recursively, filter );
         }
 
+        //! \brief Walk the directory and get a list of all kinds of files, included directory.
+        //! \param strDirName The directory name
+        //! \param files[out] The list of files are stored here. The file name is with the full path name(include the directory name)
+        //! \param depth The depth to walk the subdirectories. 0 means only walk the top dir strDirName
+        //! \param filter Pattern to match against; which can include simple '*' wildcards
+        static void listAllFiles( const StringA& strDirName, StringAList& files, int depth = 0, const StringA& filter = "*" );
+
     };
 
 
