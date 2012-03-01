@@ -5,7 +5,7 @@
 #include "netproto/include/npp_config.h"
 #include "netproto/include/message_packer.h"
 #include "netproto/include/message_unpacker.h"
-#include "netproto/include/idea_wrapper.h"
+#include "netproto/include/idea.h"
 
 #include "test_rsa_self_pair_key.h"
 #include "client_rsa_key.h"
