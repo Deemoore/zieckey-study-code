@@ -45,7 +45,8 @@ namespace npp
     {
         H_CASE_STRING_BIGIN(last_error());
         H_CASE_STRING(kNoError);
-        H_CASE_STRING(kParameterError);
+        H_CASE_STRING(kParameterErrorNULLPointer);
+        H_CASE_STRING(kParameterErrorDataLengthError);
         H_CASE_STRING(kVesionError);
         H_CASE_STRING(kMemoryNotEnough);
         H_CASE_STRING(kNotSupportOpenSSLRSA);   
