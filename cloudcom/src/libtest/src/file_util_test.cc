@@ -2,6 +2,7 @@
 
 #include "libtest/include/test_object.h"
 #include "osl/include/file_util.h"
+#include "osl/include/utility.h"
 
 namespace LibTest
 {
@@ -47,7 +48,7 @@ namespace LibTest
 
         {
             osl::StringAList files;
-            osl::FileUtil::listAllFiles( "../..", files, 0 );
+            osl::Util::listAllFiles( "../..", files, 0 );
             std::cout << "\n\n\nosl::FileUtil::listAllFiles( \"../..\", files, 0 ):\n";
             std::copy( files.begin() , files.end() , std::ostream_iterator<osl::StringA>( std::cout , "\n" ) );
         }
@@ -55,7 +56,7 @@ namespace LibTest
 
         {
             osl::StringAList files;
-            osl::FileUtil::listAllFiles( "../..", files, 1 );
+            osl::Util::listAllFiles( "../..", files, 1 );
             std::cout << "\n\n\nosl::FileUtil::listAllFiles( \"../..\", files, 1 ):\n";
             std::copy( files.begin() , files.end() , std::ostream_iterator<osl::StringA>( std::cout , "\n" ) );
         }
@@ -63,7 +64,7 @@ namespace LibTest
 
         {
             osl::StringAList files;
-            osl::FileUtil::listAllFiles( "../..", files, 2 );
+            osl::Util::listAllFiles( "../..", files, 2 );
             std::cout << "\n\n\nosl::FileUtil::listAllFiles( \"../..\", files, 2 ):\n";
             std::copy( files.begin() , files.end() , std::ostream_iterator<osl::StringA>( std::cout , "\n" ) );
         }

@@ -4,6 +4,7 @@
 
 #include "osl/include/idea_wrapper.h"
 #include "osl/include/file_util.h"
+#include "osl/include/utility.h"
 #include "osl/include/ini_parser.h"
 #include "osl/include/crc32.h"
 
@@ -885,7 +886,7 @@ namespace
 
 
         osl::StringAList infiles;
-        osl::FileUtil::listAllFiles(indir, infiles );
+        osl::Util::listAllFiles(indir, infiles );
 
         osl::StringAList::iterator it(infiles.begin());
         osl::StringAList::iterator ite(infiles.end());
