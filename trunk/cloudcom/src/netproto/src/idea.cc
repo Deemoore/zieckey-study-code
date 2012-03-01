@@ -4,7 +4,6 @@
 #include "netproto/include/idea.h"
 
 
-
 #if H_NPP_PROVIDE_IDEA_ENCRYPT
 
 
@@ -65,9 +64,9 @@ namespace npp
             return false;
         }
 
-        const unsigned int ALINE_LEN = 8;
+        const unsigned int kAlignUnitLength8 = 8;
 
-        unsigned int nAlignSourceLen = H_ALIGN( nSourceLen, ALINE_LEN );
+        unsigned int nAlignSourceLen = H_ALIGN( nSourceLen, kAlignUnitLength8 );
 
         if ( !dataEncrypted.setBufferSize( nAlignSourceLen + dataEncrypted.getSize() ) )
         {
@@ -78,28 +77,27 @@ namespace npp
         unsigned int nOctalCount = nSourceLen / 8;
         for ( unsigned int i = 0; i < nOctalCount; ++i )
         {
-            nPos = i * ALINE_LEN;
+            nPos = i * kAlignUnitLength8;
             ::idea_ecb_encrypt( szSource + nPos, (unsigned char*)dataEncrypted.getCurWriteBuffer(), const_cast<IDEA_KEY_SCHEDULE*>( &ideaEncryptKey ) );
-            dataEncrypted.seekp( ALINE_LEN );
+            dataEncrypted.seekp( kAlignUnitLength8 );
         }
 
         bool b8BytesAlign = ( nAlignSourceLen == nSourceLen ); //whether the input is a multiple of 8
         if ( !b8BytesAlign )
         {
-            unsigned char buf[ALINE_LEN] = { '\0' };
+            unsigned char buf[kAlignUnitLength8] = { '\0' };
             if ( nOctalCount > 0 )
             {
-                nPos += ALINE_LEN;
+                nPos += kAlignUnitLength8;
             }
             assert( nSourceLen > nPos );
             memcpy( buf, szSource + nPos, nSourceLen - nPos );
             ::idea_ecb_encrypt( buf, (unsigned char*)dataEncrypted.getCurWriteBuffer(), const_cast<IDEA_KEY_SCHEDULE*>( &ideaEncryptKey ) );
-            dataEncrypted.seekp( ALINE_LEN );
+            dataEncrypted.seekp( kAlignUnitLength8 );
         }
 
         return true;
     }
-
 
     void IDEA::encrypt( const unsigned char* in_buf, const unsigned int in_buf_len, const IDEA_KEY_SCHEDULE* key, mem_data_t* out_data )
     {
@@ -109,25 +107,25 @@ namespace npp
             return;
         }
 
-        const size_t ALINE_LEN = 8;
-        size_t aligned_len = CCWEB_ALIGN( in_buf_len, ALINE_LEN );
+        const size_t kAlignUnitLength8 = 8;
+        size_t aligned_len = CCWEB_ALIGN( in_buf_len, kAlignUnitLength8 );
 
         size_t pos = 0;
         size_t octal_count = in_buf_len / 8;
         size_t i = 0;
         for ( ; i < octal_count; ++i )
         {
-            pos = i * ALINE_LEN;
+            pos = i * kAlignUnitLength8;
             idea_ecb_encrypt( in_buf + pos, out_data->data + pos, const_cast<IDEA_KEY_SCHEDULE*>(key) );
         }
 
         //the input is not a multiple of 8
         if ( aligned_len != in_buf_len )
         {
-            unsigned char buf[ALINE_LEN] = { '\0' };
+            unsigned char buf[kAlignUnitLength8] = { '\0' };
             if ( octal_count > 0 )
             {
-                pos += ALINE_LEN;
+                pos += kAlignUnitLength8;
             }
             assert( in_buf_len > pos );
             memcpy( buf, in_buf + pos, in_buf_len - pos );
@@ -137,6 +135,90 @@ namespace npp
         out_data->data_len = aligned_len;
     }
 
+    bool IDEA::encrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_encrypted, size_t& data_encrypted_len )
+    {
+        if (!data_encrypted)
+        {
+            data_encrypted_len = 0;
+            return false;
+        }
+
+        size_t aligned_len = getEncryptDataLen(padding, nSourceLen);
+
+        if (data_encrypted_len < H_ALIGN(nSourceLen, 8))
+        {
+            data_encrypted_len = 0;
+            return false;
+        }
+
+        unsigned char* in_buf  = (unsigned char*)szSource;
+        unsigned char* out_buf = (unsigned char*)data_encrypted;
+
+        size_t pos = 0;
+        size_t octal_count = nSourceLen / 8;
+        size_t i = 0;
+        for ( ; i < octal_count; ++i )
+        {
+            idea_ecb_encrypt( in_buf + pos, out_buf + pos, &m_encrypt_key );
+            pos += kAlignUnitLength8;
+        }
+
+        if (PaddingPKCS7 == padding)
+        {
+            unsigned char buf[kAlignUnitLength8] = {};
+            assert( nSourceLen >= pos );
+            size_t remain = nSourceLen - pos;
+            assert( kAlignUnitLength8 > remain );
+            if (remain > 0)
+            {
+                memcpy( buf, in_buf + pos, remain );
+            }
+            memset( buf + remain, kAlignUnitLength8 - remain, kAlignUnitLength8 - remain );
+            ::idea_ecb_encrypt( buf, out_buf + pos, &m_encrypt_key );
+            pos += kAlignUnitLength8;
+        }
+        else if (PaddingZero == padding)
+        {
+            if (0 != nSourceLen % 8)
+            {
+                //the input is not a multiple of 8
+                unsigned char buf[kAlignUnitLength8] = {};
+                assert( nSourceLen > pos );
+                memcpy( buf, in_buf + pos, nSourceLen - pos );
+                ::idea_ecb_encrypt( buf, out_buf + pos, &m_encrypt_key );
+                pos += kAlignUnitLength8;
+            }
+        }
+        else
+        {
+            assert(false);
+            return false;
+        }
+        
+        assert(pos == aligned_len);
+        data_encrypted_len = aligned_len;
+        return true;
+    }
+
+    size_t IDEA::getEncryptDataLen( Padding padding, size_t nSourceLen )
+    {
+        //! output buffer length checking
+        if (padding == PaddingZero)
+        {
+            return H_ALIGN(nSourceLen, 8);
+        }
+        else if (padding == PaddingPKCS7)
+        {
+            return H_ALIGN( nSourceLen + 1, kAlignUnitLength8 );
+        }
+        else
+        {
+            assert(false);
+            return (size_t)-1;
+        }
+    }
+
+
     void IDEA::decrypt( const unsigned char* in_buf, const unsigned int in_buf_len, const IDEA_KEY_SCHEDULE* key, mem_data_t* out_data )
     {
         if ( !in_buf || 0 == in_buf_len || !out_data->data )
@@ -145,8 +227,8 @@ namespace npp
             return;
         }
 
-        const size_t ALINE_LEN = 8;
-        if ( in_buf_len % ALINE_LEN != 0 )
+        const size_t kAlignUnitLength8 = 8;
+        if ( in_buf_len % kAlignUnitLength8 != 0 )
         {
             printf( "The input source data length is wrong, it SHOULD be a multiple of 8" );
             return;
@@ -157,11 +239,11 @@ namespace npp
         size_t i = 0;
         for ( ; i < octal_count; ++i )
         {
-            pos = i * ALINE_LEN;
+            pos = i * kAlignUnitLength8;
             idea_ecb_encrypt( in_buf + pos, out_data->data + pos, const_cast<IDEA_KEY_SCHEDULE*>(key) );
         }
 
-        assert( pos == in_buf_len - ALINE_LEN );
+        assert( pos == in_buf_len - kAlignUnitLength8 );
         /* we cannot determine the orginal data length, 
          * we just know it is a multiple of 8
          */
@@ -182,9 +264,9 @@ namespace npp
             return false;
         }
 
-        const unsigned int ALINE_LEN = 8;
+        const unsigned int kAlignUnitLength8 = 8;
 
-        if ( nSourceLen % ALINE_LEN != 0 )
+        if ( nSourceLen % kAlignUnitLength8 != 0 )
         {
             assert( false && "The input source data length is wrong, it SHOULD be a multiple of 8" );
             return false;
@@ -205,9 +287,9 @@ namespace npp
             return false;
         }
 
-        const unsigned int ALINE_LEN = 8;
+        const unsigned int kAlignUnitLength8 = 8;
 
-        if ( nSourceLen % ALINE_LEN != 0 )
+        if ( nSourceLen % kAlignUnitLength8 != 0 )
         {
             assert( false && "The input source data length is wrong, it SHOULD be a multiple of 8" );
             return false;
@@ -224,8 +306,8 @@ namespace npp
         unsigned int nOctalCount = nSourceLen / 8;
         for ( unsigned int i = 0; i < nOctalCount; ++i )
         {
-            ::idea_ecb_encrypt( pos + i * ALINE_LEN, (unsigned char*)dataDecrypted.getCurWriteBuffer(), const_cast<IDEA_KEY_SCHEDULE*>( &ideaDecryptKey ) );
-            dataDecrypted.seekp( ALINE_LEN );
+            ::idea_ecb_encrypt( pos + i * kAlignUnitLength8, (unsigned char*)dataDecrypted.getCurWriteBuffer(), const_cast<IDEA_KEY_SCHEDULE*>( &ideaDecryptKey ) );
+            dataDecrypted.seekp( kAlignUnitLength8 );
         }
 
         unsigned int nDecryptedDataLen = dataDecrypted.getSize() - nDecryptBufOriginalLen;
@@ -236,6 +318,56 @@ namespace npp
             return false;
         }
 
+        return true;
+    }
+
+    bool IDEA::decrypt( const void* szSource, const size_t in_buf_len, Padding padding, void* data_decrypted, size_t& data_decrypted_len )
+    {
+        if ( !szSource || 0 == in_buf_len || !data_decrypted || data_decrypted_len < in_buf_len )
+        {
+            data_decrypted_len = 0;
+            return false;
+        }
+
+        if ( in_buf_len % kAlignUnitLength8 != 0 )
+        {
+            fprintf( stderr, "The input source data length is wrong, it SHOULD be a multiple of 8" );
+            return false;
+        }
+
+        const unsigned char* in_buf = static_cast<const unsigned char*>(szSource);
+        unsigned char* out_data = static_cast<unsigned char*>(data_decrypted);
+        size_t pos = 0;
+        size_t octal_count = in_buf_len / 8;
+        size_t i = 0;
+        for ( ; i < octal_count; ++i )
+        {
+            idea_ecb_encrypt( in_buf + pos, out_data + pos, &m_decrypt_key );
+            pos += kAlignUnitLength8;
+        }
+
+        assert(pos == in_buf_len);
+
+        if (padding == PaddingZero)
+        {
+            /* we cannot determine the original data length, 
+            * we just know it is a multiple of 8
+            */
+            data_decrypted_len = in_buf_len;
+        }
+        else if (padding == PaddingPKCS7)
+        {
+            assert(out_data[pos - 1] <= 8);
+            assert(out_data[pos - 1] > 0);
+            data_decrypted_len -= out_data[pos - 1];
+        }
+        else
+        {
+            assert(false && "Not supported!");
+            data_decrypted_len = 0;
+            return false;
+        }
+        
         return true;
     }
 

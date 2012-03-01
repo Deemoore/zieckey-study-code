@@ -27,6 +27,15 @@ namespace npp
     class _EXPORT_NETPROTO IDEA
     {
     public:
+        enum Padding
+        {
+            PaddingZero,
+            PaddingPKCS7,
+        };
+
+        enum { kAlignUnitLength8 = 8 };
+
+    public:
         IDEA();
 
         bool initialize(const unsigned char key[16]);
@@ -40,7 +49,17 @@ namespace npp
         //!     Make sure the buffer size of <code>encrypt_data</code> is at least H_ALIGN(nSourceLen, 8)
         //! \return bool - true if encrypts successfully
         bool encrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& data_encrypted );
-        //bool encrypt( const void* szSource, const size_t nSourceLen, void* data_encrypted );
+
+
+        //! \brief 
+        //! \param[in] - const void * szSource
+        //! \param[in] - const size_t nSourceLen
+        //! \param[in] - Padding padding
+        //! \param[out] - void * data_encrypted
+        //! \param[in, out] - size_t & data_encrypted_len
+        //! \return - bool
+        bool encrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_encrypted, size_t& data_encrypted_len);
+        static size_t getEncryptDataLen(Padding padding, size_t nSourceLen);
 
         //! \brief IDEA decrypt
         //! \param const void*  szSource - the input source data
@@ -48,6 +67,15 @@ namespace npp
         //! \param npp::MemoryDataStream & data_decrypted - the decrypted data is stored here
         //! \return bool - true if decrypts successfully
         bool decrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& data_decrypted );
+
+        //! \brief 
+        //! \param[in] - const void * szSource
+        //! \param[in] - const size_t nSourceLen
+        //! \param[in] - Padding padding
+        //! \param[out] - void * data_decrypted
+        //! \param[in,out] - size_t & data_decrypted_len
+        //! \return - bool
+        bool decrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_decrypted, size_t& data_decrypted_len);
     public:
         //! \brief IDEA encrypt
         //! \param const unsigned char*  szSource - the input source data

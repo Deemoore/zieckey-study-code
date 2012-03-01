@@ -66,6 +66,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "netproto-request-sample", "
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "netproto-test", "src\netproto\test\test.vcproj", "{DEC611A6-D17F-4886-B658-281DD8A14597}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91737B2D-F3C6-465F-939F-42CCA7AB9E99} = {91737B2D-F3C6-465F-939F-42CCA7AB9E99}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
