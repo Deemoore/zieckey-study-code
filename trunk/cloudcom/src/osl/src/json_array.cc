@@ -652,7 +652,7 @@ namespace json
     }
 #if H_PROVIDE_UUID
     //---------------------------------------------------------------------------
-    void  JSONArray::getUUIDArray( osl::HUUIDVector& vArray, const osl::QUUID& valDefault )const
+    void  JSONArray::getUUIDArray( osl::UUIDVector& vArray, const osl::QUUID& valDefault )const
     {
         internal_get_vector( vArray , valDefault );
     }

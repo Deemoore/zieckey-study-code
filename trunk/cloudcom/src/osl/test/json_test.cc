@@ -62,6 +62,5 @@ TEST_UNIT(json_unicode_test_2)
         H_TEST_ASSERT(serialize1 == serialize);
         H_TEST_ASSERT(jo1.equals(jo));
     }
-    
 }
 
