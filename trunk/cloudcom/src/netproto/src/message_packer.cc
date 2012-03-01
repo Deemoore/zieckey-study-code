@@ -15,13 +15,13 @@ namespace npp
     }
 
 
-    size_t MessagePacker::GetPackedTotalDataSize( size_t data_len )
+    size_t MessagePacker::GetPackedTotalDataSize(const NppHeader& npp_header, size_t data_len)
     {
         if (message_unpacker_)
         {
             if (message_unpacker_->net_header().version() == 1)
             {
-                return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
+                return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len, 8);
             }
             else
             {
@@ -31,7 +31,7 @@ namespace npp
         }
         
         //version 1
-        return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength() + H_ALIGN(data_len, 8);
+        return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len, 8);
 
         //TODO version 2
     }
@@ -55,28 +55,37 @@ namespace npp
         }
     }
 
-    size_t MessagePacker::GetSignLength()
+    size_t MessagePacker::GetSignLength(const NppHeader& npp_header)
     {
-        if (message_unpacker_)
+        if (npp_header.sign_method_ == kSimpleRSA)
         {
-            if (message_unpacker_->npp_header().sign_method_)
+            npp::SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_header.encrypt_key_no());
+            if (!rsa)
             {
-                //TODO do the sign size calculate
+                last_error(kNotSupportSimpleRSAKeyNumber);
+                return 0;
             }
+            return rsa->getSignLength();
         }
-
-        return 128;
+        else if (npp_header.sign_method() == kOpenSSLRSA0 || npp_header.sign_method() == kOpenSSLRSA2)
+        {
+            OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
+            if (!rsa)
+            {
+                last_error(kNotSupportSimpleRSAKeyNumber);
+                return 0;
+            }
+            return rsa->getSignLength();
+        }
+        else
+        {
+            last_error(kNotSupportSignMethod);
+            return 0;
+        }
     }
 
     bool MessagePacker::pack_v1( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
     {
-        assert(packed_data_buf_len >= GetPackedTotalDataSize(data_len));
-        if (packed_data_buf_len < GetPackedTotalDataSize(data_len))
-        {
-            last_error(kMemoryNotEnough);
-            return false;
-        }
-
         //---------------------------------------------------------
         //Step 1: NetHeader and NppHeader
         unsigned char* write_pos = (unsigned char*)packed_data_buf;
@@ -88,7 +97,7 @@ namespace npp
         {
             memcpy(net_header, &(message_unpacker_->net_header()), sizeof(*net_header));
             memcpy(npp_header, &(message_unpacker_->npp_header()), sizeof(*npp_header));
-            CalculateSignKeyNum(npp_header);
+            CalculateSignKeyNum(*npp_header);
         }
         else
         {
@@ -96,10 +105,17 @@ namespace npp
             npp_header->Init();
         }
 
+        assert(packed_data_buf_len >= GetPackedTotalDataSize(*npp_header, data_len));
+        if (packed_data_buf_len < GetPackedTotalDataSize(*npp_header, data_len))
+        {
+            last_error(kMemoryNotEnough);
+            return false;
+        }
+
         //---------------------------------------------------------
         //Step 2: Fill the idea encrypt data
         {
-            npp_header->digest_sign_len_ = GetSignLength() + MD5::MD5_RAW_BIN_DIGEST_LEN;
+            npp_header->digest_sign_len_ = GetSignLength(*npp_header) + MD5::MD5_RAW_BIN_DIGEST_LEN;
             switch (npp_header->encrypt_method_)
             {
             case kNoEncrypt:
@@ -170,48 +186,53 @@ namespace npp
             OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
             if (!rsa)
             {
-                last_error(kNotSupportSimpleRSAKeyNumber);
+                last_error(kNotSupportOpenSSLRSAKeyNumber);
                 return false;
             }
             size_t siglen = rsa->getSignLength();
             if (!rsa->sign(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, &siglen))
             {
-                last_error(kSimpleRSASignFailed);
+                last_error(kOpenSSLRSASignFailed);
                 return false;
             }
+        }
+        else
+        {
+            last_error(kNotSupportSignMethod);
+            return false;
         }
 
         assert(last_error() == kNoError);
         return true;
     }
 
-    void MessagePacker::CalculateSignKeyNum( NppHeader* npp_header )
+    void MessagePacker::CalculateSignKeyNum( NppHeader& npp_header )
     {
         //1->2 2->1
         //3->4 4->3
         //5->6 6->5
         //...
         {
-            uint8_t encrypt_key = npp_header->encrypt_key_no();
+            uint8_t encrypt_key = npp_header.encrypt_key_no();
             if (encrypt_key % 2) //1,3,5
             {
-                npp_header->set_encrypt_key_no(encrypt_key + 1);
+                npp_header.set_encrypt_key_no(encrypt_key + 1);
             }
             else //2, 4, 6 ...
             {
-                npp_header->set_encrypt_key_no(encrypt_key - 1);
+                npp_header.set_encrypt_key_no(encrypt_key - 1);
             }
         }
         
         {
-            uint8_t sign_key = npp_header->sign_key_no();
+            uint8_t sign_key = npp_header.sign_key_no();
             if (sign_key % 2) //1,3,5
             {
-                npp_header->set_sign_key_no(sign_key + 1);
+                npp_header.set_sign_key_no(sign_key + 1);
             }
             else //2, 4, 6 ...
             {
-                npp_header->set_sign_key_no(sign_key - 1);
+                npp_header.set_sign_key_no(sign_key - 1);
             }
         }
     }

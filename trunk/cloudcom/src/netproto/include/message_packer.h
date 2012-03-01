@@ -19,11 +19,6 @@ namespace npp
         //! \return  - 
         MessagePacker(MessageUnpacker* message_unpacker = NULL);
 
-        //! \brief Get the packed data length
-        //! \param size_t data_len - The data to be packed
-        //! \return size_t - 
-        size_t GetPackedTotalDataSize(size_t data_len);
-
         //! \brief Pack the data
         //! \param const void * data - The original data
         //! \param size_t data_len - 
@@ -36,8 +31,13 @@ namespace npp
 
         MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
     private:
+        //! \brief Get the packed data length
+        //! \param size_t data_len - The data to be packed
+        //! \return size_t - 
+        size_t GetPackedTotalDataSize(const NppHeader& npp_header, size_t data_len);
+
         //! Get the sign length
-        size_t GetSignLength();
+        size_t GetSignLength(const NppHeader& npp_header);
 
         bool pack_v1(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
 
@@ -45,7 +45,7 @@ namespace npp
     public:
 #endif
         //! We decide which sign to use 
-        void CalculateSignKeyNum(NppHeader* npp_header);
+        void CalculateSignKeyNum(NppHeader& npp_header);
 
     private:
         MessageUnpacker* message_unpacker_;
