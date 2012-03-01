@@ -211,7 +211,7 @@ namespace json
 			sb.write( indentstr.c_str(), indentstr.length() );
 		}
 
-        ObjectList::const_iterator it( m_list.begin() ), ite( m_list.end() );
+        ObjectPtrList::const_iterator it( m_list.begin() ), ite( m_list.end() );
 		//sb << '[';
 		sb.write( '[' );
 
@@ -300,40 +300,56 @@ namespace json
             return false;
         }
 
-        const size_t sz = size();
-        bool bAllElementEquals = true;
-        for ( size_t i = 0; i < sz; ++i )
-        {
-            bool bFindEqualOne = false;
-            Object* jthis = get( i );
-            for ( size_t j = 0; j < sz; ++j )
-            {
-                //TODO 这里可以优化，上一次比较过的就不需要再次比较了
-                if ( jthis->equals( *rhsArray.get(j) ) )
-                {
-                    bFindEqualOne = true;
-                    break;
-                }
-            }
 
-            if ( bFindEqualOne )
+        ObjectPtrList::const_iterator itthis( begin() );
+        ObjectPtrList::const_iterator itethis( end() );
+        ObjectPtrList::const_iterator itrhs( rhsArray.begin() );
+        ObjectPtrList::const_iterator iterhs( rhsArray.end() );
+        for ( ; itthis != itethis && itrhs != iterhs; ++itthis, ++itrhs )
+        {
+            if (!(*itthis)->equals(*(*itrhs)))
             {
-                continue;
-            }
-            else
-            {
-                bAllElementEquals = false;
-                break;
+                return false;
             }
         } // end of for
 
-        return bAllElementEquals;
+        return true;
+
+
+//         const size_t sz = size();
+//         bool bAllElementEquals = true;
+//         for ( size_t i = 0; i < sz; ++i )
+//         {
+//             bool bFindEqualOne = false;
+//             Object* jthis = get( i );
+//             for ( size_t j = 0; j < sz; ++j )
+//             {
+//                 //TODO 这里可以优化，上一次比较过的就不需要再次比较了
+//                 if ( jthis->equals( *rhsArray.get(j) ) )
+//                 {
+//                     bFindEqualOne = true;
+//                     break;
+//                 }
+//             }
+// 
+//             if ( bFindEqualOne )
+//             {
+//                 continue;
+//             }
+//             else
+//             {
+//                 bAllElementEquals = false;
+//                 break;
+//             }
+//         } // end of for
+// 
+//         return bAllElementEquals;
     }
 
 
     bool JSONArray::remove( int index )
     {
-        ListIterator it = getIterator( index );
+        Iterator it = getIterator( index );
 
         if ( it == m_list.end() )
         {
@@ -346,7 +362,7 @@ namespace json
 
     Object* JSONArray::get( int index ) const
     {
-        ListConstIterator it = getIterator( index );
+        ConstIterator it = getIterator( index );
 
         if ( it != m_list.end() )
         {
@@ -405,7 +421,7 @@ namespace json
 
     bool JSONArray::isNull( int index ) const
     {
-        ListConstIterator it = getIterator( index );
+        ConstIterator it = getIterator( index );
 
         if ( it == m_list.end() )
         {
@@ -649,28 +665,28 @@ namespace json
     }
 
 
-    JSONArray::ListConstIterator JSONArray::getIterator( size_t index ) const
+    JSONArray::ConstIterator JSONArray::getIterator( size_t index ) const
     {
         if ( index > m_list.size() )
         {
             return m_list.end();
         }
 
-        ListConstIterator it = m_list.begin();
+        ConstIterator it = m_list.begin();
 
         advance( it , index );//        for ( size_t i = 0; i < index; i++ ) it++;
 
         return it;
     }
 
-    JSONArray::ListIterator JSONArray::getIterator( size_t index )
+    JSONArray::Iterator JSONArray::getIterator( size_t index )
     {
         if ( index > m_list.size() )
         {
             return m_list.end();
         }
 
-        ListIterator it = m_list.begin();
+        Iterator it = m_list.begin();
 
         advance( it , index );//        for ( size_t i = 0; i < index; i++ ) it++;
 

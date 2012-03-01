@@ -98,7 +98,6 @@ namespace json
     {
         osl::MemoryDataStream sb( DEFAULT_BUFFER_SIZE );
         char c = 0;
-        osl::u32 unicode = 0;
 
         for ( ;; )
         {
@@ -107,7 +106,7 @@ namespace json
             switch ( c )
             {
             case 0:
-                printf( "Unterminated string\n" );
+                fprintf( stderr, "Unterminated string\n" );
                 return false;
             case '\\':	//! Escape character
                 c = next();
@@ -129,15 +128,15 @@ namespace json
                 case 'r':
                     sb << '\r';
                     break;
-                case 'u': //! e.g. \u1524 is a unicode character
-                    //TODO unicode characters
-                    if ( !decodeUnicodeEscapeSequence( unicode ) )
+                case 'u':
                     {
-                        fprintf( stderr, "Illegal unicode escape.\n" );
-                        return false;
-                    }
-
-                    {
+                        //! e.g. \u1524 is a unicode character
+                        osl::u32 unicode = 0;
+                        if ( !decodeUnicodeEscapeSequence( unicode ) )
+                        {
+                            fprintf( stderr, "Illegal unicode escape.\n" );
+                            return false;
+                        }
                         osl::StringA utf8str = JSONTokener::convertUnicodeToUTF8( unicode );
                         sb.write(utf8str.c_str(), utf8str.length());
                     }
@@ -150,7 +149,7 @@ namespace json
                     sb << c;
                     break;
                 default:
-                    printf( "Illegal escape.\n" );
+                    fprintf( stderr, "Illegal escape.[%c]\n", c );
                     return false;
                 }
 
