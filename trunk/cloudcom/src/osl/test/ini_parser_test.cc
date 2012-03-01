@@ -823,6 +823,10 @@ namespace
         {
             parser.stopParse(true);
         }
+
+        virtual ~ParserListener()
+        {
+        }
     };
 
 
