@@ -44,6 +44,7 @@ namespace
 
 
             npp::IDEA::encrypt( s, len, &ekey, &endata );
+
             {
                 ::IDEA_KEY_SCHEDULE keyIdeaEncrypt;
                 ::idea_set_encrypt_key( ( npp::u8* )strideakey.c_str(), &keyIdeaEncrypt );
@@ -68,6 +69,17 @@ namespace
                 {
                     H_TEST_ASSERT( 0 == strncmp( ( const char* )s, ( const char* )decrypted.getCache(), len ) );
                 }
+            }
+
+            {
+                npp::IDEA idea;
+                idea.initialize(strideakey);
+
+                size_t encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, len);
+                char* buf = new char[encrypted_data_len];
+                idea.encrypt(s, len, npp::IDEA::PaddingZero, buf, encrypted_data_len);
+                H_TEST_ASSERT(encrypted_data_len == endata.data_len);
+                H_TEST_ASSERT(0 == memcmp(endata.data, buf, encrypted_data_len));
             }
 
             free( endata.data );
@@ -185,10 +197,33 @@ namespace
         H_TEST_ASSERT(idea.decrypt( ( npp::u8* )ds.data(), ds.size(), decrypted ));
         H_TEST_ASSERT( 0 == strncmp( ( const char* )s, ( const char* )decrypted.data(), len ) );
     }
+
+    void test_getEncryptDataLen()
+    {
+        for (size_t i = 1; i <= 8; ++i)
+        {
+            H_TEST_ASSERT(npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, i) == 8);
+        }
+
+        for (size_t i = 0; i <= 7; ++i)
+        {
+            H_TEST_ASSERT(npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingPKCS7, i) == 8);
+        }
+
+
+        for (size_t i = 8; i <= 15; ++i)
+        {
+            H_TEST_ASSERT(npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingPKCS7, i) == 16);
+        }
+
+        H_TEST_ASSERT(npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingPKCS7, 0) == 8);
+        H_TEST_ASSERT(npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingPKCS7, 8) == 16);
+    }
 }
 
 TEST_UNIT(idea_test_1)
 {
+    test_getEncryptDataLen();
     test_1();
     test_2();
 }
