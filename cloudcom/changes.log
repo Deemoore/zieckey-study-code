@@ -1,3 +1,5 @@
+1.0.17
+    slrsa fix a possible memory leak
 
 1.0.16 
     Add more Base64 functionos. Fix LogManager::getDefaultLog bug, Add MD5 helper method
