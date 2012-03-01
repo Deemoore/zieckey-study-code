@@ -111,7 +111,7 @@ namespace npp
     {
         return 0 != slrsa_verify((const unsigned char*)m, m_len, 
             (const unsigned char*)public_key_.data(), 
-            (const unsigned char*)sigbuf, siglen);
+            (const unsigned char*)sigbuf, (const unsigned int)siglen);
     }
 
     inline size_t SimpleRSA::getSignLength() const 
