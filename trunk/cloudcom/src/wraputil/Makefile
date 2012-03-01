@@ -14,7 +14,11 @@ LIBNAME=$(shell basename `pwd`)
 
 
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
-SLRSA_OBJS := ../slrsa/md5c.o ../slrsa/nn.o ../slrsa/rsa.o ../slrsa/shsc.o ../slrsa/slrsa.o
+
+LRSA_SRCS := $(wildcard ../slrsa/*.c)
+SLRSA_OBJS := $(patsubst %.c, %.o, $(SLRSA_SRCS))
+SLRSA_DEPS := $(patsubst %.o, %.d, $(SLRSA_OBJS)) 
+
 OSLIB_SRCS := $(wildcard ../osl/src/*.cc)
 OSLIB_OBJS := $(patsubst ../osl/src/%.cc, ../osl/src/%.o, $(OSLIB_SRCS))
 

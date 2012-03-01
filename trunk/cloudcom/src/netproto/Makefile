@@ -13,7 +13,10 @@ LDFLAGS=$(TOP_LDFLAGS) -L/usr/local/lib -lpthread -lcrypt
 LIBNAME=$(shell basename `pwd`)
 
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
-SLRSA_OBJS := ../slrsa/md5c.o ../slrsa/nn.o ../slrsa/rsa.o ../slrsa/shsc.o ../slrsa/slrsa.o
+
+SLRSA_SRCS := $(wildcard ../slrsa/*.c)
+SLRSA_OBJS := $(patsubst %.c, %.o, $(SLRSA_SRCS))
+SLRSA_DEPS := $(patsubst %.o, %.d, $(SLRSA_OBJS)) 
 
 SRCS := $(wildcard src/*.cc)
 OBJS := $(patsubst src/%.cc, src/%.o, $(SRCS)) $(CCOBJS) $(IDEA_OBJS) $(SLRSA_OBJS)
