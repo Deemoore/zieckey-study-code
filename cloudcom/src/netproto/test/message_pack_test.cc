@@ -724,7 +724,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_message_packer_CalculateSignKeyNum)
         {
             h.set_encrypt_key_no(i);
             uint8_t orignal = h.encrypt_key_no();
-            packer.CalculateSignKeyNum(&h);
+            packer.CalculateSignKeyNum(h);
             H_TEST_ASSERT((orignal + 1)/2 == (h.encrypt_key_no() + 1)/2);
             if (orignal % 2 == 0)//2,4,6,8...
             {
@@ -739,7 +739,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_message_packer_CalculateSignKeyNum)
         {
             h.set_sign_key_no(i);
             uint8_t orignal = h.sign_key_no();
-            packer.CalculateSignKeyNum(&h);
+            packer.CalculateSignKeyNum(h);
             H_TEST_ASSERT((orignal + 1)/2 == (h.sign_key_no() + 1)/2);
             if (orignal % 2 == 0)//2,4,6,8...
             {
@@ -754,5 +754,6 @@ TEST_UNIT(test_func_MessagePackUnitTest_message_packer_CalculateSignKeyNum)
 #endif//_NETPROTO_TEST
 }
 
+//TODO test of 512 length key for MID Engine
 
 
