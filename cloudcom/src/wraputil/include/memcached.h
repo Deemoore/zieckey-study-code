@@ -88,6 +88,8 @@ namespace wu
         bool erase( const osl::StringA& key, osl::StringA& errmsg );
         bool erase( const char* key, const size_t keylen, osl::StringA& errmsg );
 
+        memcached_st* getMemcachedST() const { assert(mc_); return mc_; }
+
     private:
         osl::StringA domainsock_;
         osl::StringA hostname_;
