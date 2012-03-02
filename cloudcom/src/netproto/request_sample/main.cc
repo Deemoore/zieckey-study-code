@@ -20,6 +20,8 @@
 
 int main(int argc, char* argv[])
 {
+    do_browser_relative_test();
+
     const char* url = "http://build7.kill.corp.qihoo.net:8018/tutorial.php";
     const char* data = "0123456789";
     std::string result;
