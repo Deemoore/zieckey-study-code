@@ -602,7 +602,7 @@ namespace json
                 default:
                     {
                         //Reference of jansson-2.0.1 http://www.digip.org/jansson/
-                        int32_t codepoint;
+                        int32_t codepoint = 0;
                         const char* end = utf8_iterate(source.c_str() + i, &codepoint);
                         if (!end)
                         {

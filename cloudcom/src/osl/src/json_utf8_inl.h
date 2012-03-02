@@ -132,8 +132,8 @@ inline int utf8_check_full(const char *buffer, int size, int32_t *codepoint)
 
 inline const char *utf8_iterate(const char *buffer, int32_t *codepoint)
 {
-    int count;
-    int32_t value;
+    int count = 0;
+    int32_t value = 0;
 
     if(!*buffer)
         return buffer;
