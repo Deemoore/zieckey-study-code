@@ -50,6 +50,8 @@ TEST_UNIT(json_unicode_test_2)
 {
     const char* path = "test_data/json/unicode.json.txt";
     std::fstream fs(path);
+    H_TEST_ASSERT(fs.good());
+    H_TEST_ASSERT(!fs.fail());
     std::string line;
     while (std::getline(fs, line).good())
     {
