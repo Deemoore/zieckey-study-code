@@ -114,8 +114,8 @@ namespace osl
 //         bool write( f32 f );
 //         bool write( f64 d );
 
-        template<typename _T>
-        bool append(const _T& v) { return write(v); }
+//         template<typename _T>
+//         bool append(const _T& v) { return write(v); }
 
         /** Write 4 bytes int data to this data stream, the data in this stream is Little Endian
 		*   In little endian CPU system:
@@ -142,7 +142,10 @@ namespace osl
         */
         bool write( const void* buf, u32 buf_len );
 
-        bool write( const char* str ) { return write(str, strlen(str)); }
+        /**
+         * Calling <code>write(v, strlen(v))</code>
+         */
+        bool append(const char* v) { return write(v, strlen(v)); }
 
         /** move the stream pointer for read
         *  @remark   after seek, the read pointer' position is at the stream buffer' base address + start + offset,

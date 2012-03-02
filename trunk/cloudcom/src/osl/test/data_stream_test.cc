@@ -256,8 +256,8 @@ namespace
     void test_append()
     {
         MemoryDataStream ds;
-        ds.append((char)1);
-        ds.append((char)2);
+        ds.write((char)1);
+        ds.write((char)2);
         H_TEST_ASSERT(ds.size() == 2);
         H_TEST_ASSERT(ds.charAt(0) == 1);
         H_TEST_ASSERT(ds.charAt(1) == 2);
