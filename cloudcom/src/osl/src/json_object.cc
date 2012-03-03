@@ -558,7 +558,6 @@ namespace json
         char         c = 0;
         int          i;
         int          len = source.length();
-        //osl::StringA       t;
 
         sb.write( '"' );
 
@@ -606,7 +605,10 @@ namespace json
                         const char* end = utf8_iterate(source.c_str() + i, &codepoint);
                         if (!end)
                         {
-                            return false;
+                            //This is not a ASCII code and also NOT an UTF8 code, 
+                            //Maybe it is GBK Chinese code, so we just write it
+                            sb.write(c);
+                            break;
                         }
 
                         if (codepoint <= 0x7F)
