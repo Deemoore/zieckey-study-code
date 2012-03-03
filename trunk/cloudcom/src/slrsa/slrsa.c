@@ -76,6 +76,10 @@ int slrsa_public_encrypt( const unsigned char* m, const unsigned int m_len, cons
     R_RANDOM_STRUCT RandomStruct;
 
 #ifdef WIN32
+    /*
+    R_RandomCreate( &RandomStruct ); // VC compiles error, I really don't know why
+    int encrypt_ret = RSAPublicEncrypt(sigret, siglen, (unsigned char*)m, m_len, (R_RSA_PUBLIC_KEY *)publickey, &RandomStruct);
+    */
     //This is VC compile error workaround
     int encrypt_ret = _internal_RSAPublicEncrypt(sigret, siglen, (unsigned char*)m, m_len, (R_RSA_PUBLIC_KEY *)publickey, &RandomStruct);
 #else
