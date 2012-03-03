@@ -40,8 +40,7 @@ namespace
             endata.data = (u_char*)malloc( 1024 );
             dedata.data = (u_char*)malloc( 1024 );
 
-            unsigned int len = strlen( ( const char* )s );
-
+            size_t len = strlen( ( const char* )s );
 
             npp::IDEA::encrypt( s, len, &ekey, &endata );
 
@@ -77,9 +76,32 @@ namespace
 
                 size_t encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, len);
                 char* buf = new char[encrypted_data_len];
-                idea.encrypt(s, len, npp::IDEA::PaddingZero, buf, encrypted_data_len);
+                H_TEST_ASSERT(idea.encrypt(s, len, npp::IDEA::PaddingZero, buf, encrypted_data_len));
                 H_TEST_ASSERT(encrypted_data_len == endata.data_len);
                 H_TEST_ASSERT(0 == memcmp(endata.data, buf, encrypted_data_len));
+                H_TEST_ASSERT(encrypted_data_len == H_ALIGN(len, 8));
+
+                size_t decrypted_data_len = encrypted_data_len;
+                char* debuf = new char[decrypted_data_len];
+                H_TEST_ASSERT(idea.decrypt(buf, encrypted_data_len, npp::IDEA::PaddingZero, debuf, decrypted_data_len));
+                H_TEST_ASSERT(0 == memcmp(s, debuf, len));
+                H_TEST_ASSERT(decrypted_data_len == H_ALIGN(len, 8));
+                H_TEST_ASSERT(decrypted_data_len == encrypted_data_len);
+            }
+
+            {
+                npp::IDEA idea;
+                idea.initialize(strideakey);
+
+                size_t encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingPKCS7, len);
+                char* buf = new char[encrypted_data_len];
+                H_TEST_ASSERT(idea.encrypt(s, len, npp::IDEA::PaddingPKCS7, buf, encrypted_data_len));
+
+                size_t decrypted_data_len = encrypted_data_len;
+                char* debuf = new char[decrypted_data_len];
+                H_TEST_ASSERT(idea.decrypt(buf, encrypted_data_len, npp::IDEA::PaddingPKCS7, debuf, decrypted_data_len));
+                H_TEST_ASSERT(0 == memcmp(s, debuf, len));
+                H_TEST_ASSERT(len == decrypted_data_len);
             }
 
             free( endata.data );
