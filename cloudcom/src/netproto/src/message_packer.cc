@@ -129,8 +129,6 @@ namespace npp
                 break;
             case kIDEAEncrypt:
                 {
-                    //TODO need optimize
-                    MemoryDataStream buf;
                     IDEA* idea = s_pNppConfig->GetIDEA(npp_header->encrypt_key_no_);
                     assert(idea);
                     if (!idea)
@@ -138,9 +136,9 @@ namespace npp
                         last_error(kNotSupportIDEAKeyNumber);
                         return false;
                     }
-                    idea->encrypt(d, data_len, buf);
-                    memcpy(write_pos + npp_header->digest_sign_len_, buf.data(), buf.size());
-                    packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + buf.size();
+                    size_t encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, data_len);
+                    assert(idea->encrypt(d, data_len, npp::IDEA::PaddingZero, write_pos + npp_header->digest_sign_len_, encrypted_data_len));
+                    packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + encrypted_data_len;
                     break;
                 }
             default:

@@ -125,8 +125,8 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="&quot;libtest/include/QLibTestPrerequisits.h&quot;"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>

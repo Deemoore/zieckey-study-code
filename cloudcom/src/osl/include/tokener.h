@@ -308,9 +308,10 @@ namespace osl
 
         u32 startpos = m_iCurPos;
 
-        for ( ;; )
+        for ( unsigned char c = 0;; )
         {
-			if (next() <= ' ')
+            c = (unsigned char)next();
+			if (c <= ' ')
 			{
                 return Slice( m_pSrcString + startpos, m_iCurPos - startpos - 1);
 			}
@@ -419,8 +420,6 @@ namespace osl
             }
             else
             {
-                //changed by wuqiu
-                //if(c!=' ')  return false;
                 continue;
             }
         }
@@ -447,8 +446,6 @@ namespace osl
 
 
 };//end of namespace os
-
-
 
 #endif // #if H_PROVIDE_APPSHELL
 
