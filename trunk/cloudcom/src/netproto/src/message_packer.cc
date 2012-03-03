@@ -45,6 +45,7 @@ namespace npp
     {
         if (!message_unpacker_)
         {
+            //TODO version 2
             return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
         }
 
@@ -54,6 +55,7 @@ namespace npp
         }
         else
         {
+            //TODO version 2
             assert(false && "Not supported version!");
             last_error(kVesionError);
             return false;
