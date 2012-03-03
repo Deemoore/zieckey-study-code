@@ -248,7 +248,6 @@ namespace json
     //--------------------------------------------------------------------------
     inline bool JSONTokener::skipComment()
     {
-        //        unsigned int commentBegin = getCurPos() - 1;
         char c = next();
         bool successful = false;
 
@@ -267,17 +266,6 @@ namespace json
             return false;
         }
 
-        //         if ( collectComments_ )
-        //         {
-        //             CommentPlacement placement = commentBefore;
-        //             if ( lastValueEnd_  &&  !containsNewLine( lastValueEnd_, commentBegin ) )
-        //             {
-        //                 if ( c != '*'  ||  !containsNewLine( commentBegin, current_ ) )
-        //                     placement = commentAfterOnSameLine;
-        //             }
-        //
-        //             addComment( commentBegin, current_, placement );
-        //         }
         return true;
     }
 
