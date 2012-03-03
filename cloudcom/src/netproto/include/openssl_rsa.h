@@ -95,6 +95,8 @@ namespace npp
 //             std::string& publickey, 
 //             std::string& privatekey);
 
+
+
     private:
         RSA*  m_priavte_rsa;
         RSA*  m_public_rsa;

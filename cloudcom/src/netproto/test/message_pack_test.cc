@@ -206,7 +206,6 @@ namespace
         std::cout << "slrsa sign_cost=" << sign_cost << std::endl;
         std::cout << "slrsa verify_cost=" << verify_cost << std::endl;
         std::cout << "slrsa sign_cost/verify_cost=" << (double)sign_cost/(double)verify_cost << std::endl;
-
     }
 }
 
@@ -215,6 +214,8 @@ TEST_UNIT(test_func_MessagePackUnitTest_test_effective)
 #ifdef H_TEST_EFFECTIVE
     test_effective_slrsa();
     test_effective_openssl();
+    test_effective_slrsa_public_encrypt_private_decrypt();
+    test_effective_openssl_public_encrypt_private_decrypt();
 #endif
 }
 
