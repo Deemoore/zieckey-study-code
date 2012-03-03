@@ -75,8 +75,15 @@ namespace npp
 
         size_t getSignLength() const 
         { 
-            return (size_t)RSA_size(m_priavte_rsa); 
+            return (size_t)RSA_size(m_private_rsa);
         }
+
+        bool publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
+        bool publicEncrypt(const void* m, const size_t m_len, std::string& sigret);
+
+        bool privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
+        bool privateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
+
 
         //! \brief Generate a pair of private key and public key
         //!     Key length with keylen < 1024 should be considered insecure.
@@ -98,7 +105,7 @@ namespace npp
 
 
     private:
-        RSA*  m_priavte_rsa;
+        RSA*  m_private_rsa;
         RSA*  m_public_rsa;
     };
 

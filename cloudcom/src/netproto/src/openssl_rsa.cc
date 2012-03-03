@@ -7,16 +7,16 @@
 namespace npp
 {
     OpenSSLRSA::OpenSSLRSA() 
-        : m_priavte_rsa( NULL ), m_public_rsa(NULL)
+        : m_private_rsa( NULL ), m_public_rsa(NULL)
     {
         
     }
 
     OpenSSLRSA::~OpenSSLRSA()
     {
-        if ( m_priavte_rsa )
+        if ( m_private_rsa )
         {
-            RSA_free( m_priavte_rsa );
+            RSA_free( m_private_rsa );
         }
 
         if (m_public_rsa)
@@ -27,12 +27,12 @@ namespace npp
 
     bool OpenSSLRSA::initialize( const unsigned char* private_key, const size_t private_key_len, const unsigned char* public_key, const size_t public_key_len )
     {
-        assert(!m_public_rsa && !m_priavte_rsa);
+        assert(!m_public_rsa && !m_private_rsa);
 
         {
             BIO* b = BIO_new( BIO_s_mem() );
             BIO_write( b, private_key, private_key_len );
-            m_priavte_rsa = d2i_RSAPrivateKey_bio( b, NULL );
+            m_private_rsa = d2i_RSAPrivateKey_bio( b, NULL );
             BIO_free( b );
         }
 
@@ -43,7 +43,7 @@ namespace npp
             BIO_free( b );
         }
 
-        if (m_public_rsa && m_priavte_rsa)
+        if (m_public_rsa && m_private_rsa)
         {
             return true;
         }
@@ -133,7 +133,14 @@ namespace npp
     bool OpenSSLRSA::sign( SignType type, const void* m, const size_t m_len,
                     unsigned char* sigret, size_t* siglen )
     {
-        int ret = RSA_sign( type, (const unsigned char*)m, (unsigned int)m_len, sigret, (unsigned int*)siglen, m_priavte_rsa );
+        if (*siglen < (size_t)RSA_size(m_private_rsa))
+        {
+            return false;
+        }
+        
+        unsigned int len = *siglen;
+        int ret = RSA_sign( type, (const unsigned char*)m, (unsigned int)m_len, sigret, (unsigned int*)&len, m_private_rsa );
+        *siglen = len;
         return (1 == ret);
     }
 
@@ -172,6 +179,76 @@ namespace npp
     bool OpenSSLRSA::verify( const void* m, const size_t m_len, const void* sigbuf, const size_t siglen )
     {
         return verify(ST_NID_sha1, m, m_len, sigbuf, siglen);
+    }
+
+    bool OpenSSLRSA::publicEncrypt( const void* m, const size_t m_len, void* sigret, size_t* siglen )
+    {
+        //int RSA_public_encrypt(int flen, unsigned char *from, unsigned char *to, RSA *rsa, int padding);
+        if (!sigret || !siglen || *siglen < (size_t)RSA_size(m_public_rsa) || (m_len) >= (size_t)RSA_size(m_public_rsa) - 11)
+        {
+            //RSA_PKCS1_PADDING need : m_len must be less than RSA_size(rsa) - 11 for the PKCS #1 v1.5 based padding modes
+            return false;
+        }
+        
+        int ret = RSA_public_encrypt(m_len, (unsigned char*)m, (unsigned char*)sigret, m_public_rsa, RSA_PKCS1_PADDING);
+        if (ret > 0)
+        {
+            *siglen = ret;
+            return true;
+        }
+        else
+        {
+            *siglen = 0;
+            return false;
+        }
+    }
+
+    bool OpenSSLRSA::publicEncrypt( const void* m, const size_t m_len, std::string& sigret )
+    {
+        unsigned char buf[512] = {};
+        size_t buf_len = sizeof(buf);
+        bool ok = publicEncrypt(m, m_len, buf, &buf_len);
+        if (ok)
+        {
+            sigret = std::string((char*)buf, buf_len);
+            return ok;
+        }
+        return false;
+    }
+
+    bool OpenSSLRSA::privateDecrypt( const void* sig, const size_t siglen, void* plain_data, size_t* plain_data_len )
+    {
+        // int RSA_private_decrypt(int flen, unsigned char *from, unsigned char *to, RSA *rsa, int padding);
+        if (!sig || siglen == 0 || (*plain_data_len) < (size_t)RSA_size(m_private_rsa) || !plain_data)
+        {
+            return false;
+        }
+
+        int ret = RSA_private_decrypt(siglen, (unsigned char*)sig, (unsigned char*)plain_data, m_private_rsa, RSA_PKCS1_PADDING);
+        if (ret > 0)
+        {
+            *plain_data_len = ret;
+            return true;
+        }
+        else
+        {
+            *plain_data_len = 0;
+            return false;
+        }
+    }
+
+    bool OpenSSLRSA::privateDecrypt( const void* sig, const size_t sig_len, std::string& plain_data )
+    {
+        unsigned char buf[512] = {};
+        size_t buf_len = sizeof(buf);
+        bool ok = privateDecrypt(sig, sig_len, buf, &buf_len);
+        if (ok)
+        {
+            assert(buf_len == getSignLength());
+            plain_data = std::string((char*)buf, buf_len);
+            return ok;
+        }
+        return false;
     }
 } //end of namespace npp
 

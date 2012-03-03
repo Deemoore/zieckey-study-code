@@ -32,7 +32,7 @@ namespace npp
         //! \param[in,out] size_t* siglen - 
         //! \return bool - 
         bool sign( const void* m, const size_t m_len,
-            unsigned char* sigret, size_t* siglen );
+            void* sigret, size_t* siglen );
 
         bool sign( const void* m, const size_t m_len, std::string& sigret );
 
@@ -59,10 +59,10 @@ namespace npp
         //! \param[out] - unsigned char * sigret
         //! \param[in,out] - size_t * siglen
         //! \return - bool
-        bool publicEncrypt(const void* m, const size_t m_len, unsigned char* sigret, size_t* siglen);
+        bool publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
         bool publicEncrypt(const void* m, const size_t m_len, std::string& sigret);
 
-        bool privateDecrypt(const void* sig, const size_t sig_len, unsigned char* plain_data, size_t* plain_data_len);
+        bool privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
         bool privateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
 
     private:
@@ -83,10 +83,10 @@ namespace npp
     }
 
     inline bool SimpleRSA::sign( const void* m, const size_t m_len,
-        unsigned char* sigret, size_t* siglen )
+        void* sigret, size_t* siglen )
     {
         unsigned int len = *siglen;
-        int ok = slrsa_sign((const unsigned char*)m, m_len, (const unsigned char*)private_key_.data(), sigret, &len);
+        int ok = slrsa_sign((const unsigned char*)m, m_len, (const unsigned char*)private_key_.data(), (unsigned char *)sigret, &len);
         *siglen = len;
         return ok != 0;
     }
@@ -119,10 +119,10 @@ namespace npp
         return 128; 
     }
 
-    inline bool SimpleRSA::publicEncrypt(const void* m, const size_t m_len, unsigned char* sigret, size_t* siglen)
+    inline bool SimpleRSA::publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen)
     {
         unsigned int len = *siglen;
-        bool ret = 0 != slrsa_public_encrypt((const unsigned char *)m, m_len, (const unsigned char *)public_key_.c_str(), sigret, &len);
+        bool ret = 0 != slrsa_public_encrypt((const unsigned char *)m, m_len, (const unsigned char *)public_key_.c_str(), (unsigned char *)sigret, &len);
         *siglen = len;
         return ret;
     }
@@ -141,10 +141,10 @@ namespace npp
         return false;
     }
 
-    inline bool SimpleRSA::privateDecrypt(const void* sig, const size_t sig_len, unsigned char* plain_data, size_t* plain_data_len)
+    inline bool SimpleRSA::privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len)
     {
         unsigned int len = *plain_data_len;
-        bool ret = 0 != slrsa_private_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)private_key_.c_str(), plain_data, &len);
+        bool ret = 0 != slrsa_private_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)private_key_.c_str(), (unsigned char *)plain_data, &len);
         *plain_data_len = len;
         return ret;
     }
