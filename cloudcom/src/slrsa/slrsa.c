@@ -58,15 +58,32 @@ int slrsa_verify( const unsigned char *m, const unsigned int m_len,
     }
 }
 
+
+int _internal_RSAPublicEncrypt(output, outputLen, input, inputLen, publicKey, randomStruct)
+unsigned char *output;          /* output block */
+unsigned int *outputLen;        /* length of output block */
+unsigned char *input;           /* input block */
+unsigned int inputLen;          /* length of input block */
+R_RSA_PUBLIC_KEY *publicKey;    /* RSA public key */
+R_RANDOM_STRUCT *randomStruct;  /* random structure */
+{
+    R_RandomCreate(randomStruct);
+    return RSAPublicEncrypt(output, outputLen, input, inputLen, publicKey, randomStruct);
+}
+
 int slrsa_public_encrypt( const unsigned char* m, const unsigned int m_len, const unsigned char* publickey, unsigned char* sigret, unsigned int* siglen )
 {
     R_RANDOM_STRUCT RandomStruct;
-#ifndef WIN32
-    //TODO this sentence compile error in VS9.0,, but in Unix need this.
+
+#ifdef WIN32
+    //This is VC compile error workaround
+    int encrypt_ret = _internal_RSAPublicEncrypt(sigret, siglen, (unsigned char*)m, m_len, (R_RSA_PUBLIC_KEY *)publickey, &RandomStruct);
+#else
+    //This sentence compile error in VS9.0, but GCC compile OK.
     //I really don't know whether it is OK when doing Windows do this slrsa_public_encrypt and Unix do slrsa_private_decrypt
     R_RandomCreate( &RandomStruct );
-#endif
     int encrypt_ret = RSAPublicEncrypt(sigret, siglen, (unsigned char*)m, m_len, (R_RSA_PUBLIC_KEY *)publickey, &RandomStruct);
+#endif
     if (encrypt_ret == RSA_IDOK)
     {
         //successfully
