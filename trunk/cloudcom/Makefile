@@ -1,4 +1,4 @@
-# weizili@360.cn 
+# weizili
 #
 # The study test code project 
 #
@@ -12,8 +12,8 @@ TESTDIRS=src/osl/test src/netproto/test
 
 TOPDIR=`pwd`
 
-#TOP_CFLAGS="-g -O3"
-TOP_CFLAGS="-g -D_DEBUG"
+TOP_CFLAGS="-g -O3 -DNDEBUG"
+#TOP_CFLAGS="-g -D_DEBUG"
 TOP_LDFLAGS=""
 
 all:
