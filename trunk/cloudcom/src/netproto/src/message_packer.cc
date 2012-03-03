@@ -18,7 +18,7 @@ namespace npp
     {
         if (message_unpacker_)
         {
-            if (message_unpacker_->net_header().version() == 1)
+            if (message_unpacker_->net_header().version() == kProtoVersion1)
             {
                 return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
             }
@@ -49,7 +49,7 @@ namespace npp
             return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
         }
 
-        if (message_unpacker_->net_header().version() == 1)
+        if (message_unpacker_->net_header().version() == kProtoVersion1)
         {
             return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
         }
@@ -104,12 +104,13 @@ namespace npp
         {
             memcpy(net_header, &(message_unpacker_->net_header()), sizeof(*net_header));
             memcpy(npp_header, &(message_unpacker_->npp_header()), sizeof(*npp_header));
-            CalculateSignKeyNum(*npp_header);
+            ReverseSignKeyNum(*npp_header);
         }
         else
         {
             net_header->Init();
             npp_header->Init();
+            RandomNppHeader(*npp_header);
         }
 
         assert(packed_data_buf_len >= GetPackedTotalDataSize(*npp_header, data_len));
@@ -211,7 +212,7 @@ namespace npp
         return true;
     }
 
-    void MessagePacker::CalculateSignKeyNum( NppHeader& npp_header )
+    void MessagePacker::ReverseSignKeyNum( NppHeader& npp_header )
     {
         //1->2 2->1
         //3->4 4->3
@@ -239,6 +240,46 @@ namespace npp
             {
                 npp_header.set_sign_key_no(sign_key - 1);
             }
+        }
+    }
+
+    void MessagePacker::RandomNppHeader( NppHeader& npp_header )
+    {
+        IDEA* idea = NULL;
+        do 
+        {
+            assert(npp_header.encrypt_method() == kIDEAEncrypt);
+            npp_header.set_encrypt_key_no(rand() % (s_pNppConfig->GetIDEAKeyCount() + 1) + 1);
+            idea = s_pNppConfig->GetIDEA(npp_header.encrypt_key_no());
+        } while (!idea);
+        
+        npp_header.set_sign_method(rand() % kSignMethodNum);
+        switch(npp_header.sign_method())
+        {
+        case kOpenSSLRSA0:
+        case kOpenSSLRSA2:
+            {
+                OpenSSLRSA* rsa = NULL;
+                do 
+                {
+                    npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1) + 1);
+                    rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
+                } while(!rsa);
+            }
+            break;
+        case kSimpleRSA:
+            {
+                SimpleRSA* rsa = NULL;
+                do 
+                {
+                    npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1) + 1);
+                    rsa = s_pNppConfig->GetSimpleRSA(npp_header.sign_key_no());
+                } while(!rsa);
+            }
+            break;
+        default:
+            assert(false);
+            break;
         }
     }
 }

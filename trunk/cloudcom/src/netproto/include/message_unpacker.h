@@ -13,6 +13,10 @@ namespace npp
     {
     public:
         bool Unpack(const void* data, size_t data_len);
+        
+        //! Get the unpacked data and size if packing successfully
+        const char* Data();
+        size_t Size();
 
     private:
         //! \brief 
@@ -46,8 +50,12 @@ namespace npp
         const NppHeader& npp_header() const { return npp_header_; }
 
     private:
+        bool unpack_v1(const void* d, size_t d_len);
+    private:
         NetHeader net_header_;  //! The network data header
         NppHeader npp_header_;  //! The protocol relative header
+
+        std::string unpacked_data_;
     };
 }
 

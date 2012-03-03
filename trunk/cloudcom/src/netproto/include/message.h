@@ -22,9 +22,14 @@
 namespace npp
 {
 
-    class _EXPORT_NETPROTO Message : public MemoryDataStream
+    class _EXPORT_NETPROTO Message
     {
     public:
+        enum ProtoVersion
+        {
+            kProtoVersion1 = 1,
+            kProtoVersion2 = 2,
+        };
         enum EncryptMethod
         {
             kNoEncrypt   = 0,
@@ -37,6 +42,7 @@ namespace npp
             kOpenSSLRSA0 = 0, //! OpenSSL RSA
             kSimpleRSA   = 1, //! Simple RSA
             kOpenSSLRSA2 = 2, //! OpenSSL RSA, the same as kOpenSSLRSA0
+            kSignMethodNum
         };
 
         enum ErrorCode
@@ -70,7 +76,6 @@ namespace npp
 
             kNotSupportPlainData,
             kNotSupportXorEncrypt,
-
         };
     public:
         //! The header information struct of the data packet 
@@ -165,10 +170,6 @@ namespace npp
     public:
         Message();
         virtual ~Message();
-
-        //! Get the packet/unpacked data and size if packing/unpacking successfully
-        const char* Data();
-        size_t Size();
 
         //! Get the last ErrorCode
         ErrorCode last_error() const { return last_error_; }
