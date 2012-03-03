@@ -20,22 +20,6 @@ namespace npp
 
     }
 
-    const char* Message::Data()
-    {
-        if (Size() == 0)
-        {
-            return NULL;
-        }
-        else
-        {
-            return data();
-        }
-    }
-
-    size_t Message::Size()
-    {
-        return size();
-    }
 
 #define H_CASE_STRING_BIGIN(state) switch(state){
 #define H_CASE_STRING(state) case state:return #state;break;

@@ -10,17 +10,51 @@
 
 namespace npp
 {
+    const char* MessageUnpacker::Data()
+    {
+        if (Size() == 0)
+        {
+            return NULL;
+        }
+        else
+        {
+            return unpacked_data_.data();
+        }
+    }
+
+    size_t MessageUnpacker::Size()
+    {
+        return unpacked_data_.size();
+    }
+
     bool MessageUnpacker::Unpack( const void* d, size_t d_len )
     {
-        if (d_len < sizeof(net_header_) + sizeof(npp_header_) + 16 + 64)
+        if (!d)
+        {
+            last_error(kParameterErrorNULLPointer);
+            return false;
+        }
+
+        if (d_len < sizeof(net_header_) + sizeof(npp_header_))
         {
             last_error(kParameterErrorDataLengthError);
             return false;
         }
-        
-        if (!d)
+
+        if (static_cast<const char*>(d)[1] == kProtoVersion1)
         {
-            last_error(kParameterErrorNULLPointer);
+            return unpack_v1(d, d_len);
+        }
+
+        last_error(kVesionError);
+        return false;
+    }
+
+    bool MessageUnpacker::unpack_v1( const void* d, size_t d_len )
+    {
+        if (d_len < sizeof(net_header_) + sizeof(npp_header_) + 16 + 64)
+        {
+            last_error(kParameterErrorDataLengthError);
             return false;
         }
 
@@ -70,6 +104,7 @@ namespace npp
         assert(last_error() == kNoError);
         return true;
     }
+
 
     bool MessageUnpacker::VerifyDigest( const void* digest, size_t digest_len, const void* d, size_t d_len )
     {
@@ -178,7 +213,7 @@ namespace npp
                 return false;
             }
 
-            MemoryDataStream::write(encrypt_data, encrypt_data_len);
+            unpacked_data_.assign(encrypt_data, encrypt_data_len);
             break;
         case kXorEncrypt:
             last_error(kNotSupportXorEncrypt);
@@ -192,11 +227,17 @@ namespace npp
                     last_error(kNotSupportIDEAKeyNumber);
                     return false;
                 }
-
-                if (!idea->decrypt(encrypt_data, encrypt_data_len, *this))
+                size_t len = encrypt_data_len;
+                unpacked_data_.resize(len);
+                if (!idea->decrypt(encrypt_data, encrypt_data_len, IDEA::PaddingZero, &unpacked_data_[0], len))
                 {
                     last_error(kIDEADecryptFialed);
                     return false;
+                }
+                assert(unpacked_data_.size() <= len);
+                if (unpacked_data_.size() < len)
+                {
+                    unpacked_data_.resize(len);
                 }
             }
             break;
