@@ -301,7 +301,7 @@ namespace npp
         size_t i = 0;
         for ( ; i < octal_count; ++i )
         {
-            idea_ecb_encrypt( in_buf + pos, out_data + pos, const_cast<::IDEA_KEY_SCHEDULE*>(&ideaDecryptKey) );
+            idea_ecb_encrypt( in_buf + pos, out_data + pos, const_cast< ::IDEA_KEY_SCHEDULE* >(&ideaDecryptKey) );
             pos += kAlignUnitLength8;
         }
 
