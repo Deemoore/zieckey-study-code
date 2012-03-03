@@ -49,6 +49,12 @@ namespace npp
         //! \param[in, out] - size_t & data_encrypted_len
         //! \return - bool
         bool encrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_encrypted, size_t& data_encrypted_len);
+        
+        
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
         static size_t getEncryptDataLen(Padding padding, size_t nSourceLen);
 
         //! \brief IDEA decrypt
