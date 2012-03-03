@@ -37,6 +37,25 @@ namespace
         H_TEST_ASSERT(serialize1 == serialize);
         H_TEST_ASSERT(jo1.equals(jo));
     }
+
+    void test_3(const char* json_test_str)
+    {
+        json::JSONObject jo0;
+        H_TEST_ASSERT(jo0.parse(json_test_str));
+        osl::StringA serialize0 = jo0.toString();
+        json::JSONObject jo1;
+        H_TEST_ASSERT(jo1.parse(serialize0.data(), serialize0.size()));
+        osl::StringA serialize1 = jo1.toString();
+        H_TEST_ASSERT(jo1.equals(jo0));
+        H_TEST_ASSERT(serialize1 == serialize0);
+        json::JSONObject jo2;
+        H_TEST_ASSERT(jo2.parse(serialize1.data(), serialize1.size()));
+        osl::StringA serialize2 = jo2.toString();
+        H_TEST_ASSERT(jo2.equals(jo1));
+        H_TEST_ASSERT(jo2.equals(jo0));
+        H_TEST_ASSERT(serialize1 == serialize2);
+        H_TEST_ASSERT(serialize1 == serialize0);
+    }
 }
 
 TEST_UNIT(json_unicode_test_1)
@@ -55,14 +74,48 @@ TEST_UNIT(json_unicode_test_2)
     std::string line;
     while (std::getline(fs, line).good())
     {
-        json::JSONObject jo;
-        H_TEST_ASSERT(jo.parse(line.data(), line.size()));
-        osl::StringA serialize = jo.toString();
+        json::JSONObject jo0;
+        H_TEST_ASSERT(jo0.parse(line.data(), line.size()));
+        osl::StringA serialize0 = jo0.toString();
         json::JSONObject jo1;
-        H_TEST_ASSERT(jo1.parse(serialize.data(), serialize.size()));
+        H_TEST_ASSERT(jo1.parse(serialize0.data(), serialize0.size()));
         osl::StringA serialize1 = jo1.toString();
-        H_TEST_ASSERT(serialize1 == serialize);
-        H_TEST_ASSERT(jo1.equals(jo));
+        H_TEST_ASSERT(serialize1 == serialize0);
+        H_TEST_ASSERT(jo1.equals(jo0));
+        json::JSONObject jo2;
+        H_TEST_ASSERT(jo2.parse(serialize1.data(), serialize1.size()));
+        osl::StringA serialize2 = jo2.toString();
+        H_TEST_ASSERT(jo2.equals(jo1));
+        H_TEST_ASSERT(jo2.equals(jo0));
+        H_TEST_ASSERT(serialize1 == serialize2);
+        H_TEST_ASSERT(serialize1 == serialize0);
+    }
+}
+
+TEST_UNIT(json_gbk_chinese_test_3)
+{
+    const char* path = "test_data/json/gbk-chinese.json.txt";
+    std::fstream fs(path);
+    H_TEST_ASSERT(fs.good());
+    H_TEST_ASSERT(!fs.fail());
+    std::string line;
+    while (std::getline(fs, line).good())
+    {
+        json::JSONObject jo0;
+        H_TEST_ASSERT(jo0.parse(line.data(), line.size()));
+        osl::StringA serialize0 = jo0.toString();
+        json::JSONObject jo1;
+        H_TEST_ASSERT(jo1.parse(serialize0.data(), serialize0.size()));
+        osl::StringA serialize1 = jo1.toString();
+        H_TEST_ASSERT(serialize1 == serialize0);
+        H_TEST_ASSERT(jo1.equals(jo0));
+        json::JSONObject jo2;
+        H_TEST_ASSERT(jo2.parse(serialize1.data(), serialize1.size()));
+        osl::StringA serialize2 = jo2.toString();
+        H_TEST_ASSERT(jo2.equals(jo1));
+        H_TEST_ASSERT(jo2.equals(jo0));
+        H_TEST_ASSERT(serialize1 == serialize2);
+        H_TEST_ASSERT(serialize1 == serialize0);
     }
 }
 
