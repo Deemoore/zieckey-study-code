@@ -229,6 +229,12 @@ namespace npp
         }
     }
 
+
+    bool IDEA::decrypt( const void* szSource, const size_t nSourceLen, Padding padding, MemoryDataStream& data_decrypted )
+    {
+        return IDEA::decrypt(szSource, nSourceLen, m_decrypt_key, padding, data_decrypted);
+    }
+
     bool IDEA::decrypt( const void* szSource, const size_t nSourceLen, const ::IDEA_KEY_SCHEDULE& ideaDecryptKey, Padding padding, npp::MemoryDataStream& dataDecrypted )
     {
         size_t data_decrypted_len = nSourceLen;

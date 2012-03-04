@@ -69,6 +69,7 @@ namespace npp
             kOpenSSLRSASignFailed,
             kSimpleRSASignFailed,
 
+            kIDEAEncryptFialed,
             kIDEADecryptFialed,
 
             kNotSupportSignMethod,

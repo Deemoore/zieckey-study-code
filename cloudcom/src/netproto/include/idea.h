@@ -72,6 +72,7 @@ namespace npp
         //! \param[in,out] - size_t & data_decrypted_len
         //! \return - bool
         bool decrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_decrypted, size_t& data_decrypted_len);
+        bool decrypt( const void* szSource, const size_t nSourceLen, Padding padding, MemoryDataStream& data_decrypted );
 
     public:
         //! \brief IDEA encrypt

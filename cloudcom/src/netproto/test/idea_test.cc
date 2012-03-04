@@ -29,7 +29,14 @@ namespace
     void test_encrypt_decrypt( const unsigned char* s )
     {
         {
-            std::string strideakey = "abcdefghabcdefgh";
+            srand(time(NULL));
+            unsigned char ideakey[16];
+            for (size_t i = 0; i < sizeof(ideakey); ++i)
+            {
+                ideakey[i] = rand() % 256;
+            }
+            std::string strideakey = std::string((char*)ideakey, sizeof(ideakey));
+
             IDEA_KEY_SCHEDULE ekey;
             IDEA_KEY_SCHEDULE dkey;
             idea_set_encrypt_key( (const unsigned char*)strideakey.c_str(), &ekey );
@@ -102,7 +109,29 @@ namespace
                 H_TEST_ASSERT(idea.decrypt(buf, encrypted_data_len, npp::IDEA::PaddingPKCS7, debuf, decrypted_data_len));
                 H_TEST_ASSERT(0 == memcmp(s, debuf, len));
                 H_TEST_ASSERT(len == decrypted_data_len);
+
+                delete buf;
+                delete debuf;
             }
+
+
+            {
+                npp::IDEA idea;
+                H_TEST_ASSERT(idea.initialize(ideakey));
+                size_t encrypted_data_len;
+                encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, len);
+                char* buf = new char[encrypted_data_len];
+                H_TEST_ASSERT(idea.encrypt(s, len, npp::IDEA::PaddingZero, buf, encrypted_data_len));
+
+                size_t decrypted_data_len = encrypted_data_len;
+                char* debuf = new char[decrypted_data_len];
+                H_TEST_ASSERT(idea.decrypt(buf, encrypted_data_len, npp::IDEA::PaddingZero, debuf, decrypted_data_len));
+                H_TEST_ASSERT(0 == memcmp(s, debuf, len));
+
+                delete buf;
+                delete debuf;
+            }
+
 
             free( endata.data );
             free( dedata.data );
@@ -112,7 +141,14 @@ namespace
     void test_1()
     {
         {
-            std::string strideakey = "abcdefghabcdefgh";
+            //std::string strideakey = "abcdefghabcdefgh";
+            unsigned char ideakey[16];
+            for (size_t i = 0; i < sizeof(ideakey); ++i)
+            {
+                ideakey[i] = rand() % 256;
+            }
+            std::string strideakey = std::string((char*)ideakey, sizeof(ideakey));
+
             const unsigned char* s = ( const unsigned char* )"abcdefg";
             unsigned int len = strlen( ( const char* )s );
             npp::MemoryDataStream ds;
@@ -155,7 +191,6 @@ namespace
             npp::IDEA::encrypt( s, len, strideakey, ds );
             H_TEST_ASSERT( ds.getSize() == H_ALIGN( len, 8 ) );
         }
-
 
         {
 

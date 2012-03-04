@@ -125,7 +125,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="../include/;../../;../../3rdparty/include;../../3rdparty/wininclude"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;H_NETPROTO_EXPORTS;_NETPROTO_TEST"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
