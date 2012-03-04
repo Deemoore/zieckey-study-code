@@ -25,7 +25,7 @@ namespace osl
         //! Construct a sized memory.
         ScopedMem( osl::u32 nSize )
         {
-            H_ALLOC_NAME_FILE( nSize, "ScopedMem", __FILE__, __LINE__ );
+            pRep = H_ALLOC_NAME_FILE( nSize, "ScopedMem", __FILE__, __LINE__ );
         }
 
         ~ScopedMem()
