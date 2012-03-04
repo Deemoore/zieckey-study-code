@@ -14,6 +14,7 @@ TOPDIR=`pwd`
 
 TOP_CFLAGS="-g -O3 -DNDEBUG"
 #TOP_CFLAGS="-g -D_DEBUG"
+#TOP_CFLAGS="-g -D_DEBUG"
 TOP_LDFLAGS=""
 
 all:
@@ -23,7 +24,7 @@ all:
 	cp install/lib/libnet.* ~/lib
 
 check: all
-	for t in $(TESTDIRS); do $(MAKE) check -C $$t ; done
+	for t in $(TESTDIRS); do $(MAKE) check  TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; done
 	
 clean:
 	for t in $(SUBDIRS); do $(MAKE) clean -C $$t; done
