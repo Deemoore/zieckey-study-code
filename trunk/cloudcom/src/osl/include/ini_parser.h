@@ -38,8 +38,10 @@ namespace osl
             virtual void onValue(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value) = 0;
         };
 
-        //! The listener will be called when visit the parsed INI file
-        //! The values may be not the order of the input INI file
+        //! The listener will be called when visit the parsed INI file.
+        //! The values may be not the order of the input INI file.
+        //!     This order maybe not the same as the input file order, 
+        //!  but it is much faster than SequenceVisitor
         class _EXPORT_OSLIB FastVisitor
         {
         public:
@@ -143,7 +145,16 @@ namespace osl
         //Visit
     public:
 
+        //! \brief Visit all the section/key/value in the memory sorted order
+        //!     This order maybe not the same as the input file order, 
+        //!  but it is much faster than SequenceVisitor
+        //! \param[in] - FastVisitor & visitor
+        //! \return - void
         void visit(FastVisitor& visitor) const;
+
+        //! \brief Visit all the section/key/value in the input file order
+        //! \param[in] - SequenceVisitor & visitor
+        //! \return - void
         void visit(SequenceVisitor& visitor) const;
 
         //Serialize
