@@ -100,7 +100,7 @@ namespace npp
         write_pos += sizeof(*net_header);
         NppHeader* npp_header = reinterpret_cast<NppHeader*>(write_pos);
         write_pos += sizeof(*npp_header);
-        if (message_unpacker && message_unpacker_->Data())
+        if (message_unpacker_ && message_unpacker_->Data())
         {
             memcpy(net_header, &(message_unpacker_->net_header()), sizeof(*net_header));
             memcpy(npp_header, &(message_unpacker_->npp_header()), sizeof(*npp_header));
