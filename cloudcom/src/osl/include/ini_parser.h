@@ -142,6 +142,14 @@ namespace osl
         //! \return - const SectionMap&
         const SectionMap& getSectionMap() const { return section_map_; }
 
+        //Separator
+    public:
+        void setKVSeparator(const StringA& separator) { kv_separator_  = separator; }
+        void setLineSeparator(const StringA& separator) { line_separator_  = separator; }
+
+        const StringA& line_separator() const { return line_separator_; }
+        const StringA& kv_separator() const { return kv_separator_; }
+
         //Visit
     public:
 
@@ -175,11 +183,6 @@ namespace osl
         void serialize(MemoryDataStream& buf, bool input_order = false) const;
         void serialize(std::ostream& os, bool input_order = false) const;
 
-        void setKVSeparator(const StringA& separator) { kv_separator_  = separator; }
-        void setLineSeparator(const StringA& separator) { line_separator_  = separator; }
-
-        const StringA& line_separator() const { return line_separator_; }
-        const StringA& kv_separator() const { return kv_separator_; }
     private:
 
         //! \brief Skip the lines which start with '#' or '//' or ";"
@@ -195,7 +198,6 @@ namespace osl
 
         template<class _stream_t>
         void _serialize(_stream_t& os, bool input_order = false) const;
-
 
     private:
         bool            case_sensitive_;//! case sensitive flag
