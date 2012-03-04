@@ -816,7 +816,7 @@ namespace
     }
 
 
-    class ParserListener : public osl::INIParser::Listener
+    class MyParseListener : public osl::INIParser::ParseListener
     {
     public:
         virtual void onValue(osl::INIParser& parser, const osl::StringA& section, const osl::StringA& key, const osl::StringA& value)
@@ -824,7 +824,7 @@ namespace
             parser.stopParse(true);
         }
 
-        virtual ~ParserListener()
+        virtual ~MyParseListener()
         {
         }
     };
@@ -863,19 +863,126 @@ namespace
 
         size_t rawdatalen = strlen( rawdata );
         osl::INIParser parser(false);
-        ParserListener listener;
-        parser.addListener(&listener);
+        MyParseListener listener;
+        parser.addParseListener(&listener);
         parser.parse( rawdata, rawdatalen, "\r\n", "=" );
     }
 
 
-    void test_ini_parser_bug_string_1()
+    void test_ini_parser_bug_string_12()
     {
         const char* data = "files=librun.dat\t1.0.1.3557|libtask.dat\t1.0.1.3557|deepscan\\cloudsec2.dll\t3.2.8.1002\r\nmodules=360hotfix\t1.0.0.100|deepscan\t2.0.2.200\r\ntags=tencent|kingsoft\r\npid=123\r\nuid=234\r\nver=3.2.8.1002\r\nsysver=6.1.7600\r\npa=32\r\ntype=updated\r\nrt=2\r\nlt=1.5\r\nue=0\r\nlang=zh_CN\r\nvdays=365\r\nuname=zhangshan\r\nrate=360hotfix\t3|deepscan\t10\r\nproduct=360safe\r\ncombo=quick\r\nmid=a16cf365149a8aed21fdd04ae2545824\r\n";
         osl::INIParser parser(false);
         parser.parse( data, strlen(data), "\r\n", "=" );
         //std::cout << parser.serialize();
     }
+
+    void test_ini_parser_serialize_13_internal(osl::INIParser& parser)
+    {
+
+        {
+            osl::StringA key = "mid";
+            osl::StringA value = "ac9219aa5232c4e519ae5fcb4d77ae5b";
+            H_TEST_ASSERT( value == parser.get( key ) );
+        }
+
+        {
+            osl::StringA key = "product";
+            osl::StringA value = "xxxxxxse";
+            H_TEST_ASSERT( value == parser.get( key ) );
+        }
+
+        {
+            osl::StringA key = "combo";
+            osl::StringA value = "sedl";
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
+        }
+
+        {
+            osl::StringA key = "version";
+            osl::StringA value = "4.4";
+            H_TEST_ASSERT( value == parser.get( "xxxxxxse", key ) );
+        }
+
+        {
+            osl::StringA section = "a";
+            osl::StringA key = "appext";
+            osl::StringA value = "0";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+
+            key = "appext1";
+            value = "1";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+        }
+
+        {
+            osl::StringA section = "b";
+            osl::StringA key = "appext";
+            osl::StringA value = "b0";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+
+            key = "appext1";
+            value = "b1";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+        }
+
+        {
+            osl::StringA section = "c";
+            osl::StringA key = "appext";
+            osl::StringA value = "c0";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+
+            key = "appext1";
+            value = "c1";
+            H_TEST_ASSERT( value == parser.get( section, key ) );
+        }
+    }
+
+    void test_ini_parser_serialize_13()
+    {
+        const char* rawdata = 
+            "mid=ac9219aa5232c4e519ae5fcb4d77ae5b\r\n"
+            "product=xxxxxxse\r\n"
+            "[c]\r\n"
+            "appext=c0\r\n"
+            "appext1=c1\r\n"
+            "[xxxxxxse]\r\n"
+            "combo=sedl\r\n"
+            "version=4.4\r\n"
+            "[b]\r\n"
+            "appext=b0\r\n"
+            "appext1=b1\r\n"
+            "[a]\r\n"
+            "appext=0\r\n"
+            "appext1=1\r\n";
+
+        size_t rawdatalen = strlen( rawdata );
+        osl::INIParser parser;
+        H_TEST_ASSERT(parser.parse( rawdata, rawdatalen, "\r\n", "=" ));
+        test_ini_parser_serialize_13_internal(parser);
+        
+        osl::StringA sequence_str = parser.serialize(true);
+        H_TEST_ASSERT(sequence_str == rawdata);
+
+        osl::INIParser parser2;
+        H_TEST_ASSERT(parser2.parse( sequence_str.data(), sequence_str.size(), "\r\n", "=" ));
+        test_ini_parser_serialize_13_internal(parser2);
+        osl::StringA sequence_str2 = parser2.serialize(true);
+        H_TEST_ASSERT(sequence_str2 == sequence_str);
+
+        osl::INIParser parser3;
+        H_TEST_ASSERT(parser3.parse( sequence_str2.data(), sequence_str2.size(), "\r\n", "=" ));
+        test_ini_parser_serialize_13_internal(parser3);
+        osl::StringA sequence_str3 = parser3.serialize(false);
+
+
+        osl::INIParser parser4;
+        H_TEST_ASSERT(parser4.parse( sequence_str3.data(), sequence_str3.size(), "\r\n", "=" ));
+        test_ini_parser_serialize_13_internal(parser4);
+        osl::StringA sequence_str4 = parser4.serialize(true);
+        H_TEST_ASSERT(sequence_str4 == sequence_str3);
+    }
+
 }
 
 TEST_UNIT(ini_parser)
@@ -885,7 +992,7 @@ TEST_UNIT(ini_parser)
     test_ini_parser_3();
     test_ini_parser_4();
     test_ini_parser_5();
-    test_ini_parser_bug_string_1();
+    test_ini_parser_bug_string_12();
 }
 
 TEST_UNIT(ini_parser_section_6)
@@ -918,9 +1025,9 @@ TEST_UNIT(test_ini_parser_stop_parse_11)
     test_ini_parser_stop_parse_11();
 }
 
-TEST_UNIT(test_ini_parser_iterator_12)
+TEST_UNIT(test_ini_parser_serialize_13)
 {
-
+    test_ini_parser_serialize_13();
 }
 
 
