@@ -10,7 +10,7 @@
 
 namespace npp
 {
-    const char* MessageUnpacker::Data()
+    const char* MessageUnpacker::Data() const
     {
         if (Size() == 0)
         {
@@ -22,7 +22,7 @@ namespace npp
         }
     }
 
-    size_t MessageUnpacker::Size()
+    size_t MessageUnpacker::Size() const
     {
         return unpacked_data_.size();
     }
