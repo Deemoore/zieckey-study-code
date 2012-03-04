@@ -19,10 +19,15 @@ namespace osl
         typedef Map< StringA, StringA > StringAStringAMap;
         typedef Map< StringA, StringAStringAMap > SectionMap;
 
-        class _EXPORT_OSLIB Listener
+        typedef List< StringA > StringAList;
+        typedef std::pair< StringA, StringAList> SectionPairEntry;
+        typedef List< SectionPairEntry > SectionList;
+
+        //! The listener will be called when parsing an INI file
+        class _EXPORT_OSLIB ParseListener
         {
         public:
-            virtual ~Listener() {}
+            virtual ~ParseListener() {}
 
             //! \brief When we parse the INI file, every found of the section/key-value,
             //!     this interface will be called!
@@ -33,6 +38,25 @@ namespace osl
             virtual void onValue(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value) = 0;
         };
 
+        //! The listener will be called when visit the parsed INI file
+        //! The values may be not the order of the input INI file
+        class _EXPORT_OSLIB FastVisitor
+        {
+        public:
+            virtual ~FastVisitor() {}
+
+            virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value) = 0;
+        };
+
+        //! The listener will be called when visit the parsed INI file
+        //! The values' sequences is extremely as the order of the input INI file
+        class _EXPORT_OSLIB SequenceVisitor
+        {
+        public:
+            virtual ~SequenceVisitor() {}
+
+            virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value) = 0;
+        };
     public:
         //! \brief 
         //! \param[in] - bool case_sensitive
@@ -78,10 +102,13 @@ namespace osl
         void stopParse(bool stop_parsing);
 
         //! \brief 
-        //! \param Listener * pl - 
+        //! \param ParseListener * pl - 
         //! \return void - 
-        void addListener( Listener* pl );
-        void removeListener( Listener* pl );
+        void addParseListener( ParseListener* pl );
+        void removeParserListener( ParseListener* pl );
+
+        //Query
+    public:
 
         //! \brief Get the value of specified key from the default section
         //! \param const StringA & key - 
@@ -113,21 +140,35 @@ namespace osl
         //! \return - const SectionMap&
         const SectionMap& getSectionMap() const { return section_map_; }
 
+        //Visit
+    public:
+
+        void visit(FastVisitor& visitor) const;
+        void visit(SequenceVisitor& visitor) const;
+
+        //Serialize
+    public:
+
         //! \brief Serialize the INI to output string
+        //! \param[in] - bool input_order - true if we want to 
+        //!     serialize this INI object as the order of the input INI file
         //! \return - osl::StringA
-        StringA serialize() const;
+        StringA serialize(bool input_order = false) const;
 
         //! \brief Serialize the INI to output string
         //! \param[in] - StringA & output
         //! \param[in] - MemoryDataStream & buf
         //! \param[in] - std::ostream & os
         //! \return - void
-        void serialize(StringA& output) const;
-        void serialize(MemoryDataStream& buf) const;
-        void serialize(std::ostream& os) const;
+        void serialize(StringA& output, bool input_order = false) const;
+        void serialize(MemoryDataStream& buf, bool input_order = false) const;
+        void serialize(std::ostream& os, bool input_order = false) const;
 
         void setKVSeparator(const StringA& separator) { kv_separator_  = separator; }
         void setLineSeparator(const StringA& separator) { line_separator_  = separator; }
+
+        const StringA& line_separator() const { return line_separator_; }
+        const StringA& kv_separator() const { return kv_separator_; }
     private:
 
         //! \brief Skip the lines which start with '#' or '//' or ";"
@@ -142,7 +183,7 @@ namespace osl
         const char* skipSpaces( const char* szsrc );
 
         template<class _stream_t>
-        void _serialize(_stream_t& os) const;
+        void _serialize(_stream_t& os, bool input_order = false) const;
 
 
     private:
@@ -151,9 +192,12 @@ namespace osl
         SectionMap      section_map_; //! pair<section string, key/value map>
         osl::StringA    kv_separator_;//! The key/value separator
         osl::StringA    line_separator_;//! The key/value separator
+        SectionList     section_list_; //! pair<section string, keys list>
 
-        typedef std::list <Listener*> ListenerList;
+        typedef std::list <ParseListener*> ListenerList;
         ListenerList    listeners_;
+
+        class SequenceParseListener;
     };
 
     //---------------------------------------------------------

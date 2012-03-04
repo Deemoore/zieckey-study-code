@@ -85,12 +85,41 @@ namespace osl
         return parse( data, datalen, "\n", "=" );
     }
 
+    class INIParser::SequenceParseListener : public INIParser::ParseListener
+    {
+    public:
+        SequenceParseListener(INIParser* parser) : parser_(parser) { parser_->addParseListener(this); }
+
+        ~SequenceParseListener() { parser_->removeParserListener(this); }
+
+        virtual void onValue(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
+        {
+            INIParser::StringAList* keys = NULL;
+            SectionList::reverse_iterator it = parser_->section_list_.rbegin();
+            if (it != parser_->section_list_.rend() && it->first == section)
+            {
+                keys = &(it->second);
+            }
+            else
+            {
+                parser_->section_list_.push_back(std::make_pair<StringA, INIParser::StringAList>(section, INIParser::StringAList()));
+                keys = &(parser_->section_list_.rbegin()->second);
+            }
+            keys->push_back(key);
+        }
+
+    private:
+        INIParser* parser_;
+    };
+
     bool INIParser::parse( const char* data, size_t datalen, const char* linesep, const char* kvsep )
     {
         if ( !data || 0 == datalen || !linesep || !kvsep )
         {
             return false;
         }
+
+        SequenceParseListener listener(this);
 
         kv_separator_ = kvsep;
         line_separator_ = linesep;
@@ -193,12 +222,12 @@ namespace osl
         return true;
     }
 
-    void INIParser::addListener( Listener* pl )
+    void INIParser::addParseListener( ParseListener* pl )
     {
         listeners_.push_back(pl);
     }
 
-    void INIParser::removeListener( Listener* pl )
+    void INIParser::removeParserListener( ParseListener* pl )
     {
         listeners_.remove(pl);
     }
@@ -301,33 +330,86 @@ namespace osl
     }
 
 
-    StringA INIParser::serialize() const
+    StringA INIParser::serialize(bool input_order /*= false*/) const
     {
         StringA s;
-        serialize(s);
+        serialize(s, input_order);
         return s;
     }
 
-    void INIParser::serialize( StringA& output ) const
+    void INIParser::serialize( StringA& output, bool input_order /*= false*/ ) const
     {
         MemoryDataStream stream;
-        serialize(stream);
+        serialize(stream, input_order);
         output = StringA(stream.data(), stream.size());
     }
 
-    void INIParser::serialize( MemoryDataStream& stream ) const
+    void INIParser::serialize( MemoryDataStream& stream, bool input_order /*= false*/ ) const
     {
         stream.reserve(4096);
-        _serialize(stream);
+        _serialize(stream, input_order);
     }
 
-    void INIParser::serialize( std::ostream& stream ) const
+    void INIParser::serialize( std::ostream& stream, bool input_order /*= false*/ ) const
     {
-        _serialize(stream);
+        _serialize(stream, input_order);
     }
+
+    template< typename _stream_t >
+    class SerializeVistor
+    {
+    public:
+        SerializeVistor(_stream_t * stream) : stream_(stream) {}
+
+    protected:
+        void Visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
+        {
+            if (last_section_ != section)
+            {
+                last_section_ = section;
+                stream_->write("[", 1);
+                stream_->write(section.c_str(), section.length());
+                stream_->write("]", 1);
+                stream_->write(parser.line_separator().c_str(), parser.line_separator().size());
+            }
+
+            stream_->write(key.c_str(), key.length());
+            stream_->write(parser.kv_separator().c_str(), parser.kv_separator().size());
+            stream_->write(value.c_str(), value.length());
+            stream_->write(parser.line_separator().c_str(), parser.line_separator().size());
+        }
+
+    private:
+        _stream_t * stream_;
+        ::osl::StringA last_section_;
+    };
+
+    template< typename _stream_t >
+    class SerializeFastVistor : public INIParser::FastVisitor, public SerializeVistor<_stream_t>
+    {
+    public:
+        SerializeFastVistor(_stream_t * stream) : SerializeVistor(stream) {}
+
+        virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
+        {
+            SerializeVistor::Visit(parser, section, key, value);
+        }
+    };
+
+    template< typename _stream_t >
+    class SerializeSequenceVistor : public INIParser::SequenceVisitor, public SerializeVistor<_stream_t>
+    {
+    public:
+        SerializeSequenceVistor(_stream_t * stream) : SerializeVistor(stream) {}
+
+        virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
+        {
+            SerializeVistor::Visit(parser, section, key, value);
+        }
+    };
 
     template<class _stream_t>
-    void osl::INIParser::_serialize( _stream_t& stream ) const
+    void osl::INIParser::_serialize( _stream_t& stream, bool input_order /*= false*/ ) const
     {
         assert(line_separator_.length() > 0);
         assert(kv_separator_.length() > 0);
@@ -335,30 +417,51 @@ namespace osl
         {
             return;
         }
-        
+
+        if (input_order && section_list_.size() == section_map_.size())
+        {
+            SerializeSequenceVistor<_stream_t> visitor(&stream);
+            visit(visitor);
+        }
+        else
+        {
+
+            SerializeFastVistor<_stream_t> visitor(&stream);
+            visit(visitor);
+        }
+    }
+
+    void INIParser::visit( FastVisitor& visitor ) const
+    {
         SectionMap::const_iterator it_sectioin(section_map_.begin());
         SectionMap::const_iterator ite_sectioin(section_map_.end());
         for (; it_sectioin != ite_sectioin; ++it_sectioin)
         {
-            if (it_sectioin->first.length() > 0)
-            {
-                stream.write("[", 1);
-                stream.write(it_sectioin->first.c_str(), it_sectioin->first.length());
-                stream.write("]", 1);
-                stream.write(line_separator_.c_str(), line_separator_.size());
-            }
-
             StringAStringAMap::const_iterator it(it_sectioin->second.begin());
             StringAStringAMap::const_iterator ite(it_sectioin->second.end());
             for (; it != ite; ++it)
             {
-                stream.write(it->first.c_str(), it->first.length());
-                stream.write(kv_separator_.c_str(), kv_separator_.size());
-                stream.write(it->second.c_str(), it->second.length());
-                stream.write(line_separator_.c_str(), line_separator_.size());
+                visitor.visit(const_cast<INIParser&>(*this), it_sectioin->first, it->first, it->second);
             }
-            stream.write(line_separator_.c_str(), line_separator_.size());
-            stream.write(line_separator_.c_str(), line_separator_.size());
+        }
+    }
+
+    void INIParser::visit( SequenceVisitor& visitor ) const
+    {
+        SectionList::const_iterator it_section_list(section_list_.begin());
+        SectionList::const_iterator ite_section_list(section_list_.end());
+        for (; it_section_list != ite_section_list; ++it_section_list)
+        {
+            SectionMap::const_iterator it_section_map(section_map_.find(it_section_list->first));
+            assert(it_section_map != section_map_.end());
+            StringAList::const_iterator it_key(it_section_list->second.begin());
+            StringAList::const_iterator ite_key(it_section_list->second.end());
+            for (; it_key != ite_key; ++it_key)
+            {
+                StringAStringAMap::const_iterator it_map = it_section_map->second.find(*(it_key));
+                assert(it_map != it_section_map->second.end());
+                visitor.visit(const_cast<INIParser&>(*this), it_section_list->first, *it_key, it_map->second);
+            }
         }
     }
 
