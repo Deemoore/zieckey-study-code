@@ -359,11 +359,12 @@ namespace osl
     class SerializeVistor
     {
     public:
-        SerializeVistor(_stream_t * stream) : stream_(stream) {}
+        SerializeVistor() : stream_(NULL) {}
 
     protected:
         void Visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
         {
+            assert(stream_);
             if (last_section_ != section)
             {
                 last_section_ = section;
@@ -379,7 +380,10 @@ namespace osl
             stream_->write(parser.line_separator().c_str(), parser.line_separator().size());
         }
 
-    private:
+    protected:
+        void set_stream(_stream_t * stream) { stream_ = stream; }
+
+    protected:
         _stream_t * stream_;
         ::osl::StringA last_section_;
     };
@@ -388,11 +392,11 @@ namespace osl
     class SerializeFastVistor : public INIParser::FastVisitor, public SerializeVistor<_stream_t>
     {
     public:
-        SerializeFastVistor(_stream_t * stream) : SerializeVistor(stream) {}
+        SerializeFastVistor(_stream_t * stream) { SerializeVistor<_stream_t>::set_stream(stream); }
 
         virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
         {
-            SerializeVistor::Visit(parser, section, key, value);
+            SerializeVistor<_stream_t>::Visit(parser, section, key, value);
         }
     };
 
@@ -400,11 +404,11 @@ namespace osl
     class SerializeSequenceVistor : public INIParser::SequenceVisitor, public SerializeVistor<_stream_t>
     {
     public:
-        SerializeSequenceVistor(_stream_t * stream) : SerializeVistor(stream) {}
+        SerializeSequenceVistor(_stream_t * stream) { SerializeVistor<_stream_t>::set_stream(stream); }
 
         virtual void visit(::osl::INIParser& parser, const ::osl::StringA& section, const ::osl::StringA& key, const ::osl::StringA& value)
         {
-            SerializeVistor::Visit(parser, section, key, value);
+            SerializeVistor<_stream_t>::Visit(parser, section, key, value);
         }
     };
 
