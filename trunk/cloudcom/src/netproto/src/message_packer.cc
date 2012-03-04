@@ -140,7 +140,13 @@ namespace npp
                         return false;
                     }
                     size_t encrypted_data_len = npp::IDEA::getEncryptDataLen(npp::IDEA::PaddingZero, data_len);
-                    assert(idea->encrypt(d, data_len, npp::IDEA::PaddingZero, write_pos + npp_header->digest_sign_len_, encrypted_data_len));
+                    bool encrypted_ok = idea->encrypt(d, data_len, npp::IDEA::PaddingZero, write_pos + npp_header->digest_sign_len_, encrypted_data_len);
+                    assert(encrypted_ok);
+                    if (!encrypted_ok)
+                    {
+                        last_error(kIDEAEncryptFialed);
+                        return false;
+                    }
                     packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + encrypted_data_len;
                     break;
                 }

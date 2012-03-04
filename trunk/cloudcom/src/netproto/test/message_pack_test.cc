@@ -1,4 +1,18 @@
 
+
+// message_pack_test.cc:559:Assertion
+// Test name: CppUnitTestObjectClass_test_func_MessagePackUnitTest_encrypt::test_func_CppUnitTestObjectClass_test_func_MessagePackUnitTest_encrypt
+// assertion failed
+// - Expression: strncmp(raw_data, unpacker.Data(), raw_data_len) == 0
+// 
+// message_pack_test.cc:606:Assertion
+// Test name: CppUnitTestObjectClass_test_func_MessagePackUnitTest_all::test_func_CppUnitTestObjectClass_test_func_MessagePackUnitTest_all
+// assertion failed
+// - Expression: strncmp(raw_data, unpacker1.Data(), raw_data_len) == 0
+// 
+// Failures !!!
+
+
 #include "netproto/include/test_common.h"
 
 #include "netproto/include/npp_config.h"
@@ -599,6 +613,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
 
                 npp::MessageUnpacker unpacker1;
                 H_TEST_ASSERT(unpacker1.Unpack(packed_data, packed_data_len));
+                H_TEST_ASSERT(unpacker1.last_error() == npp::Message::kNoError);
                 if (npp_header.encrypt_method_ == npp::Message::kIDEAEncrypt)
                 {
                     H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker1.Size());

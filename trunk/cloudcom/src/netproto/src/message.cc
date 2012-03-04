@@ -43,6 +43,7 @@ namespace npp
         H_CASE_STRING(kSimpleRSAVerifyFailed);
         H_CASE_STRING(kOpenSSLRSASignFailed);
         H_CASE_STRING(kSimpleRSASignFailed);
+        H_CASE_STRING(kIDEAEncryptFialed);
         H_CASE_STRING(kIDEADecryptFialed);
         H_CASE_STRING(kNotSupportSignMethod);
         H_CASE_STRING(kNotSupportEncryptMethod);
