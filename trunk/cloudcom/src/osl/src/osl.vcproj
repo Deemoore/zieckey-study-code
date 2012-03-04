@@ -477,10 +477,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\ini_parser_bk.h"
-				>
-			</File>
-			<File
 				RelativePath=".\md5.cc"
 				>
 			</File>
@@ -490,14 +486,6 @@
 			</File>
 			<File
 				RelativePath="..\include\random.h"
-				>
-			</File>
-			<File
-				RelativePath=".\rsa_wrapper.cc"
-				>
-			</File>
-			<File
-				RelativePath="..\include\rsa_wrapper.h"
 				>
 			</File>
 			<File
