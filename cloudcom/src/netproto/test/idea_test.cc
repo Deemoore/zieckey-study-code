@@ -94,6 +94,9 @@ namespace
                 H_TEST_ASSERT(0 == memcmp(s, debuf, len));
                 H_TEST_ASSERT(decrypted_data_len == H_ALIGN(len, 8));
                 H_TEST_ASSERT(decrypted_data_len == encrypted_data_len);
+
+                delete buf;
+                delete debuf;
             }
 
             {

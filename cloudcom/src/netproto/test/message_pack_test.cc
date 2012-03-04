@@ -580,7 +580,13 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
     const char * raw_data = "1234567890";
     size_t raw_data_len = strlen(raw_data);
 
+    char packed_data[1024] = {};
+    size_t packed_data_len = sizeof(packed_data);
+    npp::MessagePacker packer;
+    H_TEST_ASSERT(packer.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
+
     npp::MessageUnpacker unpacker;
+    H_TEST_ASSERT(unpacker.Unpack(packed_data, packed_data_len));
     npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
     npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
     net_header.Init();
@@ -606,8 +612,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                 npp_header.sign_method_    = sign_method;
                 net_header.message_id_     = rand() % 65536;
 
-                char packed_data[1024] = {};
-                size_t packed_data_len = sizeof(packed_data);
+                packed_data_len = sizeof(packed_data);
                 npp::MessagePacker packer1(&unpacker);
                 H_TEST_ASSERT(packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
 

@@ -1,3 +1,11 @@
+/****************************** Module Header ********************************\
+    Name: npp_config.h
+ Created: 2012/02/26 14:30
+  Author: weizili
+
+ Purpose: 
+\*****************************************************************************/
+
 #ifndef NETPROTO_NP_CONF_H_
 #define NETPROTO_NP_CONF_H_
 
