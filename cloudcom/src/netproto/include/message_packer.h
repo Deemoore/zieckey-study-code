@@ -39,6 +39,9 @@ namespace npp
 
         MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
 
+        //! Get the message id from the packed data
+        static uint16_t GetMessageID(void* packed_data_buf);
+
     private:
         //! \brief Get the packed data length
         //! \param size_t data_len - The data to be packed
@@ -67,6 +70,8 @@ namespace npp
 
     private:
         MessageUnpacker* message_unpacker_;
+
+        static uint16_t message_id_;
     };
 }
 
