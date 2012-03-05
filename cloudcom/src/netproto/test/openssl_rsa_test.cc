@@ -4,7 +4,7 @@
 
 #include "test_rsa_self_pair_key.h"
 
-#if H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_OPENSSL_RSA
 
 namespace
 {

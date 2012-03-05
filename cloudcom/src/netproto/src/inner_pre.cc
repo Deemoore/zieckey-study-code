@@ -20,7 +20,7 @@
 //-------------------------------------------------------
 
 //openssl
-#if H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_OPENSSL_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"libeay32.lib")
@@ -31,7 +31,7 @@
 #endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT )
 
 //openssl
-#if H_NPP_PROVIDE_IDEA_ENCRYPT && !H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_IDEA_ENCRYPT && !H_NPP_PROVIDE_OPENSSL_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"idea.lib")

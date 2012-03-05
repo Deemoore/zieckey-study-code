@@ -76,6 +76,7 @@ namespace npp
             }
             return rsa->getSignLength();
         }
+#if H_NPP_PROVIDE_OPENSSL_RSA
         else if (npp_header.sign_method() == kOpenSSLRSA0 || npp_header.sign_method() == kOpenSSLRSA2)
         {
             OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
@@ -86,6 +87,7 @@ namespace npp
             }
             return rsa->getSignLength();
         }
+#endif
         else
         {
             last_error(kNotSupportSignMethod);
@@ -196,6 +198,7 @@ namespace npp
                 return false;
             }
         }
+#if H_NPP_PROVIDE_OPENSSL_RSA
         else if (npp_header->sign_method_ == kOpenSSLRSA0 || npp_header->sign_method_ == kOpenSSLRSA2)
         {
             OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
@@ -211,6 +214,7 @@ namespace npp
                 return false;
             }
         }
+#endif
         else
         {
             last_error(kNotSupportSignMethod);
@@ -262,34 +266,41 @@ namespace npp
             idea = s_pNppConfig->GetIDEA(npp_header.encrypt_key_no());
         } while (!idea);
         
-        npp_header.set_sign_method(rand() % kSignMethodNum);
-        switch(npp_header.sign_method())
+        bool found = false;
+        do 
         {
-        case kOpenSSLRSA0:
-        case kOpenSSLRSA2:
+            npp_header.set_sign_method(rand() % kSignMethodNum);
+            switch(npp_header.sign_method())
             {
-                OpenSSLRSA* rsa = NULL;
-                do 
+#if H_NPP_PROVIDE_OPENSSL_RSA
+            case kOpenSSLRSA0:
+            case kOpenSSLRSA2:
                 {
-                    npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1) + 1);
-                    rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
-                } while(!rsa);
-            }
+                    OpenSSLRSA* rsa = NULL;
+                    do 
+                    {
+                        npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1) + 1);
+                        rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
+                    } while(!rsa);
+                    found = true;
+                }
             break;
-        case kSimpleRSA:
-            {
-                SimpleRSA* rsa = NULL;
-                do 
+#endif
+            case kSimpleRSA:
                 {
-                    npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1) + 1);
-                    rsa = s_pNppConfig->GetSimpleRSA(npp_header.sign_key_no());
-                } while(!rsa);
+                    SimpleRSA* rsa = NULL;
+                    do 
+                    {
+                        npp_header.set_sign_key_no(rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1) + 1);
+                        rsa = s_pNppConfig->GetSimpleRSA(npp_header.sign_key_no());
+                    } while(!rsa);
+                    found = true;
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        default:
-            assert(false);
-            break;
-        }
+        } while (!found);
     }
 
     uint16_t MessagePacker::GetMessageID( void* packed_data_buf )

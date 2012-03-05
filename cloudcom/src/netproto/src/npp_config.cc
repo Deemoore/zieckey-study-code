@@ -34,15 +34,15 @@ namespace npp
         return idea.initialize(key);
     }
 
-    bool NppConfig::AddOpenSSLRSAKey( int key_no, const unsigned char* private_key, const size_t private_key_len, const unsigned char* public_key, const size_t public_key_len )
-    {
-        OpenSSLRSA& rsa = rsa_map_[key_no];
-        return rsa.initialize(private_key, private_key_len, public_key, public_key_len);
-    }
-
     bool NppConfig::AddSimpleRSAKey( int key_no, const unsigned char* private_key, const size_t private_key_len, const unsigned char* public_key, const size_t public_key_len )
     {
         SimpleRSA& rsa = slrsa_map_[key_no];
+        return rsa.initialize(private_key, private_key_len, public_key, public_key_len);
+    }
+#if H_NPP_PROVIDE_OPENSSL_RSA
+    bool NppConfig::AddOpenSSLRSAKey( int key_no, const unsigned char* private_key, const size_t private_key_len, const unsigned char* public_key, const size_t public_key_len )
+    {
+        OpenSSLRSA& rsa = rsa_map_[key_no];
         return rsa.initialize(private_key, private_key_len, public_key, public_key_len);
     }
 
@@ -56,6 +56,7 @@ namespace npp
 
         return NULL;
     }
+#endif
 
     SimpleRSA* NppConfig::GetSimpleRSA( int index )
     {

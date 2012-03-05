@@ -8,7 +8,7 @@
 #define H_NPP_PROVIDE_MD5 1
 
 //Define to 1 if you want to use RSA algorithm, using openssl
-#define H_NPP_PROVIDE_RSA 1
+#define H_NPP_PROVIDE_OPENSSL_RSA 1
 
 //Define to 1 if you want to use IDEA encrypt wrapper helpers
 #define H_NPP_PROVIDE_IDEA_ENCRYPT 1
