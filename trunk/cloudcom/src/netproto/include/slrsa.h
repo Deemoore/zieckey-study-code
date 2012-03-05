@@ -77,8 +77,8 @@ namespace npp
     inline bool SimpleRSA::initialize(const unsigned char* private_key, const size_t private_key_len,
         const unsigned char* public_key, const size_t public_key_len)
     {
-        private_key_ = std::string((const char*)private_key, private_key_len);
-        public_key_  = std::string((const char*)public_key, public_key_len);
+        private_key_.assign((const char*)private_key, private_key_len);
+        public_key_.assign((const char*)public_key, public_key_len);
         return true;
     }
 
@@ -99,7 +99,7 @@ namespace npp
         if (ok)
         {
             assert(buf_len == getSignLength());
-            sigret = std::string((char*)buf, buf_len);
+            sigret.assign((char*)buf, buf_len);
             return ok;
         }
 
@@ -135,7 +135,7 @@ namespace npp
         if (ok)
         {
             assert(buf_len == getSignLength());
-            sigret = std::string((char*)buf, buf_len);
+            sigret.assign((char*)buf, buf_len);
             return ok;
         }
         return false;
@@ -157,7 +157,7 @@ namespace npp
         if (ok)
         {
             assert(buf_len == getSignLength());
-            plain_data = std::string((char*)buf, buf_len);
+            plain_data.assign((char*)buf, buf_len);
             return ok;
         }
         return false;

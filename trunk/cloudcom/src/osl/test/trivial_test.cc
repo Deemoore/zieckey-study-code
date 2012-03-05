@@ -50,6 +50,10 @@ namespace
         H_TEST_ASSERT(s2.size() == sizeof(key));
         H_TEST_ASSERT(s1 == s2);
         H_TEST_ASSERT(memcmp(s1.data(), s2.data(), sizeof(key)) == 0);
+
+        const char* sz = "11111";
+        s2.assign(sz);
+        H_TEST_ASSERT(s2 == sz);
     }
 }
 

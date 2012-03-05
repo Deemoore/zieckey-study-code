@@ -210,7 +210,7 @@ namespace npp
         bool ok = publicEncrypt(m, m_len, buf, &buf_len);
         if (ok)
         {
-            sigret = std::string((char*)buf, buf_len);
+            sigret.assign((char*)buf, buf_len);
             return ok;
         }
         return false;
@@ -245,7 +245,7 @@ namespace npp
         if (ok)
         {
             assert(buf_len == getSignLength());
-            plain_data = std::string((char*)buf, buf_len);
+            plain_data.assign((char*)buf, buf_len);
             return ok;
         }
         return false;
