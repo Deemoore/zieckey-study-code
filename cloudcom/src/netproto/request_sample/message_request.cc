@@ -678,11 +678,19 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         size_t packed_data_len = sizeof(packed_data);
 
         {
+            const char * raw_data = "1234567890";
+            size_t raw_data_len = strlen(raw_data);
+            npp::MessagePacker packer1;
+            packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len);
+
             npp::MessageUnpacker unpacker;
-            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
+            unpacker.Unpack(packed_data, packed_data_len);
+            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header(packer1));
+            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header(packer1));
             net_header.Init();
             npp_header.Init();
+
+            packed_data_len = sizeof(packed_data);
             npp::MessagePacker packer(&unpacker);
             npp_header.encrypt_key_no_ = rand() % 2 + 1;
             npp_header.sign_key_no_    = rand() % 2 + 1;
@@ -851,9 +859,14 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         size_t packed_data_len = sizeof(packed_data);
 
         {
+            const char * raw_data = "1234567890";
+            size_t raw_data_len = strlen(raw_data);
+            npp::MessagePacker packer1;
+            packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len);
+
             npp::MessageUnpacker unpacker;
-            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
+            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header(packer1));
+            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header(packer1));
             net_header.Init();
             npp_header.Init();
             npp::MessagePacker packer(&unpacker);
