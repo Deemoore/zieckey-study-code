@@ -6,118 +6,9 @@
 #include "netproto/include/message_unpacker.h"
 #include "netproto/include/idea.h"
 
-#include "test_rsa_self_pair_key.h"
-#include "test_client_rsa_key.h"
-#include "test_server_rsa_key.h"
-#include "idea_key.h"
+#include "npp_config_creator.h"
 
 #include <iostream>
-
-namespace npp { namespace ext {
-
-    //! Name: auto_delete
-    template<class T>
-    struct auto_delete
-    {
-        T*& ptr_ref_to_be_deleted_;
-        auto_delete( T*& pointer )
-            : ptr_ref_to_be_deleted_( pointer )
-        {
-        }
-
-        ~auto_delete()
-        {
-            if ( ptr_ref_to_be_deleted_ )
-            {
-                delete ptr_ref_to_be_deleted_;
-                ptr_ref_to_be_deleted_ = 0;
-            }
-        }
-
-        void noop() {}
-    private:
-        auto_delete(const auto_delete&);
-        auto_delete&operator=(const auto_delete&);
-    };
-
-    template<class T>
-    struct auto_delete<T*>; //! \note Leave it be. Do not write any implementation
-}
-}
-
-namespace npp { namespace ext {
-    template<> inline
-        auto_delete< npp::NppConfig >::~auto_delete()
-    {
-        if ( ptr_ref_to_be_deleted_ )
-        {
-            delete ptr_ref_to_be_deleted_;
-            ptr_ref_to_be_deleted_ = NULL;
-        }
-    }
-}
-}
-
-namespace
-{
-    npp::NppConfig* CreateNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-    {
-        npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#define H_ADD_KEY(no) {\
-    npp_config->AddIdeaKey(no, idea_key##no);\
-    npp_config->AddSimpleRSAKey(no, g_slrsa_private_key##no, g_slrsa_private_key##no##_len, g_slrsa_public_key##no, g_slrsa_public_key##no##_len);\
-    npp_config->AddOpenSSLRSAKey(no, g_rsa_private_key##no, g_rsa_private_key##no##_len, g_rsa_public_key##no, g_rsa_public_key##no##_len);\
-        }
-
-        H_ADD_KEY(1);
-        H_ADD_KEY(2);
-        H_ADD_KEY(3);
-        H_ADD_KEY(4);
-
-#undef  H_ADD_KEY
-
-        return npp_config;
-    }
-
-    npp::NppConfig* CreateServerNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-    {
-        npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#define H_ADD_KEY(no) {\
-    npp_config->AddIdeaKey(no, idea_key##no);\
-    npp_config->AddSimpleRSAKey(no, g_server_slrsa_private_key##no, g_server_slrsa_private_key##no##_len, g_server_slrsa_public_key##no, g_server_slrsa_public_key##no##_len);\
-    npp_config->AddOpenSSLRSAKey(no, g_server_rsa_private_key##no, g_server_rsa_private_key##no##_len, g_server_rsa_public_key##no, g_server_rsa_public_key##no##_len);\
-        }
-
-        H_ADD_KEY(1);
-        H_ADD_KEY(2);
-        H_ADD_KEY(3);
-        H_ADD_KEY(4);
-
-#undef  H_ADD_KEY
-
-        return npp_config;
-    }
-
-    npp::NppConfig* CreateClientNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-    {
-        npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#define H_ADD_KEY(no) {\
-    npp_config->AddIdeaKey(no, idea_key##no);\
-    npp_config->AddSimpleRSAKey(no, g_client_slrsa_private_key##no, g_client_slrsa_private_key##no##_len, g_client_slrsa_public_key##no, g_client_slrsa_public_key##no##_len);\
-    npp_config->AddOpenSSLRSAKey(no, g_client_rsa_private_key##no, g_client_rsa_private_key##no##_len, g_client_rsa_public_key##no, g_client_rsa_public_key##no##_len);\
-        }
-
-        H_ADD_KEY(1);
-        H_ADD_KEY(2);
-        H_ADD_KEY(3);
-        H_ADD_KEY(4);
-
-#undef  H_ADD_KEY
-
-        return npp_config;
-    }
-}
-
 
 TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
 {
@@ -224,17 +115,17 @@ TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
     bool verify_sign   = true;
     npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
-
+#if H_NPP_PROVIDE_OPENSSL_RSA
     npp_config->AddOpenSSLRSAKey(1, private_key1, private_key1_len, public_key1, public_key1_len);
     npp_config->AddOpenSSLRSAKey(2, private_key2, private_key2_len, public_key2, public_key2_len);
-
+#endif
     npp_config->AddSimpleRSAKey(1, g_rsa_prvFileKey1, 706, g_rsa_pubFileKey1, 258);
     npp_config->AddSimpleRSAKey(2, g_rsa_prvFileKey2, 706, g_rsa_pubFileKey2, 258);
 
 
     for (int i = 1; i <= 2; ++i)
     {
-
+#if H_NPP_PROVIDE_OPENSSL_RSA
         //OpenSSL RSA
         {
             const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -245,6 +136,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
             H_TEST_ASSERT(rsa->sign(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret));
             H_TEST_ASSERT(rsa->verify(npp::OpenSSLRSA::ST_NID_sha1, raw_data, raw_data_len, sigret.data(), sigret.size()));
         }
+#endif
 
         //Simple RSA
         {

@@ -24,7 +24,7 @@ namespace npp
     {
         typedef std::map<int, IDEA>         IDEAMap;
         typedef std::map<int, SimpleRSA>    SimpleRSAMap;
-#if H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_OPENSSL_RSA
         typedef std::map<int, OpenSSLRSA > OpenSSLRSAMap;
 #endif
     public:
@@ -39,9 +39,11 @@ namespace npp
 
         bool AddIdeaKey(int key_no, const unsigned char key[16]);
 
+#if H_NPP_PROVIDE_OPENSSL_RSA
         bool AddOpenSSLRSAKey(int key_no, 
             const unsigned char* private_key, const size_t private_key_len,
             const unsigned char* public_key, const size_t public_key_len );
+#endif
 
         bool AddSimpleRSAKey(int key_no, 
             const unsigned char* private_key, const size_t private_key_len,
@@ -61,13 +63,15 @@ namespace npp
 
         void set_verify_data(bool verify_data);
 
+#if H_NPP_PROVIDE_OPENSSL_RSA
         OpenSSLRSA* GetOpenSSLRSA(int index);
+        size_t GetOpenSSLRSAKeyCount() const;
+#endif
 
         SimpleRSA* GetSimpleRSA(int index);
 
         IDEA* GetIDEA(int index);
 
-        size_t GetOpenSSLRSAKeyCount() const;
 
         size_t GetSimpleRSAKeyCount() const;
 
@@ -83,7 +87,7 @@ namespace npp
 
         IDEAMap       idea_map_;
         SimpleRSAMap  slrsa_map_;
-#if H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_OPENSSL_RSA
         OpenSSLRSAMap rsa_map_;
 #endif
     };
@@ -102,12 +106,12 @@ namespace npp
     {
         return verify_data_;
     }
-
+#if H_NPP_PROVIDE_OPENSSL_RSA
     inline size_t NppConfig::GetOpenSSLRSAKeyCount() const
     {
         return rsa_map_.size();
     }
-
+#endif
     inline size_t NppConfig::GetSimpleRSAKeyCount() const
     {
         return slrsa_map_.size();

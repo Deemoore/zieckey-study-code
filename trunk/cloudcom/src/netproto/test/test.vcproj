@@ -221,6 +221,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\npp_config_creator.h"
+				>
+			</File>
+			<File
 				RelativePath=".\test_client_rsa_key.h"
 				>
 			</File>

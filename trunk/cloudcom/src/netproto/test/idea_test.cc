@@ -2,7 +2,7 @@
 #include "netproto/include/idea.h"
 
 //openssl
-#if H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_OPENSSL_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"libeay32.lib")
@@ -13,7 +13,7 @@
 #endif //
 
 //openssl
-#if H_NPP_PROVIDE_IDEA_ENCRYPT && !H_NPP_PROVIDE_RSA
+#if H_NPP_PROVIDE_IDEA_ENCRYPT && !H_NPP_PROVIDE_OPENSSL_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"idea.lib")
