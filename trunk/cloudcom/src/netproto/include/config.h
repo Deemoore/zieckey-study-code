@@ -13,6 +13,8 @@
 //Define to 1 if you want to use IDEA encrypt wrapper helpers
 #define H_NPP_PROVIDE_IDEA_ENCRYPT 1
 
+//Define to 1 if you want to use zlib
+#define H_NPP_PROVIDE_ZLIB 1
 
 #endif
 
