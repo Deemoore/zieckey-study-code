@@ -7,6 +7,7 @@
 
 namespace npp
 {
+    uint16_t MessagePacker::message_id_ = 0;
 
     MessagePacker::MessagePacker( MessageUnpacker* message_unpacker )
         : message_unpacker_(message_unpacker)
@@ -112,6 +113,7 @@ namespace npp
             net_header->Init();
             npp_header->Init();
             RandomNppHeader(*npp_header);
+            net_header->set_message_id(MessagePacker::message_id_++);//TODO Not thread-safe
         }
 
         assert(packed_data_buf_len >= GetPackedTotalDataSize(*npp_header, data_len));
@@ -288,6 +290,12 @@ namespace npp
             assert(false);
             break;
         }
+    }
+
+    uint16_t MessagePacker::GetMessageID( void* packed_data_buf )
+    {
+        assert(packed_data_buf);
+        return ntohs(((NetHeader*)packed_data_buf)->message_id());
     }
 }
 
