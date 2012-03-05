@@ -304,6 +304,14 @@
 					RelativePath="..\include\slrsa.h"
 					>
 				</File>
+				<File
+					RelativePath=".\zlib.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\include\zlib.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
