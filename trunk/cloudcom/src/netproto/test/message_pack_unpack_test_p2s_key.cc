@@ -6,7 +6,7 @@
 #include "netproto/include/message_unpacker.h"
 #include "netproto/include/idea.h"
 
-#include "npp_config_creator.h"
+#include "netproto/include/auto_delete.h"
 
 #include <iostream>
 

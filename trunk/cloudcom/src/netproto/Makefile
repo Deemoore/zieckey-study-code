@@ -9,7 +9,7 @@ SOURCE_DIR=$(CURRENT_DIR)/src
 PREFIX=${CURRENT_DIR}/../../install
 CFLAGS=$(TOP_CFLAGS) -c -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../3rdparty/include -I${SOURCE_DIR}/../../3rdparty/unixinclude -I .. -I/usr/local/include  -MMD
 CPPFLAGS= $(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords
-LDFLAGS=$(TOP_LDFLAGS) -L/usr/local/lib -lpthread -lcrypt
+LDFLAGS=$(TOP_LDFLAGS) -L/usr/local/lib -lcrypt -lz
 LIBNAME=$(shell basename `pwd`)
 
 IDEA_OBJS := ../idea/i_cbc.o  ../idea/i_cfb64.o  ../idea/i_ecb.o  ../idea/i_ofb64.o  ../idea/i_skey.o
