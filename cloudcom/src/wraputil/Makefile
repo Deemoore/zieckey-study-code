@@ -8,7 +8,7 @@ CURRENT_DIR=$(shell echo `pwd`)
 SOURCE_DIR=$(CURRENT_DIR)/src
 PREFIX=${CURRENT_DIR}/../../install
 CFLAGS=$(TOP_CFLAGS) -c -O3 -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I${SOURCE_DIR}/../../q3rdparty/unixinclude -I .. -I/usr/local/include 
-CPPFLAGS= -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
+CPPFLAGS=$(CFLAGS) -Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=$(TOP_LDFLAGS) -L/usr/local/lib -L$(PREFIX)/lib -lmemcached
 LIBNAME=$(shell basename `pwd`)
 
