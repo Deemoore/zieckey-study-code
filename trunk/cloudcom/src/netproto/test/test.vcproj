@@ -212,6 +212,10 @@
 				RelativePath=".\simple_rsa_test.cc"
 				>
 			</File>
+			<File
+				RelativePath=".\zlib_test.cc"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"

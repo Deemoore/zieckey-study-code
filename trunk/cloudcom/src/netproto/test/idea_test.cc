@@ -196,7 +196,6 @@ namespace
         }
 
         {
-
             const unsigned char* s = NULL;
             s = ( const unsigned char* )"abcdefg";
             test_encrypt_decrypt(s);
