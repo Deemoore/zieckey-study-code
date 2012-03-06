@@ -46,9 +46,9 @@ namespace npp
 
     public:
         //! The interface for MessagePacker, don't use it
-        const NetHeader& net_header(const MessagePacker& caller) const { return net_header_; }
-        const NppHeader& npp_header(const MessagePacker& caller) const { return npp_header_; }
-        bool IsUnpackedOK(const MessagePacker& caller) const { return last_error() == kNoError && Data() != NULL;}
+        const NetHeader& net_header() const { return net_header_; }
+        const NppHeader& npp_header() const { return npp_header_; }
+        bool IsUnpackedOK() const { return last_error() == kNoError && Data() != NULL;}
 
     private:
         bool unpack_v1(const void* d, size_t d_len);

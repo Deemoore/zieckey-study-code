@@ -546,8 +546,8 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
 
     npp::MessageUnpacker unpacker;
     H_TEST_ASSERT(unpacker.Unpack(packed_data, packed_data_len));
-    npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header(packer));
-    npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header(packer));
+    npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
+    npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
     net_header.Init();
     npp_header.Init();
   
@@ -579,6 +579,8 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                 npp::MessagePacker packer1(&unpacker);
                 H_TEST_ASSERT(packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
 
+                H_TEST_ASSERT(npp::MessagePacker::GetMessageID(packed_data) == net_header.message_id());
+
                 npp::MessageUnpacker unpacker1;
                 H_TEST_ASSERT(unpacker1.Unpack(packed_data, packed_data_len));
                 H_TEST_ASSERT(unpacker1.last_error() == npp::Message::kNoError);
@@ -587,9 +589,9 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                     H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker1.Size());
                 }
                 H_TEST_ASSERT(strncmp(raw_data, unpacker1.Data(), raw_data_len) == 0);
-                H_TEST_ASSERT(unpacker1.net_header(packer).message_id_ == net_header.message_id_);
-                H_TEST_ASSERT(unpacker1.npp_header(packer).encrypt_key_no() + 1 == npp_header.encrypt_key_no() || unpacker1.npp_header(packer).encrypt_key_no() == npp_header.encrypt_key_no() + 1);
-                H_TEST_ASSERT(unpacker1.npp_header(packer).sign_key_no() + 1 == npp_header.sign_key_no() || unpacker1.npp_header(packer).sign_key_no() == npp_header.sign_key_no() + 1);
+                H_TEST_ASSERT(unpacker1.net_header().message_id_ == net_header.message_id_);
+                H_TEST_ASSERT(unpacker1.npp_header().encrypt_key_no() + 1 == npp_header.encrypt_key_no() || unpacker1.npp_header().encrypt_key_no() == npp_header.encrypt_key_no() + 1);
+                H_TEST_ASSERT(unpacker1.npp_header().sign_key_no() + 1 == npp_header.sign_key_no() || unpacker1.npp_header().sign_key_no() == npp_header.sign_key_no() + 1);
             }
         }
     }
@@ -785,8 +787,6 @@ namespace
         std::cout << "openssl public_encrypt/private_decrypt=" << (double)sign_cost/(double)verify_cost << std::endl;
 #endif
     }
-
-
 }
 
 TEST_UNIT(test_func_MessagePackUnitTest_test_effective)

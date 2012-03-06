@@ -17,9 +17,9 @@ namespace npp
 
     size_t MessagePacker::GetPackedTotalDataSize(const NppHeader& npp_header, size_t data_len)
     {
-        if (message_unpacker_ && message_unpacker_->IsUnpackedOK(*this))
+        if (message_unpacker_ && message_unpacker_->IsUnpackedOK())
         {
-            if (message_unpacker_->net_header(*this).version() == kProtoVersion1)
+            if (message_unpacker_->net_header().version() == kProtoVersion1)
             {
                 return sizeof(NetHeader) + sizeof(NppHeader) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
             }
@@ -44,9 +44,9 @@ namespace npp
 
     bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
     {
-        if (message_unpacker_ && message_unpacker_->IsUnpackedOK(*this))
+        if (message_unpacker_ && message_unpacker_->IsUnpackedOK())
         {
-            if (message_unpacker_->net_header(*this).version() == kProtoVersion1)
+            if (message_unpacker_->net_header().version() == kProtoVersion1)
             {
                 return pack_v1(d, data_len, packed_data_buf, packed_data_buf_len);
             }
@@ -104,10 +104,10 @@ namespace npp
         write_pos += sizeof(*net_header);
         NppHeader* npp_header = reinterpret_cast<NppHeader*>(write_pos);
         write_pos += sizeof(*npp_header);
-        if (message_unpacker_ && message_unpacker_->IsUnpackedOK(*this))
+        if (message_unpacker_ && message_unpacker_->IsUnpackedOK())
         {
-            memcpy(net_header, &(message_unpacker_->net_header(*this)), sizeof(*net_header));
-            memcpy(npp_header, &(message_unpacker_->npp_header(*this)), sizeof(*npp_header));
+            memcpy(net_header, &(message_unpacker_->net_header()), sizeof(*net_header));
+            memcpy(npp_header, &(message_unpacker_->npp_header()), sizeof(*npp_header));
             ReverseSignKeyNum(*npp_header);
         }
         else
