@@ -1,18 +1,3 @@
-
-
-// message_pack_test.cc:559:Assertion
-// Test name: CppUnitTestObjectClass_test_func_MessagePackUnitTest_encrypt::test_func_CppUnitTestObjectClass_test_func_MessagePackUnitTest_encrypt
-// assertion failed
-// - Expression: strncmp(raw_data, unpacker.Data(), raw_data_len) == 0
-// 
-// message_pack_test.cc:606:Assertion
-// Test name: CppUnitTestObjectClass_test_func_MessagePackUnitTest_all::test_func_CppUnitTestObjectClass_test_func_MessagePackUnitTest_all
-// assertion failed
-// - Expression: strncmp(raw_data, unpacker1.Data(), raw_data_len) == 0
-// 
-// Failures !!!
-
-
 #include "netproto/include/test_common.h"
 
 #include "netproto/include/npp_config.h"
@@ -24,67 +9,6 @@
 
 
 #include <iostream>
-
-// 
-// namespace
-// {
-//     npp::NppConfig* CreateNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-//     {
-//         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-// #define H_ADD_KEY(no) {\
-//         npp_config->AddIdeaKey(no, idea_key##no);\
-//         npp_config->AddSimpleRSAKey(no, g_slrsa_private_key##no, g_slrsa_private_key##no##_len, g_slrsa_public_key##no, g_slrsa_public_key##no##_len);\
-//         npp_config->AddOpenSSLRSAKey(no, g_rsa_private_key##no, g_rsa_private_key##no##_len, g_rsa_public_key##no, g_rsa_public_key##no##_len);\
-//         }
-// 
-//         H_ADD_KEY(1);
-//         H_ADD_KEY(2);
-//         H_ADD_KEY(3);
-//         H_ADD_KEY(4);
-// 
-// #undef  H_ADD_KEY
-// 
-//         return npp_config;
-//     }
-// 
-//     npp::NppConfig* CreateServerNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-//     {
-//         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-// #define H_ADD_KEY(no) {\
-//             npp_config->AddIdeaKey(no, idea_key##no);\
-//             npp_config->AddSimpleRSAKey(no, g_server_slrsa_private_key##no, g_server_slrsa_private_key##no##_len, g_server_slrsa_public_key##no, g_server_slrsa_public_key##no##_len);\
-//             npp_config->AddOpenSSLRSAKey(no, g_server_rsa_private_key##no, g_server_rsa_private_key##no##_len, g_server_rsa_public_key##no, g_server_rsa_public_key##no##_len);\
-//         }
-// 
-//         H_ADD_KEY(1);
-//         H_ADD_KEY(2);
-//         H_ADD_KEY(3);
-//         H_ADD_KEY(4);
-// 
-// #undef  H_ADD_KEY
-// 
-//         return npp_config;
-//     }
-// 
-//     npp::NppConfig* CreateClientNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
-//     {
-//         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-// #define H_ADD_KEY(no) {\
-//             npp_config->AddIdeaKey(no, idea_key##no);\
-//             npp_config->AddSimpleRSAKey(no, g_client_slrsa_private_key##no, g_client_slrsa_private_key##no##_len, g_client_slrsa_public_key##no, g_client_slrsa_public_key##no##_len);\
-//             npp_config->AddOpenSSLRSAKey(no, g_client_rsa_private_key##no, g_client_rsa_private_key##no##_len, g_client_rsa_public_key##no, g_client_rsa_public_key##no##_len);\
-//         }
-// 
-//         H_ADD_KEY(1);
-//         H_ADD_KEY(2);
-//         H_ADD_KEY(3);
-//         H_ADD_KEY(4);
-// 
-// #undef  H_ADD_KEY
-// 
-//         return npp_config;
-//     }
-// }
 
 TEST_UNIT(test_func_MessagePackUnitTest_self_test_0)
 {

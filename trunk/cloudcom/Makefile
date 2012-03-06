@@ -8,7 +8,7 @@
 		
 SUBDIRS=src/slrsa src/idea src/netproto src/osl src/wraputil src/net src/apputil src/libtest
 
-TESTDIRS=src/osl/test src/netproto/test
+TESTDIRS=src/osl src/netproto
 
 TOPDIR=`pwd`
 
@@ -23,7 +23,7 @@ all:
 	cp install/lib/libnetproto.* ~/lib
 	cp install/lib/libnet.* ~/lib
 
-check: all
+check: 
 	for t in $(TESTDIRS); do $(MAKE) check  TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; done
 	
 clean:
