@@ -85,6 +85,8 @@ extern "C"
 //#include <sys/time.h>
 //#include <sys/resource.h>
 }
+
+#include <arpa/inet.h>
 #endif
 
 

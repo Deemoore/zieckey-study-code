@@ -4,10 +4,6 @@
 
 #include "netproto/include/md5.h"
 
-#ifndef H_OS_WINDOWS
-#include <arpa/inet.h>
-#endif
-
 namespace npp
 {
     const char* MessageUnpacker::Data() const
