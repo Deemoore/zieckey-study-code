@@ -685,8 +685,8 @@ static const size_t g_client_slrsa_private_key4_len = 706;
 
             npp::MessageUnpacker unpacker;
             unpacker.Unpack(packed_data, packed_data_len);
-            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header(packer1));
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header(packer1));
+            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
+            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
             net_header.Init();
             npp_header.Init();
 
@@ -865,8 +865,8 @@ static const size_t g_client_slrsa_private_key4_len = 706;
             packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len);
 
             npp::MessageUnpacker unpacker;
-            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header(packer1));
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header(packer1));
+            npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
+            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
             net_header.Init();
             npp_header.Init();
             npp::MessagePacker packer(&unpacker);
