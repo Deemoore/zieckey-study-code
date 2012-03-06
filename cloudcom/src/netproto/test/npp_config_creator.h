@@ -1,42 +1,13 @@
 #ifndef _NETPROTO_TEST_NPP_CONFIG_CREATOR_H_
 #define _NETPROTO_TEST_NPP_CONFIG_CREATOR_H_
 
+#include "netproto/include/auto_delete.h"
+
 #include "test_rsa_self_pair_key.h"
 #include "test_client_rsa_key.h"
 #include "test_server_rsa_key.h"
 #include "idea_key.h"
 
-namespace npp { namespace ext {
-
-    //! Name: auto_delete
-    template<class T>
-    struct auto_delete
-    {
-        T*& ptr_ref_to_be_deleted_;
-        auto_delete( T*& pointer )
-            : ptr_ref_to_be_deleted_( pointer )
-        {
-        }
-
-        ~auto_delete()
-        {
-            if ( ptr_ref_to_be_deleted_ )
-            {
-                delete ptr_ref_to_be_deleted_;
-                ptr_ref_to_be_deleted_ = 0;
-            }
-        }
-
-        void noop() {}
-    private:
-        auto_delete(const auto_delete&);
-        auto_delete&operator=(const auto_delete&);
-    };
-
-    template<class T>
-    struct auto_delete<T*>; //! \note Leave it be. Do not write any implementation
-}
-}
 
 namespace npp { namespace ext {
     template<> inline
