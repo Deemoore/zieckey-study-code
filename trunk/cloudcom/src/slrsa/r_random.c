@@ -60,21 +60,21 @@
 
 /* Set up, random object ready for seeding. */
 
-int R_RandomInit(random)
-R_RANDOM_STRUCT *random;        /* new random structure */
+int R_RandomInit(random_struct)
+R_RANDOM_STRUCT *random_struct;        /* new random structure */
 {
 			/* clear and setup object for seeding */
-	R_memset((POINTER)random->state, 0, sizeof(random->state));
-	random->outputAvailable = 0;
-	random->bytesNeeded = RANDOM_BYTES_RQ;
+	R_memset((POINTER)random_struct->state, 0, sizeof(random_struct->state));
+	random_struct->outputAvailable = 0;
+	random_struct->bytesNeeded = RANDOM_BYTES_RQ;
 
 	return(IDOK);
 }
 
 
 
-int R_RandomUpdate(random, block, len)
-R_RANDOM_STRUCT *random;        /* random structure */
+int R_RandomUpdate(random_struct, block, len)
+R_RANDOM_STRUCT *random_struct;        /* random structure */
 unsigned char *block;           /* block of values to mix in */
 unsigned int len;               /* length of block */
 {
@@ -89,15 +89,15 @@ unsigned int len;               /* length of block */
 	/* add digest to state */
 
 	for(j = 0, i = 16; i > 0; i--) {
-		j += random->state[i-1] + digest[i-1];
-		random->state[i-1] = (BYTE)j;
+		j += random_struct->state[i-1] + digest[i-1];
+		random_struct->state[i-1] = (BYTE)j;
 		j >>= 8;
 	}
 
-	if(random->bytesNeeded < len)
-		random->bytesNeeded = 0;
+	if(random_struct->bytesNeeded < len)
+		random_struct->bytesNeeded = 0;
 	else
-		random->bytesNeeded -= len;
+		random_struct->bytesNeeded -= len;
 
 	/* Clear sensitive information. */
 
@@ -109,84 +109,84 @@ unsigned int len;               /* length of block */
 
 /* Get the number of seed byte still required by the object */
 
-int R_GetRandomBytesNeeded(bytesNeeded, random)
+int R_GetRandomBytesNeeded(bytesNeeded, random_struct)
 unsigned int *bytesNeeded;      /* number of mix-in bytes needed */
-R_RANDOM_STRUCT *random;        /* random structure */
+R_RANDOM_STRUCT *random_struct;        /* random structure */
 {
-	*bytesNeeded = random->bytesNeeded;
+	*bytesNeeded = random_struct->bytesNeeded;
 
 	return(IDOK);
 }
 
-int R_GenerateBytes(block, len, random)
+int R_GenerateBytes(block, len, random_struct)
 unsigned char *block;                             /* block */
 unsigned int len;                                 /* length of block */
-R_RANDOM_STRUCT *random;                          /* random structure */
+R_RANDOM_STRUCT *random_struct;                          /* random structure */
 {
 	MD5_CTX context;
 	unsigned int avail, i;
 
-	if(random->bytesNeeded)
+	if(random_struct->bytesNeeded)
 		return(RE_NEED_RANDOM);
 
-	avail = random->outputAvailable;
+	avail = random_struct->outputAvailable;
 
 	while(avail < len) {
-		R_memcpy((POINTER)block, (POINTER)&random->output[16-avail], avail);
+		R_memcpy((POINTER)block, (POINTER)&random_struct->output[16-avail], avail);
 		len -= avail;
 		block += avail;
 
 		/* generate new output */
 
 		MD5Init(&context);
-		MD5Update(&context, random->state, 16);
-		MD5Final(random->output, &context);
+		MD5Update(&context, random_struct->state, 16);
+		MD5Final(random_struct->output, &context);
 		avail = 16;
 
 		/* increment state */
 		for(i = 16; i > 0; i--)
-			if(random->state[i-1]++)
+			if(random_struct->state[i-1]++)
 				break;
 	}
 
-	R_memcpy((POINTER)block, (POINTER)&random->output[16-avail], len);
-	random->outputAvailable = avail - len;
+	R_memcpy((POINTER)block, (POINTER)&random_struct->output[16-avail], len);
+	random_struct->outputAvailable = avail - len;
 
 	return(IDOK);
 }
 
 /* Clear Random object when finished. */
 
-void R_RandomFinal(random)
-R_RANDOM_STRUCT *random;        /* random structure */
+void R_RandomFinal(random_struct)
+R_RANDOM_STRUCT *random_struct;        /* random structure */
 {
-	R_memset((POINTER)random, 0, sizeof(R_RANDOM_STRUCT));
+	R_memset((POINTER)random_struct, 0, sizeof(R_RANDOM_STRUCT));
 }
 
 /* Create Random object, seed ready for use.
 	 Requires ANSI Standard time routines to provide seed data.
 */
 
-void R_RandomCreate(random)
-R_RANDOM_STRUCT *random;                                /* random structure */
+void R_RandomCreate(random_struct)
+R_RANDOM_STRUCT *random_struct;                                /* random structure */
 {
 	clock_t cnow;
 	time_t t;
 	struct tm *gmt;
 
 			/* clear and setup object for seeding */
-	R_memset((POINTER)random->state, 0, sizeof(random->state));
-	random->outputAvailable = 0;
-	random->bytesNeeded = RANDOM_BYTES_RQINT;  /* using internal value */
+	R_memset((POINTER)random_struct->state, 0, sizeof(random_struct->state));
+	random_struct->outputAvailable = 0;
+	random_struct->bytesNeeded = RANDOM_BYTES_RQINT;  /* using internal value */
 
 		/* Add data to random object */
-	while(random->bytesNeeded) {
+	while(random_struct->bytesNeeded) {
 		t = time(NULL);                 /* use for seed data */
 		gmt = gmtime(&t);
 		cnow = clock();
 
-		R_RandomUpdate(random, (POINTER)gmt, sizeof(struct tm));
-		R_RandomUpdate(random, (unsigned char*)&cnow, sizeof(clock_t));
+		R_RandomUpdate(random_struct, (POINTER)gmt, sizeof(struct tm));
+		R_RandomUpdate(random_struct, (unsigned char*)&cnow, sizeof(clock_t));
 	}
 
 	/* Clean Up time data */
@@ -200,25 +200,26 @@ R_RANDOM_STRUCT *random;                                /* random structure */
 	 extra to the state, then refreshes the output.
 */
 
-void R_RandomMix(random)
-R_RANDOM_STRUCT *random;
+void R_RandomMix(random_struct)
+R_RANDOM_STRUCT *random_struct;
 {
 	unsigned int i;
 	MD5_CTX context;
 
 	for(i = 0; i < 16; i++) {
-        random->state[i] ^= (char) clock();
-        random->state[15-i] ^= (char) time(NULL);
+        random_struct->state[i] ^= (char) clock();
+        random_struct->state[15-i] ^= (char) time(NULL);
 	}
 
 	/* Clear any old state with new data */
 
 	MD5Init(&context);
-	MD5Update(&context, random->state, 16);
-	MD5Final(random->output, &context);
+	MD5Update(&context, random_struct->state, 16);
+	MD5Final(random_struct->output, &context);
 
 	/* tell R_GenerateBytes there is new output */
 
-	random->outputAvailable = 16;
+	random_struct->outputAvailable = 16;
 
 }
+
