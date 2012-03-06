@@ -16,7 +16,7 @@ namespace
 		H_ASSERT(s == "0");
 	}
 
-	void test_1()
+	void test_zlib_1()
 	{
 		const char* text = "a\t\nb\t c\td";
 		osl::Tokener token(text);
@@ -52,7 +52,7 @@ namespace
 TEST( test_tokener )
 {
 	test_0();
-	test_1();
+	test_zlib_1();
 
 }
 

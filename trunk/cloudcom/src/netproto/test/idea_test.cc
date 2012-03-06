@@ -141,7 +141,7 @@ namespace
         }
     }
 
-    void test_1()
+    void test_zlib_1()
     {
         {
             //std::string strideakey = "abcdefghabcdefgh";
@@ -283,6 +283,6 @@ namespace
 TEST_UNIT(idea_test_1)
 {
     test_getEncryptDataLen();
-    test_1();
+    test_zlib_1();
     test_2();
 }
