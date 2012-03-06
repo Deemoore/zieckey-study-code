@@ -10,7 +10,7 @@
 
 namespace
 {
-    bool test_1(const char* data)
+    bool test_zlib_1(const char* data)
     {
         size_t data_len = strlen(data);
         size_t compressed_data_len = npp::ZLib::GetCompressBound(data_len);
@@ -26,7 +26,6 @@ namespace
         H_TEST_ASSERT(decompressed_data_len == data_len);
         H_TEST_ASSERT(strncmp(decompressed_data, data, data_len) == 0);
 
-
 //         std::string scomprs;
 //         H_TEST_ASSERT(ZZ_OK == npp::ZLib::Compress(data, data_len, scomprs));
 //         H_TEST_ASSERT(scomprs.length() == compressed_data_len);
@@ -37,6 +36,34 @@ namespace
 //         H_TEST_ASSERT(sdecomprs.length() == decompressed_data_len);
 //         H_TEST_ASSERT(memcmp(compressed_data, sdecomprs.data(), sdecomprs.size()) == 0);
         return true;
+    }
+
+    bool test_gzip_1(const char* data)
+    {
+        size_t data_len = strlen(data);
+        size_t compressed_data_len = 4096;
+        char* compressed_data = new char[compressed_data_len];
+        npp::ext::auto_delete<char> compressed_data_auto_delete(compressed_data);
+        H_TEST_ASSERT(ZZ_OK == npp::GZip::Compress(data, data_len, compressed_data, &compressed_data_len));
+
+        size_t decompressed_data_len = 4096;
+        char* decompressed_data = new char[decompressed_data_len];
+        npp::ext::auto_delete<char> decompressed_data_auto_delete(decompressed_data);
+        H_TEST_ASSERT(ZZ_OK == npp::GZip::Uncompress(compressed_data, compressed_data_len, decompressed_data, &decompressed_data_len));
+
+        H_TEST_ASSERT(decompressed_data_len == data_len);
+        H_TEST_ASSERT(strncmp(decompressed_data, data, data_len) == 0);
+
+        if (data_len < 32)
+        {
+            std::string path(data);
+            path.append(".gz");
+            FILE* fp = fopen(path.c_str(), "wb+");
+            fwrite(compressed_data + 4, compressed_data_len - 4, 1, fp);
+            fflush(fp);
+            fclose(fp);
+            return true;
+        }
     }
 }
 
@@ -77,11 +104,10 @@ TEST_UNIT(zlib_test)
 
     for (size_t i = 0; i < H_ARRAYSIZE(test_datas); ++i)
     {
-        H_TEST_ASSERT(test_1(test_datas[i].data()));
+        H_TEST_ASSERT(test_zlib_1(test_datas[i].data()));
+        H_TEST_ASSERT(test_gzip_1(test_datas[i].data()));
     }
 }
 
 #endif
-
-
 

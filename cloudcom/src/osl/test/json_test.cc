@@ -7,7 +7,7 @@
 
 namespace
 {
-    void test_1()
+    void test_zlib_1()
     {
         const char* json_test_str = "{\"type\":\"AE,AE\\u6a21\\u677f,AE\\u63d2\\u4ef6,AE\\u6559\\u7a0b,\\u4f1a\\u58f0\\u4f1a\\u5f71,\\u5a5a\\u5e86,\\u680f\\u5305\"}";
         json::JSONObject jo;
@@ -60,7 +60,7 @@ namespace
 
 TEST_UNIT(json_unicode_test_1)
 {
-    test_1();
+    test_zlib_1();
     test_2();
 }
 
