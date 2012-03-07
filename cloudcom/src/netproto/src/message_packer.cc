@@ -185,7 +185,7 @@ namespace npp
             net_header->data_len_   = packed_data_buf_len - sizeof(*net_header);
             net_header->data_len_   = htons(net_header->data_len_);
             net_header->message_id_ = htons(net_header->message_id_);
-            net_header->preserve_   = htons(net_header->preserve_);
+            net_header->reserve_   = htons(net_header->reserve_);
 
             if (!s_pNppConfig->sign_data())
             {
