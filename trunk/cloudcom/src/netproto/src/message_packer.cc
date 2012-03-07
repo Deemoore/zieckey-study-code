@@ -136,7 +136,7 @@ namespace npp
                 packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + data_len;
                 break;
             case kIDEAEncrypt:
-#if 0
+#if 1
                 {
                     IDEA* idea = s_pNppConfig->GetIDEA(npp_header->encrypt_key_no_);
                     assert(idea);
