@@ -250,22 +250,14 @@
 			Name="npp"
 			>
 			<Filter
-				Name="src"
+				Name="common"
 				>
 				<File
 					RelativePath=".\idea.cc"
 					>
 				</File>
 				<File
-					RelativePath=".\message.cc"
-					>
-				</File>
-				<File
-					RelativePath=".\message_packer.cc"
-					>
-				</File>
-				<File
-					RelativePath=".\message_unpacker.cc"
+					RelativePath="..\include\idea.h"
 					>
 				</File>
 				<File
@@ -273,35 +265,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\openssl_rsa.cc"
-					>
-				</File>
-				<File
-					RelativePath=".\zlib.cc"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="include"
-				>
-				<File
-					RelativePath="..\include\idea.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\message.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\message_packer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\message_unpacker.h"
-					>
-				</File>
-				<File
 					RelativePath="..\include\npp_config.h"
+					>
+				</File>
+				<File
+					RelativePath=".\openssl_rsa.cc"
 					>
 				</File>
 				<File
@@ -313,7 +281,39 @@
 					>
 				</File>
 				<File
+					RelativePath=".\zlib.cc"
+					>
+				</File>
+				<File
 					RelativePath="..\include\zlib.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="v1"
+				>
+				<File
+					RelativePath=".\message.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\include\message.h"
+					>
+				</File>
+				<File
+					RelativePath=".\message_packer.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\include\message_packer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\message_unpacker.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\include\message_unpacker.h"
 					>
 				</File>
 			</Filter>
