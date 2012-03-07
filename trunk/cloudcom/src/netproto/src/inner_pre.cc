@@ -6,7 +6,7 @@
 #ifdef H_WINDOWS_API
 #	pragma comment(lib,"Ws2_32.lib")
 
-#if H_PROVIDE_PCRE
+#ifdef H_PROVIDE_PCRE
 #   ifdef H_DEBUG_MODE
 #		pragma comment(lib, "pcre_d.lib")
 #   else
@@ -20,7 +20,7 @@
 //-------------------------------------------------------
 
 //openssl
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"libeay32.lib")
@@ -28,10 +28,10 @@
 #		pragma comment(lib,"libeay32.lib")
 #	endif
 #endif
-#endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT )
+#endif // end of #ifdef ( H_PROVIDE_NET_CA_ENCRYPT )
 
 //openssl
-#if H_NPP_PROVIDE_IDEA_ENCRYPT && !H_NPP_PROVIDE_OPENSSL_RSA
+#if defined(H_NPP_PROVIDE_IDEA_ENCRYPT) && !defined(H_NPP_PROVIDE_OPENSSL_RSA)
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
 #		pragma comment(lib,"idea.lib")
@@ -39,7 +39,7 @@
 #		pragma comment(lib,"idea.lib")
 #	endif
 #endif
-#endif // end of #if ( H_PROVIDE_NET_CA_ENCRYPT )
+#endif // end of #ifdef ( H_PROVIDE_NET_CA_ENCRYPT )
 
 #ifdef H_WINDOWS_API
 #	ifdef H_DEBUG_MODE
@@ -109,20 +109,20 @@ namespace npp
 //         }
 // #endif
 // 
-// #if H_NPP_PROVIDE_MEMORY_POOL
+// #ifdef H_NPP_PROVIDE_MEMORY_POOL
 //         MemAlloc::initialize();
 // #endif
 // 
 //         StringUtil::initialize();
 // 
-// #if H_PROVIDE_LOG_SYSTEM
+// #ifdef H_PROVIDE_LOG_SYSTEM
 // 	    new LogManager();
 // #endif
 // 
-// #if H_PROVIDE_TIMER
+// #ifdef H_PROVIDE_TIMER
 //         //Timer::createInstance();
 //         new Timer();
-// #endif//#if H_PROVIDE_TIMER
+// #endif//#ifdef H_PROVIDE_TIMER
 // 
 //         Process::initialize();
 //         Process::getBinDir();
@@ -143,18 +143,18 @@ namespace npp
 // 
 //         Process::uninitialize();
 // 
-// #if H_PROVIDE_TIMER
+// #ifdef H_PROVIDE_TIMER
 //         Timer::destroyInstance();
-// #endif//#if H_PROVIDE_TIMER
+// #endif//#ifdef H_PROVIDE_TIMER
 // 
-// #if H_PROVIDE_LOG_SYSTEM
+// #ifdef H_PROVIDE_LOG_SYSTEM
 // 		delete s_pLogManager;
 // #endif
 // 
 //         StringUtil::uninitialize();
 // 
 // 
-// #if H_NPP_PROVIDE_MEMORY_POOL
+// #ifdef H_NPP_PROVIDE_MEMORY_POOL
 //         MemAlloc::uninitialize();
 // #endif
 // 

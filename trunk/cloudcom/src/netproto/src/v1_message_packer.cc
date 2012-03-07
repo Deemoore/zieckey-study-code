@@ -1,8 +1,10 @@
-#include "netproto/include/message_packer.h"
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/npp_config.h"
 
 #include "netproto/include/md5.h"
+
+#ifdef H_NPP_SUPPORT_PROTO_V1
 
 
 namespace npp
@@ -78,7 +80,7 @@ namespace npp
                 }
                 return rsa->getSignLength();
             }
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
             else if (npp_header.sign_method() == kOpenSSLRSA0 || npp_header.sign_method() == kOpenSSLRSA2)
             {
                 OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header.sign_key_no());
@@ -217,7 +219,7 @@ namespace npp
                     return false;
                 }
             }
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
             else if (npp_header->sign_method_ == kOpenSSLRSA0 || npp_header->sign_method_ == kOpenSSLRSA2)
             {
                 OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_header->sign_key_no_);
@@ -291,7 +293,7 @@ namespace npp
                 npp_header.set_sign_method(rand() % kSignMethodNum);
                 switch(npp_header.sign_method())
                 {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
             case kOpenSSLRSA0:
             case kOpenSSLRSA2:
                 {
@@ -330,5 +332,11 @@ namespace npp
     }
 }
 
+
+
+
+
+
+#endif // end of #ifdef H_NPP_SUPPORT_PROTO_V1
 
 

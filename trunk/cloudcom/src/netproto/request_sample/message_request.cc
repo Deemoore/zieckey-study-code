@@ -3,8 +3,8 @@
 #include "util.h"
 
 #include "netproto/include/npp_config.h"
-#include "netproto/include/message_packer.h"
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/idea.h"
 
 #include "test_rsa_self_pair_key.h"

@@ -4,7 +4,7 @@
 #include "netproto/include/idea.h"
 
 
-#if H_NPP_PROVIDE_IDEA_ENCRYPT
+#ifdef H_NPP_PROVIDE_IDEA_ENCRYPT
 
 namespace npp
 {
@@ -406,7 +406,7 @@ namespace npp
 
 } // end of namespace ext
 
-#endif // end of #if H_NPP_PROVIDE_IDEA_ENCRYPT
+#endif // end of #ifdef H_NPP_PROVIDE_IDEA_ENCRYPT
 
 
 

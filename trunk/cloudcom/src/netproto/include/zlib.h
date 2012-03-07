@@ -3,7 +3,7 @@
 
 #include "netproto/include/inner_pre.h"
 
-#if H_NPP_PROVIDE_ZLIB
+#ifdef H_NPP_PROVIDE_ZLIB
 
 namespace npp
 {

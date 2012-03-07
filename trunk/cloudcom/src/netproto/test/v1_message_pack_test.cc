@@ -1,8 +1,8 @@
 #include "netproto/include/test_common.h"
 
 #include "netproto/include/npp_config.h"
-#include "netproto/include/message_packer.h"
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/idea.h"
 
 #include "npp_config_creator.h"
@@ -30,7 +30,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_self_test_0)
             idea->decrypt(encrypted.data(), encrypted.size(), decrypted);
             H_TEST_ASSERT(strncmp(raw_data, decrypted.data(), raw_data_len) == 0);
         }
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
         //OpenSSL RSA
         {
             const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -63,7 +63,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key)
     bool verify_sign   = true;
     for (int i = 1; i <= 4; i++)
     {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
         //OpenSSL RSA
         {
             const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -164,7 +164,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key)
 
 TEST_UNIT(test_func_MessagePackUnitTest_server_client_key1)
 {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
     //OpenSSL RSA
     {
         const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -227,7 +227,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key1)
 
 TEST_UNIT(test_func_MessagePackUnitTest_server_client_key2)
 {
-    #if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
     //OpenSSL RSA
     {
         const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -290,7 +290,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key2)
 
 TEST_UNIT(test_func_MessagePackUnitTest_server_client_key3)
 {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
     //OpenSSL RSA
     {
         const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -353,7 +353,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_server_client_key3)
 
 TEST_UNIT(test_func_MessagePackUnitTest_server_client_key4)
 {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
     //OpenSSL RSA
     {
         const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";
@@ -488,7 +488,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
     {
         for (int sign_key_no = 1; sign_key_no <= 4; sign_key_no++)
         {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
             for (int sign_method = 0; sign_method <= npp::Message::kOpenSSLRSA2; ++sign_method)
 #else
             for (int sign_method = npp::Message::kSimpleRSA; sign_method <= npp::Message::kSimpleRSA; ++sign_method)
@@ -572,7 +572,7 @@ namespace
 
     void test_effective_openssl()
     {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
         const size_t BUF_SIZE = 1024;
         const size_t KEY_LEN = 1024;
         unsigned char publickey [BUF_SIZE] = {0};
@@ -662,7 +662,7 @@ namespace
 
     void test_effective_openssl_public_encrypt_private_decrypt()
     {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
         const size_t BUF_SIZE = 1024;
         const size_t KEY_LEN = 1024;
         unsigned char publickey [BUF_SIZE] = {0};

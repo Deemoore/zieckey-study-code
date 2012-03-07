@@ -51,6 +51,41 @@ namespace npp
         H_CASE_STRING(kNotSupportXorEncrypt);
         H_CASE_STRING_END;
     }
+
+    Message::NppRequestHeaderV2::NppRequestHeaderV2()
+    {
+        symmetric_encrypt_method_  = kIDEAEncrypt;
+        
+        compress_method_ = kZlibCompress;
+
+        if (s_pNppConfig->GetOpenSSLRSAKeyCount() > 0)
+        {
+            asymmetric_encrypt_method_ = kOpenSSLRSA0;
+            OpenSSLRSA* rsa = NULL;
+            do 
+            {
+                asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1);
+                rsa = s_pNppConfig->GetOpenSSLRSA(asymmetric_encrypt_key_no_);
+            } while(!rsa);
+            digest_sign_len_ = 16 + rsa->getSignLength();
+        }
+        else if (s_pNppConfig->GetSimpleRSAKeyCount() > 0)
+        {
+            asymmetric_encrypt_method_ = kSimpleRSA;
+            SimpleRSA* rsa = NULL;
+            do 
+            {
+                asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1);
+                rsa = s_pNppConfig->GetSimpleRSA(asymmetric_encrypt_key_no_);
+            } while(!rsa);
+            digest_sign_len_ = 16 + rsa->getSignLength();
+        }
+        else
+        {
+            //TODO
+            assert(false);
+        }
+    }
 }
 
 
