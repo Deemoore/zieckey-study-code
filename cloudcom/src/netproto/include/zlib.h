@@ -37,7 +37,7 @@ namespace npp
         buffer.
         */
         static int Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen, int level = ZZ_BEST_SPEED);
-        //static int Compress(const void* source, size_t sourceLen, std::string& dest);
+        static int Compress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetCompressBound() returns an upper bound on the compressed size after
@@ -60,7 +60,7 @@ namespace npp
         buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
         */
         static int Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
-        //static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
+        static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetUncompressBound() returns an upper bound on the uncompressed size after
