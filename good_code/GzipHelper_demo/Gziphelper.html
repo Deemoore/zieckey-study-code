@@ -1,0 +1,63 @@
+<!--#include virtual="header.shtml" -->
+<!--#include virtual="/global/getCss.inc" -->
+
+<CENTER><H3><FONT COLOR="#AOAO99">
+Two classes for doing Gzip in memory!
+</FONT></H3></CENTER><HR>
+
+<!-- Author and contact details -->
+
+This article was contributed by 
+<A HREF="mailto:dsgao@hotmail.com">Gao dasheng</A>.
+
+<!-- Sample image - gif or jpg -->
+<P><IMG SRC="[image filename here]" >
+
+<!-- For which environment is this code specific??? -->
+<p><u>Environment:</u> OS independend
+
+<p>
+<!-- The 'p' starts a paragraph of normal text -->
+
+Now many applications need API to do gzip in memory. Zlib form http://www.gzip.org/zlib provides gzip and ungzip function,but they is for file,It's very inconvenience to compress and decompress small data compressing in memory. I ported the gzip and ungzip function to two template class CA2GZIP and CGZIP2A to do gzip in memory, and they also allocate and deallocate memory automatically. 
+It works with zlib from http://www.gzip.org/zlib.
+the following is some codes for how to use them.
+
+<!-- create more blocks of article text as needed separated -->
+<!-- with the <p> HTML tag -->
+
+<!-- start a block of source code -->
+<PRE>
+     #include "GZipHelper.h"
+	 void main()
+	 {
+        char plainText[]="Plain text here";
+		CA2GZIP gzip(plainText,strlen(plainText));  // do compressing here;
+		LPGZIP pgzip=gzip.pgzip;  // pgzip is zipped data pointer, you can use it irectly
+		int len=gzip.Length;      // Length is length of zipped data;
+
+		CGZIP2A plain(pgzip,len);  // do uncompressing here
+
+		char *pplain=plain.psz;    // psz is plain data pointer
+		int  aLen=plain.Length;    // Length is length of unzipped data.
+	 }
+
+<!-- end the block of source code -->
+</PRE>
+
+<h3>Downloads</h3>
+<!-- demo and source files -->
+<A HREF="gzipdemo.zip">
+Download demo project - 142 Kb</A><BR>
+
+<A HREF=  "gzipdemo">
+Download source - 142 Kb</A><BR>
+
+<h3>History</h3>
+Date Posted: Jun 20, 2003]<BR>
+<!-- Only use the following if the article is updated -->
+<!-- Date Last Updated: [today's date in the format month day, year] --><BR>
+
+<!--#include virtual= "footer.shtml"  -->
+
+ 
