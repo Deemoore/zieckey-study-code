@@ -2,8 +2,8 @@
 #include "netproto/include/test_common.h"
 
 #include "netproto/include/npp_config.h"
-#include "netproto/include/message_packer.h"
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/idea.h"
 
 #include "netproto/include/auto_delete.h"
@@ -115,7 +115,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
     bool verify_sign   = true;
     npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
     npp_config->AddOpenSSLRSAKey(1, private_key1, private_key1_len, public_key1, public_key1_len);
     npp_config->AddOpenSSLRSAKey(2, private_key2, private_key2_len, public_key2, public_key2_len);
 #endif
@@ -125,7 +125,7 @@ TEST_UNIT(test_func_MessagePackUnitTest_p2sp_key_test)
 
     for (int i = 1; i <= 2; ++i)
     {
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
         //OpenSSL RSA
         {
             const char * raw_data = "0047880d4a1cf095fa4b13f9cc9f06f8";

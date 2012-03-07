@@ -250,6 +250,82 @@
 			Name="npp"
 			>
 			<Filter
+				Name="v2"
+				>
+				<Filter
+					Name="client"
+					>
+					<File
+						RelativePath=".\v2c_request_packer.cc"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\include\v2c_request_packer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\v2c_response_unpacker.cc"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\include\v2c_response_unpacker.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="server"
+					>
+					<File
+						RelativePath=".\v2s_request_unpacker.cc"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\include\v2s_request_unpacker.h"
+						>
+					</File>
+					<File
+						RelativePath=".\v2s_response_packer.cc"
+						>
+						<FileConfiguration
+							Name="Release|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\include\v2s_response_packer.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
 				Name="common"
 				>
 				<File
@@ -258,6 +334,14 @@
 				</File>
 				<File
 					RelativePath="..\include\idea.h"
+					>
+				</File>
+				<File
+					RelativePath=".\message.cc"
+					>
+				</File>
+				<File
+					RelativePath="..\include\message.h"
 					>
 				</File>
 				<File
@@ -293,27 +377,19 @@
 				Name="v1"
 				>
 				<File
-					RelativePath=".\message.cc"
+					RelativePath=".\v1_message_packer.cc"
 					>
 				</File>
 				<File
-					RelativePath="..\include\message.h"
+					RelativePath="..\include\v1_message_packer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\message_packer.cc"
+					RelativePath=".\v1_message_unpacker.cc"
 					>
 				</File>
 				<File
-					RelativePath="..\include\message_packer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\message_unpacker.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\include\message_unpacker.h"
+					RelativePath="..\include\v1_message_unpacker.h"
 					>
 				</File>
 			</Filter>

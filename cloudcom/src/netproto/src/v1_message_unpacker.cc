@@ -1,8 +1,10 @@
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_unpacker.h"
 
 #include "netproto/include/npp_config.h"
 
 #include "netproto/include/md5.h"
+
+#ifdef H_NPP_SUPPORT_PROTO_V1
 
 namespace npp
 {
@@ -252,5 +254,11 @@ namespace npp
     }
 }
 
+
+
+
+
+
+#endif // end of #ifdef H_NPP_SUPPORT_PROTO_V1
 
 

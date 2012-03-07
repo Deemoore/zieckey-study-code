@@ -28,7 +28,7 @@ namespace
     static npp::NppConfig* CreateNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
     {
         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
 #define H_ADD_KEY(no) {\
     npp_config->AddIdeaKey(no, idea_key##no);\
     npp_config->AddSimpleRSAKey(no, g_slrsa_private_key##no, g_slrsa_private_key##no##_len, g_slrsa_public_key##no, g_slrsa_public_key##no##_len);\
@@ -54,7 +54,7 @@ namespace
     static npp::NppConfig* CreateServerNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
     {
         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
 #define H_ADD_KEY(no) {\
     npp_config->AddIdeaKey(no, idea_key##no);\
     npp_config->AddSimpleRSAKey(no, g_server_slrsa_private_key##no, g_server_slrsa_private_key##no##_len, g_server_slrsa_public_key##no, g_server_slrsa_public_key##no##_len);\
@@ -80,7 +80,7 @@ namespace
     static npp::NppConfig* CreateClientNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
     {
         npp::NppConfig* npp_config = new npp::NppConfig(support_plain, sign_pack, verify_sign);
-#if H_NPP_PROVIDE_OPENSSL_RSA
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
 #define H_ADD_KEY(no) {\
     npp_config->AddIdeaKey(no, idea_key##no);\
     npp_config->AddSimpleRSAKey(no, g_client_slrsa_private_key##no, g_client_slrsa_private_key##no##_len, g_client_slrsa_public_key##no, g_client_slrsa_public_key##no##_len);\

@@ -1,10 +1,11 @@
-
-
-#ifndef NETPROTO_MESSAGE_UNPACKER_H_
-#define NETPROTO_MESSAGE_UNPACKER_H_
+#ifndef NETPROTO_MESSAGE_UNPACKER_V1_H_
+#define NETPROTO_MESSAGE_UNPACKER_V1_H_
 
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/message.h"
+
+#ifdef H_NPP_SUPPORT_PROTO_V1
+
 
 namespace npp
 {
@@ -65,4 +66,10 @@ namespace npp
 }
 
 #endif
+
+
+
+
+#endif // end of #ifdef H_NPP_SUPPORT_PROTO_V1
+
 

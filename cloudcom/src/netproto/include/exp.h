@@ -10,8 +10,8 @@ H_LINK_LIB( "netproto");
 #endif
 
 #include "netproto/include/data_stream.h"
-#include "netproto/include/message_packer.h"
-#include "netproto/include/message_unpacker.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v1_message_unpacker.h"
 
 #endif //#ifndef NETPROTO_ALL_EXPORT_H_
 

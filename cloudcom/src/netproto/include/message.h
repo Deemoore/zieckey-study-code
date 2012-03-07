@@ -30,7 +30,8 @@ namespace npp
             kProtoVersion1 = 1,
             kProtoVersion2 = 2,
         };
-        enum EncryptMethod
+
+        enum SymmetricEncryptMethod
         {
             kNoEncrypt   = 0,
             kXorEncrypt  = 1,//not use this
@@ -43,6 +44,12 @@ namespace npp
             kSimpleRSA   = 1, //! Simple RSA
             kOpenSSLRSA2 = 2, //! OpenSSL RSA, the same as kOpenSSLRSA0
             kSignMethodNum
+        };
+
+        enum CompressMethod
+        {
+            kNoComress   = 0,
+            kZlibCompress  = 1,
         };
 
         enum ErrorCode
@@ -77,6 +84,13 @@ namespace npp
 
             kNotSupportPlainData,
             kNotSupportXorEncrypt,
+        };
+
+        enum ResponseErrorCodeV2
+        {
+            kSuccess = 0,
+            kInvalidRequest = 1,
+            kInvalidClientPublicKey = 2,
         };
     public:
         //! The header information struct of the data packet 
@@ -164,6 +178,42 @@ namespace npp
             void    set_sign_key_no(uint8_t val) { sign_key_no_ = val; }
             uint8_t sign_method() const { return sign_method_; }
             void    set_sign_method(uint8_t val) { sign_method_ = val; }
+        };
+
+        struct NppRequestHeaderV2
+        {
+            uint8_t  symmetric_encrypt_method_;  //! the symmetric encrypt method, 0:no encrypt_; 1:Reserved; 2:idea 
+            uint8_t  asymmetric_encrypt_method_; //! the asymmetric encrypt method, 0:OpenSSL RSA; 1:Simple RSA; 2:Reserved 
+            uint8_t  asymmetric_encrypt_key_no_; //! the asymmetric encrypt key number
+            uint8_t  compress_method_;           //! The compress algorithm ; 0£ºno compress; 1£ºzlib
+            uint16_t digest_sign_len_;           //! The digest length and the encrypted data of symmetric_encrypt_key length
+
+            NppRequestHeaderV2();
+
+            uint8_t symmetric_encrypt_method() const { return symmetric_encrypt_method_; }
+            void set_ymmetric_encrypt_method(uint8_t val) { symmetric_encrypt_method_ = val; }
+            uint8_t asymmetric_encrypt_method() const { return asymmetric_encrypt_method_; }
+            void set_asymmetric_encrypt_method(uint8_t val) { asymmetric_encrypt_method_ = val; }
+            uint8_t asymmetric_encrypt_key_no() const { return asymmetric_encrypt_key_no_; }
+            void set_asymmetric_encrypt_key_no(uint8_t val) { asymmetric_encrypt_key_no_ = val; }
+            uint8_t compress_method() const { return compress_method_; }
+            void set_compress_method(uint8_t val) { compress_method_ = val; }
+            uint16_t digest_sign_len() const { return digest_sign_len_; }
+            void set_igest_sign_len(uint16_t val) { digest_sign_len_ = val; }
+        };
+
+        struct NppResponseHeaderV2
+        {
+            uint8_t error_code_;                //! 0 success. 1 failed. 2 client asymmetric public key invalid  . enum ResponseErrorCodeV2
+            uint8_t compress_method_;           //! The compress algorithm ; 0£ºno compress; 1£ºzlib
+            uint8_t md5_[16];
+
+            uint8_t compress_method() const { return compress_method_; }
+            void set_compress_method(uint8_t val) { compress_method_ = val; }
+            uint8_t error_code() const { return error_code_; }
+            void set_error_code(uint8_t val) { error_code_ = val; }
+            const uint8_t* md5() const { return md5_; }
+            void set_md5(uint8_t* val, size_t len = 16) { memcpy(md5_, val, len <= sizeof(md5_) ? len : sizeof(md5_)); }
         };
 #pragma pack(pop)
 

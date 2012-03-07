@@ -1,6 +1,6 @@
 #include "netproto/include/zlib.h"
 
-#if H_NPP_PROVIDE_ZLIB
+#ifdef H_NPP_PROVIDE_ZLIB
 
 #include <zlib/zlib.h>
 

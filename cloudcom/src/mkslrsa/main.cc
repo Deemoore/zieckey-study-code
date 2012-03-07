@@ -13,8 +13,8 @@
 
 // #include "netproto/include/exp.h"
 // #include "netproto/include/npp_config.h"
-// #include "netproto/include/message_packer.h"
-// #include "netproto/include/message_unpacker.h"
+// #include "netproto/include/v1_message_packer.h"
+// #include "netproto/include/v1_message_unpacker.h"
 // #include "netproto/include/idea_wrapper.h"
 // #include "netproto/include/openssl_rsa.h"
 // #include "netproto/include/slrsa_wrapper.h"

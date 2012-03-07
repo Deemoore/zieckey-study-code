@@ -16,6 +16,15 @@
 //Define to 1 if you want to use zlib
 #define H_NPP_PROVIDE_ZLIB 1
 
+//Define to 1 if you want to support protocol version 1
+#define H_NPP_SUPPORT_PROTO_V1 1
+
+//Define to 1 if you want to support protocol version 2 in server
+#define H_NPP_SUPPORT_PROTO_SERVER_V2 1
+
+//Define to 1 if you want to support protocol version 2 in client
+#define H_NPP_SUPPORT_PROTO_CLIENT_V2 1
+
 
 #endif
 
