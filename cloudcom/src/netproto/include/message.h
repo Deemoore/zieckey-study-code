@@ -119,7 +119,7 @@ namespace npp
             void     set_preserve(uint16_t val) { preserve_ = val; }
         };
 
-        struct NppHeader
+        struct NppHeaderV1
         {
             union
             {

@@ -223,13 +223,13 @@ bool do_http_request(const std::string& server_url, const std::string& request_d
 
     char packed_data[1024] = {};
     size_t packed_data_len = sizeof(packed_data);
-    npp::MessagePacker packer;
+    npp::v1::MessagePacker packer;
     assert(packer.Pack(raw_data, raw_data_len, packed_data, packed_data_len));
 
     std::string server_resp_encrypt_data;
     if (do_curl_post(server_url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
     {
-        npp::MessageUnpacker unpacker;
+        npp::v1::MessageUnpacker unpacker;
         if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
         {
             result = std::string(unpacker.Data(), unpacker.Size());
@@ -403,14 +403,14 @@ bool do_p2sp_key_test()
    
     char packed_data[1024] = {};
     size_t packed_data_len = sizeof(packed_data);
-    npp::MessagePacker packer;
+    npp::v1::MessagePacker packer;
     assert(packer.Pack(compressed_data.data(), compressed_data.length(), packed_data, packed_data_len));
 
     std::string server_resp_encrypt_data;
     
     if (do_curl_multi_part_post("http://build7.kill.corp.qihoo.net:8011/urlquery", "p2sp_request", std::string(packed_data, packed_data_len), server_resp_encrypt_data))
     {
-        npp::MessageUnpacker unpacker;
+        npp::v1::MessageUnpacker unpacker;
         if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
         {
             std::string result;
@@ -522,7 +522,7 @@ bool do_msv_test()
 
     char packed_data[1024] = {};
     size_t packed_data_len = sizeof(packed_data);
-    npp::MessagePacker packer;
+    npp::v1::MessagePacker packer;
     assert(packer.Pack(compressed_data.data(), compressed_data.length(), packed_data, packed_data_len));
 
     std::string server_resp_encrypt_data;
@@ -530,7 +530,7 @@ bool do_msv_test()
     //const char* url = "http://build7.kill.corp.qihoo.net:8089/msvquery";
     if (do_curl_multi_part_post(url, "micropattern_bole_query", std::string(packed_data, packed_data_len), server_resp_encrypt_data))
     {
-        npp::MessageUnpacker unpacker;
+        npp::v1::MessageUnpacker unpacker;
         if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
         {
             std::string result;
@@ -680,18 +680,18 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         {
             const char * raw_data = "1234567890";
             size_t raw_data_len = strlen(raw_data);
-            npp::MessagePacker packer1;
+            npp::v1::MessagePacker packer1;
             packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len);
 
-            npp::MessageUnpacker unpacker;
+            npp::v1::MessageUnpacker unpacker;
             unpacker.Unpack(packed_data, packed_data_len);
             npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
+            npp::Message::NppHeaderV1& npp_header = const_cast<npp::Message::NppHeaderV1&>(unpacker.npp_header());
             net_header.Init();
             npp_header.Init();
 
             packed_data_len = sizeof(packed_data);
-            npp::MessagePacker packer(&unpacker);
+            npp::v1::MessagePacker packer(&unpacker);
             npp_header.encrypt_key_no_ = rand() % 2 + 1;
             npp_header.sign_key_no_    = rand() % 2 + 1;
             net_header.message_id_     = rand() % 65536;
@@ -702,7 +702,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         const char* url = "http://build7.kill.corp.qihoo.net:8018/tutorial.php";
         if (do_curl_post(url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
         {
-            npp::MessageUnpacker unpacker;
+            npp::v1::MessageUnpacker unpacker;
             if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
             {
                 std::string result = std::string(unpacker.Data(), unpacker.Size());
@@ -861,15 +861,15 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         {
             const char * raw_data = "1234567890";
             size_t raw_data_len = strlen(raw_data);
-            npp::MessagePacker packer1;
+            npp::v1::MessagePacker packer1;
             packer1.Pack(raw_data, raw_data_len, packed_data, packed_data_len);
 
-            npp::MessageUnpacker unpacker;
+            npp::v1::MessageUnpacker unpacker;
             npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
-            npp::Message::NppHeader& npp_header = const_cast<npp::Message::NppHeader&>(unpacker.npp_header());
+            npp::Message::NppHeaderV1& npp_header = const_cast<npp::Message::NppHeaderV1&>(unpacker.npp_header());
             net_header.Init();
             npp_header.Init();
-            npp::MessagePacker packer(&unpacker);
+            npp::v1::MessagePacker packer(&unpacker);
             npp_header.encrypt_key_no_ = rand() % 2 + 1;
             npp_header.sign_key_no_    = rand() % 2 + 1;
             net_header.message_id_     = rand() % 65536;
@@ -880,7 +880,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
         const char* url = "http://x2.im.ccp.qihoo.net/browser_relative.php";
         if (do_curl_post(url, std::string(packed_data, packed_data_len), server_resp_encrypt_data))
         {
-            npp::MessageUnpacker unpacker;
+            npp::v1::MessageUnpacker unpacker;
             if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
             {
                 std::string result = std::string(unpacker.Data(), unpacker.Size());
