@@ -10,6 +10,10 @@
 
 #include "osl/include/platform_micros.h"
 
+#ifndef H_OS_WINDOWS
+    #include <stdarg.h>
+#endif
+
 //only use VC
 //typedef char __error__[(expr)];
 #define __static_assert2( expr , line ) typedef char __compiler_check__false__##line##__ [(expr)];
