@@ -18,6 +18,14 @@ namespace npp
         }
     }
 
+    void NppConfig::DestroyInstance()
+    {
+        if (NppConfig::getSingletonPtr())
+        {
+            delete static_cast<NppConfig*>(NppConfig::getSingletonPtr());
+        }
+    }
+
     NppConfig::NppConfig()
         : support_plain_(false), sign_data_(true), verify_data_(true)
     {
@@ -26,6 +34,11 @@ namespace npp
     NppConfig::NppConfig( bool plain, bool sign, bool verify )
         : support_plain_(plain), sign_data_(sign), verify_data_(verify)
     {
+    }
+
+    NppConfig::~NppConfig()
+    {
+
     }
 
     bool NppConfig::AddIdeaKey( int key_no, const unsigned char key[16] )
