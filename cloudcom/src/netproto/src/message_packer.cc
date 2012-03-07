@@ -136,6 +136,7 @@ namespace npp
                 packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + data_len;
                 break;
             case kIDEAEncrypt:
+#if 0
                 {
                     IDEA* idea = s_pNppConfig->GetIDEA(npp_header->encrypt_key_no_);
                     assert(idea);
@@ -155,6 +156,22 @@ namespace npp
                     packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + encrypted_data_len;
                     break;
                 }
+#else
+{                                   //TODO need optimize
+                    MemoryDataStream buf;
+                    IDEA* idea = s_pNppConfig->GetIDEA(npp_header->encrypt_key_no_);
+                    assert(idea);
+                    if (!idea)
+                    {
+                        last_error(kNotSupportIDEAKeyNumber);
+                        return false;
+                    }
+                    idea->encrypt(d, data_len, buf);
+                    memcpy(write_pos + npp_header->digest_sign_len_, buf.data(), buf.size());
+                    packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + buf.size();
+                    break; 
+}
+#endif
             default:
                 assert(false && "Not Supported!");
                 last_error(kNotSupportEncryptMethod);
