@@ -89,7 +89,7 @@ namespace npp
             uint16_t message_id_;    //! big-endian, client generate randomly
             uint8_t  packet_seq_;
             uint8_t  packet_count_;
-            uint16_t preserve_;      //! big-endian, preserved, set to 0x0000
+            uint16_t reserve_;      //! big-endian, preserved, set to 0x0000
 
 
             void Init()
@@ -115,8 +115,8 @@ namespace npp
             uint8_t  packet_count() const { return packet_count_; }
             void     set_packet_count(uint8_t val) { packet_count_ = val; }
 
-            uint16_t preserve() const { return preserve_; }
-            void     set_preserve(uint16_t val) { preserve_ = val; }
+            uint16_t reserve() const { return reserve_; }
+            void     set_reserve(uint16_t val) { reserve_ = val; }
         };
 
         struct NppHeaderV1
