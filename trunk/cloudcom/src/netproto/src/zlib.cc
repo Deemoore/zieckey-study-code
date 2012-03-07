@@ -36,18 +36,19 @@ namespace npp
         return r;
     }
 
-//     int ZLib::Compress( const void* source, size_t sourceLen, std::string& dest )
-//     {
-//         size_t dest_len_inner = GetCompressBound(sourceLen);
-//         dest.reserve(dest_len_inner);
-//         int r = Compress(source, sourceLen, &dest[0], &dest_len_inner);
-//         if (r != Z_OK)
-//         {
-//             return r;
-//         }
-//         dest.resize(dest_len_inner);
-//         return r;
-//     }
+    int ZLib::Compress( const void* source, size_t sourceLen, std::string& dest )
+    {
+        size_t dest_len_inner = GetCompressBound(sourceLen);
+        dest.resize(dest_len_inner);
+        int r = Compress(source, sourceLen, &dest[0], &dest_len_inner);
+        if (r != Z_OK)
+        {
+            return r;
+        }
+        assert(dest_len_inner <= dest.size());
+        dest.resize(dest_len_inner);
+        return r;
+    }
 
     size_t ZLib::GetCompressBound( size_t sourceLen )
     {
@@ -70,18 +71,19 @@ namespace npp
         return r;
     }
 
-//     int ZLib::Uncompress( const void* source, size_t sourceLen, std::string& dest )
-//     {
-//         size_t dest_len_inner = GetUncompressBound(source);
-//         dest.reserve(dest_len_inner);
-//         int r = Uncompress(source, sourceLen, &dest[0], &dest_len_inner);
-//         if (r != Z_OK)
-//         {
-//             return r;
-//         }
-//         dest.resize(dest_len_inner);
-//         return r;
-//     }
+    int ZLib::Uncompress( const void* source, size_t sourceLen, std::string& dest )
+    {
+        size_t dest_len_inner = GetUncompressBound(source);
+        dest.resize(dest_len_inner);
+        int r = Uncompress(source, sourceLen, &dest[0], &dest_len_inner);
+        if (r != Z_OK)
+        {
+            return r;
+        }
+        assert(dest_len_inner <= dest.size());
+        dest.resize(dest_len_inner);
+        return r;
+    }
 
 
     size_t ZLib::GetUncompressBound( const void* compressed_data )
