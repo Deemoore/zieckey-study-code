@@ -34,8 +34,14 @@ namespace npp
         //! \return NppConfig* - 
         static NppConfig* CreateInstance();
 
+        //! \brief Destroy an instance
+        //! \warning Only can be called in the main function when the process is exiting
+        //!     Be careful the thread-safe problem
+        static void DestroyInstance();
+
     public:
         NppConfig(bool support_plain, bool sign_data, bool verify_data);
+        ~NppConfig();
 
         bool AddIdeaKey(int key_no, const unsigned char key[16]);
 

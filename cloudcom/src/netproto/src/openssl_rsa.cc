@@ -17,11 +17,13 @@ namespace npp
         if ( m_private_rsa )
         {
             RSA_free( m_private_rsa );
+            m_private_rsa = NULL;
         }
 
         if (m_public_rsa)
         {
             RSA_free(m_public_rsa);
+            m_public_rsa = NULL;
         }
     }
 
