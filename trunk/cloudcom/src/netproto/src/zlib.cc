@@ -130,6 +130,7 @@ namespace npp
 #define DEF_MEM_LEVEL 9
             int strategy = Z_HUFFMAN_ONLY;
             //---------------------------------------------------------
+            //&d_stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, DEFAULT_WINDOWSIZE, DEFAULT_MEMLEVEL,  Z_DEFAULT_STRATEGY
             err = deflateInit2(&stream, level, Z_DEFLATED, -MAX_WBITS, DEF_MEM_LEVEL, strategy);
             if (err != Z_OK) return err;
 
@@ -179,7 +180,7 @@ namespace npp
         }
 
     }
-
+#if 0
     int GZip::Compress( const void* source, size_t sourceLen, void* dest, size_t* destLen )
     {
         uLongf dest_len_inner = *destLen;
@@ -195,6 +196,7 @@ namespace npp
         *destLen = dest_len_inner;
         return r;
     }
+#endif
 }
 
 #endif

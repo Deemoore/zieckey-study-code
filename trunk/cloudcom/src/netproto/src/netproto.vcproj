@@ -276,6 +276,10 @@
 					RelativePath=".\openssl_rsa.cc"
 					>
 				</File>
+				<File
+					RelativePath=".\zlib.cc"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="include"
@@ -306,10 +310,6 @@
 				</File>
 				<File
 					RelativePath="..\include\slrsa.h"
-					>
-				</File>
-				<File
-					RelativePath=".\zlib.cc"
 					>
 				</File>
 				<File

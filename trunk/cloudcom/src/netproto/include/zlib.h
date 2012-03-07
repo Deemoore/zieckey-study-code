@@ -70,6 +70,7 @@ namespace npp
         static size_t GetUncompressBound(const void* compressed_data);
     };
 
+#if 0
 
     /*
     Well that's nice, but how do I make a gzip file in memory?
@@ -124,6 +125,9 @@ namespace npp
         */
         static size_t GetUncompressBound(const void* compressed_data);
     }; 
+
+#endif
+
 }//end of namespace npp
 #endif
 
