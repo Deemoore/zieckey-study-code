@@ -151,7 +151,7 @@ namespace osl
         /** Query whether it is the end of the string.*/
         bool isEnd() const
         {
-            if ( m_iCurPos >= m_len || m_pSrcString[m_iCurPos] == '\0' )
+            if ( m_iCurPos >= (s32)m_len || m_pSrcString[m_iCurPos] == '\0' )
             {
                 return true;
             }
@@ -176,7 +176,7 @@ namespace osl
 
     private:
         char*			  m_pSrcString;	 //! the source text string to be parsed
-        u32                  m_iCurPos;  //! At first, set it 0
+        s32                  m_iCurPos;  //! At first, set it 0
         u32                      m_len;  //!
         //char			   m_cLastChar;	 //! the char we get at last time
         //bool			m_bUseLastChar;  //! whether to use the char we get at last time
@@ -214,7 +214,7 @@ namespace osl
     {
         if ( m_iCurPos <= 0 )
         {
-            printf( "Stepping back two steps is not supported\n" );
+            fprintf(stderr, "Stepping back two steps is not supported\n" );
             return false;
         }
 
@@ -226,7 +226,7 @@ namespace osl
     {
         if ( m_iCurPos - backstep < 0)
         {
-            printf( "Stepping back two steps is not supported\n" );
+            fprintf(stderr, "Stepping back two steps is not supported\n" );
             return false;
         }
 
@@ -333,7 +333,7 @@ namespace osl
 
     inline Slice Tokener::nextSlice( char quote )
     {
-        u32 startpos = m_iCurPos;
+        s32 startpos = m_iCurPos;
 
         while ( next() != quote )
         {
