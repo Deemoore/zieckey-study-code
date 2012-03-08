@@ -35,9 +35,9 @@ namespace npp
 
         enum SymmetricEncryptMethod
         {
-            kNoEncrypt   = 0,
-            kXorEncrypt  = 1,//not use this
-            kIDEAEncrypt = 2,
+            kNoSymmetricEncrypt   = 0,
+            kXorSymmetricEncrypt  = 1,//not use this
+            kIDEASymmetricEncrypt = 2,
         };
 
         enum SignMethod
@@ -178,7 +178,7 @@ namespace npp
 #else
                 encrypt_key_no_ = 1; //server program
 #endif
-                encrypt_method_  = kIDEAEncrypt;
+                encrypt_method_  = kIDEASymmetricEncrypt;
                 //sign_method_     = kSimpleRSA;
                 sign_method_     = kOpenSSLRSA0;
                 sign_key_no_     = 1;
@@ -208,9 +208,9 @@ namespace npp
                 };
                 uint8_t asymmetric_encrypt_;
             };
-            uint8_t  asymmetric_encrypt_key_no_; //! the asymmetric encrypt key number
-            uint8_t  compress_method_;           //! The compress algorithm ; 0£ºno compress; 1£ºzlib
-            uint16_t digest_sign_len_;           //! The digest length and the encrypted data of symmetric_encrypt_key length
+            uint8_t  asymmetric_encrypt_key_no_;   //! the asymmetric encrypt key number
+            uint8_t  compress_method_;             //! The compress algorithm ; 0£ºno compress; 1£ºzlib
+            uint16_t asymmetric_encrypt_data_len_; //! The length of asymmetric encrypted data of symmetric_encrypt_key
 
             NppRequestHeaderV2();
 
@@ -229,8 +229,8 @@ namespace npp
             uint8_t  compress_method() const { return compress_method_; }
             void     set_compress_method(uint8_t val) { compress_method_ = val; }
 
-            uint16_t digest_sign_len() const { return digest_sign_len_; }
-            void     set_igest_sign_len(uint16_t val) { digest_sign_len_ = val; }
+            uint16_t asymmetric_encrypt_data_len() const { return asymmetric_encrypt_data_len_; }
+            void     set_asymmetric_encrypt_data_len(uint16_t val) { asymmetric_encrypt_data_len_ = val; }
         };
 
         struct NppResponseHeaderV2

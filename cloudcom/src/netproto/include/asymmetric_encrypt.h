@@ -40,7 +40,7 @@ namespace npp
     class _EXPORT_NETPROTO AsymmetricEncryptorFactory
     {
     public:
-        static AsymmetricEncryptor* GetAsymmetricEncryptor(int encrypt_method, int key_no);
+        static AsymmetricEncryptor* GetAsymmetricEncryptor(int asymmetric_encrypt_method, int asymmetric_key_no);
     };
 
 } // end of namespace ext

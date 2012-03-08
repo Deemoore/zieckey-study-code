@@ -11,7 +11,7 @@ namespace npp
     {
         switch(encrypt_method)
         {
-        case Message::kIDEAEncrypt:
+        case Message::kIDEASymmetricEncrypt:
 #ifdef H_NPP_PROVIDE_IDEA_ENCRYPT
             return new IDEA();
 #else

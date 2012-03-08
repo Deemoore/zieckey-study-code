@@ -28,8 +28,8 @@ namespace npp
     public:
         ZLib() {}
 
-        virtual bool Compress(const void* data, size_t data_len);
-        virtual bool Uncompress(const void* data, size_t data_len);
+        virtual bool Compress(const void* data, size_t data_len, std::string& uncompresed_data);
+        virtual bool Uncompress(const void* data, size_t data_len, std::string& compresed_data);
 
         virtual size_t Size() const;
         virtual const uint8_t* Data() const;
@@ -47,7 +47,6 @@ namespace npp
         buffer.
         */
         static int Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen, int level = ZZ_BEST_SPEED);
-        static int Compress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetCompressBound() returns an upper bound on the compressed size after
@@ -70,7 +69,6 @@ namespace npp
         buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
         */
         static int Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
-        static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetUncompressBound() returns an upper bound on the uncompressed size after
@@ -78,10 +76,6 @@ namespace npp
         a Uncompress() call to allocate the destination buffer.
         */
         static size_t GetUncompressBound(const void* compressed_data);
-
-
-    private:
-        std::string data_;
     };
 
 }//end of namespace npp

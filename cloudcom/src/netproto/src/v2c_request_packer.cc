@@ -76,7 +76,7 @@ namespace npp
             //---------------------------------------------------------
             //Step 3: write symmetric encrypt data
             write_pos += kMD5HexLen + GetSignLength();
-            assert(npp_header->digest_sign_len() == kMD5HexLen + GetSignLength());
+            assert(npp_header->asymmetric_encrypt_data_len() == kMD5HexLen + GetSignLength());
             size_t encrypt_data_len = SymmetricEncryptAndWrite(npp_header, data, data_len, write_pos);
             if (0 == encrypt_data_len)
             {
@@ -150,11 +150,11 @@ namespace npp
                 compressed_data_len = ZLib::GetCompressBound(compressed_data_len);
             }
             
-            if (npp_request_header_.symmetric_encrypt_method() == kIDEAEncrypt)
+            if (npp_request_header_.symmetric_encrypt_method() == kIDEASymmetricEncrypt)
             {
                 return H_ALIGN(compressed_data_len + 8, 8);
             }
-            else if (npp_request_header_.symmetric_encrypt_method() == kNoEncrypt)
+            else if (npp_request_header_.symmetric_encrypt_method() == kNoSymmetricEncrypt)
             {
                 return compressed_data_len;
             }

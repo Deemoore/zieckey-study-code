@@ -207,7 +207,7 @@ namespace npp
         {
             switch (npp_header_.encrypt_method_)
             {
-            case kNoEncrypt:
+            case kNoSymmetricEncrypt:
                 if (!s_pNppConfig->support_plain())
                 {
                     last_error(kNotSupportPlainData);
@@ -216,11 +216,11 @@ namespace npp
 
                 unpacked_data_.assign(encrypt_data, encrypt_data_len);
                 break;
-            case kXorEncrypt:
+            case kXorSymmetricEncrypt:
                 last_error(kNotSupportXorEncrypt);
                 return false;
                 break;
-            case kIDEAEncrypt:
+            case kIDEASymmetricEncrypt:
                 {
                     IDEA* idea = s_pNppConfig->GetIDEA(npp_header_.encrypt_key_no_);
                     if (!idea)

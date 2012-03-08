@@ -477,11 +477,11 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
   
     if (support_plain)
     {
-        npp_header.encrypt_method_ = npp::Message::kNoEncrypt;
+        npp_header.encrypt_method_ = npp::Message::kNoSymmetricEncrypt;
     }
     else
     {
-        npp_header.encrypt_method_ = npp::Message::kIDEAEncrypt;
+        npp_header.encrypt_method_ = npp::Message::kIDEASymmetricEncrypt;
     }
 
     for (int encrypt_key_no = 1; encrypt_key_no <= 4; ++encrypt_key_no)
@@ -508,7 +508,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                 npp::v1::MessageUnpacker unpacker1;
                 H_TEST_ASSERT(unpacker1.Unpack(packed_data, packed_data_len));
                 H_TEST_ASSERT(unpacker1.last_error() == npp::Message::kNoError);
-                if (npp_header.encrypt_method_ == npp::Message::kIDEAEncrypt)
+                if (npp_header.encrypt_method_ == npp::Message::kIDEASymmetricEncrypt)
                 {
                     H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker1.Size());
                 }
