@@ -1,5 +1,7 @@
 
 #include "netproto/include/v2s_request_unpacker.h"
+#include "netproto/include/npp_config.h"
+#include "netproto/include/compressor.h"
 
 namespace npp
 {
@@ -78,6 +80,8 @@ namespace npp
             return false;
         }
 
+        
+
         bool RequestMessageUnpacker::_UnpackV2( const void* d, size_t d_len )
         {
             if (d_len < sizeof(net_header_) + sizeof(npp_request_header_v2_) + 16 + 64)
@@ -108,7 +112,7 @@ namespace npp
 
             assert(read_pos == ((const char*)d) + header_len + sizeof(npp_request_header_v2_));
 
-            const uint8_t* md5 = read_pos;
+            const char* md5 = read_pos;
 
             read_pos += kMD5HexLen;
 
@@ -121,33 +125,16 @@ namespace npp
                 }
                 else
                 {
-                    _UnpackV2(d, d_len);
+                    size_t compressed_data_len = d_len - sizeof(net_header_) - sizeof(npp_request_header_v2_) -kMD5HexLen - npp_request_header_v2_.asymmetric_encrypt_data_len();
+                    assert(compressed_data_len + read_pos + npp_request_header_v2_.asymmetric_encrypt_data_len() == (const char*)d + d_len);
+                    return _Uncompress(read_pos + npp_request_header_v2_.asymmetric_encrypt_data_len(), compressed_data_len);
                 }
             }
-            else
+                
+            if (!_AsymmetricDecrypt(read_pos, npp_request_header_v2_.asymmetric_encrypt_data_len(), symmetric_encrypt_key_))
             {
-                std::string encrypt_key = _AsymmetricDecrypt(read_pos, npp_request_header_v2_.asymmetric_encrypt_data_len());
-            }
-            
-
-
-
-
-
-
-            //TODO
-
-
-
-
-            size_t data_len = d_len - header_len - sizeof(npp_request_header_v2_) - npp_request_header_v2_.asymmetric_encrypt_data_len_;
-            if (s_pNppConfig->verify_data())
-            {
-                if (!_AsymmetricDecrypt(read_pos, data_len))
-                {
-                    //ErrorCode has been set by _AsymmetricDecrypt
-                    return false;
-                }
+                //error code has been set by _AsymmetricDecrypt
+                return false;
             }
 
             read_pos += npp_request_header_v2_.asymmetric_encrypt_data_len_;
@@ -156,110 +143,57 @@ namespace npp
 
             size_t encrypt_data_len = ((const char*)d) + d_len - read_pos;
 
-            if (!DecryptData(read_pos, encrypt_data_len))
+            if (!DecryptData(read_pos, encrypt_data_len, symmetric_encrypt_key_))
             {
                 //ErrorCode has been set by DecryptData
                 return false;
             }
 
-            assert(last_error() == kNoError);
-            return true;
-        }
-
-
-        bool RequestMessageUnpacker::VerifyDigest( const void* digest, size_t digest_len, const void* d, size_t d_len )
-        {
-            unsigned char binarymd5[16] = {};
-            MD5 md5(d, d_len);
-            md5.getRawDigest(binarymd5);
-            if (0 == memcmp(digest, binarymd5, sizeof(binarymd5)))
-            {
-                assert(last_error() == kNoError);
-                return true;
-            }
-
-            last_error(kDigestVerifyFailed);
-            return false;
-        }
-
-        bool RequestMessageUnpacker::VerifyOpenSSLRSASign( const char* digest )
-        {
-            assert(npp_request_header_v2_.sign_method_ == kOpenSSLRSA0 || npp_request_header_v2_.sign_method_ == kOpenSSLRSA2);
-
-#ifdef H_NPP_PROVIDE_OPENSSL_RSA
-            OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_request_header_v2_.sign_key_no_);
-            if (!rsa)
-            {
-                last_error(kNotSupportOpenSSLRSAKeyNumber);
-                return false;
-            }
-
-            if (!rsa->verify(digest, kMD5HexLen, digest + kMD5HexLen, npp_request_header_v2_.asymmetric_encrypt_data_len_))
-            {
-                last_error(kOpenSSLRSAVerifyFailed);
-                return false;
-            }
-            assert(last_error() == kNoError);
-            return true;
-#else
-            last_error(kNotSupportOpenSSLRSA);
-            return false;
-#endif
-        }
-
-        bool RequestMessageUnpacker::VerifySimpleRSASign( const char* digest )
-        {
-            assert(npp_request_header_v2_.sign_method_ == kSimpleRSA);
-
-            SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_request_header_v2_.sign_key_no_);
-            if (!rsa)
-            {
-                last_error(kNotSupportSimpleRSAKeyNumber);
-                return false;
-            }
-
-            if (!rsa->verify(digest, kMD5HexLen, digest + kMD5HexLen, npp_request_header_v2_.asymmetric_encrypt_data_len_))
-            {
-                last_error(kSimpleRSAVerifyFailed);
-                return false;
-            }
+            assert(unpacked_data_.size() > 0);
 
             assert(last_error() == kNoError);
             return true;
         }
 
-        bool RequestMessageUnpacker::_AsymmetricDecrypt( const char* digest, size_t data_len, std::string& decrypted_data)
+        bool RequestMessageUnpacker::_AsymmetricDecrypt( const char* digest, size_t data_len, std::string& decrypted_data )
         {
             AsymmetricEncryptor* encryptor = AsymmetricEncryptorFactory::GetAsymmetricEncryptor(npp_request_header_v2_.asymmetric_encrypt_method(), npp_request_header_v2_.asymmetric_encrypt_key_no());
-
-            switch (npp_request_header_v2_.sign_method_)
+            size_t decrypted_data_len = encryptor->GetDecryptDataLength();
+            decrypted_data.resize(decrypted_data_len);
+            switch (npp_request_header_v2_.asymmetric_pub_priv_method())
             {
-            case kOpenSSLRSA0:
-            case kOpenSSLRSA2:
-                if (!VerifyOpenSSLRSASign(digest))
+            case kAsymmetricPublicEncrypt:
+                if (!encryptor->PrivateDecrypt(digest, data_len, &decrypted_data[0], &decrypted_data_len))
                 {
-                    last_error(kOpenSSLRSAVerifyFailed);
+                    last_error(kAsymmetricPrivateDecryptFailed);
+                    decrypted_data.resize(0);
                     return false;
                 }
                 break;
-            case kSimpleRSA:
-                if (!VerifySimpleRSASign(digest))
+            case kAsymmetricPrivateEncrypt:
+                if (!encryptor->PublicDecrypt(digest, data_len, &decrypted_data[0], &decrypted_data_len))
                 {
-                    last_error(kSimpleRSAVerifyFailed);
+                    last_error(kAsymmetricPublicDecryptFailed);
+                    decrypted_data.resize(0);
                     return false;
                 }
                 break;
             default:
-                assert(false || (fprintf(stderr, "Not supported sign method [%d]\n", npp_request_header_v2_.sign_method_)&& false) );
-                last_error(kNotSupportSignMethod);
-                break;
+                assert(false || (fprintf(stderr, "Not supported kNotSupportAsymmetricPublicPrivateMethod [%d]\n", npp_request_header_v2_.asymmetric_pub_priv_method())&& false) );
+                last_error(kNotSupportAsymmetricPublicPrivateMethod);
+                return false;
             }
 
+            if (decrypted_data.length() < decrypted_data_len)
+            {
+                decrypted_data.resize(decrypted_data_len);
+            }
+            
             assert(last_error() == kNoError);
             return true;
         }
 
-        bool RequestMessageUnpacker::DecryptData( const char* encrypt_data, size_t encrypt_data_len )
+        bool RequestMessageUnpacker::DecryptData( const char* encrypt_data, size_t encrypt_data_len, const std::string& symmetric_encrypt_key )
         {
             switch (npp_request_header_v2_.symmetric_encrypt_method())
             {
@@ -269,14 +203,8 @@ namespace npp
                     last_error(kNotSupportPlainData);
                     return false;
                 }
-                
-                {
-                    switch ()
-                    {
 
-                    }
-                }
-                unpacked_data_.assign(encrypt_data, encrypt_data_len);
+                return _Uncompress(encrypt_data, encrypt_data_len);
                 break;
             case kXorSymmetricEncrypt:
                 last_error(kNotSupportXorEncrypt);
@@ -284,15 +212,17 @@ namespace npp
                 break;
             case kIDEASymmetricEncrypt:
                 {
-                    IDEA* idea = s_pNppConfig->GetIDEA(npp_request_header_v2_.encrypt_key_no_);
-                    if (!idea)
+                    SymmetricEncryptor* e = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_request_header_v2_.symmetric_encrypt_method());
+                    if (!e)
                     {
                         last_error(kNotSupportIDEAKeyNumber);
                         return false;
                     }
+                    bool init_ok = e->Initialize((const unsigned char*)symmetric_encrypt_key.data(), symmetric_encrypt_key.size());
+                    assert(init_ok);
                     size_t len = encrypt_data_len;
                     unpacked_data_.resize(len);
-                    if (!idea->decrypt(encrypt_data, encrypt_data_len, IDEA::PaddingZero, &unpacked_data_[0], len))
+                    if (!e->Decrypt(encrypt_data, encrypt_data_len, &unpacked_data_[0], len))
                     {
                         last_error(kIDEADecryptFialed);
                         return false;
@@ -333,10 +263,29 @@ namespace npp
             
             return last_error() == kNoError && Data() != NULL;
         }
+
+        bool RequestMessageUnpacker::_Uncompress( const void* d, size_t d_len )
+        {
+            if (npp_request_header_v2_.compress_method() == kNoComress)
+            {
+                unpacked_data_.assign((const char*)d, d_len);
+                return true;
+            }
+            
+            Compressor* c = CompressorFactory::CreateCompressor(npp_request_header_v2_.compress_method());
+            ext::auto_delete<Compressor> c_auto_delete(c);
+            if (!c->Uncompress(d, d_len, unpacked_data_))
+            {
+                last_error(kUncompressError);
+                return false;
+            }
+            
+            return true;
+        }
     }
 }
 
-#endif
+
 
 
 

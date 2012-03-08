@@ -181,16 +181,17 @@ namespace npp
 
             Compressor* compress = CompressorFactory::CreateCompressor(this->npp_request_header_.compress_method());
             npp::ext::auto_delete< npp::Compressor > compress_auto_delete(compress);
+            std::string compress_data;
             if (compress)
             {
-                if (!compress->Compress(orignal_data, orignal_data_len))
+                if (!compress->Compress(orignal_data, orignal_data_len, compress_data))
                 {
                     last_error(kCompressError);
                     return 0;
                 }
 
-                data_to_be_encrypt = reinterpret_cast<const void*>(compress->Data());
-                data_to_be_encrypt_len = compress->Size();
+                data_to_be_encrypt = reinterpret_cast<const void*>(compress_data.data());
+                data_to_be_encrypt_len = compress_data.size();
             }
             else
             {
@@ -233,7 +234,7 @@ namespace npp
             case kAsymmetricPublicEncrypt:
                 {
                     size_t len = encryptor->GetEncryptDataLength();
-                    if (!encryptor->PublicEncrypt(orignal_data_len, orignal_data_len, write_pos, &len))
+                    if (!encryptor->PublicEncrypt(orignal_data, orignal_data_len, write_pos, &len))
                     {
                         last_error(kAsymmetricPublicEncryptFailed);
                         return 0;
@@ -243,7 +244,7 @@ namespace npp
             case kAsymmetricPrivateEncrypt:
                 {
                     size_t len = encryptor->GetEncryptDataLength();
-                    if (!encryptor->PrivateEncrypt(orignal_data_len, orignal_data_len, write_pos, &len))
+                    if (!encryptor->PrivateEncrypt(orignal_data, orignal_data_len, write_pos, &len))
                     {
                         last_error(kAsymmetricPrivateEncryptFailed);
                         return 0;
@@ -251,7 +252,7 @@ namespace npp
                     return len;
                 }
             default:
-                last_error(kNotSupportAsymmetricPublicPrivateMethod)
+                last_error(kNotSupportAsymmetricPublicPrivateMethod);
                 return 0;
             }
             return 0;

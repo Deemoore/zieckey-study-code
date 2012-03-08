@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\v2cpack__v2sunpack_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\zlib_test.cc"
 				>
 			</File>

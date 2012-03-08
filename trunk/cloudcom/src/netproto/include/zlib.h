@@ -31,9 +31,6 @@ namespace npp
         virtual bool Compress(const void* data, size_t data_len, std::string& uncompresed_data);
         virtual bool Uncompress(const void* data, size_t data_len, std::string& compresed_data);
 
-        virtual size_t Size() const;
-        virtual const uint8_t* Data() const;
-
         /*
         Compresses the source buffer into the destination buffer.  sourceLen is
         the byte length of the source buffer. Upon entry, destLen is the total

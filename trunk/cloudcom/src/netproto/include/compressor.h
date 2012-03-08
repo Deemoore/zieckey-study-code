@@ -13,9 +13,6 @@ namespace npp
 
         virtual bool Compress(const void* data, size_t data_len, std::string& uncompresed_data) = 0;
         virtual bool Uncompress(const void* data, size_t data_len, std::string& compresed_data) = 0;
-
-        virtual size_t Size() const = 0;
-        virtual const uint8_t* Data() const = 0;
     };
 
     class _EXPORT_NETPROTO CompressorFactory
