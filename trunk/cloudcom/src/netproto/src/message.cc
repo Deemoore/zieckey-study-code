@@ -63,7 +63,7 @@ namespace npp
     {
         memset(this, 0, sizeof(*this));
 
-        symmetric_encrypt_method_   = kIDEAEncrypt;
+        symmetric_encrypt_method_   = kIDEASymmetricEncrypt;
         asymmetric_encrypt_         = 0;
         compress_method_            = kZlibCompress;
 
@@ -76,7 +76,7 @@ namespace npp
                 asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1);
                 rsa = s_pNppConfig->GetOpenSSLRSA(asymmetric_encrypt_key_no_);
             } while(!rsa);
-            digest_sign_len_ = kMD5HexLen + rsa->getSignLength();
+            asymmetric_encrypt_data_len_ = rsa->getSignLength();
         }
         else if (s_pNppConfig->GetSimpleRSAKeyCount() > 0)
         {
@@ -87,7 +87,7 @@ namespace npp
                 asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1);
                 rsa = s_pNppConfig->GetSimpleRSA(asymmetric_encrypt_key_no_);
             } while(!rsa);
-            digest_sign_len_ = kMD5HexLen + rsa->getSignLength();
+            asymmetric_encrypt_data_len_ = rsa->getSignLength();
         }
         else
         {

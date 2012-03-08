@@ -135,11 +135,11 @@ namespace npp
                 npp_header->digest_sign_len_ = GetSignLength(*npp_header) + kMD5HexLen;
                 switch (npp_header->encrypt_method_)
                 {
-                case kNoEncrypt:
+                case kNoSymmetricEncrypt:
                     memcpy(write_pos + npp_header->digest_sign_len_, d, data_len);
                     packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + npp_header->digest_sign_len_ + data_len;
                     break;
-                case kIDEAEncrypt:
+                case kIDEASymmetricEncrypt:
 #if 1
                     {
                         IDEA* idea = s_pNppConfig->GetIDEA(npp_header->encrypt_key_no_);
@@ -282,7 +282,7 @@ namespace npp
             IDEA* idea = NULL;
             do 
             {
-                assert(npp_header.encrypt_method() == kIDEAEncrypt);
+                assert(npp_header.encrypt_method() == kIDEASymmetricEncrypt);
                 npp_header.set_encrypt_key_no(rand() % (s_pNppConfig->GetIDEAKeyCount() + 1) + 1);
                 idea = s_pNppConfig->GetIDEA(npp_header.encrypt_key_no());
             } while (!idea);
