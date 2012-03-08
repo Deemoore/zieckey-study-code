@@ -36,24 +36,18 @@ namespace npp
         return r;
     }
 
-    int ZLib::Compress( const void* source, size_t sourceLen, std::string& dest )
+    bool ZLib::Compress( const void* source, size_t sourceLen, std::string& dest )
     {
         size_t dest_len_inner = GetCompressBound(sourceLen);
         dest.resize(dest_len_inner);
         int r = Compress(source, sourceLen, &dest[0], &dest_len_inner);
         if (r != Z_OK)
         {
-            return r;
+            return false;
         }
         assert(dest_len_inner <= dest.size());
         dest.resize(dest_len_inner);
-        return r;
-    }
-
-    bool ZLib::Compress( const void* data, size_t data_len )
-    {
-        int r = Compress(data, data_len, data_);
-        return r == Z_OK;
+        return true;
     }
 
     size_t ZLib::GetCompressBound( size_t sourceLen )
@@ -77,47 +71,23 @@ namespace npp
         return r;
     }
 
-    int ZLib::Uncompress( const void* source, size_t sourceLen, std::string& dest )
+    bool ZLib::Uncompress( const void* source, size_t sourceLen, std::string& dest )
     {
         size_t dest_len_inner = GetUncompressBound(source);
         dest.resize(dest_len_inner);
         int r = Uncompress(source, sourceLen, &dest[0], &dest_len_inner);
         if (r != Z_OK)
         {
-            return r;
+            return false;
         }
         assert(dest_len_inner <= dest.size());
         dest.resize(dest_len_inner);
-        return r;
-    }
-
-    bool ZLib::Uncompress( const void* data, size_t data_len )
-    {
-        int r = Uncompress(data, data_len, this->data_);
         return r == Z_OK;
     }
-
 
     size_t ZLib::GetUncompressBound( const void* compressed_data )
     {
         return ntohl(*(uint32_t*)compressed_data);
-    }
-
-    const uint8_t* ZLib::Data() const
-    {
-        if (Size() == 0)
-        {
-            return NULL;
-        }
-        else
-        {
-            return (const uint8_t*)this->data_.data();
-        }
-    }
-
-    size_t ZLib::Size() const
-    {
-        return this->data_.size();
     }
 }
 

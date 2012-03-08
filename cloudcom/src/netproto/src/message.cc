@@ -48,12 +48,14 @@ namespace npp
         H_CASE_STRING(kNotSupportSignMethod);
         H_CASE_STRING(kNotSupportSymmetricEncryptMethod);
         H_CASE_STRING(kNotSupportAsymmetricPublicPrivateMethod);
+        H_CASE_STRING(kNotSuportCompressMethod);
         H_CASE_STRING(kNotSupportPlainData);
         H_CASE_STRING(kNotSupportXorEncrypt);
         H_CASE_STRING(kCompressError);
+        H_CASE_STRING(kUncompressError);
         H_CASE_STRING(kSymmetricEncyptFailed);
         H_CASE_STRING(kAsymmetricPublicEncryptFailed);
-        H_CASE_STRING(kAsymmetricPrivateEncryptFailed);
+        H_CASE_STRING(kAsymmetricPrivateDecryptFailed);
         H_CASE_STRING(kAsymmetricPrivateEncryptFailed);
         H_CASE_STRING(kAsymmetricPublicDecryptFailed);
         H_CASE_STRING_END;

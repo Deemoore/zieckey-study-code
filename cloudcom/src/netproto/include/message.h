@@ -90,16 +90,19 @@ namespace npp
             kNotSupportSignMethod,
             kNotSupportSymmetricEncryptMethod,
             kNotSupportAsymmetricPublicPrivateMethod,
+            kNotSuportCompressMethod,
 
             kNotSupportPlainData,
             kNotSupportXorEncrypt,
 
             kCompressError,
+            kUncompressError,
             kSymmetricEncyptFailed,
             kAsymmetricPublicEncryptFailed,
             kAsymmetricPrivateDecryptFailed,
             kAsymmetricPrivateEncryptFailed,
             kAsymmetricPublicDecryptFailed,
+
         };
 
         enum ResponseErrorCodeV2
