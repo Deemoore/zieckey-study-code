@@ -46,17 +46,26 @@ namespace npp
         H_CASE_STRING(kIDEAEncryptFialed);
         H_CASE_STRING(kIDEADecryptFialed);
         H_CASE_STRING(kNotSupportSignMethod);
-        H_CASE_STRING(kNotSupportEncryptMethod);
+        H_CASE_STRING(kNotSupportSymmetricEncryptMethod);
+        H_CASE_STRING(kNotSupportAsymmetricPublicPrivateMethod);
         H_CASE_STRING(kNotSupportPlainData);
         H_CASE_STRING(kNotSupportXorEncrypt);
+        H_CASE_STRING(kCompressError);
+        H_CASE_STRING(kSymmetricEncyptFailed);
+        H_CASE_STRING(kAsymmetricPublicEncryptFailed);
+        H_CASE_STRING(kAsymmetricPrivateEncryptFailed);
+        H_CASE_STRING(kAsymmetricPrivateEncryptFailed);
+        H_CASE_STRING(kAsymmetricPublicDecryptFailed);
         H_CASE_STRING_END;
     }
 
     Message::NppRequestHeaderV2::NppRequestHeaderV2()
     {
-        symmetric_encrypt_method_  = kIDEAEncrypt;
-        
-        compress_method_ = kZlibCompress;
+        memset(this, 0, sizeof(*this));
+
+        symmetric_encrypt_method_   = kIDEAEncrypt;
+        asymmetric_encrypt_         = 0;
+        compress_method_            = kZlibCompress;
 
         if (s_pNppConfig->GetOpenSSLRSAKeyCount() > 0)
         {
@@ -67,7 +76,7 @@ namespace npp
                 asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetOpenSSLRSAKeyCount() + 1);
                 rsa = s_pNppConfig->GetOpenSSLRSA(asymmetric_encrypt_key_no_);
             } while(!rsa);
-            digest_sign_len_ = 16 + rsa->getSignLength();
+            digest_sign_len_ = kMD5HexLen + rsa->getSignLength();
         }
         else if (s_pNppConfig->GetSimpleRSAKeyCount() > 0)
         {
@@ -78,7 +87,7 @@ namespace npp
                 asymmetric_encrypt_key_no_ = rand() % (s_pNppConfig->GetSimpleRSAKeyCount() + 1);
                 rsa = s_pNppConfig->GetSimpleRSA(asymmetric_encrypt_key_no_);
             } while(!rsa);
-            digest_sign_len_ = 16 + rsa->getSignLength();
+            digest_sign_len_ = kMD5HexLen + rsa->getSignLength();
         }
         else
         {

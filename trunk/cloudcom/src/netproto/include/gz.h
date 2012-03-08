@@ -1,5 +1,5 @@
-#ifndef _NETPROTO_ZLIB_WRAPPER_H_
-#define _NETPROTO_ZLIB_WRAPPER_H_
+#ifndef _NETPROTO_GZIP_WRAPPER_H_
+#define _NETPROTO_GZIP_WRAPPER_H_
 
 #include "netproto/include/inner_pre.h"
 
@@ -9,31 +9,15 @@
 
 namespace npp
 {
-
-#define ZZ_OK            0
-#define ZZ_STREAM_END    1
-#define ZZ_NEED_DICT     2
-#define ZZ_ERRNO        (-1)
-#define ZZ_STREAM_ERROR (-2)
-#define ZZ_DATA_ERROR   (-3)
-#define ZZ_MEM_ERROR    (-4)
-#define ZZ_BUF_ERROR    (-5)
-#define ZZ_VERSION_ERROR (-6)
-
-#define ZZ_BEST_SPEED             1
-#define ZZ_BEST_COMPRESSION       9
-
-    class _EXPORT_NETPROTO ZLib : public Compressor
-    {
+#if 0
+    /*
+    Well that's nice, but how do I make a gzip file in memory?
+        You can request that deflate write the gzip format instead of the zlib format using deflateInit2(). You can also request that inflate decode the gzip format using inflateInit2(). Read zlib.h for more details.
+        Note that you cannot specify special gzip header contents (e.g. a file name or modification date), nor will inflate tell you what was in the gzip header. If you need to customize the header or see what's in it, you can use the raw deflate and inflate operations and the crc32() function and roll your own gzip encoding and decoding. Read the gzip RFC 1952 for details of the header and trailer format. 
+        */
+    class _EXPORT_NETPROTO GZip : public Compressor
+    {//TODO need Add 4byte length of leading
     public:
-        ZLib() {}
-
-        virtual bool Compress(const void* data, size_t data_len);
-        virtual bool Uncompress(const void* data, size_t data_len);
-
-        virtual size_t Size() const;
-        virtual const uint8_t* Data() const;
-
         /*
         Compresses the source buffer into the destination buffer.  sourceLen is
         the byte length of the source buffer. Upon entry, destLen is the total
@@ -46,8 +30,8 @@ namespace npp
         enough memory, Z_BUF_ERROR if there was not enough room in the output
         buffer.
         */
-        static int Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen, int level = ZZ_BEST_SPEED);
-        static int Compress(const void* source, size_t sourceLen, std::string& dest);
+        static int Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
+        //static int Compress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetCompressBound() returns an upper bound on the compressed size after
@@ -55,7 +39,7 @@ namespace npp
         a Compress() call to allocate the destination buffer.
         */
         static size_t GetCompressBound(size_t sourceLen);
-        
+
         /*
         Decompresses the source buffer into the destination buffer.  sourceLen is
         the byte length of the source buffer. Upon entry, destLen is the total
@@ -70,7 +54,7 @@ namespace npp
         buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
         */
         static int Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
-        static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
+        //static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
         GetUncompressBound() returns an upper bound on the uncompressed size after
@@ -78,11 +62,9 @@ namespace npp
         a Uncompress() call to allocate the destination buffer.
         */
         static size_t GetUncompressBound(const void* compressed_data);
+    }; 
 
-
-    private:
-        std::string data_;
-    };
+#endif
 
 }//end of namespace npp
 #endif

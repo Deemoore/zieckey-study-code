@@ -11,7 +11,7 @@ namespace npp
     namespace v1
     {
 
-        const char* MessageUnpacker::Data() const
+        const uint8_t* MessageUnpacker::Data() const
         {
             if (Size() == 0)
             {
@@ -19,7 +19,7 @@ namespace npp
             }
             else
             {
-                return unpacked_data_.data();
+                return reinterpret_cast<const uint8_t*>(unpacked_data_.data());
             }
         }
 
@@ -134,7 +134,7 @@ namespace npp
                 return false;
             }
 
-            if (!rsa->verify(digest, MD5::MD5_RAW_BIN_DIGEST_LEN, digest + MD5::MD5_RAW_BIN_DIGEST_LEN, npp_header_.digest_sign_len_ - MD5::MD5_RAW_BIN_DIGEST_LEN))
+            if (!rsa->verify(digest, kMD5HexLen, digest + kMD5HexLen, npp_header_.digest_sign_len_ - kMD5HexLen))
             {
                 last_error(kOpenSSLRSAVerifyFailed);
                 return false;
@@ -158,7 +158,7 @@ namespace npp
                 return false;
             }
 
-            if (!rsa->verify(digest, MD5::MD5_RAW_BIN_DIGEST_LEN, digest + MD5::MD5_RAW_BIN_DIGEST_LEN, npp_header_.digest_sign_len_ - MD5::MD5_RAW_BIN_DIGEST_LEN))
+            if (!rsa->verify(digest, kMD5HexLen, digest + kMD5HexLen, npp_header_.digest_sign_len_ - kMD5HexLen))
             {
                 last_error(kSimpleRSAVerifyFailed);
                 return false;
@@ -170,7 +170,7 @@ namespace npp
 
         bool MessageUnpacker::VerifySign( const char* digest, size_t data_len)
         {
-            if (!VerifyDigest(digest, MD5::MD5_RAW_BIN_DIGEST_LEN, digest + npp_header_.digest_sign_len_, data_len))
+            if (!VerifyDigest(digest, kMD5HexLen, digest + npp_header_.digest_sign_len_, data_len))
             {
                 last_error(kDigestVerifyFailed);
                 return false;
@@ -243,7 +243,7 @@ namespace npp
                 }
                 break;
             default:
-                last_error(kNotSupportEncryptMethod);
+                last_error(kNotSupportSymmetricEncryptMethod);
                 return false;
                 break;
             }

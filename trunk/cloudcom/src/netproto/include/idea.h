@@ -8,13 +8,13 @@
 #ifdef H_NPP_PROVIDE_IDEA_ENCRYPT
 
 #include <idea/idea.h>
-
+#include "netproto/include/symmetric_encrypt.h"
 
 namespace npp
 {
 
 
-    class _EXPORT_NETPROTO IDEA
+    class _EXPORT_NETPROTO IDEA : public SymmetricEncryptor
     {
     public:
         enum Padding
@@ -73,6 +73,49 @@ namespace npp
         //! \return - bool
         bool decrypt( const void* szSource, const size_t nSourceLen, Padding padding, void* data_decrypted, size_t& data_decrypted_len);
         bool decrypt( const void* szSource, const size_t nSourceLen, Padding padding, MemoryDataStream& data_decrypted );
+
+        //Overridden from SymmetricEncryptor
+    public:
+        //! Initialize the encrypt
+        virtual bool Initialize(const unsigned char* key, size_t key_len);
+
+        //! Create a random key and stored the value to <code>key</code>
+        //! \paran[out] key - 
+        virtual std::string CreateRandomKey();
+
+        //! \brief 
+        //! \param[in] - const void * szSource
+        //! \param[in] - const size_t nSourceLen
+        //! \param[in] - Padding padding
+        //! \param[out] - void * data_encrypted
+        //! \param[in, out] - size_t & data_encrypted_len
+        //! \return - bool
+        virtual bool Encrypt( const void* szSource, const size_t nSourceLen, void* data_encrypted, size_t& data_encrypted_len);
+
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetEncryptDataLength(size_t nSourceLen);
+
+        //! \brief 
+        //! \param[in] - const void * szSource
+        //! \param[in] - const size_t nSourceLen
+        //! \param[in] - Padding padding
+        //! \param[out] - void * data_decrypted
+        //! \param[in,out] - size_t & data_decrypted_len
+        //! \return - bool
+        virtual bool Decrypt( const void* szSource, const size_t nSourceLen, void* data_decrypted, size_t& data_decrypted_len);
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetDecryptDataLength(const void* encrypted_data, size_t encrypted_data_len);
+
+        //! Return the encrypt key length
+        virtual std::string GetEncryptKey() { return m_original_key;}
 
     public:
         //! \brief IDEA encrypt

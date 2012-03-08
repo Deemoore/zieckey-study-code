@@ -453,7 +453,7 @@ void test_pack_unpack_1( bool sign_pack, bool verify_sign )
     npp::v1::MessageUnpacker unpacker;
     H_TEST_ASSERT(unpacker.Unpack(packed_data, packed_data_len));
     H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker.Size());
-    H_TEST_ASSERT(strncmp(raw_data, unpacker.Data(), raw_data_len) == 0);
+    H_TEST_ASSERT(memcmp(raw_data, unpacker.Data(), raw_data_len) == 0);
 }
 
 void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
@@ -512,7 +512,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
                 {
                     H_TEST_ASSERT(H_ALIGN(raw_data_len, 8) == unpacker1.Size());
                 }
-                H_TEST_ASSERT(strncmp(raw_data, unpacker1.Data(), raw_data_len) == 0);
+                H_TEST_ASSERT(memcmp(raw_data, unpacker1.Data(), raw_data_len) == 0);
                 H_TEST_ASSERT(unpacker1.net_header().message_id_ == net_header.message_id_);
                 H_TEST_ASSERT(unpacker1.npp_header().encrypt_key_no() + 1 == npp_header.encrypt_key_no() || unpacker1.npp_header().encrypt_key_no() == npp_header.encrypt_key_no() + 1);
                 H_TEST_ASSERT(unpacker1.npp_header().sign_key_no() + 1 == npp_header.sign_key_no() || unpacker1.npp_header().sign_key_no() == npp_header.sign_key_no() + 1);
@@ -688,7 +688,7 @@ namespace
         time_t start = time(NULL);
         for (size_t i = 0; i < test_effective_count; ++i)
         {
-            ret = rsa.publicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
+            ret = rsa.PublicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
             H_TEST_ASSERT(ret);
         }
         time_t end = time(NULL);
@@ -700,7 +700,7 @@ namespace
         for (size_t i = 0; i < test_effective_count; ++i)
         {
             plain_data_len = sizeof(plain_data);
-            ret = rsa.privateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
+            ret = rsa.PrivateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
             H_TEST_ASSERT(ret);
         }
         end = time(NULL);
