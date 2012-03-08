@@ -8,21 +8,6 @@
 #include "test_server_rsa_key.h"
 #include "idea_key.h"
 
-
-namespace npp { namespace ext {
-    template<> inline
-        auto_delete< npp::NppConfig >::~auto_delete()
-    {
-        if ( ptr_ref_to_be_deleted_ )
-        {
-            delete ptr_ref_to_be_deleted_;
-            ptr_ref_to_be_deleted_ = NULL;
-        }
-    }
-}
-}
-
-
 namespace
 {
     static npp::NppConfig* CreateNppConfig(bool support_plain, bool sign_pack, bool verify_sign)

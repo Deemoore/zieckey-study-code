@@ -27,6 +27,11 @@ namespace npp
         return true;
     }
 
+    bool IDEA::Initialize( const unsigned char* key, size_t key_len )
+    {
+        return initialize(key);
+    }
+
     bool IDEA::encrypt( const void* szSource, const size_t nSourceLen, MemoryDataStream& dataEncrypted )
     {
         return IDEA::encrypt((const unsigned char*)szSource, (const size_t)nSourceLen, m_encrypt_key, dataEncrypted);
@@ -372,6 +377,11 @@ namespace npp
         out_data->data_len = aligned_len;
     }
 
+    bool IDEA::Encrypt( const void* szSource, const size_t nSourceLen, void* data_encrypted, size_t& data_encrypted_len )
+    {
+        return encrypt(szSource, nSourceLen, PaddingPKCS7, data_encrypted, data_encrypted_len);
+    }
+
 
     void IDEA::decrypt( const unsigned char* in_buf, const size_t in_buf_len, const IDEA_KEY_SCHEDULE* key, mem_data_t* out_data )
     {
@@ -402,6 +412,41 @@ namespace npp
         * we just know it is a multiple of 8
         */
         out_data->data_len = in_buf_len;
+    }
+
+    bool IDEA::Decrypt( const void* szSource, const size_t nSourceLen, void* data_decrypted, size_t& data_decrypted_len )
+    {
+        return decrypt(szSource, nSourceLen, PaddingPKCS7, data_decrypted, data_decrypted_len);
+    }
+
+    std::string IDEA::CreateRandomKey()
+    {
+        std::string key;
+        static int srand_start = 0;
+        if (srand_start == 0)
+        {
+            srand(time(NULL));
+            srand_start++;
+        }
+        
+        size_t key_len = 16;
+        key.resize(key_len);
+        for (size_t i = 0; i < key_len; ++i)
+        {
+            key[i] = (char)(rand() % 256);
+        }
+
+        return key;
+    }
+
+    size_t IDEA::GetEncryptDataLength( size_t nSourceLen )
+    {
+        return IDEA::getEncryptDataLen(PaddingPKCS7, nSourceLen);
+    }
+
+    size_t IDEA::GetDecryptDataLength( const void* encrypted_data, size_t encrypted_data_len )
+    {
+        return encrypted_data_len;
     }
 
 } // end of namespace ext

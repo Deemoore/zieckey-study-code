@@ -275,6 +275,14 @@
 						RelativePath=".\v2c_response_unpacker.cc"
 						>
 						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -295,6 +303,14 @@
 						RelativePath=".\v2s_request_unpacker.cc"
 						>
 						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="Release|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -310,6 +326,14 @@
 					<File
 						RelativePath=".\v2s_response_packer.cc"
 						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							ExcludedFromBuild="true"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+							/>
+						</FileConfiguration>
 						<FileConfiguration
 							Name="Release|Win32"
 							ExcludedFromBuild="true"
@@ -329,14 +353,6 @@
 				Name="common"
 				>
 				<File
-					RelativePath=".\idea.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\include\idea.h"
-					>
-				</File>
-				<File
 					RelativePath=".\message.cc"
 					>
 				</File>
@@ -352,26 +368,78 @@
 					RelativePath="..\include\npp_config.h"
 					>
 				</File>
-				<File
-					RelativePath=".\openssl_rsa.cc"
+				<Filter
+					Name="symmetric_encrypt"
 					>
-				</File>
-				<File
-					RelativePath="..\include\openssl_rsa.h"
+					<File
+						RelativePath=".\idea.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\idea.h"
+						>
+					</File>
+					<File
+						RelativePath=".\symmetric_encrypt.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\symmetric_encrypt.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="asymmetric_encrypt"
 					>
-				</File>
-				<File
-					RelativePath="..\include\slrsa.h"
+					<File
+						RelativePath=".\asymmetric_encrypt.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\asymmetric_encrypt.h"
+						>
+					</File>
+					<File
+						RelativePath=".\openssl_rsa.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\openssl_rsa.h"
+						>
+					</File>
+					<File
+						RelativePath="..\include\slrsa.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="compress"
 					>
-				</File>
-				<File
-					RelativePath=".\zlib.cc"
-					>
-				</File>
-				<File
-					RelativePath="..\include\zlib.h"
-					>
-				</File>
+					<File
+						RelativePath=".\compressor.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\compressor.h"
+						>
+					</File>
+					<File
+						RelativePath=".\gz.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\gz.h"
+						>
+					</File>
+					<File
+						RelativePath=".\zlib.cc"
+						>
+					</File>
+					<File
+						RelativePath="..\include\zlib.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="v1"

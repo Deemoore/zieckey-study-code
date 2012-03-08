@@ -18,8 +18,8 @@ namespace npp
         public:
             bool Unpack(const void* data, size_t data_len);
 
-            //! Get the unpacked data and size if packing successfully
-            const char* Data() const;
+            //! Get the unpacked data and size if unpacking successfully
+            const uint8_t* Data() const;
             size_t Size() const;
 
         private:

@@ -6,13 +6,13 @@
 #include "netproto/include/inner_pre.h"
 
 #ifdef H_NPP_PROVIDE_OPENSSL_RSA
-
+#include "netproto/include/asymmetric_encrypt.h"
 #include <openssl/rsa.h>
 #include <openssl/engine.h>
 
 namespace npp
 {
-    class _EXPORT_NETPROTO OpenSSLRSA
+    class _EXPORT_NETPROTO OpenSSLRSA : public AsymmetricEncryptor
     {
     public:
 
@@ -28,6 +28,8 @@ namespace npp
         ~OpenSSLRSA();
 
         //! \brief Initialize the rsa
+        //! \warning We support the private_key/public_key pair matches or not matches.
+        //!     But the private_key and public_key's generator bits MUST BE the same
         //! \param[in] - const unsigned char * private_key
         //! \param[in] - const size_t private_key_len
         //! \return - bool return true if successfully
@@ -78,11 +80,9 @@ namespace npp
             return (size_t)RSA_size(m_private_rsa);
         }
 
-        bool publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
-        bool publicEncrypt(const void* m, const size_t m_len, std::string& sigret);
+        bool PublicEncrypt(const void* m, const size_t m_len, std::string& sigret);
 
-        bool privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
-        bool privateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
+        bool PrivateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
 
 
         //! \brief Generate a pair of private key and public key
@@ -102,6 +102,34 @@ namespace npp
 //             std::string& publickey, 
 //             std::string& privatekey);
 
+        //Overridden
+    public:
+        //! \brief public encrypt method
+        //! \param[in] - const void * m
+        //! \param[in] - const size_t m_len
+        //! \param[out] - unsigned char * sigret
+        //! \param[in,out] - size_t * siglen
+        //! \return - bool
+        virtual bool PublicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
+
+        virtual bool PrivateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
+
+        virtual bool PrivateEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
+
+        virtual bool PublicDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
+
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetEncryptDataLength() { return (size_t)RSA_size(m_public_rsa); }
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetDecryptDataLength(){ return (size_t)RSA_size(m_public_rsa); }
 
 
     private:

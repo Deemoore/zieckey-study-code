@@ -25,6 +25,8 @@ namespace npp
     class _EXPORT_NETPROTO Message
     {
     public:
+        enum{ kMD5HexLen = 16 };
+
         enum ProtoVersion
         {
             kProtoVersion1 = 1,
@@ -44,6 +46,12 @@ namespace npp
             kSimpleRSA   = 1, //! Simple RSA
             kOpenSSLRSA2 = 2, //! OpenSSL RSA, the same as kOpenSSLRSA0
             kSignMethodNum
+        };
+
+        enum AsymmetricPublicPrivateMethod
+        {
+            kAsymmetricPublicEncrypt   = 0,
+            kAsymmetricPrivateEncrypt  = 1,
         };
 
         enum CompressMethod
@@ -80,10 +88,18 @@ namespace npp
             kIDEADecryptFialed,
 
             kNotSupportSignMethod,
-            kNotSupportEncryptMethod,
+            kNotSupportSymmetricEncryptMethod,
+            kNotSupportAsymmetricPublicPrivateMethod,
 
             kNotSupportPlainData,
             kNotSupportXorEncrypt,
+
+            kCompressError,
+            kSymmetricEncyptFailed,
+            kAsymmetricPublicEncryptFailed,
+            kAsymmetricPrivateDecryptFailed,
+            kAsymmetricPrivateEncryptFailed,
+            kAsymmetricPublicDecryptFailed,
         };
 
         enum ResponseErrorCodeV2
@@ -183,23 +199,38 @@ namespace npp
         struct NppRequestHeaderV2
         {
             uint8_t  symmetric_encrypt_method_;  //! the symmetric encrypt method, 0:no encrypt_; 1:Reserved; 2:idea 
-            uint8_t  asymmetric_encrypt_method_; //! the asymmetric encrypt method, 0:OpenSSL RSA; 1:Simple RSA; 2:Reserved 
+            union
+            {
+                struct 
+                {
+                    uint8_t asymmetric_encrypt_method_:6; //! the asymmetric encrypt method, 0:OpenSSL RSA; 1:Simple RSA; 2:Reserved 
+                    uint8_t asymmetric_pub_priv_method_:2; //! 
+                };
+                uint8_t asymmetric_encrypt_;
+            };
             uint8_t  asymmetric_encrypt_key_no_; //! the asymmetric encrypt key number
             uint8_t  compress_method_;           //! The compress algorithm ; 0£ºno compress; 1£ºzlib
             uint16_t digest_sign_len_;           //! The digest length and the encrypted data of symmetric_encrypt_key length
 
             NppRequestHeaderV2();
 
-            uint8_t symmetric_encrypt_method() const { return symmetric_encrypt_method_; }
-            void set_ymmetric_encrypt_method(uint8_t val) { symmetric_encrypt_method_ = val; }
-            uint8_t asymmetric_encrypt_method() const { return asymmetric_encrypt_method_; }
-            void set_asymmetric_encrypt_method(uint8_t val) { asymmetric_encrypt_method_ = val; }
-            uint8_t asymmetric_encrypt_key_no() const { return asymmetric_encrypt_key_no_; }
-            void set_asymmetric_encrypt_key_no(uint8_t val) { asymmetric_encrypt_key_no_ = val; }
-            uint8_t compress_method() const { return compress_method_; }
-            void set_compress_method(uint8_t val) { compress_method_ = val; }
+            uint8_t  symmetric_encrypt_method() const { return symmetric_encrypt_method_; }
+            void     set_symmetric_encrypt_method(uint8_t val) { symmetric_encrypt_method_ = val; }
+
+            uint8_t  asymmetric_encrypt_method() const { return asymmetric_encrypt_method_; }
+            void     set_asymmetric_encrypt_method(uint8_t val) { asymmetric_encrypt_method_ = val; }
+
+            uint8_t  asymmetric_pub_priv_method() const { return asymmetric_pub_priv_method_; }
+            void     set_asymmetric_pub_priv_method(uint8_t val) { asymmetric_pub_priv_method_ = val; }
+
+            uint8_t  asymmetric_encrypt_key_no() const { return asymmetric_encrypt_key_no_; }
+            void     set_asymmetric_encrypt_key_no(uint8_t val) { asymmetric_encrypt_key_no_ = val; }
+
+            uint8_t  compress_method() const { return compress_method_; }
+            void     set_compress_method(uint8_t val) { compress_method_ = val; }
+
             uint16_t digest_sign_len() const { return digest_sign_len_; }
-            void set_igest_sign_len(uint16_t val) { digest_sign_len_ = val; }
+            void     set_igest_sign_len(uint16_t val) { digest_sign_len_ = val; }
         };
 
         struct NppResponseHeaderV2
@@ -209,11 +240,11 @@ namespace npp
             uint8_t md5_[16];
 
             uint8_t compress_method() const { return compress_method_; }
-            void set_compress_method(uint8_t val) { compress_method_ = val; }
+            void    set_compress_method(uint8_t val) { compress_method_ = val; }
             uint8_t error_code() const { return error_code_; }
-            void set_error_code(uint8_t val) { error_code_ = val; }
+            void    set_error_code(uint8_t val) { error_code_ = val; }
             const uint8_t* md5() const { return md5_; }
-            void set_md5(uint8_t* val, size_t len = 16) { memcpy(md5_, val, len <= sizeof(md5_) ? len : sizeof(md5_)); }
+            void    set_md5(uint8_t* val, size_t len = 16) { memcpy(md5_, val, len <= sizeof(md5_) ? len : sizeof(md5_)); }
         };
 #pragma pack(pop)
 

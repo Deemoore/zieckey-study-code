@@ -25,7 +25,7 @@ namespace npp
             {
                 if (message_unpacker_->net_header().version() == kProtoVersion1)
                 {
-                    return sizeof(NetHeader) + sizeof(NppHeaderV1) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
+                    return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
                 }
                 else
                 {
@@ -35,7 +35,7 @@ namespace npp
             }
 
             //version 1
-            return sizeof(NetHeader) + sizeof(NppHeaderV1) + MD5::MD5_RAW_BIN_DIGEST_LEN + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
+            return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
 
             //TODO version 2
         }
@@ -43,7 +43,7 @@ namespace npp
         size_t MessagePacker::GetPackedTotalDataSize(size_t data_len)
         {
             //TODO need more process GetSignLength(npp_header) instead of 128
-            return sizeof(NetHeader) + sizeof(NppHeaderV1) + MD5::MD5_RAW_BIN_DIGEST_LEN + 128 + H_ALIGN(data_len + 8, 8);
+            return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + 128 + H_ALIGN(data_len + 8, 8);
         }
 
         bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
@@ -132,7 +132,7 @@ namespace npp
             //---------------------------------------------------------
             //Step 2: Fill the idea encrypt data
             {
-                npp_header->digest_sign_len_ = GetSignLength(*npp_header) + MD5::MD5_RAW_BIN_DIGEST_LEN;
+                npp_header->digest_sign_len_ = GetSignLength(*npp_header) + kMD5HexLen;
                 switch (npp_header->encrypt_method_)
                 {
                 case kNoEncrypt:
@@ -178,7 +178,7 @@ namespace npp
 #endif
                 default:
                     assert(false && "Not Supported!");
-                    last_error(kNotSupportEncryptMethod);
+                    last_error(kNotSupportSymmetricEncryptMethod);
                     return false;
                     break;
                 }
@@ -187,7 +187,7 @@ namespace npp
             net_header->data_len_   = packed_data_buf_len - sizeof(*net_header);
             net_header->data_len_   = htons(net_header->data_len_);
             net_header->message_id_ = htons(net_header->message_id_);
-            net_header->reserve_   = htons(net_header->reserve_);
+            net_header->reserve_    = htons(net_header->reserve_);
 
             if (!s_pNppConfig->sign_data())
             {
@@ -200,7 +200,7 @@ namespace npp
             MD5 md5(write_pos + npp_header->digest_sign_len_, 
                 packed_data_buf_len - sizeof(*net_header) - sizeof(*npp_header) - npp_header->digest_sign_len_);
             md5.getRawDigest(write_pos);
-            write_pos += MD5::MD5_RAW_BIN_DIGEST_LEN;
+            write_pos += kMD5HexLen;
 
             //---------------------------------------------------------
             //Step 4: Fill the digest Sign
@@ -213,7 +213,7 @@ namespace npp
                     return false;
                 }
                 size_t siglen = rsa->getSignLength();
-                if (!rsa->sign(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, &siglen))
+                if (!rsa->sign(write_pos - kMD5HexLen, kMD5HexLen, write_pos, &siglen))
                 {
                     last_error(kSimpleRSASignFailed);
                     return false;
@@ -229,7 +229,7 @@ namespace npp
                     return false;
                 }
                 size_t siglen = rsa->getSignLength();
-                if (!rsa->sign(write_pos - MD5::MD5_RAW_BIN_DIGEST_LEN, MD5::MD5_RAW_BIN_DIGEST_LEN, write_pos, &siglen))
+                if (!rsa->sign(write_pos - kMD5HexLen, kMD5HexLen, write_pos, &siglen))
                 {
                     last_error(kOpenSSLRSASignFailed);
                     return false;

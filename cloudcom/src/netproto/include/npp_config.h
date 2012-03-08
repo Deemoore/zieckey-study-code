@@ -70,13 +70,13 @@ namespace npp
         void set_verify_data(bool verify_data);
 
 #ifdef H_NPP_PROVIDE_OPENSSL_RSA
-        OpenSSLRSA* GetOpenSSLRSA(int index);
+        OpenSSLRSA* GetOpenSSLRSA(int key_no);
         size_t GetOpenSSLRSAKeyCount() const;
 #endif
 
-        SimpleRSA* GetSimpleRSA(int index);
+        SimpleRSA* GetSimpleRSA(int key_no);
 
-        IDEA* GetIDEA(int index);
+        IDEA* GetIDEA(int key_no);
 
 
         size_t GetSimpleRSAKeyCount() const;
@@ -143,6 +143,21 @@ namespace npp
         verify_data_ = verify;
     }
 }//end of namespace npp
+
+
+namespace npp { 
+    namespace ext {
+        template<> inline
+            auto_delete< npp::NppConfig >::~auto_delete()
+        {
+            if ( ptr_ref_to_be_deleted_ )
+            {
+                delete ptr_ref_to_be_deleted_;
+                ptr_ref_to_be_deleted_ = NULL;
+            }
+        }
+    }
+}
 
 
 #endif

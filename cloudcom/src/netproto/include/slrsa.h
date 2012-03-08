@@ -4,11 +4,12 @@
 
 #include "netproto/include/config.h"
 #include "netproto/include/inner_pre.h"
+#include "netproto/include/asymmetric_encrypt.h"
 #include "slrsa/slrsa.h"
 
 namespace npp
 {
-    class _EXPORT_NETPROTO SimpleRSA
+    class _EXPORT_NETPROTO SimpleRSA : public AsymmetricEncryptor
     {
     public:
         SimpleRSA(){}
@@ -59,11 +60,38 @@ namespace npp
         //! \param[out] - unsigned char * sigret
         //! \param[in,out] - size_t * siglen
         //! \return - bool
-        bool publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
-        bool publicEncrypt(const void* m, const size_t m_len, std::string& sigret);
+        bool PublicEncrypt(const void* m, const size_t m_len, std::string& sigret);
 
-        bool privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
-        bool privateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
+        bool PrivateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data);
+
+        //Overridden from AsymmetricEncryptor
+    public:
+        //! \brief public encrypt method
+        //! \param[in] - const void * m
+        //! \param[in] - const size_t m_len
+        //! \param[out] - unsigned char * sigret
+        //! \param[in,out] - size_t * siglen
+        //! \return - bool
+        virtual bool PublicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
+
+        virtual bool PrivateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
+
+        virtual bool PrivateEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen);
+
+        virtual bool PublicDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len);
+
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetEncryptDataLength() { return getSignLength(); }
+
+        //! \brief Get the encrypt data length which will be allocated for storing the encrypted data
+        //! \param[in] - Padding padding
+        //! \param[in] - size_t nSourceLen
+        //! \return - size_t
+        virtual size_t GetDecryptDataLength() { return getSignLength(); }
 
     private:
         std::string private_key_;
@@ -119,7 +147,7 @@ namespace npp
         return 128; 
     }
 
-    inline bool SimpleRSA::publicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen)
+    inline bool SimpleRSA::PublicEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen)
     {
         unsigned int len = *siglen;
         bool ret = 0 != slrsa_public_encrypt((const unsigned char *)m, m_len, (const unsigned char *)public_key_.c_str(), (unsigned char *)sigret, &len);
@@ -127,11 +155,11 @@ namespace npp
         return ret;
     }
 
-    inline bool SimpleRSA::publicEncrypt(const void* m, const size_t m_len, std::string& sigret)
+    inline bool SimpleRSA::PublicEncrypt(const void* m, const size_t m_len, std::string& sigret)
     {
         unsigned char buf[512] = {};
         size_t buf_len = sizeof(buf);
-        bool ok = publicEncrypt(m, m_len, buf, &buf_len);
+        bool ok = PublicEncrypt(m, m_len, buf, &buf_len);
         if (ok)
         {
             assert(buf_len == getSignLength());
@@ -141,7 +169,7 @@ namespace npp
         return false;
     }
 
-    inline bool SimpleRSA::privateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len)
+    inline bool SimpleRSA::PrivateDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len)
     {
         unsigned int len = *plain_data_len;
         bool ret = 0 != slrsa_private_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)private_key_.c_str(), (unsigned char *)plain_data, &len);
@@ -149,11 +177,11 @@ namespace npp
         return ret;
     }
 
-    inline bool SimpleRSA::privateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data)
+    inline bool SimpleRSA::PrivateDecrypt(const void* sig, const size_t sig_len, std::string& plain_data)
     {
         unsigned char buf[512] = {};
         size_t buf_len = sizeof(buf);
-        bool ok = privateDecrypt(sig, sig_len, buf, &buf_len);
+        bool ok = PrivateDecrypt(sig, sig_len, buf, &buf_len);
         if (ok)
         {
             assert(buf_len == getSignLength());
@@ -161,6 +189,23 @@ namespace npp
             return ok;
         }
         return false;
+    }
+
+
+    inline bool SimpleRSA::PrivateEncrypt(const void* m, const size_t m_len, void* sigret, size_t* siglen)
+    {
+        unsigned int len = *siglen;
+        bool ret = 0 != slrsa_private_encrypt((const unsigned char *)m, m_len, (const unsigned char *)private_key_.c_str(), (unsigned char *)sigret, &len);
+        *siglen = len;
+        return ret;
+    }
+
+    inline bool SimpleRSA::PublicDecrypt(const void* sig, const size_t sig_len, void* plain_data, size_t* plain_data_len)
+    {
+        unsigned int len = *plain_data_len;
+        bool ret = 0 != slrsa_public_decrypt((const unsigned char *)sig, sig_len, (const unsigned char *)public_key_.c_str(), (unsigned char *)plain_data, &len);
+        *plain_data_len = len;
+        return ret;
     }
 } //end of namespace npp
 

@@ -42,18 +42,18 @@ namespace
 
         unsigned char sigret[2048] = {0};
         size_t siglen = 0;
-        bool ret = rsa.publicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
+        bool ret = rsa.PublicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
         H_TEST_ASSERT(!ret);
         siglen = sizeof(sigret);
-        ret = rsa.publicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
+        ret = rsa.PublicEncrypt((unsigned char*)data, data_len, sigret, &siglen );
         H_TEST_ASSERT(ret);
 
         unsigned char plain_data[2048] = {0};
         size_t plain_data_len = 0;
-        ret = rsa.privateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
+        ret = rsa.PrivateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
         H_TEST_ASSERT(!ret);
         plain_data_len = sizeof(plain_data);
-        ret = rsa.privateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
+        ret = rsa.PrivateDecrypt((unsigned char*)sigret, siglen, plain_data, &plain_data_len );
         H_TEST_ASSERT(ret);
         H_TEST_ASSERT(memcmp(data, plain_data, data_len) == 0);
     }
