@@ -208,6 +208,10 @@
 				RelativePath=".\trivial_test.cc"
 				>
 			</File>
+			<File
+				RelativePath=".\virturl_function_override_test.cc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
