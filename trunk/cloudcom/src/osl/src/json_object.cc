@@ -1357,7 +1357,6 @@ namespace json
                 fprintf( stderr, "Deserialize binary data error!" );
                 return false;
             }
-
         }
 
         return true;
@@ -1446,7 +1445,10 @@ namespace json
         osl::u8 type = 0xff;
         file >> type;
         assert( type == OT_OBJECT );
-        val.loadFrom( file );
+        if (!val.loadFrom( file ))
+        {
+            fprintf(stderr, "load data failed from memory data stream!\n");
+        }
         return file;
     }
 

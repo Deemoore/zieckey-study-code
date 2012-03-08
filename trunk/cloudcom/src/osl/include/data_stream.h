@@ -53,7 +53,8 @@ namespace osl
 
 
         //! Sets stats of the file.
-        void setStates( unsigned int nBits );;
+        //! \param nBits - S_WRITE_BAD or S_READ_BAD or 0 or S_WRITE_BAD|S_READ_BAD
+        void setStates( unsigned int nBits );
 
         //! \warning deprecated interface, please use 
         //!     <code>readRawFile(const std::string& strFileName)</code> instead

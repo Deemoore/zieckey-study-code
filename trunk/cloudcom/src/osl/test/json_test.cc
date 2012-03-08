@@ -65,13 +65,15 @@ TEST_UNIT(json_unicode_test_1)
 }
 
 
-TEST_UNIT(json_unicode_test_2)
+TEST_UNIT(json_unicode_and_binary_test_2)
 {
     const char* path = "test_data/json/unicode.json.txt";
     std::fstream fs(path);
     H_TEST_ASSERT(fs.good());
     H_TEST_ASSERT(!fs.fail());
     std::string line;
+    size_t text_length = 0;
+    size_t binary_length = 0;
     while (std::getline(fs, line).good())
     {
         json::JSONObject jo0;
@@ -89,7 +91,18 @@ TEST_UNIT(json_unicode_test_2)
         H_TEST_ASSERT(jo2.equals(jo0));
         H_TEST_ASSERT(serialize1 == serialize2);
         H_TEST_ASSERT(serialize1 == serialize0);
+        
+        text_length += serialize0.length();
+
+        osl::MemoryDataStream buf;
+        buf << jo2;
+        binary_length += buf.size();
+        json::JSONObject jo3;
+        buf >> jo3;
+        H_TEST_ASSERT(jo3.equals(jo2));
     }
+
+    //std::cout << "\nbinary_length/text_length=" << double(binary_length)/double(text_length) << std::endl; //0.889
 }
 
 TEST_UNIT(json_gbk_chinese_test_3)

@@ -714,14 +714,15 @@ namespace json
 
         for ( osl::u32 i = 0; i < nSize; i++ )
         {
-            Object::deserializeOneObject( file, pObject );
-
-            if ( pObject )
+            if ( Object::deserializeOneObject( file, pObject ))
             {
-                //file >> *pObject;
-                //pObject->loadFrom( file );
+                assert(pObject);
                 put( pObject );
                 pObject = NULL;
+            }
+            else
+            {
+                return false;
             }
         }
 
