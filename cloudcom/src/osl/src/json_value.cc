@@ -57,15 +57,13 @@ namespace json
                 pObject = H_NEW JSONNull;
                 break;
             default:
-                assert( 0 );
+                assert( false );
                 return false;
         }
 
         if ( pObject )
         {
-            //file >> *pObject;
-            pObject->loadFrom( file );
-            return true;
+            return pObject->loadFrom( file );
         }
 
         return false;
