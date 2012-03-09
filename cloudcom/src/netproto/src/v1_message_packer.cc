@@ -290,7 +290,7 @@ namespace npp
             bool found = false;
             do 
             {
-                npp_header.set_sign_method(rand() % kSignMethodNum);
+                npp_header.set_sign_method(rand() % kAsymmetricEncryptMethodNum);
                 switch(npp_header.sign_method())
                 {
 #ifdef H_NPP_PROVIDE_OPENSSL_RSA

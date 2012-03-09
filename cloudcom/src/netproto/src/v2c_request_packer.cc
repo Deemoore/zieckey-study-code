@@ -13,7 +13,7 @@ namespace npp
 {
     namespace v2c
     {
-        uint16_t RequestMessage::message_id_ = 0;
+        uint16_t RequestMessage::message_id_ = 1;
         RequestMessage::RequestMessage()
             : symmetric_encryptor_(NULL)
             , compressor_(NULL)
@@ -60,7 +60,7 @@ namespace npp
             }
 
             //for the sake of SetAsymmetricEncryptMethod or SetAsymmetricEncryptKeyNo has been called by App layer
-            ErrorCode ec;
+            ErrorCode ec = kNoError;
             this->npp_request_header_.set_asymmetric_encrypt_data_len(this->npp_request_header_.GetSignLength(ec));
             if (this->npp_request_header_.asymmetric_encrypt_data_len() == 0)
             {
@@ -90,7 +90,6 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 3: write symmetric encrypt data
-            assert(npp_header->asymmetric_encrypt_data_len() == GetSignLength());
             uint8_t* encrypt_data_begin = write_pos + npp_header->asymmetric_encrypt_data_len();
             size_t encrypt_data_len = SymmetricEncryptAndWrite(npp_header, data, data_len, encrypt_data_begin);
             if (0 == encrypt_data_len)
@@ -103,16 +102,14 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 4: write the SymmetricEncryptKey's encrypt data
-            std::string symmetric_encrypt_key = symmetric_encryptor_->GetEncryptKey();
-            size_t sign_len = AsymmetricEncryptAndWrite(symmetric_encrypt_key.data(), symmetric_encrypt_key.size(), write_pos);
-            if (0 == sign_len)
+            size_t sign_len = AsymmetricEncryptAndWrite(write_pos);
+            if (0 == sign_len && last_error() != kNoError)
             {
                 //error code has been set by AsymmetricEncryptAndWrite
                 return false;
             }
-            
 
-            assert(net_header->data_len() + net_header->header_len_ <= packed_data_.size());
+            assert((size_t)(net_header->data_len() + net_header->header_len_) <= packed_data_.size());
             packed_data_.resize(net_header->data_len() + net_header->header_len_);
 
             //---------------------------------------------------------
@@ -130,7 +127,7 @@ namespace npp
 
         size_t RequestMessage::GetPackedTotalDataSize( size_t data_len )
         {
-            ErrorCode ec;
+            ErrorCode ec = kNoError;
             size_t ret = sizeof(NetHeader) + sizeof(NppRequestHeaderV2) + kMD5HexLen + npp_request_header_.GetSignLength(ec) + npp_request_header_.GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
@@ -226,11 +223,11 @@ namespace npp
             }
             
             symmetric_encryptor_ = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_header->symmetric_encrypt_method());
-            std::string key = symmetric_encryptor_->CreateRandomKey();
-            bool init_ok = symmetric_encryptor_->Initialize(reinterpret_cast<const unsigned char*>(key.data()), key.size());
-            assert(init_ok);
             if (symmetric_encryptor_)
             {
+                std::string key = symmetric_encryptor_->CreateRandomKey();
+                bool init_ok = symmetric_encryptor_->Initialize(reinterpret_cast<const unsigned char*>(key.data()), key.size());
+                assert(init_ok);
                 size_t write_len = symmetric_encryptor_->GetEncryptDataLength(data_to_be_encrypt_len);
                 if (!symmetric_encryptor_->Encrypt(data_to_be_encrypt, data_to_be_encrypt_len, write_pos, write_len))
                 {
@@ -247,36 +244,44 @@ namespace npp
             }
         }
 
-        size_t RequestMessage::AsymmetricEncryptAndWrite( const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos )
+        size_t RequestMessage::AsymmetricEncryptAndWrite(uint8_t* write_pos )
         {
+            if (!symmetric_encryptor_)
+            {
+                return 0;
+            }
+
+            std::string symmetric_encrypt_key = symmetric_encryptor_->GetEncryptKey();
+
             AsymmetricEncryptor* encryptor = AsymmetricEncryptorFactory::GetAsymmetricEncryptor(npp_request_header_.asymmetric_encrypt_method(), npp_request_header_.asymmetric_encrypt_key_no());
             if (!encryptor)
             {
                 last_error(kNotSupportSignMethod);//or 
                 return 0;
             }
+
             switch (npp_request_header_.asymmetric_pub_priv_method())
             {
             case kAsymmetricPublicEncrypt:
                 {
                     size_t len = encryptor->GetEncryptDataLength();
-                    if (!encryptor->PublicEncrypt(orignal_data, orignal_data_len, write_pos, &len))
+                    if (!encryptor->PublicEncrypt(symmetric_encrypt_key.data(), symmetric_encrypt_key.size(), write_pos, &len))
                     {
                         last_error(kAsymmetricPublicEncryptFailed);
                         return 0;
                     }
-                    assert(len == GetSignLength());
+                    assert(len == npp_request_header_.asymmetric_encrypt_data_len());
                     return len;
                 }
             case kAsymmetricPrivateEncrypt:
                 {
                     size_t len = encryptor->GetEncryptDataLength();
-                    if (!encryptor->PrivateEncrypt(orignal_data, orignal_data_len, write_pos, &len))
+                    if (!encryptor->PrivateEncrypt(symmetric_encrypt_key.data(), symmetric_encrypt_key.size(), write_pos, &len))
                     {
                         last_error(kAsymmetricPrivateEncryptFailed);
                         return 0;
                     }
-                    assert(len == GetSignLength());
+                    assert(len == npp_request_header_.asymmetric_encrypt_data_len());
                     return len;
                 }
             default:

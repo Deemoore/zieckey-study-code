@@ -36,7 +36,7 @@ namespace npp
         public:
             void SetSymmetricEncryptMethod(SymmetricEncryptMethod method) {npp_request_header_.set_symmetric_encrypt_method(method);}
 
-            void SetAsymmetricEncryptMethod(SignMethod method) {npp_request_header_.set_asymmetric_encrypt_method(method);}
+            void SetAsymmetricEncryptMethod(AsymmetricEncryptMethod method) {npp_request_header_.set_asymmetric_encrypt_method(method);}
 
             void SetAsymmetricEncryptKeyNo(uint8_t key_no) {npp_request_header_.set_asymmetric_encrypt_key_no(key_no);}
 
@@ -61,7 +61,7 @@ namespace npp
             size_t SymmetricEncryptAndWrite(NppRequestHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
             //! Return the written data length
-            size_t AsymmetricEncryptAndWrite(const void* key, size_t key_len, uint8_t* write_pos);
+            size_t AsymmetricEncryptAndWrite(uint8_t* write_pos);
 
 
             SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
