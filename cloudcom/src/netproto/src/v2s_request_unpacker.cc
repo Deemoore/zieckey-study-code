@@ -12,8 +12,10 @@ namespace npp
         RequestMessageUnpacker::RequestMessageUnpacker()
             : v1_message_unpacker_(NULL)
             , symmetric_encryptor_(NULL)
+            , compressor_(NULL)
         {
-
+            asymmetric_decrypt_ok_ = true;
+            digest_verify_ok_      = true;
         }
 
 
@@ -29,6 +31,12 @@ namespace npp
             {
                 delete symmetric_encryptor_;
                 symmetric_encryptor_ = NULL;
+            }
+            
+            if (compressor_)
+            {
+                delete compressor_;
+                compressor_ = NULL;
             }
             
         }
@@ -93,6 +101,8 @@ namespace npp
 
         bool RequestMessageUnpacker::_UnpackV2( const void* d, size_t d_len )
         {
+            //---------------------------------------------------------
+            //Step 1: NetHeader
             if (d_len < sizeof(net_header_) + sizeof(npp_request_header_v2_) + kMD5HexLen)
             {
                 last_error(kParameterErrorDataLengthError);
@@ -115,6 +125,9 @@ namespace npp
             }
 
             read_pos += header_len;
+
+            //---------------------------------------------------------
+            //Step 2: NppRequestHeaderV2 
             memcpy(&npp_request_header_v2_, read_pos, sizeof(npp_request_header_v2_));
 
             npp_request_header_v2_.set_asymmetric_encrypt_data_len(ntohs(npp_request_header_v2_.asymmetric_encrypt_data_len()));
@@ -123,10 +136,13 @@ namespace npp
 
             assert(read_pos == ((const char*)d) + header_len + sizeof(npp_request_header_v2_));
 
+            //---------------------------------------------------------
+            //Step 3: md5
             const char* md5 = read_pos;
-
             read_pos += kMD5HexLen;
 
+            //---------------------------------------------------------
+            //Step 4: decrypt the symmetric_encrypt_key
             if (npp_request_header_v2_.symmetric_encrypt_method() == kNoSymmetricEncrypt)
             {
                 if (!s_pNppConfig->support_plain())
@@ -146,29 +162,31 @@ namespace npp
             if (!_AsymmetricDecrypt(read_pos, npp_request_header_v2_.asymmetric_encrypt_data_len(), symmetric_encrypt_key))
             {
                 //error code has been set by _AsymmetricDecrypt
+                asymmetric_decrypt_ok_ = false;
                 return false;
             }
 
             read_pos += npp_request_header_v2_.asymmetric_encrypt_data_len_;
-
             assert(read_pos - ((const char*)d) < (long)d_len);
 
-            size_t encrypt_data_len = ((const char*)d) + d_len - read_pos;
 
+            //---------------------------------------------------------
+            //Step 5: Symmetric decrypt
+            size_t encrypt_data_len = ((const char*)d) + d_len - read_pos;
             if (!_DecryptAndUncompressData(read_pos, encrypt_data_len, symmetric_encrypt_key))
             {
                 //ErrorCode has been set by _DecryptAndUncompressData
                 return false;
             }
 
-            //TODO  uncompress
-
             assert(unpacked_data_.size() > 0);
 
-            //verify MD5
+            //---------------------------------------------------------
+            //Step 6: verify MD5
             if (!_VerifyDigest(md5, kMD5HexLen, unpacked_data_.data(), unpacked_data_.size()))
             {
                 //ErrorCode has been set by _VerifyDigest
+                digest_verify_ok_ = false;
                 return false;
             }
 
@@ -314,9 +332,12 @@ namespace npp
                 return true;
             }
             
-            Compressor* c = CompressorFactory::CreateCompressor(npp_request_header_v2_.compress_method());
-            ext::auto_delete<Compressor> c_auto_delete(c);
-            if (!c->Uncompress(d, d_len, unpacked_data_))
+            if (!compressor_)
+            {
+                compressor_ = CompressorFactory::CreateCompressor(npp_request_header_v2_.compress_method());
+            }
+            
+            if (!compressor_->Uncompress(d, d_len, unpacked_data_))
             {
                 last_error(kUncompressError);
                 return false;
@@ -337,6 +358,11 @@ namespace npp
 
         bool RequestMessageUnpacker::_VerifyDigest( const void* digest, size_t digest_len, const void* plain_data, size_t plain_data_len )
         {
+            if (!s_pNppConfig->verify_data())
+            {
+                return true;
+            }
+            
             assert(digest_len == kMD5HexLen);
             unsigned char calc_md5[kMD5HexLen]  = {};
             MD5_CTX ctx;

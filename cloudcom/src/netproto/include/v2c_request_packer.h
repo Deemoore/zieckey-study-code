@@ -4,11 +4,12 @@
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/message.h"
 
-#include "netproto/include/symmetric_encrypt.h"
-
 
 namespace npp
 {
+    class Compressor;
+    class SymmetricEncryptor;
+
     namespace v2c
     {
         class _EXPORT_NETPROTO RequestMessage : public Message
@@ -36,6 +37,7 @@ namespace npp
             void SetSymmetricEncryptMethod(SymmetricEncryptMethod method) {npp_request_header_.set_symmetric_encrypt_method(method);}
 
             void SetAsymmetricEncryptMethod(SignMethod method) {npp_request_header_.set_asymmetric_encrypt_method(method);}
+
             void SetAsymmetricEncryptKeyNo(uint8_t key_no) {npp_request_header_.set_asymmetric_encrypt_key_no(key_no);}
 
             void SetAsymmetricPublicPrivateMethod(AsymmetricPublicPrivateMethod method) { npp_request_header_.set_asymmetric_pub_priv_method(method);}
@@ -48,27 +50,34 @@ namespace npp
             //! \return size_t - 
             size_t GetPackedTotalDataSize(size_t data_len);
 
-            //! Get the asymmetric encrypt sign length
-            size_t GetSignLength();
-
-            size_t GetEncryptDataLength(size_t data_len);
+//             //! Get the asymmetric encrypt sign length
+//             size_t GetSignLength();
+// 
+//             size_t GetEncryptDataLength(size_t data_len);
 
             void CalcMD5AndWrite(const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
             //! Return the written data length
             size_t SymmetricEncryptAndWrite(NppRequestHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
-
             //! Return the written data length
             size_t AsymmetricEncryptAndWrite(const void* key, size_t key_len, uint8_t* write_pos);
 
+
+            SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
+            Compressor* compressor() const { return compressor_; }
+
         private:
+            friend class ResponseUnpacker;
+
             NppRequestHeaderV2  npp_request_header_;
             NetHeader           net_header_;
 
             std::string         packed_data_;
 
             SymmetricEncryptor* symmetric_encryptor_;
+
+            Compressor*         compressor_;
         private:
             static uint16_t message_id_;
         };

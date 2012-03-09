@@ -109,9 +109,10 @@ namespace npp
 
         enum ResponseErrorCodeV2
         {
-            kSuccess = 0,
+            kRequestSuccess = 0,
             kInvalidRequest = 1,
             kInvalidClientPublicKey = 2,
+            kServerInternalError = 3,
         };
     public:
         //! The header information struct of the data packet 
@@ -224,6 +225,10 @@ namespace npp
             uint16_t asymmetric_encrypt_data_len_; //! The length of asymmetric encrypted data of symmetric_encrypt_key
 
             NppRequestHeaderV2();
+
+            size_t GetSymmetricEncryptDataLength(size_t data_len, ErrorCode& ec) const;
+
+            size_t GetSignLength(ErrorCode& ec);
 
             uint8_t  symmetric_encrypt_method() const { return symmetric_encrypt_method_; }
             void     set_symmetric_encrypt_method(uint8_t val) { symmetric_encrypt_method_ = val; }

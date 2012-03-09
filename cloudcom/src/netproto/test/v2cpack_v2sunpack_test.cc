@@ -21,13 +21,13 @@ namespace
         const char * raw_data = "1234567890";
         size_t raw_data_len = strlen(raw_data);
 
-        npp::v2c::RequestMessage packer;
-        H_TEST_ASSERT(packer.Pack(raw_data, raw_data_len));
+        npp::v2c::RequestMessage v2c_request;
+        H_TEST_ASSERT(v2c_request.Pack(raw_data, raw_data_len));
 
-        npp::v2s::RequestMessageUnpacker unpacker;
-        H_TEST_ASSERT(unpacker.Unpack(packer.Data(), packer.Size()));
-        H_TEST_ASSERT(raw_data_len == unpacker.Size());
-        H_TEST_ASSERT(memcmp(raw_data, unpacker.Data(), raw_data_len) == 0);
+        npp::v2s::RequestMessageUnpacker v2s_unpacker;
+        H_TEST_ASSERT(v2s_unpacker.Unpack(v2c_request.Data(), v2c_request.Size()));
+        H_TEST_ASSERT(raw_data_len == v2s_unpacker.Size());
+        H_TEST_ASSERT(memcmp(raw_data, v2s_unpacker.Data(), raw_data_len) == 0);
     }
 
     static void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )

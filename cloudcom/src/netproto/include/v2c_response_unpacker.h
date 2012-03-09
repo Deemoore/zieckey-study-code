@@ -1,28 +1,25 @@
-#ifndef NETPROTO_MESSAGE_PACKER_H_
-#define NETPROTO_MESSAGE_PACKER_H_
+#ifndef NETPROTO_V2C_RESPONSE_MESSAGE_UNPACKER_H_
+#define NETPROTO_V2C_RESPONSE_MESSAGE_UNPACKER_H_
 
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/message.h"
-
 
 namespace npp
 {
     namespace v2c
     {
 
-        class MessageUnpacker;
+        class RequestMessage;
 
-        class _EXPORT_NETPROTO MessagePacker : public Message
+        class _EXPORT_NETPROTO ResponseUnpacker : public Message
         {
         public:
-            //! \brief The constructor of MessagePacker
+            //! \brief The constructor of ResponseUnpacker
             //! \note When you do a response message packing, 
-            //!     please provide parameter <code>message_unpacker</code>
-            //! \param MessageUnpacker * message_unpacker - 
+            //!     please provide parameter <code>request_message</code>
+            //! \param RequestMessage * request_message - 
             //! \return  - 
-            MessagePacker(MessageUnpacker* message_unpacker = NULL);
-
-            //MessagePacker(NppHeaderV1&, NetHeader&); //TODO add this constructor
+            ResponseUnpacker(RequestMessage* request_message);
 
             //! \brief Pack the data
             //! \param const void * data - The original data
@@ -32,49 +29,27 @@ namespace npp
             //!     <code>packed_data_buf</code> and after packing 
             //!     the packed data length will stored here
             //! \return bool - 
-            bool Pack(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
+            bool Unpack(const void* data, size_t data_len);
 
+            //! Get the unpacked data and size if unpacking successfully
+            const uint8_t* Data() const;
+            size_t Size() const;
 
-            //! \brief Get the packed data length
-            //! \param size_t data_len - The data to be packed
-            //! \return size_t - 
-            size_t GetPackedTotalDataSize(size_t data_len);
-
-            MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
-
-            //! Get the message id from the packed data
-            static uint16_t GetMessageID(void* packed_data_buf);
-
-        private:
-            //! \brief Get the packed data length
-            //! \param size_t data_len - The data to be packed
-            //! \return size_t - 
-            size_t GetPackedTotalDataSize(const NppHeaderV1& npp_header, size_t data_len);
-
-            //! Get the sign length
-            size_t GetSignLength(const NppHeaderV1& npp_header);
-
-            bool pack_v1(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
-
-#ifdef _NETPROTO_TEST
-        public:
-#endif
-            //! We decide which sign to use 
-            //! 1->2 2->1
-            //! 3->4 4->3
-            //! 5->6 6->5
-            void ReverseSignKeyNum(NppHeaderV1& npp_header);
+            //! Get the message ID from the data
+            //! The data length MUST be larger than sizeof(NetHeader)
+            static uint16_t GetMessageID(const void* data) 
+            {
+                const NetHeader* h = reinterpret_cast<const NetHeader*>(data);
+                return ntohs(h->message_id());
+            }
 
         private:
-            //! Give a random IDEA key to npp_header
-            //! Give a random Sign key to npp_header
-            //! Give a random Sign Method to npp_header
-            void RandomNppHeader(NppHeaderV1& npp_header);
+            RequestMessage*     request_message_;
 
-        private:
-            MessageUnpacker* message_unpacker_;
+            NetHeader           net_header_;
+            NppResponseHeaderV2 npp_response_header_v2_;
 
-            static uint16_t message_id_;
+            std::string unpacked_data_;
         };
     }
 }

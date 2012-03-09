@@ -1,5 +1,5 @@
-#ifndef NETPROTO_MESSAGE_PACKER_H_
-#define NETPROTO_MESSAGE_PACKER_H_
+#ifndef NETPROTO_V2S_RESPONSE_MESSAGE_PACKER_H_
+#define NETPROTO_V2S_RESPONSE_MESSAGE_PACKER_H_
 
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/message.h"
@@ -9,10 +9,9 @@ namespace npp
 {
     namespace v2s
     {
+        class RequestMessageUnpacker;
 
-        class MessageUnpacker;
-
-        class _EXPORT_NETPROTO MessagePacker : public Message
+        class _EXPORT_NETPROTO ResponseMessagePacker : public Message
         {
         public:
             //! \brief The constructor of MessagePacker
@@ -20,9 +19,7 @@ namespace npp
             //!     please provide parameter <code>message_unpacker</code>
             //! \param MessageUnpacker * message_unpacker - 
             //! \return  - 
-            MessagePacker(MessageUnpacker* message_unpacker = NULL);
-
-            //MessagePacker(NppHeaderV1&, NetHeader&); //TODO add this constructor
+            ResponseMessagePacker(RequestMessageUnpacker* message_unpacker);
 
             //! \brief Pack the data
             //! \param const void * data - The original data
@@ -40,41 +37,20 @@ namespace npp
             //! \return size_t - 
             size_t GetPackedTotalDataSize(size_t data_len);
 
-            MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
+            RequestMessageUnpacker* GetRequestMessageUnpacker() const { return message_unpacker_; }
 
             //! Get the message id from the packed data
             static uint16_t GetMessageID(void* packed_data_buf);
 
         private:
-            //! \brief Get the packed data length
-            //! \param size_t data_len - The data to be packed
-            //! \return size_t - 
-            size_t GetPackedTotalDataSize(const NppHeaderV1& npp_header, size_t data_len);
 
-            //! Get the sign length
-            size_t GetSignLength(const NppHeaderV1& npp_header);
+            void _CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos );
 
-            bool pack_v1(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
-
-#ifdef _NETPROTO_TEST
-        public:
-#endif
-            //! We decide which sign to use 
-            //! 1->2 2->1
-            //! 3->4 4->3
-            //! 5->6 6->5
-            void ReverseSignKeyNum(NppHeaderV1& npp_header);
+            //! Return the size of encrypted data
+            size_t _SymmetricEncryptAndWrite(NppResponseHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
         private:
-            //! Give a random IDEA key to npp_header
-            //! Give a random Sign key to npp_header
-            //! Give a random Sign Method to npp_header
-            void RandomNppHeader(NppHeaderV1& npp_header);
-
-        private:
-            MessageUnpacker* message_unpacker_;
-
-            static uint16_t message_id_;
+            RequestMessageUnpacker* message_unpacker_;
         };
     }
 }
