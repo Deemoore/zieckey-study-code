@@ -215,7 +215,7 @@ namespace npp
             symmetric_encryptor_ = SymmetricEncryptorFactory::CreateSymmetricEncryptor(this->npp_request_header_.symmetric_encrypt_method());
             std::string key = symmetric_encryptor_->CreateRandomKey();
             bool init_ok = symmetric_encryptor_->Initialize(reinterpret_cast<const unsigned char*>(key.data()), key.size());
-            assert();
+            assert(init_ok);
             if (symmetric_encryptor_)
             {
                 size_t write_len = symmetric_encryptor_->GetEncryptDataLength(data_to_be_encrypt_len);
