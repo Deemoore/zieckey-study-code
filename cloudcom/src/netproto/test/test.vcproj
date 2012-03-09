@@ -181,6 +181,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\asymmetric_encryptor_test.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\compressor_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\data_stream_test.cc"
 				>
 			</File>
@@ -202,6 +210,10 @@
 			</File>
 			<File
 				RelativePath=".\simple_rsa_test.cc"
+				>
+			</File>
+			<File
+				RelativePath=".\symmetric_encryptor_test.cc"
 				>
 			</File>
 			<File
@@ -238,6 +250,10 @@
 			</File>
 			<File
 				RelativePath=".\test_rsa_self_pair_key.h"
+				>
+			</File>
+			<File
+				RelativePath=".\test_rsa_self_pair_key_1024.h"
 				>
 			</File>
 			<File

@@ -15,6 +15,7 @@ namespace npp
         RequestMessage::RequestMessage()
             : symmetric_encryptor_(NULL)
         {
+            net_header_.InitV2();
             net_header_.set_message_id(RequestMessage::message_id_++);
         }
 
@@ -55,6 +56,9 @@ namespace npp
                 return false;
             }
 
+            //for the sake of SetAsymmetricEncryptMethod or SetAsymmetricEncryptKeyNo has been called by App layer
+            this->npp_request_header_.set_asymmetric_encrypt_data_len(GetSignLength());
+
             //---------------------------------------------------------
             //Step 1: NetHeader and NppRequestHeaderV2
             packed_data_.resize(GetPackedTotalDataSize(data_len));
@@ -72,35 +76,43 @@ namespace npp
             //---------------------------------------------------------
             //Step 2: write md5
             CalcMD5AndWrite( data, data_len, write_pos );
+            write_pos += kMD5HexLen;
 
             //---------------------------------------------------------
             //Step 3: write symmetric encrypt data
-            write_pos += kMD5HexLen + GetSignLength();
-            assert(npp_header->asymmetric_encrypt_data_len() == kMD5HexLen + GetSignLength());
-            size_t encrypt_data_len = SymmetricEncryptAndWrite(npp_header, data, data_len, write_pos);
+            assert(npp_header->asymmetric_encrypt_data_len() == GetSignLength());
+            uint8_t* encrypt_data_begin = write_pos + npp_header->asymmetric_encrypt_data_len();
+            size_t encrypt_data_len = SymmetricEncryptAndWrite(npp_header, data, data_len, encrypt_data_begin);
             if (0 == encrypt_data_len)
             {
                 //error code has been set by SymmetricEncryptAndWrite
                 return false;
             }
             
+            net_header->set_data_len(encrypt_data_len + npp_header->asymmetric_encrypt_data_len() + kMD5HexLen + sizeof(*npp_header));
 
             //---------------------------------------------------------
             //Step 4: write the SymmetricEncryptKey's encrypt data
-            size_t sign_len = AsymmetricEncryptAndWrite(write_pos, encrypt_data_len, write_pos - GetSignLength());
+            std::string symmetric_encrypt_key = symmetric_encryptor_->GetEncryptKey();
+            size_t sign_len = AsymmetricEncryptAndWrite(symmetric_encrypt_key.data(), symmetric_encrypt_key.size(), write_pos);
             if (0 == sign_len)
             {
                 //error code has been set by AsymmetricEncryptAndWrite
                 return false;
             }
             
+
+            assert(net_header->data_len() + net_header->header_len_ <= packed_data_.size());
+            packed_data_.resize(net_header->data_len() + net_header->header_len_);
+
             //---------------------------------------------------------
             //Step 5: end
             assert(last_error() == kNoError);
             assert(memcmp(&this->npp_request_header_, npp_header, sizeof(*npp_header)) == 0);
-            net_header->set_data_len(htons((short)encrypt_data_len));
+            net_header->set_data_len(htons(net_header->data_len()));
             net_header->set_message_id(htons(net_header->message_id()));
-            net_header->set_reserve(net_header->reserve());
+            net_header->set_reserve(htons(net_header->reserve()));
+            npp_header->set_asymmetric_encrypt_data_len(htons(npp_header->asymmetric_encrypt_data_len()));
             memcpy(&this->net_header_, net_header, sizeof(*net_header));
 
             return true;
@@ -239,6 +251,7 @@ namespace npp
                         last_error(kAsymmetricPublicEncryptFailed);
                         return 0;
                     }
+                    assert(len == GetSignLength());
                     return len;
                 }
             case kAsymmetricPrivateEncrypt:
@@ -249,15 +262,14 @@ namespace npp
                         last_error(kAsymmetricPrivateEncryptFailed);
                         return 0;
                     }
+                    assert(len == GetSignLength());
                     return len;
                 }
             default:
                 last_error(kNotSupportAsymmetricPublicPrivateMethod);
                 return 0;
             }
-            return 0;
         }
-
     }
 }
 

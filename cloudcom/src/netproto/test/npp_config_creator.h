@@ -3,7 +3,7 @@
 
 #include "netproto/include/auto_delete.h"
 
-#include "test_rsa_self_pair_key.h"
+#include "test_rsa_self_pair_key_1024.h"
 #include "test_client_rsa_key.h"
 #include "test_server_rsa_key.h"
 #include "idea_key.h"

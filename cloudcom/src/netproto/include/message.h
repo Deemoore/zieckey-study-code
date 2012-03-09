@@ -38,6 +38,7 @@ namespace npp
             kNoSymmetricEncrypt   = 0,
             kXorSymmetricEncrypt  = 1,//not use this
             kIDEASymmetricEncrypt = 2,
+            kSymmetricEncryptMethodNum,
         };
 
         enum SignMethod
@@ -58,6 +59,7 @@ namespace npp
         {
             kNoComress   = 0,
             kZlibCompress  = 1,
+            kCompressNum
         };
 
         enum ErrorCode
@@ -125,11 +127,17 @@ namespace npp
             uint16_t reserve_;      //! big-endian, preserved, set to 0x0000
 
 
-            void Init()
+            void InitV1()
+            {
+                InitV2();
+                version_ = kProtoVersion1;
+            }
+
+            void InitV2()
             {
                 memset(this, 0, sizeof(*this));
                 header_len_ = sizeof(*this);
-                version_ = 1;
+                version_ = kProtoVersion2;
                 packet_count_ = 1;
             }
 

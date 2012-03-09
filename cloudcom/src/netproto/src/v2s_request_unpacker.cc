@@ -2,6 +2,7 @@
 #include "netproto/include/v2s_request_unpacker.h"
 #include "netproto/include/npp_config.h"
 #include "netproto/include/compressor.h"
+#include "slrsa/md5.h"
 
 namespace npp
 {
@@ -10,6 +11,7 @@ namespace npp
 
         RequestMessageUnpacker::RequestMessageUnpacker()
             : v1_message_unpacker_(NULL)
+            , symmetric_encryptor_(NULL)
         {
 
         }
@@ -22,6 +24,13 @@ namespace npp
                 delete v1_message_unpacker_;
                 v1_message_unpacker_ = NULL;
             }
+
+            if (symmetric_encryptor_)
+            {
+                delete symmetric_encryptor_;
+                symmetric_encryptor_ = NULL;
+            }
+            
         }
 
         const uint8_t* RequestMessageUnpacker::Data() const
@@ -84,7 +93,7 @@ namespace npp
 
         bool RequestMessageUnpacker::_UnpackV2( const void* d, size_t d_len )
         {
-            if (d_len < sizeof(net_header_) + sizeof(npp_request_header_v2_) + 16 + 64)
+            if (d_len < sizeof(net_header_) + sizeof(npp_request_header_v2_) + kMD5HexLen)
             {
                 last_error(kParameterErrorDataLengthError);
                 return false;
@@ -107,6 +116,8 @@ namespace npp
 
             read_pos += header_len;
             memcpy(&npp_request_header_v2_, read_pos, sizeof(npp_request_header_v2_));
+
+            npp_request_header_v2_.set_asymmetric_encrypt_data_len(ntohs(npp_request_header_v2_.asymmetric_encrypt_data_len()));
 
             read_pos += sizeof(npp_request_header_v2_);
 
@@ -131,7 +142,8 @@ namespace npp
                 }
             }
                 
-            if (!_AsymmetricDecrypt(read_pos, npp_request_header_v2_.asymmetric_encrypt_data_len(), symmetric_encrypt_key_))
+            std::string symmetric_encrypt_key;
+            if (!_AsymmetricDecrypt(read_pos, npp_request_header_v2_.asymmetric_encrypt_data_len(), symmetric_encrypt_key))
             {
                 //error code has been set by _AsymmetricDecrypt
                 return false;
@@ -143,13 +155,22 @@ namespace npp
 
             size_t encrypt_data_len = ((const char*)d) + d_len - read_pos;
 
-            if (!DecryptData(read_pos, encrypt_data_len, symmetric_encrypt_key_))
+            if (!_DecryptAndUncompressData(read_pos, encrypt_data_len, symmetric_encrypt_key))
             {
-                //ErrorCode has been set by DecryptData
+                //ErrorCode has been set by _DecryptAndUncompressData
                 return false;
             }
 
+            //TODO  uncompress
+
             assert(unpacked_data_.size() > 0);
+
+            //verify MD5
+            if (!_VerifyDigest(md5, kMD5HexLen, unpacked_data_.data(), unpacked_data_.size()))
+            {
+                //ErrorCode has been set by _VerifyDigest
+                return false;
+            }
 
             assert(last_error() == kNoError);
             return true;
@@ -184,7 +205,7 @@ namespace npp
                 return false;
             }
 
-            if (decrypted_data.length() < decrypted_data_len)
+            if (decrypted_data_len < decrypted_data.size())
             {
                 decrypted_data.resize(decrypted_data_len);
             }
@@ -193,7 +214,7 @@ namespace npp
             return true;
         }
 
-        bool RequestMessageUnpacker::DecryptData( const char* encrypt_data, size_t encrypt_data_len, const std::string& symmetric_encrypt_key )
+        bool RequestMessageUnpacker::_DecryptAndUncompressData( const char* encrypt_data, size_t encrypt_data_len, const std::string& symmetric_encrypt_key )
         {
             switch (npp_request_header_v2_.symmetric_encrypt_method())
             {
@@ -212,26 +233,15 @@ namespace npp
                 break;
             case kIDEASymmetricEncrypt:
                 {
-                    SymmetricEncryptor* e = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_request_header_v2_.symmetric_encrypt_method());
-                    if (!e)
+                    symmetric_encryptor_ = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_request_header_v2_.symmetric_encrypt_method());
+                    if (!symmetric_encryptor_)
                     {
                         last_error(kNotSupportIDEAKeyNumber);
                         return false;
                     }
-                    bool init_ok = e->Initialize((const unsigned char*)symmetric_encrypt_key.data(), symmetric_encrypt_key.size());
+                    bool init_ok = symmetric_encryptor_->Initialize((const unsigned char*)symmetric_encrypt_key.data(), symmetric_encrypt_key.size());
                     assert(init_ok);
-                    size_t len = encrypt_data_len;
-                    unpacked_data_.resize(len);
-                    if (!e->Decrypt(encrypt_data, encrypt_data_len, &unpacked_data_[0], len))
-                    {
-                        last_error(kIDEADecryptFialed);
-                        return false;
-                    }
-                    assert(unpacked_data_.size() <= len);
-                    if (unpacked_data_.size() < len)
-                    {
-                        unpacked_data_.resize(len);
-                    }
+                    return _DecryptAndUncompressData(symmetric_encryptor_, encrypt_data, encrypt_data_len);
                 }
                 break;
             default:
@@ -239,9 +249,41 @@ namespace npp
                 return false;
                 break;
             }
+        }
 
-            assert(last_error() == kNoError);
-            return true;
+        bool RequestMessageUnpacker::_DecryptAndUncompressData( SymmetricEncryptor* e, const char* encrypt_data, size_t encrypt_data_len )
+        {
+            size_t decrypted_data_len = e->GetDecryptDataLength(encrypt_data, encrypt_data_len);
+            if (npp_request_header_v2_.compress_method() == kNoComress)
+            {
+                unpacked_data_.resize(decrypted_data_len);
+                if (!e->Decrypt(encrypt_data, decrypted_data_len, &unpacked_data_[0], decrypted_data_len))
+                {
+                    last_error(kIDEADecryptFialed);
+                    return false;
+                }
+                assert(encrypt_data_len <= unpacked_data_.size());
+                if (decrypted_data_len < unpacked_data_.size())
+                {
+                    unpacked_data_.resize(decrypted_data_len);
+                }
+                return true;
+            }
+
+            std::string decrypted_data; //the decrypted data which is compressed
+            decrypted_data.resize(decrypted_data_len);
+            if (!e->Decrypt(encrypt_data, decrypted_data_len, &decrypted_data[0], decrypted_data_len))
+            {
+                last_error(kIDEADecryptFialed);
+                return false;
+            }
+            assert(encrypt_data_len <= decrypted_data.size());
+            if (decrypted_data_len < decrypted_data.size())
+            {
+                decrypted_data.resize(decrypted_data_len);
+            }
+
+            return _Uncompress(decrypted_data.data(), decrypted_data_len);
         }
 
         const Message::NetHeader& RequestMessageUnpacker::net_header() const
@@ -281,6 +323,36 @@ namespace npp
             }
             
             return true;
+        }
+
+        Message::ProtoVersion RequestMessageUnpacker::GetProtoVersion() const
+        {
+            if (v1_message_unpacker_)
+            {
+                return static_cast<Message::ProtoVersion>(v1_message_unpacker_->net_header().version());
+            }
+
+            return static_cast<Message::ProtoVersion>(net_header().version());
+        }
+
+        bool RequestMessageUnpacker::_VerifyDigest( const void* digest, size_t digest_len, const void* plain_data, size_t plain_data_len )
+        {
+            assert(digest_len == kMD5HexLen);
+            unsigned char calc_md5[kMD5HexLen]  = {};
+            MD5_CTX ctx;
+            MD5Init(&ctx);
+            MD5Update(&ctx, (unsigned char*)plain_data, (unsigned int)plain_data_len);
+            MD5Final((unsigned char*)calc_md5, &ctx);
+
+            if (0 == memcmp(calc_md5, digest, digest_len))
+            {
+                return true;
+            }
+            else
+            {
+                last_error(kDigestVerifyFailed);
+                return false;
+            }
         }
     }
 }
