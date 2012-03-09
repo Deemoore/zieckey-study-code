@@ -4,7 +4,7 @@
 #include "osl/include/inner_pre.h"
 
 #if H_PROVIDE_APPSHELL
-
+#include "osl/include/string_ext.h"
 #include "osl/include/assert_ext.h"
 
 namespace osl

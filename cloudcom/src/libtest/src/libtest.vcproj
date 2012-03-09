@@ -281,15 +281,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\string_test.cc"
-				>
-			</File>
-			<File
 				RelativePath=".\thread_test.cc"
-				>
-			</File>
-			<File
-				RelativePath=".\tokener_test.cc"
 				>
 			</File>
 		</Filter>

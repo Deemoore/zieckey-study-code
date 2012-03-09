@@ -21,7 +21,6 @@ DECLARATION_TEST( TThreadPool );
 DECLARATION_TEST( TAppShell );
 DECLARATION_TEST( TMemAlloc );
 DECLARATION_TEST( TProcess );
-DECLARATION_TEST( TString );
 DECLARATION_TEST( TThreads );
 DECLARATION_TEST( TMemoryDataStream );
 DECLARATION_TEST( TestIsPod );
@@ -229,7 +228,6 @@ namespace LibTest
          REGISTER_TEST( TAppShell );
          REGISTER_TEST( TProcess );
          REGISTER_TEST( TLog );
-         REGISTER_TEST( TString );
          REGISTER_TEST( TThreads );
          REGISTER_TEST( TMemoryDataStream );
          REGISTER_TEST( TMemAlloc );
