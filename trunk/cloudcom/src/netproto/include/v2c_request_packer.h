@@ -55,8 +55,6 @@ namespace npp
 // 
 //             size_t GetEncryptDataLength(size_t data_len);
 
-            void CalcMD5AndWrite(const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
-
             //! Return the written data length
             size_t SymmetricEncryptAndWrite(NppRequestHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
@@ -66,6 +64,7 @@ namespace npp
 
             SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
             Compressor* compressor() const { return compressor_; }
+            const NppRequestHeaderV2& npp_request_header_v2() const { return npp_request_header_; }
 
         private:
             friend class ResponseUnpacker;

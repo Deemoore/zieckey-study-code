@@ -2,8 +2,6 @@
 #include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/npp_config.h"
 
-#include "netproto/include/md5.h"
-
 #ifdef H_NPP_SUPPORT_PROTO_V1
 
 
@@ -197,10 +195,14 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 3: Fill the digest MD5
-            MD5 md5(write_pos + npp_header->digest_sign_len_, 
-                packed_data_buf_len - sizeof(*net_header) - sizeof(*npp_header) - npp_header->digest_sign_len_);
-            md5.getRawDigest(write_pos);
+            {
+                unsigned char* plain_data = write_pos + npp_header->digest_sign_len_;
+                size_t plain_data_len = packed_data_buf_len - sizeof(*net_header) - sizeof(*npp_header) - npp_header->digest_sign_len_;
+                CalcMD5AndWrite(plain_data, plain_data_len, write_pos);
+            }
+            
             write_pos += kMD5HexLen;
+
 
             //---------------------------------------------------------
             //Step 4: Fill the digest Sign

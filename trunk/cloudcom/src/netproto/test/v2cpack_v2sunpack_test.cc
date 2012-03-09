@@ -6,6 +6,8 @@
 #include "netproto/include/idea.h"
 #include "netproto/include/v2c_request_packer.h"
 #include "netproto/include/v2s_request_unpacker.h"
+#include "netproto/include/v2c_response_unpacker.h"
+#include "netproto/include/v2s_response_packer.h"
 #include "npp_config_creator.h"
 
 
@@ -38,6 +40,18 @@ namespace
         H_TEST_ASSERT(unpack_ok);
         H_TEST_ASSERT(raw_data_len == v2s_unpacker.Size());
         H_TEST_ASSERT(memcmp(raw_data, v2s_unpacker.Data(), raw_data_len) == 0);
+
+        npp::v2s::ResponseMessagePacker v2s_response(&v2s_unpacker);
+        char buf[1024] = {};
+        size_t buf_len = sizeof(buf);
+        const char* response_data = "0123456789";
+        size_t response_data_len = strlen(response_data);
+        H_TEST_ASSERT(v2s_response.Pack(response_data, response_data_len, buf, buf_len));
+
+        npp::v2c::ResponseUnpacker v2c_response_unpacker(&v2c_request);
+        H_TEST_ASSERT(v2c_response_unpacker.Unpack(buf, buf_len));
+        H_TEST_ASSERT(response_data_len == v2c_response_unpacker.Size());
+        H_TEST_ASSERT(memcmp(response_data, v2c_response_unpacker.Data(), response_data_len) == 0);
     }
 }
 

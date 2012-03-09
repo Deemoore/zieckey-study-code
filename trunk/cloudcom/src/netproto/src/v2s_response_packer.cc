@@ -27,7 +27,17 @@ namespace npp
             
             assert(message_unpacker_->GetProtoVersion() == Message::kProtoVersion2);
 
+            if (packed_data_buf_len < GetPackedTotalDataSize(data_len))
+            {
+                last_error(kParameterErrorDataLengthError);
+                return false;
+            }
 
+            if (last_error() != kNoError)
+            {
+                return false;
+            }
+            
             //---------------------------------------------------------
             //Step 1: NetHeader
             unsigned char* write_pos = (unsigned char*)packed_data_buf;
@@ -58,19 +68,17 @@ namespace npp
 
             npp_header->set_error_code(kRequestSuccess);
 
-            //---------------------------------------------------------
-            //Step 3: MD5
-            _CalcMD5AndWrite(data, data_len, write_pos);
-            write_pos += kMD5HexLen;
+            //write MD5
+            CalcMD5AndWrite(data, data_len, npp_header->md5_);
 
             //---------------------------------------------------------
-            //Step 4: Encrypt data
+            //Step 3: Encrypt data
             size_t encrypted_data_len = _SymmetricEncryptAndWrite(npp_header, data, data_len, write_pos);
-            packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + kMD5HexLen + encrypted_data_len;
+            packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + encrypted_data_len;
 
             //---------------------------------------------------------
-            //Step 5: End
-            net_header->set_data_len(htons(packed_data_buf_len));
+            //Step 4: End
+            net_header->set_data_len(htons(packed_data_buf_len - sizeof(*net_header)));
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve())); 
 
@@ -86,17 +94,9 @@ namespace npp
             }
 
             ErrorCode ec = kNoError;
-            size_t ret = sizeof(NetHeader) + sizeof(NppResponseHeaderV2) + kMD5HexLen + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
+            size_t ret = sizeof(NetHeader) + sizeof(NppResponseHeaderV2) + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
-        }
-
-        void ResponseMessagePacker::_CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos )
-        {
-            MD5_CTX ctx;
-            MD5Init(&ctx);
-            MD5Update(&ctx, (unsigned char*)data, (unsigned int)data_len);
-            MD5Final((unsigned char*)write_pos, &ctx);
         }
 
         size_t ResponseMessagePacker::_SymmetricEncryptAndWrite( NppResponseHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos )

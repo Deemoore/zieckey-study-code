@@ -44,6 +44,13 @@ namespace npp
             }
 
         private:
+
+            bool _DecryptAndUncompressData( const char* encrypt_data, size_t encrypt_data_len );
+
+            bool _Uncompress( const void* d, size_t d_len );
+
+
+        private:
             RequestMessage*     request_message_;
 
             NetHeader           net_header_;

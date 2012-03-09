@@ -106,6 +106,8 @@ namespace npp
             kAsymmetricPrivateEncryptFailed,
             kAsymmetricPublicDecryptFailed,
 
+            kServerResponseParameterError,
+
         };
 
         enum ResponseErrorCodeV2
@@ -282,6 +284,96 @@ namespace npp
         { 
             last_error_ = val; 
         }
+
+    protected:
+
+
+//         bool _DecryptAndUncompressData( const char* encrypt_data, size_t encrypt_data_len, const std::string& symmetric_encrypt_key )
+//         {
+//             switch (npp_request_header_v2_.symmetric_encrypt_method())
+//             {
+//             case kNoSymmetricEncrypt:
+//                 if (!s_pNppConfig->support_plain())
+//                 {
+//                     last_error(kNotSupportPlainData);
+//                     return false;
+//                 }
+// 
+//                 return _Uncompress(encrypt_data, encrypt_data_len);
+//                 break;
+//             case kXorSymmetricEncrypt:
+//                 last_error(kNotSupportXorEncrypt);
+//                 return false;
+//                 break;
+//             case kIDEASymmetricEncrypt:
+//                 {
+//                     symmetric_encryptor_ = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_request_header_v2_.symmetric_encrypt_method());
+//                     if (!symmetric_encryptor_)
+//                     {
+//                         last_error(kNotSupportIDEAKeyNumber);
+//                         return false;
+//                     }
+//                     bool init_ok = symmetric_encryptor_->Initialize((const unsigned char*)symmetric_encrypt_key.data(), symmetric_encrypt_key.size());
+//                     assert(init_ok);
+//                     return _DecryptAndUncompressData(symmetric_encryptor_, encrypt_data, encrypt_data_len);
+//                 }
+//                 break;
+//             default:
+//                 last_error(kNotSupportSymmetricEncryptMethod);
+//                 return false;
+//                 break;
+//             }
+//         }
+// 
+//         bool _DecryptAndUncompressData( SymmetricEncryptor* e, const char* encrypt_data, size_t encrypt_data_len )
+//         {
+//             size_t decrypted_data_len = e->GetDecryptDataLength(encrypt_data, encrypt_data_len);
+//             if (npp_request_header_v2_.compress_method() == kNoComress)
+//             {
+//                 unpacked_data_.resize(decrypted_data_len);
+//                 if (!e->Decrypt(encrypt_data, decrypted_data_len, &unpacked_data_[0], decrypted_data_len))
+//                 {
+//                     last_error(kIDEADecryptFialed);
+//                     return false;
+//                 }
+//                 assert(encrypt_data_len <= unpacked_data_.size());
+//                 if (decrypted_data_len < unpacked_data_.size())
+//                 {
+//                     unpacked_data_.resize(decrypted_data_len);
+//                 }
+//                 return true;
+//             }
+// 
+//             std::string decrypted_data; //the decrypted data which is compressed
+//             decrypted_data.resize(decrypted_data_len);
+//             if (!e->Decrypt(encrypt_data, decrypted_data_len, &decrypted_data[0], decrypted_data_len))
+//             {
+//                 last_error(kIDEADecryptFialed);
+//                 return false;
+//             }
+//             assert(encrypt_data_len <= decrypted_data.size());
+//             if (decrypted_data_len < decrypted_data.size())
+//             {
+//                 decrypted_data.resize(decrypted_data_len);
+//             }
+// 
+//             return _Uncompress(decrypted_data.data(), decrypted_data_len);
+//         }
+
+        //! \brief 
+        //! \param const void * data - The data to be calculate MD5
+        //! \param size_t data_len - 
+        //! \param uint8_t * write_pos - It MUST be large enough to hold 16 bytes
+        //! \return void - 
+        static void CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos );
+
+        //! \brief 
+        //! \param const void * digest - The digest
+        //! \param size_t digest_len - 
+        //! \param const void * d - The source data to be verified
+        //! \param size_t d_len - 
+        //! \return bool - 
+        bool VerifyDigest(const void* digest, size_t digest_len, const void* d, size_t d_len);
 
     private:
         ErrorCode last_error_;
