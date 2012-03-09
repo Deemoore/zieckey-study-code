@@ -2,7 +2,7 @@
 
 #include "netproto/include/npp_config.h"
 #include "netproto/include/zlib.h"
-#include "netproto/include/md5.h"
+#include "slrsa/md5.h"
 
 #ifndef H_OS_WINDOWS
 #include <arpa/inet.h>
@@ -58,7 +58,41 @@ namespace npp
         H_CASE_STRING(kAsymmetricPrivateDecryptFailed);
         H_CASE_STRING(kAsymmetricPrivateEncryptFailed);
         H_CASE_STRING(kAsymmetricPublicDecryptFailed);
+        H_CASE_STRING(kServerResponseParameterError);
         H_CASE_STRING_END;
+    }
+
+    void Message::CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos )
+    {
+        MD5_CTX ctx;
+        MD5Init(&ctx);
+        MD5Update(&ctx, (unsigned char*)data, (unsigned int)data_len);
+        MD5Final((unsigned char*)write_pos, &ctx);
+    }
+
+    bool Message::VerifyDigest( const void* digest, size_t digest_len, const void* plain_data, size_t plain_data_len )
+    {
+        if (!s_pNppConfig->verify_data())
+        {
+            return true;
+        }
+
+        assert(digest_len == kMD5HexLen);
+        unsigned char calc_md5[kMD5HexLen]  = {};
+        MD5_CTX ctx;
+        MD5Init(&ctx);
+        MD5Update(&ctx, (unsigned char*)plain_data, (unsigned int)plain_data_len);
+        MD5Final((unsigned char*)calc_md5, &ctx);
+
+        if (0 == memcmp(calc_md5, digest, digest_len))
+        {
+            return true;
+        }
+        else
+        {
+            last_error(kDigestVerifyFailed);
+            return false;
+        }
     }
 
     Message::NppRequestHeaderV2::NppRequestHeaderV2()

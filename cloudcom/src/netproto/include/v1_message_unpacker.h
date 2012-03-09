@@ -23,13 +23,6 @@ namespace npp
             size_t Size() const;
 
         private:
-            //! \brief 
-            //! \param const void * digest - The digest
-            //! \param size_t digest_len - 
-            //! \param const void * d - The source data to be verified
-            //! \param size_t d_len - 
-            //! \return bool - 
-            bool VerifyDigest(const void* digest, size_t digest_len, const void* d, size_t d_len);
 
             //! \brief 
             //! \param const char * digest - A pointer to the digest data

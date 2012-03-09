@@ -44,8 +44,6 @@ namespace npp
 
         private:
 
-            void _CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos );
-
             //! Return the size of encrypted data
             size_t _SymmetricEncryptAndWrite(NppResponseHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 

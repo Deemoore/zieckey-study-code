@@ -3,7 +3,7 @@
 
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/v2c_request_packer.h"
-#include "slrsa/md5.h"
+
 #include "netproto/include/npp_config.h"
 #include "netproto/include/zlib.h"
 #include "netproto/include/compressor.h"
@@ -67,11 +67,15 @@ namespace npp
                 last_error(ec);
                 return false;
             }
-            
 
             //---------------------------------------------------------
             //Step 1: NetHeader and NppRequestHeaderV2
-            packed_data_.resize(GetPackedTotalDataSize(data_len));
+            size_t total_size = GetPackedTotalDataSize(data_len);
+            if (0 == total_size)
+            {
+                return false;
+            }
+            packed_data_.resize(total_size);
 
             uint8_t* write_pos = reinterpret_cast<uint8_t*>(&packed_data_[0]);
 
@@ -120,7 +124,7 @@ namespace npp
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve()));
             npp_header->set_asymmetric_encrypt_data_len(htons(npp_header->asymmetric_encrypt_data_len()));
-            memcpy(&this->net_header_, net_header, sizeof(*net_header));
+            //memcpy(&this->net_header_, net_header, sizeof(*net_header));
 
             return true;
         }
@@ -188,21 +192,12 @@ namespace npp
 //             }
 //         }
 
-        void RequestMessage::CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos )
-        {
-            MD5_CTX ctx;
-            MD5Init(&ctx);
-            MD5Update(&ctx, (unsigned char*)data, (unsigned int)data_len);
-            MD5Final((unsigned char*)write_pos, &ctx);
-        }
-
         size_t RequestMessage::SymmetricEncryptAndWrite(NppRequestHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos)
         {
             const void*  data_to_be_encrypt = orignal_data;
             size_t data_to_be_encrypt_len = orignal_data_len;
 
             compressor_ = CompressorFactory::CreateCompressor(npp_header->compress_method());
-            npp::ext::auto_delete< npp::Compressor > compress_auto_delete(compressor_);
             std::string compress_data;
             if (compressor_)
             {

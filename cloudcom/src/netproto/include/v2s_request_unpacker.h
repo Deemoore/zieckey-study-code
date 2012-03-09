@@ -62,8 +62,6 @@ namespace npp
 
             bool _Uncompress(const void* d, size_t d_len);
 
-            bool _VerifyDigest(const void* digest, size_t digest_len, const void* plain_data, size_t plain_data_size);
-
         private:
             NetHeader            net_header_;  //! The network data header
 

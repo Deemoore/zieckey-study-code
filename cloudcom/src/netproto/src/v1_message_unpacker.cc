@@ -2,7 +2,6 @@
 
 #include "netproto/include/npp_config.h"
 
-#include "netproto/include/md5.h"
 
 #ifdef H_NPP_SUPPORT_PROTO_V1
 
@@ -104,22 +103,6 @@ namespace npp
 
             assert(last_error() == kNoError);
             return true;
-        }
-
-
-        bool MessageUnpacker::VerifyDigest( const void* digest, size_t digest_len, const void* d, size_t d_len )
-        {
-            unsigned char binarymd5[16] = {};
-            MD5 md5(d, d_len);
-            md5.getRawDigest(binarymd5);
-            if (0 == memcmp(digest, binarymd5, sizeof(binarymd5)))
-            {
-                assert(last_error() == kNoError);
-                return true;
-            }
-
-            last_error(kDigestVerifyFailed);
-            return false;
         }
 
         bool MessageUnpacker::VerifyOpenSSLRSASign( const char* digest )

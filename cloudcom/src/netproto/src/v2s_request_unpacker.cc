@@ -183,9 +183,9 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 6: verify MD5
-            if (!_VerifyDigest(md5, kMD5HexLen, unpacked_data_.data(), unpacked_data_.size()))
+            if (!VerifyDigest(md5, kMD5HexLen, unpacked_data_.data(), unpacked_data_.size()))
             {
-                //ErrorCode has been set by _VerifyDigest
+                //ErrorCode has been set by VerifyDigest
                 digest_verify_ok_ = false;
                 return false;
             }
@@ -304,6 +304,30 @@ namespace npp
             return _Uncompress(decrypted_data.data(), decrypted_data_len);
         }
 
+        bool RequestMessageUnpacker::_Uncompress( const void* d, size_t d_len )
+        {
+            if (npp_request_header_v2_.compress_method() == kNoComress)
+            {
+                unpacked_data_.assign((const char*)d, d_len);
+                return true;
+            }
+
+            if (!compressor_)
+            {
+                compressor_ = CompressorFactory::CreateCompressor(npp_request_header_v2_.compress_method());
+            }
+
+            assert(compressor_);
+
+            if (!compressor_->Uncompress(d, d_len, unpacked_data_))
+            {
+                last_error(kUncompressError);
+                return false;
+            }
+
+            return true;
+        }
+
         const Message::NetHeader& RequestMessageUnpacker::net_header() const
         {
             if (v1_message_unpacker_)
@@ -324,28 +348,6 @@ namespace npp
             return last_error() == kNoError && Data() != NULL;
         }
 
-        bool RequestMessageUnpacker::_Uncompress( const void* d, size_t d_len )
-        {
-            if (npp_request_header_v2_.compress_method() == kNoComress)
-            {
-                unpacked_data_.assign((const char*)d, d_len);
-                return true;
-            }
-            
-            if (!compressor_)
-            {
-                compressor_ = CompressorFactory::CreateCompressor(npp_request_header_v2_.compress_method());
-            }
-            
-            if (!compressor_->Uncompress(d, d_len, unpacked_data_))
-            {
-                last_error(kUncompressError);
-                return false;
-            }
-            
-            return true;
-        }
-
         Message::ProtoVersion RequestMessageUnpacker::GetProtoVersion() const
         {
             if (v1_message_unpacker_)
@@ -356,30 +358,6 @@ namespace npp
             return static_cast<Message::ProtoVersion>(net_header().version());
         }
 
-        bool RequestMessageUnpacker::_VerifyDigest( const void* digest, size_t digest_len, const void* plain_data, size_t plain_data_len )
-        {
-            if (!s_pNppConfig->verify_data())
-            {
-                return true;
-            }
-            
-            assert(digest_len == kMD5HexLen);
-            unsigned char calc_md5[kMD5HexLen]  = {};
-            MD5_CTX ctx;
-            MD5Init(&ctx);
-            MD5Update(&ctx, (unsigned char*)plain_data, (unsigned int)plain_data_len);
-            MD5Final((unsigned char*)calc_md5, &ctx);
-
-            if (0 == memcmp(calc_md5, digest, digest_len))
-            {
-                return true;
-            }
-            else
-            {
-                last_error(kDigestVerifyFailed);
-                return false;
-            }
-        }
     }
 }
 
