@@ -1,7 +1,7 @@
 #include "netproto/include/message.h"
 
 #include "netproto/include/npp_config.h"
-
+#include "netproto/include/zlib.h"
 #include "netproto/include/md5.h"
 
 #ifndef H_OS_WINDOWS
@@ -95,6 +95,58 @@ namespace npp
         {
             //TODO
             assert(false);
+        }
+    }
+
+    size_t Message::NppRequestHeaderV2::GetSymmetricEncryptDataLength(size_t data_len, ErrorCode& ec) const
+    {
+        size_t compressed_data_len = data_len;
+        if (compress_method() == kZlibCompress)
+        {
+            compressed_data_len = ZLib::GetCompressBound(compressed_data_len);
+        }
+
+        switch (symmetric_encrypt_method())
+        {
+        case kNoSymmetricEncrypt:
+            return compressed_data_len;
+        case kIDEASymmetricEncrypt:
+            return H_ALIGN(compressed_data_len + 8, 8);
+        default:
+            assert(false);
+            ec = (kNotSupportSymmetricEncryptMethod);
+            return 0;
+        }
+    }
+
+    size_t Message::NppRequestHeaderV2::GetSignLength(ErrorCode& ec)
+    {
+        if (asymmetric_encrypt_method() == kSimpleRSA)
+        {
+            npp::SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(asymmetric_encrypt_key_no());
+            if (!rsa)
+            {
+                ec = (kNotSupportSimpleRSAKeyNumber);
+                return 0;
+            }
+            return rsa->getSignLength();
+        }
+#ifdef H_NPP_PROVIDE_OPENSSL_RSA
+        else if (asymmetric_encrypt_method() == kOpenSSLRSA0 || asymmetric_encrypt_method() == kOpenSSLRSA2)
+        {
+            OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(asymmetric_encrypt_key_no());
+            if (!rsa)
+            {
+                ec = (kNotSupportSimpleRSAKeyNumber);
+                return 0;
+            }
+            return rsa->getSignLength();
+        }
+#endif
+        else
+        {
+            ec = (kNotSupportSignMethod);
+            return 0;
         }
     }
 }

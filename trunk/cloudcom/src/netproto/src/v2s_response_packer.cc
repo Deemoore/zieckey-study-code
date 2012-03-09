@@ -1,85 +1,154 @@
-#ifndef NETPROTO_MESSAGE_PACKER_H_
-#define NETPROTO_MESSAGE_PACKER_H_
 
 #include "netproto/include/inner_pre.h"
-#include "netproto/include/message.h"
-
+#include "netproto/include/v2s_response_packer.h"
+#include "netproto/include/v1_message_packer.h"
+#include "netproto/include/v2s_request_unpacker.h"
+#include "netproto/include/compressor.h"
+#include "netproto/include/npp_config.h"
+#include "slrsa/md5.h"
 
 namespace npp
 {
-    namespace v1
+    namespace v2s
     {
-
-        class MessageUnpacker;
-
-        class _EXPORT_NETPROTO MessagePacker : public Message
+        ResponseMessagePacker::ResponseMessagePacker( RequestMessageUnpacker* message_unpacker )
+            : message_unpacker_(message_unpacker)
         {
-        public:
-            //! \brief The constructor of MessagePacker
-            //! \note When you do a response message packing, 
-            //!     please provide parameter <code>message_unpacker</code>
-            //! \param MessageUnpacker * message_unpacker - 
-            //! \return  - 
-            MessagePacker(MessageUnpacker* message_unpacker = NULL);
+            
+        }
 
-            //MessagePacker(NppHeaderV1&, NetHeader&); //TODO add this constructor
-
-            //! \brief Pack the data
-            //! \param const void * data - The original data
-            //! \param size_t data_len - 
-            //! \param[out] void * packed_data_buf - The packed data will be stored here
-            //! \param[in,out] size_t & packed_data_buf_len - The original size of 
-            //!     <code>packed_data_buf</code> and after packing 
-            //!     the packed data length will stored here
-            //! \return bool - 
-            bool Pack(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
+        bool ResponseMessagePacker::Pack( const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
+        {
+            if (message_unpacker_->GetProtoVersion() == Message::kProtoVersion1)
+            {
+                v1::MessagePacker v1packer(message_unpacker_->v1_message_unpacker());
+                return v1packer.Pack(data, data_len, packed_data_buf, packed_data_buf_len);
+            }
+            
+            assert(message_unpacker_->GetProtoVersion() == Message::kProtoVersion2);
 
 
-            //! \brief Get the packed data length
-            //! \param size_t data_len - The data to be packed
-            //! \return size_t - 
-            size_t GetPackedTotalDataSize(size_t data_len);
+            //---------------------------------------------------------
+            //Step 1: NetHeader
+            unsigned char* write_pos = (unsigned char*)packed_data_buf;
+            NetHeader* net_header = reinterpret_cast<NetHeader*>(write_pos);
+            write_pos += sizeof(*net_header);
 
-            MessageUnpacker* GetMessageUnpacker() const { return message_unpacker_; }
+            //---------------------------------------------------------
+            //Step 2: NppResponseHeaderV2
+            NppResponseHeaderV2* npp_header = reinterpret_cast<NppResponseHeaderV2*>(write_pos);
+            write_pos += sizeof(*npp_header);
+            if (!message_unpacker_->asymmetric_decrypt_ok())
+            {
+                assert(!message_unpacker_->IsUnpackedOK());
+                npp_header->set_error_code(kInvalidClientPublicKey);
+                packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header);
+                return true;
+            }
+            else if (!message_unpacker_->IsUnpackedOK())
+            {
+                assert(!message_unpacker_->IsUnpackedOK());
+                npp_header->set_error_code(kInvalidRequest);
+                packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header);
+                return true;
+            }
 
-            //! Get the message id from the packed data
-            static uint16_t GetMessageID(void* packed_data_buf);
+            npp_header->set_error_code(kRequestSuccess);
+            npp_header->set_compress_method(message_unpacker_->npp_request_header_v2().compress_method());
 
-        private:
-            //! \brief Get the packed data length
-            //! \param size_t data_len - The data to be packed
-            //! \return size_t - 
-            size_t GetPackedTotalDataSize(const NppHeaderV1& npp_header, size_t data_len);
+            //---------------------------------------------------------
+            //Step 3: MD5
+            _CalcMD5AndWrite(data, data_len, write_pos);
+            write_pos += kMD5HexLen;
 
-            //! Get the sign length
-            size_t GetSignLength(const NppHeaderV1& npp_header);
+            //---------------------------------------------------------
+            //Step 4: Encrypt data
+            size_t encrypted_data_len = _SymmetricEncryptAndWrite(npp_header, data, data_len, write_pos);
+            packed_data_buf_len = sizeof(*net_header) + sizeof(*npp_header) + kMD5HexLen + encrypted_data_len;
 
-            bool pack_v1(const void* data, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len);
+            //---------------------------------------------------------
+            //Step 5: End
+            assert(memcmp(&this->npp_request_header_, npp_header, sizeof(*npp_header)) == 0);
+            net_header->set_data_len(htons(net_header->data_len()));
+            net_header->set_message_id(htons(net_header->message_id()));
+            net_header->set_reserve(htons(net_header->reserve())); 
 
-#ifdef _NETPROTO_TEST
-        public:
-#endif
-            //! We decide which sign to use 
-            //! 1->2 2->1
-            //! 3->4 4->3
-            //! 5->6 6->5
-            void ReverseSignKeyNum(NppHeaderV1& npp_header);
+            return true;
+        }
 
-        private:
-            //! Give a random IDEA key to npp_header
-            //! Give a random Sign key to npp_header
-            //! Give a random Sign Method to npp_header
-            void RandomNppHeader(NppHeaderV1& npp_header);
+        size_t ResponseMessagePacker::GetPackedTotalDataSize( size_t data_len )
+        {
+            if (message_unpacker_->GetProtoVersion() == Message::kProtoVersion1)
+            {
+                v1::MessagePacker v1packer(message_unpacker_->v1_message_unpacker());
+                return v1packer.GetPackedTotalDataSize(data_len);
+            }
 
-        private:
-            MessageUnpacker* message_unpacker_;
+            ErrorCode ec;
+            size_t ret = sizeof(NetHeader) + sizeof(NppResponseHeaderV2) + kMD5HexLen + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
+            last_error(ec);
+            return ret;
+        }
 
-            static uint16_t message_id_;
-        };
+        void ResponseMessagePacker::_CalcMD5AndWrite( const void* data, size_t data_len, uint8_t* write_pos )
+        {
+            MD5_CTX ctx;
+            MD5Init(&ctx);
+            MD5Update(&ctx, (unsigned char*)data, (unsigned int)data_len);
+            MD5Final((unsigned char*)write_pos, &ctx);
+        }
+
+        size_t ResponseMessagePacker::_SymmetricEncryptAndWrite( NppResponseHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos )
+        {
+            const void*  data_to_be_encrypt = orignal_data;
+            size_t data_to_be_encrypt_len = orignal_data_len;
+
+            Compressor* compress = message_unpacker_->compressor();
+            std::string compress_data;
+            if (compress)
+            {
+                if (!compress->Compress(orignal_data, orignal_data_len, compress_data))
+                {
+                    last_error(kCompressError);
+                    npp_header->set_error_code(kServerInternalError);
+                    return 0;
+                }
+
+                data_to_be_encrypt = reinterpret_cast<const void*>(compress_data.data());
+                data_to_be_encrypt_len = compress_data.size();
+            }
+            else
+            {
+                // We force to set the compress method to <code>kNoComress</code>
+                npp_header->set_compress_method(kNoComress);
+            }
+
+
+            SymmetricEncryptor* symmetric_encryptor = message_unpacker_->symmetric_encryptor();
+            if (symmetric_encryptor)
+            {
+                size_t write_len = symmetric_encryptor->GetEncryptDataLength(data_to_be_encrypt_len);
+                if (!symmetric_encryptor->Encrypt(data_to_be_encrypt, data_to_be_encrypt_len, write_pos, write_len))
+                {
+                    last_error(kSymmetricEncyptFailed);
+                    npp_header->set_error_code(kServerInternalError);
+                    return 0;
+                }
+                return write_len;
+            }
+
+            if (!s_pNppConfig->support_plain())
+            {
+                npp_header->set_error_code(kInvalidRequest);
+                return 0;
+            }
+            memcpy(write_pos, orignal_data, orignal_data_len);
+            return orignal_data_len;
+        }
     }
 }
 
-#endif
+
 
 
 

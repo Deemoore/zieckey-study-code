@@ -9,6 +9,8 @@
 
 namespace npp
 {
+    class Compressor;
+    class SymmetricEncryptor;
     namespace v2s
     {
         class _EXPORT_NETPROTO RequestMessageUnpacker : public Message
@@ -36,10 +38,15 @@ namespace npp
 
             SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
 
+            Compressor* compressor() const { return compressor_; }
+
             bool _AsymmetricDecrypt(const void* digest, size_t len, std::string& decrypted_data);
 
             //! After calling <code>Unpack</code>
             Message::ProtoVersion GetProtoVersion() const;
+
+            bool digest_verify_ok() const { return digest_verify_ok_; }
+            bool asymmetric_decrypt_ok() const { return asymmetric_decrypt_ok_; }
 
         private:
 
@@ -67,6 +74,10 @@ namespace npp
             std::string unpacked_data_;
 
             SymmetricEncryptor* symmetric_encryptor_;
+            Compressor*         compressor_;
+
+            bool asymmetric_decrypt_ok_;
+            bool digest_verify_ok_;
         };
     }
 }
