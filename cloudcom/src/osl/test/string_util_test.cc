@@ -23,6 +23,7 @@ namespace
         //             H_TEST_ASSERT ( strTip == strRet2 );
         //         }
 
+#ifdef H_OS_WINDOWS
         /// Utf8
         {
             osl::StringA strTip = "ansiÖÐÎÄtest";
@@ -30,7 +31,7 @@ namespace
 
             H_TEST_ASSERT ( strTip == strTipRet );
         }
-
+#endif
     }
 
     void test_xtoa()
