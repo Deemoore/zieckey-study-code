@@ -287,7 +287,7 @@ namespace npp
             return false;
         }
 
-        int ret = RSA_private_encrypt(m_len, (unsigned char*)m, (unsigned char*)sigret, m_public_rsa, RSA_PKCS1_PADDING);
+        int ret = RSA_private_encrypt(m_len, (unsigned char*)m, (unsigned char*)sigret, m_private_rsa, RSA_PKCS1_PADDING);
         if (ret > 0)
         {
             *siglen = ret;
