@@ -141,7 +141,7 @@ namespace
         }
     }
 
-    void test_zlib_1()
+    void test_idea_1()
     {
         {
             //std::string strideakey = "abcdefghabcdefgh";
@@ -242,7 +242,7 @@ namespace
 
     }
 
-    void test_2()
+    void test_idea_2()
     {
         std::string strideakey = "abcdefghabcdefgh";
         const unsigned char* s = ( const unsigned char* )"abcdefg";
@@ -283,6 +283,6 @@ namespace
 TEST_UNIT(idea_test_1)
 {
     test_getEncryptDataLen();
-    test_zlib_1();
-    test_2();
+    test_idea_1();
+    test_idea_2();
 }

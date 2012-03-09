@@ -235,8 +235,8 @@ namespace npp
                         last_error(kIDEADecryptFialed);
                         return false;
                     }
-                    assert(unpacked_data_.size() <= len);
-                    if (unpacked_data_.size() < len)
+                    assert(unpacked_data_.size() >= len);
+                    if (unpacked_data_.size() >= len)
                     {
                         unpacked_data_.resize(len);
                     }

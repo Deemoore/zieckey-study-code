@@ -16,17 +16,19 @@ namespace
         size_t encrypt_buf_len = sizeof(encrypt_buf);
 
         bool ret = e->PublicEncrypt(data.data(), data.size(), encrypt_buf, &encrypt_buf_len);
+        H_TEST_ASSERT(encrypt_buf_len == e->GetEncryptDataLength());
         H_TEST_ASSERT(ret);
 
         char   decrypt_buf[2048] = {};
         size_t decrypt_buf_len = sizeof(decrypt_buf);
         ret = e->PrivateDecrypt(encrypt_buf, encrypt_buf_len, decrypt_buf, &decrypt_buf_len);
         H_TEST_ASSERT(ret);
+
         H_TEST_ASSERT(decrypt_buf_len == data.size());
         H_TEST_ASSERT(memcmp(data.data(), decrypt_buf, data.size()) == 0);
     }
 
-    void test_symmetric_encrypt_1(npp::AsymmetricEncryptor* e, const std::string& data)
+    void test_private_encrypt_2(npp::AsymmetricEncryptor* e, const std::string& data)
     {
         char   encrypt_buf[2048] = {};
         size_t encrypt_buf_len = sizeof(encrypt_buf);
@@ -83,7 +85,43 @@ TEST_UNIT(test_asymmetric_encrypt_1)
                 npp::AsymmetricEncryptor* e = npp::AsymmetricEncryptorFactory::GetAsymmetricEncryptor(method, key_no);
                 H_TEST_ASSERT(e);
                 test_public_encrypt_1(e, test_datas[i]);
-                test_symmetric_encrypt_1(e, test_datas[i]);
+                test_private_encrypt_2(e, test_datas[i]);
+            }
+        }
+    }
+}
+
+namespace
+{
+    std::string CreateRondomString(size_t len)
+    {
+        std::string ret;
+        ret.resize(len);
+        for (size_t i = 0; i < len; ++i)
+        {
+            ret[0] = (char)(rand() % 256);
+        }
+        return ret;
+    }
+}
+
+TEST_UNIT(test_asymmetric_encrypt_2)
+{
+    bool support_plain = false;
+    bool sign_pack     = true;
+    bool verify_sign   = true;
+    npp::NppConfig* npp_config = CreateNppConfig(support_plain, sign_pack, verify_sign);
+    npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
+    for (size_t i = 1; i < 40; ++i)
+    {
+        for (int key_no = 1; key_no <= 4; key_no++)
+        {
+            for (int method = npp::Message::kOpenSSLRSA0; method < npp::Message::kSignMethodNum; method++)
+            {
+                npp::AsymmetricEncryptor* e = npp::AsymmetricEncryptorFactory::GetAsymmetricEncryptor(method, key_no);
+                H_TEST_ASSERT(e);
+                test_public_encrypt_1(e, CreateRondomString(i));
+                test_private_encrypt_2(e, CreateRondomString(i));
             }
         }
     }

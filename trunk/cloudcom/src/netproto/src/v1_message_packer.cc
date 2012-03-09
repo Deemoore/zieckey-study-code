@@ -116,7 +116,7 @@ namespace npp
             }
             else
             {
-                net_header->Init();
+                net_header->InitV1();
                 npp_header->Init();
                 RandomNppHeader(*npp_header);
                 net_header->set_message_id(MessagePacker::message_id_++);//TODO Not thread-safe

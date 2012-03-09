@@ -10,7 +10,6 @@ namespace npp
 {
     namespace v1
     {
-
         class MessageUnpacker;
 
         class _EXPORT_NETPROTO MessagePacker : public Message
