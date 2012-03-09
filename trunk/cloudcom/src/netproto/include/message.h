@@ -41,18 +41,19 @@ namespace npp
             kSymmetricEncryptMethodNum,
         };
 
-        enum SignMethod
+        enum AsymmetricEncryptMethod
         {
             kOpenSSLRSA0 = 0, //! OpenSSL RSA
             kSimpleRSA   = 1, //! Simple RSA
             kOpenSSLRSA2 = 2, //! OpenSSL RSA, the same as kOpenSSLRSA0
-            kSignMethodNum
+            kAsymmetricEncryptMethodNum
         };
 
         enum AsymmetricPublicPrivateMethod
         {
             kAsymmetricPublicEncrypt   = 0,
             kAsymmetricPrivateEncrypt  = 1,
+            kAsymmetricPublicPrivateMethodNum
         };
 
         enum CompressMethod
@@ -277,7 +278,10 @@ namespace npp
 
     protected:
         //! Set the last ErrorCode
-        void last_error(ErrorCode val) { last_error_ = val; }
+        void last_error(ErrorCode val) 
+        { 
+            last_error_ = val; 
+        }
 
     private:
         ErrorCode last_error_;

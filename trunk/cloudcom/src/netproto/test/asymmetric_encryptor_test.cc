@@ -78,9 +78,9 @@ TEST_UNIT(test_asymmetric_encrypt_1)
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
     for (size_t i = 0; i < H_ARRAYSIZE(test_datas); ++i)
     {
-        for (int key_no = 1; key_no <= 4; key_no++)
+        for (int key_no = 1; key_no <= 2; key_no++)
         {
-            for (int method = npp::Message::kOpenSSLRSA0; method < npp::Message::kSignMethodNum; method++)
+            for (int method = npp::Message::kOpenSSLRSA0; method < npp::Message::kAsymmetricEncryptMethodNum; method++)
             {
                 npp::AsymmetricEncryptor* e = npp::AsymmetricEncryptorFactory::GetAsymmetricEncryptor(method, key_no);
                 H_TEST_ASSERT(e);
@@ -112,11 +112,11 @@ TEST_UNIT(test_asymmetric_encrypt_2)
     bool verify_sign   = true;
     npp::NppConfig* npp_config = CreateNppConfig(support_plain, sign_pack, verify_sign);
     npp::ext::auto_delete<npp::NppConfig> npp_config_auto_deleted(npp_config);
-    for (size_t i = 1; i < 40; ++i)
+    for (size_t i = 1; i < 40; i = i + 3)
     {
         for (int key_no = 1; key_no <= 4; key_no++)
         {
-            for (int method = npp::Message::kOpenSSLRSA0; method < npp::Message::kSignMethodNum; method++)
+            for (int method = npp::Message::kOpenSSLRSA0; method < npp::Message::kAsymmetricEncryptMethodNum; method++)
             {
                 npp::AsymmetricEncryptor* e = npp::AsymmetricEncryptorFactory::GetAsymmetricEncryptor(method, key_no);
                 H_TEST_ASSERT(e);

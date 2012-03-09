@@ -33,11 +33,14 @@ namespace npp
             unsigned char* write_pos = (unsigned char*)packed_data_buf;
             NetHeader* net_header = reinterpret_cast<NetHeader*>(write_pos);
             write_pos += sizeof(*net_header);
+            memcpy(net_header, &message_unpacker_->net_header(), sizeof(*net_header));
+            net_header->set_reserve(0);
 
             //---------------------------------------------------------
             //Step 2: NppResponseHeaderV2
             NppResponseHeaderV2* npp_header = reinterpret_cast<NppResponseHeaderV2*>(write_pos);
             write_pos += sizeof(*npp_header);
+            npp_header->set_compress_method(message_unpacker_->npp_request_header_v2().compress_method());
             if (!message_unpacker_->asymmetric_decrypt_ok())
             {
                 assert(!message_unpacker_->IsUnpackedOK());
@@ -54,7 +57,6 @@ namespace npp
             }
 
             npp_header->set_error_code(kRequestSuccess);
-            npp_header->set_compress_method(message_unpacker_->npp_request_header_v2().compress_method());
 
             //---------------------------------------------------------
             //Step 3: MD5
@@ -68,8 +70,7 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 5: End
-            assert(memcmp(&this->npp_request_header_, npp_header, sizeof(*npp_header)) == 0);
-            net_header->set_data_len(htons(net_header->data_len()));
+            net_header->set_data_len(htons(packed_data_buf_len));
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve())); 
 
@@ -84,7 +85,7 @@ namespace npp
                 return v1packer.GetPackedTotalDataSize(data_len);
             }
 
-            ErrorCode ec;
+            ErrorCode ec = kNoError;
             size_t ret = sizeof(NetHeader) + sizeof(NppResponseHeaderV2) + kMD5HexLen + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
@@ -142,8 +143,9 @@ namespace npp
                 npp_header->set_error_code(kInvalidRequest);
                 return 0;
             }
-            memcpy(write_pos, orignal_data, orignal_data_len);
-            return orignal_data_len;
+
+            memcpy(write_pos, data_to_be_encrypt, data_to_be_encrypt_len);
+            return data_to_be_encrypt_len;
         }
     }
 }
