@@ -329,7 +329,7 @@ namespace npp
         {
             assert(out_data[pos - 1] <= 8);
             assert(out_data[pos - 1] > 0);
-            data_decrypted_len -= out_data[pos - 1];
+            data_decrypted_len = in_buf_len - out_data[pos - 1];
         }
         else
         {
