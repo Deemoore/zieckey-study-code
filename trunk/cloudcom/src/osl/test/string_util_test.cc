@@ -107,11 +107,11 @@ namespace
     {
         using namespace osl;
 
-        Vector<osl::f64> vec;
-        vec.push_back( 12.3 );
-        vec.push_back( 45.6 );
-        vec.push_back( 78.9 );
-        vec.push_back( 0.0f );
+        Vector<osl::s64> vec;
+        vec.push_back( 12 );
+        vec.push_back( 45 );
+        vec.push_back( 78 );
+        vec.push_back( 0 );
 
         StringA strSplit = "";
         strSplit += StringUtil::valueOf( vec[0] );
@@ -125,22 +125,14 @@ namespace
         {
             Vector<StringA> retval = StringUtil::split( strSplit.c_str() , " ," );
             Vector<StringA> TempVal;
-            TempVal.push_back( "1.230000e+001" );
-            TempVal.push_back( "4.560000e+001" );
-            TempVal.push_back( "7.890000e+001" );
-            TempVal.push_back( "0.000000e+000" );
+            TempVal.push_back( "12" );
+            TempVal.push_back( "45" );
+            TempVal.push_back( "78" );
+            TempVal.push_back( "0" );
             H_TEST_ASSERT( retval == TempVal );
 
-            osl::f64 fvec[6]={};
-            StringUtil::toF64Elements( strSplit , fvec , 6 , 0.0 );
-
-            // 			osl::s32 nVec[9]={};
-            // 			StringUtil::toS32Elements( strSplit , nVec , 9 , 0 );
-            // 			osl::s32 nVec2[9]={};
-            // 			copy( vec.begin() , vec.end() , nVec2 );
-            // 			H_TEST_ASSERT( 0 == memcmp( nVec , nVec2 , sizeof(nVec2) ) );
-
-
+            osl::s64 fvec[6]={};
+            StringUtil::toS64Elements( strSplit , fvec , 6 , 0.0 );
         }
 
 
