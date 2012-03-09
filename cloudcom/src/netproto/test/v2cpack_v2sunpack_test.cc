@@ -27,31 +27,60 @@ namespace
         const char * raw_data = "1234567890";
         size_t raw_data_len = strlen(raw_data);
 
-        npp::v2c::RequestMessage v2c_request;
-        v2c_request.SetCompressMethod(cm);
-        v2c_request.SetAsymmetricEncryptMethod(aem);
-        v2c_request.SetSymmetricEncryptMethod(sem);
-        v2c_request.SetAsymmetricPublicPrivateMethod(appm);
-        H_TEST_ASSERT(v2c_request.Pack(raw_data, raw_data_len));
+        //v2
+        {
+            npp::v2c::RequestMessage v2c_request;
+            v2c_request.SetCompressMethod(cm);
+            v2c_request.SetAsymmetricEncryptMethod(aem);
+            v2c_request.SetSymmetricEncryptMethod(sem);
+            v2c_request.SetAsymmetricPublicPrivateMethod(appm);
+            H_TEST_ASSERT(v2c_request.Pack(raw_data, raw_data_len));
 
-        npp::v2s::RequestMessageUnpacker v2s_unpacker;
-        bool unpack_ok = v2s_unpacker.Unpack(v2c_request.Data(), v2c_request.Size());
-        assert  (unpack_ok);
-        H_TEST_ASSERT(unpack_ok);
-        H_TEST_ASSERT(raw_data_len == v2s_unpacker.Size());
-        H_TEST_ASSERT(memcmp(raw_data, v2s_unpacker.Data(), raw_data_len) == 0);
+            npp::v2s::RequestMessageUnpacker v2s_unpacker;
+            bool unpack_ok = v2s_unpacker.Unpack(v2c_request.Data(), v2c_request.Size());
+            assert  (unpack_ok);
+            H_TEST_ASSERT(unpack_ok);
+            H_TEST_ASSERT(raw_data_len == v2s_unpacker.Size());
+            H_TEST_ASSERT(memcmp(raw_data, v2s_unpacker.Data(), raw_data_len) == 0);
 
-        npp::v2s::ResponseMessagePacker v2s_response(&v2s_unpacker);
-        char buf[1024] = {};
-        size_t buf_len = sizeof(buf);
-        const char* response_data = "0123456789";
-        size_t response_data_len = strlen(response_data);
-        H_TEST_ASSERT(v2s_response.Pack(response_data, response_data_len, buf, buf_len));
+            npp::v2s::ResponseMessagePacker v2s_response(&v2s_unpacker);
+            char buf[1024] = {};
+            size_t buf_len = sizeof(buf);
+            const char* response_data = "0123sdfasd456asdfas789";
+            size_t response_data_len = strlen(response_data);
+            H_TEST_ASSERT(v2s_response.Pack(response_data, response_data_len, buf, buf_len));
 
-        npp::v2c::ResponseUnpacker v2c_response_unpacker(&v2c_request);
-        H_TEST_ASSERT(v2c_response_unpacker.Unpack(buf, buf_len));
-        H_TEST_ASSERT(response_data_len == v2c_response_unpacker.Size());
-        H_TEST_ASSERT(memcmp(response_data, v2c_response_unpacker.Data(), response_data_len) == 0);
+            npp::v2c::ResponseUnpacker v2c_response_unpacker(&v2c_request);
+            H_TEST_ASSERT(v2c_response_unpacker.Unpack(buf, buf_len));
+            H_TEST_ASSERT(response_data_len == v2c_response_unpacker.Size());
+            H_TEST_ASSERT(memcmp(response_data, v2c_response_unpacker.Data(), response_data_len) == 0);
+        }
+
+        //v1
+        {
+            npp::v1::MessagePacker v1_packer;
+            char buf[1024] = {};
+            size_t buf_len = sizeof(buf);
+            H_TEST_ASSERT(v1_packer.Pack(raw_data, raw_data_len, buf, buf_len));
+
+            npp::v2s::RequestMessageUnpacker v2s_unpacker;
+            bool unpack_ok = v2s_unpacker.Unpack(buf, buf_len);
+            assert(unpack_ok);
+            H_TEST_ASSERT(unpack_ok);
+            //H_TEST_ASSERT(raw_data_len == v2s_unpacker.Size());
+            H_TEST_ASSERT(memcmp(raw_data, v2s_unpacker.Data(), raw_data_len) == 0);
+
+            npp::v2s::ResponseMessagePacker v2s_response(&v2s_unpacker);
+            buf_len = sizeof(buf);
+            const char* response_data = "01234asdfa56aafsdfasds78934234";
+            size_t response_data_len = strlen(response_data);
+            H_TEST_ASSERT(v2s_response.Pack(response_data, response_data_len, buf, buf_len));
+
+            npp::v1::MessageUnpacker v1_unpacker;
+            H_TEST_ASSERT(v1_unpacker.Unpack(buf, buf_len));
+            //H_TEST_ASSERT(response_data_len == v1_unpacker.Size());
+            H_TEST_ASSERT(memcmp(response_data, v1_unpacker.Data(), response_data_len) == 0);
+        }
     }
 }
 
