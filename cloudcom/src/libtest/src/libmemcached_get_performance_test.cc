@@ -159,7 +159,64 @@ TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performa
 
 
 
-#endif// #ifdef H_PROVIDE_LIBMEMCACHED
+TEST_INVOKE( test_libmemcached_test_get_get , "test_libmemcached_test_get_get --sock=/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock --host=localhost --port=10009 --thread=16 --count=1000000 --log=true" )
+{
+    osl::StringA sock = "/home/s/apps/CloudSafeLine/QueryEngine/MemDB/var/memcached.sock";
+    osl::StringA hostname = "localhost";
+    osl::StringA port = "10000";
+    int threadnum = 1;
+    size_t count     = 100000;
+    bool log_enable = false;
+    //test_memcached1 --host=localhost --port=10009 --thread=10 --method=get,set,delete
+    osl::AppShell::Param* pp = pCmd->getParam("host");
+    if ( pp ) hostname = pp->strVal;
+
+    pp = pCmd->getParam("port");
+    if ( pp ) port = pp->strVal;
+
+    pp = pCmd->getParam("thread");
+    if ( pp ) threadnum = atoi(pp->strVal.c_str());
+
+    pp = pCmd->getParam("count");
+    if ( pp ) count = atol(pp->strVal.c_str());
+
+    pp = pCmd->getParam("log");
+    if ( pp && pp->strVal == "true") log_enable = true;
+
+    wu::Memcached mc_(sock.data(), hostname.data(), port.data());
+    osl::Random randint( uint32_t(s_pTimer->getImmediateSeconds() * 1000000) + rand());
+    for (size_t i = 0; i < count; ++i)
+    {
+        wu::Memcached::StringAStringAMap kvm;
+        osl::StringA key, errmsg;
+        for (int j = 0; j < 5; ++j)
+        {
+            key = osl::StringUtil::valueOf(osl::s64(i + j + randint.next()));
+            kvm[key] = "";
+        }
+        if (mc_.mget(1, kvm, errmsg) < 0)
+        {
+            logTrace("libtest", "mget error:%s", errmsg.data());
+        }
+        
+        wu::Memcached::StringAStringAMap kvm1;
+        kvm1 = kvm;
+        if (mc_.mget(1, kvm1, errmsg) < 0)
+        {
+            logTrace("libtest", "mget error:%s", errmsg.data());
+        }
+        wu::Memcached::StringAStringAMap::iterator it(kvm1.begin());
+        wu::Memcached::StringAStringAMap::iterator ite(kvm1.end());
+        for (; it != ite; ++it)
+        {
+            if (log_enable && it->second != "1")
+            {
+                logTrace("libtest", "error key=%s value=[%s]", it->first.c_str(), it->second.c_str());
+            }
+        }
+    }
+}
 
 
+#endif
 
