@@ -26,6 +26,9 @@ namespace npp
         {
             SymmetricEncryptorFactory::DesstorySymmetricEncryptor(symmetric_encryptor_);
             symmetric_encryptor_ = NULL;
+
+            CompressorFactory::DesstoryCompressor(compressor_);
+            compressor_ = NULL;
         }
 
         const uint8_t* RequestMessage::Data() const
@@ -61,8 +64,8 @@ namespace npp
 
             //for the sake of SetAsymmetricEncryptMethod or SetAsymmetricEncryptKeyNo has been called by App layer
             ErrorCode ec = kNoError;
-            this->npp_request_header_.set_asymmetric_encrypt_data_len(this->npp_request_header_.GetSignLength(ec));
-            if (this->npp_request_header_.asymmetric_encrypt_data_len() == 0)
+            this->npp_request_header_v2_.set_asymmetric_encrypt_data_len(this->npp_request_header_v2_.GetSignLength(ec));
+            if (this->npp_request_header_v2_.asymmetric_encrypt_data_len() == 0)
             {
                 last_error(ec);
                 return false;
@@ -84,7 +87,7 @@ namespace npp
             write_pos += sizeof(*net_header);
 
             NppRequestHeaderV2* npp_header = reinterpret_cast<NppRequestHeaderV2*>(write_pos);
-            memcpy(npp_header, &this->npp_request_header_, sizeof(*npp_header));
+            memcpy(npp_header, &this->npp_request_header_v2_, sizeof(*npp_header));
             write_pos += sizeof(*npp_header);
 
             //---------------------------------------------------------
@@ -119,7 +122,7 @@ namespace npp
             //---------------------------------------------------------
             //Step 5: end
             assert(last_error() == kNoError);
-            assert(memcmp(&this->npp_request_header_, npp_header, sizeof(*npp_header)) == 0);
+            assert(memcmp(&this->npp_request_header_v2_, npp_header, sizeof(*npp_header)) == 0);
             net_header->set_data_len(htons(net_header->data_len()));
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve()));
@@ -132,16 +135,16 @@ namespace npp
         size_t RequestMessage::GetPackedTotalDataSize( size_t data_len )
         {
             ErrorCode ec = kNoError;
-            size_t ret = sizeof(NetHeader) + sizeof(NppRequestHeaderV2) + kMD5HexLen + npp_request_header_.GetSignLength(ec) + npp_request_header_.GetSymmetricEncryptDataLength(data_len, ec);
+            size_t ret = sizeof(NetHeader) + sizeof(NppRequestHeaderV2) + kMD5HexLen + npp_request_header_v2_.GetSignLength(ec) + npp_request_header_v2_.GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
         }
 // 
 //         size_t RequestMessage::GetSignLength()
 //         {
-//             if (npp_request_header_.asymmetric_encrypt_method() == kSimpleRSA)
+//             if (npp_request_header_v2_.asymmetric_encrypt_method() == kSimpleRSA)
 //             {
-//                 npp::SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_request_header_.asymmetric_encrypt_key_no());
+//                 npp::SimpleRSA* rsa = s_pNppConfig->GetSimpleRSA(npp_request_header_v2_.asymmetric_encrypt_key_no());
 //                 if (!rsa)
 //                 {
 //                     last_error(kNotSupportSimpleRSAKeyNumber);
@@ -150,9 +153,9 @@ namespace npp
 //                 return rsa->getSignLength();
 //             }
 // #ifdef H_NPP_PROVIDE_OPENSSL_RSA
-//             else if (npp_request_header_.asymmetric_encrypt_method() == kOpenSSLRSA0 || npp_request_header_.asymmetric_encrypt_method() == kOpenSSLRSA2)
+//             else if (npp_request_header_v2_.asymmetric_encrypt_method() == kOpenSSLRSA0 || npp_request_header_v2_.asymmetric_encrypt_method() == kOpenSSLRSA2)
 //             {
-//                 OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_request_header_.asymmetric_encrypt_key_no());
+//                 OpenSSLRSA* rsa = s_pNppConfig->GetOpenSSLRSA(npp_request_header_v2_.asymmetric_encrypt_key_no());
 //                 if (!rsa)
 //                 {
 //                     last_error(kNotSupportSimpleRSAKeyNumber);
@@ -171,16 +174,16 @@ namespace npp
 //         size_t RequestMessage::GetEncryptDataLength( size_t data_len )
 //         {
 //             size_t compressed_data_len = data_len;
-//             if (npp_request_header_.compress_method() == kZlibCompress)
+//             if (npp_request_header_v2_.compress_method() == kZlibCompress)
 //             {
 //                 compressed_data_len = ZLib::GetCompressBound(compressed_data_len);
 //             }
 //             
-//             if (npp_request_header_.symmetric_encrypt_method() == kIDEASymmetricEncrypt)
+//             if (npp_request_header_v2_.symmetric_encrypt_method() == kIDEASymmetricEncrypt)
 //             {
 //                 return H_ALIGN(compressed_data_len + 8, 8);
 //             }
-//             else if (npp_request_header_.symmetric_encrypt_method() == kNoSymmetricEncrypt)
+//             else if (npp_request_header_v2_.symmetric_encrypt_method() == kNoSymmetricEncrypt)
 //             {
 //                 return compressed_data_len;
 //             }
@@ -214,7 +217,7 @@ namespace npp
             {
                 // We force to set the compressor_ method to <code>kNoComress</code>
                 npp_header->set_compress_method(kNoComress);
-                this->npp_request_header_.set_compress_method(kNoComress);
+                this->npp_request_header_v2_.set_compress_method(kNoComress);
             }
             
             symmetric_encryptor_ = SymmetricEncryptorFactory::CreateSymmetricEncryptor(npp_header->symmetric_encrypt_method());
@@ -248,14 +251,14 @@ namespace npp
 
             std::string symmetric_encrypt_key = symmetric_encryptor_->GetEncryptKey();
 
-            AsymmetricEncryptor* encryptor = AsymmetricEncryptorFactory::GetAsymmetricEncryptor(npp_request_header_.asymmetric_encrypt_method(), npp_request_header_.asymmetric_encrypt_key_no());
+            AsymmetricEncryptor* encryptor = AsymmetricEncryptorFactory::GetAsymmetricEncryptor(npp_request_header_v2_.asymmetric_encrypt_method(), npp_request_header_v2_.asymmetric_encrypt_key_no());
             if (!encryptor)
             {
                 last_error(kNotSupportSignMethod);//or 
                 return 0;
             }
 
-            switch (npp_request_header_.asymmetric_pub_priv_method())
+            switch (npp_request_header_v2_.asymmetric_pub_priv_method())
             {
             case kAsymmetricPublicEncrypt:
                 {
@@ -265,7 +268,7 @@ namespace npp
                         last_error(kAsymmetricPublicEncryptFailed);
                         return 0;
                     }
-                    assert(len == npp_request_header_.asymmetric_encrypt_data_len());
+                    assert(len == npp_request_header_v2_.asymmetric_encrypt_data_len());
                     return len;
                 }
             case kAsymmetricPrivateEncrypt:
@@ -276,7 +279,7 @@ namespace npp
                         last_error(kAsymmetricPrivateEncryptFailed);
                         return 0;
                     }
-                    assert(len == npp_request_header_.asymmetric_encrypt_data_len());
+                    assert(len == npp_request_header_v2_.asymmetric_encrypt_data_len());
                     return len;
                 }
             default:
