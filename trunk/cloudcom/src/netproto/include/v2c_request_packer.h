@@ -34,15 +34,15 @@ namespace npp
 
             //Behavior setting
         public:
-            void SetSymmetricEncryptMethod(SymmetricEncryptMethod method) {npp_request_header_.set_symmetric_encrypt_method(method);}
+            void SetSymmetricEncryptMethod(SymmetricEncryptMethod method) {npp_request_header_v2_.set_symmetric_encrypt_method(method);}
 
-            void SetAsymmetricEncryptMethod(AsymmetricEncryptMethod method) {npp_request_header_.set_asymmetric_encrypt_method(method);}
+            void SetAsymmetricEncryptMethod(AsymmetricEncryptMethod method) {npp_request_header_v2_.set_asymmetric_encrypt_method(method);}
 
-            void SetAsymmetricEncryptKeyNo(uint8_t key_no) {npp_request_header_.set_asymmetric_encrypt_key_no(key_no);}
+            void SetAsymmetricEncryptKeyNo(uint8_t key_no) {npp_request_header_v2_.set_asymmetric_encrypt_key_no(key_no);}
 
-            void SetAsymmetricPublicPrivateMethod(AsymmetricPublicPrivateMethod method) { npp_request_header_.set_asymmetric_pub_priv_method(method);}
+            void SetAsymmetricPublicPrivateMethod(AsymmetricPublicPrivateMethod method) { npp_request_header_v2_.set_asymmetric_pub_priv_method(method);}
 
-            void SetCompressMethod(CompressMethod method) {npp_request_header_.set_compress_method(method);}
+            void SetCompressMethod(CompressMethod method) {npp_request_header_v2_.set_compress_method(method);}
 
         private:
             //! \brief Get the packed data length
@@ -64,12 +64,12 @@ namespace npp
 
             SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
             Compressor* compressor() const { return compressor_; }
-            const NppRequestHeaderV2& npp_request_header_v2() const { return npp_request_header_; }
+            const NppRequestHeaderV2& npp_request_header_v2() const { return npp_request_header_v2_; }
 
         private:
             friend class ResponseUnpacker;
 
-            NppRequestHeaderV2  npp_request_header_;
+            NppRequestHeaderV2  npp_request_header_v2_;
             NetHeader           net_header_;
 
             std::string         packed_data_;
