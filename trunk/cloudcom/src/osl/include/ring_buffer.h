@@ -1,9 +1,8 @@
-#ifndef OSLIB_RINGPTRBUFFER_H_
-#define OSLIB_RINGPTRBUFFER_H_
+#ifndef _OSLIB_RINGPTRBUFFER_H_
+#define _OSLIB_RINGPTRBUFFER_H_
 
-#include "qoslib/include/QOSLibPrerequisits.h"
-#include "qoslib/include/QString.h"
-#include "qoslib/include/QMyOS.h"
+#include "osl/include/inner_pre.h"
+#include "osl/include/string_ext.h"
 
 namespace osl
 {

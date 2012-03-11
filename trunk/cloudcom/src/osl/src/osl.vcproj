@@ -341,6 +341,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ring_buffer.cc"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ring_buffer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\thread.cc"
 				>
 			</File>
