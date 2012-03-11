@@ -215,6 +215,39 @@ namespace
         memcpy(buf + sizeof(key1), (char*)key2, sizeof(key2));
         H_TEST_ASSERT(memcmp(s1.data(), buf, s1.length()) == 0);
     }
+
+    static int FLAGS_md5_index = 4;
+
+    osl::Slice SpliteCommand(const char* command, size_t len)
+    {
+        int count = 0;
+        const char* begin = command;
+        size_t slice_start = 0;
+        for (size_t i = 0; i < len; ++i)
+        {
+            if (begin[i] == '\t')
+            {
+                ++count;
+                if (count == FLAGS_md5_index)
+                {
+                    slice_start = i+1;
+                }
+                else if (count == FLAGS_md5_index + 1)
+                {
+                    if (i - slice_start == 32)
+                    {
+                        return osl::Slice(begin + slice_start, 32);
+                    }
+                    else
+                    {
+                        return osl::Slice();
+                    }
+                }
+            }
+        }
+
+        return osl::Slice();
+    }
 }
 
 TEST_UNIT(trivial_std_string_test)
@@ -234,7 +267,17 @@ TEST_UNIT(string_util_test_1)
 }
 
 
+TEST_UNIT(test_SpliteCommand)
+{
+    std::string data1 = "dfbc22a2ba2fbff94d4557a707fb9c15\twd\turlproc\t2.1.0.1001\t2d7d233ef132096f2f5ba843972e4fad\t255\taHR0cDovL3d3dy5iYWlkdS5jb20vcz93b3JkPSVDNiVCRCVCQSVGRSVDNiVGQiVCMyVCNSVENSVCRSVCNSVFNyVCQiVCMCZ0bj1zaXRlaGFvMTIzJmY9Mw==\t1331165275$";
+    osl::Slice slice = SpliteCommand(data1.data(), data1.size());
+    H_TEST_ASSERT(slice.toString() == "2d7d233ef132096f2f5ba843972e4fad");
 
+    std::string data2 = "dfbc22a2ba2fbff94d4557a707fb9c15\twd\turlproc";
+    slice = SpliteCommand(data2.data(), data2.size());
+    H_TEST_ASSERT(slice.toString() == "");
+
+}
 
 
 
