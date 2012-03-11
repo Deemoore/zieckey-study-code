@@ -1,5 +1,6 @@
-#include "qoslib/include/QOSLibPrerequisits.h"
-#include "qoslib/include/QRingBuffer.h"
+#include "osl/include/inner_pre.h"
+#include "osl/include/ring_buffer.h"
+#include "osl/include/atomic_op.h"
 
 #ifdef H_OS_WINDOWS
 #	include "emmintrin.h"
