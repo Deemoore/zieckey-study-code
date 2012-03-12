@@ -9,15 +9,19 @@
 
 namespace npp
 {
-#if 0
     /*
     Well that's nice, but how do I make a gzip file in memory?
         You can request that deflate write the gzip format instead of the zlib format using deflateInit2(). You can also request that inflate decode the gzip format using inflateInit2(). Read zlib.h for more details.
         Note that you cannot specify special gzip header contents (e.g. a file name or modification date), nor will inflate tell you what was in the gzip header. If you need to customize the header or see what's in it, you can use the raw deflate and inflate operations and the crc32() function and roll your own gzip encoding and decoding. Read the gzip RFC 1952 for details of the header and trailer format. 
         */
     class _EXPORT_NETPROTO GZip : public Compressor
-    {//TODO need Add 4byte length of leading
+    {
+        //TODO need Add 4byte length of leading
+        //TODO more comments
     public:
+        virtual bool Compress(const void* data, size_t data_len, std::string& compresed_data) {return true;}
+        virtual bool Uncompress(const void* data, size_t data_len, std::string& uncompresed_data){return true;}
+
         /*
         Compresses the source buffer into the destination buffer.  sourceLen is
         the byte length of the source buffer. Upon entry, destLen is the total
@@ -62,9 +66,13 @@ namespace npp
         a Uncompress() call to allocate the destination buffer.
         */
         static size_t GetUncompressBound(const void* compressed_data);
-    }; 
 
-#endif
+
+        static int gz_compress2 (uint8_t *dest, uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
+
+        static int gz_uncompress (uint8_t *dest, uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
+
+    }; 
 
 }//end of namespace npp
 #endif

@@ -1,11 +1,12 @@
-#ifndef _NETPROTO_RSA_H_
-#define _NETPROTO_RSA_H_
+#ifndef _NETPROTO_OPENSSL_RSA_H_
+#define _NETPROTO_OPENSSL_RSA_H_
 
 
 #include "netproto/include/config.h"
 #include "netproto/include/inner_pre.h"
 
 #ifdef H_NPP_PROVIDE_OPENSSL_RSA
+
 #include "netproto/include/asymmetric_encrypt.h"
 #include <openssl/rsa.h>
 #include <openssl/engine.h>
