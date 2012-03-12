@@ -1,5 +1,5 @@
-#ifndef _NETPROTO_CONFIG_H_
-#define _NETPROTO_CONFIG_H_
+#ifndef _NETPROTO_TOTAL_CONFIG_H_
+#define _NETPROTO_TOTAL_CONFIG_H_
 
 //Define to 1 if you want to use memory pool
 //#define H_NPP_PROVIDE_MEMORY_POOL 0

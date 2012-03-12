@@ -5,8 +5,9 @@
 
 #include "netproto/include/zlib.h"
 #include "netproto/include/auto_delete.h"
+#include "netproto/include/gz.h"
 
-#if H_NPP_PROVIDE_ZLIB
+#ifdef H_NPP_PROVIDE_ZLIB
 
 namespace
 {
@@ -44,13 +45,23 @@ namespace
 
     bool test_gzip_1(const char* data)
     {
-#if 0
         size_t data_len = strlen(data);
         size_t compressed_data_len = 4096;
         char* compressed_data = new char[compressed_data_len];
         npp::ext::auto_delete<char> compressed_data_auto_delete(compressed_data);
         H_TEST_ASSERT(ZZ_OK == npp::GZip::Compress(data, data_len, compressed_data, &compressed_data_len));
 
+        if (data_len < 32)
+        {
+            std::string path(data);
+            path.append(".gz");
+            FILE* fp = fopen(path.c_str(), "wb+");
+            fwrite(compressed_data, compressed_data_len, 1, fp);
+            fflush(fp);
+            fclose(fp);
+        }
+
+        #if 1
         size_t decompressed_data_len = 4096;
         char* decompressed_data = new char[decompressed_data_len];
         npp::ext::auto_delete<char> decompressed_data_auto_delete(decompressed_data);
@@ -59,15 +70,7 @@ namespace
         H_TEST_ASSERT(decompressed_data_len == data_len);
         H_TEST_ASSERT(strncmp(decompressed_data, data, data_len) == 0);
 
-        if (data_len < 32)
-        {
-            std::string path(data);
-            path.append(".gz");
-            FILE* fp = fopen(path.c_str(), "wb+");
-            fwrite(compressed_data + 4, compressed_data_len - 4, 1, fp);
-            fflush(fp);
-            fclose(fp);
-        }
+        
 #endif
         return true;
     }

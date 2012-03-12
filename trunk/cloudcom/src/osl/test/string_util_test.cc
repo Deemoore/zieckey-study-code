@@ -230,18 +230,7 @@ namespace
                 ++count;
                 if (count == FLAGS_md5_index)
                 {
-                    slice_start = i+1;
-                }
-                else if (count == FLAGS_md5_index + 1)
-                {
-                    if (i - slice_start == 32)
-                    {
-                        return osl::Slice(begin + slice_start, 32);
-                    }
-                    else
-                    {
-                        return osl::Slice();
-                    }
+                    return osl::Slice(begin+i+1, 32);
                 }
             }
         }
@@ -276,7 +265,6 @@ TEST_UNIT(test_SpliteCommand)
     std::string data2 = "dfbc22a2ba2fbff94d4557a707fb9c15\twd\turlproc";
     slice = SpliteCommand(data2.data(), data2.size());
     H_TEST_ASSERT(slice.toString() == "");
-
 }
 
 

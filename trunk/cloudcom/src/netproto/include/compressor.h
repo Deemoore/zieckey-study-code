@@ -11,8 +11,8 @@ namespace npp
     public:
         virtual ~Compressor() {}
 
-        virtual bool Compress(const void* data, size_t data_len, std::string& uncompresed_data) = 0;
-        virtual bool Uncompress(const void* data, size_t data_len, std::string& compresed_data) = 0;
+        virtual bool Compress(const void* data, size_t data_len, std::string& compresed_data) = 0;
+        virtual bool Uncompress(const void* data, size_t data_len, std::string& uncompresed_data) = 0;
     };
 
     class _EXPORT_NETPROTO CompressorFactory
