@@ -237,6 +237,15 @@ namespace
 
         return osl::Slice();
     }
+
+    void test_slice()
+    {
+        osl::SliceSliceMap ssmap;
+        ssmap["a"] = "aaa";
+        ssmap["b"] = "bbb";
+        H_TEST_ASSERT(ssmap["a"] == "aaa");
+        H_TEST_ASSERT(ssmap["b"] == "bbb");
+    }
 }
 
 TEST_UNIT(trivial_std_string_test)
@@ -269,3 +278,8 @@ TEST_UNIT(test_SpliteCommand)
 
 
 
+
+TEST_UNIT(test_slice)
+{
+    test_slice();
+}
