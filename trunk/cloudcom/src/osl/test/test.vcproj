@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\getopt_test.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\ini_parser_test.cc"
 				>
 			</File>
