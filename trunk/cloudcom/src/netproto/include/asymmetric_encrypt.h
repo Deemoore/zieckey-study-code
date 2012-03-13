@@ -10,6 +10,8 @@ namespace npp
     class _EXPORT_NETPROTO AsymmetricEncryptor
     {
     public:
+        virtual ~AsymmetricEncryptor() {}
+
         //! \brief public encrypt method
         //! \param[in] - const void * m
         //! \param[in] - const size_t m_len
