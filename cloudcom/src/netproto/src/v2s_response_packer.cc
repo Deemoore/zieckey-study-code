@@ -39,11 +39,11 @@ namespace npp
             }
             
             //---------------------------------------------------------
-            //Step 1: NetHeader
+            //Step 1: NetHeaderV2
             unsigned char* write_pos = (unsigned char*)packed_data_buf;
-            NetHeader* net_header = reinterpret_cast<NetHeader*>(write_pos);
+            NetHeaderV2* net_header = reinterpret_cast<NetHeaderV2*>(write_pos);
             write_pos += sizeof(*net_header);
-            memcpy(net_header, &message_unpacker_->net_header(), sizeof(*net_header));
+            memcpy(net_header, &message_unpacker_->net_header_v2(), sizeof(*net_header));
             net_header->set_reserve(0);
 
             //---------------------------------------------------------
@@ -78,9 +78,9 @@ namespace npp
 
             //---------------------------------------------------------
             //Step 4: End
-            net_header->set_data_len(htons(packed_data_buf_len - sizeof(*net_header)));
+            net_header->set_data_len(htonl(packed_data_buf_len - sizeof(*net_header)));
             net_header->set_message_id(htons(net_header->message_id()));
-            net_header->set_reserve(htons(net_header->reserve())); 
+            net_header->set_reserve(htons(net_header->reserve()));
 
             return true;
         }
@@ -94,7 +94,7 @@ namespace npp
             }
 
             ErrorCode ec = kNoError;
-            size_t ret = sizeof(NetHeader) + sizeof(NppResponseHeaderV2) + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
+            size_t ret = sizeof(NetHeaderV2) + sizeof(NppResponseHeaderV2) + message_unpacker_->npp_request_header_v2().GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
         }

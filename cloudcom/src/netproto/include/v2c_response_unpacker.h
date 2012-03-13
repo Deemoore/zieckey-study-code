@@ -36,10 +36,10 @@ namespace npp
             size_t Size() const;
 
             //! Get the message ID from the data
-            //! The data length MUST be larger than sizeof(NetHeader)
+            //! The data length MUST be larger than sizeof(NetHeaderV2)
             static uint16_t GetMessageID(const void* data) 
             {
-                const NetHeader* h = reinterpret_cast<const NetHeader*>(data);
+                const NetHeaderV2* h = reinterpret_cast<const NetHeaderV2*>(data);
                 return ntohs(h->message_id());
             }
 
@@ -53,7 +53,7 @@ namespace npp
         private:
             RequestMessage*     request_message_;
 
-            NetHeader           net_header_;
+            NetHeaderV2           net_header_;
             NppResponseHeaderV2 npp_response_header_v2_;
 
             std::string unpacked_data_;

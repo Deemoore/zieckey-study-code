@@ -23,7 +23,7 @@ namespace npp
             {
                 if (message_unpacker_->net_header().version() == kProtoVersion1)
                 {
-                    return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
+                    return sizeof(NetHeaderV1) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
                 }
                 else
                 {
@@ -33,7 +33,7 @@ namespace npp
             }
 
             //version 1
-            return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
+            return sizeof(NetHeaderV1) + sizeof(NppHeaderV1) + kMD5HexLen + GetSignLength(npp_header) + H_ALIGN(data_len + 8, 8);
 
             //TODO version 2
         }
@@ -41,7 +41,7 @@ namespace npp
         size_t MessagePacker::GetPackedTotalDataSize(size_t data_len)
         {
             //TODO need more process GetSignLength(npp_header) instead of 128
-            return sizeof(NetHeader) + sizeof(NppHeaderV1) + kMD5HexLen + 128 + H_ALIGN(data_len + 8, 8);
+            return sizeof(NetHeaderV1) + sizeof(NppHeaderV1) + kMD5HexLen + 128 + H_ALIGN(data_len + 8, 8);
         }
 
         bool MessagePacker::Pack( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
@@ -100,9 +100,9 @@ namespace npp
         bool MessagePacker::pack_v1( const void* d, size_t data_len, void* packed_data_buf, size_t& packed_data_buf_len )
         {
             //---------------------------------------------------------
-            //Step 1: NetHeader and NppHeaderV1
+            //Step 1: NetHeaderV1 and NppHeaderV1
             unsigned char* write_pos = (unsigned char*)packed_data_buf;
-            NetHeader* net_header = reinterpret_cast<NetHeader*>(write_pos);
+            NetHeaderV1* net_header = reinterpret_cast<NetHeaderV1*>(write_pos);
             write_pos += sizeof(*net_header);
             NppHeaderV1* npp_header = reinterpret_cast<NppHeaderV1*>(write_pos);
             write_pos += sizeof(*npp_header);
@@ -182,8 +182,7 @@ namespace npp
                 }
             }
 
-            net_header->data_len_   = packed_data_buf_len - sizeof(*net_header);
-            net_header->data_len_   = htons(net_header->data_len_);
+            net_header->data_len_   = htons(packed_data_buf_len - sizeof(*net_header));
             net_header->message_id_ = htons(net_header->message_id_);
             net_header->reserve_    = htons(net_header->reserve_);
 
@@ -329,7 +328,7 @@ namespace npp
         uint16_t MessagePacker::GetMessageID( void* packed_data_buf )
         {
             assert(packed_data_buf);
-            return ntohs(((NetHeader*)packed_data_buf)->message_id());
+            return ntohs(((NetHeaderV1*)packed_data_buf)->message_id());
         }
     }
 }

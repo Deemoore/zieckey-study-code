@@ -120,7 +120,7 @@ namespace npp
     public:
         //! The header information struct of the data packet 
 #pragma pack(push,1)
-        struct NetHeader
+        struct NetHeaderV1
         {
             uint8_t  header_len_;    //! in bytes 
             uint8_t  version_;       //! The protocol version
@@ -209,6 +209,43 @@ namespace npp
             void    set_sign_key_no(uint8_t val) { sign_key_no_ = val; }
             uint8_t sign_method() const { return sign_method_; }
             void    set_sign_method(uint8_t val) { sign_method_ = val; }
+        };
+
+        struct NetHeaderV2
+        {
+            uint8_t  header_len_;    //! in bytes 
+            uint8_t  version_;       //! The protocol version
+            uint32_t data_len_;      //! big-endian, the length of the data 
+            uint16_t message_id_;    //! big-endian, client generate randomly
+            uint8_t  packet_seq_;
+            uint8_t  packet_count_;
+            uint16_t reserve_;      //! big-endian, preserved, set to 0x0000
+
+            void Init()
+            {
+                memset(this, 0, sizeof(*this));
+                header_len_ = sizeof(*this);
+                version_ = kProtoVersion2;
+                packet_count_ = 1;
+            }
+
+            uint8_t  version() const { return version_; }
+            void     set_version(uint8_t val) { version_ = val; }
+
+            uint32_t data_len() const { return data_len_; }
+            void     set_data_len(uint32_t val) { data_len_ = val; }
+
+            uint16_t message_id() const { return message_id_; }
+            void     set_message_id(uint16_t val) { message_id_ = val; }
+
+            uint8_t  packet_seq() const { return packet_seq_; }
+            void     set_packet_seq(uint8_t val) { packet_seq_ = val; }
+
+            uint8_t  packet_count() const { return packet_count_; }
+            void     set_packet_count(uint8_t val) { packet_count_ = val; }
+
+            uint16_t reserve() const { return reserve_; }
+            void     set_reserve(uint16_t val) { reserve_ = val; }
         };
 
         struct NppRequestHeaderV2

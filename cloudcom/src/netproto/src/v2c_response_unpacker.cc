@@ -47,7 +47,7 @@ namespace npp
             uint8_t header_len = read_pos[0];
             assert(header_len >= sizeof(net_header_));
             memcpy(&net_header_, read_pos, sizeof(net_header_)); // for the sake of NetHeader's changes
-            net_header_.data_len_   = ntohs(net_header_.data_len_);
+            net_header_.data_len_   = ntohl(net_header_.data_len_);
             net_header_.message_id_ = ntohs(net_header_.message_id_);
             net_header_.reserve_    = ntohs(net_header_.reserve_);
 

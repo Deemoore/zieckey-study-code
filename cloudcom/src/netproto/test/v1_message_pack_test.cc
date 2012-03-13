@@ -470,7 +470,7 @@ void test_pack_unpack_2( bool support_plain, bool sign_pack, bool verify_sign )
 
     npp::v1::MessageUnpacker unpacker;
     H_TEST_ASSERT(unpacker.Unpack(packed_data, packed_data_len));
-    npp::Message::NetHeader& net_header = const_cast<npp::Message::NetHeader&>(unpacker.net_header());
+    npp::Message::NetHeaderV1& net_header = const_cast<npp::Message::NetHeaderV1&>(unpacker.net_header());
     npp::Message::NppHeaderV1& npp_header = const_cast<npp::Message::NppHeaderV1&>(unpacker.npp_header());
     net_header.InitV1();
     npp_header.Init();
