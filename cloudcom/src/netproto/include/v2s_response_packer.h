@@ -4,6 +4,7 @@
 #include "netproto/include/inner_pre.h"
 #include "netproto/include/message.h"
 
+#ifdef H_NPP_SUPPORT_PROTO_SERVER_V2
 
 namespace npp
 {
@@ -55,5 +56,8 @@ namespace npp
 
 #endif
 
+
+
+#endif
 
 

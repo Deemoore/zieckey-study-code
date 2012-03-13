@@ -208,10 +208,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\md5.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\platform_micros.h"
 				>
 			</File>
@@ -241,10 +237,6 @@
 				RelativePath=".\inner_pre.cc"
 				>
 			</File>
-			<File
-				RelativePath=".\md5.cc"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="npp"
@@ -266,20 +258,6 @@
 					<File
 						RelativePath=".\v2c_response_unpacker.cc"
 						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\include\v2c_response_unpacker.h"
@@ -300,20 +278,6 @@
 					<File
 						RelativePath=".\v2s_response_packer.cc"
 						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\include\v2s_response_packer.h"

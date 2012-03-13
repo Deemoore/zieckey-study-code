@@ -131,19 +131,21 @@ namespace npp
             uint16_t reserve_;      //! big-endian, preserved, set to 0x0000
 
 
-            void InitV1()
-            {
-                InitV2();
-                version_ = kProtoVersion1;
-            }
-
-            void InitV2()
+            void Init()
             {
                 memset(this, 0, sizeof(*this));
                 header_len_ = sizeof(*this);
-                version_ = kProtoVersion2;
+                version_ = kProtoVersion1;
                 packet_count_ = 1;
             }
+
+//             void InitV2()
+//             {
+//                 memset(this, 0, sizeof(*this));
+//                 header_len_ = sizeof(*this);
+//                 version_ = kProtoVersion2;
+//                 packet_count_ = 1;
+//             }
 
             uint8_t  version() const { return version_; }
             void     set_version(uint8_t val) { version_ = val; }

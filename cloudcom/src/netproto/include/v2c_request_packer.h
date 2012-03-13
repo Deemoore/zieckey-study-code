@@ -26,7 +26,7 @@ namespace npp
             bool Pack(const void* data, size_t data_len);
 
             //! Get the message id from the packed data
-            uint16_t GetMessageID() { return net_header_.message_id(); }
+            uint16_t GetMessageID() { return net_header_v2_.message_id(); }
 
             //! Get the packed data and size if packing successfully
             const uint8_t* Data() const;
@@ -50,11 +50,6 @@ namespace npp
             //! \return size_t - 
             size_t GetPackedTotalDataSize(size_t data_len);
 
-//             //! Get the asymmetric encrypt sign length
-//             size_t GetSignLength();
-// 
-//             size_t GetEncryptDataLength(size_t data_len);
-
             //! Return the written data length
             size_t SymmetricEncryptAndWrite(NppRequestHeaderV2* npp_header, const void* orignal_data, size_t orignal_data_len, uint8_t* write_pos);
 
@@ -65,12 +60,13 @@ namespace npp
             SymmetricEncryptor* symmetric_encryptor() const { return symmetric_encryptor_; }
             Compressor* compressor() const { return compressor_; }
             const NppRequestHeaderV2& npp_request_header_v2() const { return npp_request_header_v2_; }
+            const NetHeaderV2& net_header_v2() const { return net_header_v2_; }
 
         private:
             friend class ResponseUnpacker;
 
             NppRequestHeaderV2  npp_request_header_v2_;
-            NetHeaderV2           net_header_;
+            NetHeaderV2         net_header_v2_;
 
             std::string         packed_data_;
 
