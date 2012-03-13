@@ -19,51 +19,6 @@
 
 #include "curl/curl.h"
 
-namespace npp { namespace ext {
-
-    //! Name: auto_delete
-    template<class T>
-    struct auto_delete
-    {
-        T*& ptr_ref_to_be_deleted_;
-        auto_delete( T*& pointer )
-            : ptr_ref_to_be_deleted_( pointer )
-        {
-        }
-
-        ~auto_delete()
-        {
-            if ( ptr_ref_to_be_deleted_ )
-            {
-                delete ptr_ref_to_be_deleted_;
-                ptr_ref_to_be_deleted_ = 0;
-            }
-        }
-
-        void noop() {}
-    private:
-        auto_delete(const auto_delete&);
-        auto_delete&operator=(const auto_delete&);
-    };
-
-    template<class T>
-    struct auto_delete<T*>; //! \note Leave it be. Do not write any implementation
-    }
-}
-
-namespace npp { namespace ext {
-    template<> inline
-        auto_delete< npp::NppConfig >::~auto_delete()
-    {
-        if ( ptr_ref_to_be_deleted_ )
-        {
-            delete ptr_ref_to_be_deleted_;
-            ptr_ref_to_be_deleted_ = NULL;
-        }
-    }
-}
-}
-
 namespace
 {
     npp::NppConfig* CreateNppConfig(bool support_plain, bool sign_pack, bool verify_sign)
@@ -232,7 +187,7 @@ bool do_http_request(const std::string& server_url, const std::string& request_d
         npp::v1::MessageUnpacker unpacker;
         if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
         {
-            result = std::string(unpacker.Data(), unpacker.Size());
+            result = std::string((const char*)unpacker.Data(), unpacker.Size());
             return true;
         }
         else
@@ -687,7 +642,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
             unpacker.Unpack(packed_data, packed_data_len);
             npp::Message::NetHeaderV1& net_header = const_cast<npp::Message::NetHeaderV1&>(unpacker.net_header());
             npp::Message::NppHeaderV1& npp_header = const_cast<npp::Message::NppHeaderV1&>(unpacker.npp_header());
-            net_header.InitV1();
+            net_header.Init();
             npp_header.Init();
 
             packed_data_len = sizeof(packed_data);
@@ -705,7 +660,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
             npp::v1::MessageUnpacker unpacker;
             if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
             {
-                std::string result = std::string(unpacker.Data(), unpacker.Size());
+                std::string result = std::string((const char*)unpacker.Data(), unpacker.Size());
                 fprintf(stdout, "request ok, response:\n%s", result.data());
                 //return true;
             }
@@ -867,7 +822,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
             npp::v1::MessageUnpacker unpacker;
             npp::Message::NetHeaderV1& net_header = const_cast<npp::Message::NetHeaderV1&>(unpacker.net_header());
             npp::Message::NppHeaderV1& npp_header = const_cast<npp::Message::NppHeaderV1&>(unpacker.npp_header());
-            net_header.InitV1();
+            net_header.Init();
             npp_header.Init();
             npp::v1::MessagePacker packer(&unpacker);
             npp_header.encrypt_key_no_ = rand() % 2 + 1;
@@ -883,7 +838,7 @@ static const size_t g_client_slrsa_private_key4_len = 706;
             npp::v1::MessageUnpacker unpacker;
             if (unpacker.Unpack(server_resp_encrypt_data.data(), server_resp_encrypt_data.size()))
             {
-                std::string result = std::string(unpacker.Data(), unpacker.Size());
+                std::string result = std::string((const char*)unpacker.Data(), unpacker.Size());
                 fprintf(stdout, "request ok, response:\n%s", result.data());
                 //return true;
             }

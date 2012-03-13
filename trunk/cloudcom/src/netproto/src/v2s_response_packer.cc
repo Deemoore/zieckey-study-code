@@ -7,6 +7,8 @@
 #include "netproto/include/npp_config.h"
 #include "slrsa/md5.h"
 
+#ifdef H_NPP_SUPPORT_PROTO_SERVER_V2
+
 namespace npp
 {
     namespace v2s
@@ -150,6 +152,7 @@ namespace npp
     }
 }
 
+#endif
 
 
 

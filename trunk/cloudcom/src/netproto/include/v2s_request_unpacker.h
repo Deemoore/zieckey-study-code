@@ -7,6 +7,8 @@
 #include "netproto/include/v1_message_unpacker.h"
 #include "netproto/include/symmetric_encrypt.h"
 
+#ifdef H_NPP_SUPPORT_PROTO_SERVER_V2
+
 namespace npp
 {
     class Compressor;
@@ -80,7 +82,7 @@ namespace npp
     }
 }
 
-#endif
-
+#endif//H_NPP_SUPPORT_PROTO_SERVER_V2
+#endif//
 
 

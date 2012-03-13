@@ -18,8 +18,8 @@ namespace npp
             : symmetric_encryptor_(NULL)
             , compressor_(NULL)
         {
-            net_header_.Init();
-            net_header_.set_message_id(RequestMessage::message_id_++);
+            net_header_v2_.Init();
+            net_header_v2_.set_message_id(RequestMessage::message_id_++);
         }
 
         RequestMessage::~RequestMessage()
@@ -83,7 +83,7 @@ namespace npp
             uint8_t* write_pos = reinterpret_cast<uint8_t*>(&packed_data_[0]);
 
             NetHeaderV2* net_header = reinterpret_cast<NetHeaderV2*>(write_pos);
-            memcpy(net_header, &this->net_header_, sizeof(*net_header));
+            memcpy(net_header, &this->net_header_v2_, sizeof(*net_header));
             write_pos += sizeof(*net_header);
 
             NppRequestHeaderV2* npp_header = reinterpret_cast<NppRequestHeaderV2*>(write_pos);
@@ -127,7 +127,7 @@ namespace npp
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve()));
             npp_header->set_asymmetric_encrypt_data_len(htons(npp_header->asymmetric_encrypt_data_len()));
-            //memcpy(&this->net_header_, net_header, sizeof(*net_header));
+            //memcpy(&this->net_header_v2_, net_header, sizeof(*net_header));
 
             return true;
         }
