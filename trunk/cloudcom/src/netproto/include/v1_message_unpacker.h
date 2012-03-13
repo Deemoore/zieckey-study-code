@@ -43,14 +43,14 @@ namespace npp
 
         public:
             //! The interface for MessagePacker, don't use it
-            const NetHeader& net_header() const { return net_header_; }
+            const NetHeaderV1& net_header() const { return net_header_; }
             const NppHeaderV1& npp_header() const { return npp_header_; }
             bool IsUnpackedOK() const { return last_error() == kNoError && Data() != NULL;}
 
         private:
             bool unpack_v1(const void* d, size_t d_len);
         private:
-            NetHeader net_header_;  //! The network data header
+            NetHeaderV1 net_header_;  //! The network data header
             NppHeaderV1 npp_header_;  //! The protocol relative header
 
             std::string unpacked_data_;

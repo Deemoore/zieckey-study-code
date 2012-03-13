@@ -70,7 +70,7 @@ namespace npp
             friend class ResponseUnpacker;
 
             NppRequestHeaderV2  npp_request_header_v2_;
-            NetHeader           net_header_;
+            NetHeaderV2           net_header_;
 
             std::string         packed_data_;
 

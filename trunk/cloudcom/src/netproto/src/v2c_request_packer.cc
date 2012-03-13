@@ -18,7 +18,7 @@ namespace npp
             : symmetric_encryptor_(NULL)
             , compressor_(NULL)
         {
-            net_header_.InitV2();
+            net_header_.Init();
             net_header_.set_message_id(RequestMessage::message_id_++);
         }
 
@@ -72,7 +72,7 @@ namespace npp
             }
 
             //---------------------------------------------------------
-            //Step 1: NetHeader and NppRequestHeaderV2
+            //Step 1: NetHeaderV2 and NppRequestHeaderV2
             size_t total_size = GetPackedTotalDataSize(data_len);
             if (0 == total_size)
             {
@@ -82,7 +82,7 @@ namespace npp
 
             uint8_t* write_pos = reinterpret_cast<uint8_t*>(&packed_data_[0]);
 
-            NetHeader* net_header = reinterpret_cast<NetHeader*>(write_pos);
+            NetHeaderV2* net_header = reinterpret_cast<NetHeaderV2*>(write_pos);
             memcpy(net_header, &this->net_header_, sizeof(*net_header));
             write_pos += sizeof(*net_header);
 
@@ -123,7 +123,7 @@ namespace npp
             //Step 5: end
             assert(last_error() == kNoError);
             assert(memcmp(&this->npp_request_header_v2_, npp_header, sizeof(*npp_header)) == 0);
-            net_header->set_data_len(htons(net_header->data_len()));
+            net_header->set_data_len(htonl(net_header->data_len()));
             net_header->set_message_id(htons(net_header->message_id()));
             net_header->set_reserve(htons(net_header->reserve()));
             npp_header->set_asymmetric_encrypt_data_len(htons(npp_header->asymmetric_encrypt_data_len()));
@@ -135,7 +135,7 @@ namespace npp
         size_t RequestMessage::GetPackedTotalDataSize( size_t data_len )
         {
             ErrorCode ec = kNoError;
-            size_t ret = sizeof(NetHeader) + sizeof(NppRequestHeaderV2) + kMD5HexLen + npp_request_header_v2_.GetSignLength(ec) + npp_request_header_v2_.GetSymmetricEncryptDataLength(data_len, ec);
+            size_t ret = sizeof(NetHeaderV2) + sizeof(NppRequestHeaderV2) + kMD5HexLen + npp_request_header_v2_.GetSignLength(ec) + npp_request_header_v2_.GetSymmetricEncryptDataLength(data_len, ec);
             last_error(ec);
             return ret;
         }

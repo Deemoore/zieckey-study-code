@@ -76,7 +76,7 @@ namespace npp
                 return false;
             }
 
-            if (d_len < sizeof(net_header_) + sizeof(NppHeaderV1))
+            if (d_len < sizeof(net_header_v2_) + sizeof(NppHeaderV1))
             {
                 last_error(kParameterErrorDataLengthError);
                 return false;
@@ -102,8 +102,8 @@ namespace npp
         bool RequestMessageUnpacker::_UnpackV2( const void* d, size_t d_len )
         {
             //---------------------------------------------------------
-            //Step 1: NetHeader
-            if (d_len < sizeof(net_header_) + sizeof(npp_request_header_v2_) + kMD5HexLen)
+            //Step 1: NetHeaderV2
+            if (d_len < sizeof(net_header_v2_) + sizeof(npp_request_header_v2_) + kMD5HexLen)
             {
                 last_error(kParameterErrorDataLengthError);
                 return false;
@@ -112,13 +112,13 @@ namespace npp
             const char* read_pos = ((const char*)d);
 
             uint8_t header_len = read_pos[0];
-            assert(header_len >= sizeof(net_header_));
-            memcpy(&net_header_, read_pos, sizeof(net_header_)); // for the sake of NetHeader's changes
-            net_header_.data_len_   = ntohs(net_header_.data_len_);
-            net_header_.message_id_ = ntohs(net_header_.message_id_);
-            net_header_.reserve_    = ntohs(net_header_.reserve_);
+            assert(header_len >= sizeof(net_header_v2_));
+            memcpy(&net_header_v2_, read_pos, sizeof(net_header_v2_)); // for the sake of NetHeaderV2's changes
+            net_header_v2_.data_len_   = ntohl(net_header_v2_.data_len_);
+            net_header_v2_.message_id_ = ntohs(net_header_v2_.message_id_);
+            net_header_v2_.reserve_    = ntohs(net_header_v2_.reserve_);
 
-            if (net_header_.data_len_ != d_len - header_len)
+            if (net_header_v2_.data_len_ != d_len - header_len)
             {
                 last_error(kNppHeaderDataLengthError);
                 return false;
@@ -152,7 +152,7 @@ namespace npp
                 }
                 else
                 {
-                    size_t compressed_data_len = d_len - sizeof(net_header_) - sizeof(npp_request_header_v2_) -kMD5HexLen - npp_request_header_v2_.asymmetric_encrypt_data_len();
+                    size_t compressed_data_len = d_len - sizeof(net_header_v2_) - sizeof(npp_request_header_v2_) -kMD5HexLen - npp_request_header_v2_.asymmetric_encrypt_data_len();
                     assert(compressed_data_len + read_pos + npp_request_header_v2_.asymmetric_encrypt_data_len() == (const char*)d + d_len);
                     return _Uncompress(read_pos + npp_request_header_v2_.asymmetric_encrypt_data_len(), compressed_data_len);
                 }
@@ -328,14 +328,9 @@ namespace npp
             return true;
         }
 
-        const Message::NetHeader& RequestMessageUnpacker::net_header() const
+        const Message::NetHeaderV2& RequestMessageUnpacker::net_header_v2() const
         {
-            if (v1_message_unpacker_)
-            {
-                return v1_message_unpacker_->net_header();
-            }
-            
-            return net_header_;
+            return net_header_v2_;
         }
 
         bool RequestMessageUnpacker::IsUnpackedOK() const
@@ -355,7 +350,7 @@ namespace npp
                 return static_cast<Message::ProtoVersion>(v1_message_unpacker_->net_header().version());
             }
 
-            return static_cast<Message::ProtoVersion>(net_header().version());
+            return static_cast<Message::ProtoVersion>(net_header_v2().version());
         }
 
     }

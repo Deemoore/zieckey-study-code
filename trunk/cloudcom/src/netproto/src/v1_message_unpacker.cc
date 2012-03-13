@@ -65,7 +65,7 @@ namespace npp
             memcpy(&net_header_, read_pos, sizeof(net_header_)); // for the sake of NetHeader's changes
             net_header_.data_len_   = ntohs(net_header_.data_len_);
             net_header_.message_id_ = ntohs(net_header_.message_id_);
-            net_header_.reserve_   = ntohs(net_header_.reserve_);
+            net_header_.reserve_    = ntohs(net_header_.reserve_);
 
             if (net_header_.data_len_ != d_len - header_len)
             {

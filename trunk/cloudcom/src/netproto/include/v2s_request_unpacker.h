@@ -28,7 +28,7 @@ namespace npp
             //Query interface
         public:
             //! The interface for MessagePacker, don't use it
-            const Message::NetHeader& net_header() const;
+            const Message::NetHeaderV2& net_header_v2() const;
 
             const Message::NppRequestHeaderV2& npp_request_header_v2() const { return npp_request_header_v2_; }
 
@@ -63,7 +63,7 @@ namespace npp
             bool _Uncompress(const void* d, size_t d_len);
 
         private:
-            NetHeader            net_header_;  //! The network data header
+            NetHeaderV2          net_header_v2_;  //! The network data header
 
             NppRequestHeaderV2   npp_request_header_v2_;
 
