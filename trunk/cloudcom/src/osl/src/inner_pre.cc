@@ -77,9 +77,10 @@ namespace osl
 {
     namespace donotuseit
     {
-        const char* _bugreport  = "bug report to weizili";
+        const char* _bugreport     = "bug report to weizili";
         const char* _packetstring  = "packet name cloudcom";
-        const char* _packetversion = "version 1.0.17";
+        const char* _packetversion = "oslib version 1.0.17";
+        const char* _build_data    = "build time: " __DATE__ " " __TIME__;
     }
 
     namespace
