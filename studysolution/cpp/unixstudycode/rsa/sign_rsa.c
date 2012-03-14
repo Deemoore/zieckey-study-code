@@ -141,8 +141,8 @@ int main ( int argc, const char * argv[] )
             if (i != 0)
             {
                 printf(", ");
-                if ( i % 16 == 0 )
-                  printf("\n\t");
+                //if ( i % 16 == 0 )
+                 // printf("\n\t");
             }
             else
             {
@@ -158,8 +158,8 @@ int main ( int argc, const char * argv[] )
             if (i != 0)
             {
                 printf(", ");
-                if ( i % 16 == 0 )
-                  printf("\n\t");
+                //if ( i % 16 == 0 )
+                 // printf("\n\t");
             }
             else
             {

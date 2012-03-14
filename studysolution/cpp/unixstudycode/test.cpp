@@ -146,6 +146,16 @@ void test6_assert()
     assert(0);
 }
 
+void test7_cout()
+{
+    double a = 0.0f;
+    bool b = true;
+    bool b1 = false;
+    std::cout << "double 0.0=" << a << std::endl;
+    std::cout << "bool true=" << b << std::endl;
+    std::cout << "bool false=" << b1 << std::endl;
+}
+
 int main()
 {
     //test1_random();
@@ -153,6 +163,7 @@ int main()
     //test3_array_const_size();
     //test4_pair_compare();
     //test5_reinterpret_cast();
-    test6_assert();
+    //test6_assert();
+    test7_cout();
     return 0;
 }

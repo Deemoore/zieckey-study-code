@@ -222,6 +222,7 @@ int main(int argc, char **argv)
 			fseek( fout, 0, SEEK_END );
 			long outdata_len = ftell( fout );
 			Bytef* outdata = (Bytef*)malloc( outdata_len );
+            memset(outdata, '1', outdata_len);
 			fseek( fout, 0, SEEK_SET );
 			fread( outdata, 1, outdata_len, fout );
 			fclose( fout );
