@@ -57,7 +57,7 @@ namespace npp
     {
         const char* _build_message =
             "=== bug report to [weizili@360.cn]. "
-            "packet name [libqoslib.so]. "
+            "packet name [libnetproto.so]. "
             "packet version [1.0.18]. "
             "build time: [" __DATE__ " " __TIME__ "] ===";
 
