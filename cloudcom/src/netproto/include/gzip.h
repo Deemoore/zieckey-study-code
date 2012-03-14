@@ -21,8 +21,33 @@ namespace npp
     public:
         virtual ~GZip() {}
 
-        virtual bool Compress(const void* data, size_t data_len, std::string& compresed_data) {return true;}
-        virtual bool Uncompress(const void* data, size_t data_len, std::string& uncompresed_data){return true;}
+        virtual bool Compress(const void* data, size_t data_len, std::string& compresed_data)
+        {
+            size_t dest_len_inner = GetCompressBound(data_len);
+            compresed_data.resize(dest_len_inner);
+            bool r = Compress(data, data_len, &compresed_data[0], &dest_len_inner);
+            if (!r)
+            {
+                return false;
+            }
+            assert(dest_len_inner <= compresed_data.size());
+            compresed_data.resize(dest_len_inner);
+            return true;
+        }
+
+        virtual bool Uncompress(const void* data, size_t data_len, std::string& uncompresed_data)
+        {
+            size_t dest_len_inner = GetUncompressBound(data, data_len);
+            uncompresed_data.resize(dest_len_inner);
+            bool r = Uncompress(data, data_len, &uncompresed_data[0], &dest_len_inner);
+            if (!r)
+            {
+                return false;
+            }
+            assert(dest_len_inner <= uncompresed_data.size());
+            uncompresed_data.resize(dest_len_inner);
+            return true;
+        }
 
         /*
         Compresses the source buffer into the destination buffer.  sourceLen is
@@ -62,12 +87,7 @@ namespace npp
         static bool Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
         //static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
 
-        /*
-        GetUncompressBound() returns an upper bound on the uncompressed size after
-        Uncompress() on sourceLen bytes.  It would be used before
-        a Uncompress() call to allocate the destination buffer.
-        */
-        static size_t GetUncompressBound(const void* compressed_data);
+        static size_t GetUncompressBound( const void* compressed_data, size_t compressed_data_len );
     }; 
 
 }//end of namespace npp

@@ -108,6 +108,52 @@ namespace npp
         }
     }
 
+#if 0
+    bool GZip::Compress( const void* source, size_t sourceLen, void* dest, size_t* destLen )
+    {
+        if (NULL == destLen || 
+            NULL == dest || 
+            *destLen < (GetCompressBound(sourceLen)) || 
+            NULL == source)
+        {
+            return Z_MEM_ERROR;
+        }
+
+        *(uint32_t*)(dest) = htonl(sourceLen);
+
+        size_t dest_len_inner = *destLen - sizeof(uint32_t);
+
+        int r = gz_compress((const uint8_t*)source, sourceLen, (uint8_t*)dest + sizeof(uint32_t), &dest_len_inner);
+
+        //add the leading 4 bytes of original data length
+        *destLen = dest_len_inner + sizeof(uint32_t);
+        return r == ZZ_OK;
+    }
+
+    bool GZip::Uncompress( const void* source, size_t sourceLen, void* dest, size_t* destLen )
+    {
+        if (NULL == destLen || 
+            NULL == dest || 
+            *destLen < (GetUncompressBound(source)) || 
+            NULL == source)
+        {
+            return Z_MEM_ERROR;
+        }
+
+        int r = gz_uncompress((const uint8_t *)source + sizeof(uint32_t), sourceLen - sizeof(uint32_t), (uint8_t*)dest, destLen);
+        return r == ZZ_OK;
+    }
+
+    size_t GZip::GetCompressBound( size_t sourceLen )
+    {
+        return 4 + gz_compress_bound(sourceLen);
+    }
+
+    size_t GZip::GetUncompressBound( const void* compressed_data, size_t compressed_data_len )
+    {
+        return ntohl(*(uint32_t*)compressed_data);
+    }
+#else
     bool GZip::Compress( const void* source, size_t sourceLen, void* dest, size_t* destLen )
     {
         return ZZ_OK == gz_compress((const uint8_t*)source, sourceLen, (uint8_t*)dest, destLen);
@@ -117,6 +163,17 @@ namespace npp
     {
         return ZZ_OK == gz_uncompress((const uint8_t*)source, sourceLen, (uint8_t*)dest, destLen);
     }
+
+    size_t GZip::GetCompressBound( size_t sourceLen )
+    {
+        return gz_compress_bound(sourceLen);
+    }
+
+    size_t GZip::GetUncompressBound( const void* compressed_data, size_t compressed_data_len )
+    {
+        return gz_uncompress_bound((const uint8_t*)compressed_data, compressed_data_len);
+    }
+#endif
 }
 
 
