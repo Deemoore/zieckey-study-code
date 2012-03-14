@@ -16,11 +16,11 @@
         _EXPORT_OSLIB extern int  optind;
         _EXPORT_OSLIB extern int  opterr;
         _EXPORT_OSLIB extern int  optopt;
-        _EXPORT_OSLIB int getopt(int argc, char** argv, char* optstr);
+        _EXPORT_OSLIB int getopt(int argc, char *const *__argv, const char* optstr);
 
     #ifdef __cplusplus
     }
-#endif//end of __GNUC_
+    #endif//end of
 
 #endif
 
