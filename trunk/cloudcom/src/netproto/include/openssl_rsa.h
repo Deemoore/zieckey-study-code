@@ -26,7 +26,7 @@ namespace npp
 
     public:
         OpenSSLRSA();
-        ~OpenSSLRSA();
+        virtual ~OpenSSLRSA();
 
         //! \brief Initialize the rsa
         //! \warning We support the private_key/public_key pair matches or not matches.

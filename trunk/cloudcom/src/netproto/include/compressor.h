@@ -6,6 +6,20 @@
 
 namespace npp
 {
+
+#define ZZ_OK            0
+#define ZZ_STREAM_END    1
+#define ZZ_NEED_DICT     2
+#define ZZ_ERRNO        (-1)
+#define ZZ_STREAM_ERROR (-2)
+#define ZZ_DATA_ERROR   (-3)
+#define ZZ_MEM_ERROR    (-4)
+#define ZZ_BUF_ERROR    (-5)
+#define ZZ_VERSION_ERROR (-6)
+
+#define ZZ_BEST_SPEED             1
+#define ZZ_BEST_COMPRESSION       9
+
     class _EXPORT_NETPROTO Compressor
     {
     public:

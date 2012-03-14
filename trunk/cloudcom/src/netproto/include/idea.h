@@ -27,6 +27,7 @@ namespace npp
 
     public:
         IDEA();
+        virtual ~IDEA() {}
 
         bool initialize(const unsigned char key[16]);
         bool initialize(const std::string& key);

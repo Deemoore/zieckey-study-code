@@ -14,7 +14,7 @@ namespace npp
     public:
         SimpleRSA(){}
 
-        ~SimpleRSA(){}
+        virtual ~SimpleRSA() {}
 
         //! \brief Initialize the rsa
         //! \param[in] - const unsigned char * private_key

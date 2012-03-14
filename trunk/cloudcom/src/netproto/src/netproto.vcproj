@@ -360,11 +360,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\gz.cc"
+						RelativePath=".\gzip.cc"
 						>
 					</File>
 					<File
-						RelativePath="..\include\gz.h"
+						RelativePath="..\include\gzip.h"
 						>
 					</File>
 					<File
