@@ -87,6 +87,7 @@ namespace osl
         static int _count = snprintf(_buf, sizeof(_buf), "%s", _build_message);
     }
 
+#if 0
     namespace
     {
         class AutoInitModule
@@ -105,6 +106,7 @@ namespace osl
 
         static AutoInitModule auto_init_module;
     }
+#endif
 
     static bool s_bInitialized = false;
 

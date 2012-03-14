@@ -194,7 +194,7 @@ namespace
         s.reserve(0);
     }
 
-j    void test_std_string_assign_append()
+    void test_std_string_assign_append()
     {
         unsigned char key1[] = {0x30, 0x81, 0x00, 0x02, 0x81, 0x81, 0x00, 0xe2, 0xc7, 0x68, 0x22, 0x2d, 0x8d, 0xbd, 0xb5, 0x0e};
         unsigned char key2[] = {0x30, 0x01, 0x00, 0x02, 0x00, 0x81, 0x00, 0xe2, 0xc7, 0x68, 0x22, 0x2d, 0x8d, 0xbd, 0xb5, 0x0e, 0xb5, 0x0e};
@@ -217,7 +217,7 @@ j    void test_std_string_assign_append()
         memcpy(buf, (char*)key1, sizeof(key1));
         memcpy(buf + sizeof(key1), (char*)key2, sizeof(key2));
         H_TEST_ASSERT(memcmp(s1.data(), buf, s1.length()) == 0);
-    }
+     }
 
     static int FLAGS_md5_index = 4;
 
