@@ -139,7 +139,7 @@ int gz_uncompress( const uint8_t*source, uint32_t sourceLen, uint8_t*dest, size_
     }
 
 
-    stream.next_in = (Bytef*)source + have_read_count;
+    stream.next_in  = const_cast<Bytef*>(source) + have_read_count;
     stream.avail_in = (uInt)sourceLen - have_read_count - 4 - 4;
 
     /* Check for source > 64K on 16-bit machine: */
@@ -180,7 +180,7 @@ int gz_compress( const uint8_t*source, uint32_t sourceLen, uint8_t*dest, size_t 
     memcpy(dest, header, sizeof(header));
     uint32_t writen = sizeof(header);
 
-    stream.next_in = (Bytef*)source;
+    stream.next_in = const_cast<Bytef*>(source);
     stream.avail_in = (uInt)sourceLen;
 #ifdef MAXSEG_64K
     /* Check for source > 64K on 16-bit machine: */

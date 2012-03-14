@@ -22,6 +22,7 @@ all:
 	cp install/lib/libwraputil.* ~/lib
 	cp install/lib/libnetproto.* ~/lib
 	cp install/lib/libnet.* ~/lib
+	cp install/lib/libqoslib.* ~/lib
 
 check: 
 	for t in $(TESTDIRS); do $(MAKE) check  TOP_CFLAGS=$(TOP_CFLAGS) TOP_LDFLAGS=$(TOP_LDFLAGS) -C $$t ; done

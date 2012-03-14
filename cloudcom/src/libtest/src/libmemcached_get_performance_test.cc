@@ -171,6 +171,9 @@ TEST_INVOKE( test_libmemcached_test_get_get , "test_libmemcached_test_get_get --
     osl::AppShell::Param* pp = pCmd->getParam("host");
     if ( pp ) hostname = pp->strVal;
 
+    pp = pCmd->getParam("sock");
+    if ( pp ) sock = pp->strVal;
+
     pp = pCmd->getParam("port");
     if ( pp ) port = pp->strVal;
 
@@ -182,6 +185,8 @@ TEST_INVOKE( test_libmemcached_test_get_get , "test_libmemcached_test_get_get --
 
     pp = pCmd->getParam("log");
     if ( pp && pp->strVal == "true") log_enable = true;
+
+    logTrace("libtest", "\n\tlog_enable=[%d] sock=[%s]", log_enable, sock.data());
 
     wu::Memcached mc_(sock.data(), hostname.data(), port.data());
     osl::Random randint( uint32_t(s_pTimer->getImmediateSeconds() * 1000000) + rand());
@@ -209,7 +214,7 @@ TEST_INVOKE( test_libmemcached_test_get_get , "test_libmemcached_test_get_get --
         wu::Memcached::StringAStringAMap::iterator ite(kvm1.end());
         for (; it != ite; ++it)
         {
-            if (log_enable && it->second != "1")
+            if (log_enable)
             {
                 logTrace("libtest", "error key=%s value=[%s]", it->first.c_str(), it->second.c_str());
             }
