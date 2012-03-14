@@ -53,12 +53,18 @@
 
 namespace npp
 {
-    namespace donotuseit
+    namespace _donotuseit
     {
-        const char* _bugreport  = "bug report to weizili";
-        const char* _packetstring  = "packet name cloudcom";
-        const char* _packetversion = "version 1.0.17";
+        const char* _build_message =
+            "=== bug report to [weizili@360.cn]. "
+            "packet name [libqoslib.so]. "
+            "packet version [1.0.18]. "
+            "build time: [" __DATE__ " " __TIME__ "] ===";
+
+        char _buf[2048] = {};
+        static int _count = snprintf(_buf, sizeof(_buf), "%s", _build_message);
     }
+
 // 
 //     namespace
 //     {
