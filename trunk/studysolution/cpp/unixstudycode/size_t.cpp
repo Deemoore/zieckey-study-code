@@ -29,6 +29,7 @@ int main()
     printf("bool true=%d\n", true );
     printf("sizeof(size_t)=%lu\n", sizeof(size_t));
     printf("sizeof(long long)=%lu\n", sizeof(long long));
+    printf("sizeof(long double)=%lu\n", sizeof(long double));
     printf("sizeof(long)=%lu\n", sizeof(long));
     printf("sizeof(time_t)=%lu\n", sizeof(time_t));
 
