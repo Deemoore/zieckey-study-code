@@ -130,10 +130,18 @@ inline int utf8_check_full(const char *buffer, int size, int32_t *codepoint)
     return 1;
 }
 
+//! \brief 
+//! \param[in] const char * buffer - 
+//! \param[out] int32_t * codepoint - The UTF-8's int value
+//! \return const char * - The next UTF-8 character point. 
+//!     return NULL if it is not a ASCII code and also NOT an UTF8 code
 inline const char *utf8_iterate(const char *buffer, int32_t *codepoint)
 {
     int count = 0;
     int32_t value = 0;
+
+    if(codepoint)
+        *codepoint = 0;
 
     if(!*buffer)
         return buffer;
