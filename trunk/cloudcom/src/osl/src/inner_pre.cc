@@ -75,12 +75,16 @@
 
 namespace osl
 {
-    namespace donotuseit
+    namespace _donotuseit
     {
-        const char* _bugreport     = "bug report to weizili";
-        const char* _packetstring  = "packet name cloudcom";
-        const char* _packetversion = "oslib version 1.0.17";
-        const char* _build_data    = "build time: " __DATE__ " " __TIME__;
+        const char* _build_message =
+            "=== bug report to [weizili@360.cn]. "
+            "packet name [libqoslib.so]. "
+            "packet version [1.0.18]. "
+            "build time: [" __DATE__ " " __TIME__ "] ===";
+
+        char _buf[2048] = {};
+        static int _count = snprintf(_buf, sizeof(_buf), "%s", _build_message);
     }
 
     namespace
@@ -136,8 +140,6 @@ namespace osl
         MemAlloc::initialize();
 #endif
 
-        StringUtil::initialize();
-
 #if H_PROVIDE_LOG_SYSTEM
         LogManager::createInstance();
 #endif
@@ -173,9 +175,6 @@ namespace osl
 #if H_PROVIDE_LOG_SYSTEM
 		LogManager::destroyInstance();
 #endif
-
-        StringUtil::uninitialize();
-
 
 #if H_PROVIDE_MEMORY_POOL
         MemAlloc::uninitialize();
