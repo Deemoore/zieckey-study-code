@@ -5,7 +5,7 @@
 
 #include "netproto/include/zlib.h"
 #include "netproto/include/auto_delete.h"
-#include "netproto/include/gz.h"
+#include "netproto/include/gzip.h"
 
 #ifdef H_NPP_PROVIDE_ZLIB
 
@@ -49,7 +49,8 @@ namespace
         size_t compressed_data_len = 4096;
         char* compressed_data = new char[compressed_data_len];
         npp::ext::auto_delete<char> compressed_data_auto_delete(compressed_data);
-        H_TEST_ASSERT(ZZ_OK == npp::GZip::Compress(data, data_len, compressed_data, &compressed_data_len));
+        H_TEST_ASSERT(ZZ_OK == gz_compress((const uint8_t*)data, data_len, (uint8_t*)compressed_data, &compressed_data_len));
+        H_TEST_ASSERT(compressed_data_len <= gz_compress_bound(data_len));
 
         if (data_len < 32)
         {
@@ -61,17 +62,16 @@ namespace
             fclose(fp);
         }
 
-        #if 1
+
         size_t decompressed_data_len = 4096;
         char* decompressed_data = new char[decompressed_data_len];
         npp::ext::auto_delete<char> decompressed_data_auto_delete(decompressed_data);
-        H_TEST_ASSERT(ZZ_OK == npp::GZip::Uncompress(compressed_data, compressed_data_len, decompressed_data, &decompressed_data_len));
+        H_TEST_ASSERT(ZZ_OK == gz_uncompress((const uint8_t*)compressed_data, compressed_data_len, (uint8_t*)decompressed_data, &decompressed_data_len));
+        H_TEST_ASSERT(decompressed_data_len == gz_uncompress_bound((const uint8_t*)compressed_data, compressed_data_len));
 
         H_TEST_ASSERT(decompressed_data_len == data_len);
         H_TEST_ASSERT(strncmp(decompressed_data, data, data_len) == 0);
 
-        
-#endif
         return true;
     }
 }

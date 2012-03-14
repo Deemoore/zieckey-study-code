@@ -19,6 +19,8 @@ namespace npp
         //TODO need Add 4byte length of leading
         //TODO more comments
     public:
+        virtual ~GZip() {}
+
         virtual bool Compress(const void* data, size_t data_len, std::string& compresed_data) {return true;}
         virtual bool Uncompress(const void* data, size_t data_len, std::string& uncompresed_data){return true;}
 
@@ -34,7 +36,7 @@ namespace npp
         enough memory, Z_BUF_ERROR if there was not enough room in the output
         buffer.
         */
-        static int Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
+        static bool Compress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
         //static int Compress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
@@ -57,7 +59,7 @@ namespace npp
         enough memory, Z_BUF_ERROR if there was not enough room in the output
         buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
         */
-        static int Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
+        static bool Uncompress(const void* source, size_t sourceLen, void* dest, size_t* destLen);
         //static int Uncompress(const void* source, size_t sourceLen, std::string& dest);
 
         /*
@@ -66,15 +68,40 @@ namespace npp
         a Uncompress() call to allocate the destination buffer.
         */
         static size_t GetUncompressBound(const void* compressed_data);
-
-
-        static int gz_compress2 (uint8_t *dest, uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
-
-        static int gz_uncompress (uint8_t *dest, uint32_t *destLen, const uint8_t *source, uint32_t sourceLen);
-
     }; 
 
 }//end of namespace npp
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+//! \brief 
+//! \param const uint8_t * source - 
+//! \param uint32_t source_len - 
+//! \param uint8_t * dest - 
+//! \param size_t * dest_len - 
+//! \return int - ZZ_OK if successfully
+_EXPORT_NETPROTO int gz_compress  (const uint8_t *source, uint32_t source_len, uint8_t *dest, size_t *dest_len);
+_EXPORT_NETPROTO int gz_uncompress(const uint8_t *source, uint32_t source_len, uint8_t *dest, size_t *dest_len);
+
+//! \brief Get the compressed data length which you can use to allocate memory to store the data
+//! \warning I am not much sure whether it is OK! If you came across any problem of this function, 
+//!     please contact me <weizili>
+//! \param size_t source_len - 
+//! \return _EXPORT_NETPROTO size_t - 
+_EXPORT_NETPROTO size_t gz_compress_bound(  size_t source_len);
+
+//! \brief Get the uncompressed data length which you can use to allocate memory to store the data
+//! \param const uint8_t * compressed_data - 
+//! \param size_t compressed_source_len - 
+//! \return _EXPORT_NETPROTO size_t - 
+_EXPORT_NETPROTO size_t gz_uncompress_bound(const uint8_t *compressed_data, size_t compressed_source_len);
+
+#ifdef __cplusplus
+}; // end of extern "C"{
+#endif
+
 #endif
 
 #endif
