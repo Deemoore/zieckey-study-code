@@ -29,8 +29,8 @@ namespace
 #define FLAG_RECURSIVE  0x0004        
 
     int flags = 0;                        
-    int verbose = 5;                      
-    const char* in_fname = NULL;          
+    int verbose = 0;                      
+    //const char* in_fname = NULL;          
     const char* out_fname = NULL;         
 
     void getopt_test()
@@ -40,16 +40,14 @@ namespace
             "-f",
             "-i",
             "-r",
-            "-h",
             "-v", 
-            "3",
-            "fff"
+            "3"
         };
         int argc = H_ARRAYSIZE(argv);
         
         while(1) 
         {
-            int c = getopt(argc, const_cast<char**>(argv), "-ifrhv::o:");
+            int c = getopt(argc, const_cast<char**>(argv), "ifrhv::o:");
             if(c == -1) break;
             switch(c) 
             {
@@ -64,15 +62,12 @@ namespace
                 break;
             case 'h': 
                 help(); 
-                exit(0);
+                break;
             case 'v': 
                 verbose = atoi(optarg); 
                 break;
             case 'o': 
                 out_fname = optarg; 
-                break;
-            case 1 : 
-                in_fname = optarg; 
                 break;
             default:
                 printf("Option '%c' (%d) with '%s'\n", c, c, optarg);
@@ -85,12 +80,11 @@ namespace
         H_TEST_ASSERT((flags & FLAG_RECURSIVE) == FLAG_RECURSIVE);
         H_TEST_ASSERT(verbose == 3);
         H_TEST_ASSERT(out_fname == NULL);
-        H_TEST_ASSERT(strcmp(in_fname, "fff") == 0);
     }
 }
 
 TEST_UNIT(getopt_test)
 {
-    //getopt_test();
+    getopt_test();
     //TODO
 }
