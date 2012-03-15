@@ -67,6 +67,36 @@ namespace osl
         template<class T>
         struct auto_delete<T*>; //! \note Leave it be. Do not write any implementation
 
+
+
+        //! Name: auto_delete
+        template<class T>
+        struct auto_free
+        {
+            T*& ptr_ref_to_be_deleted_;
+            auto_free( T*& pointer )
+                : ptr_ref_to_be_deleted_( pointer )
+            {
+            }
+
+            ~auto_free()
+            {
+                if ( ptr_ref_to_be_deleted_ )
+                {
+                    free(ptr_ref_to_be_deleted_);
+                    ptr_ref_to_be_deleted_ = 0;
+                }
+            }
+
+            void noop() {}
+        private:
+            auto_free(const auto_free&);
+            auto_free&operator=(const auto_free&);
+        };
+
+        template<class T>
+        struct auto_free<T*>; //! \note Leave it be. Do not write any implementation
+
     }// end of namespace ext
 } // end of namespace osl
 
