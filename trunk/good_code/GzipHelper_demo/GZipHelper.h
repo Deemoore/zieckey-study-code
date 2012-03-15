@@ -208,16 +208,16 @@ typedef CA2GZIPT<10> CA2GZIP;
 
 
 template< int t_nBufferLength = 1024>
-class CGZIP2AT
+class Gunzip
 {
 public:
     char *psz;
     int  Length;
-    CGZIP2AT(LPGZIP pgzip,int len):m_gzip(pgzip),m_gziplen(len),psz(0),Length(0),m_pos(0)
+    Gunzip(LPGZIP pgzip,int len):m_gzip(pgzip),m_gziplen(len),psz(0),Length(0),m_pos(0)
     {
         Init(); 
     }
-    ~CGZIP2AT()
+    ~Gunzip()
     {
         if(psz!=m_buffer) TRYFREE(psz);  
     }
@@ -468,5 +468,5 @@ private:
     }
 
 };
-typedef CGZIP2AT<> CGZIP2A;
+typedef Gunzip<> CGZIP2A;
 #endif
