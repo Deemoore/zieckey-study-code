@@ -69,7 +69,45 @@ namespace osl
 
 
 
-        //! Name: auto_delete
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+
+        //! Name: auto_delete_array
+        template<class T>
+        struct auto_delete_array
+        {
+            T*& ptr_ref_to_be_deleted_;
+            auto_delete_array( T*& pointer )
+                : ptr_ref_to_be_deleted_( pointer )
+            {
+            }
+
+            ~auto_delete_array()
+            {
+                if ( ptr_ref_to_be_deleted_ )
+                {
+                    delete [] ptr_ref_to_be_deleted_;
+                    ptr_ref_to_be_deleted_ = 0;
+                }
+            }
+
+            void noop() {}
+        private:
+            auto_delete_array(const auto_delete_array&);
+            auto_delete_array&operator=(const auto_delete_array&);
+        };
+
+        template<class T>
+        struct auto_delete_array<T*>; //! \note Leave it be. Do not write any implementation
+
+
+
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+
+        //! Name: auto_free
         template<class T>
         struct auto_free
         {
