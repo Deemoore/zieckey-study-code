@@ -50,7 +50,7 @@ namespace npp
 #define get_byte() (source[readn++])
             int method; /* method byte */
             int flags;  /* flags byte */
-            uInt len;
+            int len;
             int c;
 
             uint32_t readn = 0;
@@ -91,7 +91,8 @@ namespace npp
                 len  =  (uInt)get_byte();
                 len += ((uInt)get_byte())<<8;
                 /* len is garbage if EOF but the loop below will quit anyway */
-                while (len-- != 0 && get_byte() != EOF) ;
+                //while (len-- != 0 && get_byte() != EOF) ;
+                while (len-- != 0)  (void)get_byte();
             }
             if ((flags & ORIG_NAME) != 0) { /* skip the original file name */
                 while ((c = get_byte()) != 0 && c != EOF) ;

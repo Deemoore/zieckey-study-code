@@ -33,7 +33,7 @@ namespace
 
         virtual void run()
         {
-            double start = s_pTimer->getImmediateSeconds();
+            double fstart = s_pTimer->getImmediateSeconds();
             logTrace("libtest", "Thread %s is running ... thread state=%d  total_count_=%lu", getName().c_str(), getState(), total_count_);
             osl::StringA errmsg;
             osl::StringA key;
@@ -60,8 +60,8 @@ namespace
             }
 
 
-            double end = s_pTimer->getImmediateSeconds();
-            logTrace("libtest", "Thread %s stopped  total_count_=%lu ops=%f", getName().c_str(), total_count_, total_count_/(end - start));
+            double fend = s_pTimer->getImmediateSeconds();
+            logTrace("libtest", "Thread %s stopped  total_count_=%lu ops=%f", getName().c_str(), total_count_, total_count_/(fend - fstart));
         }
 
    private:
@@ -107,7 +107,7 @@ TEST_INVOKE( test_libmemcached_get_performance , "test_libmemcached_get_performa
     }
 
    
-    double start_time = s_pTimer->getImmediateSeconds();
+    //double start_time = s_pTimer->getImmediateSeconds();
 
     {
         ThreadPtrList::iterator it(threads.begin());

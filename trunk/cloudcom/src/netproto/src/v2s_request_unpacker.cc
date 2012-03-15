@@ -260,6 +260,7 @@ namespace npp
                         return false;
                     }
                     bool init_ok = symmetric_encryptor_->Initialize((const unsigned char*)symmetric_encrypt_key.data(), symmetric_encrypt_key.size());
+                    (void)init_ok;
                     assert(init_ok);
                     return _DecryptAndUncompressData(symmetric_encryptor_, encrypt_data, encrypt_data_len);
                 }
