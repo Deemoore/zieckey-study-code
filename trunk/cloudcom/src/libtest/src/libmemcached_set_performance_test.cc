@@ -22,7 +22,7 @@ namespace
     {
         int count = 0;
         const char* begin = command;
-        size_t slice_start = 0;
+        //size_t slice_start = 0;
         for (size_t i = 0; i < len; ++i)
         {
             if (begin[i] == '\t')
