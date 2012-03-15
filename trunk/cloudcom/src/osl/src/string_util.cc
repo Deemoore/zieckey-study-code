@@ -439,16 +439,14 @@ namespace
         }
     }
 
-    //! \brief     分割字符串
-    //! \tparam    StringType 字符串类型 StringA StringW
-    //! \tparam    Vector的第二个参数
-    //! \param[in] ret 分割的结果
-    //! \param[in] str 要分割的字符串
-    //! \param[in] delims 分割符
-    //! \param[in] maxSplits 
-    template<class StringType , class _ContainerName>
-    void stringUtilSplit( osl::Vector<StringType,_ContainerName>& ret,const StringType& str
-        , const StringType& delims, unsigned int maxSplits)
+
+    template< class _StringVector, 
+              class StringType > 
+    void _stringUtilSplit( 
+                _StringVector& ret, 
+                const StringType& str , 
+                const StringType& delims, 
+                unsigned int maxSplits)
     {
         unsigned int numSplits = 0;
 
@@ -484,8 +482,57 @@ namespace
 
         }
         while ( pos != osl::StringA::npos );
-
     }
+
+    //! \brief     分割字符串
+    //! \tparam    StringType 字符串类型 StringA StringW
+    //! \tparam    Vector的第二个参数
+    //! \param[in] ret 分割的结果
+    //! \param[in] str 要分割的字符串
+    //! \param[in] delims 分割符
+    //! \param[in] maxSplits 
+    template<class StringType , class _ContainerName>
+    void stringUtilSplit( osl::Vector<StringType,_ContainerName>& ret,const StringType& str
+        , const StringType& delims, unsigned int maxSplits)
+    {
+        _stringUtilSplit(ret, str, delims, maxSplits);
+
+//         unsigned int numSplits = 0;
+// 
+//         // Use STL methods
+//         size_t start, pos;
+//         start = 0;
+// 
+//         do
+//         {
+//             pos = str.find_first_of( delims, start );
+// 
+//             if ( pos == start )
+//             {
+//                 // Do nothing
+//                 start = pos + 1;
+//             }
+//             else if ( pos == osl::StringA::npos || ( maxSplits && numSplits == maxSplits ) )
+//             {
+//                 // Copy the rest of the string
+//                 ret.push_back( str.substr( start ) );
+//                 break;
+//             }
+//             else
+//             {
+//                 // Copy up to delimiter
+//                 ret.push_back( str.substr( start, pos - start ) );
+//                 start = pos + 1;
+//             }
+// 
+//             // parse up to next real data
+//             start = str.find_first_not_of( delims, start );
+//             ++numSplits;
+// 
+//         }
+//         while ( pos != osl::StringA::npos );
+    }
+
 
     template<typename StringType>
     void stringUtil_Split( const StringType& src, StringType& left, StringType& right, typename StringType::const_pointer pDelims , size_t nDelimsLength )
@@ -715,28 +762,38 @@ namespace osl
     }
 
     //-------------------------------------------------------------------
-    Vector<StringA> StringUtil::split( const StringA& str, const StringA& delims, unsigned int maxSplits )
-    {
-        Vector<StringA> ret;
-        StringUtil::split( ret, str, delims, maxSplits );
-        return ret;
-    }
+//     Vector<StringA> StringUtil::split( const StringA& str, const StringA& delims, unsigned int maxSplits )
+//     {
+//         Vector<StringA> ret;
+//         StringUtil::split( ret, str, delims, maxSplits );
+//         return ret;
+//     }
 
     void StringUtil::split( Vector<StringA>& ret, const StringA& str, const StringA& delims, unsigned int maxSplits )
     {
         stringUtilSplit( ret , str , delims , maxSplits );
     }
 
-    Vector<StringW> StringUtil::split( const StringW& str, const StringW& delims, unsigned int maxSplits )
+    void StringUtil::split( std::vector<StringA>& ret, const StringA& str, const StringA& delims, unsigned int maxSplits )
     {
-        Vector<StringW> ret;
-        StringUtil::split( ret, str, delims, maxSplits );
-        return ret;
+        _stringUtilSplit( ret , str , delims , maxSplits );
     }
+
+//     Vector<StringW> StringUtil::split( const StringW& str, const StringW& delims, unsigned int maxSplits )
+//     {
+//         Vector<StringW> ret;
+//         StringUtil::split( ret, str, delims, maxSplits );
+//         return ret;
+//     }
 
     void StringUtil::split( Vector<StringW>& ret, const StringW& str, const StringW& delims, unsigned int maxSplits )
     {
         stringUtilSplit( ret , str , delims , maxSplits );
+    }
+
+    void StringUtil::split( std::vector<StringW>& ret, const StringW& str, const StringW& delims, unsigned int maxSplits )
+    {
+        _stringUtilSplit( ret , str , delims , maxSplits );
     }
 
     void StringUtil::split( const StringA& src, StringA& left, StringA& right, const char* delims/* = "\t\n "*/ )
@@ -1542,6 +1599,11 @@ namespace osl
     void StringUtilW::split( Vector<StringW>& ret, const StringW& str, const StringW& delims, unsigned int maxSplits )
     {
         stringUtilSplit( ret , str , delims , maxSplits );
+    }
+
+    void StringUtilW::split( std::vector<StringW>& ret, const StringW& str, const StringW& delims, unsigned int maxSplits )
+    {
+        _stringUtilSplit( ret , str , delims , maxSplits );
     }
 
 	osl::s64 StringUtilW::toS64( const StringW& val )

@@ -94,9 +94,9 @@ namespace osl
         *   \deprecated ·ÏÆúµÄ½Ó¿Ú¡£don't using these tow functions, there are substituted by
         *	void split( Vector<StringA>& resultSubstrsVec, const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
         */
-        static Vector<StringA> split( const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
-        //! \deprecated
-        static Vector<StringW> split( const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
+//         static Vector<StringA> split( const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
+//         //! \deprecated
+//         static Vector<StringW> split( const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
 
 
         /** Returns a StringVector that contains all the substrings delimited
@@ -109,8 +109,11 @@ namespace osl
         */
 
         static void split( Vector<StringA>& resultSubstrsVec, const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
-//        static void split( StringAVector& resultSubstrsVec, const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
+        static void split( std::vector<StringA>& resultSubstrsVec, const StringA& str, const StringA& delims = "\t\n ", unsigned int maxSplits = 0 );
         static void split( Vector<StringW>& resultSubstrsVec, const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
+        static void split( std::vector<StringW>& resultSubstrsVec, const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
+        
+
 
         /**
         * Split a string into tow strings using the special characters .
@@ -326,7 +329,7 @@ namespace osl
         }
 
         static void split( Vector<StringW>& resultSubstrsVec, const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
-
+        static void split( std::vector<StringW>& resultSubstrsVec, const StringW& str, const StringW& delims = L"\t\n ", unsigned int maxSplits = 0 );
     };
 
 

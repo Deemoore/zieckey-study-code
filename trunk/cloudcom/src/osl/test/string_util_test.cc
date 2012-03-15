@@ -123,7 +123,8 @@ namespace
         strSplit += StringUtil::valueOf( vec[3] );
 
         {
-            Vector<StringA> retval = StringUtil::split( strSplit.c_str() , " ," );
+            Vector<StringA> retval;
+            StringUtil::split(retval, strSplit.c_str() , " ," );
             Vector<StringA> TempVal;
             TempVal.push_back( "12" );
             TempVal.push_back( "45" );
@@ -136,6 +137,20 @@ namespace
         }
 
 
+
+        {
+            std::vector<StringA> retval;
+            StringUtil::split(retval, strSplit.c_str() , " ," );
+            std::vector<StringA> TempVal;
+            TempVal.push_back( "12" );
+            TempVal.push_back( "45" );
+            TempVal.push_back( "78" );
+            TempVal.push_back( "0" );
+            H_TEST_ASSERT( retval == TempVal );
+
+            osl::s64 fvec[6]={};
+            StringUtil::toS64Elements( strSplit , fvec , 6 , 0 );
+        }
 
 
 
