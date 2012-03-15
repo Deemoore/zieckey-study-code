@@ -56,6 +56,7 @@ namespace
         H_TEST_ASSERT(serialize1 == serialize2);
         H_TEST_ASSERT(serialize1 == serialize0);
     }
+
 }
 
 TEST_UNIT(json_unicode_test_1)
@@ -132,3 +133,23 @@ TEST_UNIT(json_gbk_chinese_test_3)
     }
 }
 
+TEST_UNIT(json_error_test_4)
+{
+    osl::StringA line = "{\"list\":[{\"attrs\":{\"content\":\"\u606d\u559c\u3010\u674e\u5c0f\u59d0\u25c6\u25c6\u25c6\u3011\u7b2c\u4e00\u8f6e24\u780110\u4e2d8\u8fbe\u5230\u52a0\u5a01\u671b\u6807\u51c6\uff0c\u52a0\u5a01\u671b1000\u5e76\u664b\u5347\u4e3a\u4f18\u79c0\u9ad8\u624b\uff0c\u611f\u8c22\u4f60\u5bf9\u5409\u5229\u7684\u652f\u6301\uff0c\u5409\u5229\u6709\u4f60\u66f4\u7cbe\u5f69\uff01\u3010\u7c89\u58a8\u3011\u606d\u559c\u3010\u674e\u5c0f\u59d0\u25c6\u25c6\u25c6\u3011\u5728\u7b2c\u4e00\u8f6e\u4e8c\u56db\u7801\u4e2d\u5341\u671f\u4e2d\u516b\uff0c\u8fbe\u5230\u52a0\u5a01\u671b\u6807\u51c6\uff0c\u52a0\u5a01\u671b1000\u5e76\u664b\u5347\u4e3a\u91d1\u6e2f\u4f18\u79c0\u53d1\u8868\u9ad8\u624b\uff0c\u91d1\u6e2f\u6709\u4f60\u66f4\u7cbe\u5f69\uff01\u3010\u7ba1\u7406\u5458\u3011\u606d\u559c\u3010\u674e\u5c0f\u59d0\u25c6\u25c6\u25c6\u3011\u7b2c\u4e00\u8f6e\u4e00\u6ce2\u8fde\u4e2d\u4e94\u671f\u8fbe\u5230\u52a0\u5a01\u671b\u6807\u51c6\uff0c\u52a0\u5a01\u671b1000\u5e76\u664b\u5347\u4e3a\u8363\u8a89\u9ad8\u624b\uff0c\u611f\u8c22\u4f60\u5bf9\u5409\u5229\u7684\u652f\u6301\uff0c\u5409\u5229\u6709\u4f60\u66f4\u7cbe\u5f69\uff01 \u3010\u7c89\u58a8\u3011\u606d\u559c\u3010\u674e\",\"title\":\"026\u671f:\u4e00\u6ce220\u7801\u5927\u4e2d\u5df2\u7ecf\u66f4\u65b0\u4e86\uff01\u2588\u2588\u3010\u674e\u5c0f\u59d0\u4eba\u7f8e\u6599\u66f4\u9753\uff01\u5168\u80fd\u51a0\u519b\uff01\u3011\u2588\"},\"type\":\"99\"}],\"url\":\"http://ji2010.com/bbs/htm_data/2/1203/672810.html\"}";
+    json::JSONObject jo0;
+    H_TEST_ASSERT(jo0.parse(line.data(), line.size()));
+    osl::StringA serialize0 = jo0.toString();
+    //H_TEST_ASSERT(serialize0 == line);
+    json::JSONObject jo1;
+    H_TEST_ASSERT(jo1.parse(serialize0.data(), serialize0.size()));
+    osl::StringA serialize1 = jo1.toString();
+    H_TEST_ASSERT(serialize1 == serialize0);
+    H_TEST_ASSERT(jo1.equals(jo0));
+    json::JSONObject jo2;
+    H_TEST_ASSERT(jo2.parse(serialize1.data(), serialize1.size()));
+    osl::StringA serialize2 = jo2.toString();
+    H_TEST_ASSERT(jo2.equals(jo1));
+    H_TEST_ASSERT(jo2.equals(jo0));
+    H_TEST_ASSERT(serialize1 == serialize2);
+    H_TEST_ASSERT(serialize1 == serialize0);
+}
