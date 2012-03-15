@@ -225,6 +225,7 @@ namespace npp
             {
                 std::string key = symmetric_encryptor_->CreateRandomKey();
                 bool init_ok = symmetric_encryptor_->Initialize(reinterpret_cast<const unsigned char*>(key.data()), key.size());
+                (void)init_ok;
                 assert(init_ok);
                 size_t write_len = symmetric_encryptor_->GetEncryptDataLength(data_to_be_encrypt_len);
                 if (!symmetric_encryptor_->Encrypt(data_to_be_encrypt, data_to_be_encrypt_len, write_pos, write_len))
