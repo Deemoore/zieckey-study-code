@@ -374,7 +374,7 @@ namespace wu
             memcached_return_t rc = MEMCACHED_SUCCESS;
             char* value = memcached_get( mc_, key, keylen,
                         &value_len, &flags, &rc ); //remember to free this returned value
-            osl::ext::auto_delete<char> value_autofree(value);
+            osl::ext::auto_free<char> value_autofree(value);
 
             if ( rc == MEMCACHED_SUCCESS )
             {
