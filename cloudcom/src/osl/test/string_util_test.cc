@@ -132,7 +132,7 @@ namespace
             H_TEST_ASSERT( retval == TempVal );
 
             osl::s64 fvec[6]={};
-            StringUtil::toS64Elements( strSplit , fvec , 6 , 0.0 );
+            StringUtil::toS64Elements( strSplit , fvec , 6 , 0 );
         }
 
 
@@ -225,7 +225,6 @@ namespace
     {
         int count = 0;
         const char* begin = command;
-        size_t slice_start = 0;
         for (size_t i = 0; i < len; ++i)
         {
             if (begin[i] == '\t')
