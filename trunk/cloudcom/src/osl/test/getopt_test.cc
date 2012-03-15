@@ -47,7 +47,7 @@ namespace
         
         while(1) 
         {
-            int c = getopt(argc, const_cast<char**>(argv), "ifrhv::o:");
+            int c = getopt(argc, const_cast<char**>(argv), "ifrhv:o:");
             if(c == -1) break;
             switch(c) 
             {
@@ -64,6 +64,7 @@ namespace
                 help(); 
                 break;
             case 'v': 
+                //printf("optarg=[%s]\n", optarg);
                 verbose = atoi(optarg); 
                 break;
             case 'o': 
