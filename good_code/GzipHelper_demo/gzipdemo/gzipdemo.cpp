@@ -6,7 +6,14 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
     {
+        char* buffer="0";
+        size_t size=1;
+        CA2GZIP gzip(buffer,size);
+        LPGZIP pzip = gzip.pgzip;
+        printf("Output len=%lu\n", gzip.Length);
+    }
 
+    {
         FILE *ain=fopen("d:\\BigExample.txt","rb");
         fseek( ain,0,SEEK_END);
         long size=ftell(ain);
