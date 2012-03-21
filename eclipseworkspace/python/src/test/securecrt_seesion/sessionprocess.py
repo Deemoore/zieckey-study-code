@@ -9,18 +9,20 @@ g_templete_hostname = 'build7.kill.corp.qihoo.net'
 
 
 #modify there three parameters
-g_leading = 'scan'
-g_host = '.safe.bjt.qihoo.net'
-g_numbers = range(1,25)
+g_leading = 'hpre'
+g_host = '.safe.zzbc.qihoo.net'
+g_numbers = range(1,5)
 
 def readfile(path):
-    fh = open(path, encoding='utf-8')
+    #fh = open(path, encoding='utf-8')
+    fh = open(path)
     content = fh.read()
     fh.close()
     return content
 
 def writefile(path, data):
-    fh = open(path, mode='w', encoding='utf-8')
+    #fh = open(path, mode='w', encoding='utf-8')
+    fh = open(path, mode='w')
     fh.write(data)
     fh.close()
 
