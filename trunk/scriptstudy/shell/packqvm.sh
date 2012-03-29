@@ -4,8 +4,11 @@ _datenow=`date +%Y%m%d`
 _timenow=`date +%H%M%S`
 _pack=qvm_1_${_datenow}_${_timenow}.tar.gz
 _contentfile="./mailcontent"
+
 echo ${_pack};
+
 cd /da1/weizili/msvbin/qvm
+
 rm -rf 1
 tar vjxf /tmp/qvm.tar.bz2 -C /da1/weizili/msvbin
 rm -rf 1/cfg
