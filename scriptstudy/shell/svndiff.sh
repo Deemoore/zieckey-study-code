@@ -8,12 +8,14 @@ fi
 
 file_name=$1
 modify_file_name=${file_name}.modify
-base_file_name=${file_name}.base
-svn up
-version=`svn up` 
-version=`echo $version | awk '{print $3}' | awk -F. '{print $1}'`
+base_file_name=${file_name}.base.cxx
+#svn up
+#version=`svn up` 
+#version=`echo $version | awk '{print $3}' | awk -F. '{print $1}'`
 cp -rf $file_name $modify_file_name
 svn revert $file_name
 cp -rf $file_name $base_file_name
 cp $modify_file_name $file_name
 vimdiff $file_name $base_file_name
+rm -f $modify_file_name
+rm -f $base_file_name
