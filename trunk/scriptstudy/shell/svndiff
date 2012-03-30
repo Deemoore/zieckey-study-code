@@ -16,6 +16,6 @@ svn up
 svn revert $file_name
 cp -rf $file_name $base_file_name
 cp $modify_file_name $file_name
-vimdiff $file_name $base_file_name
+vimdiff $base_file_name $file_name 
 rm -f $modify_file_name
 rm -f $base_file_name
