@@ -1,0 +1,76 @@
+
+<!-- saved from url=(0038)http://new.vckbase.com/index.php/qqqun -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body marginwidth="0" marginheight="0">﻿
+
+
+
+<title>qq群动态</title>
+<style>
+body{ margin:0; padding:0 ; font-size:12px; font-family:Verdana, Arial, "微软雅黑", "宋体"; font-size:14px;}
+.framewrap{ width:700px;} 
+a,a:visited{ color:#444; text-decoration:none}
+a:hover{ color:red; text-decoration:underline}
+.blockbg{ width:630px; height:30px; line-height:30px; background:#fafafa; padding:10px; margin:5px  0 0 26px; border:1px  solid #ccc; }
+#marqueeBox{ float:left; height:30px; width:520px;overflow:hidden;}
+#marqueeBox div{ height:30px; overflow:hidden;}
+#addgroup{ float:right; padding-top:6px;}
+</style>
+
+
+ 
+<div class="framewrap">
+<div><img src="t1.gif"></div>
+ 
+<div class="blockbg">
+<script>
+var marqueeContent=new Array();   //滚动主题
+marqueeContent[0]='VC知识库200个QQ群中的一个等待你的加入。';
+marqueeContent[1]='加入VC知识库官方群，可以加快论坛问题解决进度。';
+var marqueeInterval=new Array();  //定义一些常用而且要经常用到的变量
+var marqueeId=0;
+var marqueeDelay=2000;
+var marqueeHeight=30;
+function initMarquee() {
+ var str=marqueeContent[0];
+ document.write('<div id=marqueeBox class=blockwap style="overflow:hidden;height:'+marqueeHeight+'px" onmouseover="clearInterval(marqueeInterval[0])" onmouseout="marqueeInterval[0]=setInterval(\'startMarquee()\',marqueeDelay)"><div>'+str+'</div></div> <div id=addgroup><a href="http://qun.qq.com/#jointhegroup/gid/222344972" target="_blank" ><img src="/Public/web/images/group_btn.gif" border=0 /></a></div>');
+ marqueeId++;
+ marqueeInterval[0]=setInterval("startMarquee()",marqueeDelay);
+}
+function startMarquee() {
+ var str=marqueeContent[marqueeId];
+  marqueeId++;
+ if(marqueeId>=marqueeContent.length) marqueeId=0;
+ if(marqueeBox.childNodes.length==1) {
+  var nextLine=document.createElement('DIV');
+  nextLine.innerHTML=str;
+  marqueeBox.appendChild(nextLine);
+  }
+ else {
+  marqueeBox.childNodes[0].innerHTML=str;
+  marqueeBox.appendChild(marqueeBox.childNodes[0]);
+  marqueeBox.scrollTop=0;
+  }
+ clearInterval(marqueeInterval[1]);
+ marqueeInterval[1]=setInterval("scrollMarquee()",10);
+ }
+function scrollMarquee() {
+ marqueeBox.scrollTop++;
+ if(marqueeBox.scrollTop%marqueeHeight==marqueeHeight){
+  clearInterval(marqueeInterval[1]);
+  }
+ }
+initMarquee();
+</script><div id="marqueeBox" class="blockwap" style="overflow:hidden;height:30px" onmouseover="clearInterval(marqueeInterval[0])" onmouseout="marqueeInterval[0]=setInterval(&#39;startMarquee()&#39;,marqueeDelay)"><div>VC知识库200个QQ群中的一个等待你的加入。</div><div>加入VC知识库官方群，可以加快论坛问题解决进度。</div></div> <div id="addgroup"><a href="http://qun.qq.com/#jointhegroup/gid/222344972" target="_blank"><img src="group_btn.gif" border="0"></a></div>
+</div> 
+</div>
+
+<div id="think_page_trace" style="background:white;margin:6px;font-size:14px;border:1px dashed silver;padding:8px">
+<fieldset id="querybox" style="margin:5px;">
+<legend style="color:gray;font-weight:bold">页面Trace信息</legend>
+<div style="overflow:auto;height:300px;text-align:left;">
+当前页面 : /index.php/qqqun<br>模板缓存 : ./web/Runtime/Cache/ac4e76512ae6c950877fa6ed7bbacbc7.php<br>请求方法 : GET<br>通信协议 : HTTP/1.1<br>请求时间 : 2012-04-08 20:18:48<br>用户代理 : Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.83 Safari/535.11 QIHU 360EE<br>会话ID : ia9rn3tngc3l8st59lg2e46p67<br>日志记录 : 3条日志<br>[ 2012-04-08T20:18:48+08:00 ] SQL: SHOW COLUMNS FROM `vck_qqqun` [ RunTime:0.060511s ]
+<br>[ 2012-04-08T20:18:48+08:00 ] SQL: SELECT COUNT(*) AS tp_count FROM `vck_qqqun` ORDER BY id desc LIMIT 1  [ RunTime:0.005407s ]
+<br>[ 2012-04-08T20:18:48+08:00 ] SQL: SELECT * FROM `vck_qqqun` ORDER BY id desc LIMIT 0,5  [ RunTime:0.000544s ]
+<br>加载文件 : 17<br>    [0] =&gt; E:\newvck\index.php<br>    [1] =&gt; E:\newvck\core\core.php<br>    [2] =&gt; E:\newvck\web\Runtime\~runtime.php<br>    [3] =&gt; E:\newvck\core\Common\convention.php<br>    [4] =&gt; E:\newvck\web\Conf\config.php<br>    [5] =&gt; E:\newvck\Public\Config\Config.ini.php<br>    [6] =&gt; E:\newvck\Public\Config\smail.php<br>    [7] =&gt; E:\newvck\web\Common\common.php<br>    [8] =&gt; E:\newvck\web\Conf\routes.php<br>    [9] =&gt; E:\newvck\core\Common\debug.php<br>    [10] =&gt; E:\newvck\core\Lib\Think\Util\Dispatcher.class.php<br>    [11] =&gt; E:\newvck\core\Lang\zh-cn.php<br>    [12] =&gt; E:\newvck\web\Lib\Action\QqqunAction.class.php<br>    [13] =&gt; E:\newvck\core\Lib\Think\Core\Model.class.php<br>    [14] =&gt; E:\newvck\core\Lib\Think\Db\Db.class.php<br>    [15] =&gt; E:\newvck\core\Lib\Think\Db\Driver\DbMysql.class.php<br>    [16] =&gt; E:\newvck\web\Runtime\Cache\ac4e76512ae6c950877fa6ed7bbacbc7.php<br><br></div>
+</fieldset>
+</div></body></html>
