@@ -1,0 +1,815 @@
+
+<!-- saved from url=(0047)http://www.vckbase.com/document/viewdoc/?id=551 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>自绘按钮的实现 - VC知识库文章</title>
+<meta name="keywords" content="XPButton,Owner Draw,WM_MOUSELEAVE,WM_MOUSEHOVER,LPDRAWITEMSTRUCT,自绘按钮">
+<meta name="description" content="XPButton,Owner Draw,WM_MOUSELEAVE,WM_MOUSEHOVER,LPDRAWITEMSTRUCT,自绘按钮">
+<link rel="stylesheet" href="http://www.vckbase.com/document/viewdoc/style.css">
+<style>
+.adbox {padding-left:26px;}
+.bbbox {padding-top:26px; overflow:hidden}
+.tadbox {overflow:hidden}
+</style>
+
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0"><a style="width: 118px; height: 25px; background-image: url(http://mat1.gtimg.com/app/opent/images/websites/share/qshare.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; left: 522px; top: 4568px; position: absolute; z-index: 999999; display: none; background-position: initial initial; background-repeat: initial initial; " href="javascript:;"></a><a style="width: 118px; height: 25px; background-image: url(http://mat1.gtimg.com/app/opent/images/websites/share/qshare.png); background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; position: absolute; display: none; background-position: initial initial; background-repeat: initial initial; " href="javascript:;"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr bgcolor="#A0D39B"> 
+    <td width="14%" height="78">&nbsp;<a href="http://www.vckbase.com/"><img src="./how to implement button_files/vckcom.gif" width="109" height="13" border="0"></a></td>
+    <td width="76%" align="left"><table width="100%" height="55" border="0" cellpadding="0" cellspacing="0">
+  <tbody><tr>
+    <td align="right"><iframe width="750" height="55" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="./how to implement button_files/shatt3.htm"></iframe></td>
+  </tr>
+</tbody></table></td>
+  <!--script type="text/javascript">
+google_ad_client = "pub-4159669282587342";
+/* 728x90, 创建于 09-4-19 */
+google_ad_slot = "4947706540";
+google_ad_width = 728;
+google_ad_height = 90;
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script-->
+    <td height="78" valign="bottom" align="right"><img src="./how to implement button_files/earch.gif" width="89" height="27"></td>
+  </tr>
+  <tr bgcolor="#EEEEEE">     <td colspan="2"><font color="#333333" class="small">::</font><a href="http://www.vckbase.com/"><font color="black"><span class="small">首页</span></font></a> 
+      &gt;&gt; <a href="http://www.vckbase.com/document"><font color="black"><span class="small">文档中心</span></font></a>
+&gt;&gt;  <a href="http://www.vckbase.com/document/journal"><span class="small"><font color="black">在线杂志</font></span></a> &gt;&gt;  <a href="http://www.vckbase.com/document/listdoc.asp?sclsid=301"><span class="small"><font color="black">按钮</font></span></a></td>
+    <td width="10%" align="right" class="small">
+[ <a href="http://www.vckbase.com/document/journal/redir.asp?journal=18"><span class="small"><font color="black">在线杂志 第18期</font></span></a> ] </td>
+  </tr>
+</tbody></table>
+<br>
+<table class="tadbox" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr>
+    <td>
+<table width="1316" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr>
+    <td width="660" align="left"><iframe width="660" height="102" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="./how to implement button_files/qqqun.htm"></iframe></td>
+    <td width="5">&nbsp;</td>
+    <td width="610" rowspan="3" align="left" class="bbbox">
+      <iframe width="610" height="220" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="./how to implement button_files/bbslist2.htm"></iframe></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="adbox"><script type="text/javascript" src="./how to implement button_files/3"></script><a href="http://www.uipower.com/" target="_blank"><img border="0" src="./how to implement button_files/1328258527.jpg"></a></td>
+    <td>&nbsp;</td>
+  </tr>
+</tbody></table></td>
+  </tr>
+</tbody></table>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr> 
+    <td height="1" background="./how to implement button_files/dotline2.gif"></td>
+  </tr>
+</tbody></table> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr> 
+    <td width="40" height="74"></td>
+    <td width="*" height="74" valign="top">
+<form name="form2" method="post" action="http://www.vckbase.com/SYS/script/find.asp"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody><tr> 
+          <td><span id="docinfo">[ <font color="#009900">原创文档</font> 本文适合初级读者 已阅读109528次 ]</span></td>
+
+		<td align="right">
+
+
+<a href="javascript:;" class="tmblog" id="share_btn_1327833387226" onclick="postToWb()"><img src="./how to implement button_files/b24.png" border="0" alt="转播到腾讯微博"></a>
+
+<script>
+var _share_tencent_weibo = function() {
+    String.prototype.elength = function() {
+        return this.replace(/[^\u0000-\u00ff]/g, "aa").length;
+    };
+    String.prototype.tripurl = function() {
+        return this.replace(new RegExp("((news|telnet|nttp|file|http|ftp|https)://){1}(([-A-Za-z0-9]+(\\.[-A-Za-z0-9]+)*(\\.[-A-Za-z]{2,5}))|([0-9]{1,3}(\\.[0-9]{1,3}){3}))(:[0-9]*)?(/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*)*", "gi"), new Array(12).join("aa"));
+    };
+    if ( !! window.find) {
+        HTMLElement.prototype.contains = function(B) {
+            return this.compareDocumentPosition(B) - 19 > 0
+        }
+    };
+    var _appkey = "801092013" || "801000271"; //你从腾讯微博开放平台获得的appkey
+    var _web = {
+        "name": document.title || "",
+        "href": location.href.replace(/([^\x00-\xff]+)/g,encodeURIComponent("$1")),
+        "hash": location.hash,
+        "target": "toolbar=0,status=0,resizable=1,width=630,height=530"
+    };
+    var _pic = function(area) {
+        var _imgarr = area.getElementsByTagName("img");
+        var _srcarr = [];
+        for (var i = 0; i < _imgarr.length; i++) {
+            _srcarr.push(encodeURIComponent(_imgarr[i].src));
+        }
+        return _srcarr.join("|");
+    };
+    var _text = function() {
+        var s1 = arguments[0] || "",
+        s2 = Array().slice.call(arguments, 1).join(" ").replace(/[\s\n]+/g, " "),
+        k = 257 - s1.tripurl().elength();
+        var s = s2.slice(0, (k - 4) >> 1);
+        if (s2.elength() > k) {
+            k = k - 3;
+            for (var i = k >> 1; i <= k; i++) {
+                if ((s2.slice(0, i)).tripurl().elength() >= k) {
+                    break;
+                }
+                else {
+                    s = s2.slice(0, i);
+                }
+            }
+            s += "...";
+        } else {
+            s = s2;
+        }
+        return [s1, s];
+    };
+    var _u = "http://share.v.t.qq.com/index.php?c=share&a=index&url=$url$&appkey=" + _appkey + "&assname=vckbase2012&title=$title$&pic=$pic$";
+    var qshare_btn = function(_arr) {
+        if (_arr[0]) {
+            return _arr[0];
+        }
+        else {
+            var o = document.createElement("a"),
+            _ostyle = "width:118px;height:25px;background:url(http://mat1.gtimg.com/app/opent/images/websites/share/qshare.png);position:absolute;display:none;";
+            o.setAttribute("style", _ostyle);
+            o.style.cssText = _ostyle;
+            o.setAttribute("href", "javascript:;");
+            document.body.insertBefore(o, document.body.childNodes[0]);
+            return o;
+        }
+    } (arguments);
+    var share_area = function(_arr) {
+        if (_arr[1]) {
+            if ((typeof _arr[1] == "object" && _arr[1].length) || (_arr[1].constructor == Array)) {
+                return _arr[1];
+            } else {
+                return [_arr[1]];
+            }
+        }
+        else {
+            return [document.body];
+        }
+    } (arguments);
+    var current_area = share_area[0];
+    var share_btn = function(_arr) {
+        if (_arr[2]) {
+            _arr[2].onclick = function() {
+                window.open(_u.replace("$title$", encodeURIComponent(_text(_web.name,"").join(" "))).replace("$url$", encodeURIComponent(_web.href)).replace("$pic$", _pic(share_area[0])).substr(0, 2048), 'null', _web.target);
+            }
+        } else {
+            return null;
+        }
+    } (arguments);
+    var _select = function() {
+        return (document.selection ? document.selection.createRange().text: document.getSelection()).toString().replace(/[\s\n]+/g, " ");
+    };
+    var show = function(e, x, y) {
+        with(qshare_btn.style) {
+            display = "inline-block";
+            left = x + "px";
+            top = y + "px";
+            position = "absolute";
+            zIndex = "999999";
+        }
+    };
+    var hide = function(e) {
+        e.style.display = "none";
+    };
+    document.onmouseup = function(e) {
+        e = e || window.event;
+        var o = e.target || e.srcElement;
+        for (var i = 0; i < share_area.length; i++) {
+            if (share_area[i].contains(o) || share_area[i] == o) {
+                var _e = {
+                    "x": e.clientX,
+                    "y": e.clientY
+                };
+                var _o = {
+                    "w": qshare_btn.clientWidth,
+                    "h": qshare_btn.clientHeight
+                };
+                var _d = window.pageYOffset || (document.documentElement || document.body).scrollTop || 0;
+                var x = (_e.x - _o.w < 0) ? _e.x + _o.w: _e.x - _o.w,
+                y = (_e.y - _o.h < 0) ? _e.y + _d - _o.h: _e.y + _d;
+                if (_select() && _select().length >= 10 && o != qshare_btn) {
+                    show(qshare_btn, x - 5, y);
+                    current_area = share_area[i];
+                    break;
+                } else {
+                    hide(qshare_btn);
+                }
+
+            } else {
+                hide(qshare_btn);
+            }
+        }
+    };
+    document.onmouseover = function(e) {
+        var curtarget = (e && e.target) || (window.event && window.event.srcElement),
+        sx = parseInt(qshare_btn.style.width),
+        sy = parseInt(qshare_btn.style.height),
+        d = Math.min(sx, sy);
+        if (curtarget.tagName.toLowerCase() == "img") {
+            var erect = curtarget.getBoundingClientRect();
+            if (curtarget.clientWidth >= 150 && curtarget.clientHeight >= 150) {
+                show(qshare_btn, erect.right - sx - d, erect.bottom + document.body.scrollTop + document.documentElement.scrollTop - sy - d);
+                qshare_btn.setAttribute("shareimg", curtarget.src);
+            }
+        } else if (curtarget != qshare_btn && qshare_btn.getAttribute("shareimg")) {
+            qshare_btn.removeAttribute("shareimg");
+            hide(qshare_btn);
+        }
+    };
+    document.onmousedown = function(e) {
+        var curtarget = (e && e.target) || (window.event && window.event.srcElement);
+        if (curtarget != qshare_btn) {
+            if (document.selection) {
+                document.selection.empty();
+            } else if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    };
+    qshare_btn.onclick = function() {
+        var shareimg = qshare_btn.getAttribute("shareimg");
+        if (shareimg != null) {
+            window.open(_u.replace("$title$", encodeURIComponent(_web.name)).replace("$url$", encodeURIComponent(_web.href)).replace("$pic$", encodeURIComponent(shareimg)).substr(0, 2048), 'null', _web.target);
+            return;
+        }
+        var _str = _select();
+        _resultstr = _text(_web.name, _str).reverse().join(" ");
+        if (_str) {
+            var url = _u.replace("$title$", encodeURIComponent(_resultstr)).replace("$pic$", _pic(current_area));
+            url = url.replace("$url$", encodeURIComponent(_web.href.replace(_web.hash, "") + "#" + (current_area["name"] || current_area["id"] || ""))).substr(0, 2048);
+            window.open(url, 'null', _web.target);
+        }
+        hide(this);
+    };
+};
+_share_tencent_weibo(null,null,document.getElementById("share_btn_1327833387226"));
+/*
+_share_tencent_weibo(qshare_btn,qshare_area,share_btn);
+qshare_btn:Q-Share功能按钮，选中文字或鼠标放在功能区域中的大图上后显示的转播按钮
+qshare_area:Q-Share功能区域，可以是一个Dom数组
+share_btn:一键转播功能按钮，点击后将会弹出转播页面
+如须自定义功能，qshare_btn,share_area,share_btn自己设置,其中qshare_area可以是一个DOM数组
+*/
+</script>
+
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+(function(){
+  var _w = 106 , _h = 24;
+  var param = {
+    url:location.href,
+    type:'5',
+    count:'', /**是否显示分享数，1显示(可选)*/
+    appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+    title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+    pic:'', /**分享图片的路径(可选)*/
+    ralateUid:'2667733442', /**关联用户的UID，分享微博会@该用户(可选)*/
+	language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+    rnd:new Date().valueOf()
+  }
+  var temp = [];
+  for( var p in param ){
+    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+  }
+  document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+})()
+</script><iframe allowtransparency="true" frameborder="0" scrolling="no" src="./how to implement button_files/weiboshare.htm" width="106" height="24"></iframe></td>
+
+
+            <td align="right" width="200">
+<input type="text" name="keyword" size="10" maxlength="20" class="rect">
+              <select name="gclsid" class="rect">
+                <option value="100" selected="">文档</option>
+                <option value="200">代码</option>
+                <option value="400">工具</option>
+    </select>
+    <input type="image" border="0" name="imageField" src="./how to implement button_files/go.gif" width="21" height="15" align="absmiddle">
+            </td>
+        </tr>
+      </tbody></table></form>
+      <div align="center"></div>
+      <br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr>
+    <td><p align="center"><strong>自绘按钮的实现</strong><br>
+        作者:<a href="mailto:duxiuxing@163.net">杜修杏</a></p>
+      <p><a href="http://www.vckbase.com/code/downcode.asp?id=1793">下载本文示例工程</a><br>
+        <br>
+        如果你希望能够在自己的程序中表现出新意，那么你一定不会仅仅满足于MFC提供那些标准控件。这时，我们就必须自己另外多做些工作了。就改变控件外观这一点来说，主要是利用控件的自绘功能（Owner 
+        Draw）实现的。本篇将和各位一起定义一个XP风格的CXPButton按钮类，目的不在于介绍CXPButton类的使用技巧，而在于向各位阐述实现自绘按钮的方法。当然如果你觉得CXPButton有用的话，也可以把它的源文件保存下来，直接加入到自己的项目中。<br>
+        <br>
+        本篇要点：<br>
+        <a href="http://www.vckbase.com/document/viewdoc/?id=551#D1">一、准备工作</a><br>
+        <a href="http://www.vckbase.com/document/viewdoc/?id=551#D2">二、实现原理及难点</a><br>
+        <a href="http://www.vckbase.com/document/viewdoc/?id=551#D3">三、按钮类的使用</a><br>
+        <a href="http://www.vckbase.com/document/viewdoc/?id=551#D4">四、小结与提示</a><br>
+        <a href="http://www.vckbase.com/document/viewdoc/?id=551#D5">五、附录</a><br>
+        <br>
+        <strong><font color="#FF6600"><a name="D1" id="D1"></a></font><img src="./how to implement button_files/paragraph.gif" width="14" height="16"> 
+        一、准备工作</strong><br>
+        <br>
+        在开始编码之前，首先应该确定好，更准确的说应该是设计好按钮在各种状态下的外观。按钮控件的几中基本状态包括：<br>
+        Normal状态，就是按钮一开始显示时的样子。<br>
+        Over状态，鼠标指针移动到按钮上面时按钮显示的样子。<br>
+        Down状态，按下按钮时显示的样子。<br>
+        Focus状态，按钮按下后松开的样子，例如标准按钮按下松开之后会看到按钮内部有一个虚线框。<br>
+        Disable状态，当然就是按钮被设置成无效的时候的样子啦。</p>
+      <p> 我参考了一下WindowsXP中普通按钮的实际样子，设计出XP按钮各种状态的外观，如下图所示：</p>
+      <p><img src="./how to implement button_files/XPButtonDemo1.gif" width="454" height="206"><br>
+        至于Down状态主要是在Over状态的基础上将文字往右下的方向稍微平移，以实现下压的效果。<br>
+        <br>
+        <strong><font color="#FF6600"><a name="D2" id="D2"></a></font><img src="./how to implement button_files/paragraph.gif" width="14" height="16"> 
+        二、实现原理及难点</strong></p>
+      <p> 下面我们开始类的创建，在Workspace的ClassView页中右击列表树的根结点，选择New Class…</p>
+      <p><img src="./how to implement button_files/XPButtonDemo2.gif" width="339" height="275"> 
+        <br>
+        <br>
+        在弹出窗口中进行派生类的定义，如下图所示，注意，你需要填写的只有Name和Base class两项，其余的选项保持默认值就可以了。<br>
+        <br>
+        <img src="./how to implement button_files/XPButtonDemo3.gif" width="409" height="311"> 
+        <br>
+        <br>
+        按OK按钮退出之后，我们可以在ClassView里面看到新创建的类的名字。接下来我们可以为CXPButton类添加各种成员变量。因为自绘控件说穿了就是画图，所以在成员变量中可以看到各种与画图有关的数据类型，一般来说成员变量会在类的构造函数中初始化，在类的析构函数中销毁。详细代码请参见本篇附带的源程序。<br>
+        下面简要叙述一下按钮的实现原理：</p>
+      <p>1. 在控件初始化时为按钮添加Owner Draw的属性。这是因为在MFC中，要想激活控件的自绘功能，要求该控件的属性中必须包含属性值BS_OWNERDRAW，这一步我们可以通过类向导为CXPButton类添加PreSubclassWindow()函数，在该函数中完成属性值的设置。当激活控件的自绘功能之后，每次控件状态改变的时候都会运行函数DrawItem()，该函数的作用就是绘制控件在各种状态下的外观。</p>
+      <p>2. 添加WM_MOUSELEAVE消息函数，当鼠标指针离开按钮时，触发该消息函数，我们在函数中添加代码，通知DrawItem函数鼠标指针已经离开了，让按钮重绘。</p>
+      <p>3. 添加WM_MOUSEHOVER消息函数，当鼠标指针位于按钮之上时，触发该消息函数，我们在函数重添加代码，通知DrawItem函数鼠标指针现在正在按钮的上面，让按钮重绘。</p>
+      <p>4. 添加DrawItem函数。在DrawItem中根据按钮当前的状态绘制按钮的外观。可以说自绘控件的大部分功能都是在这个函数中实现的。DrawItem函数包含了一个LPDRAWITEMSTRUCT的指针，本篇会在稍后予以讲解。</p>
+      <p> </p>
+      <p>了解了基本的设计思路之后，剩下就看我们怎么去实现了。我本人觉得这里有两个难点，首先是WM_MOUSELEAVE和WM_MOUSEHOVER不是标准的Windows消息函数，它们不能通过类向导来添加，所有的添加工作都需要通过手工输入代码来完成。另一个难点是DrawItem中的LPDRAWITEMSTRUCT指针，它指向了一个DRAWITEMSTRUCT的结构，这个结构中包含了控件的各种细节，为我们提供了实现自绘功能的必要信息。</p>
+      <p><strong>难点一：</strong><br>
+        事实上WM_MOUSELEAVE和WM_MOUSEHOVER两个Windows消息是通过WM_MOUSEMOVE消息触发的，而WM_MOUSEMOVE是标准的Windows消息，因此我们可以通过类向导来为CXPButton类添加WM_MOUSEMOVE消息函数。<br>
+        <img src="./how to implement button_files/XPButtonDemo4.gif" width="586" height="348"> 
+        <br>
+        <br>
+        函数的代码见如下，这段代码非常有用，在其它的自绘控件中，如果想触发WM_MOUSELEAVE和WM_MOUSEHOVER消息，也是使用类似的方法实现的。<br>
+      </p>
+<pre>void CXPButton::OnMouseMove(UINT nFlags, CPoint point) 
+{
+       // TODO: Add your message handler code here and/or call default
+       if (!m_bTracking)
+       {
+              TRACKMOUSEEVENT tme;
+              tme.cbSize = sizeof(tme);
+              tme.hwndTrack = m_hWnd;
+              tme.dwFlags = TME_LEAVE | TME_HOVER;
+              tme.dwHoverTime = 1;
+              m_bTracking = _TrackMouseEvent(&amp;tme);
+       }
+       CButton::OnMouseMove(nFlags, point);
+}</pre>我们接着添加WM_MOUSELEAVE和WM_MOUSEHOVER消息消息函数。在CXPButton类的声明中（即在XPButton.h文件中）找到afx_msg void OnMouseMove(UINT nFlags, CPoint point);的函数声明，紧接其下输入
+<pre>afx_msg LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
+afx_msg LRESULT OnMouseHover(WPARAM wParam, LPARAM lParam);
+</pre>然后在XPButton.cpp文件中找到ON_WM_MOUSEMOVE()，紧接其后输入
+<pre>ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
+ON_MESSAGE(WM_MOUSEHOVER, OnMouseHover)
+</pre>
+      当然最后还有函数的实现了，详细代码可见本篇提供的源程序，这里就不再重复了。<br>
+      <br>
+      <strong>难点二：</strong><br>
+      下面我们看看DRAWITEMSTRUCE结构为我们提供了哪些有用信息呢？<br>
+DRAWITEMSTRUCT结构的定义如下：<pre>typedef struct tagDRAWITEMSTRUCT {
+    UINT   CtlType;                       //控件类型
+    UINT   CtlID;                          //控件ID
+    UINT   itemID;                        //菜单项、列表框或组合框中某一项的索引值
+    UINT   itemAction;                   //控件行为
+    UINT   itemState;                     //控件状态
+    HWND   hwndItem;                 //父窗口句柄或菜单句柄
+    HDC    hDC;                           //控件对应的绘图设备句柄
+    RECT   rcItem;                        //控件所占据的矩形区域
+    DWORD  itemData;                  //列表框或组合框中某一项的值
+} DRAWITEMSTRUCT, *PDRAWITEMSTRUCT, *LPDRAWITEMSTRUCT;</pre>
+其实不仅是按钮控件，其它控件，如ComboBox、ListBox、StaticText等都是通过DRAWITEMSTRUCT来记录控件信息的。关于这个结构的详细文档可参考本篇的附录。
+<br>
+      <br>
+      也许你早已看到许多自绘按钮的例子，实际上自绘按钮本身的函数结构都是差不多的，它们显示效果的区别主要取决于代码编写者对GDI作图函数的运用与掌握程度。有兴趣的朋友可以研究一下CXPButton类中DrawItem函数的数据结构，其实只要修改一下其中GDI绘图函数的部分代码，马上又能做出另一个自绘按钮控件了。 
+      <br>
+      <br>
+      <strong><font color="#FF6600"><a name="D3" id="D3"></a></font><img src="./how to implement button_files/paragraph.gif" width="14" height="16"> 
+      三、按钮类的使用</strong> 
+      <p> 下面演示CXPButton类的使用。往对话框中添加一个按钮控件，假设它的ID值为IDC_BUTTON1。进入类向导（Class Wizard）的Member 
+        Variables属性页，为IDC_BUTTON1添加一个变量m_btnNormal。确定退出后再进行编译，就可以看到重新定义过XP风格按钮了。<br>
+      </p> 
+      <img src="./how to implement button_files/XPButtonDemo5.gif" width="625" height="429"><br>
+      <br>
+      如果你是之间把CXPButton的源文件引入自己的工程中的，那么在上图的Variable type中是看不到CXPButton选项的。但是可以通过以下方法加入： 
+      <p>1. 首先保存工程后退出。<br>
+        2. 在工程的目录下找到一个后缀名为.clw的文件，将其删除。但是为了以防万一还是建议你实现备份一下。<br>
+        3. 重新打开工程，进入类向导，此时会看到一下一个弹出对话框，我们选择“是（Yes）”。<br>
+        <br>
+        <img src="./how to implement button_files/XPButtonDemo6.gif" width="489" height="124"> 
+        <br>
+        <br>
+        4. 再选择“Add All”，这样我们就可以在类向导中使用CXPButton的变量类型了。<br>
+        <br>
+        <strong><font color="#FF6600"><a name="D4" id="D4"></a></font><img src="./how to implement button_files/paragraph.gif" width="14" height="16"> 
+        四、小结与提示</strong><br>
+        <br>
+        对于按钮来说，当按钮上面任何可见的部分发生变换的时候，都要调用DrawItem函数进行重绘。自绘制按钮必须设定BS_OWNERDRAW的属性，设置的代码在PreSubclassWindows函数中完成。另外为了防止系统字体设置的变化影响控件的表达效果，还可以在该函数中为控件指定某种固定的字体。但是要注意的是这个<br>
+        让我们来回顾一下实现自绘按钮的基本步骤：<br>
+        a. 确定设计方案；<br>
+        b. 初始化，但是记得要在函数退出前恢复先前的GDI对象，并释放所占领的资源；<br>
+        c. 添加相应消息函数；<br>
+        d. 添加绘图函数DrawItem，在DrawItem中作图的顺序一般是先画外边框，再上底色，接着写文字，最后是画内边框。不过有些人也喜欢把边框放到最后画，这问题不大。<br>
+        <br>
+        <strong><font color="#FF6600"><a name="D5" id="D5"></a></font><img src="./how to implement button_files/paragraph.gif" width="14" height="16"> 
+        五、附录</strong></p>
+      <p><strong>DRAWITEMSTRUCT结构文档</strong>（根据Msdn翻译）<br>
+        <br>
+        <strong>DRAWITEMSTRUCT</strong></p>
+      <p>DRAWITEMSTRUCT 为需要自绘的控件或者菜单项提供了必要的信息。在需要绘制的控件或者菜单项对应的WM_DRAWITEM消息函数中得到一个指向该结构的指针。 
+        DRAWITEMSTRUCT结构的定义如下：<br>
+        typedef struct tagDRAWITEMSTRUCT {<br>
+        UINT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS1">CtlType</a>; <br>
+        UINT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS2">CtlID</a>; <br>
+        UINT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS3">itemID</a>; <br>
+        UINT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS4">itemAction</a>; <br>
+        UINT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS5">itemState</a>; <br>
+        HWND <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS6">hwndItem</a>; <br>
+        HDC <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS7">hDC</a>; <br>
+        RECT <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS8">rcItem</a>; <br>
+        ULONG_PTR <a href="http://www.vckbase.com/document/viewdoc/?id=551#DIS9">itemData</a>; <br>
+        } DRAWITEMSTRUCT; </p>
+      <p>结构成员：</p>
+      <p><strong><font color="#FF6600"><a name="DIS1"></a>CtlType</font> </strong><br>
+        指定了控件的类型，其取值如下表所示。 </p>
+      <p>取值<br>
+        描述</p>
+      <p>ODT_BUTTON<br>
+        按钮控件<br>
+        <br>
+        ODT_COMBOBOX<br>
+        组合框控件<br>
+        <br>
+        ODT_LISTBOX<br>
+        列表框控件<br>
+        <br>
+        ODT_LISTVIEW<br>
+        列表视图控件<br>
+        <br>
+        ODT_MENU<br>
+        菜单项<br>
+        <br>
+        ODT_STATIC<br>
+        静态文本控件<br>
+        <br>
+        ODT_TAB<br>
+        Tab控件<br>
+        <br>
+        <strong><font color="#FF6600"><a name="DIS2" id="DIS2"></a>CtlID </font></strong></p>
+      <p>指定了自绘控件的ID值，而对于菜单项则不需要使用该成员 </p>
+      <p><strong><font color="#FF6600"><a name="DIS3" id="DIS3"></a>itemID</font></strong> 
+        <br>
+        表示菜单项ID，也可以表示列表框或者组合框中某项的索引值。对于一个空的列表框或组合框，该成员的值为–1。这时应用程序只绘制焦点矩形（该矩形的坐标由rcItem 
+        成员给出）虽然此时控件中没有需要显示的项，但是绘制焦点矩形还是很有必要的，因为这样做能够提示用户该控件是否具有输入焦点。当然也可以设置itemAction 
+        成员为合适值，使得无需绘制焦点。 </p>
+      <p><strong><font color="#FF6600"><a name="DIS4" id="DIS4"></a>itemAction 
+        </font></strong><br>
+        指定绘制行为，其取值可以为下表中所示值的一个或者多个的联合。 </p>
+      <p>取值<br>
+        描述<br>
+        <br>
+        ODA_DRAWENTIRE<br>
+        当整个控件都需要被绘制时，设置该值<br>
+        <br>
+        ODA_FOCUS<br>
+        如果控件需要在获得或失去焦点时被绘制，则设置该值。此时应该检查itemState成员，以确定控件是否具有输入焦点。<br>
+        <br>
+        ODA_SELECT<br>
+        如果控件需要在选中状态改变时被绘制，则设置该值。此时应该检查itemState 成员，以确定控件是否处于选中状态。<br>
+      </p>
+      <p><strong><font color="#FF6600"><a name="DIS5" id="DIS5"></a>itemState 
+        </font></strong><br>
+        指定了当前绘制操作完成后，所绘项的可见状态。例如，如果菜单项应该被灰色显示，则可以指定ODS_GRAYED状态标志。其取值可以为下表中所示值的一个或者多个的联合。</p>
+      <p>取值<br>
+        描述<br>
+        <br>
+        ODS_CHECKED<br>
+        如果菜单项将被选中，则可设置该值。该值只对菜单项有用。<br>
+        <br>
+        ODS_COMBOBOXEDIT<br>
+        在自绘组合框控件中只绘制选择区域。<br>
+        <br>
+        ODS_DEFAULT<br>
+        默认值。<br>
+        <br>
+        ODS_DISABLED<br>
+        如果控件将被禁止，则设置该值。<br>
+        <br>
+        ODS_FOCUS<br>
+        如果控件需要输入焦点，则设置该值。<br>
+        <br>
+        ODS_GRAYED<br>
+        如果控件需要被灰色显示，则设置该值。该值只在绘制菜单时使用。<br>
+        <br>
+        ODS_HOTLIGHT<br>
+        Windows 98/Me, Windows 2000/XP: 如果鼠标指针位于控件之上，则设置该值，这时控件会显示高亮颜色。<br>
+        <br>
+        ODS_INACTIVE<br>
+        Windows 98/Me, Windows 2000/XP: 表示没有激活的菜单项。<br>
+        <br>
+        ODS_NOACCEL<br>
+        Windows 2000/XP: 控件是否有快速键盘。<br>
+        <br>
+        ODS_NOFOCUSRECT<br>
+        Windows 2000/XP: 不绘制捕获焦点的效果。<br>
+        <br>
+        ODS_SELECTED<br>
+        选中的菜单项。<br>
+        <br>
+        <font color="#FF6600"><strong><font color="#FF6600"><a name="DIS6" id="DIS6"></a></font>hwndItem 
+        </strong></font><br>
+        指定了组合框、列表框和按钮等自绘控件的窗口句柄；如果自绘的对象时菜单项，则表示包含该菜单项的菜单句柄。 </p>
+      <p><font color="#FF6600"><strong><font color="#FF6600"><a name="DIS7" id="DIS7"></a></font>hDC</strong> 
+        </font><br>
+        指定了绘制操作所使用的设备环境。 </p>
+      <p><font color="#FF6600"><strong><font color="#FF6600"><a name="DIS8" id="DIS8"></a></font>rcItem</strong></font> 
+        <br>
+        指定了将被绘制的矩形区域。这个矩形区域就是上面hDC的作用范围。系统会自动裁剪组合框、列表框或按钮等控件的自绘制区域以外的部分。也就是说rcItem中的坐标点（0，0）指的就是控件的左上角。但是系统不裁剪菜单项，所以在绘制菜单项的时候，必须先通过一定的换算得到该菜单项的位置，以保证绘制操作在我们希望的区域中进行。 
+      </p>
+      <p><font color="#FF6600"><strong><font color="#FF6600"><a name="DIS9" id="DIS9"></a></font>itemData</strong></font> 
+        <br>
+        对于菜单项，该成员的取值可以是由</p>
+      <p>CMenu::AppendMenu、<br>
+        CMenu::InsertMenu或者<br>
+        CMenu::ModifyMenu</p>
+      <p>等函数传递给菜单的值。 </p>
+      <p>对于列表框或这组合框，该成员的值可以为由</p>
+      <p>ComboBox::AddString、<br>
+        CComboBox::InsertString、<br>
+        CListBox::AddString或者<br>
+        CListBox::InsertString</p>
+      <p>等传递给控件的值。</p>
+      <p>如果ctlType 的取值是ODT_BUTTON或者ODT_STATIC, itemData的取值为0。 </p>
+      
+    </td>
+  </tr>
+</tbody></table>
+    </td>
+  </tr>
+</tbody></table>
+<br>
+<div style="margin-left:40px">
+
+</div>
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody><tr>
+    <td align="right">
+
+
+<a href="javascript:;" class="tmblog" id="share_btn_1327833387226" onclick="postToWb()"><img src="./how to implement button_files/b24.png" border="0" alt="转播到腾讯微博"></a>
+
+<script>
+var _share_tencent_weibo = function() {
+    String.prototype.elength = function() {
+        return this.replace(/[^\u0000-\u00ff]/g, "aa").length;
+    };
+    String.prototype.tripurl = function() {
+        return this.replace(new RegExp("((news|telnet|nttp|file|http|ftp|https)://){1}(([-A-Za-z0-9]+(\\.[-A-Za-z0-9]+)*(\\.[-A-Za-z]{2,5}))|([0-9]{1,3}(\\.[0-9]{1,3}){3}))(:[0-9]*)?(/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*)*", "gi"), new Array(12).join("aa"));
+    };
+    if ( !! window.find) {
+        HTMLElement.prototype.contains = function(B) {
+            return this.compareDocumentPosition(B) - 19 > 0
+        }
+    };
+    var _appkey = "801092013" || "801000271"; //你从腾讯微博开放平台获得的appkey
+    var _web = {
+        "name": document.title || "",
+        "href": location.href.replace(/([^\x00-\xff]+)/g,encodeURIComponent("$1")),
+        "hash": location.hash,
+        "target": "toolbar=0,status=0,resizable=1,width=630,height=530"
+    };
+    var _pic = function(area) {
+        var _imgarr = area.getElementsByTagName("img");
+        var _srcarr = [];
+        for (var i = 0; i < _imgarr.length; i++) {
+            _srcarr.push(encodeURIComponent(_imgarr[i].src));
+        }
+        return _srcarr.join("|");
+    };
+    var _text = function() {
+        var s1 = arguments[0] || "",
+        s2 = Array().slice.call(arguments, 1).join(" ").replace(/[\s\n]+/g, " "),
+        k = 257 - s1.tripurl().elength();
+        var s = s2.slice(0, (k - 4) >> 1);
+        if (s2.elength() > k) {
+            k = k - 3;
+            for (var i = k >> 1; i <= k; i++) {
+                if ((s2.slice(0, i)).tripurl().elength() >= k) {
+                    break;
+                }
+                else {
+                    s = s2.slice(0, i);
+                }
+            }
+            s += "...";
+        } else {
+            s = s2;
+        }
+        return [s1, s];
+    };
+    var _u = "http://share.v.t.qq.com/index.php?c=share&a=index&url=$url$&appkey=" + _appkey + "&assname=vckbase2012&title=$title$&pic=$pic$";
+    var qshare_btn = function(_arr) {
+        if (_arr[0]) {
+            return _arr[0];
+        }
+        else {
+            var o = document.createElement("a"),
+            _ostyle = "width:118px;height:25px;background:url(http://mat1.gtimg.com/app/opent/images/websites/share/qshare.png);position:absolute;display:none;";
+            o.setAttribute("style", _ostyle);
+            o.style.cssText = _ostyle;
+            o.setAttribute("href", "javascript:;");
+            document.body.insertBefore(o, document.body.childNodes[0]);
+            return o;
+        }
+    } (arguments);
+    var share_area = function(_arr) {
+        if (_arr[1]) {
+            if ((typeof _arr[1] == "object" && _arr[1].length) || (_arr[1].constructor == Array)) {
+                return _arr[1];
+            } else {
+                return [_arr[1]];
+            }
+        }
+        else {
+            return [document.body];
+        }
+    } (arguments);
+    var current_area = share_area[0];
+    var share_btn = function(_arr) {
+        if (_arr[2]) {
+            _arr[2].onclick = function() {
+                window.open(_u.replace("$title$", encodeURIComponent(_text(_web.name,"").join(" "))).replace("$url$", encodeURIComponent(_web.href)).replace("$pic$", _pic(share_area[0])).substr(0, 2048), 'null', _web.target);
+            }
+        } else {
+            return null;
+        }
+    } (arguments);
+    var _select = function() {
+        return (document.selection ? document.selection.createRange().text: document.getSelection()).toString().replace(/[\s\n]+/g, " ");
+    };
+    var show = function(e, x, y) {
+        with(qshare_btn.style) {
+            display = "inline-block";
+            left = x + "px";
+            top = y + "px";
+            position = "absolute";
+            zIndex = "999999";
+        }
+    };
+    var hide = function(e) {
+        e.style.display = "none";
+    };
+    document.onmouseup = function(e) {
+        e = e || window.event;
+        var o = e.target || e.srcElement;
+        for (var i = 0; i < share_area.length; i++) {
+            if (share_area[i].contains(o) || share_area[i] == o) {
+                var _e = {
+                    "x": e.clientX,
+                    "y": e.clientY
+                };
+                var _o = {
+                    "w": qshare_btn.clientWidth,
+                    "h": qshare_btn.clientHeight
+                };
+                var _d = window.pageYOffset || (document.documentElement || document.body).scrollTop || 0;
+                var x = (_e.x - _o.w < 0) ? _e.x + _o.w: _e.x - _o.w,
+                y = (_e.y - _o.h < 0) ? _e.y + _d - _o.h: _e.y + _d;
+                if (_select() && _select().length >= 10 && o != qshare_btn) {
+                    show(qshare_btn, x - 5, y);
+                    current_area = share_area[i];
+                    break;
+                } else {
+                    hide(qshare_btn);
+                }
+
+            } else {
+                hide(qshare_btn);
+            }
+        }
+    };
+    document.onmouseover = function(e) {
+        var curtarget = (e && e.target) || (window.event && window.event.srcElement),
+        sx = parseInt(qshare_btn.style.width),
+        sy = parseInt(qshare_btn.style.height),
+        d = Math.min(sx, sy);
+        if (curtarget.tagName.toLowerCase() == "img") {
+            var erect = curtarget.getBoundingClientRect();
+            if (curtarget.clientWidth >= 150 && curtarget.clientHeight >= 150) {
+                show(qshare_btn, erect.right - sx - d, erect.bottom + document.body.scrollTop + document.documentElement.scrollTop - sy - d);
+                qshare_btn.setAttribute("shareimg", curtarget.src);
+            }
+        } else if (curtarget != qshare_btn && qshare_btn.getAttribute("shareimg")) {
+            qshare_btn.removeAttribute("shareimg");
+            hide(qshare_btn);
+        }
+    };
+    document.onmousedown = function(e) {
+        var curtarget = (e && e.target) || (window.event && window.event.srcElement);
+        if (curtarget != qshare_btn) {
+            if (document.selection) {
+                document.selection.empty();
+            } else if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    };
+    qshare_btn.onclick = function() {
+        var shareimg = qshare_btn.getAttribute("shareimg");
+        if (shareimg != null) {
+            window.open(_u.replace("$title$", encodeURIComponent(_web.name)).replace("$url$", encodeURIComponent(_web.href)).replace("$pic$", encodeURIComponent(shareimg)).substr(0, 2048), 'null', _web.target);
+            return;
+        }
+        var _str = _select();
+        _resultstr = _text(_web.name, _str).reverse().join(" ");
+        if (_str) {
+            var url = _u.replace("$title$", encodeURIComponent(_resultstr)).replace("$pic$", _pic(current_area));
+            url = url.replace("$url$", encodeURIComponent(_web.href.replace(_web.hash, "") + "#" + (current_area["name"] || current_area["id"] || ""))).substr(0, 2048);
+            window.open(url, 'null', _web.target);
+        }
+        hide(this);
+    };
+};
+_share_tencent_weibo(null,null,document.getElementById("share_btn_1327833387226"));
+/*
+_share_tencent_weibo(qshare_btn,qshare_area,share_btn);
+qshare_btn:Q-Share功能按钮，选中文字或鼠标放在功能区域中的大图上后显示的转播按钮
+qshare_area:Q-Share功能区域，可以是一个Dom数组
+share_btn:一键转播功能按钮，点击后将会弹出转播页面
+如须自定义功能，qshare_btn,share_area,share_btn自己设置,其中qshare_area可以是一个DOM数组
+*/
+</script>
+
+<script type="text/javascript" charset="utf-8">
+(function(){
+  var _w = 106 , _h = 24;
+  var param = {
+    url:location.href,
+    type:'5',
+    count:'', /**是否显示分享数，1显示(可选)*/
+    appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+    title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+    pic:'', /**分享图片的路径(可选)*/
+    ralateUid:'2667733442', /**关联用户的UID，分享微博会@该用户(可选)*/
+	language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+    rnd:new Date().valueOf()
+  }
+  var temp = [];
+  for( var p in param ){
+    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+  }
+  document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+})()
+</script><iframe allowtransparency="true" frameborder="0" scrolling="no" src="./how to implement button_files/weiboshare(1).htm" width="106" height="24"></iframe>
+
+
+
+
+
+</td>
+<td width="50"></td>
+  </tr>
+</tbody></table>
+  <br>
+  <table width="98%" border="0" cellspacing="0" cellpadding="0" class="small" height="18">
+    <tbody><tr valign="middle"> 
+      <td bgcolor="#A0D39B" width="47%"><img src="./how to implement button_files/toplogo.gif" width="10" height="10">最新评论 
+        <a href="http://www.vckbase.com/SYS/script/viewcomment.asp?gclsid=100&itemid=551" target="_blank"><span class="small">[发表评论]</span></a> <a href="http://www.vckbase.com/support/contribute.html" target="_blank"><span class="small">[文章投稿]</span></a></td>
+      <td bgcolor="#A0D39B" width="53%" align="right"><img src="./how to implement button_files/rec1.gif" width="9" height="9"> 
+        <a href="http://www.vckbase.com/SYS/script/viewcomment.asp?gclsid=100&itemid=551" target="_blank"><span class="small">查看所有评论</span></a>
+        <img src="./how to implement button_files/rec1.gif" width="9" height="9"> <a href="http://www.vckbase.com/SYS/script/writemail.asp?gclsid=100&itemid=551&title=%d7%d4%bb%e6%b0%b4%c5%a5%b5%c4%ca%b5%cf%d6" target="_blank"><span class="small">推荐给好友</span></a>
+        <img src="./how to implement button_files/rec1.gif" width="9" height="9"> <a href="javascript:window.print();"><span class="small">打印</span></a></td>
+    </tr>
+  </tbody></table>
+<table width="98%" border="0" cellspacing="1" cellpadding="0" bgcolor="#ffffff" class="small"><tbody><tr><td bgcolor="#FFFFFF"><br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 求源代码，在哪里下呀， ( yyni36 发表于 2011-5-24 22:02:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 源程序在哪里下载呢？ ( zhonghuajia 发表于 2011-3-4 12:04:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 很经典的文章，学习了。 ( zhonghuajia 发表于 2011-3-4 10:52:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 谢谢，对我有一定的启发 ( purple 发表于 2010-10-9 11:38:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 写的很详细&nbsp;就是怎么下不了源码呢 ( sujunyang 发表于 2010-8-3 10:25:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 谢谢无私的奉献！ ( 敏s陈懋平 发表于 2010-6-21 16:18:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 程序內有一行在Boundschecker檢查時會出錯<br>pDC-&gt;FillRect(&amp;rct,&nbsp;&amp;brBk[((i&nbsp;*&nbsp;63)&nbsp;/&nbsp;nHeight)]);<br><br>經過檢查存取brBk[]時會超過索引值63<br><br><br>改成下方就OK<br>pDC-&gt;FillRect(&amp;rct,&nbsp;&amp;brBk[(((i-2)&nbsp;*&nbsp;63)&nbsp;/&nbsp;nHeight)]); ( redseafish 发表于 2007-12-12 10:23:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 很好的东西，谢谢了<br>学习用一下。 ( tncqsy 发表于 2007-7-11 16:28:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> vc&nbsp;vb&nbsp;dll&nbsp;控件学习网(&nbsp;源码　)<br>http://konny520.diy.myrice.com<br><br>vc&nbsp;vb&nbsp;dll&nbsp;控件学习网(&nbsp;源码　)<br>http://konny520.diy.myrice.com ( konny 发表于 2007-3-5 15:55:00)<br>&nbsp;<br><img src="./how to implement button_files/doc2.gif" width="11" height="11" align="absmiddle"> 大家可以用CXPButton类吗？我怎么用了该类编译之后对话框都没显示啦！什么原因呢？ ( langzi200 发表于 2006-6-1 12:17:00)<br>&nbsp;<br>.......................................................<br><a href="http://www.vckbase.com/SYS/script/viewcomment.asp?gclsid=100&itemid=551" target="_blank"><span class="small">More...</span></a> </td></tr></tbody></table>
+<br>
+<table width="100%" height="55" border="0" cellpadding="0" cellspacing="0">
+  <tbody><tr>
+    <td align="right"><iframe width="750" height="55" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="./how to implement button_files/shatt2.htm"></iframe></td>
+  </tr>
+</tbody></table>
+
+
+<div align="right"><br>
+  <span class="small">版权所有 © 1999 - 2011 VC知识库&nbsp; </span>
+  <script src="./how to implement button_files/stat.php" language="JavaScript" charset="gb2312"></script><a href="http://www.cnzz.com/stat/website.php?web_id=1295967" target="_blank" title="站长统计"><img border="0" hspace="0" vspace="0" src="./how to implement button_files/pic.gif"></a><img src="./how to implement button_files/stat.htm" border="0" width="0" height="0"><br>
+</div>
+
+</body></html>

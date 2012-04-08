@@ -1,0 +1,61 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: XPButtonDemo - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x804 /fo"Debug/XPButtonDemo.res" /d "_DEBUG" /d "_AFXDLL" "F:\code\winui\button\XPButtonDemo\XPButtonDemo\XPButtonDemo.rc"" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBA.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/XPButtonDemo.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"F:\code\winui\button\XPButtonDemo\XPButtonDemo\XPButton.cpp"
+"F:\code\winui\button\XPButtonDemo\XPButtonDemo\XPButtonDemo.cpp"
+"F:\code\winui\button\XPButtonDemo\XPButtonDemo\XPButtonDemoDlg.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBA.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBB.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/XPButtonDemo.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"F:\code\winui\button\XPButtonDemo\XPButtonDemo\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBB.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBC.bat" with contents
+[
+@echo off
+copyright.bat
+]
+Creating command line "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBC.bat"
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+XPButton.cpp
+XPButtonDemo.cpp
+XPButtonDemoDlg.cpp
+Generating Code...
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBD.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:yes /pdb:"Debug/XPButtonDemo.pdb" /debug /machine:I386 /out:"Debug/XPButtonDemo.exe" /pdbtype:sept 
+.\Debug\StdAfx.obj
+.\Debug\XPButton.obj
+.\Debug\XPButtonDemo.obj
+.\Debug\XPButtonDemoDlg.obj
+.\Debug\XPButtonDemo.res
+]
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPEBD.tmp"
+
+===本程序下载于VC知识库(www.vckbase.com)===
+-------技术支持由UIPower提供(www.uipower.com)------
+......如遇到任何技术问题请发邮件vckbase@vckbase.com......
+<h3>Output Window</h3>
+Linking...
+
+
+
+<h3>Results</h3>
+XPButtonDemo.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
