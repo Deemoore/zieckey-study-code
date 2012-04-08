@@ -7,13 +7,13 @@
 //
 
 /////////////////////////////////////////////////////////////////////////////
-// CXPButton window
+// CXPButton2 window
 
-class CXPButton : public CButton
+class CXPButton2 : public CButton
 {
 // Construction
 public:
-	CXPButton();
+	CXPButton2();
 
 	// Attributes
 protected:
@@ -42,20 +42,12 @@ protected:
 	BOOL m_bSelected;	//按钮被按下是该值为true
 	BOOL m_bFocus;	//按钮为当前焦点所在时该值为true
 
-    CBrush m_brush;
 // Operations
 public:
-    enum BrushColor
-    {
-        kRed,
-        kGreen,
-        kGrey,
-    };
-    void SetBrushColor(BrushColor);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CXPButton)
+	//{{AFX_VIRTUAL(CXPButton2)
 	protected:
 	virtual void PreSubclassWindow();
 	//}}AFX_VIRTUAL
@@ -65,11 +57,11 @@ public:
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 	virtual void DoGradientFill(CDC *pDC, CRect* rect);
 	virtual void DrawInsideBorder(CDC *pDC, CRect* rect);
-	virtual ~CXPButton();
+	virtual ~CXPButton2();
 
 	// Generated message map functions
 protected:
-	//{{AFX_MSG(CXPButton)
+	//{{AFX_MSG(CXPButton2)
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnMouseHover(WPARAM wParam, LPARAM lParam);

@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "XPButton.h"
+#include "XPButton2.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -11,9 +11,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// CXPButton
+// CXPButton2
 
-CXPButton::CXPButton()
+CXPButton2::CXPButton2()
 {
 	m_BoundryPen.CreatePen(PS_INSIDEFRAME | PS_SOLID, 1, RGB(0, 0, 0));
 	m_InsideBoundryPenLeft.CreatePen(PS_INSIDEFRAME | PS_SOLID, 3, RGB(250, 196, 88)); 
@@ -31,10 +31,9 @@ CXPButton::CXPButton()
 	
 	m_bOver = m_bSelected = m_bTracking = m_bFocus = FALSE;
 	
-    m_brush.CreateSolidBrush(RGB(255,255,0));
 }
 
-CXPButton::~CXPButton()
+CXPButton2::~CXPButton2()
 {
 	m_BoundryPen.DeleteObject();
 	m_InsideBoundryPenLeft.DeleteObject();
@@ -53,8 +52,8 @@ CXPButton::~CXPButton()
 }
 
 
-BEGIN_MESSAGE_MAP(CXPButton, CButton)
-	//{{AFX_MSG_MAP(CXPButton)
+BEGIN_MESSAGE_MAP(CXPButton2, CButton)
+	//{{AFX_MSG_MAP(CXPButton2)
 	ON_WM_MOUSEMOVE()
 	ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
 	ON_MESSAGE(WM_MOUSEHOVER, OnMouseHover)
@@ -62,10 +61,10 @@ BEGIN_MESSAGE_MAP(CXPButton, CButton)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CXPButton message handlers
+// CXPButton2 message handlers
 
 //添加Owner Draw属性
-void CXPButton::PreSubclassWindow() 
+void CXPButton2::PreSubclassWindow() 
 {
 	// TODO: Add your specialized code here and/or call the base class
 	
@@ -73,7 +72,7 @@ void CXPButton::PreSubclassWindow()
 	ModifyStyle(0, BS_OWNERDRAW);
 }
 
-void CXPButton::OnMouseMove(UINT nFlags, CPoint point) 
+void CXPButton2::OnMouseMove(UINT nFlags, CPoint point) 
 {
 	// TODO: Add your message handler code here and/or call default
 	if (!m_bTracking)
@@ -90,7 +89,7 @@ void CXPButton::OnMouseMove(UINT nFlags, CPoint point)
 }
 
 
-LRESULT CXPButton::OnMouseLeave(WPARAM wParam, LPARAM lParam)
+LRESULT CXPButton2::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
 	m_bOver = FALSE;
 	m_bTracking = FALSE;
@@ -98,7 +97,7 @@ LRESULT CXPButton::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CXPButton::OnMouseHover(WPARAM wParam, LPARAM lParam)
+LRESULT CXPButton2::OnMouseHover(WPARAM wParam, LPARAM lParam)
 {
 	m_bOver = TRUE;
 	InvalidateRect(NULL);
@@ -106,7 +105,7 @@ LRESULT CXPButton::OnMouseHover(WPARAM wParam, LPARAM lParam)
 }
 
 
-void CXPButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
+void CXPButton2::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
 	//从lpDrawItemStruct获取控件的相关信息
 	CRect rect =  lpDrawItemStruct->rcItem;
@@ -188,14 +187,48 @@ void CXPButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 }
 
 //绘制按钮的底色
-void CXPButton::DoGradientFill(CDC *pDC, CRect* rect)
+void CXPButton2::DoGradientFill(CDC *pDC, CRect* rect)
 {
-    pDC->FillRect(rect, &m_brush);
+	CBrush brBk[64];
+	int nWidth = rect->Width();	
+	int nHeight = rect->Height();
+	CRect rct;
+	
+	for (int i = 0; i < 64; i ++)
+	{
+		if (m_bOver)
+		{
+			if (m_bFocus)
+				brBk[i].CreateSolidBrush(RGB(255 - (i / 4), 255 - (i / 4), 255 - (i / 3)));
+			else
+				brBk[i].CreateSolidBrush(RGB(255 - (i / 4), 255 - (i / 4), 255 - (i / 5)));
+		}
+		else
+		{
+			if (m_bFocus)
+				brBk[i].CreateSolidBrush(RGB(255 - (i / 3), 255 - (i / 3), 255 - (i / 4)));
+			else
+				brBk[i].CreateSolidBrush(RGB(255 - (i / 3), 255 - (i / 3), 255 - (i / 5)));
+		}
+	}
+	
+	for (int i = rect->top; i <= nHeight + 2; i ++) 
+	{
+		rct.SetRect(rect->left, i, nWidth + 2, i + 1);
+		pDC->FillRect(&rct, &brBk[((i * 63) / nHeight)]);
+	}
+
+//     CBrush br;
+//     br.CreateSolidBrush(RGB(255,0,0));
+//     pDC->FillRect(rect, &br);
+	
+	for (int i = 0; i < 64; i ++)
+		brBk[i].DeleteObject();
 }
 
 
 //绘制按钮的内边框
-void CXPButton::DrawInsideBorder(CDC *pDC, CRect* rect)
+void CXPButton2::DrawInsideBorder(CDC *pDC, CRect* rect)
 {
 	CPen *pLeft, *pRight, *pTop, *pBottom;
 	
@@ -233,14 +266,4 @@ void CXPButton::DrawInsideBorder(CDC *pDC, CRect* rect)
 		DrawFocusRect(pDC->m_hDC,rect);
 }
 
-void CXPButton::SetBrushColor( BrushColor c )
-{
-//     switch(c)
-//     {
-//     case kRed:
-//         {
-//             m_brush.CreateSolidBrush()
-//         }
-//     }
-}
 

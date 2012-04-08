@@ -9,6 +9,7 @@
 #endif // _MSC_VER > 1000
 
 #include "XPButton.h"
+#include "XPButton2.h"
 /////////////////////////////////////////////////////////////////////////////
 // CXPButtonDemoDlg dialog
 
@@ -21,11 +22,11 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CXPButtonDemoDlg)
 	enum { IDD = IDD_XPBUTTONDEMO_DIALOG };
-	CXPButton	m_btnOK;
-	CXPButton	m_btnCancel;
-	CXPButton	m_btnDisable;
-	CXPButton	m_btnFocus;
-	CXPButton	m_btnOver;
+	CXPButton2	m_btnOK;
+	CXPButton2	m_btnCancel;
+	CXPButton2	m_btnDisable;
+	CXPButton2	m_btnFocus;
+	CXPButton2	m_btnOver;
 	CXPButton	m_btnNormal;
 	//}}AFX_DATA
 
