@@ -3,5 +3,5 @@ svn usage:
 Make it auto change the versions
 
 /**
- * @version $Id $Revision $Date
+ * @version $Id$ $Revision$ $Date$
  */
