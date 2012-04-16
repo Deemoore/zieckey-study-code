@@ -9,6 +9,6 @@ class CTimerListener
 {
 public:
 	CTimerListener(void) {};
-	~CTimerListener(void) {};
-	virtual void OnMMTimer(int nTimerID) = 0;	
+	virtual ~CTimerListener(void) {};
+	virtual void OnMMTimer(int nTimerID) = 0;	//该函数是在异步线程中被调用，注意线程安全问题
 };
