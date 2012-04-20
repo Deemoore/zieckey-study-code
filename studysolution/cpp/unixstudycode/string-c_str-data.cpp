@@ -9,9 +9,11 @@ void test_resize();
 void test_istringstream();
 void test_hex();
 void test_null_string();
+void test_string_length();
 
 int main()
 {
+    test_string_length();
     test_null_string();
     test_c_str();
     test_resize();
@@ -23,10 +25,13 @@ int main()
 void test_null_string()
 {
     const char* a = NULL;
-    std::string s(a);
+    (void)a;
+    /*
+    std::string s(a); //Will core dump
     printf("address a=%p\n", a);
     printf("address s.data()=%p\n", s.data());
     printf("address s.c_str()=%p\n", s.c_str());
+    */
 }
 
 
@@ -75,3 +80,16 @@ void test_hex()
     sprintf( hex33, "%02x", 0xA8 );
     std::cout << "hex33=" << hex33 << std::endl;
 }
+
+
+void test_string_length()
+{
+    std::string s = "11212";
+    size_t len = s.length();
+    size_t sz = s.size();
+    std::cout << "len=" << len << std::endl
+        << "size=" << sz << std::endl;
+}
+
+
+

@@ -10,7 +10,7 @@ CC=cc
 CXX=cc
 AR=ar
 ARFLAGS=cru
-CFLAGS=-g -DNDEBUG -D_TRACE -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
+CFLAGS=-g -D_DEBUG -D_TRACE -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
 LDFLAGS=-lstdc++ -L/usr/local/lib
 

@@ -9,8 +9,8 @@
 #include <tr1/unordered_set>
 
 //using md5
-#include "qoslib/include/QOSLibAllExp.h"
-#include "qoslib/include/QMD5.h"
+//#include "qoslib/include/QOSLibAllExp.h"
+//#include "qoslib/include/QMD5.h"
 
 namespace zl
 { //{{{
@@ -65,7 +65,7 @@ int main( int argc, char* argv[] )
         return -1;
     }
 
-    osl::initializeOSLib();
+    //osl::initializeOSLib();
 
     size_t count = atoi(argv[1]);
     bool rehash = false;
