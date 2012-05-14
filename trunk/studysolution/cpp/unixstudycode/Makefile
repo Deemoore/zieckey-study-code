@@ -12,7 +12,7 @@ AR=ar
 ARFLAGS=cru
 CFLAGS=-g -D_DEBUG -D_TRACE -pg -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include -I.
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-lstdc++ -L/usr/local/lib
+LDFLAGS=-lstdc++ -L/usr/local/lib -lpthread
 
 C_SRCS=$(wildcard *.c)
 CPP_SRCS=$(wildcard *.cpp) 
