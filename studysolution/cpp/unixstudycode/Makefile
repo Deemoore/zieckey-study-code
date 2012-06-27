@@ -21,7 +21,7 @@ OBJS=$(patsubst %.c, %.o, $(C_SRCS) )
 OBJS+=$(patsubst %.cpp, %.o, $(CPP_SRCS) )
 PROGRAMS=$(patsubst %.o, %, $(OBJS) )		
 		
-SUBDIRS=c_call_cpp rsa protobuf shared_ptr libevent
+SUBDIRS=c_call_cpp rsa protobuf shared_ptr libevent boost
 
     
 TOPDIR=`pwd`
