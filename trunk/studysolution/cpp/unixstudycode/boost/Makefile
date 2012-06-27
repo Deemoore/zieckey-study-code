@@ -12,7 +12,7 @@ AR=ar
 ARFLAGS=cru
 CFLAGS=-g -DNDEBUG  -I/usr/local/include -I. -I ~/include 
 CPPFLAGS=-Woverloaded-virtual -Wsign-promo -fno-gnu-keywords 
-LDFLAGS=-lstdc++ -L/usr/local/lib -L ~/lib -Wl,-rpath=~/lib -lz -lboost_iostreams
+LDFLAGS=-lstdc++ -L/usr/local/lib -L ~/lib -Wl,-rpath=~/lib -lz -lboost_iostreams -lboost_serialization
 
 C_SRCS=$(wildcard *.c)
 CPP_SRCS=$(wildcard *.cpp) 
