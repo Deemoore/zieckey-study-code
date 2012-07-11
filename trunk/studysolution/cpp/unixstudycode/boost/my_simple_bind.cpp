@@ -6,6 +6,8 @@
 #include <iterator>
 #include <functional>
 
+#include <boost/bind.hpp>
+
 typedef std::vector<int> intvector;
 
 template <typename R, typename T, typename Arg>
