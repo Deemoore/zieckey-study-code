@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><title>Linux网络的多播IP技术</title>
+
+
+
+<meta name="keywords" content="Linux网络的多播IP技术">
+<meta name="description" content="Linux网络的多播IP技术">
+<link href="%E5%A4%9A%E6%92%AD_files/style.css" type="text/css" rel="stylesheet">
+<meta http-equiv="content-type" content="text/html; charset=gb2312"></head><body>
+<span id="content_top"></span>
+<div class="tb_2">
+<ul>
+<li class="l_4">当前位置：<a href="http://study.qqcf.com/" target="_blank">首页</a>&gt;&gt;<a href="http://study.qqcf.com/corps/153/list_1.htm" target="_blank">网管专栏</a>&gt;&gt;<a href="http://study.qqcf.com/sort/638/list_2_1.htm" target="_blank">防火墙和路由</a>&gt;&gt;Linux网络的多播IP技术</li>
+<li class="l_7"><span id="ad_1"></span></li>
+<li class="l_5">Linux网络的多播IP技术</li>
+<li class="l_6">
+
+		
+<span class="contentblk">　　多播广播是用于建立分步式系统：例如网络游戏、ICQ聊天构建、远程视频会议系统的重要工具。使用多播广播的程序和UDP向单个介绍方发送信息的程序相似。区别在于多播广播程序使用特殊的多播IP地址。 <br><br><strong>目录 <br><br>一、配置Linux支持多播IP<br>二、使用Linux多播IP广播数据</strong> <br><br>例
+如本地计算机的的IP地址是：127.0.0.1二它的多播地址是： 224.0.0.1。这是由RCF
+1390定义的。为发送IP多播数据，发送者需要确定一个合适的多播地址，这个地址代表一个组。IPv4多播地址采用D类IP地址确定多播的组。在
+Internet中，多播地址范围是从224.0.0.0到234.255.255.255。其中比较重要的地址有： <br><br>224.0.0.1 － 网段中所有支持多播的主机 <br><br>　　224.0.0.2 － 网段中所有支持多播的路由器 <br><br>　　224.0.0.4 － 网段中所有的DVMRP路由器 <br><br>　　224.0.0.5 － 所有的OSPF路由器 <br><br>　　224.0.0.6 － 所有的OSPF指派路由器 <br><br>　　224.0.0.9 － 所有RIPv2路由器 <br><br>IPv6
+地址空间中有1/256的地址空间分配给多播地址。一个FF（11111111）值标识该地址是多播地址。标识段高三位始终设置为0并保留。第四位T标识
+设置为0时表示一个永久分配的多播地址。T标识设置为1时，表示非永久分配的多播地址，这种地址作为一个临时的多播地址。 <br><br><b><font color="#330099"><a name="1">一、配置Linux支持多播IP</a></font></b> <br><br>在默认状态下，大多Linux发行版本关闭的对多播IP的支持。为了在Linux系统使用多播套接口，需要从新配置和编译Linux内核。下面看一下配置步骤： <br><br>1.cd /usr/src/linux <br><br>2.make menuconfig <br><br>3.选择网络选项 <br><br>4.选中IP：Enable Multicasting IP一项 <br><br>5.保存并从menuconfig 退出 <br><br>6.运行：make dep；make clean；make bzlmage <br><br>7.cp／vmlinuz／vdimLz_good <br><br>8.cparch/i386/boot/zImage／vmlinzz <br><br>9.cd／etc <br><br>10.编辑lilo．conf，加入针对／vmlinuz_good的内核新选项 <br><br>11.运行li1o <br><br>Linux内核编译后，以超级用户身份运行命令： 
+<table bgcolor="#cccccc" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><pre><code>＃router add –net 224.0.0.0 netmask 224.0.0.0 dev lo</code></pre></td></tr></tbody></table><br><br>核实命令是否加入系统，运行命令： 
+<table bgcolor="#cccccc" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><pre><code>＃route –eKernel IP routing table
+Destination     gatewary   Genmask       Flags  MSS  Window irtt Iface
+10.0.0.0        *         255.255.255.0  U     0     0      0   eth0
+127.0.0.0       *         255.0.0.0      U     0     0      0    lo
+BASE_ADDRESS&gt;MC *         240.0.0.0      U     0     0      0     lo
+Default         10.0.0.1   0.0.0.0       UG    0     0      0     eth0</code></pre></td></tr></tbody></table><br><br>其中出现多播地址： 224.0.0.1。就表示配置成功了。 <br><br><b><font color="#330099"><a name="2">二、使用Linux多播IP广播数据</a></font></b> <br><br><b>1、首先在服务器端建立多播程序：</b> <br><br>服务器端程序代码和解释： 
+<table bgcolor="#cccccc" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><pre><code>/* 
+ * broadcast.c - An IP multicast server 
+ */
+#include <stdio.h>
+#include <sys socket.h="">
+#include <netinet in.h="">
+#include <arpa inet.h="">
+#include <netdb.h>#include <unistd.h>
+#include <stdlib.h>int port = 6789;
+int main(void)
+{    
+int socket_descriptor;  
+ struct sockaddr_in address;  
+  /*  首先建立套接口 */
+    socket_descriptor = socket(AF_INET, SOCK_DGRAM, 0);  
+  if (socket_descriptor == -1) 
+{      
+  perror(\"Opening socket\"); 
+       exit(EXIT_FAILURE);  
+  }   
+ /* 初始化IP多播地址 */ 
+ memset(&amp;address, 0, sizeof(address));   
+ address.sin_family = AF_INET;  
+ address.sin_addr.s_addr = inet_addr(\"224.0.0.1\"); 
+ address.sin_port = htons(port);  
+  /* 开始进行IP多播 */  
+while(1) { 
+ if(sendto(socket_descriptor, \"test from broadcast\", 
+ sizeof(\"test from broadcast\"), 0,   
+ (struct sockaddr *)&amp;address, sizeof(address)) &lt; 0) 
+{  
+ perror(\"sendto\");  
+ exit(EXIT_FAILURE); 
+ }   
+ sleep(2);  
+}  
+exit(EXIT_SUCCESS);}</stdlib.h></unistd.h></netdb.h></arpa></netinet></sys></stdio.h></code></pre></td></tr></tbody></table><br><br><b>2、创建Linux客户端的程序多播IP广播</b> <br><br>建立好广播服务器后，就需要一个客户端的收听程序，收听多播IP广播要求在程序中作以下几项工作： <br><br>（1）、多播方收听，客户端编写通知Linux内核每个指定的套接口加入多播IP广播组。 <br><br>（2）、收听方必须运行在同一个Linux计算机的不同进程的同一个套接口。 <br><br>（3）、编写配置端口设定广播信息可以发送给同一个Linux主机，这样作的用处是在同一个Linux主机上测试广播程序和收听程序，易于调试。 <br><br>客户端程序代码和解释 
+<table bgcolor="#cccccc" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><pre><code>/* 
+ * listen.c - An IP multicast client */
+#include <stdio.h>
+#include <sys socket.h="">
+#include <netinet in.h="">
+#include <arpa inet.h="">
+#include <netdb.h>
+#include <stdlib.h>
+#include <unistd.h>
+char * host_name = \"224.0.0.1\";
+ /* 多播IP地址 */
+int port = 6789;
+int main(void)
+{ 
+   struct ip_mreq command; 
+   int loop = 1;
+ /* 多播循环 */ 
+  int iter = 0;
+  int sin_len;
+  char message[256];
+  int socket_descriptor;
+ struct sockaddr_in sin;
+ struct hostent *server_host_name;
+ if((server_host_name = gethostbyname(host_name)) == 0)
+ {
+   perror(\"gethostbyname\");
+   exit(EXIT_FAILURE);
+    }   
+ /*bzero(&amp;sin, sizeof(sin));*/
+memset(&amp;sin, 0, sizeof(sin));
+  sin.sin_family = AF_INET;
+  sin.sin_addr.s_addr = htonl(INADDR_ANY);
+  sin.sin_port = htons(port);
+  if((socket_descriptor = socket(PF_INET, SOCK_DGRAM, 0)) == -1) 
+{ perror(\"socket\");
+ exit(EXIT_FAILURE);
+ }
+ /* 调用bind之前，设置套接口选项启用多播IP支持*/
+ loop = 1;
+ if(setsockopt(socket_descriptor, 
+SOL_SOCKET, SO_REUSEADDR,
+ &amp;loop, sizeof(loop)) &lt; 0)
+{ 
+ perror(\"setsockopt:SO_REUSEADDR\");
+ exit(EXIT_FAILURE);
+  }
+if(bind(socket_descriptor, 
+(struct sockaddr *)&amp;sin, sizeof(sin)) &lt; 0)
+ {
+   perror(\"bind\"); 
+   exit(EXIT_FAILURE);
+    }
+/* 在同一个主机上进行广播设置套接口，
+作用是方便单个开发系统上测试多播IP广播 */ 
+loop = 1; 
+if(setsockopt(socket_descriptor, 
+IPPROTO_IP, IP_MULTICAST_LOOP, 
+  &amp;loop, sizeof(loop)) &lt; 0) 
+{   
+ perror(\"setsockopt:IP_MULTICAST_LOOP\");
+ exit(EXIT_FAILURE); 
+   } 
+ /* 加入一个广播组。进一步告诉Linux内核，
+特定的套接口即将接受广播数据*/ 
+ command.imr_multiaddr.s_addr = inet_addr(\"224.0.0.1\"); 
+ command.imr_interface.s_addr = htonl(INADDR_ANY);
+ if(command.imr_multiaddr.s_addr == -1) 
+{  
+ perror(\"224.0.0.1 not a legal multicast address\"); 
+ exit(EXIT_FAILURE); 
+}
+if (setsockopt(socket_descriptor, IPPROTO_IP, IP_ADD_MEMBERSHIP, 
+  &amp;command, sizeof(command)) &lt; 0)
+ {   
+  perror(\"setsockopt:IP_ADD_MEMBERSHIP\");
+    } 
+ while(iter++ &lt; 8) 
+{    
+  sin_len = sizeof(sin); 
+  if(recvfrom(socket_descriptor, message, 256, 0,
+  (struct sockaddr *)&amp;sin, &amp;sin_len) == -1) { 
+   perror(\"recvfrom\");   
+    }  
+printf(\"Response #%-2d from server: %s\\n\", iter, message);
+     sleep(2);    } 
+   /* 接受8个广播后退出 */ 
+if(setsockopt(socket_descriptor, IPPROTO_IP, IP_DROP_MEMBERSHIP,
+     &amp;command, sizeof(command)) &lt; 0) { 
+     perror(\"setsockopt:IP_DROP_MEMBERSHIP\"); 
+   }   
+close(socket_descriptor); 
+exit(EXIT_SUCCESS);}</unistd.h></stdlib.h></netdb.h></arpa></netinet></sys></stdio.h></code></pre></td></tr></tbody></table><br><br><b>3、运行Linux多播IP程序</b> <br><br>运
+行程序，打开两个终端窗口并在每个窗口中输入以上的源代码。在一个窗口中键入make，编译broadcast和1isten这两个的可执行文件,由
+GUN make建立一个Makfiles文件。GUN make是Linux系统中一个自动生成和维护目标程序的工具。 <br><br>在一个窗口中通过执行./broadcast,在另一个的窗口执行./listen，启动收听程序，你应该看到如下输出： <br><br><ccid_nobr>
+</ccid_nobr><table bgcolor="#cccccc" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><pre><code>＃./listenResponse #1 form sever :test from broadcast
+Response #2 form sever :test from broadcast
+Response #3 form sever :test from broadcast
+Response #4 form sever :test from broadcast
+Response #5 form sever :test from broadcast
+Response #6 form sever :test from broadcast
+Response #7 form sever :test from broadcast
+Response #8 form sever :test from broadcast
+#</code>
+<li class="l_7"><span id="ad_2"></span></li>
+
+
+<span id="content_bottom"></span>
+<script src="%E5%A4%9A%E6%92%AD_files/content_get.js"></script>
+</pre></td></tr></tbody></table></span></li></ul></div></body></html>

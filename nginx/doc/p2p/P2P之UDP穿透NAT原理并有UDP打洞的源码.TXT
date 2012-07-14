@@ -1,0 +1,1124 @@
+﻿
+P2P之UDP穿透NAT原理并有UDP打洞的源码
+
+首先先介绍一些基本概念：
+    NAT(Network Address Translators)，网络地址转换：网络地址转换是在IP地址日益缺乏的情况下产生的，它的主要目的就是为了能够地址重用。NAT分为两大类，基本的NAT和NAPT(Network Address/Port Translator)
+	Cone NAT 圆锥NAT
+	Symmetric NAT 对称NAT
+	
+    最开始NAT是运行在路由器上的一个功能模块。
+    最先提出的是基本的NAT，它的产生基于如下事实：一个私有网络（域）中的节点中只有很少的节点需要与外网连接（呵呵，这是在上世纪90年代中期提出的）。那么这个子网中其实只有少数的节点需要全球唯一的IP地址，其他的节点的IP地址应该是可以重用的。
+    因此，基本的NAT实现的功能很简单，在子网内使用一个保留的IP子网段，这些IP对外是不可见的。子网内只有少数一些IP地址可以对应到真正全球唯一的IP地址。如果这些节点需要访问外部网络，那么基本NAT就负责将这个节点的子网内IP转化为一个全球唯一的IP然后发送出去。(基本的NAT会改变IP包中的原IP地址，但是不会改变IP包中的端口)
+    关于基本的NAT可以参看RFC 1631
+    另外一种NAT叫做NAPT，从名称上我们也可以看得出，NAPT不但会改变经过这个NAT设备的IP数据报的IP地址，还会改变IP数据报的TCP/UDP端口。基本NAT的设备可能我们见的不多（呵呵，我没有见到过），NAPT才是我们真正讨论的主角。看下图：
+                                Server S1                        
+                         18.181.0.31:1235                         
+                                      |
+          ^  Session 1 (A-S1)  ^      | 
+          |  18.181.0.31:1235  |      |  
+          v 155.99.25.11:62000 v      |   
+                                      |
+                                     NAT
+                                 155.99.25.11
+                                      |
+          ^  Session 1 (A-S1)  ^      | 
+          |  18.181.0.31:1235  |      | 
+          v   10.0.0.1:1234    v      | 
+                                      |
+                                   Client A
+                                10.0.0.1:1234
+    有一个私有网络10.*.*.*，Client A是其中的一台计算机，这个网络的网关（一个NAT设备）的外网IP是155.99.25.11(应该还有一个内网的IP地址，比如10.0.0.10)。如果Client A中的某个进程（这个进程创建了一个UDP Socket,这个Socket绑定1234端口）想访问外网主机18.181.0.31的1235端口，那么当数据包通过NAT时会发生什么事情呢？
+    首先NAT会改变这个数据包的原IP地址，改为155.99.25.11。接着NAT会为这个传输创建一个Session（Session是一个抽象的概念，如果是TCP，也许Session是由一个SYN包开始，以一个FIN包结束。而UDP呢，以这个IP的这个端口的第一个UDP开始，结束呢，呵呵，也许是几分钟，也许是几小时，这要看具体的实现了）并且给这个Session分配一个端口，比如62000，然后改变这个数据包的源端口为62000。所以本来是（10.0.0.1:1234->18.181.0.31:1235）的数据包到了互联网上变为了（155.99.25.11:62000->18.181.0.31:1235）。
+    一旦NAT创建了一个Session后，NAT会记住62000端口对应的是10.0.0.1的1234端口，以后从18.181.0.31发送到62000端口的数据会被NAT自动的转发到10.0.0.1上。（注意：这里是说18.181.0.31发送到62000端口的数据会被转发，其他的IP发送到这个端口的数据将被NAT抛弃）这样Client A就与Server S1建立以了一个连接。
+
+    呵呵，上面的基础知识可能很多人都知道了，那么下面是关键的部分了。
+    看看下面的情况：
+    Server S1                                     Server S2
+ 18.181.0.31:1235                              138.76.29.7:1235
+        |                                             |
+        |                                             |
+        +----------------------+----------------------+
+                               |
+   ^  Session 1 (A-S1)  ^      |      ^  Session 2 (A-S2)  ^
+   |  18.181.0.31:1235  |      |      |  138.76.29.7:1235  |
+   v 155.99.25.11:62000 v      |      v 155.99.25.11:62000 v
+                               |
+                            Cone NAT
+                          155.99.25.11
+                               |
+   ^  Session 1 (A-S1)  ^      |      ^  Session 2 (A-S2)  ^
+   |  18.181.0.31:1235  |      |      |  138.76.29.7:1235  |
+   v   10.0.0.1:1234    v      |      v   10.0.0.1:1234    v
+                               |
+                            Client A
+                         10.0.0.1:1234
+    接上面的例子，如果Client A的原来那个Socket(绑定了1234端口的那个UDP Socket)又接着向另外一个Server S2发送了一个UDP包，那么这个UDP包在通过NAT时会怎么样呢？
+    这时可能会有两种情况发生，一种是NAT再次创建一个Session，并且再次为这个Session分配一个端口号（比如：62001）。另外一种是NAT再次创建一个Session，但是不会新分配一个端口号，而是用原来分配的端口号62000。前一种NAT叫做Symmetric NAT，后一种叫做Cone NAT。我们期望我们的NAT是第二种，呵呵，如果你的NAT刚好是第一种，那么很可能会有很多P2P软件失灵。（可以庆幸的是，现在绝大多数的NAT属于后者，即Cone NAT）
+  
+    好了，我们看到，通过NAT,子网内的计算机向外连结是很容易的（NAT相当于透明的，子网内的和外网的计算机不用知道NAT的情况）。
+    但是如果外部的计算机想访问子网内的计算机就比较困难了（而这正是P2P所需要的）。
+    那么我们如果想从外部发送一个数据报给内网的计算机有什么办法呢？首先，我们必须在内网的NAT上打上一个“洞”（也就是前面我们说的在NAT上建立一个Session），这个洞不能由外部来打，只能由内网内的主机来打。而且这个洞是有方向的，比如从内部某台主机（比如：192.168.0.10）向外部的某个IP(比如：219.237.60.1)发送一个UDP包，那么就在这个内网的NAT设备上打了一个方向为219.237.60.1的“洞”，（这就是称为UDP Hole Punching的技术）以后219.237.60.1就可以通过这个洞与内网的192.168.0.10联系了。（但是其他的IP不能利用这个洞）。
+
+呵呵，现在该轮到我们的正题P2P了。有了上面的理论，实现两个内网的主机通讯就差最后一步了：那就是鸡生蛋还是蛋生鸡的问题了，两边都无法主动发出连接请求，谁也不知道谁的公网地址，那我们如何来打这个洞呢？我们需要一个中间人来联系这两个内网主机。
+    现在我们来看看一个P2P软件的流程，以下图为例：
+
+                       Server S （219.237.60.1）
+                          |
+                          |
+   +----------------------+----------------------+
+   |                                             |
+ NAT A (外网IP:202.187.45.3:60000)             NAT B (外网IP:187.34.1.56:40000)
+   |   (内网IP:192.168.0.1)                      | (内网IP:192.168.0.1)
+   |                                             |
+Client A  (192.168.0.20:4000)             Client B (192.168.0.10:40000)
+    首先，Client A登录服务器，NAT A为这次的Session分配了一个端口60000，那么Server S收到的Client A的地址是202.187.45.3:60000，这就是Client A的外网地址了。同样，Client B登录Server S，NAT B给此次Session分配的端口是40000，那么Server S收到的B的地址是187.34.1.56:40000。
+    此时，Client A与Client B都可以与Server S通信了。如果Client A此时想直接发送信息给Client B，那么他可以从Server S那儿获得B的公网地址187.34.1.56:40000，是不是Client A向这个地址发送信息Client B就能收到了呢？答案是不行，因为如果这样发送信息，NAT B会将这个信息丢弃（因为这样的信息是不请自来的，为了安全，大多数NAT都会执行丢弃动作）。现在我们需要的是在NAT B上打一个方向为202.187.45.3（即Client A的外网地址）的洞，那么Client A发送到187.34.1.56:40000的信息,Client B就能收到了。这个打洞命令由谁来发呢，呵呵，当然是Server S。
+    总结一下这个过程：如果Client A想向Client B发送信息，那么Client A发送命令给Server S，请求Server S命令Client B向Client A方向打洞。呵呵，是不是很绕口，不过没关系，想一想就很清楚了，何况还有源代码呢（侯老师说过：在源代码面前没有秘密 8）），然后Client A就可以通过Client B的外网地址与Client B通信了。
+   
+    注意：以上过程只适合于Cone NAT的情况，如果是Symmetric NAT，那么当Client B向Client A打洞的端口已经重新分配了，Client B将无法知道这个端口（如果Symmetric NAT的端口是顺序分配的，那么我们或许可以猜测这个端口号，可是由于可能导致失败的因素太多，我们不推荐这种猜测端口的方法）。
+
+另外在网上找到了UDP打洞的不错的代码，希望和大家分享一下。首先声明一下，很多文章都是以前收集的，很多出处已经不知道，望原作者原谅，如有不变请告诉我。
+服务器的代码：
+Imports System.Net
+Imports System.Net.Sockets
+Imports System.Text
+Imports System.Threading
+Imports System.Collections
+
+Module myUDPServerModule myUDPServer
+
+全局变量#Region "全局变量"
+
+    Dim ServerSocket As New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+    Dim ipep As IPEndPoint = New IPEndPoint(IPAddress.Any, 12000)
+
+    Dim htUserList As New Hashtable '用来保存在线用户和用户的"IP和端口"
+
+    Dim userName(0) As String
+    Dim userIPEP(0) As IPEndPoint
+    Dim userTime(0) As Integer
+
+    Dim timerDelegate As New TimerCallback(AddressOf onLineTimeOut)
+
+#End Region
+
+参数#Region "参数"
+
+    '以下是客户端到服务器端的消息开头
+    Const LOGININ As String = "10" '请求登陆的消息|||消息形式:10+自己的用户名
+    Const LOGINOUT As String = "11" '请求登出的消息|||消息形式:11+自己的用户名
+    Const GETULIST As String = "12" '请求获得在线用户列表|||消息形式:12
+    Const P2PCONN As String = "13" '请求P2P连接的消息|||消息形式:13+自己的用户名+|+对方的用户名
+    Const HOLDLINE As String = "14" '保持连接.|||消息开式:14+自己的用户名
+
+    '以下是服务器到客户端的消息开头
+    Const HVUSER As String = "20" '用户名已存在
+    Const GETUSER As String = "21" '在线用户列表|||消息格式:21+用户名+EP
+    Const MAKHOLD As String = "22" '打洞命令|||消息格式:22+IP
+    Const LOGINOK As String = "23" '登陆成功
+    Const SERVCLS As String = "24" '服务器关闭
+    Const MSGEND As String = "25" '消息结束
+
+    '以下是服务器端的命名
+    Const EXITPRO As String = "EXIT" '退出命令
+    Const SHOWULIST As String = "SHOWUSER" '显示在线用户
+    Const HELP As String = "HELP" '显示帮助
+
+#End Region
+
+方法#Region "方法"
+
+    '主函数,程序入口
+    Sub Main()Sub Main()
+
+        '获得服务器的IP地址
+        Dim addressList As System.Net.IPAddress() = Dns.GetHostByName(Dns.GetHostName()).AddressList
+        Dim ServerIP As IPAddress = addressList(0)
+
+        ServerSocket.Bind(ipep)
+        Console.WriteLine("服务器正在启动.")
+        Console.WriteLine("服务器IP:" & ServerIP.ToString & " 正在监听" & ipep.Port.ToString & "端口")
+        Dim listenTH As New Thread(AddressOf listen)
+        listenTH.Start() '启用监听的线程
+        Console.WriteLine("服务器启动成功..")
+
+        Dim timer As New Timer(timerDelegate, Nothing, 0, 5000)
+
+        Dim SVInput As String
+        While True
+            Console.Write("Server>")
+            SVInput = Console.ReadLine().ToUpper
+            Select Case SVInput
+                Case EXITPRO
+                    listenTH.Abort()
+                    ServerSocket.Close()
+                    Exit Sub
+                Case SHOWULIST
+                    showUser()
+                Case HELP
+                    Console.Write("*********************************" & Chr(10) & Chr(13) & "exit:输出当前程序" & Chr(10) & Chr(13) & "showuser:显示当前在线用户例表" & Chr(10) & Chr(13) & "help:显示帮助" & Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13))
+                Case Else
+                    Console.WriteLine("*********************************" & Chr(10) & Chr(13) & "笨瓜,你输入的不是有效的命令." & Chr(10) & Chr(13) & "*********************************")
+            End Select
+        End While
+
+
+    End Sub
+
+    '打印在线用户
+    Sub showUser()Sub showUser()
+        Dim hava As Boolean = False
+        If userName.Length <> 0 Then
+            Dim i As Integer
+            For i = 1 To userName.Length - 1
+                If userName(i) <> "" Then
+                    hava = True
+                    Exit For
+                End If
+            Next
+            If hava = False Then
+                Console.WriteLine("*********************************" & Chr(10) & Chr(13) & "当前没有用户在线" & Chr(10) & Chr(13) & "*********************************")
+                Exit Sub
+            End If
+            Console.WriteLine("*********************************")
+            For i = 1 To userName.Length - 1
+                If userName(i) <> "" Then
+                    Console.WriteLine("用户名:" & userName(i) & " 地址:" & userIPEP(i).ToString)
+                End If
+            Next
+            Console.WriteLine("*********************************")
+        Else
+            Console.WriteLine("*********************************" & Chr(10) & Chr(13) & "当前没有用户在线" & Chr(10) & Chr(13) & "*********************************")
+        End If
+    End Sub
+
+    '服务器监听函数
+    Sub listen()Sub listen()
+
+        While True
+
+            Try
+                Dim recv As Integer = 0
+                Dim data As [Byte]() = New Byte(1024) {}
+                Dim sender As New IPEndPoint(IPAddress.Any, 0)
+                Dim tempRemoteEP As EndPoint = CType(sender, EndPoint)
+                recv = ServerSocket.ReceiveFrom(data, tempRemoteEP)
+
+                'Console.WriteLine(Encoding.Unicode.GetString(data))
+
+                Dim msgHead As String = Encoding.Unicode.GetString(data, 0, 4)
+                Select Case msgHead
+                    Case LOGININ
+                        Dim LoginThing As String = userLogin(data, tempRemoteEP, recv)
+                        If LoginThing = HVUSER Then
+                            sendMsg(HVUSER, tempRemoteEP)
+                        ElseIf LoginThing = LOGINOK Then
+                            sendMsg(LOGINOK, tempRemoteEP)
+
+                        End If
+
+                    Case LOGINOUT
+                        userloginout(data, recv)
+
+                    Case GETULIST
+                        Dim userinfo As String = getUserList()
+                        sendMsg(userinfo, tempRemoteEP)
+
+                    Case P2PCONN
+                        questP2PConn(data, recv)
+
+                    Case HOLDLINE
+                        holdOnLine(data, recv)
+                End Select
+
+            Catch e As Exception
+                'Console.WriteLine(e.ToString)
+            End Try
+        End While
+
+    End Sub
+
+    '转发P2P连接请求
+    Private Sub questP2PConn()Sub questP2PConn(ByVal data() As Byte, ByVal recv As Integer)
+
+        Dim recvStr As String = Encoding.Unicode.GetString(data, 4, recv - 4)
+        Dim split() As String = recvStr.Split("|")
+
+        Dim fromEP As IPEndPoint
+        Dim toEP As IPEndPoint
+        Dim i As Integer
+        For i = 1 To userName.Length - 1
+            If userName(i) = split(0) Then
+                fromEP = userIPEP(i)
+            End If
+            If userName(i) = split(1) Then
+                toEP = userIPEP(i)
+            End If
+        Next
+        Dim holdbytes() As Byte = Encoding.Unicode.GetBytes(MAKHOLD & fromEP.ToString)
+        ServerSocket.SendTo(holdbytes, toEP)
+    End Sub
+
+    '函数.返回所有在线用户.其格式:用户名+|+用户IPEP+|
+    Private Function getUserList()Function getUserList() As String
+        Dim userInfo As String = GETUSER
+        Dim i As Integer
+        For i = 1 To userName.Length - 1
+            If userName(i) <> "" Then
+                userInfo += userName(i) & "|" & userIPEP(i).ToString & "|"
+            End If
+        Next
+        Return userInfo
+    End Function
+
+    '用户登陆,直接返回登陆是否成功的值
+    Private Function userLogin()Function userLogin(ByVal data As Byte(), ByVal userEP As IPEndPoint, ByVal recvCount As Integer) As String
+
+        Dim Uname As String = Encoding.Unicode.GetString(data, 4, recvCount - 4)
+
+        Dim Uinfobytes() As Byte
+
+        Dim i As Integer
+        Dim j As Integer
+
+        For i = 1 To userName.Length - 1
+            If Uname = userName(i) Then
+                Return HVUSER
+            End If
+        Next
+
+        For i = 1 To userName.Length - 1
+            If userName(i) = "" Then
+                userName(i) = Uname
+                userIPEP(i) = userEP
+                userTime(i) = 60
+                Console.Write(Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13) & Uname.Trim & "上线了." & "用户地址:" & userEP.ToString & Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13))
+                Console.Write("Server>")
+
+                Uinfobytes = Encoding.Unicode.GetBytes(LOGININ & userName(i) & "|" & userIPEP(i).ToString)
+
+                For j = 1 To userName.Length - 1
+                    If userName(j) <> "" And userName(j) <> Uname Then
+                        ServerSocket.SendTo(Uinfobytes, userIPEP(j))
+                    End If
+                Next
+                Return LOGINOK
+            End If
+        Next
+
+        Dim userCount As Integer = userName.Length
+
+        ReDim Preserve userName(userCount)
+        ReDim Preserve userIPEP(userCount)
+        ReDim Preserve userTime(userCount)
+
+        userName(userName.Length - 1) = Uname
+        userIPEP(userIPEP.Length - 1) = userEP
+        userTime(userTime.Length - 1) = 60
+
+        Console.Write(Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13) & Uname.Trim & "上线了." & "用户地址:" & userEP.ToString & Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13))
+        Console.Write("Server>")
+
+        Uinfobytes = Encoding.Unicode.GetBytes(LOGININ & userName(userName.Length - 1) & "|" & userIPEP(userName.Length - 1).ToString)
+
+        For j = 1 To userName.Length - 1
+            If userName(j) <> "" And userName(j) <> Uname Then
+                ServerSocket.SendTo(Uinfobytes, userIPEP(j))
+            End If
+        Next
+        Return LOGINOK
+
+    End Function
+
+    '用户登出
+    Private Sub userloginout()Sub userloginout(ByVal data As Byte(), ByVal recvCount As Integer)
+
+        Dim i As Integer
+        Dim Uname As String = Encoding.Unicode.GetString(data, 4, recvCount - 4)
+
+        For i = 1 To userName.Length - 1
+
+            If Uname = userName(i) Then
+
+                Dim loginOutMsg As String = LOGINOUT & userName(i)
+
+
+                userName(i) = ""
+                userIPEP(i) = Nothing
+                userTime(i) = 0
+
+                Dim j As Integer
+                For j = 1 To userName.Length - 1
+                    If userName(j) <> "" Then
+
+                        sendMsg(loginOutMsg, userIPEP(j))
+
+                    End If
+                Next
+
+                Console.WriteLine(Chr(10) & Chr(13) & "*********************************")
+                Console.WriteLine("用户" & Uname & "下线了.")
+                Console.WriteLine("*********************************")
+                Console.Write("Server>")
+
+                Exit For
+
+            End If
+
+        Next
+
+    End Sub
+
+    '保持用户在线的过程
+    Private Sub holdOnLine()Sub holdOnLine(ByVal data As Byte(), ByVal recvCount As Integer)
+
+        Dim Uname As String = Encoding.Unicode.GetString(data, 4, recvCount - 4)
+
+        Dim i As Integer
+
+        For i = 1 To userName.Length - 1
+
+            If Uname = userName(i) Then
+
+                userTime(i) = 60
+                Exit For
+
+            End If
+
+        Next
+
+    End Sub
+
+    '用户超时退出
+    Private Sub onLineTimeOut()Sub onLineTimeOut(ByVal state As [Object])
+
+        Dim i As Integer
+
+        For i = 1 To userName.Length - 1
+
+            If userTime(i) > 0 Then
+
+                userTime(i) -= 5
+
+                If userTime(i) <= 0 Then
+
+                    Dim loginoutmsg As String = LOGINOUT & userName(i)
+
+                    Console.WriteLine(Chr(10) & Chr(13) & "*********************************")
+                    Console.WriteLine("用户" & userName(i) & "下线了.")
+                    Console.WriteLine("*********************************")
+                    Console.Write("Server>")
+
+                    userName(i) = ""
+                    userIPEP(i) = Nothing
+
+                    Dim ULoginOutbytes() As Byte = Encoding.Unicode.GetBytes(loginoutmsg)
+
+                    Dim j As Integer
+                    For j = 1 To userName.Length - 1
+
+                        If userName(j) <> "" Then
+                            If userIPEP(j) Is Nothing Then
+                            Else
+                                ServerSocket.SendTo(ULoginOutbytes, userIPEP(j))
+                            End If
+                        End If
+
+                    Next
+
+                End If
+
+            End If
+
+        Next
+
+    End Sub
+
+    '发送消息的函数
+    Sub sendMsg()Sub sendMsg(ByVal msg As String, ByVal remoteEP As IPEndPoint)
+        Dim sendBytes As [Byte]() = Encoding.Unicode.GetBytes(msg)
+        Try
+
+            ServerSocket.SendTo(sendBytes, remoteEP)
+
+        Catch e As Exception
+            Console.WriteLine(e.ToString())
+        End Try
+    End Sub
+
+#End Region
+
+End Module
+客户端的代码:
+Imports System.Net
+Imports System.Net.Sockets
+Imports System.Text
+Imports System.Threading
+
+
+Module Module1Module Module1
+
+参数#Region "参数"
+
+    '以下是客户端到服务器端的消息开头
+    Const LOGININ As String = "10" '请求登陆的消息|||消息形式:10+自己的用户名
+    Const LOGINOUT As String = "11" '请求登出的消息|||消息形式:11+自己的用户名
+    Const GETULIST As String = "12" '请求获得在线用户列表|||消息形式:12+自己的用户名
+    Const P2PCONN As String = "13" '请求P2P连接的消息|||消息形式:13+自己的用户名+对方的用户名
+    Const HOLDLINE As String = "14" '保持连接.|||消息开式:14+自己的用户名
+
+    '以下是服务器到客户端的消息开头
+    Const HVUSER As String = "20" '用户名已存在
+    Const GETUSER As String = "21" '在线用户列表|||消息格式:21+用户名+EP
+    Const MAKHOLD As String = "22" '打洞命令|||消息格式:22+IP
+    Const LOGINOK As String = "23" '登陆成功
+    Const SERVCLS As String = "24" '服务器关闭
+    Const MSGEND As String = "25" '消息结束
+
+    '以下是客户端到客户端的消息开头
+    Const HOLDOK As String = "30" '打洞成功
+    Const CHATMSG As String = "31" '聊天消息
+    Const CHTMSGEND As String = "32" '聊天消息发送成功
+
+    '以下是客户端的命名
+    Const EXITPRO As String = "EXIT" '退出命令
+    Const SHOWULIST As String = "SHOWUSER" '显示在线用户
+    Const HELP As String = "HELP" '显示帮助
+    Const SEND As String = "SEND" '发送消息
+
+#End Region
+
+全局全量#Region "全局全量"
+
+    Delegate Sub myMethodDelegate()Sub myMethodDelegate(ByRef myInData As Byte()) '登陆时用的事件
+
+    'Dim MaxTry As Integer = 5
+    Dim msgSendEnd As Boolean = False '消息是否发送成功,若发送成功,则会返回结束消息
+    Dim ThListen As New Thread(AddressOf listen) '监听的线程
+    Dim ClientSocket As New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) '客户端套节字的定义
+    Dim username As String '当前用户名
+    Dim ServerEP As IPEndPoint '服务器的IPEP
+    Dim holdBytes As [Byte]() = Encoding.Unicode.GetBytes(HOLDLINE & username) '和服务器保持连接连接时用到的byte数组
+    Dim OLUserName() As String
+    Dim OLUserEP() As IPEndPoint
+    Dim getUrecCount As Integer
+    Dim testHold As Boolean = False
+    Dim testChat As Boolean = False
+
+    Private receiveDone As ManualResetEvent '在登陆时用来阻塞线程,等待收到数据
+    Private sendDone As ManualResetEvent '用来阴塞发送消息的线程.等待收到回送的确认消息
+    Private getUDone As ManualResetEvent '用来阻塞请求好友名单的线程,等待接收好友名单
+    Private holdDone As ManualResetEvent '用来阻塞打洞时的线程
+    Private chatDone As ManualResetEvent '用来阻塞发送聊天消息时的线程
+
+    Dim timerDelegate As New TimerCallback(AddressOf holdonline) '为保持在线状态弄得
+
+#End Region
+
+方法#Region "方法"
+
+    '主函数,程序入口
+    Sub Main()Sub Main()
+        Dim InputIP As String
+        Dim InputOK As Boolean = False
+
+
+        '判断输入的IP,并且保存服务器的IPEP
+        While InputOK <> True
+            Console.Write("请输入服务器IP:")
+            InputIP = Console.ReadLine()
+            Try
+                ServerEP = New IPEndPoint(IPAddress.Parse(InputIP), 11000)
+                InputOK = True
+            Catch
+                Console.WriteLine("你输入的服务器IP不正确,请重新输入.")
+                InputOK = False
+            End Try
+        End While
+
+        Dim bool As Boolean = False
+
+        '判断用户是否登陆成功
+        While bool <> True
+
+            Dim LoginOK As Boolean = Login()
+            If LoginOK = True Then
+                bool = True
+            Else
+                Console.Write("是否重试:输入Y重试,输入任意值退出程序:")
+                Dim tempYN As String = Console.ReadLine.ToUpper
+                If tempYN = "Y" Then
+                    bool = False
+                Else
+                    Exit Sub
+                End If
+            End If
+
+        End While
+
+        Console.WriteLine("用户名:" & username)
+        holdBytes = Encoding.Unicode.GetBytes(HOLDLINE & username)
+        '登陆成功后.用一个timer,每隔50秒向服务器发送消息,保持在线状态跟在主机注册的端口
+        Dim timer As New Timer(timerDelegate, Nothing, 10000, 50000)
+
+        '请求在线名单
+        Console.WriteLine("正在获取在线名单,请稍后.")
+        Dim getUbool As Boolean = False
+        While getUbool <> True
+            getUbool = getU()
+            If getUbool = False Then
+                Console.Write("是否重试:输入Y重试,输入任意值退出程序:")
+                Dim tempYN As String = Console.ReadLine.ToUpper
+                If tempYN = "Y" Then
+                    bool = False
+                Else
+                    Exit Sub
+                End If
+            End If
+        End While
+
+        ThListen.Start()
+
+        '用来处理客户端的一些命令
+        Dim SVInput As String
+        While True
+            Console.Write("Client>")
+            SVInput = Console.ReadLine().ToUpper
+            Select Case SVInput
+                Case EXITPRO
+                    exitApp()
+                    ThListen.Abort()
+                    ClientSocket.Close()
+                    Exit Sub
+                Case SHOWULIST
+                    Console.WriteLine("*********************************")
+                    showUserList()
+                    Console.WriteLine("*********************************")
+                Case HELP
+                    Console.Write("*********************************" & Chr(10) & Chr(13) & "exit:输出当前程序" & Chr(10) & Chr(13) & "showuser:显示当前在线用户例表" & Chr(10) & Chr(13) & "send:发送消息.格式:send 用户名 消息" & Chr(10) & Chr(13) & "help:显示帮助" & Chr(10) & Chr(13) & "*********************************" & Chr(10) & Chr(13))
+                Case Else
+                    If SVInput.Substring(0, 4) = "SEND" Then
+                        Dim split() As String = SVInput.Split(" ")
+                        If split.Length = 3 Then
+                            sendChatMsg(split(1), split(2))
+                        Else
+                            Console.WriteLine("*********************************" & Chr(10) & Chr(13) & "你输入的命令格式不正确.send命令格式为:send 用户名 你的消息" & Chr(10) & Chr(13) & "*********************************")
+                        End If
+                    Else
+                        Console.WriteLine("*********************************" & Chr(10) & Chr(13) & "笨瓜,你输入的不是有效的命令." & Chr(10) & Chr(13) & "*********************************")
+                    End If
+            End Select
+        End While
+
+    End Sub
+
+    '登陆函数
+    Private Function Login()Function Login() As Boolean
+
+        receiveDone = New ManualResetEvent(False)
+        Dim userBytes As [Byte]()
+
+        Dim userOK As Boolean = False
+
+        Console.Write("请输入你的用户名:")
+
+        '判断用户名是否符合格式
+        While (userOK <> True)
+            username = Console.ReadLine.ToUpper
+            userBytes = Encoding.Unicode.GetBytes(LOGININ & username)
+
+            If userBytes.Length > 24 Or userBytes.Length < 10 Then
+                Console.WriteLine("用户名不得小于6个字节,且不得大于20个字节.")
+                Console.Write("请重新输入你的用户名:")
+            Else
+                userOK = True
+            End If
+        End While
+
+        '向服务器发送客户消息
+        ClientSocket.SendTo(userBytes, ServerEP)
+
+        Dim data As [Byte]() = New Byte(1024) {}
+
+        Dim comStr As String = Encoding.Unicode.GetString(data, 0, 4)
+
+        '异面的接收服务器回送的消息
+        Dim DGrecv As New myMethodDelegate(AddressOf recvLogin)
+        DGrecv.BeginInvoke(data, Nothing, Nothing)
+
+        '等待服务器回送消息的时长为10秒,否则为服务器超时
+        receiveDone.WaitOne(30000, True)
+
+        Dim recvStr As String = Encoding.Unicode.GetString(data, 0, 4)
+
+        If recvStr = comStr Then
+            Console.WriteLine("服务器超时.登陆失败!!")
+            Return False
+        End If
+
+        If Encoding.Unicode.GetString(data, 0, 4) = LOGINOK Then
+            Console.WriteLine("登陆成功!!")
+            Return True
+        ElseIf Encoding.Unicode.GetString(data, 0, 4) = HVUSER Then
+            Console.WriteLine("用户名重复.登陆失败!!")
+            Return False
+        Else
+            Console.WriteLine("服务器未知错误,登陆失败!!")
+            Return False
+        End If
+
+    End Function
+
+    '登出函数
+    Private Sub exitApp()Sub exitApp()
+
+        Dim loginOutStr As String = LOGINOUT & username
+        Dim sendBytes As [Byte]() = Encoding.Unicode.GetBytes(loginOutStr)
+        ClientSocket.SendTo(sendBytes, ServerEP)
+
+    End Sub
+
+    '请求好友列表的函数
+    Private Function getU()Function getU() As Boolean
+
+        getUDone = New ManualResetEvent(False)
+        Dim getUbytes As Byte() = Encoding.Unicode.GetBytes(GETULIST)
+        ClientSocket.SendTo(getUbytes, ServerEP)
+
+        Dim data As [Byte]() = New Byte(4056) {}
+        Dim comStr As String = Encoding.Unicode.GetString(data, 0, 4)
+
+        Dim GUrecv As New myMethodDelegate(AddressOf recvGetU)
+        GUrecv.BeginInvoke(data, Nothing, Nothing)
+
+        getUDone.WaitOne(30000, True)
+
+        Dim recvStr As String = Encoding.Unicode.GetString(data, 0, 4)
+
+        If recvStr = comStr Then
+            Console.WriteLine("服务器超时.或取好友名单失败!!")
+            Return False
+        End If
+
+        If Encoding.Unicode.GetString(data, 0, 4) = GETUSER Then
+            getUserList(data, getUrecCount)
+            Console.WriteLine("获取在线名单成功!!")
+            showUserList()
+            Return True
+        Else
+            Console.WriteLine("服务器未知错误,获取在线名单失败!!")
+            Return False
+        End If
+
+    End Function
+
+    '登陆时用来异步的接收服务器发送的消息
+    Sub recvLogin()Sub recvLogin(ByRef inData As Byte())
+
+        ClientSocket.Receive(inData)
+        receiveDone.Set()
+
+    End Sub
+
+    '请求好友名单时用来异步接收服务器发送的消息
+    Sub recvGetU()Sub recvGetU(ByRef inData As Byte())
+
+        getUrecCount = ClientSocket.Receive(inData)
+        getUDone.Set()
+
+    End Sub
+
+    '处理收到的在线用户信息
+    Private Sub getUserList()Sub getUserList(ByVal userInfobytes() As Byte, ByVal reccount As Integer)
+
+        Dim ustr As String = Encoding.Unicode.GetString(userInfobytes, 4, reccount - 4)
+
+        Dim splitStr() As String = Nothing
+
+        splitStr = Ustr.Split("|")
+
+        Dim IPEPSplit() As String = Nothing
+
+        Dim i As Integer = 0
+
+        Dim k As Integer
+        For k = 0 To splitStr.Length - 2 Step 2
+            ReDim Preserve OLUserName(i)
+            ReDim Preserve OLUserEP(i)
+
+            OLUserName(i) = splitStr(k)
+            IPEPSplit = splitStr(k + 1).Split(":")
+            OLUserEP(i) = New IPEndPoint(IPAddress.Parse(IPEPSplit(0)), IPEPSplit(1))
+
+            IPEPSplit = Nothing
+            i += 1
+        Next
+
+    End Sub
+
+    '显示在线用户
+    Private Sub showUserList()Sub showUserList()
+        Dim i As Integer
+        For i = 0 To OLUserName.Length - 1
+            If OLUserName(i) <> "" Then
+                Console.WriteLine("用户名:" & OLUserName(i) & " 用户IP:" & OLUserEP(i).ToString)
+            End If
+        Next
+    End Sub
+
+    '客户程序监听的函数
+    Sub listen()Sub listen()
+
+        While True
+
+            Try
+                Dim recv As Integer = 0 '收到的字节数
+                Dim data As [Byte]() = New Byte(1024) {} '缓冲区大小
+                Dim sender As New IPEndPoint(IPAddress.Any, 0)
+                Dim tempRemoteEP As EndPoint = CType(sender, EndPoint)
+                recv = ClientSocket.ReceiveFrom(data, tempRemoteEP)
+
+                Dim msgHead As String = Encoding.Unicode.GetString(data, 0, 4) '获得消息头的内容
+                Select Case msgHead
+                    Case MSGEND
+                        msgSendEnd = True
+                        sendDone.Set()
+                    Case LOGININ
+                        addOnLine(data, recv)
+                    Case LOGINOUT
+                        removeOnLine(data, recv)
+                    Case MSGEND
+                        msgSendEnd = True
+                        sendDone.Set()
+                    Case MAKHOLD
+                        Console.WriteLine(Chr(10) & Chr(13) & "收到打洞消息.")
+                        makeHold(data, recv)
+                        Console.Write("Client>")
+                    Case CHATMSG
+                        showChatMsg(data, recv)
+                    Case HOLDOK
+                        testHold = True
+                        holdDone.Set()
+                    Case CHTMSGEND
+                        testChat = True
+                        chatDone.Set()
+                End Select
+
+            Catch
+            End Try
+
+        End While
+    End Sub
+
+    '发送聊天消息
+    Private Sub sendChatMsg()Sub sendChatMsg(ByVal remoteUser As String, ByVal chatMsgStr As String)
+
+        If remoteUser = username Then
+            Console.WriteLine("猪头,你想干什么!!!")
+            Exit Sub
+        End If
+
+        Dim i As Integer
+
+        Dim remoteUEP As IPEndPoint
+        For i = 0 To OLUserName.Length - 1
+            If remoteUser = OLUserName(i) Then
+                remoteUEP = OLUserEP(i)
+                Exit For
+            End If
+            If i = OLUserName.Length - 1 Then
+                Console.WriteLine("找不到你想发送的用户.")
+                Exit Sub
+            End If
+        Next
+
+        Dim msgbytes() As Byte = Encoding.Unicode.GetBytes(CHATMSG & username & "|" & chatMsgStr)
+        Dim holdbytes() As Byte = Encoding.Unicode.GetBytes(P2PCONN & username & "|" & remoteUser)
+
+        chatDone = New ManualResetEvent(False)
+        ClientSocket.SendTo(msgbytes, remoteUEP)
+        chatDone.WaitOne(10000, True)
+        If testChat = True Then
+            testChat = False
+            Exit Sub
+        End If
+
+        testHold = False
+        While testHold <> True
+            Console.WriteLine("打洞ing..")
+            holdDone = New ManualResetEvent(False)
+            ClientSocket.SendTo(holdbytes, remoteUEP)
+            ClientSocket.SendTo(holdbytes, ServerEP)
+            holdDone.WaitOne(10000, True)
+            If testHold = True Then
+                Exit While
+            Else
+                Console.WriteLine("打洞超时,发送消息失败.")
+                Console.Write("是否重试,按Y重试,按任意值结束发送:")
+                Dim YorN As String = Console.ReadLine().ToUpper
+                If YorN = "Y" Then
+                    testHold = False
+                Else
+                    Exit Sub
+                End If
+            End If
+        End While
+
+        While testChat <> True
+            Console.WriteLine("打洞成功,正在准备发送..")
+            chatDone = New ManualResetEvent(False)
+            ClientSocket.SendTo(msgbytes, remoteUEP)
+            chatDone.WaitOne(10000, True)
+            If testChat = True Then
+                Console.WriteLine("消息发送成功!!")
+                Exit While
+            Else
+                Console.WriteLine("发送超时,发送消息失败.")
+                Console.Write("是否重试,按Y重试,按任意值结束发送:")
+                Dim YorN As String = Console.ReadLine().ToUpper
+                If YorN = "Y" Then
+                    testChat = False
+                Else
+                    Exit Sub
+                End If
+            End If
+        End While
+        testHold = False
+        testChat = False
+    End Sub
+
+    '处理聊天消息
+    Private Sub showChatMsg()Sub showChatMsg(ByVal indata() As Byte, ByVal recvcount As Integer)
+        Dim msgStr As String = Encoding.Unicode.GetString(indata, 4, recvcount - 4)
+        Dim splitStr() As String = msgStr.Split("|")
+        Dim fromUname As String = splitStr(0)
+        Dim msg As String = splitStr(1)
+        Console.WriteLine(Chr(10) & Chr(13) & "收到来自" & fromUname & "的消息:" & msg)
+        Console.Write("Client>")
+        Dim i As Integer
+        For i = 0 To OLUserName.Length - 1
+            If OLUserName(i) = fromUname Then
+                Exit For
+            End If
+        Next
+        Dim tempbytes() As Byte = Encoding.Unicode.GetBytes(CHTMSGEND)
+        ClientSocket.SendTo(tempbytes, OLUserEP(i))
+    End Sub
+
+    '处理打洞函数
+    Private Sub makeHold()Sub makeHold(ByVal indata() As Byte, ByVal recvcount As Integer)
+        Dim makholdstr As String = Encoding.Unicode.GetString(indata, 4, recvcount)
+        Dim ipepstr() As String = makholdstr.Split(":")
+        Dim holdEP As IPEndPoint = New IPEndPoint(IPAddress.Parse(ipepstr(0)), ipepstr(1))
+
+        Dim holdbytes() As Byte = Encoding.Unicode.GetBytes(HOLDOK & username)
+        ClientSocket.SendTo(holdbytes, holdEP)
+        Console.WriteLine("回送打洞消息.")
+    End Sub
+
+    '处理用户上线的函数
+    Private Sub addOnLine()Sub addOnLine(ByVal inData() As Byte, ByVal recvCount As Integer)
+        Dim inStr As String = Encoding.Unicode.GetString(inData, 4, recvCount - 4)
+        Dim userinfo() As String = inStr.Split("|")
+        Dim strUserEP() As String = userinfo(1).Split(":")
+
+        Dim i As Integer
+        For i = 0 To OLUserName.Length - 1
+            If OLUserName(i) = "" Then
+                OLUserName(i) = userinfo(0)
+                OLUserEP(i) = New IPEndPoint(IPAddress.Parse(strUserEP(0)), strUserEP(1))
+                Console.WriteLine(Chr(10) & Chr(13) & "用户" & OLUserName(i) & "上线了. 用户地址:" & OLUserEP(i).ToString)
+                Console.Write("Client>")
+                Exit Sub
+            End If
+        Next
+
+        ReDim Preserve OLUserName(i + 1)
+        ReDim Preserve OLUserEP(i + 1)
+
+        OLUserName(i + 1) = userinfo(0)
+        OLUserEP(i + 1) = New IPEndPoint(IPAddress.Parse(strUserEP(0)), strUserEP(1))
+
+        Console.WriteLine(Chr(10) & Chr(13) & "用户" & OLUserName(i + 1) & "上线了. 用户地址:" & OLUserEP(i + 1).ToString)
+        Console.Write("Client>")
+
+    End Sub
+
+    '处理用户下线的函数
+    Private Sub removeOnLine()Sub removeOnLine(ByVal inData() As Byte, ByVal recvCount As Integer)
+        Dim offUname As String = Encoding.Unicode.GetString(inData, 4, recvCount - 4)
+
+        Dim i As Integer
+        For i = 0 To OLUserName.Length - 1
+            If OLUserName(i) = offUname Then
+                OLUserName(i) = ""
+                OLUserEP(i) = Nothing
+                Console.WriteLine(Chr(10) & Chr(13) & "用户" & offUname & "下线了.")
+                Console.Write("Client>")
+                Exit For
+
+            End If
+        Next
+        Dim j As Integer
+        For j = 0 To OLUserName.Length - 1
+            If OLUserName(j) <> "" Then
+                Console.WriteLine(OLUserName(j))
+                Console.Write("Client>")
+            End If
+
+
+        Next
+    End Sub
+
+    '发送消息的函数
+    Public Function sendmsg()Function sendmsg(ByVal msg As String, ByVal sendToIPEP As IPEndPoint) As String
+
+        Dim sendBytes As [Byte]() = Encoding.Unicode.GetBytes(msg)
+
+        '判断发送的字节数是否超过了服务器缓冲区大小
+        If sendBytes.Length > 1024 Then
+            Return "W输入的字数太多"
+        End If
+
+        '判断消息是否发送成功
+        While msgSendEnd = False
+
+            sendDone = New ManualResetEvent(False)
+
+            Try
+
+                ClientSocket.SendTo(sendBytes, sendToIPEP)
+
+                sendDone.WaitOne(10000, True) '阻塞线程10秒
+
+                If msgSendEnd = False Then
+                    Console.WriteLine("消息发送超时")
+                Else
+                    Exit While
+                End If
+
+            Catch e As Exception
+
+                Console.WriteLine("发送消息失败" & e.ToString)
+                Exit Function
+
+            End Try
+
+            Console.Write("是否重试?按Y重试,按任意键退出:")
+            Dim userInput As String = Console.ReadLine.ToUpper
+
+            If userInput = "Y" Then
+            Else
+                msgSendEnd = False
+                Exit Function
+            End If
+
+        End While
+
+        msgSendEnd = False
+
+    End Function
+
+    '用保持在线状态的函数
+    Private Sub holdonline()Sub holdonline(ByVal state As [Object])
+        ClientSocket.SendTo(holdBytes, ServerEP)
+    End Sub
+
+#End Region
+
+End Module
+
+这段代码已经基本实现udp打洞的效果，希望对初学者有所帮助.
+小黑三
+关注 - 1
+粉丝 - 1
+关注博主
+0
+0
+0
+(请您对文章做出评价)
+? 上一篇：如何对MSComm控件手工注册和安装过程中代码注册
+? 下一篇：用socket进行图片聊天，服务器和客户端画图达到同步的效果的源代码
+posted on 2007-06-20 09:55 小黑三 阅读(3889) 评论(11) 编辑 收藏 所属分类: Socket编程
+
+FeedBack:
+1990981
+#1楼 2007-09-16 10:49 王子龙      
+Thanks
+
+　回复　引用　查看　  
+#2楼 2008-01-31 16:28 kkun      
+//这个打洞命令由谁来发呢，呵呵，当然是Server S。
+S具体怎么打的呀?NAT A 记录的是S的IP呀,从B来的消息,A还是不会接收~只会接收S来的消息,这里不太明白~望博主再指点一下
+　回复　引用　查看　  
+#3楼 2008-01-31 17:28 yrh2847189[未注册用户]
+@kkun
+A告诉S我要连接B,B收到S的消息,消息中有A的ip信息,B发消息到A，以后A到B的消息,B就会不拒绝了，可以收到A的消息了。
+
+　回复　引用　  
+#4楼 2008-01-31 17:34 kkun      
+--引用--------------------------------------------------
+yrh2847189: @kkun
+A告诉S我要连接B,B收到S的消息,消息中有A的ip信息,B发消息到A，以后A到B的消息,B就会不拒绝了，可以收到A的消息了。
+
+--------------------------------------------------------
+好滴,谢谢,么有公网IP的服务器,做出来没法测试,
+　回复　引用　查看　  
+#5楼 2008-12-29 13:32 我有公网IP可以帮你测试[未注册用户]
+联系我:359474479
+　回复　引用　  
+#6楼 2009-02-21 14:17 apPZ[未注册用户]
+3楼正解，其实也不需要公网的IP也可以实现，google stun服务器
+　回复　引用　  
+#7楼 2009-03-27 09:59 Clive_Li      
+讲得很清楚，谢谢。
+　回复　引用　查看　  
+#8楼 2009-09-07 10:21 wangjun8868      
+你有c#版的吗？我用你的项目建了VB.NET的 不行呀！公司有自己的服务器
+　回复　引用　查看　  
+#9楼 2009-09-08 09:19 yrh2847189[未注册用户]
+代码可以的，抱歉，我没有c#版
+　回复　引用　  
+#10楼 2010-12-11 10:00 net学习者      
+好代码，找了好久了
+　回复　引用　查看　  
+#11楼 2010-12-18 14:28 胡勇亮      
+UDP穿透中：
+内网计算机A和B的公网IP已获取，在与公网服务器S(im.stzp.cn:24201)的Session中 分别为
+SessionA -> 183.7.131.166:56469
+SessionB -> 183.7.131.166:56470
+
+现在A要与B进行通信：
+A向B（183.7.131.166:56470）发送 UDP报文，但是B收不到，S发到B可以!
+原文的意思是说：B应先向A打洞，但是A也一样收不到B的消息，这....？
+
+A和B之间怎么打洞啊？请教
+
+
+　回复　引用　查看　  
+注册用户登录后才能发表评论，请 登录 或 注册，返回博客园首页。
+IT新闻:
+· 摩托罗拉双核平板Xoom上市计划曝光
+· TI证实黑莓平板使用OMPA4双核处理器
+· Firefox 4.0 Beta 9下周发布
+· AT&T称CDMA版iPhone速度慢 如同驶入慢车道
+· 马云：我怀疑自己但不怀疑信念
+更多IT新闻...
+知识库最新文章:
+关于C# 中的Attribute 特性
+愚蠢且能干
+MySQL中处理Null时要注意两大陷阱
+SharePoint 2010中托管元数据
+.NET控件Designer架构设计
+网站导航：
+博客园首页  IT新闻  个人主页  闪存  程序员招聘  社区  博问
+
+China-pub 计算机图书网上专卖店！6.5万品种2-8折！
+China-Pub 计算机绝版图书按需印刷服务
+
+相关搜索:
+Socket编程
+
+最简洁阅读版式：
+P2P之UDP穿透NAT原理并有UDP打洞的源码
+Copyright ?2011 小黑三 Powered by: 博客园 模板提供：沪江博客

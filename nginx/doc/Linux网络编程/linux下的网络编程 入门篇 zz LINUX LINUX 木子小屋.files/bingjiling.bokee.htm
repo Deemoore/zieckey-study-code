@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" >
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=GBK" />	
+<META NAME="description" CONTENT="木子小屋" />
+<META NAME="keywords" CONTENT="木子小屋 博客 博客网 博客动力 bokee.com" />
+<META NAME="author" CONTENT="bingjiling 博客网 博客动力 bokee.com" />
+<META NAME="robots" CONTENT="all" />
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache" />
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache" />
+<META HTTP-EQUIV="Expires" CONTENT="0" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss2.b" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://bingjiling.bokee.com/rsd.b" />
+<link id='blogdriverFrameCss' href="http://blogteam.bokee.com/pub/frame/800/21.css" rel="stylesheet" type="text/css" />
+<link id='poplogin' href="http://blogteam.bokee.com/pub/css/poplogin.css" rel="stylesheet" type="text/css" />
+<link id='blogdriverCss' href="http://blogteam.bokee.com/pub/template/800/21/38/index.css" rel="stylesheet" type="text/css" />
+<link id='blogdriverCss' href="http://blogteam.bokee.com/pub/css/update.css" rel="stylesheet" type="text/css" />
+<link id='blogdriverCss' href="http://blogteam.bokee.com/pub/css/theme-select.css" rel="stylesheet" type="text/css" />
+<link id='blogdriverCss' href="http://blogteam.bokee.com/pub/css/normal.css" rel="stylesheet" type="text/css" />
+<style>
+#page-switch #back-to-mine{
+    width:91px;
+    padding-left:4px;
+    padding-right:0px;
+    background:url(http://blogteam.bokee.com/pub/images/ln-back2.gif) center left no-repeat;
+}
+</style>
+<title>木子小屋</title>
+<script src="http://blogteam.bokee.com/pub/js/prototype.js?ver=20061107" language="JavaScript"></script>
+<script src="http://blogteam.bokee.com/pub/js/cookie.js" language="JavaScript" ></script>
+<script src="http://blogteam.bokee.com/pub/js/index.js" language="JavaScript"></script>
+<script language="JavaScript" src="http://blogteam.bokee.com/pub/js/header.js?ver=20061107" ></script>
+<script src="http://reg.bokee.com/account/web/js/login.js" language="JavaScript"></script>
+<script src="/pub/js/operation.js?ver=20061225" language="JavaScript"></script>
+<script >
+	var blogID=getBlogID();		
+	var access='0';
+	var href=document.location.href.replace(/http:\/\//ig,"");
+	href=href.substring(0,href.indexOf("/"));
+	if(access!=0&&href!=blogID){
+		window.location.href='http://blogteam.bokee.com/pub/error/USERACCESS.html';
+	}
+    var calendarUrl="/pub/logDate.xml";
+	var albumUrl="/pub/Album.xml";
+	var albumTypename="default";	
+	var isIE=(navigator.appName.indexOf("Microsoft")!=-1);
+	var isNav=(navigator.appName.indexOf("Netscape")!=-1);
+	function init(){				
+		setCalendar();
+	    setFlash();
+	    setImg();
+	}
+	function setCalendar(){
+	     var myFlash= document.calendarFlash;
+ 		 if(myFlash){
+		     myFlash.SetVariable("url","/query.b?type=cal");
+		 }
+	}
+	
+	function setPhoto(){
+	     var myFlash = document.myFlash;
+		  if(myFlash){
+		     if(parseInt(myFlash.offsetWidth)>0){
+				  myFlash.SetVariable("url", albumUrl);
+				  myFlash.SetVariable("awidth", parseInt(myFlash.offsetWidth));
+				  myFlash.SetVariable("typename",albumTypename);
+			  }
+		  }
+	}	
+	function myFlash_DoFSCommand(command, args){
+	  if (args == "calendar"){
+		setCalendar();
+	  }
+	  else{
+		 setPhoto(); 
+	  }
+	}
+	if (navigator.appName && navigator.appName.indexOf("Microsoft") != -1 && 
+	  	navigator.userAgent.indexOf("Windows") != -1 && navigator.userAgent.indexOf("Windows 3.1") == -1) {
+	  	document.write('<SCRIPT LANGUAGE=VBScript\> \n');
+	  	document.write('on error resume next \n');
+	 	document.write('Sub myFlash_FSCommand(ByVal command, ByVal args)\n');
+	 	document.write(' call myFlash_DoFSCommand(command, args)\n');
+	 	document.write('end sub\n');
+	 	document.write('</SCRIPT\> \n');
+	}
+	
+	function setFlash(){
+		var myFlshObj =  document.myFlash;
+		var photoAlbum=document.getElementById('photoAlbum');		
+		if(photoAlbum&&myFlshObj){		
+			var awidth=0;
+			awidth=parseInt(photoAlbum.offsetWidth);
+			if(awidth<260)	myFlshObj.height='150px';
+			if(awidth>=260 && awidth<350) myFlshObj.height='240px';
+			if(awidth>=350 && awidth<370) myFlshObj.height='305px';
+			if(awidth>=370 && awidth<550) myFlshObj.height='320px';
+			if(awidth>=550 && awidth<730) myFlshObj.height='455px';
+			if(awidth>=730)	myFlshObj.height='590px';
+		}
+	}
+		
+	function setAlbumUrl(name){
+		albumTypename=name;
+        setFlash();
+		myFlash_DoFSCommand(null,"test");
+	}
+	function showLoginWindow(ev){
+	var obj = document.getElementById("pop-login");
+	if(document.all){
+		obj.style.top = ev.clientY +'px';
+		obj.style.left = ev.clientX - 272 +'px';
+	}
+	else{
+		obj.style.top = ev.pageY +'px';
+		obj.style.left = ev.pageX - 272 +'px'
+	}
+	obj.style.display ="block";
+	document.getElementById("pop-user-name").focus();
+	}
+	function hideLoginWindow(){
+		document.getElementById("pop-login").style.display ="none";
+	}
+	var blogID=getBlogID();
+	var UserName = "";
+	if(blogID!=null){
+		var tmpUserName=blogID.split(".");
+		UserName=tmpUserName[0];
+	}
+	function resize(obj){
+	   if(window.event.srcElement.tagName == 'A'){
+	    	return;
+	   }
+       obj.parentNode.childNodes[1].style.display = obj.parentNode.childNodes[1].style.display=='none' ? 'block': 'none';
+       obj.parentNode.childNodes[2].style.display = obj.parentNode.childNodes[2].style.display=='none' ? 'block': 'none';       	       
+	}
+	
+	 function tab(event){
+	    var evt = (document.all)?window.event:event;
+		if(evt.keyCode == 9){
+	      document.getElementById("pop-password").focus();
+	      return false;
+	    }
+	    else{
+		  return evt.keyCode;
+	    }
+	}
+	function tab1(event){
+	    var evt = (document.all)?window.event:event;
+		if(evt.keyCode == 9){
+	      document.getElementById("save").focus();
+	      return false;
+	    }
+	    else{
+		  return evt.keyCode;
+	    }
+	}		
+</script>
+
+<style>
+   #friends img{
+     display:none;
+   }
+   .friendListImg{border: 1px solid #CCC;margin: 5px;}
+   table {
+　　　table-layout: fixed;
+　　　word-wrap:break-word;
+　　}
+　　div {
+　　　word-wrap:break-word;
+　　}
+</style>
+</head>
+
+<body id="blogdriver" onload="init()">
+
+
+<script>
+    writeTop(getUserName() , '0');
+</script>	
+<div id="container">  
+<!-- 弹出式登录框 -->
+<div id="pop-login">
+	<FORM METHOD=POST ACTION="http://reg.bokee.com/account/LoginCtrl.b"  name="fm" onsubmit="return check()">
+		<table>
+			<tr>
+				<td class="pop-col1"><label for="pop-user-name">用户名</label></td><td class="pop-col2"><input id="pop-user-name" name="username" value="" type="text" onkeydown="return tab(event)"/> <a href="http://reg.bokee.com/account/web/register.jsp">注 &nbsp;  &nbsp;册</a> </td>
+			</tr>
+			<tr>
+				<td  class="pop-col1">密　码</td><td class="pop-col2"><input id="pop-password"  name="password" type="password" onkeydown="return tab1(event)"/>  <a href="http://reg.bokee.com/account/GetPwdCtrl.b">忘记密码</a></td>
+			</tr>
+			<tr>
+				<td  class="pop-col1">保存密码</td><td class="pop-col2"><input name="save" value="0" type="checkbox">  &nbsp; &nbsp; <input type="submit" value="登录" id="pop-sbumit-btn" />&nbsp; &nbsp; <span id="pop-cancel"><img src="http://blogteam.bokee.com/pub/images/close-pop.gif" onclick="javascript:hideLoginWindow();" alt="取消" /></span></td>
+			</tr>
+	  </table>
+	  <input type="hidden" name="url" value="">
+	  <input type="hidden" name="action" value="">
+	</form>
+</div>
+<div id="pageHeader">
+
+	<div id="blog-title" >
+		<h1>木子小屋&nbsp;&nbsp;&nbsp;&nbsp;<span class="title-font" style="cursor:hand" onclick="javascript:window.clipboardData.setData('Text','http://bingjiling.bokee.com/');alert('直接粘贴(ctrl+v)到MSN或QQ里就可以发送给好友啦!^_^Y');" >复制</span></h1>
+		<p>生命是一场奇异的旅行  我们总在行走  不停地经历花开花落  不断寻找  自由 或幻象</p>
+	    
+	</div>
+	  
+	  
+<script>
+    writeHeader('main','bingjiling.bokee.com','335921');
+</script>
+</div>
+<div id="pageBody">
+
+<div id='leftDiv'>
+<div id='notice' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_17.gif' /></span>公告</p></h3><div class='col-body'><div class="newly-right"><p id='noticeContent'>整理硬盘，贴一堆库存文章</p></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='myPhoto' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_0.gif' /></span>个人形象</p></h3><div class='col-body'><div class="newly-right myPhotoCenter"><dl class="people-dl"><dt><img id='photoImg' width='120px;' height='120px;' onError="this.src='http://blogteam.bokee.com/pub/images/logo_s.png'" src='http://bingjiling.bokee.com/inc/logo_s.png'/></dt><dd class="people"><p><a href="javascript:doAddFriend('bingjiling.bokee.com')"><img src="http://blogteam.bokee.com/pub/images/myphoto-addfriend.gif"/>加为好友</a>&nbsp;<a href="javascript:popPostMsg('bingjiling.bokee.com');"><img src="http://blogteam.bokee.com/pub/images/myphoto-msg.gif"/>发送私信</a></p><p><a href="#addNote"><img src="http://blogteam.bokee.com/pub/images/myphoto-note.gif"/>给我留言</a>&nbsp;<a href="javascript:addFavorite('生命是一场奇异的旅行  我们总在行走  不停地经历花开花落  不断寻找  自由 或幻象','http://bingjiling.bokee.com/');"><img src="http://blogteam.bokee.com/pub/images/myphoto-favo.gif"/>加入收藏</a></p><p><a href="http://group.bokee.com/group/userjump.action?userId=335921&blogId=bingjiling.bokee.com"><img src="http://blogteam.bokee.com/pub/images/myphoto-group.gif"/>我的群组</a>&nbsp;<a href="javascript:commendblog('bingjiling.bokee.com');"><img src="http://blogteam.bokee.com/pub/images/myphoto-friend.gif"/>荐给好友</a></p></dd></dl></div></div><div class="newly-bot"><div class="newly-bot01"></div></div><form action='/control/showChat.b' id="chatRoomFrmMyPhoto" method='post' target='_blank'><input type="hidden" id='chatNamePostMyPhoto' name='chatNamePost' value='test'/><input type="hidden" id='urlMyPhoto' name='url' value=' '/></form></div>
+<div id='categories' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_2.gif' /></span>日志栏目</p></h3><div class='col-body'><div class="newly-right"><ul  class=riz-Lm><li><a href='http://bingjiling.bokee.com/cat.0.html' title='默认栏目'>默认栏目</a></li><li><a href='http://bingjiling.bokee.com/cat.12509009.html' title='USB'>USB</a></li><li><a href='http://bingjiling.bokee.com/cat.12474231.html' title='模拟电路'>模拟电路</a></li><li><a href='http://bingjiling.bokee.com/cat.10490686.html' title='文学'>文学</a></li><li><a href='http://bingjiling.bokee.com/cat.10490687.html' title='菜鸟新知'>菜鸟新知</a></li><li><a href='http://bingjiling.bokee.com/cat.10490688.html' title='cartoon'>cartoon</a></li><li><a href='http://bingjiling.bokee.com/cat.10490689.html' title='电子技术'>电子技术</a></li><li><a href='http://bingjiling.bokee.com/cat.10490690.html' title='心情日记'>心情日记</a></li><li><a href='http://bingjiling.bokee.com/cat.10490691.html' title='休闲'>休闲</a></li><li><a href='http://bingjiling.bokee.com/cat.10490692.html' title='通信及信号处理'>通信及信号处理</a></li><li><a href='http://bingjiling.bokee.com/cat.10490693.html' title='嵌入式'>嵌入式</a></li><li><a href='http://bingjiling.bokee.com/cat.10566340.html' title='LINUX'>LINUX</a></li><li><a href='http://bingjiling.bokee.com/cat.10570946.html' title='DSP'>DSP</a></li><li><a href='http://bingjiling.bokee.com/cat.10809532.html' title='经济类'>经济类</a></li></ul></div></div><div class="newly-bot"><div class="newly-bot01"></div><div class="cl-sc"></div></div></div>
+<div id='user-list-10499124' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_99.gif' /></span>学习资源</p></h3><div class='col-body'><div class="newly-right"><table class='pingl-Dl'><tr><td width='*'></td><td width='13'></td></tr><tr><td><a target="_blank" href="http://www.minigui.org/res.shtml">minigui资源下载</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.itepub.net/index.php?sid=x9nYds">ITPUB图书下载</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.programsalon.com/">程序员联合开发网</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://forum.eviloctal.com/thread-htm-fid-60.html">evil电子书</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.61ic.com/Index.html">61ic</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://users.sosdg.org/~qiyong/lxr/source/">linux在线源码</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://ny.xmu.edu.cn/editor.asp">在线html编辑</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.cnitblog.com/luofuchong">luofuchong博客</a></td><td>&nbsp;</td></tr></table></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='user-list-11439034' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_99.gif' /></span>休闲娱乐</p></h3><div class='col-body'><div class="newly-right"><table class='pingl-Dl'><tr><td width='*'></td><td width='13'></td></tr><tr><td><a target="_blank" href="http://www.everywhere.com.cn/map/">厦门电子地图</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.tkwin.com/showxs.htm">张小娴作品集</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.21softs.com/">日历</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.atfriday.com/GameZone/index.asp">游戏小站</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.kanunu.cn/jimmy">几米作品集</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.1ting.com/">一听音乐</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://blog.sina.com.cn/plum">梅子的写食日记</a></td><td>&nbsp;</td></tr></table></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='user-list-10224850' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_99.gif' /></span>小圈子</p></h3><div class='col-body'><div class="newly-right"><table class='pingl-Dl'><tr><td width='*'></td><td width='13'></td></tr><tr><td><a target="_blank" href="http://www.xmulife.cn/?2217">者者的家</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.xmulife.cn/?2233">naoki的家</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://wucaiyuan2003.blog.163.com/">彩彩-宁静致远</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/cmf3887299">pheobe-生命的厚味</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://www.xmulife.cn/?2503">cindy的家</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://girlwendy.blog.sohu.com/">wendy-放飞心情</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://dawson.blogbus.com/">公子大贤-浅斟低唱</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/faggy">faggy-云雀之歌</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/warden325">warden-守望者殿堂</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/huangnange">allen-难舍南哥</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://lovelykakuna.spaces.live.com/">kakuna-蟹壳小居</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://bandwang789.spaces.live.com">band-band's sky</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://lovelycatsky.spaces.live.com/">泠泠-cat's corner</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://pigletkaren.spaces.live.com/">karen-皮吉厨房</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/hudefu">dove-快乐为主</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://hi.baidu.com/11gram">lijun</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://detdao.blog.sohu.com/">刀-城市故事</a></td><td>&nbsp;</td></tr><tr><td><a target="_blank" href="http://swetty-cc.blog.sohu.com/">西西</a></td><td>&nbsp;</td></tr></table></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='stat' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_14.gif' /></span>统计</p></h3><div class='col-body'><div class="newly-right"><p id="diarystat"  style="margin-left:10px;">统计中，请等候...</p><p id="numstat" style="margin-left:10px;">统计中，请等候...</p><script>statCount('bingjiling')</script></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+</div>
+<div id='centerDiv'>
+<div id='blogIndex' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_4.gif' /></span>日志</p></h3><style>#blogIndex .entry-body p{text-indent:0;line-height:25px;}</style><div class='col-body'><div class="newly-right"><div class='diary-all'><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.16063477.html'>不要做浮躁的嵌入式系统工程师zz(置顶日志)</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490693.html'>嵌入式</a></span></p></div><div class='entry-body'>摘要：多看帮助、举一反三、系统、反复、实践、讲解&nbsp;&nbsp;<a href='/viewdiary.16063477.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.6.5</span> <span class='pub-time' title='发布时间'>10:29</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=16063477" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("不要做浮躁的嵌入式系统工程师zz","http://bingjiling.bokee.com/viewdiary.16063477.html")'>收藏</a> | <a href='/viewdiary.16063477.html#remark' class='ln-comments'>评论：3</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18304456.html'>研三了，努力吧~</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490690.html'>心情日记</a></span></p></div><div class='entry-body'>摘要：逛到一个陌生又熟悉的地方，有种复杂的情绪。
+研三了，回头望望走过的日子，不知道自己错过了多少东西。
+记得的才是活过。是不..&nbsp;&nbsp;<a href='/viewdiary.18304456.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.18</span> <span class='pub-time' title='发布时间'>22:03</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18304456" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("研三了，努力吧~","http://bingjiling.bokee.com/viewdiary.18304456.html")'>收藏</a> | <a href='/viewdiary.18304456.html#remark' class='ln-comments'>评论：0</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18240004.html'>一些下载交叉编译环境的网站</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10566340.html'>LINUX</a></span></p></div><div class='entry-body'>摘要：（arm-linux-toolchain,arm-elf-toochain的区别：主要是编译过程中所用的C库的不同，ar..&nbsp;&nbsp;<a href='/viewdiary.18240004.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.12</span> <span class='pub-time' title='发布时间'>15:29</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18240004" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("一些下载交叉编译环境的网站","http://bingjiling.bokee.com/viewdiary.18240004.html")'>收藏</a> | <a href='/viewdiary.18240004.html#remark' class='ln-comments'>评论：0</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18183981.html'>点名（wendy，naoki，allen）</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490690.html'>心情日记</a></span></p></div><div class='entry-body'>摘要：迫害人品的后遗症来了，好吧，我还是遵守游戏规则，几个写一起了，重复的见前文……
+1.    從誰那裏接到的題目? 
+  ..&nbsp;&nbsp;<a href='/viewdiary.18183981.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.8</span> <span class='pub-time' title='发布时间'>16:28</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18183981" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("点名（wendy，naoki，allen）","http://bingjiling.bokee.com/viewdiary.18183981.html")'>收藏</a> | <a href='/viewdiary.18183981.html#remark' class='ln-comments'>评论：4</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18169849.html'>被点名了</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490690.html'>心情日记</a></span></p></div><div class='entry-body'>摘要：1.從誰那裏接到的題目? 
+  pheobe 
+2.2007年你最开心的事？ 
+  07年还有几个月呢，没有最开心只有更..&nbsp;&nbsp;<a href='/viewdiary.18169849.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.7</span> <span class='pub-time' title='发布时间'>19:14</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18169849" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("被点名了","http://bingjiling.bokee.com/viewdiary.18169849.html")'>收藏</a> | <a href='/viewdiary.18169849.html#remark' class='ln-comments'>评论：2</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18113076.html'>爱情砝码</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490690.html'>心情日记</a></span></p></div><div class='entry-body'>摘要：大中午的不睡觉，又用键盘开始爬格子了。
+    前天晚上和高、wz去逛中山路，换季打折嘛，hoho~ 然后竟收到sx的电..&nbsp;&nbsp;<a href='/viewdiary.18113076.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.4</span> <span class='pub-time' title='发布时间'>13:49</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18113076" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("爱情砝码","http://bingjiling.bokee.com/viewdiary.18113076.html")'>收藏</a> | <a href='/viewdiary.18113076.html#remark' class='ln-comments'>评论：3</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.18023627.html'>成长中淡去的几种情感 （转载）</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490686.html'>文学</a></span></p></div><div class='entry-body'>摘要：当今天的我觉得昨天的我所做的事很幻稚时，我们还在成长；当今天的我觉得跟昨天的我没两样时，我们已经停止成长。 
+成长，是一..&nbsp;&nbsp;<a href='/viewdiary.18023627.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.9.3</span> <span class='pub-time' title='发布时间'>12:23</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=18023627" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("成长中淡去的几种情感 （转载）","http://bingjiling.bokee.com/viewdiary.18023627.html")'>收藏</a> | <a href='/viewdiary.18023627.html#remark' class='ln-comments'>评论：3</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.17983376.html'>Linux下USB内核之学习笔记（三）</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.12509009.html'>USB</a></span></p></div><div class='entry-body'>摘要：详细分析USB内核(USBD)提供的功能
+主要有四类功能：客户端驱动管理，USB设备的配置和管理，主机控制器的管理，协议..&nbsp;&nbsp;<a href='/viewdiary.17983376.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.8.30</span> <span class='pub-time' title='发布时间'>09:40</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=17983376" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("Linux下USB内核之学习笔记（三）","http://bingjiling.bokee.com/viewdiary.17983376.html")'>收藏</a> | <a href='/viewdiary.17983376.html#remark' class='ln-comments'>评论：0</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.17983372.html'>Linux下USB内核 学习笔记</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.12509009.html'>USB</a></span></p></div><div class='entry-body'>摘要：Linux下USB内核之学习笔记（一）
+Linux下USB子系统软件结构为
+USB内核（USB驱动，USBD ）处于系统..&nbsp;&nbsp;<a href='/viewdiary.17983372.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.8.30</span> <span class='pub-time' title='发布时间'>09:39</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=17983372" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("Linux下USB内核 学习笔记","http://bingjiling.bokee.com/viewdiary.17983372.html")'>收藏</a> | <a href='/viewdiary.17983372.html#remark' class='ln-comments'>评论：0</a></span></div></div><div class='entry-preview'><div class='entry-title' style='cursor:hand' onClick='resize(this)'><h2><a href='/viewdiary.17947361.html'>谈四层板和33欧电阻zz</a></h2><p><span class=fenlei-Span>分类:<a href='http://bingjiling.bokee.com/cat.10490693.html'>嵌入式</a></span></p></div><div class='entry-body'>摘要：问：做最小系统板是2层还是4层好？
+答：只有AT91可以用两层板，其他的最少4层；44b0的地和电源处理好也可用两层板；..&nbsp;&nbsp;<a href='/viewdiary.17947361.html'>查看全文</a></div><div class='entry-footer'><span class='f'><span class='pub-date' title='发布日期'>2007.8.29</span> <span class='pub-time' title='发布时间'>19:33</span> <span class='ln-author'>作者：<a class='author' href='http://id.bokee.com/showInfo.b?username=bingjiling'>寂寞17路</a></span> <script type="text/javascript">if(blogID!=null)document.writeln('<a href="http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=17947361" class="ln-trackbacks">引用0<\/a> | ');</script><a href='javascript:void(0);' class='ln-bookmark' onClick='addFavorite("谈四层板和33欧电阻zz","http://bingjiling.bokee.com/viewdiary.17947361.html")'>收藏</a> | <a href='/viewdiary.17947361.html#remark' class='ln-comments'>评论：0</a></span></div></div></div><ul class='diary-easy pingl-Dl'><li><a href='/viewdiary.16063477.html'>不要做浮躁的嵌入式系统工程师zz</a></li><li><a href='/viewdiary.18304456.html'>研三了，努力吧~</a></li><li><a href='/viewdiary.18240004.html'>一些下载交叉编译环境的网站</a></li><li><a href='/viewdiary.18183981.html'>点名（wendy，naoki，allen）</a></li><li><a href='/viewdiary.18169849.html'>被点名了</a></li><li><a href='/viewdiary.18113076.html'>爱情砝码</a></li><li><a href='/viewdiary.18023627.html'>成长中淡去的几种情感 （转载）</a></li><li><a href='/viewdiary.17983376.html'>Linux下USB内核之学习笔记（三）</a></li><li><a href='/viewdiary.17983372.html'>Linux下USB内核 学习笔记</a></li><li><a href='/viewdiary.17947361.html'>谈四层板和33欧电阻zz</a></li></ul><p align="right"><a href="/diaryIndex.b">更多日志..</a></p></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='renark' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_7.gif' /></span>最新评论</p></h3><div class='col-body'><div class="newly-right"><script type='text/javascript' src='/21/59/33/bingjiling.bokee.com/remark.js'></script></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+<div id='guestBook' class='operation'><h3 class='select'><p class='newly-title'><span class='newly-Img'><img src='http://blogteam.bokee.com/pub/images/ico_8.gif' /></span>留言</p></h3><div class='col-body'><div class="newly-right"><div id='msg-list'><script type='text/javascript' src='/21/59/33/bingjiling.bokee.com/note.js'></script></div><p id='more-msg'  class="jiarud"><a name="addNote"></a><a href='/note/listNote.b'>[查看更多留言]</a></p><div id="leave-msg"><form method='post' name='leaveNote' id='leaveNote'><p><textarea  name='noteContent'  id='noteContent' style='width:85%'></textarea></p><p><input id='nickName' name='nickName'  type='text' value='匿名' onclick='select();' onKeyDown='if(event.keyCode==13){event.returnValue=false;}' maxlength='40' style='width:85%'/><input id='node_cmt-btn' name='node_cmt-btn' type='button' value='发表' onclick='noteSubmit()'/></p></form></div></div></div><div class="newly-bot"><div class="newly-bot01"></div></div></div>
+</div>
+<div id='rightDiv'>
+</div>
+    
+
+</div>
+<div id="pageFooter">
+	<p>Copyright 2002-2005 Bokee.com </p>
+	<p>All Rights Reserved</p>
+</div>
+</div>
+
+<img src="/stats/pvcounter.fcgi?username=bingjiling&oid=bingjiling_vh,bingjiling_wc" style="width:0;height:0;display:none;" />
+<img src="http://bingjiling.bokee.com/21/59/33/bingjiling.bokee.com/photo/photo.xml" style="width:0;height:0;display:none;" />
+<img src="http://bingjiling.bokee.com/21/59/33/bingjiling.bokee.com/photo/album.xml" style="width:0;height:0;display:none;" />
+
+<!-- 扩展标签 -->
+<div id="extraDiv1"></div><div id="extraDiv2"></div><div id="extraDiv3"></div>
+<div id="extraDiv4"></div><div id="extraDiv5"></div><div id="extraDiv6"></div>
+
+
+<img id="call" src="" style="width:0;height:0;display:none;" />
+<img id="self" src="" style="width:0;height:0;display:none;" />
+
+<script  language="javascript">
+if(getBlogID()!=null){
+document.getElementById('self').src="http://"+getBlogID()+"/visitor/visitor.fcg?owner=" +getBlogIDName() +"&accessor=" + "bingjiling.bokee.com".split(".")[0] +"&op=2";
+document.getElementById('call').src="http://bingjiling.bokee.com/visitor/visitor.fcg?owner=" + "bingjiling.bokee.com".split(".")[0] +"&visitor=" + getBlogIDName()+ "&p=0&type=0&op=0";
+}
+</script>
+
+</body>
+</html>

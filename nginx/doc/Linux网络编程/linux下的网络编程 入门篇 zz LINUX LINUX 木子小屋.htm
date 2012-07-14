@@ -1,0 +1,647 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0051)http://bingjiling.bokee.com/viewdiary.15896397.html -->
+<HTML xml:lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=GBK">
+<META content="socket 网络 客户服务器  linux下的网络编程 入门篇 zz LINUX 木子小屋" name=description>
+<META 
+content="socket 网络 客户服务器  linux下的网络编程 入门篇 zz LINUX 木子小屋 博客 博客网 博客动力 bokee.com" 
+name=keywords>
+<META content="bingjiling  博客网 博客动力 bokee.com" name=author>
+<META content=all name=robots>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Cache-Control content=no-cache>
+<META http-equiv=Expires content=0><LINK 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/23.css" type=text/css 
+rel=stylesheet><LINK id=blogdriverCss 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/index.css" type=text/css 
+rel=stylesheet><LINK 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/editblog.css" type=text/css 
+rel=stylesheet><LINK href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/update.css" 
+type=text/css rel=stylesheet><LINK 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/normal.css" type=text/css 
+rel=stylesheet>
+<SCRIPT language=JavaScript>
+<!--
+	function remarkSubmit()
+	{
+		if ( Check.isLong('remarkNickName',40) ){
+			alert(" 发布人长度不能超过40个字符");
+			return false;
+		}
+		if (Check.isNull('remarkNickName') ){
+			alert("请输入发布人姓名");
+			return false;
+		}
+		if ( Check.isLong('remarkContent',200) ){
+			alert("评论内容长度不能超过200个字符");
+			return false;
+		}
+		
+		if (Check.isNull('remarkContent') ){
+			alert("请输入评论内容！");
+			return false;
+		}
+		if(Check.isNull('rand')){
+			alert("请输入验证码！");
+			return false;
+		}
+		return true;
+	}
+	function resize(obj){
+	   if(window.event.srcElement.tagName == 'A'){
+	    	return;
+	   }
+       obj.parentNode.childNodes[1].style.display = obj.parentNode.childNodes[1].style.display=='none' ? 'block': 'none';
+       obj.parentNode.childNodes[2].style.display = obj.parentNode.childNodes[2].style.display=='none' ? 'block': 'none';       	       
+	}
+	
+	function search(env){
+		if(env.keyCode == 13){
+			m = 1;
+			doSearch();
+		}
+	}
+	function doSearch(){
+	    var value = document.getElementById('wd').value;
+		document.getElementById('wd').value = value + " site:bokee.com";
+		document.getElementById('searchForm').submit();
+		document.getElementById('wd').value = value;		
+	}
+	function doSearch1(){
+	    var value = document.getElementById('wd').value;
+		document.getElementById('searchForm').submit();	
+	}
+	var c = "评论字数限制在200个字符之内";
+	function clearF(){
+		if(document.getElementById("remarkContent").value == c){
+			document.getElementById("remarkContent").value = '';
+		}
+	}
+	
+//-->	
+</SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/prototype.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/index.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/operation.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/cookie.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/stats.js"></SCRIPT>
+
+<META content="MSHTML 6.00.2900.3157" name=GENERATOR></HEAD>
+<BODY id=entry-view onload=setImg()><LINK id=poplogin 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/poplogin.css" type=text/css 
+rel=stylesheet>
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/login.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/cookie.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/header.js"></SCRIPT>
+
+<SCRIPT>
+   var blogID=getBlogID();
+   var UserName = "";
+   var href= "";
+   checkAccess('0');
+</SCRIPT>
+
+<SCRIPT>
+   	    writeTop(getUserName(), 0);
+	</SCRIPT>
+
+<DIV id=container><!-- 页面头部  --><LINK id=poplogin 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/poplogin.css" type=text/css 
+rel=stylesheet>
+<STYLE>#page-switch #back-to-mine {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 4px; BACKGROUND: url(http://blogteam.bokee.com/pub/images/ln-back2.gif) no-repeat left center; WIDTH: 91px
+}
+</STYLE>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/login.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/cookie.js"></SCRIPT>
+
+<SCRIPT language=JavaScript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/header.js"></SCRIPT>
+
+<SCRIPT>
+   var blogID=getBlogID();
+   var UserName = "";
+   var href= "";
+   checkAccess('0');
+   function logout(){
+   	window.location.href='/logout.b';
+   }
+   function tab(event){
+	    var evt = (document.all)?window.event:event;
+		if(evt.keyCode == 9){
+	      document.getElementById("pop-password").focus();
+	      return false;
+	    }
+	    else{
+		  return evt.keyCode;
+	    }
+	}
+	function tab1(event){
+	    var evt = (document.all)?window.event:event;
+		if(evt.keyCode == 9){
+	      document.getElementById("save").focus();
+	      return false;
+	    }
+	    else{
+		  return evt.keyCode;
+	    }
+	}
+</SCRIPT>
+<!-- 弹出式登录框 -->
+<DIV id=pop-login>
+<FORM name=fm onsubmit="return check()" 
+action=http://reg.bokee.com/account/LoginCtrl.b method=post>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD class=pop-col1><LABEL for=pop-user-name>用户名</LABEL></TD>
+    <TD class=pop-col2><INPUT id=pop-user-name onkeydown="return tab(event)" 
+      name=username> <A href="http://reg.bokee.com/account/web/register.jsp">注 
+      &nbsp; &nbsp;册</A> </TD></TR>
+  <TR>
+    <TD class=pop-col1>密　码</TD>
+    <TD class=pop-col2><INPUT id=pop-password onkeydown="return tab1(event)" 
+      type=password name=password> <A 
+      href="http://reg.bokee.com/account/GetPwdCtrl.b">忘记密码</A></TD></TR>
+  <TR>
+    <TD class=pop-col1>保存密码</TD>
+    <TD class=pop-col2><INPUT type=checkbox value=0 name=save> &nbsp; &nbsp; <INPUT id=pop-sbumit-btn type=submit value=登录>&nbsp; &nbsp; <SPAN 
+      id=pop-cancel><IMG onclick=javascript:hideLoginWindow(); alt=取消 
+      src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/close-pop.gif"></SPAN></TD></TR></TBODY></TABLE><INPUT 
+id=url type=hidden name=url> <INPUT type=hidden name=action> </FORM></DIV>
+<DIV id=pageHeader>
+<DIV id=blog-title>
+<H1>木子小屋&nbsp;&nbsp;&nbsp;&nbsp;<SPAN class=title-font style="CURSOR: hand" 
+onclick="javascript:window.clipboardData.setData('Text','http://bingjiling.bokee.com/');alert('直接粘贴(ctrl+v)到MSN或QQ里就可以发送给好友啦!^_^Y');">复制</SPAN></H1>
+<P>生命是一场奇异的旅行 我们总在行走 不停地经历花开花落 不断寻找 自由 或幻象</P></DIV>
+<SCRIPT>
+   	    writeHeader('diary','bingjiling.bokee.com','335921');
+	</SCRIPT>
+</DIV>
+<DIV id=pageBody>
+<DIV id=centerDiv><!-- 日志内容 -->
+<DIV class=operation id=blogIndex>
+<DIV class=entry-title onclick=resize(this)>
+<DIV class=lt>
+<H2>linux下的网络编程 入门篇 zz</H2><INPUT id=search-key type=hidden 
+value="linux下的网络编程 入门篇 zz" name=search-key> </DIV>
+<DIV class="rl entry-titlerl fenlei-Span">分类:<A 
+href="http://bingjiling.bokee.com/cat.10566340.html">LINUX</A></DIV></DIV>
+<DIV class="entry-body nerr">
+<P>图1描述了<FONT color=#ff0000>Linux对IP协议族的实现机制</FONT>。&nbsp;<BR><BR>　　<IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/view.jpg" 
+?if(this.width><BR>Linux 
+支持BSD的套接字和全部的TCP/IP协议，是通过网络协议将其视为一组相连的软件层来实现的，BSD套接字（BSD 
+Socket）由通用的套接字管理软件支持，该软件是INET套接字层，用来管理基于IP的TCP与UDP端口到端口的互联问题，从协议分层来看，IP是网络层协议，TCP是一个可靠的端口到端口的传输层协议，他是利用IP层进行传接报文的，同时也是面向连接的，通过建立一条虚拟电路在不同的网路间传输报文，保证所传输报文的无丢失性和无重复性。用户数据报文协议（User 
+Datagram 
+Protocol，UDP）也是利用IP层传输报文，但他是一个非面向连接的传输层协议，利用IP层传输报文时，当目的方网际协议层收到IP报文后，必须识别出该报文所使用的上层协议（即传输层协议），因此，在IP报头上中，设有一个"协议"域（Protocol）。通过该域的值，即可判明其上层协议类型，传输层与网络层在功能说的最大区别是前者提供进程通信能力，而后者则不能，在进程通信的意义上，网络通信的最终地址不仅仅是主机地址，还包括可以描述进程的某种标识符，为此，TCP/UDP提出了协议端口（Protocol 
+Port）的概念，用于标识通信的进程，例如，Web服务器进程通常使用端口80，在/etc/services文件中有这些注册了的端口地址。 
+<BR><BR>对于TCP传输，传输节点间先要建立连接，然后通过该连接传输已排好序的报文，以保证传输的正确性，IP层中的代码用于实现网际协议，这些代码将 
+IP头增加到传输数据中，同时也把收到的IP报文正确的传送到TCP层或UDP层。TCP是一个面向连接协议，而UDP则是一个非面向连接协议，当一个 
+UDP报文发送出去后，Linux并不知道也不去关心他是否成功地到达了目的的主机，IP层之下，是支持所有Linux网络应用的网络设备层，例如点到点协议（Point 
+to Point 
+Protocol，PPP）和以太网层。网络设备并非总代表物理设备，其中有一些（例如回送设备）则是纯粹的软件设备，网络设备与标准的Linux设备不同，他们不是通过Mknod命令创建的，必须是底层软件找到并进行了初始化之后，这些设备才被创建并可用。因此只有当启动了正确设置的以太网设备驱动程序的内核后，才会有/dev/eth0文件，ARP协议位于IP层和支持地址解析的协议层之间。&nbsp;<BR><BR><FONT 
+style="FONT-SIZE: 18px; LINE-HEIGHT: 100%"><STRONG>网络通信原理</STRONG> 
+</FONT><BR></P>
+<P>所有的网络通信就其实现技术可以分为两种，线路交换和包交换，计算机网络一般采用包交换，TCP使用了包交换通信技术，计算机网络中所传输的数据，全部都以包（Packet）这个单位来发送，包由"报头"和"报文"组成，结构如图2所示，在"报头"中记载有发送主机地址，接收主机地址及与报文内容相关的信息等，在"报文"中记载有需要发送的数据，网络中的每个主机和路由器中都有一个路由寻址表，根据这个路由表，包就可以通过网络传送到相应的目的主机。 
+<BR><IMG 
+src="E:\linux\document\netprogram\Linux网络编程\linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files\view(1).jpg" 
+width=370 ?if(this.width><BR><BR>网络通信中的一个非常重要的概念就是套接字（Socket），简单地说，套接字就是<FONT 
+color=#ff0000>网络进程的ID</FONT>，网络通信归根到底是进程的通信，在网络中，每个节点有一个网络地址（即IP地址），两个进程通信时，首先要确定各自所在网络节点的网络地址，但是，网络地址只能确定进程所在的计算机，而一台计算机上可能同时有多个网络进程，还不能确定到底是其中的哪个进程，由此套接字中还要有其他的信息，那就是端口号（Port），在一台计算机中，一个端口一次只能分配给一个进程，即端口号与进程是一一对应的关系，所以，端口号和网络地址就能唯一地确定Internet中的一个网络进程。可以认为：<FONT 
+color=#ff0000>套接字= 网络地址+端口号</FONT> 
+<BR><BR>系统调用一个Socket（）得到一个套接字描述符，然后就可以通过他进行网络通信了。 
+<BR><BR>套接字有很多种类，最常用的就有两种；流式套接字和数据报套接字。在Linux中分别称之"SOCK_STREAM" 和 "SOCK_DGRAM" 
+，他们分别使用不同的协议，流式套接字使用TCP协议，数据报套接字使用UDP协议，本文所使用的是流式套接字协议。 <BR><BR><STRONG><FONT 
+style="FONT-SIZE: 18px; LINE-HEIGHT: 100%">网络通信原理在文件传输程序设计中的应用 
+</FONT><BR></P></STRONG>
+<P>网络上的绝大多数通信采用的都是<FONT 
+color=#ff0000>客户机/服务器机制（Client/Server），</FONT>即服务器提供服务，客户是这些服务的使用者，服务器首先创建一个Socket，然后将该Socket与本地地址/端口号绑定（Bind（）），成功之后就在相应的Socket上监听（Listen（））。当Accept（）函数捕捉到一个连接服务（Connect（））请求时，接受并生成一个新的Socket,并通过这个新的Socket与客户端通信，客户端同样也要创建一个Socket，将该Socket与本地地址/端口号绑定，还需要指定服务器端的地址与端口号，随后向服务器端发出Connect（），请求被服务器端接受后，可以通过Socket与服务器端通信。 
+<BR><BR>TCP是一种面向连接的、可靠的、双向的通信数据流，说他可靠，是因为他使用3段握手协议传输数据，并且在传输时采用"重传肯定确认"机制保证数据的正确发送：接收端收到的数据后要发出一个肯定确认，而发送端必须要能接受到这个肯定信号，否则就要将数据重发。在此原理基础之上，设计了基于Linux 
+操作系统下TCP/IP编程实现文件传输的实例。我们采用客户机/服务器模式通信时，通信双方发送/接收数据的工作流程如图3所示。 <BR><IMG 
+src="E:\linux\document\netprogram\Linux网络编程\linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files\view(2).jpg" 
+?if(this.width><BR>　　&nbsp;<BR><BR>文件传输就是基于客户机/服务器模型而设计的，客户机和服务器之间利用TCP建立连续，因文件传输是一个交互式会话系统，客户机每次执行文件传输，都需要与服务器建立控制连接和数据连接，其中控制连接负责传输控制信息、利用控制命令、客户机可以向服务器提出无限次的请求，客户机每次提出的请求，服务器与客户机建立一个数据连接，进行实际的数据传输，数据传输完毕后，对应的数据连接被清除，控制连接依然保持，等待客户机发出新的传输请求，直到客户机撤销控制连接，结束会话。 
+<BR><BR>当进行文件传输时，首先向服务器发出连接请求，服务器验证身份后，与客户端建立连接，双方进入会话状态，这时只要客户端向服务器端发出数据连接请求，建立起数据连接后，双方就进入数据传输状态，数据传输完毕后，数据连接被撤销，如此循环反复，直到会话结束，从而实现将文件从服务器端传输至客户机端。 
+<BR><BR><FONT 
+style="FONT-SIZE: 18px; LINE-HEIGHT: 100%"><STRONG>文件传输程序设计流程</STRONG></FONT><BR><BR>1 
+客户端的TCP应用程序流程 <BR><BR>（1）先用Socket（）创建本地套接口，给服务器端套接口地址结构赋值。 
+<BR><BR>（2）用Connect（）函数使本地套接口向服务器端套接口发出建立连接请求，经3次握手建立TCP连接。 
+<BR><BR>（3）用Read（）函数读取所要接收的文件名以及存放在内存里的文件内容。 
+<BR><BR>（4）用Open（）函数打开客户端新建立的目标文件，如果没有建立，该函数会自动生成目标文件，等待存放文件内容。 
+<BR><BR>（5）最后用Write（）函数将读取的文件内容存放在新的目标文件中，以实现服务器端向客户端的文件传输。 
+<BR><BR>（6）通信结束，用Close（）关闭套接口，停止接收文件。 <BR><BR>2 服务器端的TCP应用程序流程 
+<BR><BR>（1）先用Open（）函数打开等待传输的可读文件； <BR><BR>（2）用Socket（）创建套接口，并给套接口地址结构赋值； 
+<BR><BR>（3）用Bind（）函数绑定套接口； <BR><BR>（4）用Listen（）函数在该套接口上监听请求； 
+<BR><BR>（5）用Accept（）函数接受请求，产生新的套接口及描述字，并与客户端连接； 
+<BR><BR>（6）用Lseek（）函数是为了在每次接受客户机连接时，将用于读的源文件指针移到文件头； 
+<BR><BR>（7）用Read（）函数读取一定长度的源文件数据； 
+<BR><BR>（8）最后用Write（）函数将读取的源文件数据存放在内存中，以便客户端读取； 
+<BR><BR>（9）传输完毕时，用Close（）关闭所有进程，结束文件传输。 
+<BR><BR>在文件传输过程中，很重要的一点是：当服务器端开始发送数据时，客户端要同时进行文件数据的接收。如果客户端没有运行，服务器端会一直等待客户端发送请求，当服务器源文件发送完毕，则客户端也将源文件的数据完全接收，并生成新的目标文件，从而实现文件的网络通信。 
+<BR><BR></P></DIV>
+<P 
+id=trackback>你可以通过这个链接引用该篇文章:http://bingjiling.bokee.com/tb.b?diaryId=15896397 
+</P>
+<DIV class=entry-footer><SPAN class=f><SPAN class=pub-date 
+title=发布日期>2007.5.12</SPAN> <SPAN class=pub-time title=发布时间>21:10</SPAN> <SPAN 
+class=ln-author>作者：<A class=author 
+href="http://id.bokee.com/showInfo.b?username=bingjiling.bokee.com">寂寞17路</A></SPAN> 
+</SPAN><SPAN class=f>
+<SCRIPT>if(blogID!=null){document.writeln('<a class="ln-trackbacks" href=\"http://'+blogID+'/trackback/doTrackDiary.b?trackDiaryUrl=http://bingjiling.bokee.com/trackback/trackDiary.b?diaryId=15896397\">引用：0</a> | ');}</SCRIPT>
+<A class=ln-bookmark 
+href="javascript:addFavorite('linux下的网络编程%20入门篇%20zz','http://bingjiling.bokee.com/viewdiary.15896397.html');">收藏</A> 
+| <A class=ln-comments 
+href="http://bingjiling.bokee.com/viewdiary.15896397.html#remark">评论：2</A> | 
+<SPAN class=ln-viewed id=h15896397>阅读：0</SPAN>
+<SCRIPT>
+						putDiary($('h15896397'));
+						</SCRIPT>
+ </SPAN></DIV></DIV>
+<SCRIPT>statDiaryHit('bingjiling');</SCRIPT>
+<!-- 金行广告 -->
+<DIV class=operation id=shoulashou>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_wodeguanggao.gif"></SPAN>我的广告</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<SCRIPT 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/bi.com&amp;type=6"></SCRIPT>
+</DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV>
+<DIV class=operation>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_wenzhangpinglun.gif"></SPAN>我的搜索</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<FORM name=gform action=http://www.google.cn/search method=get target=_top>
+<TABLE bgColor=#ffffff border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=top noWrap align=left 
+      height=32><!-- Clickable Google Logo --><A 
+      href="javascript:submitFormWithChannel('logo')"><IMG height=23 alt=Google 
+      src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/logo_Google.gif" width=75 
+      align=middle border=0> </A><!-- END of Clickable Google Logo --></TD>
+    <TD noWrap><!-- Google Web Union Search Box --><INPUT maxLength=255 
+      size=24 name=q> </INPUT><INPUT onclick="javascript:document.getElementById('channel').value='sitesearch';document.getElementById('sitesearch').value='bokee.com';document.getElementById('gform').submit();" type=button value=站内搜索 name=sb> 
+      </INPUT><INPUT onclick="javascript:document.getElementById('channel').value='internetsearch';document.getElementById('sitesearch').value='';document.getElementById('gform').submit();" type=button value=搜索 name=sa> 
+      </INPUT><INPUT id=sitesearch type=hidden name=sitesearch> <INPUT 
+      type=hidden value=aff-bokee name=client> </INPUT><INPUT type=hidden 
+      value=gbk name=ie> </INPUT><INPUT type=hidden value=gbk name=oe> 
+      </INPUT><INPUT type=hidden value=zh-CN name=hl> </INPUT><INPUT id=channel 
+      type=hidden value=search name=channel> </INPUT></TD></TR>
+  <TR>
+    <TD></TD>
+    <TD 
+noWrap><!-- End of Google Web Union Search Box --></TD></TR></TBODY></TABLE></FORM></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV><!-- 文章评论 -->
+<DIV class=operation id=comment>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_wenzhangpinglun.gif"></SPAN>文章评论</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<DIV class=col-bodyimg><IMG height=30 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/logo_s.gif" width=30> </DIV>
+<DIV class=cmt-avatar>
+<DIV class=cmt-body>你讲的真清楚，条理好！ </DIV>
+<DIV class=cmt-info>
+<P>发布人：perfect!! 发布时间:2007.8.31</P></DIV></DIV>
+<DIV class=cmt-number>1</DIV>
+<DIV class=clear></DIV>
+<DIV class=col-bodyimg><A 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/bingjiling.bokee.htm"><IMG 
+height=30 onerror="this.src='http://blogteam.bokee.com/pub/images/logo_s.png';" 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/logo_s.png" width=30></A> </DIV>
+<DIV class=cmt-avatar>
+<DIV class=cmt-body>不是我，zz=转载，hoho~~ </DIV>
+<DIV class=cmt-info>
+<P>发布人：<A 
+href="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/bingjiling.bokee.htm">冰激凌</A> 
+发布时间:2007.8.31</P></DIV></DIV>
+<DIV class=cmt-number>2</DIV>
+<DIV class=clear></DIV>
+<DIV class="cmea pad-Left" id=cmt-area>
+<H4>添加评论</H4>
+<FORM name=remark onsubmit="return remarkSubmit();" action=/remark/remark.b 
+method=post><INPUT type=hidden value=BokeeToken name=webwork.token.name> <INPUT 
+type=hidden value=1FSB5OUQQDBTF1TSDYBK1C4OO6D3GFEM name=BokeeToken> <INPUT 
+type=hidden value=D name=blogRemark.remarkType> <INPUT type=hidden 
+value=15896397 name=blogRemark.objectId> <INPUT type=hidden 
+value=bingjiling.bokee.com name=blogRemark.blogId> 
+<DIV class=cmt-arearow><STRONG class=required>*</STRONG>昵&nbsp; 称：&nbsp;<INPUT 
+id=remarkNickName name=blogRemark.remarkNickName> </DIV>
+<DIV class="cmt-arearow areaind">&nbsp;主&nbsp; 页：&nbsp;<INPUT id=remarkEmail 
+value=HTTP:// name=blogRemark.remarkHomepage>(选填) </DIV>
+<DIV class=cmt-arearow><SPAN class=arearowver><STRONG 
+class=required>*</STRONG>内&nbsp; 容：</SPAN> <TEXTAREA class=areartext id=remarkContent onfocus=clearF() name=blogRemark.remarkContent>评论字数限制在200个字符之内</TEXTAREA> 
+</DIV>
+<DIV class=cmt-arearow><STRONG class=required>*</STRONG>验证码：&nbsp;<INPUT id=rand 
+style="MARGIN-BOTTOM: 10px" maxLength=5 name=rand><IMG 
+style="MARGIN: 0px 0px 3px 5px" 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/rndimg.png" border=0> </DIV>
+<DIV class=cmt-arearow><SPAN class=lt><STRONG 
+class=required>*</STRONG>为必填项</SPAN> <SPAN class="rl ceaaa"><INPUT class=style-btn type=submit value=发布 name=submitRemark></SPAN> 
+
+<DIV class=clear></DIV></DIV></FORM><A id=remark 
+name=remark></A></DIV></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV></DIV>
+<DIV id=rightDiv><!-- 个人形象 -->
+<DIV class=operation id=myPhoto>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_xingxiang.gif"></SPAN>个人形象</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<DL class=pingl-Dl>
+  <DT><IMG id=photoImg height=120 
+  onerror="this.src='http://blogteam.bokee.com/pub/images/logo_s.png'" 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/logo_s.png" width=120> 
+  <P><A href="javascript:doAddFriend('bingjiling.bokee.com');"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-addfriend.gif">加为好友</A> 
+  <A href="javascript:popPostMsg('bingjiling.bokee.com');"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-msg.gif">发送私信</A> </P>
+  <P><A href="javascript:popNote('bingjiling.bokee.com');"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-note.gif">给我留言</A> <A 
+  href="javascript:addFavorite('生命是一场奇异的旅行%20%20我们总在行走%20%20不停地经历花开花落%20%20不断寻找%20%20自由%20或幻象','http://bingjiling.bokee.com/');"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-favo.gif">加入收藏</A> </P>
+  <P><A 
+  href="http://group.bokee.com/group/userjump.action?userId=335921&amp;blogId=bingjiling.bokee.com"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-group.gif">我的群组</A> <A 
+  href="javascript:commendblog('bingjiling.bokee.com');"><IMG 
+  src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/myphoto-friend.gif">荐给好友</A> 
+  </P><!--	<p>
+		<a href="#x" onClick='jionChatRoomMyPhoto()'><img src="http://blogteam.bokee.com/pub/images/myphoto-chat.gif" alt="去聊天室" />去聊天室</a>
+		
+    	<a href="http://mov.bokee.com/" target="_black" ><img src="http://blogteam.bokee.com/pub/images/gomovie.gif">去看电影</a>
+     --><!--		
+		<a href="#x" onClick="javascript:alert('此功能正在开发中，过段时间就可以使用了！祝愉快^_^!');" style="color: #7F7F7F; "><img src="http://blogteam.bokee.com/pub/images/myphoto-mail.gif">发送邮件</a>
+//-->
+  <P></P></DT></DL></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV></DIV>
+<DIV class=operation id=rising>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_16.gif"></SPAN>反病毒中心</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<DIV class=rx_div>
+<DIV class=rx_con>
+<TABLE class=linkimg-rx cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD>
+      <DIV style="TEXT-ALIGN: center">以下服务由<FONT 
+  color=red>瑞星</FONT>友情提供</DIV></TD></TR>
+  <TR>
+    <TD class=youqingTd><A 
+      href="http://bokee.allyes.com/main/adfclick?db=bokee&amp;bid=248,1338,1751&amp;cid=0,0,0&amp;sid=17241&amp;advid=100&amp;camid=275&amp;show=ignore&amp;url=http://ad.doubleclick.net/clk;134682177;20226654;f?http://www.rising.com.cn/2008/trial/index.htm" 
+      target=_blank><B>瑞星2008版下载</B><BR>（全面免费）</A></TD></TR>
+  <TR>
+    <TD class=youqingTd><A 
+      href="http://bokee.allyes.com/main/adfclick?db=bokee&amp;bid=248,1340,1753&amp;cid=0,0,0&amp;sid=17243&amp;advid=100&amp;camid=275&amp;show=ignore&amp;url=http://tool.ikaka.com/" 
+      target=_blank><B>卡卡助手下载</B><BR>（免费杀流氓软件工具）</A></TD></TR>
+  <TR>
+    <TD class=youqingTd><A 
+      href="http://bokee.allyes.com/main/adfclick?db=bokee&amp;bid=248,1341,1754&amp;cid=0,0,0&amp;sid=17244&amp;advid=100&amp;camid=275&amp;show=ignore&amp;url=http://it.rising.com.cn/Channels/Service/index.shtml" 
+      target=_blank><B>专杀工具下载</B><BR>（50余种病毒专杀下载）</A></TD></TR></TBODY></TABLE></DIV></DIV></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV>
+<DIV class=operation id=blogIndex>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_wodeguanggao.gif"></SPAN>定制广告</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right><A class=youqingTd 
+href="http://alimamainc.bokee.com/viewdiary.19044158.html" 
+target=blank><B>阿里妈妈与bokee联手&nbsp;&nbsp;<BR>专业定做属于您自己的广告</B></A> </DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV><!--更多文章-->
+<DIV class=operation id=entry-browse-col>
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_gengduowenzhang.gif"></SPAN>更多文章</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<DIV class=newarticle>
+<UL class=pingl-Dl>
+  <LI>·<A 
+  href="http://bingjiling.bokee.com/viewdiary.16063477.html">不要做浮躁的嵌入式系统工程师zz</A> 
+  </LI>
+  <LI>·<A href="http://bingjiling.bokee.com/viewdiary.18304456.html">该日志已锁定</A> 
+  </LI>
+  <LI>·<A 
+  href="http://bingjiling.bokee.com/viewdiary.18240004.html">一些下载交叉编译环境的网站</A> 
+  </LI>
+  <LI>·<A 
+  href="http://bingjiling.bokee.com/viewdiary.18183981.html">点名（wendy，naoki，allen）</A> 
+
+  <UL></UL></LI></UL></DIV></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV><!-- 相关博客文章 -->
+<DIV class=operation style="DISPLAY: none">
+<H3 class=select>
+<P class=newly-title><SPAN class=newly-Img><IMG 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/ico_xiangguanbokewenzhang.gif"></SPAN>相关博客文章</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<DIV class=interblog id=interdiary>数据读取中.... </DIV></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV><!-- 留下脚印 
+	  <p id="arrow_l"   style="display:none;position:absolute;height:30px; width:12px; background-color:#fff; border:1px solid #ccc; border-left:0; padding-top:20px; z-index:1;"><img id="arrow_001" src="http://blogteam.bokee.com/pub/images/jiantou01.gif" /></p><div id="show_lists" class="pos-Div" style="display:none;width:62px; height:60px;border:1px solid #ccc;margin-top:1px;background-color:#fff; position:absolute; z-index:1;"><a href="#">发送消息</a><a href="#">加为好友</a><a href="#">查看资料</a></div>
+					  
+		<div class="operation">
+			<h3 class="select"><p class="newly-title"><span class="newly-Img"><img src="http://blogteam.bokee.com/pub/images/ico_liuxiajiaoyin.gif" /></span>留下脚印</p></h3>
+			<div class="col-body">
+			  <script src="http://blogteam.bokee.com/pub/js/pop_new.js" language="JavaScript"></script>
+				<div class="newly-right">
+					<div class="pingl-Dl">
+					 
+					<script language="javascript" src='http://bingjiling.bokee.com/visitor/visitor.fcg?owner=bingjiling&p=15896397&type=3&op=1'>
+					</script>
+					  
+				<div class="clear"></div>
+			</div>
+				</div>
+			</div>
+			<div class="newly-bot"><div class="newly-bot01"></div></div>
+		</div>
+		
+     --></DIV></DIV>
+<DIV id=container>
+<DIV class=operation>
+<H3 class=select>
+<P class=newly-title>相关服务</P></H3>
+<DIV class=col-body>
+<DIV class=newly-right>
+<TABLE class="xiangg-Tab pingl-Dl">
+  <TBODY>
+  <TR>
+    <TD class="spanButton fonw">关于博客</TD>
+    <TD class="spanButton fonw">关于博客网</TD>
+    <TD class="spanButton fonw">用户帮助</TD>
+    <TD class="spanButton fonw">产品展示</TD>
+    <TD class="spanButton fonw">频道推荐</TD>
+    <TD class="spanButton fonw">热点与排行</TD></TR>
+  <TR>
+    <TD><A href="http://blog.bokee.com/help/what.GBK.htm">什么是博客?</A></TD>
+    <TD><A href="http://www.bokee.com/new/about/aboutus.html">本站介绍</A></TD>
+    <TD><A href="http://reg.bokee.com/account/Register.b">用户注册</A></TD>
+    <TD><A href="http://www.booso.com/">博客搜索</A></TD>
+    <TD><A href="http://mm.bokee.com/">美女博客</A></TD>
+    <TD><A href="http://news.bokee.com/">今日焦点文章</A></TD></TR>
+  <TR>
+    <TD><A href="http://research.bokee.com/">博客研究</A></TD>
+    <TD><A href="http://www.bokee.com/new/about/fazhan.htm">历史</A></TD>
+    <TD><A href="http://www.bokee.com/new/about/service.htm">服务条款</A></TD>
+    <TD><A href="http://blogs.bokee.com/contribute">投稿</A></TD>
+    <TD><A href="http://entstar.bokee.com/index.php">明星博客</A></TD>
+    <TD><A href="http://pic.bokee.com/">热门图片</A></TD></TR>
+  <TR>
+    <TD><A href="http://group.bokee.com/web20/">web2.0论坛</A></TD>
+    <TD><A href="http://www.booso.com/">博客搜索</A></TD>
+    <TD><A href="http://help.bokee.com/">客服电话</A></TD>
+    <TD><A href="http://group.bokee.com/">博客群</A></TD>
+    <TD><A href="http://mm.bokee.com/couple">情侣</A></TD>
+    <TD><A href="http://blogs.bokee.com/huangye/index.shtml">热点博客排行</A></TD></TR>
+  <TR>
+    <TD><A href="http://fxd.bokee.com/">方兴东观察</A></TD>
+    <TD><A href="http://www.bokee.com/new/about/contact.html">联系我们</A></TD>
+    <TD><A href="http://help.bokee.com/">产品公告</A></TD>
+    <TD><A href="http://www.booso.com/cast.html">博客联播</A></TD>
+    <TD><A href="http://life.bokee.com/baby/index.shtml">宝宝秀</A></TD>
+    <TD><A href="http://zt.bokee.com/">精彩专题</A></TD></TR>
+  <TR>
+    <TD><A href="http://www.chinalabs.com/">互联网实验室</A></TD>
+    <TD><A href="http://blogs.bokee.com/contribute">投稿</A></TD>
+    <TD><A href="http://help.bokee.com:8086/help/index.html">博客教程</A></TD>
+    <TD><A href="http://mail.bokee.com/">邮箱</A></TD>
+    <TD><A href="http://ent.bokee.com/">娱乐</A></TD>
+    <TD><A href="http://mov.bokee.com/" target=_blank>火爆视频</A></TD></TR>
+  <TR>
+    <TD><A href="http://blogs.bokee.com/" target=_blank>博客公社</A></TD>
+    <TD><A href="http://hr.bokee.com/">招聘</A></TD>
+    <TD><A 
+    href="http://group.bokee.com/group/home.action?groupId=6">技巧论坛</A></TD>
+    <TD><A href="http://bank.bokee.com/">博客金行</A></TD>
+    <TD><A href="http://2008.bokee.com/">博客奥运</A></TD>
+    <TD><A href="http://groups.bokee.com/catagory/index.shtml">分类群组</A></TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD><A href="http://blogs.bokee.com/help/zhubian/index.shtml">主编热线</A></TD>
+    <TD><A href="http://net.china.cn/chinese/index.htm">不良信息反馈</A></TD>
+    <TD><A href="http://bt.bokee.com/">BT下载</A></TD>
+    <TD><A href="http://vip.bokee.com/">名家专栏</A></TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD><A 
+      href="http://adimage.bokee.com/images/ad/minisite/service/serve.htm">广告服务</A></TD>
+    <TD>&nbsp;</TD>
+    <TD><A href="http://photo.bokee.com/">图片博客</A></TD>
+    <TD><A href="http://group.bokee.com/wall/home.action">许愿墙</A></TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD><A href="http://www.bokee.com/new/about/sitemap.html">导航</A></TD>
+    <TD>&nbsp;</TD>
+    <TD><A href="http://mov.bokee.com/">播客</A></TD>
+    <TD><A href="http://blogs.bokee.com/contribute/">投稿器</A></TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD>&nbsp;</TD>
+    <TD></TD>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR></TBODY></TABLE></DIV></DIV>
+<DIV class=newly-bot>
+<DIV class=newly-bot01></DIV></DIV></DIV></DIV><!-- 页面底部  --><!-- 页面底部  -->
+<DIV id=pageFooter>
+<P>Copyright 2002-2006 Bokee.com </P>
+<P>All Rights Reserved</P></DIV>
+<SCRIPT language=javascript 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/count.js" 
+type=text/javascript></SCRIPT>
+</DIV><IMG style="DISPLAY: none; WIDTH: 0px; HEIGHT: 0px" 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/pvcounter.htm"> <!-- 扩展标签 -->
+<DIV id=extraDiv1></DIV>
+<DIV id=extraDiv2></DIV>
+<DIV id=extraDiv3></DIV>
+<DIV id=extraDiv4></DIV>
+<DIV id=extraDiv5></DIV>
+<DIV id=extraDiv6></DIV>
+<SCRIPT type=text/javascript>
+<!--
+Empty_show = "empty.gif";
+TelSense_ad_output = "ZoneID";
+TelSense_ad_format = "";
+Product_zoneID = "167";
+Web_userID = "193";
+//-->
+</SCRIPT>
+
+<SCRIPT src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/Default.aspx" 
+type=text/javascript></SCRIPT>
+<IMG id=caller style="DISPLAY: none; WIDTH: 0px; HEIGHT: 0px" 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/bingjiling.bokee.htm"> <IMG 
+id=self style="DISPLAY: none; WIDTH: 0px; HEIGHT: 0px" 
+src="linux下的网络编程 入门篇 zz LINUX LINUX 木子小屋.files/bingjiling.bokee.htm">
+<SCRIPT language=javascript>
+if(getBlogID()!=null){
+document.getElementById('caller').src="http://bingjiling.bokee.com/visitor/visitor.fcg?owner=bingjiling&visitor=" + getBlogIDName()+ "&p=15896397&type=3&op=0";
+document.getElementById('self').src="http://"+getBlogIDName()+"/visitor/visitor.fcg?owner=" +getBlogIDName() +"&accessor=bingjiling&op=2";
+}
+</SCRIPT>
+
+<SCRIPT>
+var nname = document.getElementById("remarkNickName");
+if(getBlogID()!=null){
+	if(nname ==null || nname == ""){
+		nname.value = getUserName();
+	}
+}
+
+
+
+//取得相关博客文章
+//getInterfixDiary();
+
+//取得老乡数据
+var province = '%B8%A3%BD%A8'
+//getTownsman(province);
+//取得相同生日的数据
+var birthDay = '1984-6-6';
+//取得相同生日的数据
+//getSameBirthday(birthDay);
+//callInsertData();
+
+
+</SCRIPT>
+
+<SCRIPT language=javascript src="" type=text/javascript></SCRIPT>
+ </BODY></HTML>

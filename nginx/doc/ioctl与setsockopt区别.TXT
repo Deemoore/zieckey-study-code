@@ -1,0 +1,8 @@
+ioctl与setsockopt到底有什么区别
+
+setsockopt 是设置 socket 的选项。
+ioctl 是设置文件句柄的选项。
+socket 也是一种文件句柄，
+所以 ioctl 当然可以实现 setsockopt 的功能哦。
+
+

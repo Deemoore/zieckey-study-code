@@ -1,0 +1,80 @@
+我的第一个结构(在这个技术手册TM中)--struct sockaddr.。这个结构 为许多类型的套接字储存套接字地址信息：
+struct sockaddr {
+　　 unsigned short sa_family; /* 地址家族, AF_xxx */
+　　 char sa_data[14]; /*14字节协议地址*/
+　　 };
+sa_family 能够是各种各样的类型，但是在这篇文章中都是 "AF_INET"。 sa_data包含套接字中的目标地址和端口信息。
+这好像有点 不明智。
+为了处理struct sockaddr，程序员创造了一个并列的结构： struct sockaddr_in ("in" 代表 "Internet"。)
+struct sockaddr_in {
+　　 short int sin_family; /* 通信类型 */
+　　 unsigned short int sin_port; /* 端口 */
+　　 struct in_addr sin_addr; /* Internet 地址 */
+　　 unsigned char sin_zero[8]; /* 与sockaddr结构的长度相同*/
+　　 };
+用这个数据结构可以轻松处理套接字地址的基本元素。注意 sin_zero (它被加入到这个结构，并且长度和 struct
+sockaddr 一样) 应该使用函数 bzero() 或 memset() 来全部置零。 同时，这一重要的字节，一个指向 sockaddr_in结构
+体的指针也可以被指向结构体sockaddr并且代替它。这 样的话即使 socket() 想要的是 struct sockaddr *，你仍然可以
+使用 struct sockaddr_in，并且在最后转换。同时，注意 sin_family 和 struct sockaddr 中的 sa_family 一致并能够
+设置为 "AF_INET"。最后，sin_port和 sin_addr 必须是网络字节顺序 (Network Byte Order)！
+你也许会反对道："但是，怎么让整个数据结构 struct in_addr sin_addr 按照网络字节顺序呢?" 要知道这个问题的答
+案，我们就要仔细的看一看这 个数据结构： struct in_addr, 有这样一个联合 (unions)：
+/* Internet 地址 (一个与历史有关的结构) */
+　　 struct in_addr {
+　　 unsigned long s_addr;
+　　 };
+它曾经是个最坏的联合，但是现在那些日子过去了。如果你声明 "ina" 是数据结构 struct sockaddr_in 的实例，那么
+"ina.sin_addr.s_addr" 就储 存4字节的 IP 地址(使用网络字节顺序)。如果你不幸的系统使用的还是恐 怖的联合
+struct in_addr ，你还是可以放心4字节的 IP 地址并且和上面 我说的一样(这是因为使用了“#define”。) 
+
+
+
+
+
+
+struct hostent结构体
+
+这个数据结构是这样的： 
+	struct hostent { 
+	char *h_name; 
+	char **h_aliases; 
+	int h_addrtype; 
+	int h_length; 
+	char **h_addr_list; 
+	}; 
+	#define h_addr h_addr_list[0]  
+这里是这个数据结构的详细资料：  
+struct hostent:  
+　　h_name – 地址的正式名称。 
+　　h_aliases – 空字节-地址的预备名称的指针。 
+　　h_addrtype –地址类型; 通常是AF_INET。  
+　　h_length – 地址的比特长度。 
+　　h_addr_list – 零字节-主机网络地址指针。网络字节顺序。 
+　　h_addr - h_addr_list中的第一地址。 
+gethostbyname () 成功时返回一个指向结构体 hostent 的指针，或者 是个空 (NULL) 指针。(但是和以前不同，不设置errno，h_errno 设置错 误信息。请看下面的 herror()。) 但是如何使用呢? 这个函数可不象它看上去那么难用。 
+这里是个例子： 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <errno.h> 
+#include <netdb.h> 
+#include <sys/types.h> 
+#include <netinet/in.h> 
+int main(int argc, char *argv[]) 
+{ 
+	struct hostent *h; 
+	if (argc != 2) 
+	{ /* 检查命令行 */ 
+		fprintf(stderr,"usage: getip address\n"); 
+		exit(1); 
+	} 
+	if ((h=gethostbyname(argv[1])) == NULL) 
+	{ /* 取得地址信息 */ 
+		herror("gethostbyname"); 
+		exit(1); 
+	} 
+	printf("Host name : %s\n", h->h_name); 
+　　printf("IP Address : %s\n",inet_ntoa(*((struct in_addr *)h->h_addr))); 
+	return 0; 
+} 
+在使用 gethostbyname() 的时候，你不能用perror() 打印错误信息 (因为 errno 没有使用)，你应该调用 herror()。
+相当简单，你只是传递一个保存机器名的字符串(例如 "whitehouse.gov") 给gethostbyname()，然后从返回的数据结构  struct hostent 中获取信息。唯一也许让人不解的是输出 IP 地址信息。h->h_addr 是一个 char *， 但是 inet_ntoa() 需要的是  struct in_addr。因此，我转换 h->h_addr 成 struct in_addr *，然后得到数据。 
