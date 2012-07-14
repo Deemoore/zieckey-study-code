@@ -863,6 +863,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\user_ext_module\ngx_http_hello_world.c"
+					>
+				</File>
+				<File
 					RelativePath=".\http\modules\ngx_http_index_module.c"
 					>
 				</File>
@@ -936,10 +940,6 @@
 				</File>
 				<File
 					RelativePath=".\http\modules\ngx_http_ssl_module.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\nginx-1.0.5\src\http\modules\ngx_http_static_module.c"
 					>
 				</File>
 				<File
