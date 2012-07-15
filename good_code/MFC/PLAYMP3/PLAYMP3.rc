@@ -1,0 +1,310 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\PLAYMP3.rc2""  // non-Microsoft eMbedded Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""wceres.rc""         // WCE-specific components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\PLAYMP3.ico"
+IDI_MP3                 ICON    DISCARDABLE     "res\\icon1.ico"
+IDI_PATH                ICON    DISCARDABLE     "res\\ico00001.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BKG                 BITMAP  DISCARDABLE     "res\\±³¾°.bmp"
+IDB_SPAUSE_B            BITMAP  DISCARDABLE     "res\\28.201B.bmp"
+IDB_BKG1                BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+IDB_MUTE                BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
+IDB_PLAY                BITMAP  DISCARDABLE     "res\\mp3.bmp"
+IDB_OPEN_ADD_W          BITMAP  DISCARDABLE     "res\\openfile\\205.196.bmp"
+IDB_OPEN_ADD_B          BITMAP  DISCARDABLE     "res\\openfile\\bitmap2.bmp"
+IDB_OPEN_CANCEL_W       BITMAP  DISCARDABLE     "res\\openfile\\267.196.bmp"
+IDB_OPEN_CANCEL_B       BITMAP  DISCARDABLE     "res\\openfile\\10.bmp"
+IDB_OPEN_ALL_W          BITMAP  DISCARDABLE     "res\\openfile\\142.196.bmp"
+IDB_OPEN_ALL_B          BITMAP  DISCARDABLE     "res\\openfile\\bmp00004.bmp"
+IDB_OPEN_BKG            BITMAP  DISCARDABLE     "res\\openfile\\bmp00005.bmp"
+IDB_DOWN_W              BITMAP  DISCARDABLE     "res\\bmp00003.bmp"
+IDB_DOWN_B              BITMAP  DISCARDABLE     "res\\20.140.bmp"
+IDB_UP_W                BITMAP  DISCARDABLE     "res\\bmp00002.bmp"
+IDB_UP_B                BITMAP  DISCARDABLE     "res\\20.22.bmp"
+IDB_PLAYMP3_B           BITMAP  DISCARDABLE     "res\\1.bmp"
+IDB_PLAYMP3_W           BITMAP  DISCARDABLE     "res\\25.201.bmp"
+IDB_STOP_W              BITMAP  DISCARDABLE     "res\\bmp00006.bmp"
+IDB_STOP_B              BITMAP  DISCARDABLE     "res\\64.201.bmp"
+IDB_LEFT_W              BITMAP  DISCARDABLE     "res\\bmp00007.bmp"
+IDB_LEFT_B              BITMAP  DISCARDABLE     "res\\103.201.bmp"
+IDB_RIGHT_W             BITMAP  DISCARDABLE     "res\\bmp00008.bmp"
+IDB_RIGHT_B             BITMAP  DISCARDABLE     "res\\142.201.bmp"
+IDB_ADD_W               BITMAP  DISCARDABLE     "res\\6.bmp"
+IDB_ADD_B               BITMAP  DISCARDABLE     "res\\221.201.bmp"
+IDB_SUB_W               BITMAP  DISCARDABLE     "res\\7.bmp"
+IDB_SUB_B               BITMAP  DISCARDABLE     "res\\260.201.bmp"
+IDB_RANDOM_W            BITMAP  DISCARDABLE     "res\\182.201.bmp"
+IDB_CANCEL_B            BITMAP  DISCARDABLE     "res\\8.bmp"
+IDB_CANCEL_W            BITMAP  DISCARDABLE     "res\\288.177.bmp"
+IDB_ROUND_W             BITMAP  DISCARDABLE     "res\\456.bmp"
+IDB_CLOSE_B             BITMAP  DISCARDABLE     "res\\24.bmp"
+IDB_CLOSE_W             BITMAP  DISCARDABLE     "res\\276.22.bmp"
+IDB_LIST                BITMAP  DISCARDABLE     "res\\18.19.bmp"
+IDB_OPEN_UP_W           BITMAP  DISCARDABLE     "res\\openfile\\bmp00010.bmp"
+IDB_OPEN_DOWN_W         BITMAP  DISCARDABLE     "res\\openfile\\2.bmp"
+IDB_OPEN_UP_B           BITMAP  DISCARDABLE     "res\\openfile\\18.197.bmp"
+IDB_OPEN_DOWN_B         BITMAP  DISCARDABLE     "res\\openfile\\68.197.bmp"
+IDB_VOL_DIAN            BITMAP  DISCARDABLE     "res\\ÒôÁ¿µã.bmp"
+IDB_volume              BITMAP  DISCARDABLE     "res\\175.178.bmp"
+IDB_STATE_DIAN          BITMAP  DISCARDABLE     "res\\½ø¶Èµã.bmp"
+IDB_BLACK_VOL_DIAN      BITMAP  DISCARDABLE     "res\\½ø¶ÈÌõ2.bmp"
+IDB_BLACK_STATE_DIAN    BITMAP  DISCARDABLE     "res\\½ø¶ÈÌõ1.bmp"
+IDB_OPENFILE_UP1        BITMAP  DISCARDABLE     "res\\openfile\\up2.bmp"
+IDB_OPENFILE_UP2        BITMAP  DISCARDABLE     "res\\openfile\\up1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_OPENFILE DIALOG DISCARDABLE  0, 0, 287, 180
+STYLE WS_POPUP
+CLASS "OPENPLAY"
+FONT 10, "System"
+BEGIN
+    CONTROL         "List1",IDC_LISTCTRL,"SysListView32",WS_BORDER | 
+                    WS_TABSTOP,31,24,86,50
+END
+
+IDD_NEW_OPENFILE DIALOG DISCARDABLE  0, 0, 187, 94
+STYLE WS_POPUP
+FONT 10, "System"
+BEGIN
+    CONTROL         "List1",IDC_PATH,"SysListView32",LVS_ALIGNLEFT | 
+                    WS_BORDER | WS_TABSTOP,6,0,60,50
+    CONTROL         "List2",IDC_FILE,"SysListView32",LVS_SHOWSELALWAYS | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,120,7,60,50
+    CONTROL         "up",IDC_UP,"Button",BS_OWNERDRAW | WS_TABSTOP,7,73,50,
+                    14
+    CONTROL         "ALL",IDC_ALL,"Button",BS_OWNERDRAW | WS_TABSTOP,63,73,
+                    50,14
+    CONTROL         "add",IDC_ADD,"Button",BS_OWNERDRAW | WS_TABSTOP,130,73,
+                    50,14
+    CONTROL         "ok",IDC_EXIT,"Button",BS_OWNERDRAW | WS_TABSTOP,93,58,
+                    50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_OPENFILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 280
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_NEW_OPENFILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PLAYMP3_DIALOG DIALOGEX 0, 0, 246, 157
+STYLE WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_APPWINDOW | 0x80000000L
+CLASS "PLAY"
+FONT 8, "System"
+BEGIN
+    LISTBOX         IDC_LIST,0,78,35,72,LBS_NOINTEGRALHEIGHT | NOT WS_BORDER | 
+                    WS_TABSTOP
+    LTEXT           "",IDC_PLAYTIME,192,23,47,8,NOT WS_VISIBLE | NOT 
+                    WS_GROUP
+    LTEXT           "",IDC_PLAYING,90,102,44,13,NOT WS_VISIBLE | NOT 
+                    WS_GROUP
+    LTEXT           "",IDC_NAMEING,197,4,33,8,NOT WS_VISIBLE | NOT WS_GROUP
+    CONTROL         256,IDC_VOL_DIAN,"Static",SS_BITMAP,78,60,9,12
+    CONTROL         259,IDC_STATE_DIAN,"Static",SS_BITMAP,31,22,19,12
+    LTEXT           "",IDC_LRCNEW,121,50,79,41
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PLAYMP3_DIALOG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 239
+        BOTTOMMARGIN, 150
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "V_MAX\0"
+            VALUE "FileDescription", "PLAYMP3 WCE MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "PLAYMP3\0"
+            VALUE "LegalCopyright", "Copyright © 2007\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "PLAYMP3.exe\0"
+            VALUE "ProductName", "PLAYMP3 Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\PLAYMP3.rc2"  // non-Microsoft eMbedded Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "wceres.rc"         // WCE-specific components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

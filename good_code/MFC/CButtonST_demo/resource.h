@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by CButtonST_Demo.rc
 //
 #define IDD_CBUTTONST_DEMO_DIALOG       102
@@ -86,13 +86,22 @@
 #define IDC_BTNFACE                     1023
 #define IDC_BTNSHADE1                   1025
 #define IDC_BTNSHADE2                   1026
+#define IDC_SCROLLBAR1                  1026
 #define IDC_BTNSHADE3                   1027
+#define IDC_SCROLLBAR2                  1027
 #define IDC_BTNSHADE4                   1028
+#define IDC_SLIDER1                     1028
 #define IDC_BTNSHADE5                   1029
+#define IDC_SPIN1                       1029
 #define IDC_BTNSHADE6                   1030
+#define IDC_PROGRESS1                   1030
 #define IDC_BTNSHADE7                   1031
+#define IDC_SLIDER2                     1031
 #define IDC_BTNSHADE8                   1032
+#define IDC_SPIN2                       1032
 #define IDC_BTNSHADE9                   1033
+#define IDC_PROGRESS2                   1033
+#define IDC_HOTKEY1                     1034
 #define IDM_ITEM1                       32771
 #define IDM_ITEM2                       32772
 
@@ -102,7 +111,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        188
 #define _APS_NEXT_COMMAND_VALUE         32773
-#define _APS_NEXT_CONTROL_VALUE         1026
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
