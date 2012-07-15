@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CDlgBasic, CDialog)
 	//{{AFX_MSG_MAP(CDlgBasic)
 	ON_BN_CLICKED(IDC_BTNDISABLED, OnBtnDisabled)
 	//}}AFX_MSG_MAP
+    ON_BN_CLICKED(IDC_BTNKEYMANAGER, &CDlgBasic::OnBnClickedBtnkeymanager)
 END_MESSAGE_MAP()
 
 BOOL CDlgBasic::OnInitDialog() 
@@ -58,6 +59,8 @@ BOOL CDlgBasic::OnInitDialog()
 	// 48x48 icon button
 	m_btnKeyManager.SetIcon(IDI_KEYMANAGER);
 	m_btnKeyManager.OffsetColor(CButtonST::BTNST_COLOR_BK_IN, shBtnColor);
+    
+    //SetDlgItemText(IDC_BTNKEYMANAGER, L"xxxxxxxxxxxx");
 	// Disabled button
 	m_btnDisabled.SetIcon(IDI_SOUND);
 	m_btnDisabled.OffsetColor(CButtonST::BTNST_COLOR_BK_IN, shBtnColor);
@@ -109,3 +112,21 @@ void CDlgBasic::OnBtnDisabled()
 	// Disable the button
 	m_btnDisabled.EnableWindow(FALSE);
 } // End of OnBtnDisabled
+
+void CDlgBasic::OnBnClickedBtnkeymanager()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    static int i = 0;
+    if (i++ % 2 == 0)
+    {
+        m_btnKeyManager.SetIcon(IDI_CANCEL3);
+        m_btnDisabled.EnableWindow(TRUE);
+    }
+    else
+    {
+        m_btnKeyManager.SetIcon(IDI_KEYMANAGER);
+    }
+}
+
+
+

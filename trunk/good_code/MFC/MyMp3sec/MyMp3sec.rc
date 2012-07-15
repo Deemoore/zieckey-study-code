@@ -1,0 +1,399 @@
+//Microsoft eMbedded Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\MyMp3sec.rc2""  // non-Microsoft eMbedded Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""wceres.rc""         // WCE-specific components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\MyMp3sec.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PLAYBOX DIALOG DISCARDABLE  0, 0, 367, 286
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 10, "System"
+BEGIN
+    CONTROL         "PEXIT",IDC_PEXIT,"Button",BS_OWNERDRAW | WS_TABSTOP,302,
+                    15,45,17
+    CTEXT           "songname",IDC_SONAME,83,95,204,18,SS_CENTERIMAGE
+    LTEXT           "Static",IDC_BMPSHOW,87,138,200,20
+    CTEXT           "exe",IDC_EXE,146,116,83,18,SS_CENTERIMAGE
+    CONTROL         "PREPLAY",IDC_PREPLAY,"Button",BS_OWNERDRAW | WS_TABSTOP,
+                    192,15,45,17
+    LTEXT           "PROGRESSTIME",IDC_PROGRESSTIME,340,145,27,8,NOT 
+                    WS_VISIBLE
+    CONTROL         "PPAUSE",IDC_PPAUSE,"Button",BS_OWNERDRAW | WS_TABSTOP,
+                    137,15,45,17
+    CONTROL         "PVOLNEC",IDC_PVOLNEC,"Button",BS_OWNERDRAW | WS_TABSTOP,
+                    100,170,22,13
+    CONTROL         "PVOLADD",IDC_PVOLADD,"Button",BS_OWNERDRAW | WS_TABSTOP,
+                    257,170,22,13
+    LTEXT           "VOLUME",IDC_BMPSHOWVOLUME,123,168,133,19
+    CONTROL         "PBACK",IDC_PBACK,"Button",BS_OWNERDRAW | WS_TABSTOP,247,
+                    15,45,17
+    CONTROL         148,IDC_STATIC,"Static",SS_BITMAP,1,1,36,27
+    CONTROL         "PPICTURE",IDC_PPICTURE,"Button",BS_OWNERDRAW | 
+                    WS_TABSTOP,3,115,43,11
+    CONTROL         "PPICTURE1",IDC_PPICTURE1,"Button",BS_OWNERDRAW | 
+                    WS_TABSTOP,3,115,43,11
+    CONTROL         166,IDC_STATIC,"Static",SS_BITMAP,74,76,220,123
+END
+
+IDD_DELOG DIALOG DISCARDABLE  0, 0, 187, 94
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,130,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,130,24,50,14
+END
+
+IDD_DELETE DIALOG DISCARDABLE  0, 0, 366, 275
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 10, "System"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,173,153,34,
+                    16
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,239,
+                    153,34,16
+    CONTROL         159,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,
+                    366,275
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PLAYBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 360
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 279
+    END
+
+    IDD_DELOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_DELETE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 359
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 268
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_V                   BITMAP  DISCARDABLE     "picture\\v.bmp"
+IDB_PEXIT               BITMAP  DISCARDABLE     "picture\\PEXIT.bmp"
+IDB_PROGRESSBACK        BITMAP  DISCARDABLE     "picture\\progressback.bmp"
+IDB_PROGRESSFORE        BITMAP  DISCARDABLE     "picture\\progressfore.bmp"
+IDB_MAN                 BITMAP  DISCARDABLE     "picture\\man2.bmp"
+IDB_VOLUMEBACK          BITMAP  DISCARDABLE     "picture\\volumeback.bmp"
+IDB_VOLUMEFORE          BITMAP  DISCARDABLE     "picture\\volumefore.bmp"
+IDB_PPAUSE              BITMAP  DISCARDABLE     "picture\\ÔÝÍ£.bmp"
+IDB_PREPLAY             BITMAP  DISCARDABLE     "picture\\ÖØ¸´²¥·Å.bmp"
+IDB_PBACK               BITMAP  DISCARDABLE     "picture\\·µ»Ø.bmp"
+IDB_PVOLNEC             BITMAP  DISCARDABLE     "picture\\volumesub1.bmp"
+IDB_PVOLNECC            BITMAP  DISCARDABLE     "picture\\volumesub2.bmp"
+IDB_PVOLADD             BITMAP  DISCARDABLE     "picture\\volumeadd1.bmp"
+IDB_PVOLADDD            BITMAP  DISCARDABLE     "picture\\volumeadd2.bmp"
+IDB_LEFTUP              BITMAP  DISCARDABLE     "picture\\×óÉÏ½Ç.bmp"
+IDB_BITMAP13            BITMAP  DISCARDABLE     "picture\\×ó²àÍ¼±ê1.bmp"
+IDB_BITMAP22            BITMAP  DISCARDABLE     "picture\\×ó²àÍ¼±ê.bmp"
+IDB_PLAY                BITMAP  DISCARDABLE     "picture\\4.bmp"
+IDB_PLAYALL             BITMAP  DISCARDABLE     "picture\\7.bmp"
+IDB_FIRST               BITMAP  DISCARDABLE     "picture\\FIRST.bmp"
+IDB_END                 BITMAP  DISCARDABLE     "picture\\END.bmp"
+IDB_PRE                 BITMAP  DISCARDABLE     "picture\\PRE.bmp"
+IDB_NEXT                BITMAP  DISCARDABLE     "picture\\NEXT.bmp"
+IDB_DELETEOK            BITMAP  DISCARDABLE     "picture\\DELETE-OK.bmp"
+IDB_DELETECANCEL        BITMAP  DISCARDABLE     "picture\\DELETE-CANCLE.bmp"
+IDB_DELE                BITMAP  DISCARDABLE     "picture\\9.bmp"
+IDB_DELETEDLG           BITMAP  DISCARDABLE     "picture\\¸´¼þ 41.bmp"
+IDB_BOX                 BITMAP  DISCARDABLE     "picture\\¿ò.bmp"
+IDB_kuang               BITMAP  DISCARDABLE     "picture\\¿ò1.bmp"
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MYMP3SEC_DIALOG DIALOG DISCARDABLE  0, 0, 386, 270
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_APPWINDOW | 0x80000000L
+FONT 8, "System"
+BEGIN
+    CONTROL         "",IDC_MEDIAPLAYER1,
+                    "{22D6F312-B0F6-11D0-94AB-0080C74C7E95}",NOT WS_VISIBLE | 
+                    WS_TABSTOP,0,120,8,16
+    LTEXT           "1",1,60,80,106,12,SS_NOTIFY
+    LTEXT           "2",2,60,100,106,12,SS_NOTIFY
+    LTEXT           "3",3,59,118,106,12,SS_NOTIFY
+    LTEXT           "4",4,59,137,106,12,SS_NOTIFY
+    LTEXT           "5",5,59,155,106,12,SS_NOTIFY
+    LTEXT           "6",6,59,175,106,12,SS_NOTIFY
+    LTEXT           "7",7,59,196,106,12,SS_NOTIFY
+    LTEXT           "8",8,195,82,113,12,SS_NOTIFY
+    LTEXT           "9",9,195,102,113,12,SS_NOTIFY
+    LTEXT           "10",10,195,120,113,12,SS_NOTIFY
+    LTEXT           "11",11,195,139,113,12,SS_NOTIFY
+    LTEXT           "12",12,195,157,113,12,SS_NOTIFY
+    LTEXT           "13",13,195,177,113,12,SS_NOTIFY
+    LTEXT           "14",14,195,198,113,12,SS_NOTIFY
+    CONTROL         "HOME",IDC_HOME,"Button",BS_OWNERDRAW | WS_TABSTOP,309,4,
+                    35,15
+    CONTROL         131,IDC_v1,"Static",SS_BITMAP,45,80,13,12
+    CONTROL         131,IDC_v2,"Static",SS_BITMAP,45,99,13,12
+    CONTROL         131,IDC_v3,"Static",SS_BITMAP,45,118,13,12
+    CONTROL         131,IDC_v4,"Static",SS_BITMAP,45,137,13,12
+    CONTROL         131,IDC_v5,"Static",SS_BITMAP,45,156,13,12
+    CONTROL         131,IDC_v6,"Static",SS_BITMAP,45,175,13,12
+    CONTROL         131,IDC_v7,"Static",SS_BITMAP,45,194,13,12
+    CONTROL         131,IDC_v8,"Static",SS_BITMAP,181,80,13,12
+    CONTROL         131,IDC_v9,"Static",SS_BITMAP,181,99,13,12
+    CONTROL         131,IDC_v10,"Static",SS_BITMAP,181,118,13,12
+    CONTROL         131,IDC_v11,"Static",SS_BITMAP,181,137,13,12
+    CONTROL         131,IDC_v12,"Static",SS_BITMAP,181,156,13,12
+    CONTROL         131,IDC_v13,"Static",SS_BITMAP,181,175,13,12
+    CONTROL         131,IDC_v14,"Static",SS_BITMAP,181,194,13,12
+    CONTROL         "PLAY",IDC_PLAY,"Button",BS_OWNERDRAW | WS_TABSTOP,73,4,
+                    35,15
+    PUSHBUTTON      "CURRENT",IDC_CURRENT,371,52,15,14,NOT WS_VISIBLE
+    LTEXT           "YANSHI",IDC_YANSHI,374,32,12,8,SS_NOTIFY | NOT 
+                    WS_VISIBLE
+    CONTROL         "PLAYALL",IDC_PLAYALL,"Button",BS_OWNERDRAW | WS_TABSTOP,
+                    132,4,35,15
+    CONTROL         "FIRST",IDC_FIRST,"Button",BS_OWNERDRAW | WS_TABSTOP,21,
+                    243,42,13
+    CONTROL         "PRE",IDC_PRE,"Button",BS_OWNERDRAW | WS_TABSTOP,117,243,
+                    42,13
+    CONTROL         "NEXT",IDC_NEXT,"Button",BS_OWNERDRAW | WS_TABSTOP,213,
+                    243,42,13
+    CONTROL         "END",IDC_END,"Button",BS_OWNERDRAW | WS_TABSTOP,309,243,
+                    42,13
+    CONTROL         "BACK",IDC_BACK,"Button",BS_OWNERDRAW | WS_TABSTOP,250,4,
+                    35,15
+    CONTROL         "DELE",IDC_DELE,"Button",BS_OWNERDRAW | WS_TABSTOP,191,4,
+                    35,15
+    CONTROL         148,IDC_STATIC,"Static",SS_BITMAP,0,0,51,57
+    CONTROL         165,IDC_STATIC,"Static",SS_BITMAP,17,62,11,188
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_MYMP3SEC_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 379
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 263
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "szu\0"
+            VALUE "FileDescription", "MyMp3sec WCE MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "MyMp3sec\0"
+            VALUE "LegalCopyright", "Copyright © 2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "MyMp3sec.exe\0"
+            VALUE "ProductName", "MyMp3sec Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_MYMP3SEC_DIALOG DLGINIT
+BEGIN
+    IDC_MEDIAPLAYER1, 0x376, 340, 0
+0x0000, 0x0000, 0x0001, 0x0000, 0x013e, 0x0000, 0x02b0, 0x0000, 0x0003, 
+0xffff, 0xffff, 0x000b, 0x0000, 0x000b, 0xffff, 0x000b, 0xffff, 0x000b, 
+0xffff, 0x000b, 0xffff, 0x0000, 0x0002, 0x0000, 0x0000, 0x000b, 0x0000, 
+0x0003, 0x0000, 0x0000, 0x0008, 0x0002, 0x0000, 0x0000, 0x0005, 0x0000, 
+0x0000, 0x0000, 0x4014, 0x0008, 0x0002, 0x0000, 0x0000, 0x000b, 0xffff, 
+0x0003, 0x0000, 0x0000, 0x0005, 0x0000, 0x0000, 0x0000, 0xbff0, 0x0003, 
+0x0000, 0x0000, 0x0008, 0x0002, 0x0000, 0x0000, 0x0013, 0x0000, 0x0000, 
+0x0013, 0xffff, 0x00ff, 0x0003, 0x0000, 0x0000, 0x0003, 0x0004, 0x0000, 
+0x000b, 0xffff, 0x000b, 0xffff, 0x000b, 0xffff, 0x000b, 0x0000, 0x000b, 
+0xffff, 0x0008, 0x0002, 0x0000, 0x0000, 0x000b, 0xffff, 0x0003, 0xffff, 
+0xffff, 0x000b, 0x0000, 0x0003, 0x0001, 0x0000, 0x000b, 0x0000, 0x0005, 
+0x0000, 0x0000, 0x0000, 0x3ff0, 0x0008, 0x0002, 0x0000, 0x0000, 0x0008, 
+0x0002, 0x0000, 0x0000, 0x0008, 0x0002, 0x0000, 0x0000, 0x0005, 0x0000, 
+0x0000, 0x0000, 0xbff0, 0x0005, 0x0000, 0x0000, 0x0000, 0xbff0, 0x000b, 
+0xffff, 0x000b, 0xffff, 0x000b, 0xffff, 0x000b, 0x0000, 0x000b, 0x0000, 
+0x000b, 0x0000, 0x000b, 0xffff, 0x000b, 0x0000, 0x000b, 0xffff, 0x000b, 
+0xffff, 0x000b, 0x0000, 0x000b, 0x0000, 0x000b, 0xffff, 0x000b, 0x0000, 
+0x000b, 0xffff, 0x000b, 0x0000, 0x0003, 0x0000, 0x0000, 0x0013, 0x0000, 
+0x0000, 0x000b, 0x0000, 0x0003, 0xfd8a, 0xffff, 0x000b, 0x0000, 
+    0
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\MyMp3sec.rc2"  // non-Microsoft eMbedded Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "wceres.rc"         // WCE-specific components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

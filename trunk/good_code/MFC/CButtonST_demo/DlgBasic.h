@@ -48,6 +48,8 @@ private:
 	CButtonST	m_btnSearch;
 	CButtonST	m_btnBack;
 	CButtonST	m_btnNext;
+public:
+    afx_msg void OnBnClickedBtnkeymanager();
 };
 
 //{{AFX_INSERT_LOCATION}}
