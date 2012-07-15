@@ -6,22 +6,21 @@
 #include <stdio.h>
 
 typedef struct {
-    unsigned long consume;
-    char*         ini_buf;
-    unsigned long buflen;//the lenght of the ini_buf
-} ngx_http_p2s_conf_t;
+    int           index;
+    char*         buf;
+    size_t        buflen;//the length of the buf
+} ngx_http_helloworld_conf_t;
 
-static char *ngx_http_p2s_urlquery_set(ngx_conf_t *cf, ngx_command_t *cmd, void*conf);
+static char *ngx_http_helloworld_set(ngx_conf_t *cf, ngx_command_t *cmd, void*conf);
 
-static void *ngx_http_p2s_create_conf(ngx_conf_t *cf);
+static void *ngx_http_helloworld_create_conf(ngx_conf_t *cf);
 
-static ngx_command_t ngx_http_p2s_commands[] =
+static ngx_command_t ngx_http_helloworld_commands[] =
 {/*{{{*/
-
-    { ngx_string("hello_world_query"), //The command name, it MUST BE the same as nginx.conf location block's command
+    { ngx_string("helloworld_query"), //The command name, it MUST BE the same as nginx.conf location block's command
 
     NGX_HTTP_SRV_CONF|NGX_HTTP_LOC_CONF|NGX_CONF_NOARGS,
-    ngx_http_p2s_urlquery_set,
+    ngx_http_helloworld_set,
     0,
     0,
     NULL },
@@ -29,7 +28,7 @@ static ngx_command_t ngx_http_p2s_commands[] =
     ngx_null_command
 };/*}}}*/
 
-static ngx_http_module_t ngx_http_p2s_module_ctx =
+static ngx_http_module_t ngx_http_helloworld_module_ctx =
 {/*{{{*/
     NULL, /* preconfiguration */
     NULL, /* postconfiguration */
@@ -40,15 +39,15 @@ static ngx_http_module_t ngx_http_p2s_module_ctx =
     NULL, /* create server configuration */
     NULL, /* merge server configuration */
 
-    ngx_http_p2s_create_conf, /* create location configration */
+    ngx_http_helloworld_create_conf, /* create location configration */
     NULL /* merge location configration */
 };/*}}}*/
 
-ngx_module_t ngx_http_p2s_module =
+ngx_module_t ngx_http_helloworld_module =
 {/*{{{*/
     NGX_MODULE_V1,
-    &ngx_http_p2s_module_ctx, /* module context */
-    ngx_http_p2s_commands, /* module directives */
+    &ngx_http_helloworld_module_ctx, /* module context */
+    ngx_http_helloworld_commands, /* module directives */
     NGX_HTTP_MODULE, /* module type */
     NULL, /* init master */
     NULL, /* init module */
@@ -64,15 +63,15 @@ ngx_module_t ngx_http_p2s_module =
 * Process the client request.
 * The client post data has stored in <code>r</code>
 */
-static void p2s_urlquery_process_handler(ngx_http_request_t *r)
+static void helloworld_process_handler(ngx_http_request_t *r)
 {/*{{{*/
     ngx_int_t rc = NGX_OK;
     ngx_buf_t *b = NULL;
     ngx_chain_t out;
 
 
-    ngx_http_p2s_conf_t *conf = NULL;
-    conf = (ngx_http_p2s_conf_t *)ngx_http_get_module_loc_conf(r,ngx_http_p2s_module);
+    ngx_http_helloworld_conf_t *conf = NULL;
+    conf = (ngx_http_helloworld_conf_t *)ngx_http_get_module_loc_conf(r,ngx_http_helloworld_module);
     if (conf == NULL)
     {
         ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
@@ -89,7 +88,7 @@ static void p2s_urlquery_process_handler(ngx_http_request_t *r)
     out.buf = b;
     out.next = NULL;
 
-    b->last = ngx_sprintf(b->pos, "%s", conf->ini_buf);
+    b->last = ngx_sprintf(b->pos, "local conf index=[%d] text=[%s]", conf->index, conf->buf);
 
     r->headers_out.status = NGX_HTTP_OK;
     r->headers_out.content_length_n = b->last - b->pos;
@@ -115,10 +114,10 @@ static void p2s_urlquery_process_handler(ngx_http_request_t *r)
 * After read all the data from client we set a process handler
 */
 static ngx_int_t
-ngx_http_p2s_urlquery_handler(ngx_http_request_t *r)
+ngx_http_helloworld_handler(ngx_http_request_t *r)
 {/*{{{*/
     ngx_int_t rc = NGX_DONE;
-    rc = ngx_http_read_client_request_body( r, p2s_urlquery_process_handler );
+    rc = ngx_http_read_client_request_body( r, helloworld_process_handler );
     if (rc >= NGX_HTTP_SPECIAL_RESPONSE) {
         return rc;
     }
@@ -131,29 +130,31 @@ ngx_http_p2s_urlquery_handler(ngx_http_request_t *r)
 * set the request reading data handler
 */
 static char *
-ngx_http_p2s_urlquery_set( ngx_conf_t *cf, ngx_command_t *cmd, void *conf )
+ngx_http_helloworld_set( ngx_conf_t *cf, ngx_command_t *cmd, void *conf )
 {/*{{{*/
     ngx_http_core_loc_conf_t *clcf;
 
     clcf = (ngx_http_core_loc_conf_t *)ngx_http_conf_get_module_loc_conf(cf,ngx_http_core_module);
-    clcf->handler = ngx_http_p2s_urlquery_handler;
+    clcf->handler = ngx_http_helloworld_handler;
 
     return NGX_CONF_OK;
 }/*}}}*/
 
 
 static void *
-ngx_http_p2s_create_conf(ngx_conf_t *cf)
+ngx_http_helloworld_create_conf(ngx_conf_t *cf)
 {/*{{{*/
-    ngx_http_p2s_conf_t *conf;
+    ngx_http_helloworld_conf_t *conf = NULL;
+    static int index = 0;
 
-    conf = (ngx_http_p2s_conf_t *)ngx_pcalloc(cf->pool,sizeof(ngx_http_p2s_conf_t));
+    conf = (ngx_http_helloworld_conf_t *)ngx_pcalloc(cf->pool,sizeof(ngx_http_helloworld_conf_t));
     if (conf == NULL) {
         return NGX_CONF_ERROR;
     }
 
-    conf->consume = 0;
-
+    conf->index = index++;
+    conf->buf = "Hello NGINX.";
+    conf->buflen  = strlen(conf->buf);
 
     return conf;
 }/*}}}*/
