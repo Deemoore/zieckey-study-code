@@ -15,6 +15,9 @@ static char *ngx_http_helloworld_set(ngx_conf_t *cf, ngx_command_t *cmd, void*co
 
 static void *ngx_http_helloworld_create_conf(ngx_conf_t *cf);
 
+static int local_conf_create_count = 0;
+static int ngx_http_helloworld_set_count = 0;
+
 static ngx_command_t ngx_http_helloworld_commands[] =
 {/*{{{*/
     { ngx_string("helloworld_query"), //The command name, it MUST BE the same as nginx.conf location block's command
@@ -88,7 +91,7 @@ static void helloworld_process_handler(ngx_http_request_t *r)
     out.buf = b;
     out.next = NULL;
 
-    b->last = ngx_sprintf(b->pos, "local conf index=[%d] text=[%s]", conf->index, conf->buf);
+    b->last = ngx_sprintf(b->pos, "local conf index=[%d] local_conf_create_count=[%d] ngx_http_helloworld_set_count=[%d] text=[%s]", conf->index, local_conf_create_count, ngx_http_helloworld_set_count, conf->buf);
 
     r->headers_out.status = NGX_HTTP_OK;
     r->headers_out.content_length_n = b->last - b->pos;
@@ -137,6 +140,8 @@ ngx_http_helloworld_set( ngx_conf_t *cf, ngx_command_t *cmd, void *conf )
     clcf = (ngx_http_core_loc_conf_t *)ngx_http_conf_get_module_loc_conf(cf,ngx_http_core_module);
     clcf->handler = ngx_http_helloworld_handler;
 
+    ngx_http_helloworld_set_count++;
+
     return NGX_CONF_OK;
 }/*}}}*/
 
@@ -145,14 +150,13 @@ static void *
 ngx_http_helloworld_create_conf(ngx_conf_t *cf)
 {/*{{{*/
     ngx_http_helloworld_conf_t *conf = NULL;
-    static int index = 0;
 
     conf = (ngx_http_helloworld_conf_t *)ngx_pcalloc(cf->pool,sizeof(ngx_http_helloworld_conf_t));
     if (conf == NULL) {
         return NGX_CONF_ERROR;
     }
 
-    conf->index = index++;
+    conf->index = local_conf_create_count++;
     conf->buf = "Hello NGINX.";
     conf->buflen  = strlen(conf->buf);
 
