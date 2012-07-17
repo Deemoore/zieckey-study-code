@@ -38,5 +38,8 @@ int main(int argc, const char *argv[])
         printf("__sync_fetch_and_add test failed, count=%d!!!!\n", count);
     }
     printf("%d\n",count);
+
+    __sync_lock_release(&count);
+    printf("after __sync_lock_release , count=%d\n", count);
     return 0;
 }
