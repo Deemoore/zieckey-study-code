@@ -9,7 +9,7 @@
 
 #include <assert.h>
 
-#define MAX_ELEMENTS	50
+#define MAX_ELEMENTS 1048576	
 
 static int stack[MAX_ELEMENTS];
 static int index;
