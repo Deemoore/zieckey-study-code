@@ -12,9 +12,10 @@
 #define  MD5Final   MD5_Final
 
 
-//int ibits = 1024;//1024bits
+//int ibits = MAX_BUFFER_LEN;//MAX_BUFFER_LENbits
 int ibits = 512;//512 bits
-
+//const size_t MAX_BUFFER_LEN = 8096;
+#define MAX_BUFFER_LEN 8096
 
 typedef struct {
 	unsigned char* data;
@@ -89,7 +90,7 @@ void sign_data( RSA* rsa, const unsigned char* bData, unsigned int iDatalen, mem
 	if( ret != 1 )
 	{
 		int l;
-		char s[1024];
+		char s[MAX_BUFFER_LEN];
 		FILE* f;
 
 		f = fopen( "/dev/stdout", "w" );
@@ -108,7 +109,7 @@ int main ( int argc, const char * argv[] )
     {
         fprintf( stderr, "Usage: %s [rsa_bits]\n", argv[0] );
         fprintf( stderr, "\te.g.: %s 512\n", argv[0] );
-        fprintf( stderr, "\te.g.: %s 1024\n", argv[0] );
+        fprintf( stderr, "\te.g.: %s MAX_BUFFER_LEN\n", argv[0] );
         return -1;
     }
 
@@ -122,8 +123,8 @@ int main ( int argc, const char * argv[] )
     for (jj = 0; jj < 10; jj++)
     {
         //generate public and private key
-        unsigned char public_key[1024] = { 0 };
-        unsigned char private_key[1024] = { 0 };
+        unsigned char public_key[MAX_BUFFER_LEN] = { 0 };
+        unsigned char private_key[MAX_BUFFER_LEN] = { 0 };
         BIO* bio = BIO_new( BIO_s_mem() );
         RSA* rsa = gen_rsa( ibits );
         int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
@@ -178,8 +179,8 @@ int main ( int argc, const char * argv[] )
     ///test
     {
         //generate public and private key
-        unsigned char public_key[1024] = { 0 };
-        unsigned char private_key[1024] = { 0 };
+        unsigned char public_key[MAX_BUFFER_LEN] = { 0 };
+        unsigned char private_key[MAX_BUFFER_LEN] = { 0 };
         BIO* bio = BIO_new( BIO_s_mem() );
         RSA* rsa = gen_rsa( ibits );
         int ret = i2d_RSAPublicKey_bio( bio, rsa );//create a public key
@@ -199,16 +200,16 @@ int main ( int argc, const char * argv[] )
 
     //using private key to sign data
     mem_data_t datasign_private;
-    datasign_private.data_len = 1024;
-    datasign_private.data = (char*) malloc( 1024 );
+    datasign_private.data_len = MAX_BUFFER_LEN;
+    datasign_private.data = (char*) malloc( MAX_BUFFER_LEN );
     RSA* rsa_private = create_rsa( private_key, private_key_len, 1 );
     sign_data( rsa_private, raw_data, sizeof( raw_data ), &datasign_private );
     
 
     //using public key to sign data
     mem_data_t datasign_public;
-    datasign_public.data_len = 1024;
-    datasign_public.data = (char*) malloc( 1024 );
+    datasign_public.data_len = MAX_BUFFER_LEN;
+    datasign_public.data = (char*) malloc( MAX_BUFFER_LEN );
     RSA* rsa_public = create_rsa( public_key, public_key_len, 2 );
     int verifyret = RSA_verify( NID_sha1, raw_data, sizeof( raw_data ), datasign_private.data, datasign_private.data_len, rsa_public );
     //if ( verifyret == 1 )

@@ -2,6 +2,7 @@
 #define _MAP_REDUCE_COMMON_H_
 
 #include <sys/time.h>
+#include <stdarg.h>
 #include <errno.h>
 
 inline void logAll(const char* filename, const char* funcname, int lineno, const char* fmt, ... )
