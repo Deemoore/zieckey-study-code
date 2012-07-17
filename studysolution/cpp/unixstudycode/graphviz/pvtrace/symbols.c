@@ -169,11 +169,11 @@ void emitSymbols( void )
 
     if (totals[from]) {
 
-      fprintf( fp, "  %s [shape=rectangle]\n", functions[from].funcName );
+      fprintf( fp, "  \"%s\" [shape=rectangle]\n", functions[from].funcName );
 
     } else {
 
-      fprintf( fp, "  %s [shape=ellipse]\n", functions[from].funcName );
+      fprintf( fp, "  \"%s\" [shape=ellipse]\n", functions[from].funcName );
 
     }
 
@@ -187,7 +187,7 @@ void emitSymbols( void )
     for (to = 0 ; to < MAX_FUNCTIONS ; to++) {
 
       if (calls[from][to]) {
-        fprintf( fp, "  %s -> %s [label=\"%d calls\" fontsize=\"10\"]\n", 
+        fprintf( fp, "  \"%s\" -> \"%s\" [label=\"%d calls\" fontsize=\"10\"]\n", 
                   functions[from].funcName, functions[to].funcName,
                   calls[from][to] );
       }
