@@ -15,7 +15,7 @@ static char *ngx_http_helloworld_set(ngx_conf_t *cf, ngx_command_t *cmd, void*co
 
 static void *ngx_http_helloworld_create_conf(ngx_conf_t *cf);
 
-static int local_conf_create_count = 0;
+static int loc_conf_create_count = 0;
 static int ngx_http_helloworld_set_count = 0;
 
 static ngx_command_t ngx_http_helloworld_commands[] =
@@ -42,8 +42,8 @@ static ngx_http_module_t ngx_http_helloworld_module_ctx =
     NULL, /* create server configuration */
     NULL, /* merge server configuration */
 
-    ngx_http_helloworld_create_conf, /* create location configration */
-    NULL /* merge location configration */
+    ngx_http_helloworld_create_conf, /* create location configuration */
+    NULL /* merge location configuration */
 };/*}}}*/
 
 ngx_module_t ngx_http_helloworld_module =
@@ -91,7 +91,7 @@ static void helloworld_process_handler(ngx_http_request_t *r)
     out.buf = b;
     out.next = NULL;
 
-    b->last = ngx_sprintf(b->pos, "local conf index=[%d] local_conf_create_count=[%d] ngx_http_helloworld_set_count=[%d] text=[%s]", conf->index, local_conf_create_count, ngx_http_helloworld_set_count, conf->buf);
+    b->last = ngx_sprintf(b->pos, "local conf index=[%d] loc_conf_create_count=[%d] ngx_http_helloworld_set_count=[%d] text=[%s]", conf->index, loc_conf_create_count, ngx_http_helloworld_set_count, conf->buf);
 
     r->headers_out.status = NGX_HTTP_OK;
     r->headers_out.content_length_n = b->last - b->pos;
@@ -156,7 +156,7 @@ ngx_http_helloworld_create_conf(ngx_conf_t *cf)
         return NGX_CONF_ERROR;
     }
 
-    conf->index = local_conf_create_count++;
+    conf->index = loc_conf_create_count++;
     conf->buf = "Hello NGINX.";
     conf->buflen  = strlen(conf->buf);
 
