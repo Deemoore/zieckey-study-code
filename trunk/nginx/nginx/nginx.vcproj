@@ -891,6 +891,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\user_ext_module\ngx_http_mergedemo_module.c"
+					>
+				</File>
+				<File
 					RelativePath=".\http\modules\ngx_http_not_modified_filter_module.c"
 					>
 				</File>
