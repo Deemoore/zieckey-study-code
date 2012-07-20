@@ -1212,6 +1212,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\conf\nginx.conf"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
