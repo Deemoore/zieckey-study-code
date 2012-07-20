@@ -171,10 +171,17 @@ ngx_http_mergedemo_set( ngx_conf_t *cf, ngx_command_t *cmd, void *conf )
 {/*{{{*/
     ngx_http_core_loc_conf_t *clcf;
 
+    ngx_str_t* value = (ngx_str_t*)cf->args->elts;
+    ngx_http_mergedemo_loc_conf_t * loc_conf = ( ngx_http_mergedemo_loc_conf_t *)ngx_http_conf_get_module_loc_conf( cf, ngx_http_mergedemo_module );
+    ngx_http_mergedemo_srv_conf_t * srv_conf = ( ngx_http_mergedemo_srv_conf_t *)ngx_http_conf_get_module_srv_conf( cf, ngx_http_mergedemo_module );
+    ngx_http_mergedemo_main_conf_t * main_conf = ( ngx_http_mergedemo_main_conf_t *)ngx_http_conf_get_module_main_conf( cf, ngx_http_mergedemo_module );
+    loc_conf->loc1 = value[0].len;
+    srv_conf->srv1 = value[0].len;
+    main_conf->main3 = *value;
+    ngx_http_mergedemo_set_count++;
+
     clcf = (ngx_http_core_loc_conf_t *)ngx_http_conf_get_module_loc_conf(cf,ngx_http_core_module);
     clcf->handler = ngx_http_mergedemo_handler;
-
-    ngx_http_mergedemo_set_count++;
 
     return NGX_CONF_OK;
 }/*}}}*/
@@ -201,6 +208,16 @@ static char *
 ngx_http_mergedemo_init_main_conf(ngx_conf_t *cf, void *conf)
 {
     ngx_http_mergedemo_main_conf_t* mconf = conf;
+
+    ngx_str_t* value = (ngx_str_t*)cf->args->elts;
+    ngx_http_mergedemo_loc_conf_t * loc_conf = ( ngx_http_mergedemo_loc_conf_t *)ngx_http_conf_get_module_loc_conf( cf, ngx_http_mergedemo_module );
+    ngx_http_mergedemo_srv_conf_t * srv_conf = ( ngx_http_mergedemo_srv_conf_t *)ngx_http_conf_get_module_srv_conf( cf, ngx_http_mergedemo_module );
+    ngx_http_mergedemo_main_conf_t * main_conf = ( ngx_http_mergedemo_main_conf_t *)ngx_http_conf_get_module_main_conf( cf, ngx_http_mergedemo_module );
+    loc_conf->loc1 = value[0].len;
+    srv_conf->srv1 = value[0].len;
+    main_conf->main3 = *value;
+    ngx_http_mergedemo_set_count++;
+
     ngx_str_set(&mconf->main3, "initialized 3333");
     ngx_str_set(&(mconf->name), "initialized main conf name");
     main_conf_init_count++;
