@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Weibo", "Weibo.vcproj", "{4B1245F1-3FCE-4783-8567-37B021B25B33}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TXAPITool", "..\APIExample\TXAPITool.vcproj", "{D321715D-7991-4BF9-8C1F-A3801148CF4C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4B1245F1-3FCE-4783-8567-37B021B25B33} = {4B1245F1-3FCE-4783-8567-37B021B25B33}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B1245F1-3FCE-4783-8567-37B021B25B33}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4B1245F1-3FCE-4783-8567-37B021B25B33}.Debug|Win32.Build.0 = Debug|Win32
+		{4B1245F1-3FCE-4783-8567-37B021B25B33}.Release|Win32.ActiveCfg = Release|Win32
+		{4B1245F1-3FCE-4783-8567-37B021B25B33}.Release|Win32.Build.0 = Release|Win32
+		{D321715D-7991-4BF9-8C1F-A3801148CF4C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D321715D-7991-4BF9-8C1F-A3801148CF4C}.Debug|Win32.Build.0 = Debug|Win32
+		{D321715D-7991-4BF9-8C1F-A3801148CF4C}.Release|Win32.ActiveCfg = Release|Win32
+		{D321715D-7991-4BF9-8C1F-A3801148CF4C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
