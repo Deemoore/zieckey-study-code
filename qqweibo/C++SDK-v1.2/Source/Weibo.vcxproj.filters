@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{28465a0a-26ac-470b-a34a-9f4d3b0321a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\http">
+      <UniqueIdentifier>{3cce8c1c-df4d-4598-b6cd-4501ce720730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\http\curl">
+      <UniqueIdentifier>{d19e391c-97b2-49cc-865a-6fe17f2cd21a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\parser">
+      <UniqueIdentifier>{8131fe8c-c2ba-46d3-a6b5-5de2871d72c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\parser\JSON">
+      <UniqueIdentifier>{649a4858-fb03-43bf-af7c-bd71020abfe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\parser\TinyXml">
+      <UniqueIdentifier>{84ea7909-8d9a-4ea1-8334-3778722d98f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\url">
+      <UniqueIdentifier>{c858ba93-bec3-45c9-9535-3b8dc1f428b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\url\Oauth">
+      <UniqueIdentifier>{d3fc22db-b393-49aa-ac60-5d14aee282ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{789660ab-f9fb-4407-878e-ad827297db99}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Request.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilString.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WeiboApi.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="WeiboParam.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="http\Http.cpp">
+      <Filter>Source\http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\HttpProxy.cpp">
+      <Filter>Source\http</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\JsonParser.cpp">
+      <Filter>Source\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\XmlParser.cpp">
+      <Filter>Source\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\JSON\json_reader.cpp">
+      <Filter>Source\parser\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\JSON\json_value.cpp">
+      <Filter>Source\parser\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\JSON\json_writer.cpp">
+      <Filter>Source\parser\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\TinyXml\tinystr.cpp">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\TinyXml\tinyxml.cpp">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\TinyXml\tinyxmlerror.cpp">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="parser\TinyXml\tinyxmlparser.cpp">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="url\RequestUrl.cpp">
+      <Filter>Source\url</Filter>
+    </ClCompile>
+    <ClCompile Include="url\Oauth\hash.c">
+      <Filter>Source\url\Oauth</Filter>
+    </ClCompile>
+    <ClCompile Include="url\Oauth\oauth.c">
+      <Filter>Source\url\Oauth</Filter>
+    </ClCompile>
+    <ClCompile Include="url\Oauth\oauth_http.c">
+      <Filter>Source\url\Oauth</Filter>
+    </ClCompile>
+    <ClCompile Include="url\Oauth\xmalloc.c">
+      <Filter>Source\url\Oauth</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Request.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="http\Http.h">
+      <Filter>Source\http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\HttpProxy.h">
+      <Filter>Source\http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\curl.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\curlbuild.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\curlrules.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\curlver.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\easy.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\mprintf.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\multi.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\stdcheaders.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\typecheck-gcc.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="http\curl\types.h">
+      <Filter>Source\http\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\autolink.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\config.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\features.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\forwards.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\json.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\json_batchallocator.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\reader.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\value.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\JSON\writer.h">
+      <Filter>Source\parser\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\TinyXml\tinystr.h">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="parser\TinyXml\tinyxml.h">
+      <Filter>Source\parser\TinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="url\RequestUrl.h">
+      <Filter>Source\url</Filter>
+    </ClInclude>
+    <ClInclude Include="url\Oauth\oauth.h">
+      <Filter>Source\url\Oauth</Filter>
+    </ClInclude>
+    <ClInclude Include="url\Oauth\xmalloc.h">
+      <Filter>Source\url\Oauth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\JsonParser.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\UtilString.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\WeiboApi.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\WeiboParam.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\XmlParser.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\weibo.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="parser\JSON\json_internalarray.inl">
+      <Filter>Source\parser\JSON</Filter>
+    </None>
+    <None Include="parser\JSON\json_internalmap.inl">
+      <Filter>Source\parser\JSON</Filter>
+    </None>
+    <None Include="parser\JSON\json_valueiterator.inl">
+      <Filter>Source\parser\JSON</Filter>
+    </None>
+  </ItemGroup>
+</Project>
