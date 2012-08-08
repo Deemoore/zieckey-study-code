@@ -1,4 +1,4 @@
-CPPFLAGS= -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include/thrift -I/usr/local/include 
+CPPFLAGS= -g -fPIC -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare -Winvalid-pch -fms-extensions -Wall -I/usr/local/include/thrift -I/usr/local/include 
 LDFLAGS=-L/usr/local/lib
 
 server=server

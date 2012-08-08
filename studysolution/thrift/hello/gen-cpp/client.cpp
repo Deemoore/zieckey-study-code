@@ -3,6 +3,15 @@
 #include <protocol/TBinaryProtocol.h>
 #include "UserExchange.h"
 //#include "hello_types.h"
+//
+#include <sys/time.h>
+
+inline double current_second()
+{
+    struct timeval tv;
+    gettimeofday( &tv, NULL );
+    return (double)(tv.tv_sec) + ((double)(tv.tv_usec))/1000000.0f;
+}
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -39,8 +48,10 @@ int main( int argc, char** argv )
             user.user_id = i++;
             user.sex = SexType::MALE;    
 
+            double begin = current_second();
             int32_t retcode = client.add_user(user);
-            printf( "retcode=%d\n", retcode );
+            double end = current_second();
+            printf( "retcode=%d cost=%fms\n", retcode, 1000*(end - begin) );
 
             user.firstname = "liujin";
             user.user_id = i++;
