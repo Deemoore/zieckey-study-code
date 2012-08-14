@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="41" version="2.0">
+<workbench progressCount="34" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="175" y="92">
 <fastViewData fastViewLocation="1024"/>
@@ -24,13 +24,15 @@
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="198" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ant.ui.internal.editor.AntEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.ClassFileEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.python.pydev.editor.PythonEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
-<page aggregateWorkingSetId="Aggregate for window 1309315236022" focus="true" label="Workspace - Java">
+<page aggregateWorkingSetId="Aggregate for window 1309315236022" focus="true" label="Workspace - Debug">
 <editors>
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
@@ -42,33 +44,108 @@
 <part id="3"/>
 <part id="4"/>
 <part id="5"/>
+<part id="6"/>
+<part id="7"/>
+<part id="8"/>
+<part id="9"/>
+<part id="10"/>
+<part id="11"/>
+<part id="12"/>
+<part id="13"/>
+<part id="14"/>
+<part id="15"/>
+<part id="16"/>
+<part id="17"/>
+<part id="18"/>
+<part id="19"/>
+<part id="20"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONStringer.java" partName="JSONStringer.java" path="E:/workspace/eclipse-workspace/json/src/org/json/JSONStringer.java" title="JSONStringer.java" tooltip="json/src/org/json/JSONStringer.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/json/src/org/json/JSONStringer.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="204"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AutoExpandingBufferReadTransport.java" partName="AutoExpandingBufferReadTransport.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/transport/AutoExpandingBufferReadTransport.java" title="AutoExpandingBufferReadTransport.java" tooltip="thrift/src/org/apache/thrift/transport/AutoExpandingBufferReadTransport.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/transport/AutoExpandingBufferReadTransport.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="47" selectionOffset="849" selectionTopPixel="0"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONTokener.java" partName="JSONTokener.java" path="E:/workspace/eclipse-workspace/json/src/org/json/JSONTokener.java" title="JSONTokener.java" tooltip="json/src/org/json/JSONTokener.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/json/src/org/json/JSONTokener.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="3211"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AutoExpandingBufferWriteTransport.java" partName="AutoExpandingBufferWriteTransport.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/transport/AutoExpandingBufferWriteTransport.java" title="AutoExpandingBufferWriteTransport.java" tooltip="thrift/src/org/apache/thrift/transport/AutoExpandingBufferWriteTransport.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/transport/AutoExpandingBufferWriteTransport.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONObject.java" partName="JSONObject.java" path="E:/workspace/eclipse-workspace/json/src/org/json/JSONObject.java" title="JSONObject.java" tooltip="json/src/org/json/JSONObject.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/json/src/org/json/JSONObject.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="39903" selectionTopPixel="16980"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="THttpClient.java" partName="THttpClient.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/transport/THttpClient.java" title="THttpClient.java" tooltip="thrift/src/org/apache/thrift/transport/THttpClient.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/transport/THttpClient.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="15" selectionOffset="1087" selectionTopPixel="0"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.ClassFileEditor" name="Integer.class" partName="Integer.class" title="Integer.class" tooltip="java.lang.Integer" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" org.eclipse.jdt.ui.ClassFileIdentifier="=json/D:\/Java\/jre7\/lib\/rt.jar&lt;java.lang(Integer.class"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TIOStreamTransport.java" partName="TIOStreamTransport.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/transport/TIOStreamTransport.java" title="TIOStreamTransport.java" tooltip="thrift/src/org/apache/thrift/transport/TIOStreamTransport.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/transport/TIOStreamTransport.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4609" selectionTopPixel="1920"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Test.java" partName="Test.java" path="E:/workspace/eclipse-workspace/json/src/org/json/Test.java" title="Test.java" tooltip="json/src/org/json/Test.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/json/src/org/json/Test.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="12654"/>
+<editor id="org.eclipse.ui.DefaultTextEditor" name="README" partName="README" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/README" title="README" tooltip="thrift/README" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/README"/>
+<editorState selectionHorizontalPixel="0" selectionLength="13" selectionOffset="1100" selectionTopPixel="159"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestJSONObject.java" partName="TestJSONObject.java" path="E:/workspace/eclipse-workspace/json/src/org/json/tests/TestJSONObject.java" title="TestJSONObject.java" tooltip="json/src/org/json/tests/TestJSONObject.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/json/src/org/json/tests/TestJSONObject.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="10772" selectionTopPixel="6090"/>
+<editor id="org.eclipse.ant.ui.internal.editor.AntEditor" name="build.xml" partName="build.xml" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/build.xml" title="build.xml" tooltip="thrift/build.xml" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/build.xml"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="15307" selectionTopPixel="4929"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TAsyncClientManager.java" partName="TAsyncClientManager.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/async/TAsyncClientManager.java" title="TAsyncClientManager.java" tooltip="thrift/src/org/apache/thrift/async/TAsyncClientManager.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/async/TAsyncClientManager.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ServerTestBase.java" partName="ServerTestBase.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/server/ServerTestBase.java" title="ServerTestBase.java" tooltip="thrift/test/org/apache/thrift/server/ServerTestBase.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/server/ServerTestBase.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="7089"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestHsHaServer.java" partName="TestHsHaServer.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/server/TestHsHaServer.java" title="TestHsHaServer.java" tooltip="thrift/test/org/apache/thrift/server/TestHsHaServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/server/TestHsHaServer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestNonblockingServer.java" partName="TestNonblockingServer.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/server/TestNonblockingServer.java" title="TestNonblockingServer.java" tooltip="thrift/test/org/apache/thrift/server/TestNonblockingServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/server/TestNonblockingServer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestThreadedSelectorServer.java" partName="TestThreadedSelectorServer.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/server/TestThreadedSelectorServer.java" title="TestThreadedSelectorServer.java" tooltip="thrift/test/org/apache/thrift/server/TestThreadedSelectorServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/server/TestThreadedSelectorServer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="EqualityTest.java" partName="EqualityTest.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/test/EqualityTest.java" title="EqualityTest.java" tooltip="thrift/test/org/apache/thrift/test/EqualityTest.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/test/EqualityTest.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestTUnion.java" partName="TestTUnion.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/TestTUnion.java" title="TestTUnion.java" tooltip="thrift/test/org/apache/thrift/TestTUnion.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/TestTUnion.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Fixtures.java" partName="Fixtures.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/test/org/apache/thrift/Fixtures.java" title="Fixtures.java" tooltip="thrift/test/org/apache/thrift/Fixtures.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/test/org/apache/thrift/Fixtures.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1724" selectionTopPixel="8"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CalculatorHandler.java" partName="CalculatorHandler.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/tutorial/CalculatorHandler.java" title="CalculatorHandler.java" tooltip="thrift/src/tutorial/CalculatorHandler.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/tutorial/CalculatorHandler.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1192" selectionTopPixel="15"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JavaClient.java" partName="JavaClient.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/tutorial/JavaClient.java" title="JavaClient.java" tooltip="thrift/src/tutorial/JavaClient.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/tutorial/JavaClient.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2901" selectionTopPixel="390"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JavaServer.java" partName="JavaServer.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/tutorial/JavaServer.java" title="JavaServer.java" tooltip="thrift/src/tutorial/JavaServer.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/tutorial/JavaServer.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2425" selectionTopPixel="399"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SharedService.java" partName="SharedService.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/shared/SharedService.java" title="SharedService.java" tooltip="thrift/src/shared/SharedService.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/shared/SharedService.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="6897" selectionTopPixel="1635"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TTransport.java" partName="TTransport.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/transport/TTransport.java" title="TTransport.java" tooltip="thrift/src/org/apache/thrift/transport/TTransport.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/transport/TTransport.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="5" selectionOffset="3744" selectionTopPixel="1395"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Calculator.java" partName="Calculator.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/tutorial/Calculator.java" title="Calculator.java" tooltip="thrift/src/tutorial/Calculator.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/tutorial/Calculator.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="10" selectionOffset="47617" selectionTopPixel="20700"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TMessage.java" partName="TMessage.java" path="E:/workspace/googlecodesvn/trunk/eclipseworkspace/thrift/src/org/apache/thrift/protocol/TMessage.java" title="TMessage.java" tooltip="thrift/src/org/apache/thrift/protocol/TMessage.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/thrift/src/org/apache/thrift/protocol/TMessage.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1175" selectionTopPixel="122"/>
 </editor>
 </editors>
 <views>
@@ -105,8 +182,9 @@
 <view id="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator" partName="Data Source Explorer"/>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>
-<category IMemento.internal.id="Warnings (1 item)"/>
+<expanded>&#x0A;<category IMemento.internal.id="Warnings"/>
+<category IMemento.internal.id="Errors"/>
+<category IMemento.internal.id="Warnings (67 items)"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -168,14 +246,20 @@
 <filteredTreeFindHistory/>
 </viewState>
 </view>
-<view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
-<view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
-<view id="org.eclipse.wst.server.ui.ServersView" partName="Servers"/>
+<view id="org.eclipse.jdt.ui.SourceView" partName="Declaration">
+<viewState/>
+</view>
+<view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc">
+<viewState/>
+</view>
+<view id="org.eclipse.wst.server.ui.ServersView" partName="Servers">
+<viewState CommonNavigator.LINKING_ENABLED="0"/>
+</view>
 <view id="org.python.pydev.navigator.view" partName="PyDev Package Explorer">
 <viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.debug.ui.DebugPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jst.j2ee.internal.perspective.J2EEPerspective" id="org.eclipse.jst.j2ee.J2EEPerspective" label="Java EE"/>
 <alwaysOnActionSet id="org.eclipse.mylyn.context.ui.actionSet"/>
@@ -242,31 +326,22 @@
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.mylyn.tasks.ui.views.tasks"/>
 <fastViewBars/>
-<layout>
-<mainWindow>
-<info folder="true" part="topLeft">
-<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">
-<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="topLeft">&#x0A;<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackagesView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@941f0a" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@941f0a" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.25" ratioLeft="250" ratioRight="750" relationship="2" relative="topLeft"/>
-<info folder="true" part="bottomRight" ratio="0.69860893" ratioLeft="452" ratioRight="195" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.python.pydev.navigator.view" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.AllMarkersView" label="Markers"/>
+<info folder="true" part="bottomRight" ratio="0.69860893" ratioLeft="452" ratioRight="195" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.python.pydev.navigator.view" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.AllMarkersView" label="Markers"/>
 <page content="org.eclipse.ui.views.PropertySheet" label="Properties"/>
 <page content="org.eclipse.wst.server.ui.ServersView" label="Servers"/>
 <page content="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator" label="Data Source Explorer"/>
@@ -278,8 +353,7 @@
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -288,12 +362,9 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="topRight" ratio="0.7" ratioLeft="525" ratioRight="225" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info folder="true" part="topRight" ratio="0.7" ratioLeft="525" ratioRight="225" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.mylyn.tasks.ui.views.tasks" label="Task List"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
@@ -343,42 +414,29 @@
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
-<layout>
-<mainWindow>
-<info folder="true" part="topLeft">
-<folder activePageID="org.python.pydev.navigator.view" appearance="2" expanded="2">
-<page content="org.python.pydev.navigator.view" label="PyDev Package Explorer"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="topLeft">&#x0A;<folder activePageID="org.python.pydev.navigator.view" appearance="2" expanded="2">&#x0A;<page content="org.python.pydev.navigator.view" label="PyDev Package Explorer"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="topLeft">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="topLeft">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.25977653" ratioLeft="372" ratioRight="1060" relationship="2" relative="topLeft"/>
-<info folder="true" part="bottom" ratio="0.5810956" ratioLeft="541" ratioRight="390" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<info folder="true" part="bottom" ratio="0.5810956" ratioLeft="541" ratioRight="390" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1bc27df" ratio="0.75" ratioLeft="795" ratioRight="265" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1bc27df" ratio="0.75" ratioLeft="795" ratioRight="265" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
@@ -428,28 +486,32 @@
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.TaskList"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.debug.ui.VariableView"/>
 <view id="org.eclipse.debug.ui.DebugView"/>
 <view id="org.eclipse.wst.server.ui.ServersView"/>
-<view id="org.eclipse.debug.ui.VariableView"/>
 <view id="org.eclipse.debug.ui.BreakpointView"/>
-<view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
-<page content="org.eclipse.wst.server.ui.ServersView" label="Servers"/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
-<part id="1"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.76165116" ratioLeft="572" ratioRight="179" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.57894737" ratioLeft="539" ratioRight="392" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.PropertySheet" label="LabelNotFound"/>
@@ -457,25 +519,41 @@
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
 <page content="org.eclipse.wst.xsl.jaxp.debug.ui.view1" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@187d7ee" ratio="0.5" ratioLeft="956" ratioRight="956" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">
+<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
+<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<page content="org.eclipse.wst.server.ui.ServersView" label="Servers"/>
+<page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
 </presentation>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.4495575" ratioLeft="254" ratioRight="311" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1074" ratioRight="358" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.60345733" ratioLeft="1152" ratioRight="757" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.3463961" ratioLeft="495" ratioRight="934" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
-<page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.3463961" ratioLeft="495" ratioRight="934" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<folder appearance="2" expanded="2">
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
-<part id="1"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 </mainWindow>
@@ -541,6 +619,7 @@
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.jdt.ui.SourceView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.mylyn.tasks.ui.views.tasks"/>
 <fastViewBars/>
@@ -567,18 +646,19 @@
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.18334207" ratioLeft="350" ratioRight="1559" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.7494647" ratioLeft="700" ratioRight="234" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ProblemView" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
-<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
+<part id="3"/>
 </presentation>
 </folder>
 </info>
@@ -607,169 +687,161 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" path="/python/src/test/log/analyse/abstract.py"/>
-<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.python.pydev.editor.PythonEditor" uri="file:/D:/eclipse-3.7/plugins/org.python.pydev.debug_2.2.0.2011062419/pysrc/pydevd.py"/>
-<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.python.pydev.editor.PythonEditor" uri="file:/D:/eclipse-3.7/plugins/org.python.pydev.debug_2.2.0.2011062419/pysrc/_pydev_execfile.py"/>
-<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.python.pydev.editor.PythonEditor" uri="file:/D:/eclipse-3.7/plugins/org.python.pydev.debug_2.2.0.2011062419/pysrc/_pydev_execfile.py"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" path="/python/src/test/renamebatch/rename.py"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" path="/python/src/test/securecrt_seesion/__init__.py"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" path="/python/src/test/securecrt_seesion/sessionprocess.py"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/org/json/JSONStringer.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/org/json/JSONTokener.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/org/json/JSONObject.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/org/json/Test.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/tests/SampleResourceBundle_en_US.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/json/src/org/json/tests/TestJSONObject.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/org/apache/thrift/protocol/TBinaryProtocol.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/org/apache/thrift/TBaseProcessor.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/org/apache/thrift/protocol/TMessage.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/org/apache/thrift/ProcessFunction.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/tutorial/CalculatorHandler.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/tutorial/Calculator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/tutorial/JavaClient.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/thrift/src/org/apache/thrift/transport/TTransport.java"/>
 </editors>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="278" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="5869" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="310" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9046" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9073" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="70" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9411" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="199" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9520" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="70" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9549" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="236" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9584" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="278" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9620" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="337" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="9411" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="405" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="5869" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="399" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="7831" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="199" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="7855" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="405" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="7873" y="0"/>
 </item>
-<item historyLabel="pydevd" index="1">
-<position info="not_deleted" x="55003" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8040" y="0"/>
 </item>
-<item historyLabel="pydevd" index="1">
-<position info="not_deleted" x="45421" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8085" y="0"/>
 </item>
-<item historyLabel="_pydev_execfile" index="2">
-<position/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8057" y="0"/>
 </item>
-<item historyLabel="pydevd" index="1">
-<position info="not_deleted" x="45421" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8119" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="405" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8085" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8155" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="199" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8085" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="405" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8191" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="196" y="0"/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8085" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="8074" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBinaryProtocol.java" index="0">
+<position info="not_deleted" x="5869" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="875" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="405" y="0"/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="883" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="552" y="0"/>
+<item historyLabel="TMessage.java" index="2">
+<position info="not_deleted" x="1175" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="917" y="0"/>
 </item>
-<item historyLabel="_pydev_execfile" index="2">
-<position info="not_deleted" x="991" y="0"/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="937" y="2"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="501" y="0"/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="917" y="0"/>
 </item>
-<item historyLabel="_pydev_execfile" index="3">
-<position info="not_deleted" x="1164" y="0"/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="968" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="501" y="0"/>
+<item historyLabel="TBaseProcessor.java" index="1">
+<position info="not_deleted" x="1393" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="1042" y="0"/>
+<item historyLabel="ProcessFunction.java" index="3">
+<position info="not_deleted" x="515" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="503" y="0"/>
+<item historyLabel="ProcessFunction.java" index="3">
+<position info="not_deleted" x="562" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="622" y="0"/>
+<item historyLabel="ProcessFunction.java" index="3">
+<position info="not_deleted" x="968" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="503" y="0"/>
+<item historyLabel="ProcessFunction.java" index="3">
+<position info="not_deleted" x="996" y="0"/>
 </item>
-<item historyLabel="abstract" index="0">
-<position info="not_deleted" x="585" y="0"/>
+<item historyLabel="CalculatorHandler.java" index="4">
+<position info="not_deleted" x="1158" y="0"/>
 </item>
-<item historyLabel="rename" index="4">
-<position info="not_deleted" x="449" y="0"/>
+<item historyLabel="CalculatorHandler.java" index="4">
+<position info="not_deleted" x="1192" y="0"/>
 </item>
-<item historyLabel="securecrt_seesion" index="5">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="15641" y="0"/>
 </item>
-<item historyLabel="sessionprocess" index="6">
-<position info="not_deleted" x="787" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="16151" y="0"/>
 </item>
-<item historyLabel="rename" index="4">
-<position info="not_deleted" x="69" y="40"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="3438" y="0"/>
 </item>
-<item historyLabel="sessionprocess" index="6">
-<position info="not_deleted" x="787" y="0"/>
+<item historyLabel="JavaClient.java" index="6">
+<position info="not_deleted" x="2901" y="0"/>
 </item>
-<item historyLabel="Python Editor" index="6">
-<position/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="16137" y="0"/>
 </item>
-<item historyLabel="JSONStringer.java" index="7">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="16184" y="0"/>
 </item>
-<item historyLabel="JSONTokener.java" index="8">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="16155" y="0"/>
 </item>
-<item historyLabel="JSONObject.java" index="9">
-<position info="not_deleted" x="39903" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="47617" y="10"/>
 </item>
-<item historyLabel="Test.java" index="10">
-<position info="not_deleted" x="0" y="0"/>
+<item historyLabel="TMessage.java" index="2">
+<position info="not_deleted" x="1175" y="0"/>
 </item>
-<item historyLabel="SampleResourceBundle_en_US.java" index="11">
-<position info="not_deleted" x="3" y="0"/>
+<item historyLabel="Calculator.java" index="5">
+<position info="not_deleted" x="47617" y="10"/>
 </item>
-<item historyLabel="Test.java" index="10">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item active="true" historyLabel="TestJSONObject.java" index="12">
-<position info="not_deleted" x="3" y="0"/>
+<item active="true" historyLabel="TTransport.java" index="7">
+<position info="not_deleted" x="3744" y="5"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -789,50 +861,38 @@
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestJSONObject.java" tooltip="json/src/org/json/tests/TestJSONObject.java">
-<persistable path="/json/src/org/json/tests/TestJSONObject.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TMessage.java" tooltip="thrift/src/org/apache/thrift/protocol/TMessage.java">
+<persistable path="/thrift/src/org/apache/thrift/protocol/TMessage.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SampleResourceBundle_en_US.java" tooltip="json/src/tests/SampleResourceBundle_en_US.java">
-<persistable path="/json/src/tests/SampleResourceBundle_en_US.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TBinaryProtocol.java" tooltip="thrift/src/org/apache/thrift/protocol/TBinaryProtocol.java">
+<persistable path="/thrift/src/org/apache/thrift/protocol/TBinaryProtocol.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Test.java" tooltip="json/src/org/json/Test.java">
-<persistable path="/json/src/org/json/Test.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TTransport.java" tooltip="thrift/src/org/apache/thrift/transport/TTransport.java">
+<persistable path="/thrift/src/org/apache/thrift/transport/TTransport.java"/>
 </file>
-<file factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditor" name="Integer.class" tooltip="java.lang.Integer">
-<persistable org.eclipse.jdt.ui.ClassFileIdentifier="=json/D:\/Java\/jre7\/lib\/rt.jar&lt;java.lang(Integer.class"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Calculator.java" tooltip="thrift/src/tutorial/Calculator.java">
+<persistable path="/thrift/src/tutorial/Calculator.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONObject.java" tooltip="json/src/org/json/JSONObject.java">
-<persistable path="/json/src/org/json/JSONObject.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TServiceClient.java" tooltip="thrift/src/org/apache/thrift/TServiceClient.java">
+<persistable path="/thrift/src/org/apache/thrift/TServiceClient.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONTokener.java" tooltip="json/src/org/json/JSONTokener.java">
-<persistable path="/json/src/org/json/JSONTokener.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TSimpleServer.java" tooltip="thrift/src/org/apache/thrift/server/TSimpleServer.java">
+<persistable path="/thrift/src/org/apache/thrift/server/TSimpleServer.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JSONStringer.java" tooltip="json/src/org/json/JSONStringer.java">
-<persistable path="/json/src/org/json/JSONStringer.java"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SharedService.java" tooltip="thrift/src/shared/SharedService.java">
+<persistable path="/thrift/src/shared/SharedService.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="sessionprocess.py" tooltip="python/src/test/securecrt_seesion/sessionprocess.py">
-<persistable path="/python/src/test/securecrt_seesion/sessionprocess.py"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JavaServer.java" tooltip="thrift/src/JavaServer.java">
+<persistable path="/thrift/src/JavaServer.java"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="__init__.py" tooltip="python/src/test/securecrt_seesion/__init__.py">
-<persistable path="/python/src/test/securecrt_seesion/__init__.py"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="JavaClient.java" tooltip="thrift/src/JavaClient.java">
+<persistable path="/thrift/src/JavaClient.java"/>
 </file>
-<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="_pydev_execfile.py" tooltip="D:\eclipse-3.7\plugins\org.python.pydev.debug_2.2.0.2011062419\pysrc\_pydev_execfile.py">
-<persistable uri="file:/D:/eclipse-3.7/plugins/org.python.pydev.debug_2.2.0.2011062419/pysrc/_pydev_execfile.py"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CalculatorHandler.java" tooltip="thrift/src/CalculatorHandler.java">
+<persistable path="/thrift/src/CalculatorHandler.java"/>
 </file>
-<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="pydevd.py" tooltip="D:\eclipse-3.7\plugins\org.python.pydev.debug_2.2.0.2011062419\pysrc\pydevd.py">
-<persistable uri="file:/D:/eclipse-3.7/plugins/org.python.pydev.debug_2.2.0.2011062419/pysrc/pydevd.py"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="abstract.py" tooltip="python/src/test/log/analyse/abstract.py">
-<persistable path="/python/src/test/log/analyse/abstract.py"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="__init__.py" tooltip="python/src/test/log/analyse/__init__.py">
-<persistable path="/python/src/test/log/analyse/__init__.py"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="rename.py" tooltip="StudyCode/src/test/renamebatch/rename.py">
-<persistable path="/StudyCode/src/test/renamebatch/rename.py"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.python.pydev.editor.PythonEditor" name="__init__.py" tooltip="StudyCode/src/test/renamebatch/__init__.py">
-<persistable path="/StudyCode/src/test/renamebatch/__init__.py"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ConfigServer.java" tooltip="thrift/src/helloworld/ConfigServer.java">
+<persistable path="/thrift/src/helloworld/ConfigServer.java"/>
 </file>
 </mruList>
 </workbench>
