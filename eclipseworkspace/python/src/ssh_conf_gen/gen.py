@@ -9,14 +9,14 @@ import os
 g_securecrt_templete_file = 'build7.kill.corp.qihoo.net.ini'
 g_xshell_templete_file = 'build7.kill.corp.qihoo.net.xsh'
 g_templete_hostname = 'build7.kill.corp.qihoo.net'
-g_xshell_dir = '' #'E:/dropbox/misc/sharesoft/xshell/a/'
-g_securecrt_dir = '' #'E:/dropbox/misc/sharesoft/config_secureCRT_zieckey/Sessions/online/a/'
+g_xshell_dir = 'E:/dropbox/misc/sharesoft/xshell/a/'
+g_securecrt_dir = 'E:/dropbox/misc/sharesoft/config_secureCRT_zieckey/Sessions/online/a/'
 
 #modify this parameters:
-g_fill_0           = 1 # 1 true, 0 false
-g_leading          = 'mse'
-g_host             = '.safe.zzbc.qihoo.net'
-g_start_end_number = [1, 20] # [1,4] include 1,2,3,4
+g_fill_0           = 0 # 1 true, 0 false
+g_leading          = 'mkill'
+g_host             = '.safe.bjsc.qihoo.net'
+g_start_end_number = [1, 4] # [1,4] include 1,2,3,4
 
 def readfile(path):
     #fh = open(path, encoding='utf-8')
