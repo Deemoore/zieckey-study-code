@@ -136,7 +136,7 @@ int main( int argc, char* argv[] )
         start = current_usec();
         for (int i = 0; it != ite; ++it, ++i)
         {
-            shash_map[*it] = i;
+            sunordered_map[*it] = i;
         }
         end = current_usec();
         unordered_map_insert_us = end - start;
@@ -213,7 +213,7 @@ int main( int argc, char* argv[] )
         start = current_usec();
         for (int i = 0; it != ite; ++it, ++i)
         {
-            shash_map[*it] = i;
+            sunordered_map[*it] = i;
         }
         end = current_usec();
         unordered_map_find_us = end - start;
@@ -248,7 +248,7 @@ int main( int argc, char* argv[] )
         start = current_usec();
         for (int i = 0; it != ite; ++it, ++i)
         {
-            shash_map.erase(*it);
+            sunordered_map.erase(*it);
         }
         end = current_usec();
         unordered_map_delete_us = end - start;
