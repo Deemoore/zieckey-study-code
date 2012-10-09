@@ -8,10 +8,6 @@
 #include <tr1/unordered_map>
 #include <tr1/unordered_set>
 
-//using md5
-//#include "qoslib/include/QOSLibAllExp.h"
-//#include "qoslib/include/QMD5.h"
-
 namespace zl
 { //{{{
     struct equal_to
@@ -64,8 +60,6 @@ int main( int argc, char* argv[] )
         fprintf(stderr, "For example:%s 10000 rehash\n", argv[0]);
         return -1;
     }
-
-    //osl::initializeOSLib();
 
     size_t count = atoi(argv[1]);
     bool rehash = false;
@@ -288,7 +282,7 @@ void fill_list(string_list& slist, size_t count)
     {
         std::ostringstream oss;
         oss << i;
-        //slist.push_back(MD5::getHexMD5(oss.str().c_str(), oss.str().length()));
+        //slist.push_back(MD5::hex(oss.str().c_str(), oss.str().length()));
         slist.push_back(oss.str());//
     }
 }
