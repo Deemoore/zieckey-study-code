@@ -2,6 +2,9 @@
 #define _MESSAGE_H_
 
 #include <boost/thread.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/insert_linebreaks.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
 
 class Message {
 public:
@@ -20,6 +23,24 @@ public:
         has_called_ = true;
 
         __sync_fetch_and_add(&count_, 1); 
+
+        //occupy some cpu time
+        using namespace boost::archive::iterators;
+        typedef base64_from_binary< transform_width< const char *, 6, 8 > > base64_text;
+        const char* address = "zlkxcnvzkx nsdfhlaweir q[230q'as dpjf;ae[0q9u[2309h21    ;2lkjasd;faj;sd fo[p398q123u09rj;fasdifh afj";
+        size_t      count   = strlen(address);
+        for (int i = 0; i < 10; ++i)
+        {
+            std::stringstream ss;
+            std::copy( base64_text(address),
+                        base64_text(address + count),
+                        std::ostream_iterator<char>(ss) );
+            std::string b64 = ss.str();
+            std::string eb64 = "emxreGNudnpreCBuc2RmaGxhd2VpciBxWzIzMHEnYXMgZHBqZjthZVswcTl1WzIzMDloMjEgICAgOzJsa2phc2Q7ZmFqO3NkIGZvW3AzOThxMTIzdTA5cmo7ZmFzZGlmaCBhZmo";
+            if (b64 != eb64) {
+                fprintf(stderr, "boost base64 encode error, [%s]\n", b64.c_str());
+            }
+        }
     }
 
     int count() const { return count_; }
