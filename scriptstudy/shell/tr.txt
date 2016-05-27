@@ -1,7 +1,0 @@
-[weizili@build4 src]$ echo "abcd" | tr [a-z] [A-Z]
-ABCD
-[weizili@build4 src]$ echo "abcd" | tr [A-Z] [a-z]
-abcd
-[weizili@build4 src]$ echo "aABbcd" | tr [A-Z] [a-z]
-aabbcd
-[weizili@build4 src]$ echo "FFFabcd" | tr [a-z] [A-Z]  
